@@ -1,0 +1,124 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
+using System.Linq;
+using System.Web;
+
+namespace OMIstats.Database
+{
+    public class Acceso
+    {
+        public static string CADENA_CONEXION;
+        private SqlConnection conexion = new SqlConnection();
+        private SqlDataAdapter adapter = new SqlDataAdapter();
+        private DataSet dataset = new DataSet();
+
+        public class Estatus
+        {
+            public bool error = false;
+            public string descripcion = "";
+        }
+
+        /// <summary>
+        /// Regresa la tabla obtenida despues de ejecutar un query
+        /// </summary>
+        /// <returns></returns>
+        public DataTable getTable()
+        {
+            if (dataset == null || dataset.Tables.Count == 0)
+                return null;
+            return dataset.Tables[0];
+        }
+
+        private Estatus Conectar()
+        {
+            Estatus resultado = new Estatus();
+            try
+            {
+                conexion.ConnectionString = CADENA_CONEXION;
+                conexion.Open();
+            }
+            catch(Exception e)
+            {
+                resultado.error = true;
+                resultado.descripcion = e.Message;
+            }
+
+            return resultado;
+        }
+
+        private Estatus Desconectar()
+        {
+            Estatus resultado = new Estatus();
+            try
+            {
+                if (conexion.State == ConnectionState.Open)
+                    conexion.Close();
+            }
+            catch (Exception e)
+            {
+                resultado.error = true;
+                resultado.descripcion = e.Message;
+            }
+
+            return resultado;
+        }
+
+        /// <summary>
+        /// Ejecuta un query.
+        /// Si el query es un select, llamar a getTable devolvera la tabla consultada
+        /// </summary>
+        /// <param name="query"></param>
+        public Estatus EjecutarQuery(string query)
+        {
+            Estatus resultado = Conectar();
+            if (resultado.error)
+                return resultado;
+
+            query = query.Trim();
+
+            try
+            {
+                if (query.StartsWith("update"))
+                {
+                    adapter.UpdateCommand = new SqlCommand(query, conexion);
+                    adapter.UpdateCommand.ExecuteNonQuery();
+                }
+                else if (query.StartsWith("delete"))
+                {
+                    adapter.DeleteCommand = new SqlCommand(query, conexion);
+                    adapter.DeleteCommand.ExecuteNonQuery();
+                }
+                else if (query.StartsWith("insert"))
+                {
+                    adapter.InsertCommand = new SqlCommand(query, conexion);
+                    adapter.InsertCommand.ExecuteNonQuery();
+                }
+                else if (query.StartsWith("select"))
+                {
+                    dataset.Clear();
+                    dataset.Tables.Clear();
+                    adapter.SelectCommand = new SqlCommand(query, conexion);
+                    adapter.Fill(dataset);
+                }
+                else
+                {
+                    resultado.error = true;
+                    resultado.descripcion = "Comando inválido";
+                    return resultado;
+                }
+            }
+            catch (Exception e)
+            {
+                resultado.error = true;
+                resultado.descripcion = e.Message;
+                return resultado;
+            }
+
+            resultado = Desconectar();
+            return resultado;
+        }
+
+    }
+}
