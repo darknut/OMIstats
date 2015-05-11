@@ -15,8 +15,25 @@ namespace OMIstats.Controllers
         public ActionResult Index()
         {
             Persona p = new Persona();
-
+            ViewBag.logInError = "none";   
             return View(p);
+        }
+
+        //
+        // POST: /LogIn/
+
+        [HttpPost]
+        public ActionResult Index(Persona p)
+        {
+            if (p.logIn())
+            {
+                return Index();
+            }
+            else
+            {
+                ViewBag.logInError = "inline";
+                return View(p);
+            }
         }
 
     }

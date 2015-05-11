@@ -1,14 +1,26 @@
 ﻿@model OMIstats.Models.Persona
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Iniciar sesión";
 }
 
-<h2>Iniciar sesión</h2>
+@using(@Html.BeginForm()) {
+    @Html.ValidationSummary(true)
 
-<div> Nombre de usuario: </div>
-<div> @Html.EditorFor(model => model.usuario) </div>
+    <fieldset>    
+        <legend>Iniciar sesión</legend>
 
-<div> Contraseña: </div>
-<div> @Html.PasswordFor(model => model.password) </div>
+        <div> Nombre de usuario: </div>
+        <div> @Html.EditorFor(model => model.usuario) </div>
 
+        <div> Contraseña: </div>
+        <div> @Html.PasswordFor(model => model.password) </div>
+
+        <div> @Html.Label("Nombre de usuario o contraseña incorrecta", new { style = "display:" + ViewBag.logInError + ";" }) </div>
+
+        <p>
+            <input type="submit" value="Entrar" />
+        </p>
+
+    </fieldset>
+}
