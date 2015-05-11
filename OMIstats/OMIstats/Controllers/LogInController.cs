@@ -7,7 +7,7 @@ using OMIstats.Models;
 
 namespace OMIstats.Controllers
 {
-    public class LogInController : Controller
+    public class LogInController : BaseController
     {
         //
         // GET: /LogIn/
@@ -29,7 +29,7 @@ namespace OMIstats.Controllers
             {
                 //Log in exitoso
                 Session["usuario"] = p;
-                return Index();  //TODO: Redirigir hacia otra pagina
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -37,6 +37,15 @@ namespace OMIstats.Controllers
                 ViewBag.logInError = true;
                 return View(p);
             }
+        }
+
+        //
+        // GET: /LogIn/Salir
+
+        public ActionResult Salir()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
         }
 
     }

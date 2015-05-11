@@ -8,6 +8,23 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @if (@ViewBag.usuario != null && @ViewBag.usuario.clave > 0)
+    {
+        if (@ViewBag.usuario.admin)
+        {
+            <div>
+                Admin
+            </div>
+        }
+
+        <div>Bienvenido @ViewBag.usuario.nombre </div>
+        <div>@Html.ActionLink("Cerrar sesión", "Salir", "LogIn")</div>
+    }
+    else
+    {
+        <div>@Html.ActionLink("Iniciar sesión", "Index", "LogIn")</div>
+    }
+
     @RenderBody()
 
     @Scripts.Render("~/bundles/jquery")

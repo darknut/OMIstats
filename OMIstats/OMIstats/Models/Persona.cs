@@ -78,7 +78,7 @@ namespace OMIstats.Models
                 persona.twitter = datos["twitter"].ToString().Trim();
                 persona.sitio = datos["sitio"].ToString().Trim();
                 persona.correo = datos["correo"].ToString().Trim();
-                persona.admin = datos["admin"].ToString().Equals("1");
+                persona.admin = (bool) datos["admin"];
                 persona.genero = datos["genero"].ToString()[0];
                 persona.foto = datos["foto"].ToString().Trim();
             }

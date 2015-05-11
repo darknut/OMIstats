@@ -11,7 +11,7 @@ namespace OMIstats
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Response.Redirect("LogIn");
+            Response.Redirect("Home");
         }
     }
 }
