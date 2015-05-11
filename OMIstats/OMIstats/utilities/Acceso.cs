@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace OMIstats.Database
+namespace OMIstats.Utilities
 {
     public class Acceso
     {

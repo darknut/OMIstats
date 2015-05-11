@@ -1,0 +1,14 @@
+﻿@model OMIstats.Models.Persona
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Iniciar sesión</h2>
+
+<div> Nombre de usuario: </div>
+<div> @Html.EditorFor(model => model.usuario) </div>
+
+<div> Contraseña: </div>
+<div> @Html.PasswordFor(model => model.password) </div>
+
