@@ -26,5 +26,10 @@ namespace OMIstats
 
             Utilities.Acceso.CADENA_CONEXION = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
         }
+
+        public void Session_Start()
+        {
+            Session["usuario"] = new Models.Persona();
+        }
     }
 }

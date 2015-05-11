@@ -15,7 +15,7 @@ namespace OMIstats.Controllers
         public ActionResult Index()
         {
             Persona p = new Persona();
-            ViewBag.logInError = "none";   
+            ViewBag.logInError = false;
             return View(p);
         }
 
@@ -27,11 +27,14 @@ namespace OMIstats.Controllers
         {
             if (p.logIn())
             {
-                return Index();
+                //Log in exitoso
+                Session["usuario"] = p;
+                return Index();  //TODO: Redirigir hacia otra pagina
             }
             else
             {
-                ViewBag.logInError = "inline";
+                //Log in fallido
+                ViewBag.logInError = true;
                 return View(p);
             }
         }

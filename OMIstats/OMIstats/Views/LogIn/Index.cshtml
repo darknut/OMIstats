@@ -16,7 +16,7 @@
         <div> Contraseña: </div>
         <div> @Html.PasswordFor(model => model.password) </div>
 
-        <div> @Html.Label("Nombre de usuario o contraseña incorrecta", new { style = "display:" + ViewBag.logInError + ";" }) </div>
+        <div> @Html.Label("Nombre de usuario o contraseña incorrecta", new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;")}) </div>
 
         <p>
             <input type="submit" value="Entrar" />

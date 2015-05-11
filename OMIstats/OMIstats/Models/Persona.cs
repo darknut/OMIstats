@@ -31,7 +31,7 @@ namespace OMIstats.Models
         /// se intenta hacer log in, si los datos de acceso son correctos
         /// el resto de los datos en la instancia se llena
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Si el login fue exitoso</returns>
         public bool logIn()
         {
             if (usuario == null || password == null)
