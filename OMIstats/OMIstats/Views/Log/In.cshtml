@@ -7,20 +7,23 @@
 @using(@Html.BeginForm()) {
     @Html.ValidationSummary(true)
 
-    <fieldset>
-        <legend>Iniciar sesión</legend>
+    <h1 class="titulo">Iniciar sesión</h1>
 
-        <div> Nombre de usuario: </div>
-        <div> @Html.EditorFor(model => model.usuario) </div>
+    <div> Nombre de usuario: </div>
+    <div> @Html.EditorFor(model => model.usuario) </div>
 
-        <div> Contraseña: </div>
-        <div> @Html.PasswordFor(model => model.password) </div>
+    <br />
 
-        <div> @Html.Label("Nombre de usuario o contraseña incorrecta", new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;")}) </div>
+    <div> Contraseña: </div>
+    <div> @Html.PasswordFor(model => model.password)</div>
 
-        <p>
-            <input type="submit" value="Entrar" />
-        </p>
+    <br />
 
-    </fieldset>
+    <div>@Html.Label("Nombre de usuario o contraseña incorrecta",
+    new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
+          @class = "error" }) </div>
+
+    <p>
+        <input type="submit" value="Entrar" />
+    </p>
 }
