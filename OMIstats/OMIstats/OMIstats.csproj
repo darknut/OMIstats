@@ -127,7 +127,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="utilities\Cadenas.cs" />
     <Compile Include="Models\Persona.cs" />
-    <Compile Include="Controllers\LogInController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -228,7 +228,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\LogIn\Index.cshtml" />
+    <Content Include="Views\Log\In.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

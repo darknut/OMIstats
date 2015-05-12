@@ -18,11 +18,11 @@
         }
 
         <div>Bienvenido @ViewBag.usuario.nombre </div>
-        <div>@Html.ActionLink("Cerrar sesión", "Salir", "LogIn")</div>
+        <div>@Html.ActionLink("Cerrar sesión", "Out", "Log")</div>
     }
     else
     {
-        <div>@Html.ActionLink("Iniciar sesión", "Index", "LogIn")</div>
+        <div>@Html.ActionLink("Iniciar sesión", "In", "Log")</div>
     }
 
     @RenderBody()

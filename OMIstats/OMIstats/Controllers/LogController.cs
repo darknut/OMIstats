@@ -7,12 +7,20 @@ using OMIstats.Models;
 
 namespace OMIstats.Controllers
 {
-    public class LogInController : BaseController
+    public class LogController : BaseController
     {
         //
-        // GET: /LogIn/
+        // GET: /Log/
 
         public ActionResult Index()
+        {
+            return Redirect("Log/In/");
+        }
+
+        //
+        // GET: /Log/In/
+
+        public ActionResult In()
         {
             if (Persona.isLoggedIn(Session["usuario"]))
                 return RedirectToAction("Index", "Home");
@@ -23,10 +31,10 @@ namespace OMIstats.Controllers
         }
 
         //
-        // POST: /LogIn/
+        // POST: /Log/In/
 
         [HttpPost]
-        public ActionResult Index(Persona p)
+        public ActionResult In(Persona p)
         {
             if (p.logIn())
             {
@@ -45,9 +53,9 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /LogIn/Salir
+        // GET: /Log/Out/
 
-        public ActionResult Salir()
+        public ActionResult Out()
         {
             Session.Clear();
             Session["usuario"] = new Persona();
