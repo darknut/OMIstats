@@ -3,12 +3,35 @@
 
 .foto
 {
-	float: left;
+    float:left;
 	border-top-left-radius: 15px;
-	border-bottom-left-radius: 15px;
 	border-bottom-right-radius: 15px;
 	margin-right: 2px;
 	margin-bottom: 8px;
     width:100px;
-    border:1px solid;
+}
+
+.datosParticipante {
+    float:left;
+}
+
+.nombrePerfil {
+    padding-left:10px;
+    font-size:20px;
+}
+
+.fechaNacimiento {
+    padding-left:10px;
+    padding-top:5px;
+    font-size:8px;
+    font-style:italic;
+}
+
+.contacto {
+    padding-top:10px;
+    padding-left:10px;
+}
+
+.contacto a {
+    padding-right:5px;
 }

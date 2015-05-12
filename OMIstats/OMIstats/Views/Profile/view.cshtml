@@ -11,6 +11,39 @@
 
     <h1 class="titulo">Datos de usuario</h1>
 
-    <img src="~/img/omi.png" class="foto" />
+    <img src='@Url.Content("~/img/" + @Model.foto)' class="foto" alt="@Model.nombre"/>
 
-    <div>@Html.DisplayFor(model => model.nombre)</div>
+    <div class="datosParticipante">
+
+        <div class="nombrePerfil">@Html.DisplayFor(model => model.nombre)</div>
+    
+        <div class="fechaNacimiento">
+            @if (Model.nacimiento.Length > 0)
+            {
+                @Html.DisplayFor(model => model.nacimiento)
+            }
+        </div>
+
+        <div class="contacto">
+            @if (Model.sitio.Length > 0)
+            {
+                <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio"/></a>
+            }
+
+            @if (Model.correo.Length > 0)
+            {
+                <a href="mailto:@Model.correo" target="_blank"><img src="~/img/mail.png" alt="correo"/></a>
+            }
+
+            @if (Model.facebook.Length > 0)
+            {
+                <a href="@Model.facebook" target="_blank"><img src="~/img/facebook.png" alt="facebook"/></a>
+            }
+
+            @if (Model.twitter.Length > 0)
+            {
+                <a href="@Model.twitter" target="_blank"><img src="~/img/twitter.png" alt="twitter"/></a>
+            }
+        </div>
+
+    </div>

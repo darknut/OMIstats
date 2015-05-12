@@ -21,11 +21,29 @@ namespace OMIstats.Models
         public bool admin { get; set; }
         public char genero { get; set; }
         public string foto { get; set; }
+        public int ioiID { get; set; }
 
         /// <summary>
         /// Solo de entrada, no se obtiene de la base de datos
         /// </summary>
         public string password { get; set; }
+
+        public Persona()
+        {
+            clave = 0;
+            nombre = "";
+            nacimiento = "";
+            facebook = "";
+            twitter = "";
+            sitio = "";
+            correo = "";
+            usuario = "";
+            admin = false;
+            genero = ' ';
+            foto = "";
+            ioiID = 0;
+            password = "";
+        }
 
         /// <summary>
         /// Usando los datos en las variables de instancia
@@ -82,6 +100,7 @@ namespace OMIstats.Models
                 persona.admin = (bool) datos["admin"];
                 persona.genero = datos["genero"].ToString()[0];
                 persona.foto = datos["foto"].ToString().Trim();
+                persona.ioiID = (int) datos["ioiID"];
             }
         }
 
