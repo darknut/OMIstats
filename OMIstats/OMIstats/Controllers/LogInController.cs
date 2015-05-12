@@ -14,6 +14,9 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
+            if (Persona.isLoggedIn(Session["usuario"]))
+                return RedirectToAction("Index", "Home");
+
             Persona p = new Persona();
             ViewBag.logInError = false;
             return View(p);
@@ -29,11 +32,13 @@ namespace OMIstats.Controllers
             {
                 //Log in exitoso
                 Session["usuario"] = p;
+                ViewBag.logInError = false;
                 return RedirectToAction("Index", "Home");
             }
             else
             {
                 //Log in fallido
+                Session["usuario"] = new Persona();
                 ViewBag.logInError = true;
                 return View(p);
             }
@@ -45,6 +50,7 @@ namespace OMIstats.Controllers
         public ActionResult Salir()
         {
             Session.Clear();
+            Session["usuario"] = new Persona();
             return RedirectToAction("Index", "Home");
         }
 

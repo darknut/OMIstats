@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Mvc;
 
 namespace OMIstats.Models
 {
@@ -82,6 +83,19 @@ namespace OMIstats.Models
                 persona.genero = datos["genero"].ToString()[0];
                 persona.foto = datos["foto"].ToString().Trim();
             }
+        }
+
+        /// <summary>
+        /// Revisa si hay un usuario loggeado
+        /// </summary>
+        public static bool isLoggedIn(Object obj)
+        {
+            if (obj == null)
+                return false;
+
+            Persona p = (Persona)obj;
+
+            return (p.clave != 0);
         }
     }
 }
