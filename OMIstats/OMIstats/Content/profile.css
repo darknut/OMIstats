@@ -13,6 +13,7 @@
 
 .datosParticipante {
     float:left;
+    clear:right;
 }
 
 .nombrePerfil {

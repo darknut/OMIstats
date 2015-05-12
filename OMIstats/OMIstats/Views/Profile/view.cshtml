@@ -47,3 +47,14 @@
         </div>
 
     </div>
+
+    <div style="clear:both;">
+
+    @if (Model.ioiID != 0)
+    {
+        <a href='@Url.Content("http://stats.ioinformatics.org/people/" + @Model.ioiID)' target="_blank">
+            <img src="~/img/external.png" alt="ioi" style="width:20px;"/>
+        </a>
+    }
+
+    </div>

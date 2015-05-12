@@ -206,6 +206,7 @@
     <Content Include="img\bronce.png" />
     <Content Include="img\circulo.png" />
     <Content Include="img\domi.gif" />
+    <Content Include="img\external.png" />
     <Content Include="img\facebook.png" />
     <Content Include="img\homepage.png" />
     <Content Include="img\karel.bmp" />
