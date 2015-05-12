@@ -1,0 +1,14 @@
+﻿body {
+}
+
+.foto
+{
+	float: left;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	margin-right: 2px;
+	margin-bottom: 8px;
+    width:100px;
+    border:1px solid;
+}

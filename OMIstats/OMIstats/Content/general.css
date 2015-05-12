@@ -136,3 +136,13 @@
 .error {
     color:red;
 }
+
+.nombre {
+    color:gray;
+    text-decoration:none;
+}
+
+.nombre:hover {
+    color:blue;
+    text-decoration:underline;
+}

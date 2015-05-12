@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="utilities\Acceso.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\general.css" />
+    <Content Include="Content\profile.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -201,6 +203,18 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="img\bronce.png" />
+    <Content Include="img\circulo.png" />
+    <Content Include="img\domi.gif" />
+    <Content Include="img\facebook.png" />
+    <Content Include="img\homepage.png" />
+    <Content Include="img\karel.bmp" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\mail.png" />
+    <Content Include="img\omi.png" />
+    <Content Include="img\oro.png" />
+    <Content Include="img\plata.png" />
+    <Content Include="img\twitter.png" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -231,6 +245,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Log\In.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Profile\view.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

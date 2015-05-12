@@ -97,5 +97,32 @@ namespace OMIstats.Models
 
             return (p.clave != 0);
         }
+
+        /// <summary>
+        /// Regresa el objeto persona asociado con el nombre de usuario mandado como parámetro
+        /// </summary>
+        public static Persona obtenerPersonaDeUsuario(string usuario)
+        {
+            if (usuario == null || usuario.Length == 0)
+                return null;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where usuario = ");
+            query.Append(Utilities.Cadenas.comillas(usuario));
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Persona p = new Persona();
+            llenarDatos(p, table.Rows[0]);
+
+            return p;
+        }
     }
 }

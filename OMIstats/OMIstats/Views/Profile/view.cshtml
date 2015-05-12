@@ -1,0 +1,16 @@
+﻿@model OMIstats.Models.Persona
+
+@section AddToHead
+{
+    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = "Perfil de Usuario";
+}
+
+    <h1 class="titulo">Datos de usuario</h1>
+
+    <img src="~/img/omi.png" class="foto" />
+
+    <div>@Html.DisplayFor(model => model.nombre)</div>

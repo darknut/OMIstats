@@ -3,7 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/Content/general.css" />
+    <link rel="stylesheet" href="~/Content/general.css" type="text/css" />
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @RenderSection("AddToHead", required: false);
+    }
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -39,7 +43,9 @@
                     {
                         <span>Bienvenido</span>
                     }
-                     @ViewBag.usuario.nombre
+                    @Html.ActionLink((string)@ViewBag.usuario.nombre, "view", "Profile", 
+                                      new { usuario = (string)@ViewBag.usuario.usuario }, 
+                                      new { @class = "nombre" })
                 </span>
                 <div>@Html.ActionLink("Cerrar sesión", "Out", "Log")</div>
             }
