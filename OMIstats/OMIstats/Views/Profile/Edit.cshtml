@@ -1,0 +1,82 @@
+﻿@model OMIstats.Models.Persona
+
+@section AddToHead
+{
+    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = "Actualizar perfil";
+}
+
+<h1 class="titulo">Actualizar perfil</h1>
+
+<form action="/Profile/Edit" method="post" enctype="multipart/form-data">
+    <div>
+        <div class="foto">
+            <img src='@Url.Content("~/img/" + @Model.foto)' alt="@Model.nombre"/>
+        </div>
+
+        <div class="datosParticipante">
+            <div>
+                <div class="label">Sube una foto:</div>
+                <div class="input"><input type="file" name="file" id="file" /></div>
+            </div>
+            <div>
+                <div class="label">Usuario:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.usuario) </div>
+            </div>
+            <div>
+                <div class="label">Nombre:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.nombre, new { disabled="disabled" }) </div>
+            </div>
+            <div>
+                <div class="label">Género:</div>
+                <div class="input">
+                    <select id="genero" name="genero">
+                    @if (@Model.genero[0] == 'F')
+                    {
+                        <option value="M">Masculino</option>
+                        <option value="F" selected="selected">Femenino</option>
+                    }
+                    else
+                    {
+                        <option value="M" selected="selected">Masculino</option>
+                        <option value="F">Femenino</option>
+                    }
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="label">Fecha de nacimiento:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.nacimiento) </div>
+            </div>
+            <div>
+                <div class="label">Sitio web:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.sitio) </div>
+            </div>
+            <div>
+                <div class="label">Correo electrónico:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.correo) </div>
+            </div>
+            <div>
+                <div class="label">Facebook:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.facebook) </div>
+            </div>
+            <div>
+                <div class="label">Twitter:</div>
+                <div class="input"> @Html.TextBoxFor(model => model.twitter) </div>
+            </div>
+
+            <div>
+                <div class="label"></div>
+                <div class="input"> <input type="submit" /> </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+    <div style="clear:both">
+        <!-- -TODO- Enlace -->
+        Si tu nombre está representado incorréctamente, mándanos un correo con los datos correctos.
+    </div>

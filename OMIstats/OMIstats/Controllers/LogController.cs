@@ -36,12 +36,14 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult In(Persona p)
         {
+            if (p == null)
+                return RedirectToAction("Index", "Home");
             if (p.logIn())
             {
                 //Log in exitoso
                 Session["usuario"] = p;
                 ViewBag.logInError = false;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("view", "Profile");
             }
             else
             {

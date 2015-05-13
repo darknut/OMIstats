@@ -19,7 +19,7 @@ namespace OMIstats.Models
         public string correo { get; set; }
         public string usuario { get; set; }
         public bool admin { get; set; }
-        public char genero { get; set; }
+        public string genero { get; set; }
         public string foto { get; set; }
         public int ioiID { get; set; }
 
@@ -39,7 +39,7 @@ namespace OMIstats.Models
             correo = "";
             usuario = "";
             admin = false;
-            genero = ' ';
+            genero = " ";
             foto = "";
             ioiID = 0;
             password = "";
@@ -82,23 +82,23 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="persona">El objeto donde se guardaran los datos</param>
         /// <param name="datos">La fila con el origen de los datos</param>
-        /// <param name="completo">Si es true, saca todos los datos de la fila, de ser false, solo nombre y clave</param>
+        /// <param name="completo">Si es true, saca todos los datos de la fila, de ser false, solo nombre, usuario y clave</param>
         private static void llenarDatos(Persona persona, DataRow datos, bool completo = true)
         {
             persona.clave = (int) datos["clave"];
             persona.nombre = datos["nombre"].ToString().Trim();
+            persona.usuario = datos["usuario"].ToString().Trim();
             persona.password = "";
 
             if (completo)
             {
-                persona.usuario = datos["usuario"].ToString().Trim();
                 persona.nacimiento = datos["nacimiento"].ToString().Trim();
                 persona.facebook = datos["facebook"].ToString().Trim();
                 persona.twitter = datos["twitter"].ToString().Trim();
                 persona.sitio = datos["sitio"].ToString().Trim();
                 persona.correo = datos["correo"].ToString().Trim();
                 persona.admin = (bool) datos["admin"];
-                persona.genero = datos["genero"].ToString()[0];
+                persona.genero = datos["genero"].ToString();
                 persona.foto = datos["foto"].ToString().Trim();
                 persona.ioiID = (int) datos["ioiID"];
             }
@@ -142,6 +142,34 @@ namespace OMIstats.Models
             llenarDatos(p, table.Rows[0]);
 
             return p;
+        }
+
+        /// <summary>
+        /// Regresa los datos de los admins del sitio
+        /// como una lista de personas
+        /// </summary>
+        public static List<Persona> obtenerAdmins()
+        {
+            List<Persona> admins = new List<Persona>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where admin = 1");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Persona p = new Persona();
+                llenarDatos(p, r, completo:false);
+                admins.Add(p);
+            }
+
+            return admins;
         }
     }
 }

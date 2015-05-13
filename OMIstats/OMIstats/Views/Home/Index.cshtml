@@ -1,4 +1,6 @@
-﻿@{
+﻿@model  IEnumerable<OMIstats.Models.Persona>
+
+@{
     ViewBag.Title = "OMI";
 }
 
@@ -13,7 +15,7 @@
     sobre olimpiadas actuales y pasadas, incluyendo los medalleros oficiales de cada año.
 </p>
 
-<!-- TODO: Agregar enlace a las páginas para pedir acceso -->
+<!-- -TODO- Agregar enlace a las páginas para pedir acceso -->
 <p>
     Se invita a cada participante a agregar sus datos de contacto si así lo desea, para lo cual será necesario
     que pidan a los administradores del sitio sus datos de acceso. Si aun tienes en tu poder tu reconocimiento
@@ -27,5 +29,18 @@
 </p>
 
 <p>
-    Desarrollado por <a href="Profile/view?usuario=darknut" class="nombre">Félix Rafael Horta Cuadrilla</a>.<!-- TODO: Agregar admins -->
+    Desarrollado por <a href="Profile/view?usuario=darknut" class="nombre">Félix Rafael Horta Cuadrilla</a>.
 </p>
+
+<h4>Administradores</h4>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            @Html.ActionLink(item.nombre, "view", "Profile",
+                    new { usuario = item.usuario },
+                    new { @class = "nombre" })
+        </li>
+    }
+</ul>

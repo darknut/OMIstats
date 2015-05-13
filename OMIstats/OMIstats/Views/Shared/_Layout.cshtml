@@ -26,16 +26,12 @@
         <div class="boton">Prueba</div>
         <div class="boton">Prueba Dos</div>
         <div class="boton">Otra Prueba Mas</div>
-            @if (@ViewBag.usuario != null && @ViewBag.usuario.admin)
-            {
-                <div class="boton">Admin</div>
-            }
         <br />
         <div class="usuario">
             @if (@ViewBag.usuario != null && @ViewBag.usuario.clave > 0)
             {
                 <span>
-                    @if(@ViewBag.usuario.genero == 'F')
+                    @if(@ViewBag.usuario.genero[0] == 'F')
                     {
                         <span>Bienvenida</span>
                     }

@@ -1,4 +1,5 @@
 ﻿@model OMIstats.Models.Persona
+@using System.Text.RegularExpressions;
 
 @section AddToHead
 {
@@ -6,22 +7,29 @@
 }
 
 @{
-    ViewBag.Title = "Perfil de Usuario";
+    ViewBag.Title = Model.nombre;
 }
 
     <h1 class="titulo">Datos de usuario</h1>
 
-    <img src='@Url.Content("~/img/" + @Model.foto)' class="foto" alt="@Model.nombre"/>
+    <div class="foto" >
+        <img src='@Url.Content("~/img/" + @Model.foto)' alt="@Model.nombre"/>
+    </div>
 
     <div class="datosParticipante">
 
         <div class="nombrePerfil">@Html.DisplayFor(model => model.nombre)</div>
     
-        <div class="fechaNacimiento">
-            @if (Model.nacimiento.Length > 0)
-            {
-                @Html.DisplayFor(model => model.nacimiento)
-            }
+        <div>
+            <div class="fechaNacimiento">
+                @if (Model.nacimiento.Length > 0)
+                {
+                    @Html.DisplayFor(model => model.nacimiento)
+                }
+            </div>
+            <div class="perfilUsuario">
+                Usuario: @Html.DisplayFor(model => model.usuario)
+            </div>
         </div>
 
         <div class="contacto">
@@ -48,6 +56,67 @@
 
     </div>
 
+    <div class="botones">
+        <!-- -TODO- Agregar enlaces a los lugares correctos -->
+
+        @if ((@ViewBag.usuario == null || @ViewBag.usuario.clave == 0) && Regex.IsMatch(Model.usuario, @"^\d+$"))
+        {
+            <div>
+                <div class="botonPerfil">Reclamar usuario</div>
+            </div>
+            <br />
+        }
+
+        @if (@ViewBag.usuario != null)
+        {
+            if (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave))
+            {
+                <div>
+                    @Html.ActionLink("Actualizar datos", "Edit", "Profile",
+                                     null, new { @class = "botonPerfil" });
+                </div>
+                <br />
+            }
+
+            if (@ViewBag.usuario.admin)
+            {
+                if (@ViewBag.usuario.clave != Model.clave)
+                {
+                    <div>
+                        <div class="botonPerfil">Mandar contraseña</div>
+                    </div>
+                    <br />
+
+                    <div>
+                        <div class="botonPerfil">Asignar cuenta</div>
+                    </div>
+                    <br />
+
+                    if (Model.admin)
+                    {
+                        <div>
+                            <div class="botonPerfil">Eliminar Admin</div>
+                        </div>
+                        <br />
+                    }
+                    else
+                    {
+                        <div>
+                            <div class="botonPerfil">Hacer admin</div>
+                        </div>
+                        <br />
+                    }
+
+                    <div>
+                        <div class="botonPerfil">Unir usuario</div>
+                    </div>
+                    <br />
+                }
+            }
+        }
+
+    </div>
+
     <div style="clear:both;">
 
     @if (Model.ioiID != 0)
@@ -57,4 +126,9 @@
         </a>
     }
 
+    </div>
+
+    <div>
+        <!-- -TODO- Enlace -->
+        Si tuviste participaciones que no están listadas en nuestra página, mándanos un correo con los datos faltantes.
     </div>
