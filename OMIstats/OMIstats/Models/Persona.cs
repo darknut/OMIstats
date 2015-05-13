@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,8 @@ namespace OMIstats.Models
     {
         public int clave { get; set; }
         public string nombre { get; set; }
-        public string nacimiento { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime nacimiento { get; set; }
         public string facebook { get; set; }
         public string twitter { get; set; }
         public string sitio { get; set; }
@@ -32,7 +34,7 @@ namespace OMIstats.Models
         {
             clave = 0;
             nombre = "";
-            nacimiento = "";
+            nacimiento = new DateTime(1900, 1, 1);
             facebook = "";
             twitter = "";
             sitio = "";
@@ -92,7 +94,7 @@ namespace OMIstats.Models
 
             if (completo)
             {
-                persona.nacimiento = datos["nacimiento"].ToString().Trim();
+                persona.nacimiento = Utilities.Fechas.stringToDate(datos["nacimiento"].ToString().Trim());
                 persona.facebook = datos["facebook"].ToString().Trim();
                 persona.twitter = datos["twitter"].ToString().Trim();
                 persona.sitio = datos["sitio"].ToString().Trim();

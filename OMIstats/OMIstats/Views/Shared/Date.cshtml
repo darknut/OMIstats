@@ -1,0 +1,2 @@
+﻿@model DateTime
+@Html.TextBox("", String.Format("{0:d}", Model.ToLongDateString()), new { @class = "datefield", type = "date" })

@@ -106,3 +106,15 @@
     display:inline-block;
     padding-top:15px;
 }
+
+.inputSitio{
+    width:320px;
+}
+
+.inputFacebook {
+    width:147px;
+}
+
+.inputTwitter {
+    width:197px;
+}

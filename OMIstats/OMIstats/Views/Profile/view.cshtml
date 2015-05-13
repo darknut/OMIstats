@@ -22,7 +22,7 @@
     
         <div>
             <div class="fechaNacimiento">
-                @if (Model.nacimiento.Length > 0)
+                @if (Model.nacimiento.Year > 1900)
                 {
                     @Html.DisplayFor(model => model.nacimiento)
                 }
@@ -33,6 +33,12 @@
         </div>
 
         <div class="contacto">
+
+            @if (Model.ioiID != 0)
+            {
+                <a href='@Url.Content("http://stats.ioinformatics.org/people/" + @Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;"/></a>
+            }
+
             @if (Model.sitio.Length > 0)
             {
                 <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio"/></a>
@@ -117,18 +123,7 @@
 
     </div>
 
-    <div style="clear:both;">
-
-    @if (Model.ioiID != 0)
-    {
-        <a href='@Url.Content("http://stats.ioinformatics.org/people/" + @Model.ioiID)' target="_blank">
-            <img src="~/img/external.png" alt="ioi" style="width:20px;"/>
-        </a>
-    }
-
-    </div>
-
-    <div>
+    <div style="clear:both">
         <!-- -TODO- Enlace -->
         Si tuviste participaciones que no están listadas en nuestra página, mándanos un correo con los datos faltantes.
     </div>
