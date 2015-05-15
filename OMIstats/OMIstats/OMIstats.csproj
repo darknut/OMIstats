@@ -217,8 +217,6 @@
     <Content Include="img\oro.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
-    <Content Include="js\jquery-ui.min.js" />
-    <Content Include="js\jquery.min.js" />
     <Content Include="js\profile.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -252,7 +250,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Profile\view.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
-    <Content Include="Views\Shared\Date.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

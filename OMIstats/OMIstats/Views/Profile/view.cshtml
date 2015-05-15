@@ -24,7 +24,7 @@
             <div class="fechaNacimiento">
                 @if (Model.nacimiento.Year > 1900)
                 {
-                    @Html.DisplayFor(model => model.nacimiento)
+                    @Model.nacimiento.ToString("dd/MM/yyyy")
                 }
             </div>
             <div class="perfilUsuario">

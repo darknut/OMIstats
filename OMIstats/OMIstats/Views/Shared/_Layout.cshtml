@@ -4,13 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="~/Content/general.css" type="text/css" />
-    @if (IsSectionDefined("AddToHead"))
-    {
-        @RenderSection("AddToHead", required: false);
-    }
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("AddToHead", required: false);
 </head>
 <body class="mainpage">
     <img src="~/img/circulo.png" class="circulo" alt="logoOMI"/>
@@ -23,9 +20,11 @@
     <div class="header">
     <div class="menu">
 
-        <div class="boton">Prueba</div>
-        <div class="boton">Prueba Dos</div>
-        <div class="boton">Otra Prueba Mas</div>
+        <a class="boton" href="/Home">Página principal</a>
+        @if (@ViewBag.usuario != null && @ViewBag.usuario.admin)
+        {
+            <div class="boton">Admin</div>
+        }
         <br />
         <div class="usuario">
             @if (@ViewBag.usuario != null && @ViewBag.usuario.clave > 0)
