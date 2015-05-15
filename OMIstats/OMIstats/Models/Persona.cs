@@ -13,7 +13,7 @@ namespace OMIstats.Models
     {
         public int clave { get; set; }
         public string nombre { get; set; }
-        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime nacimiento { get; set; }
         public string facebook { get; set; }
         public string twitter { get; set; }

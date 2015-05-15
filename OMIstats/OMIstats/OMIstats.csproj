@@ -217,6 +217,9 @@
     <Content Include="img\oro.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
+    <Content Include="js\jquery-ui.min.js" />
+    <Content Include="js\jquery.min.js" />
+    <Content Include="js\profile.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
