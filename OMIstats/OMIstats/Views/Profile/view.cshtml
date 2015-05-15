@@ -51,12 +51,12 @@
 
             @if (Model.facebook.Length > 0)
             {
-                <a href="@Model.facebook" target="_blank"><img src="~/img/facebook.png" alt="facebook"/></a>
+                <a href='@Url.Content("https://www.facebook.com/" + @Model.facebook)' target="_blank"><img src="~/img/facebook.png" alt="facebook"/></a>
             }
 
             @if (Model.twitter.Length > 0)
             {
-                <a href="@Model.twitter" target="_blank"><img src="~/img/twitter.png" alt="twitter"/></a>
+                <a href='@Url.Content("http://www.twitter.com/" + @Model.twitter)' target="_blank"><img src="~/img/twitter.png" alt="twitter"/></a>
             }
         </div>
 
