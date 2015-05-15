@@ -4,7 +4,7 @@
     nextText: 'Sig>',
     currentText: 'Hoy',
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    monthNamesShort: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
     dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
     dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
@@ -17,5 +17,15 @@
 };
 $.datepicker.setDefaults($.datepicker.regional['es']);
 $(function () {
-    $("#nacimiento").datepicker();
+    var txt = document.getElementById("nacimiento");
+    if (txt.value == "01/01/1900")
+        txt.value = "";
+    var dateToday = new Date();
+    var thisYear = dateToday.getFullYear();
+    $("#nacimiento").datepicker({
+        changeYear: true,
+        changeMonth: true,
+        yearRange: "1950:" + thisYear,
+        showButtonPanel: true
+    });
 });
