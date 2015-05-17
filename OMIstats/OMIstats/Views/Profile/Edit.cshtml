@@ -38,8 +38,20 @@
                 <div class="input"> @Html.TextBoxFor(model => model.usuario) </div>
             </div>
             <div>
+                <div class="label">Contraseña actual:</div>
+                <div class="input"> @Html.PasswordFor(model => model.password) </div>
+            </div>
+            <div>
+                <div class="label">Contraseña nueva:</div>
+                <div class="input"><input type="password" id="password2" name="password2" /> </div>
+            </div>
+            <div>
+                <div class="label">Repetir contraseña:</div>
+                <div class="input"><input type="password" id="password3" name="password3" /> </div>
+            </div>
+            <div>
                 <div class="label">Nombre:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.nombre, new { disabled="disabled" }) </div>
+                <div class="input"> @Html.TextBoxFor(model => model.nombre) </div>
             </div>
             <div>
                 <div class="label">Género:</div>
