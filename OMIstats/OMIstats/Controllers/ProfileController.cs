@@ -9,6 +9,9 @@ namespace OMIstats.Controllers
 {
     public class ProfileController : BaseController
     {
+        private const int AñoMinimo = 1950;
+        private const int EdadMaxima = 20;
+
         //
         // GET: /Profile/
 
@@ -47,6 +50,20 @@ namespace OMIstats.Controllers
             if (!Persona.isLoggedIn(Session["usuario"]))
                 return RedirectToAction("Index", "Home");
 
+            int maximo = MiembroDelegacion.primeraOMIPara((Persona)Session["usuario"]);
+            int minimo = MiembroDelegacion.ultimaOMIComoCompetidorPara((Persona)Session["usuario"]);
+
+            if (maximo == 0)
+                maximo = DateTime.Today.Year;
+
+            if (minimo == 0)
+                minimo = AñoMinimo;
+            else
+                minimo -= EdadMaxima;
+
+            ViewBag.maximo = maximo;
+            ViewBag.minimo = minimo;
+
             return View((Persona)Session["usuario"]);
         }
 
@@ -61,6 +78,7 @@ namespace OMIstats.Controllers
             ////    var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
             ////    file.SaveAs(path);
             ////}
+            // -TODO- Verificar si persona dentro de session cambia cuando regresa por aqui
 
             return View((Persona)Session["usuario"]);
         }

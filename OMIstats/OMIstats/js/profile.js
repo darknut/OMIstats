@@ -20,12 +20,10 @@ $(function () {
     var txt = document.getElementById("nacimiento");
     if (txt.value == "01/01/1900")
         txt.value = "";
-    var dateToday = new Date();
-    var thisYear = dateToday.getFullYear();
     $("#nacimiento").datepicker({
         changeYear: true,
         changeMonth: true,
-        yearRange: "1950:" + thisYear,
+        yearRange: OMI_minimo + ":" + OMI_maximo,
         showButtonPanel: true
     });
 });

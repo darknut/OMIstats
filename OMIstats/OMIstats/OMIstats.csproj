@@ -125,6 +125,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="utilities\Acceso.cs" />
     <Compile Include="utilities\Cadenas.cs" />
     <Compile Include="Models\Persona.cs" />
