@@ -100,11 +100,13 @@
     display:inline-block;
     padding-top:15px;
     padding-left:10px;
+    vertical-align:top;
 }
 
 .input {
     display:inline-block;
     padding-top:15px;
+    vertical-align:top;
 }
 
 .inputSitio{
@@ -141,4 +143,22 @@
 .ui-datepicker-current {
     font-weight:bold !important;
     color:black !important;
+}
+
+.clear {
+    clear:both;
+}
+
+.userDiv {
+    height:60px;
+}
+
+.disponible {
+    color:green;
+    display:none;
+}
+
+.noDisponible {
+    color:red;
+    display:none;
 }

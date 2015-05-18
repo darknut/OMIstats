@@ -27,3 +27,64 @@ $(function () {
         showButtonPanel: true
     });
 });
+
+function revisa() {
+    var txt = document.getElementById("nacimiento");
+    if (txt.value == "")
+        txt.value = "01/01/1900";
+    $("#editProfile").submit();
+}
+
+function setDisponible() {
+    setVisible("disponible", true);
+    setVisible("noDisponible", false);
+    setVisible("cambioUsuario", false);
+    setVisible("alfanumerico", false);
+}
+
+function setNoDisponible() {
+    setVisible("disponible", false);
+    setVisible("noDisponible", true);
+    setVisible("cambioUsuario", false);
+    setVisible("alfanumerico", false);
+}
+
+function setCambioUsuario() {
+    setVisible("disponible", false);
+    setVisible("noDisponible", false);
+    setVisible("cambioUsuario", true);
+    setVisible("alfanumerico", false);
+}
+
+function setAlfanumerico() {
+    setVisible("disponible", false);
+    setVisible("noDisponible", false);
+    setVisible("cambioUsuario", false);
+    setVisible("alfanumerico", true);
+}
+
+$(document).ready(function () {
+    $("#usuarioAjax").click(function () {
+        $.ajax({
+            url: '/Profile/Check',
+            type: 'POST',
+            dataType: 'json',
+            data: { usuario: document.getElementById("usuario").value },
+            success: function (data) {
+                if (data == "ok")
+                    setDisponible();
+                else if (data == "taken")
+                    setNoDisponible();
+                else if (data == "number")
+                    setCambioUsuario();
+                else if (data == "alfanumeric")
+                    setAlfanumerico();
+                else
+                    setNoDisponible();
+            },
+            error: function (data) {
+                setNoDisponible();
+            }
+        });
+    });
+});

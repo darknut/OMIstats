@@ -68,6 +68,20 @@ namespace OMIstats.Controllers
         }
 
         //
+        // POST: /Profile/Check/
+
+        [HttpPost]
+        public JsonResult Check(string usuario)
+        {
+            if (!Persona.isLoggedIn(Session["usuario"]))
+                return Json("error");
+
+            string respuesta = Persona.revisarNombreUsuarioDisponible((Persona)Session["usuario"], usuario);
+
+            return Json(respuesta);
+        }
+
+        //
         // POST: /Profile/Edit/
         [HttpPost]
         public ActionResult Edit(HttpPostedFileBase file, Persona p)

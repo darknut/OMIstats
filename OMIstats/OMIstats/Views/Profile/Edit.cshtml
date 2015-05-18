@@ -22,7 +22,7 @@
 
 <h1 class="titulo">Actualizar perfil</h1>
 
-<form action="/Profile/Edit" method="post" enctype="multipart/form-data">
+<form name="editProfile" id="editProfile" action="/Profile/Edit" method="post" enctype="multipart/form-data">
     <div>
         <div class="foto">
             <img src='@Url.Content("~/img/" + @Model.foto)' alt="@Model.nombre"/>
@@ -33,9 +33,17 @@
                 <div class="label">Sube una foto:</div>
                 <div class="input"><input type="file" name="file" id="file" /></div>
             </div>
-            <div>
+            <div class="userDiv">
                 <div class="label">Usuario:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.usuario) </div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.usuario)
+                    <input type="button" name="usuarioAjax"  id="usuarioAjax" value="Revisar disponibilidad" />
+                    <br />
+                    <div id="disponible" class="disponible">El nombre de usuario está disponible</div>
+                    <div id="noDisponible" class="noDisponible">El nombre de usuario no está disponible</div>
+                    <div id="cambioUsuario" class="noDisponible">Escribe un nombre de usuario que no empiece con un número</div>
+                    <div id="alfanumerico" class="noDisponible">Solo se permiten caracteres alfanumericos</div>
+                </div>
             </div>
             <div>
                 <div class="label">Contraseña actual:</div>
@@ -72,7 +80,9 @@
             </div>
             <div>
                 <div class="label">Fecha de nacimiento:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}") </div>
+                <div class="input"> @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}")
+                    @Html.ValidationMessageFor(model => model.nacimiento, "No escribiste una fecha válida")
+                </div>
             </div>
             <div>
                 <div class="label">Sitio web:</div>
@@ -93,13 +103,12 @@
 
             <div>
                 <div class="label"></div>
-                <div class="input"> <input type="submit" /> </div>
+                <div class="input"> <input type="button"  onclick="revisa()"  value="Enviar"/> </div>
             </div>
         </div>
     </div>
 </form>
 
-    <div style="clear:both">
-        <!-- -TODO- Enlace -->
-        Si tu nombre está representado incorréctamente, mándanos un correo con los datos correctos.
+    <div class="clear">
+
     </div>

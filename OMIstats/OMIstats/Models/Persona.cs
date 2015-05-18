@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -171,6 +172,45 @@ namespace OMIstats.Models
             }
 
             return admins;
+        }
+
+        /// <summary>
+        /// Revisa en la base de datos si el nombre de usuario está disponible y si es un nombre válido
+        /// </summary>
+        /// <returns>
+        /// ok: el nombre esta disponible
+        /// number: el nombre empieza con numero y es invalido
+        /// alfanumeric: el nombre no es alfanumerico
+        /// taken: el nombre no esta disponible
+        /// </returns>
+        public static string revisarNombreUsuarioDisponible(Persona p, string usuario)
+        {
+            usuario = usuario.Trim().ToLower();
+            if (Regex.IsMatch(usuario, "^\\d"))
+                return "number";
+
+            if (p.usuario.Equals(usuario))
+                return "ok";
+
+            if (!Regex.IsMatch(usuario, "^[a-zA-Z0-9]*$"))
+                return "alfanumeric";
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from Persona ");
+            query.Append(" where usuario = ");
+            query.Append(Utilities.Cadenas.comillas(usuario));
+            query.Append(" and clave <> ");
+            query.Append(p.clave);
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count == 0)
+                return "ok";
+
+            return "taken";
         }
     }
 }
