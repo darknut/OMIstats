@@ -12,6 +12,8 @@ namespace OMIstats.Models
 {
     public class Persona
     {
+        public const int TamañoUsuarioMaximo = 20;
+
         public int clave { get; set; }
         public string nombre { get; set; }
         public DateTime nacimiento { get; set; }
@@ -36,6 +38,7 @@ namespace OMIstats.Models
             NUMBER,
             ALFANUMERIC,
             TAKEN,
+            SIZE,
             ERROR
         }
 
@@ -186,6 +189,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Revisa en la base de datos si el nombre de usuario está disponible y si es un nombre válido
         /// </summary>
+        /// <remarks>Este campo se valida a mano porque se valida en una llamada AJAX</remarks>
         /// <returns>
         /// ok: el nombre esta disponible
         /// number: el nombre empieza con numero y es invalido
@@ -196,8 +200,8 @@ namespace OMIstats.Models
         {
             usuario = usuario.Trim().ToLower();
 
-            if (usuario.Length == 0)
-                return DisponibilidadUsuario.ERROR;
+            if (usuario.Length == 0 || usuario.Length > TamañoUsuarioMaximo)
+                return DisponibilidadUsuario.SIZE;
 
             if (Regex.IsMatch(usuario, "^\\d"))
                 return DisponibilidadUsuario.NUMBER;

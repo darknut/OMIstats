@@ -101,6 +101,12 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult Edit(HttpPostedFileBase file, Persona p)
         {
+            if (!Persona.isLoggedIn(Session["usuario"]))
+                return RedirectToAction("Index", "Home");
+
+            if (!ModelState.IsValid)
+                return Edit();
+
             limpiaErroresViewBag();
 
             if (file != null)

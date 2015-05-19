@@ -10,6 +10,7 @@ function setDisponible() {
     setVisible("noDisponible", false);
     setVisible("cambioUsuario", false);
     setVisible("alfanumerico", false);
+    setVisible("size", false);
 }
 
 function setNoDisponible() {
@@ -17,6 +18,7 @@ function setNoDisponible() {
     setVisible("noDisponible", true);
     setVisible("cambioUsuario", false);
     setVisible("alfanumerico", false);
+    setVisible("size", false);
 }
 
 function setCambioUsuario() {
@@ -24,6 +26,7 @@ function setCambioUsuario() {
     setVisible("noDisponible", false);
     setVisible("cambioUsuario", true);
     setVisible("alfanumerico", false);
+    setVisible("size", false);
 }
 
 function setAlfanumerico() {
@@ -31,6 +34,15 @@ function setAlfanumerico() {
     setVisible("noDisponible", false);
     setVisible("cambioUsuario", false);
     setVisible("alfanumerico", true);
+    setVisible("size", false);
+}
+
+function setSize() {
+    setVisible("disponible", false);
+    setVisible("noDisponible", false);
+    setVisible("cambioUsuario", false);
+    setVisible("alfanumerico", false);
+    setVisible("size", true);
 }
 
 function setErrorUsuario(errorUsuario) {
@@ -42,6 +54,8 @@ function setErrorUsuario(errorUsuario) {
         setCambioUsuario();
     else if (errorUsuario == "alfanumeric")
         setAlfanumerico();
+    else if (errorUsuario == "size")
+        setSize();
     else
         setNoDisponible();
 }
@@ -60,6 +74,8 @@ $(document).ready(function () {
     if (txt.value == "01/01/1900")
         txt.value = "";
     setCampoFechas("nacimiento", OMI_minimo + ":" + OMI_maximo);
+
+    document.getElementById("genero").value = generoUsuario;
 
     if (errorImagen !== "")
     {

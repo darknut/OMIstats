@@ -15,6 +15,7 @@
       var OMI_maximo = @ViewBag.maximo;
       var errorImagen = "@ViewBag.errorImagen";
       var errorUsuario = "@ViewBag.errorUsuario";
+      var generoUsuario = "@Model.genero";
   </script>
   <script src="/Scripts/jquery-ui-1.8.20.min.js"></script>
   <script src="/js/fechas.js""></script>
@@ -52,6 +53,7 @@
                     <div id="noDisponible" class="textoRojo">El nombre de usuario no está disponible</div>
                     <div id="cambioUsuario" class="textoRojo">Escribe un nombre de usuario que no empiece con un número</div>
                     <div id="alfanumerico" class="textoRojo">Solo se permiten caracteres alfanumericos</div>
+                    <div id="size" class="textoRojo">El nombre de usuario debe de estar entre 1 y 20 caracteres</div>
                 </div>
             </div>
             <div>
@@ -74,16 +76,8 @@
                 <div class="label">Género:</div>
                 <div class="input">
                     <select id="genero" name="genero">
-                    @if (@Model.genero[0] == 'F')
-                    {
                         <option value="M">Masculino</option>
-                        <option value="F" selected="selected">Femenino</option>
-                    }
-                    else
-                    {
-                        <option value="M" selected="selected">Masculino</option>
                         <option value="F">Femenino</option>
-                    }
                     </select>
                 </div>
             </div>
