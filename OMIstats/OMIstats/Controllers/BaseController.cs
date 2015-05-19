@@ -10,6 +10,7 @@ namespace OMIstats.Controllers
     {
         public BaseController()
         {
+            // Se usa System.Web en vez de Session porque a tiempo de construcción, Session aún no esta populada
             ViewBag.usuario = System.Web.HttpContext.Current.Session["usuario"];
         }
     }

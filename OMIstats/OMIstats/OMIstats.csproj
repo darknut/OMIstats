@@ -127,6 +127,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="utilities\Acceso.cs" />
+    <Compile Include="utilities\Archivos.cs" />
     <Compile Include="utilities\Cadenas.cs" />
     <Compile Include="Models\Persona.cs" />
     <Compile Include="Controllers\LogController.cs" />
@@ -144,7 +145,11 @@
     <Compile Include="utilities\Fechas.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\cabecera.css" />
+    <Content Include="Content\fechas.css" />
+    <Content Include="Content\formas.css" />
     <Content Include="Content\general.css" />
+    <Content Include="Content\inicio.css" />
     <Content Include="Content\profile.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -218,7 +223,10 @@
     <Content Include="img\oro.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
+    <Content Include="js\formas.js" />
     <Content Include="js\general.js" />
+    <Content Include="js\fechas.js" />
+    <Content Include="Content\logIn.css" />
     <Content Include="js\profile.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />

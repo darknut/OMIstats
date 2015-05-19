@@ -1,0 +1,23 @@
+﻿.ui-datepicker-year, .ui-datepicker-month {
+    border: 1px thin;
+    background: #cccccc /*{bgColorHeader}*/
+    url(themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png) /*{bgImgUrlHeader}*/
+    50% /*{bgHeaderXPos}*/ 50% /*{bgHeaderYPos}*/ repeat-x /*{bgHeaderRepeat}*/;
+}
+
+.ui-datepicker-year option, .ui-datepicker-month option {
+    background-color:white;
+}
+
+.ui-datepicker-year {
+    width:67px !important;
+}
+
+.ui-datepicker-month {
+    width:112px !important;
+}
+
+.ui-datepicker-current {
+    font-weight:bold !important;
+    color:black !important;
+}

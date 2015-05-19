@@ -38,6 +38,7 @@ namespace OMIstats.Controllers
         {
             if (p == null)
                 return RedirectToAction("Index", "Home");
+
             if (p.logIn())
             {
                 //Log in exitoso

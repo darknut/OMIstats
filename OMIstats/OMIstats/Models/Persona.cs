@@ -30,6 +30,15 @@ namespace OMIstats.Models
         /// </summary>
         public string password { get; set; }
 
+        public enum DisponibilidadUsuario
+        {
+            OK = 0,
+            NUMBER,
+            ALFANUMERIC,
+            TAKEN,
+            ERROR
+        }
+
         public Persona()
         {
             clave = 0;
@@ -183,17 +192,21 @@ namespace OMIstats.Models
         /// alfanumeric: el nombre no es alfanumerico
         /// taken: el nombre no esta disponible
         /// </returns>
-        public static string revisarNombreUsuarioDisponible(Persona p, string usuario)
+        public static DisponibilidadUsuario revisarNombreUsuarioDisponible(Persona p, string usuario)
         {
             usuario = usuario.Trim().ToLower();
+
+            if (usuario.Length == 0)
+                return DisponibilidadUsuario.ERROR;
+
             if (Regex.IsMatch(usuario, "^\\d"))
-                return "number";
+                return DisponibilidadUsuario.NUMBER;
 
             if (p.usuario.Equals(usuario))
-                return "ok";
+                return DisponibilidadUsuario.OK;
 
             if (!Regex.IsMatch(usuario, "^[a-zA-Z0-9]*$"))
-                return "alfanumeric";
+                return DisponibilidadUsuario.ALFANUMERIC;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -208,9 +221,9 @@ namespace OMIstats.Models
 
             DataTable table = db.getTable();
             if (table.Rows.Count == 0)
-                return "ok";
+                return DisponibilidadUsuario.OK;
 
-            return "taken";
+            return DisponibilidadUsuario.TAKEN;
         }
     }
 }

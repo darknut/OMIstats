@@ -1,34 +1,4 @@
-﻿$.datepicker.regional['es'] = {
-    closeText: 'Cerrar',
-    prevText: '<Ant',
-    nextText: 'Sig>',
-    currentText: 'Hoy',
-    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    monthNamesShort: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
-    dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-    weekHeader: 'Sm',
-    dateFormat: 'dd/mm/yy',
-    firstDay: 0,
-    isRTL: false,
-    showMonthAfterYear: false,
-    yearSuffix: ''
-};
-$.datepicker.setDefaults($.datepicker.regional['es']);
-$(function () {
-    var txt = document.getElementById("nacimiento");
-    if (txt.value == "01/01/1900")
-        txt.value = "";
-    $("#nacimiento").datepicker({
-        changeYear: true,
-        changeMonth: true,
-        yearRange: OMI_minimo + ":" + OMI_maximo,
-        showButtonPanel: true
-    });
-});
-
-function revisa() {
+﻿function revisa() {
     var txt = document.getElementById("nacimiento");
     if (txt.value == "")
         txt.value = "01/01/1900";
@@ -63,28 +33,46 @@ function setAlfanumerico() {
     setVisible("alfanumerico", true);
 }
 
+function setErrorUsuario(errorUsuario) {
+    if (errorUsuario == "ok")
+        setDisponible();
+    else if (errorUsuario == "taken")
+        setNoDisponible();
+    else if (errorUsuario == "number")
+        setCambioUsuario();
+    else if (errorUsuario == "alfanumeric")
+        setAlfanumerico();
+    else
+        setNoDisponible();
+}
+
+function getNombreUsuario() {
+    return { usuario: document.getElementById("usuario").value };
+}
+
 $(document).ready(function () {
-    $("#usuarioAjax").click(function () {
-        $.ajax({
-            url: '/Profile/Check',
-            type: 'POST',
-            dataType: 'json',
-            data: { usuario: document.getElementById("usuario").value },
-            success: function (data) {
-                if (data == "ok")
-                    setDisponible();
-                else if (data == "taken")
-                    setNoDisponible();
-                else if (data == "number")
-                    setCambioUsuario();
-                else if (data == "alfanumeric")
-                    setAlfanumerico();
-                else
-                    setNoDisponible();
-            },
-            error: function (data) {
-                setNoDisponible();
-            }
-        });
-    });
+    configurarAjax("usuarioAjax", "/Profile/Check",
+        function () { return getNombreUsuario() },
+        function (data) { setErrorUsuario(data); },
+        function (data) { setNoDisponible(); });
+
+    var txt = document.getElementById("nacimiento");
+    if (txt.value == "01/01/1900")
+        txt.value = "";
+    setCampoFechas("nacimiento", OMI_minimo + ":" + OMI_maximo);
+
+    if (errorImagen !== "")
+    {
+        setCampoError("file");
+        if (errorImagen === "invalida")
+            setVisible("imagenInvalida", true);
+        if (errorImagen === "bytes")
+            setVisible("imagenMuyGrande", true);
+    }
+
+    if (errorUsuario !== "")
+    {
+        setCampoError("usuario");
+        setErrorUsuario(errorUsuario);
+    }
 });

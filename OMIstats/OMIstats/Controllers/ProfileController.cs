@@ -12,6 +12,33 @@ namespace OMIstats.Controllers
         private const int AñoMinimo = 1950;
         private const int EdadMaxima = 20;
 
+        #region Metodos privados
+
+        private void ponFechasEnViewBag()
+        {
+            int maximo = MiembroDelegacion.primeraOMIPara((Persona)Session["usuario"]);
+            int minimo = MiembroDelegacion.ultimaOMIComoCompetidorPara((Persona)Session["usuario"]);
+
+            if (maximo == 0)
+                maximo = DateTime.Today.Year;
+
+            if (minimo == 0)
+                minimo = AñoMinimo;
+            else
+                minimo -= EdadMaxima;
+
+            ViewBag.maximo = maximo;
+            ViewBag.minimo = minimo;
+        }
+
+        private void limpiaErroresViewBag()
+        {
+            ViewBag.errorImagen = "";
+            ViewBag.errorUsuario = "";
+        }
+
+        #endregion
+
         //
         // GET: /Profile/
 
@@ -50,19 +77,7 @@ namespace OMIstats.Controllers
             if (!Persona.isLoggedIn(Session["usuario"]))
                 return RedirectToAction("Index", "Home");
 
-            int maximo = MiembroDelegacion.primeraOMIPara((Persona)Session["usuario"]);
-            int minimo = MiembroDelegacion.ultimaOMIComoCompetidorPara((Persona)Session["usuario"]);
-
-            if (maximo == 0)
-                maximo = DateTime.Today.Year;
-
-            if (minimo == 0)
-                minimo = AñoMinimo;
-            else
-                minimo -= EdadMaxima;
-
-            ViewBag.maximo = maximo;
-            ViewBag.minimo = minimo;
+            ponFechasEnViewBag();
 
             return View((Persona)Session["usuario"]);
         }
@@ -76,7 +91,7 @@ namespace OMIstats.Controllers
             if (!Persona.isLoggedIn(Session["usuario"]))
                 return Json("error");
 
-            string respuesta = Persona.revisarNombreUsuarioDisponible((Persona)Session["usuario"], usuario);
+            string respuesta = Persona.revisarNombreUsuarioDisponible((Persona)Session["usuario"], usuario).ToString().ToLower();
 
             return Json(respuesta);
         }
@@ -86,15 +101,34 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult Edit(HttpPostedFileBase file, Persona p)
         {
-            ////if (file.ContentLength > 0)
-            ////{
-            ////    var fileName = Path.GetFileName(file.FileName);
-            ////    var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-            ////    file.SaveAs(path);
-            ////}
-            // -TODO- Verificar si persona dentro de session cambia cuando regresa por aqui
+            limpiaErroresViewBag();
 
-            return View((Persona)Session["usuario"]);
+            if (file != null)
+            {
+                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file);
+                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
+                {
+                    ViewBag.errorImagen = resultado.ToString().ToLower();
+                    return Edit();
+                }
+            }
+
+            Persona.DisponibilidadUsuario respUsuario = Persona.revisarNombreUsuarioDisponible((Persona)Session["usuario"], p.usuario);
+            if (respUsuario != Persona.DisponibilidadUsuario.OK)
+            {
+                ViewBag.errorUsuario = respUsuario.ToString().ToLower();
+                return Edit();
+            }
+
+            // Todas las validaciones fueron pasadas, es hora de guardar los datos
+
+            if (file != null)
+            {
+                Utilities.Archivos.guardaImagen(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
+                // -TODO- Agregar imagen a tabla de Requests
+            }
+
+            return Edit();
         }
     }
 }
