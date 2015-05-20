@@ -20,9 +20,17 @@ namespace OMIstats.Models
         [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
         public string nombre { get; set; }
         public DateTime nacimiento { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string facebook { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [MaxLength(15, ErrorMessage = "El tamaño máximo es de 15 caracteres")]
         public string twitter { get; set; }
+        [RegularExpression(@"^(https?:\/\/)?((([\w-]+)\.){2,})([\/\w\.-]+)(\?[\/\w\.-=%&]*)?$", ErrorMessage = "Escribe una URL válida")]
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
         public string sitio { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Escribe un correo electrónico válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string correo { get; set; }
         public string usuario { get; set; }
         public bool admin { get; set; }

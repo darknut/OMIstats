@@ -154,6 +154,12 @@ namespace OMIstats.Controllers
                 p.password = "";
             }
 
+            // Validacion genero
+            if (String.IsNullOrEmpty(p.genero) || p.genero.Equals("M"))
+                p.genero = "M";
+            else
+                p.genero = "F";
+
             // Todas las validaciones fueron pasadas, es hora de guardar los datos
 
             if (file != null)

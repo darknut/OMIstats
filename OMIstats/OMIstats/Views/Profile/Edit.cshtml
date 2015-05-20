@@ -105,19 +105,31 @@
             </div>
             <div>
                 <div class="label">Sitio web:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.sitio, new { @class = "inputSitio" }) </div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.sitio, new { @class = "inputSitio" })
+                    @Html.ValidationMessageFor(model => model.sitio)
+                </div>
             </div>
             <div>
                 <div class="label">Correo electrónico:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.correo, new { @class = "inputSitio" }) </div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.correo, new { @class = "inputSitio" })
+                    @Html.ValidationMessageFor(model => model.correo)
+                </div>
             </div>
             <div>
                 <div class="label">Facebook:</div>
-                <div class="input">https://www.facebook.com/@Html.TextBoxFor(model => model.facebook, new { @class = "inputFacebook" }) </div>
+                <div class="input">
+                    https://www.facebook.com/@Html.TextBoxFor(model => model.facebook, new { @class = "inputFacebook" })
+                    @Html.ValidationMessageFor(model => model.facebook)
+                </div>
             </div>
             <div>
                 <div class="label">Twitter:</div>
-                <div class="input">https://twitter.com/@Html.TextBoxFor(model => model.twitter, new { @class = "inputTwitter" }) </div>
+                <div class="input">
+                    https://twitter.com/@Html.TextBoxFor(model => model.twitter, new { @class = "inputTwitter" })
+                    @Html.ValidationMessageFor(model => model.twitter)
+                </div>
             </div>
 
             <div>
