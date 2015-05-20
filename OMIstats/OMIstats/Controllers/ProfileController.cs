@@ -146,6 +146,12 @@ namespace OMIstats.Controllers
                     ViewBag.errorPassword = errorPassword.ToString().ToLower();
                     return Edit();
                 }
+
+                p.password = password2;
+            }
+            else
+            {
+                p.password = "";
             }
 
             // Todas las validaciones fueron pasadas, es hora de guardar los datos

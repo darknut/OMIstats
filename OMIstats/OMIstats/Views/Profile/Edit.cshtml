@@ -40,7 +40,8 @@
         <div class="datosParticipante">
             <div>
                 <div class="label">Sube una foto:</div>
-                <div class="input"><input type="file" name="file" id="file" />
+                <div class="input">
+                    <input type="file" name="file" id="file" />
                     <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
                     <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 300KB</div>
                 </div>
@@ -81,7 +82,10 @@
             </div>
             <div>
                 <div class="label">Nombre:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.nombre) </div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nombre)
+                    @Html.ValidationMessageFor(model => model.nombre)
+                </div>
             </div>
             <div>
                 <div class="label">Género:</div>
@@ -94,7 +98,8 @@
             </div>
             <div>
                 <div class="label">Fecha de nacimiento:</div>
-                <div class="input"> @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}")
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}")
                     @Html.ValidationMessageFor(model => model.nacimiento, "No escribiste una fecha válida")
                 </div>
             </div>

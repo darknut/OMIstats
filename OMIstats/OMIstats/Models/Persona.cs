@@ -15,6 +15,9 @@ namespace OMIstats.Models
         public const int TamañoUsuarioMaximo = 20;
 
         public int clave { get; set; }
+        [Required(ErrorMessage = "Escribe tu nombre")]
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚüÜ\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
+        [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
         public string nombre { get; set; }
         public DateTime nacimiento { get; set; }
         public string facebook { get; set; }
