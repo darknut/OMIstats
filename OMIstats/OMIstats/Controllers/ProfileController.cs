@@ -35,6 +35,7 @@ namespace OMIstats.Controllers
         {
             ViewBag.errorImagen = "";
             ViewBag.errorUsuario = "";
+            ViewBag.errorPassword = "";
         }
 
         #endregion
@@ -52,7 +53,7 @@ namespace OMIstats.Controllers
 
         public ActionResult view(string usuario)
         {
-            if (usuario == null || usuario.Length == 0)
+            if (String.IsNullOrEmpty(usuario))
             {
                 if (Persona.isLoggedIn(Session["usuario"]))
                     return View((Persona)Session["usuario"]);
@@ -99,9 +100,9 @@ namespace OMIstats.Controllers
         //
         // POST: /Profile/Edit/
         [HttpPost]
-        public ActionResult Edit(HttpPostedFileBase file, Persona p)
+        public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p)
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!Persona.isLoggedIn(Session["usuario"]) || p == null)
                 return RedirectToAction("Index", "Home");
 
             if (!ModelState.IsValid)
@@ -109,6 +110,9 @@ namespace OMIstats.Controllers
 
             limpiaErroresViewBag();
 
+            Persona current = (Persona)Session["usuario"];
+
+            // Validaciones foto
             if (file != null)
             {
                 Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file);
@@ -119,11 +123,29 @@ namespace OMIstats.Controllers
                 }
             }
 
-            Persona.DisponibilidadUsuario respUsuario = Persona.revisarNombreUsuarioDisponible((Persona)Session["usuario"], p.usuario);
-            if (respUsuario != Persona.DisponibilidadUsuario.OK)
+            // Validaciones nombre usuario
+            Persona.DisponibilidadUsuario respUsuario = Persona.revisarNombreUsuarioDisponible(current, p.usuario);
+            if (respUsuario != Persona.DisponibilidadUsuario.DISPONIBLE)
             {
                 ViewBag.errorUsuario = respUsuario.ToString().ToLower();
                 return Edit();
+            }
+
+            // Validaciones password
+            if (!String.IsNullOrEmpty(p.password) ||
+                !String.IsNullOrEmpty(password2) ||
+                !String.IsNullOrEmpty(password3))
+            {
+                Persona temp = new Persona();
+                temp.usuario = current.usuario;
+                temp.password = p.password;
+
+                Persona.ErrorPassword errorPassword = temp.verificaPasswords(password2, password3);
+                if (errorPassword != Persona.ErrorPassword.OK)
+                {
+                    ViewBag.errorPassword = errorPassword.ToString().ToLower();
+                    return Edit();
+                }
             }
 
             // Todas las validaciones fueron pasadas, es hora de guardar los datos

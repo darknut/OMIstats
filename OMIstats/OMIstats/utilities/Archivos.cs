@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -7,14 +8,14 @@ namespace OMIstats.Utilities
 {
     public class Archivos
     {
-        public static readonly List<string> ExtensionesValidas = new List<string> { "bmp", "jpg", "jpeg", "gif", "png" };
+        public static readonly List<string> ExtensionesValidas = new List<string> { ".bmp", ".jpg", ".jpeg", ".gif", ".png" };
         public static readonly int TamañoMaximo = 1024 * 300;
 
         public enum ResultadoImagen
         {
             VALIDA = 0,
-            INVALIDA = 1,
-            BYTES = 2
+            IMAGEN_INVALIDA,
+            IMAGEN_MUY_GRANDE
         }
 
         public enum FolderImagenes
@@ -26,16 +27,19 @@ namespace OMIstats.Utilities
 
         public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen)
         {
-            string[] nombre = imagen.FileName.Split('.');
+            if (imagen == null || String.IsNullOrEmpty(imagen.FileName))
+                return ResultadoImagen.IMAGEN_INVALIDA;
 
-            if (nombre.Length < 2)
-                return ResultadoImagen.INVALIDA;
+            string extension = Path.GetExtension(imagen.FileName).Trim();
 
-            if (!ExtensionesValidas.Contains(nombre[1].Trim().ToLower()))
-                return ResultadoImagen.INVALIDA;
+            if (extension.Length < 2)
+                return ResultadoImagen.IMAGEN_INVALIDA;
+
+            if (!ExtensionesValidas.Contains(extension.ToLower()))
+                return ResultadoImagen.IMAGEN_INVALIDA;
 
             if (imagen.ContentLength > TamañoMaximo)
-                return ResultadoImagen.BYTES;
+                return ResultadoImagen.IMAGEN_MUY_GRANDE;
 
             return ResultadoImagen.VALIDA;
         }

@@ -34,12 +34,20 @@ namespace OMIstats.Models
 
         public enum DisponibilidadUsuario
         {
-            OK = 0,
+            DISPONIBLE = 0,
             NUMBER,
             ALFANUMERIC,
             TAKEN,
             SIZE,
             ERROR
+        }
+
+        public enum ErrorPassword
+        {
+            OK = 0,
+            PASSWORD_INVALIDO,
+            PASSWORD_VACIO,
+            PASSWORD_DIFERENTE
         }
 
         public Persona()
@@ -65,16 +73,16 @@ namespace OMIstats.Models
         /// el resto de los datos en la instancia se llena
         /// </summary>
         /// <returns>Si el login fue exitoso</returns>
-        public bool logIn()
+        public bool logIn(bool datosCompletos = true)
         {
-            if (usuario == null || password == null)
+            if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(password))
                 return false;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where usuario = ");
-            query.Append(Utilities.Cadenas.comillas(usuario));
+            query.Append(Utilities.Cadenas.comillas(usuario.ToLower()));
             query.Append(" and password = HASHBYTES(\'SHA1\', ");
             query.Append(Utilities.Cadenas.comillas(password));
             query.Append(")");
@@ -86,7 +94,7 @@ namespace OMIstats.Models
             if (table.Rows.Count != 1)
                 return false;
 
-            llenarDatos(this, table.Rows[0]);
+            llenarDatos(this, table.Rows[0], completo:datosCompletos);
 
             return true;
         }
@@ -136,14 +144,14 @@ namespace OMIstats.Models
         /// </summary>
         public static Persona obtenerPersonaDeUsuario(string usuario)
         {
-            if (usuario == null || usuario.Length == 0)
+            if (String.IsNullOrEmpty(usuario))
                 return null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where usuario = ");
-            query.Append(Utilities.Cadenas.comillas(usuario));
+            query.Append(Utilities.Cadenas.comillas(usuario.ToLower()));
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -198,6 +206,9 @@ namespace OMIstats.Models
         /// </returns>
         public static DisponibilidadUsuario revisarNombreUsuarioDisponible(Persona p, string usuario)
         {
+            if (p == null || usuario == null)
+                return DisponibilidadUsuario.ERROR;
+
             usuario = usuario.Trim().ToLower();
 
             if (usuario.Length == 0 || usuario.Length > TamañoUsuarioMaximo)
@@ -207,7 +218,7 @@ namespace OMIstats.Models
                 return DisponibilidadUsuario.NUMBER;
 
             if (p.usuario.Equals(usuario))
-                return DisponibilidadUsuario.OK;
+                return DisponibilidadUsuario.DISPONIBLE;
 
             if (!Regex.IsMatch(usuario, "^[a-zA-Z0-9]*$"))
                 return DisponibilidadUsuario.ALFANUMERIC;
@@ -225,9 +236,23 @@ namespace OMIstats.Models
 
             DataTable table = db.getTable();
             if (table.Rows.Count == 0)
-                return DisponibilidadUsuario.OK;
+                return DisponibilidadUsuario.DISPONIBLE;
 
             return DisponibilidadUsuario.TAKEN;
+        }
+
+        public ErrorPassword verificaPasswords(string password1, string password2)
+        {
+            if (!logIn(datosCompletos: false))
+                return ErrorPassword.PASSWORD_INVALIDO;
+
+            if (String.IsNullOrEmpty(password1))
+                return ErrorPassword.PASSWORD_VACIO;
+
+            if (!password1.Equals(password2))
+                return ErrorPassword.PASSWORD_DIFERENTE;
+
+            return ErrorPassword.OK;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace OMIstats.Utilities
     {
         public static DateTime stringToDate(string fecha)
         {
-            if (fecha == null || fecha.Length == 0)
+            if (String.IsNullOrEmpty(fecha))
                 return new DateTime(1900, 1, 1);
 
             int dia, mes, año;

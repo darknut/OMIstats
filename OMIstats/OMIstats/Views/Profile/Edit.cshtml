@@ -11,11 +11,13 @@
 @section scripts
 {
   <script>
-      var OMI_minimo = @ViewBag.minimo;
-      var OMI_maximo = @ViewBag.maximo;
+      var OMI_minimo = "@ViewBag.minimo";
+      var OMI_maximo = "@ViewBag.maximo";
+      var generoUsuario = "@Model.genero";
+
       var errorImagen = "@ViewBag.errorImagen";
       var errorUsuario = "@ViewBag.errorUsuario";
-      var generoUsuario = "@Model.genero";
+      var errorPassword = "@ViewBag.errorPassword";
   </script>
   <script src="/Scripts/jquery-ui-1.8.20.min.js"></script>
   <script src="/js/fechas.js""></script>
@@ -39,8 +41,8 @@
             <div>
                 <div class="label">Sube una foto:</div>
                 <div class="input"><input type="file" name="file" id="file" />
-                    <div id="imagenInvalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
-                    <div id="imagenMuyGrande" class="textoRojo">El limite de tamaño para una imagen es 300KB</div>
+                    <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
+                    <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 300KB</div>
                 </div>
             </div>
             <div class="userDiv">
@@ -50,23 +52,32 @@
                     <input type="button" name="usuarioAjax"  id="usuarioAjax" value="Revisar disponibilidad" />
                     <br />
                     <div id="disponible" class="textoVerde">El nombre de usuario está disponible</div>
-                    <div id="noDisponible" class="textoRojo">El nombre de usuario no está disponible</div>
-                    <div id="cambioUsuario" class="textoRojo">Escribe un nombre de usuario que no empiece con un número</div>
-                    <div id="alfanumerico" class="textoRojo">Solo se permiten caracteres alfanumericos</div>
+                    <div id="taken" class="textoRojo">El nombre de usuario no está disponible</div>
+                    <div id="number" class="textoRojo">Escribe un nombre de usuario que no empiece con un número</div>
+                    <div id="alfanumeric" class="textoRojo">Solo se permiten caracteres alfanumericos</div>
                     <div id="size" class="textoRojo">El nombre de usuario debe de estar entre 1 y 20 caracteres</div>
                 </div>
             </div>
             <div>
                 <div class="label">Contraseña actual:</div>
-                <div class="input"> @Html.PasswordFor(model => model.password) </div>
+                <div class="input">
+                    @Html.PasswordFor(model => model.password)
+                    <div id ="password_invalido" class="textoRojo">La contraseña es incorrecta</div>
+                </div>
             </div>
             <div>
                 <div class="label">Contraseña nueva:</div>
-                <div class="input"><input type="password" id="password2" name="password2" /> </div>
+                <div class="input">
+                    <input type="password" id="password2" name="password2" />
+                    <div id ="password_vacio" class="textoRojo">Escribe una contraseña nueva</div>
+                </div>
             </div>
             <div>
                 <div class="label">Repetir contraseña:</div>
-                <div class="input"><input type="password" id="password3" name="password3" /> </div>
+                <div class="input">
+                    <input type="password" id="password3" name="password3" />
+                    <div id ="password_diferente" class="textoRojo">Las contraseñas no coinciden</div>
+                </div>
             </div>
             <div>
                 <div class="label">Nombre:</div>
