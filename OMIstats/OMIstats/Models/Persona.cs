@@ -15,27 +15,38 @@ namespace OMIstats.Models
         public const int TamañoUsuarioMaximo = 20;
 
         public int clave { get; set; }
+
         [Required(ErrorMessage = "Escribe tu nombre")]
         [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚüÜ\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
         [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
         public string nombre { get; set; }
+
         public DateTime nacimiento { get; set; }
+
         [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string facebook { get; set; }
+
         [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
         [MaxLength(15, ErrorMessage = "El tamaño máximo es de 15 caracteres")]
         public string twitter { get; set; }
+
         [RegularExpression(@"^(https?:\/\/)?((([\w-]+)\.){2,})([\/\w\.-]+)(\?[\/\w\.-=%&]*)?$", ErrorMessage = "Escribe una URL válida")]
         [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
         public string sitio { get; set; }
+
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Escribe un correo electrónico válido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string correo { get; set; }
+
         public string usuario { get; set; }
+
         public bool admin { get; set; }
+
         public string genero { get; set; }
+
         public string foto { get; set; }
+
         public int ioiID { get; set; }
 
         /// <summary>
@@ -252,6 +263,9 @@ namespace OMIstats.Models
             return DisponibilidadUsuario.TAKEN;
         }
 
+        /// <summary>
+        /// Verifica que el nuevo password sea válido
+        /// </summary>
         public ErrorPassword verificaPasswords(string password1, string password2)
         {
             if (!logIn(datosCompletos: false))
@@ -264,6 +278,83 @@ namespace OMIstats.Models
                 return ErrorPassword.PASSWORD_DIFERENTE;
 
             return ErrorPassword.OK;
+        }
+
+        /// <summary>
+        /// Guarda los datos en la base de datos
+        /// </summary>
+        /// <returns>Si el update se ejecutó correctamente</returns>
+        public bool guardarDatos()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update persona set ");
+
+            if (nombre.Length > 0)
+            {
+                query.Append(" nombre = ");
+                query.Append(Utilities.Cadenas.comillas(nombre));
+                query.Append(",");
+
+                query.Append(" nombreHash = HASHBYTES(\'SHA1\', ");
+                query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
+                query.Append("),");
+            }
+
+            query.Append(" facebook = ");
+            query.Append(Utilities.Cadenas.comillas(facebook));
+            query.Append(",");
+
+            query.Append(" twitter = ");
+            query.Append(Utilities.Cadenas.comillas(twitter));
+            query.Append(",");
+
+            query.Append(" sitio = ");
+            query.Append(Utilities.Cadenas.comillas(sitio));
+            query.Append(",");
+
+            query.Append(" usuario = ");
+            query.Append(Utilities.Cadenas.comillas(usuario));
+            query.Append(",");
+
+            if (password.Length > 0)
+            {
+                query.Append(" [password] = HASHBYTES(\'SHA1\', ");
+                query.Append(Utilities.Cadenas.comillas(password));
+                query.Append("),");
+            }
+
+            query.Append(" [admin] = ");
+            query.Append(admin ? "1" : "0");
+            query.Append(",");
+
+            query.Append(" genero = ");
+            query.Append(Utilities.Cadenas.comillas(genero));
+            query.Append(",");
+
+            if (foto.Length > 0)
+            {
+                query.Append(" foto = ");
+                query.Append(Utilities.Cadenas.comillas(foto));
+                query.Append(",");
+            }
+
+            query.Append(" correo = ");
+            query.Append(Utilities.Cadenas.comillas(correo));
+            query.Append(",");
+
+            query.Append(" nacimiento = ");
+            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(nacimiento)));
+            query.Append(",");
+
+            query.Append(" ioiID = ");
+            query.Append(ioiID);
+
+            query.Append(" where clave = ");
+            query.Append(clave);
+
+            return !db.EjecutarQuery(query.ToString()).error;
         }
     }
 }

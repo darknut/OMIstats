@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Iniciar sesión";
-    <link rel="stylesheet" href="~/Content/logIn.css" type="text/css" />
 }
 
 @using(@Html.BeginForm()) {
@@ -21,7 +20,7 @@
 
     <div>@Html.Label("Nombre de usuario o contraseña incorrecta",
     new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
-          @class = "errorLogIn" }) </div>
+          @class = "errorTextoRojo" }) </div>
 
     <p>
         <input type="submit" value="Entrar" />

@@ -20,5 +20,15 @@ namespace OMIstats.Utilities
 
             return new DateTime(año, mes, dia);
         }
+
+        public static string dateToString(DateTime fecha)
+        {
+            if (fecha == null)
+                return "01/01/1900";
+
+            return fecha.Day.ToString("00") + "/" +
+                   fecha.Month.ToString("00") + "/" +
+                   fecha.Year.ToString();
+        }
     }
 }

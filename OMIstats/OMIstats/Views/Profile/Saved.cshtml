@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Actualizar perfil";
+}
+
+<h2 class="titulo">Actualizar perfil</h2>
+
+@if (@ViewBag.value == "ok")
+{
+    <div>Los cambios se guardaron satisfactoriamente</div>
+}
+else if (@ViewBag.value == "admin")
+{
+    <div>
+        Los cambios se guardaron satisfactoriamente.
+        <br />
+        <br />
+        Sin embargo, algunos de los cambios requieren moderación de un administrador.
+    </div>
+}
+else if (@ViewBag.value == "error")
+{
+    <!-- -TODO- Agregar enlace -->
+    <div class="errorTextoRojo">
+        Ocurrió un error mientras guardábamos tus datos.
+        <br />
+        <br />
+        Inténtalo otra vez más tarde, y persiste el error, mándanos un correo.
+    </div>
+}
+
+<br />
+
+@Html.ActionLink("Regresar a tu perfil", "view", "Profile")

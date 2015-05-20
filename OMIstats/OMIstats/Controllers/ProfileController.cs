@@ -84,6 +84,15 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Profile/Saved/
+
+        public ActionResult Saved(string value)
+        {
+            ViewBag.value = value;
+            return View();
+        }
+
+        //
         // POST: /Profile/Check/
 
         [HttpPost]
@@ -108,6 +117,7 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return Edit();
 
+            bool needsAdmin = false;
             limpiaErroresViewBag();
 
             Persona current = (Persona)Session["usuario"];
@@ -160,15 +170,41 @@ namespace OMIstats.Controllers
             else
                 p.genero = "F";
 
-            // Todas las validaciones fueron pasadas, es hora de guardar los datos
-
+            // Guardando los request especiales
             if (file != null)
             {
                 Utilities.Archivos.guardaImagen(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
                 // -TODO- Agregar imagen a tabla de Requests
+                needsAdmin = true;
             }
 
-            return Edit();
+            if (!p.nombre.Equals(current.nombre))
+            {
+                // -TODO- Agregar nombre a tabla de Requests
+                needsAdmin = true;
+            }
+
+            // Se copian los datos que no se pueden modificar
+            p.admin = current.admin;
+            p.clave = current.clave;
+            p.ioiID = current.ioiID;
+            // Foto y nombre se vuelven "" porque se actualizan por un Admin
+            p.foto = "";
+            p.nombre = "";
+
+            // Se guardan los datos
+            if (p.guardarDatos())
+            {
+                Session["usuario"] = Persona.obtenerPersonaDeUsuario(p.usuario);
+                if (needsAdmin)
+                    return RedirectToAction("Saved", "Profile", new { value = "admin" });
+                else
+                    return RedirectToAction("Saved", "Profile", new { value = "ok" });
+            }
+            else
+            {
+                return RedirectToAction("Saved", "Profile", new { value = "error" });
+            }
         }
     }
 }

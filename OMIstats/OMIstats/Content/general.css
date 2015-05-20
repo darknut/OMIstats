@@ -18,3 +18,7 @@
 .clear {
     clear:both;
 }
+
+.errorTextoRojo {
+    color:red;
+}

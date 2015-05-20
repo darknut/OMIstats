@@ -226,7 +226,6 @@
     <Content Include="js\formas.js" />
     <Content Include="js\general.js" />
     <Content Include="js\fechas.js" />
-    <Content Include="Content\logIn.css" />
     <Content Include="js\profile.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -260,6 +259,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Profile\view.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Profile\Saved.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
