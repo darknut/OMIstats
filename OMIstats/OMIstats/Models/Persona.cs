@@ -17,7 +17,7 @@ namespace OMIstats.Models
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe tu nombre")]
-        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚüÜ\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
         [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
         public string nombre { get; set; }
 
@@ -186,6 +186,30 @@ namespace OMIstats.Models
             llenarDatos(p, table.Rows[0]);
 
             return p;
+        }
+
+        /// <summary>
+        /// Lee de nuevo los datos del usuario de la base de datos y los actualiza en el objeto
+        /// </summary>
+        public void recargarDatos()
+        {
+            if (clave == 0)
+                return;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where clave = ");
+            query.Append(clave);
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return;
+
+            llenarDatos(this, table.Rows[0]);
         }
 
         /// <summary>

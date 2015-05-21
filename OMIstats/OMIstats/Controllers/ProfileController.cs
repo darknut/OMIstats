@@ -56,7 +56,10 @@ namespace OMIstats.Controllers
             if (String.IsNullOrEmpty(usuario))
             {
                 if (Persona.isLoggedIn(Session["usuario"]))
+                {
+                    ((Persona)Session["usuario"]).recargarDatos();
                     return View((Persona)Session["usuario"]);
+                }
                 else
                     return RedirectToAction("Index", "Home");
             }
@@ -78,6 +81,7 @@ namespace OMIstats.Controllers
             if (!Persona.isLoggedIn(Session["usuario"]))
                 return RedirectToAction("Index", "Home");
 
+            ((Persona)Session["usuario"]).recargarDatos();
             ponFechasEnViewBag();
 
             return View((Persona)Session["usuario"]);
@@ -185,6 +189,7 @@ namespace OMIstats.Controllers
             }
 
             // Se copian los datos que no se pueden modificar
+            current.recargarDatos();
             p.admin = current.admin;
             p.clave = current.clave;
             p.ioiID = current.ioiID;
@@ -195,7 +200,7 @@ namespace OMIstats.Controllers
             // Se guardan los datos
             if (p.guardarDatos())
             {
-                Session["usuario"] = Persona.obtenerPersonaDeUsuario(p.usuario);
+                ((Persona)Session["usuario"]).recargarDatos();
                 if (needsAdmin)
                     return RedirectToAction("Saved", "Profile", new { value = "admin" });
                 else
