@@ -1,14 +1,11 @@
-﻿function configurarAjax(ID, direccion, funcionDatos, funcionExito, funcionError)
-{
-    $("#" + ID).click(function () {
-        $.ajax({
-            url: direccion,
-            type: 'POST',
-            dataType: 'json',
-            data: funcionDatos(),
-            success: funcionExito,
-            error: funcionError
-        });
+﻿function llamadaAjax(direccion, datos, funcionExito, funcionError) {
+    $.ajax({
+        url: direccion,
+        type: 'POST',
+        dataType: 'json',
+        data: datos,
+        success: funcionExito,
+        error: funcionError
     });
 }
 

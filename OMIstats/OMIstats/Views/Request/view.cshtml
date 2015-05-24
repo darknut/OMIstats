@@ -7,6 +7,14 @@
 @section AddToHead
 {
     <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script src="~/js/general.js"></script>
+    <script src="~/js/formas.js"></script>
+    <script src="~/js/request.js"></script>
 }
 
 <h2 class="titulo">Mis peticiones</h2>
@@ -54,7 +62,7 @@ else
 
         @for (int j = cambioNombre; j < Model.Count; j++)
         {
-            <tr>
+            <tr id='@Url.Content("row" + @Model[j].clave)'>
                 @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("nombre"))
                 {
                     <td class="tdNombre">
@@ -64,7 +72,10 @@ else
                        @Html.DisplayFor(model => Model[j].datos1)
                     </td>
                     <td>
-                       @Html.ActionLink("Eliminar", "Delete", new { clave = Model[j].clave })
+                       <a href="javascript:eliminar(@Model[j].clave)">Eliminar</a>
+                       <div id='@Url.Content("error" + @Model[j].clave)' class="textoRojo">
+                        Hubo un error. Inténtalo más tarde.
+                       </div>
                     </td>
                 }
                 else
@@ -92,7 +103,7 @@ else
 
         @for (int j = cambioFoto; j < Model.Count; j++)
         {
-            <tr>
+            <tr id='@Url.Content("row" + @Model[j].clave)'>
                 @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("foto"))
                 {
                     <td class="tdFoto">
@@ -102,7 +113,10 @@ else
                        <img src='@Url.Content(Path.Combine("/img/temp", Model[j].datos1))' alt="foto"/>
                     </td>
                     <td>
-                       @Html.ActionLink("Eliminar", "Delete", new { clave = Model[j].clave })
+                       <a href="javascript:eliminar(@Model[j].clave)">Eliminar</a>
+                       <div id='@Url.Content("error" + @Model[j].clave)' class="textoRojo">
+                        Hubo un error. Inténtalo más tarde.
+                       </div>
                     </td>
                 }
                 else

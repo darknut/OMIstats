@@ -94,5 +94,47 @@ namespace OMIstats.Models
             if (cargarUsuario)
                 usuario = Persona.obtenerPersonaConClave((int)datos["usuario"]);
         }
+
+        /// <summary>
+        /// Obtiene la peticion de la base de datos con la clave mandada como parametro
+        /// </summary>
+        public static Peticion obtenerPeticionConClave(int clave)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            if (clave == 0)
+                return null;
+
+            query.Append(" select * from peticion where clave = ");
+            query.Append(clave);
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Peticion p = new Peticion();
+            p.llenarDatos(table.Rows[0], true);
+
+            return p;
+        }
+
+        /// <summary>
+        /// Elimina la petición de la base de datos
+        /// </summary>
+        /// <returns>Si se eliminó correctamente la petición</returns>
+        public bool eliminarPeticion()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("delete peticion where clave = ");
+            query.Append(clave);
+
+            return !db.EjecutarQuery(query.ToString()).error;
+        }
     }
 }

@@ -20,18 +20,16 @@ function setErrorUsuario(elem)
         setVisible(arrayErroresUsuario[i], arrayErroresUsuario[i] == elem);
 }
 
-function getNombreUsuario()
+function checarUsuario()
 {
-    return { usuario: document.getElementById("usuario").value };
+    llamadaAjax("/Profile/Check",
+                { usuario: document.getElementById("usuario").value },
+                function (data) { setErrorUsuario(data); },
+                function (data) { setNoDisponible(); });
 }
 
 $(document).ready(function ()
 {
-    configurarAjax("usuarioAjax", "/Profile/Check",
-        function () { return getNombreUsuario() },
-        function (data) { setErrorUsuario(data); },
-        function (data) { setNoDisponible(); });
-
     var txt = document.getElementById("nacimiento");
     if (txt.value == "01/01/1900")
         txt.value = "";

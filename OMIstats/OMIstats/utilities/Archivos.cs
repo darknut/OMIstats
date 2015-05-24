@@ -46,24 +46,31 @@ namespace OMIstats.Utilities
             return ResultadoImagen.VALIDA;
         }
 
-        /// <summary>
-        /// Guarda la imagen en disco y devuelve el nombre del archivo
-        /// </summary>
-        /// <param name="imagen">La imagen mandada como http request</param>
-        /// <param name="nombre">El nombre opcional de la imagen</param>
-        /// <param name="folder">El folder donde colocar la imagen</param>
-        /// <returns>El path relativo de la imagen</returns>
-        public static string guardaImagen(HttpPostedFileBase imagen, string nombre = "", FolderImagenes folder = FolderImagenes.TEMPORAL)
+        private static string pathAbsoluto(FolderImagenes folder)
         {
-            string extension = Path.GetExtension(imagen.FileName);
-            string lugarEnDisco = "";
+            string s = "";
             switch (folder)
             {
                 case FolderImagenes.TEMPORAL:
-                    lugarEnDisco = FOLDER_TEMPORAL;
+                    s = FOLDER_TEMPORAL;
                     break;
             }
-            lugarEnDisco = HttpContext.Current.Server.MapPath(lugarEnDisco);
+            s = HttpContext.Current.Server.MapPath(s);
+
+            return s;
+        }
+
+        /// <summary>
+        /// Guarda la imagen en disco y devuelve el nombre del archivo
+        /// </summary>
+        /// <param name="archivo">La imagen mandada como http request</param>
+        /// <param name="nombre">El nombre opcional de la imagen</param>
+        /// <param name="folder">El folder donde colocar la imagen</param>
+        /// <returns>El path relativo de la imagen</returns>
+        public static string guardaArchivo(HttpPostedFileBase archivo, string nombre = "", FolderImagenes folder = FolderImagenes.TEMPORAL)
+        {
+            string extension = Path.GetExtension(archivo.FileName);
+            string lugarEnDisco = pathAbsoluto(folder);
 
             if (String.IsNullOrEmpty(nombre))
                 do
@@ -71,9 +78,15 @@ namespace OMIstats.Utilities
                     nombre = Guid.NewGuid().ToString() + extension;
                 } while (File.Exists(Path.Combine(lugarEnDisco, nombre)));
 
-            imagen.SaveAs(Path.Combine(lugarEnDisco, nombre));
+            archivo.SaveAs(Path.Combine(lugarEnDisco, nombre));
 
             return nombre;
+        }
+
+        public static void eliminarArchivo(string nombre, FolderImagenes folder)
+        {
+            string lugarEnDisco = pathAbsoluto(folder);
+            System.IO.File.Delete(Path.Combine(lugarEnDisco, nombre));
         }
     }
 }

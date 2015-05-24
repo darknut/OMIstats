@@ -195,7 +195,7 @@ namespace OMIstats.Controllers
                 // Guardando los request especiales
                 if (file != null)
                 {
-                    string imagen = Utilities.Archivos.guardaImagen(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
+                    string imagen = Utilities.Archivos.guardaArchivo(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
                     Peticion pet = new Peticion();
                     pet.tipo = "usuario";
                     pet.subtipo = "foto";

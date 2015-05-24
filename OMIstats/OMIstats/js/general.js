@@ -5,3 +5,8 @@
     else
         elem.style.display = 'none';
 }
+
+function esconde(id)
+{
+    $("#" + id).hide("slow");
+}

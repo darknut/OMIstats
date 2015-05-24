@@ -51,7 +51,7 @@
                 <div class="label">Usuario:</div>
                 <div class="input">
                     @Html.TextBoxFor(model => model.usuario)
-                    <input type="button" name="usuarioAjax"  id="usuarioAjax" value="Revisar disponibilidad" />
+                    <input type="button" onclick="checarUsuario()" value="Revisar disponibilidad" />
                     <br />
                     <div id="disponible" class="textoVerde">El nombre de usuario está disponible</div>
                     <div id="taken" class="textoRojo">El nombre de usuario no está disponible</div>

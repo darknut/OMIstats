@@ -30,5 +30,33 @@ namespace OMIstats.Controllers
             return View(Peticion.obtenerPeticionesDeUsuario((Persona) Session["usuario"]));
         }
 
+        //
+        // POST: /Request/Delete/
+
+        [HttpPost]
+        public JsonResult Delete(int clave)
+        {
+            if (!Persona.isLoggedIn(Session["usuario"]))
+                return Json("error");
+
+            ((Persona)Session["usuario"]).recargarDatos();
+
+            Peticion pe = Peticion.obtenerPeticionConClave(clave);
+            if (pe == null)
+                return Json("error");
+
+            if (!(((Persona)Session["usuario"]).admin ||
+                  ((Persona)Session["usuario"]).clave == pe.usuario.clave))
+                return Json("error");
+
+            if (!pe.eliminarPeticion())
+                return Json("error");
+
+            if (pe.tipo.Equals("usuario") &&
+                pe.subtipo.Equals("foto"))
+                Utilities.Archivos.eliminarArchivo(pe.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
+
+            return Json("ok");
+        }
     }
 }
