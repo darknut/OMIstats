@@ -6,6 +6,9 @@
         quedan = quedan - 1;
         if (quedan == 0)
             location.reload();
+        else
+            if (typeof calculaTotal == 'function')
+                calculaTotal();
     }
     else
         setVisible("error" + fila, true);

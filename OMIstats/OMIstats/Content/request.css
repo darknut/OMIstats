@@ -8,10 +8,6 @@
     font-style:italic;
 }
 
-table {
-    padding-bottom:20px;
-}
-
 th {
     color:#336699;
     text-align:left;
@@ -48,4 +44,8 @@ td {
 
 .negritas {
     font-weight:bold;
+}
+
+.right {
+    float:right;
 }

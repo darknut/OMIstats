@@ -86,7 +86,7 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Obtiene todas las peticiones de la base de datos
+        /// Obtiene las primeras 30 peticiones de la base de datos
         /// </summary>
         public static List<Peticion> obtenerPeticiones()
         {
@@ -94,7 +94,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from peticion order by tipo, subtipo, usuario ");
+            query.Append(" select top 30 * from peticion order by tipo, subtipo, usuario ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return lista;
@@ -110,6 +110,27 @@ namespace OMIstats.Models
             }
 
             return lista;
+        }
+
+        /// <summary>
+        /// Regresa el total de de peticiones en la base de datos
+        /// </summary>
+        public static int cuentaPeticiones()
+        {
+            List<Peticion> lista = new List<Peticion>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select count(*) from peticion  ");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return 0;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return 0;
+
+            return (int) table.Rows[0][0];
         }
 
         private void llenarDatos(DataRow datos, bool cargarUsuario = false)

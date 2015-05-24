@@ -81,6 +81,8 @@ namespace OMIstats.Controllers
             if (!((Persona)Session["usuario"]).admin)
                 return RedirectToAction("Index", "Home");
 
+            ViewBag.totalPeticiones = Peticion.cuentaPeticiones();
+
             return View(Peticion.obtenerPeticiones());
         }
     }
