@@ -65,6 +65,39 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Aprove(int clave)
         {
+            if (!Persona.isLoggedIn(Session["usuario"]))
+                return Json("error");
+
+            ((Persona)Session["usuario"]).recargarDatos();
+
+            if (!((Persona)Session["usuario"]).admin)
+                return Json("error");
+
+            Peticion p = Peticion.obtenerPeticionConClave(clave);
+            if (p == null)
+                return Json("error");
+
+            // Aceptando la petición
+            if (p.tipo.Equals("usuario"))
+            {
+                if (p.subtipo.Equals("nombre"))
+                {
+                    p.usuario.nombre = p.datos1;
+                    p.usuario.guardarDatos();
+                }
+
+                if (p.subtipo.Equals("foto"))
+                {
+                    p.usuario.foto =
+                        Utilities.Archivos.copiarArchivo(p.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
+                                            p.usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+                    p.usuario.guardarDatos();
+                    Utilities.Archivos.eliminarArchivo(p.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
+                }
+            }
+
+            p.eliminarPeticion();
+
             return Json("ok");
         }
 

@@ -13,7 +13,7 @@
     <h1 class="titulo">Datos de usuario</h1>
 
     <div class="foto" >
-        <img src='@Url.Content("~/img/" + @Model.foto)' alt="@Model.nombre"/>
+        <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
     </div>
 
     <div class="datosParticipante">

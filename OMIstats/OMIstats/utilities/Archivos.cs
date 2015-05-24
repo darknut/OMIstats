@@ -12,6 +12,7 @@ namespace OMIstats.Utilities
         public static readonly int TamañoMaximo = 1024 * 300;
 
         public const string FOLDER_TEMPORAL = "~/img/temp";
+        public const string FOLDER_USUARIOS = "~/img/user";
 
         public enum ResultadoImagen
         {
@@ -46,7 +47,7 @@ namespace OMIstats.Utilities
             return ResultadoImagen.VALIDA;
         }
 
-        private static string pathAbsoluto(FolderImagenes folder)
+        private static string pathRelativo(FolderImagenes folder)
         {
             string s = "";
             switch (folder)
@@ -54,7 +55,17 @@ namespace OMIstats.Utilities
                 case FolderImagenes.TEMPORAL:
                     s = FOLDER_TEMPORAL;
                     break;
+                case FolderImagenes.USUARIOS:
+                    s = FOLDER_USUARIOS;
+                    break;
             }
+
+            return s;
+        }
+
+        private static string pathAbsoluto(FolderImagenes folder)
+        {
+            string s = pathRelativo(folder);
             s = HttpContext.Current.Server.MapPath(s);
 
             return s;
@@ -83,10 +94,31 @@ namespace OMIstats.Utilities
             return nombre;
         }
 
+        /// <summary>
+        /// Borra el archivo del disco
+        /// </summary>
         public static void eliminarArchivo(string nombre, FolderImagenes folder)
         {
             string lugarEnDisco = pathAbsoluto(folder);
             System.IO.File.Delete(Path.Combine(lugarEnDisco, nombre));
+        }
+
+        /// <summary>
+        /// Copia un archivo
+        /// </summary>
+        /// <returns>El path relativo al archivo destino</returns>
+        public static string copiarArchivo(string nombreOrigen, FolderImagenes folderOrigen, string nombreDestino, FolderImagenes folderDestino)
+        {
+            string lugarOrigen = pathAbsoluto(folderOrigen);
+            string lugarDestino = pathAbsoluto(folderDestino);
+
+            if (Path.GetExtension(nombreDestino).Length < 2)
+                nombreDestino += Path.GetExtension(nombreOrigen);
+
+            System.IO.File.Copy(Path.Combine(lugarOrigen, nombreOrigen),
+                Path.Combine(lugarDestino, nombreDestino), overwrite:true);
+
+            return Path.Combine(pathRelativo(folderDestino), nombreDestino);
         }
     }
 }
