@@ -116,7 +116,7 @@ namespace OMIstats.Models
             if (table.Rows.Count != 1)
                 return false;
 
-            llenarDatos(this, table.Rows[0], completo:datosCompletos);
+            llenarDatos(table.Rows[0], completo:datosCompletos);
 
             return true;
         }
@@ -127,24 +127,24 @@ namespace OMIstats.Models
         /// <param name="persona">El objeto donde se guardaran los datos</param>
         /// <param name="datos">La fila con el origen de los datos</param>
         /// <param name="completo">Si es true, saca todos los datos de la fila, de ser false, solo nombre, usuario y clave</param>
-        private static void llenarDatos(Persona persona, DataRow datos, bool completo = true)
+        private void llenarDatos(DataRow datos, bool completo = true)
         {
-            persona.clave = (int) datos["clave"];
-            persona.nombre = datos["nombre"].ToString().Trim();
-            persona.usuario = datos["usuario"].ToString().Trim();
-            persona.password = "";
+            clave = (int) datos["clave"];
+            nombre = datos["nombre"].ToString().Trim();
+            usuario = datos["usuario"].ToString().Trim();
+            password = "";
 
             if (completo)
             {
-                persona.nacimiento = Utilities.Fechas.stringToDate(datos["nacimiento"].ToString().Trim());
-                persona.facebook = datos["facebook"].ToString().Trim();
-                persona.twitter = datos["twitter"].ToString().Trim();
-                persona.sitio = datos["sitio"].ToString().Trim();
-                persona.correo = datos["correo"].ToString().Trim();
-                persona.admin = (bool) datos["admin"];
-                persona.genero = datos["genero"].ToString();
-                persona.foto = datos["foto"].ToString().Trim();
-                persona.ioiID = (int) datos["ioiID"];
+                nacimiento = Utilities.Fechas.stringToDate(datos["nacimiento"].ToString().Trim());
+                facebook = datos["facebook"].ToString().Trim();
+                twitter = datos["twitter"].ToString().Trim();
+                sitio = datos["sitio"].ToString().Trim();
+                correo = datos["correo"].ToString().Trim();
+                admin = (bool) datos["admin"];
+                genero = datos["genero"].ToString();
+                foto = datos["foto"].ToString().Trim();
+                ioiID = (int) datos["ioiID"];
             }
         }
 
@@ -183,7 +183,19 @@ namespace OMIstats.Models
                 return null;
 
             Persona p = new Persona();
-            llenarDatos(p, table.Rows[0]);
+            p.llenarDatos(table.Rows[0]);
+
+            return p;
+        }
+
+        /// <summary>
+        /// Regresa la persona asociada con la clave mandada como parametro
+        /// </summary>
+        public static Persona obtenerPersonaConClave(int clave)
+        {
+            Persona p = new Persona();
+            p.clave = clave;
+            p.recargarDatos();
 
             return p;
         }
@@ -209,7 +221,7 @@ namespace OMIstats.Models
             if (table.Rows.Count != 1)
                 return;
 
-            llenarDatos(this, table.Rows[0]);
+            llenarDatos(table.Rows[0]);
         }
 
         /// <summary>
@@ -233,7 +245,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Persona p = new Persona();
-                llenarDatos(p, r, completo:false);
+                p.llenarDatos(r, completo:false);
                 admins.Add(p);
             }
 

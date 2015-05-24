@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -52,6 +53,46 @@ namespace OMIstats.Models
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public static List<Peticion> obtenerPeticionesDeUsuario(Persona usuario)
+        {
+            List<Peticion> lista = new List<Peticion>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from peticion where usuario = ");
+            query.Append(usuario.clave);
+            query.Append(" order by tipo, subtipo ");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return lista;
+
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Peticion p = new Peticion();
+                p.llenarDatos(r);
+                p.usuario = usuario;
+
+                lista.Add(p);
+            }
+
+            return lista;
+        }
+
+        private void llenarDatos(DataRow datos, bool cargarUsuario = false)
+        {
+            clave = (int) datos["clave"];
+            tipo = datos["tipo"].ToString();
+            subtipo = datos["subtipo"].ToString();
+            datos1 = datos["datos1"].ToString();
+            datos2 = datos["datos2"].ToString();
+            datos3 = datos["datos3"].ToString();
+
+            if (cargarUsuario)
+                usuario = Persona.obtenerPersonaConClave((int)datos["usuario"]);
         }
     }
 }

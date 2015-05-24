@@ -1,0 +1,119 @@
+﻿@model List<OMIstats.Models.Peticion>
+
+@{
+    ViewBag.Title = "Mis peticiones";
+}
+
+@section AddToHead
+{
+    <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
+}
+
+<h2 class="titulo">Mis peticiones</h2>
+
+<div>Aqui puedes ver las peticiones que has hecho y que necesitan ser aprobadas por un administrador. Puedes eliminarlas si así lo deseas</div>
+
+@{
+    int cambioNombre = -1;
+    int cambioFoto = -1;
+    int i = 0;
+}
+
+@foreach (var item in Model)
+{
+    if (item.tipo.Equals("usuario") && item.subtipo.Equals("nombre") && cambioNombre == -1)
+    {
+        cambioNombre = i;
+    }
+    if (item.tipo.Equals("usuario") && item.subtipo.Equals("foto") && cambioFoto == -1)
+    {
+        cambioFoto = i;
+    }
+    i++;
+}
+
+
+@if (cambioNombre == -1 && cambioFoto == -1)
+{
+    <div class="clean">No tienes ninguna petición</div>
+}
+else
+{
+    if (cambioNombre != -1)
+    {
+        
+    <h3>Cambio de nombre</h3>
+
+    <table>
+
+        <tr>
+            <th>Nombre actual</th>
+            <th>Nuevo nombre</th>
+            <th></th>
+        </tr>
+
+        @for (int j = cambioNombre; j < Model.Count; j++)
+        {
+            <tr>
+                @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("nombre"))
+                {
+                    <td class="tdNombre">
+                       @ViewBag.usuario.nombre
+                    </td>
+                    <td class="tdNombre">
+                       @Html.DisplayFor(model => Model[j].datos1)
+                    </td>
+                    <td>
+                       @Html.ActionLink("Eliminar", "Delete", new { clave = Model[j].clave })
+                    </td>
+                }
+                else
+                {
+                    break;
+                }
+            </tr>
+        }
+
+    </table>
+    }
+    
+    if (cambioFoto != -1)
+    {
+        
+    <h3>Cambio de foto</h3>
+
+    <table>
+
+        <tr>
+            <th>Foto actual</th>
+            <th>Nueva foto</th>
+            <th></th>
+        </tr>
+
+        @for (int j = cambioFoto; j < Model.Count; j++)
+        {
+            <tr>
+                @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("foto"))
+                {
+                    <td class="tdFoto">
+                       <img src='@Url.Content(Path.Combine("/img", ViewBag.usuario.foto))' alt="foto"/>
+                    </td>
+                    <td class="tdFoto">
+                       <img src='@Url.Content(Path.Combine("/img/temp", Model[j].datos1))' alt="foto"/>
+                    </td>
+                    <td>
+                       @Html.ActionLink("Eliminar", "Delete", new { clave = Model[j].clave })
+                    </td>
+                }
+                else
+                {
+                    break;
+                }
+            </tr>
+        }
+
+    </table>
+    }
+}
+
+<!-- -TODO- Agregar algun lugar que apunte aqui -->

@@ -125,6 +125,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="Models\Peticion.cs" />
     <Compile Include="utilities\Acceso.cs" />
@@ -152,6 +153,7 @@
     <Content Include="Content\general.css" />
     <Content Include="Content\inicio.css" />
     <Content Include="Content\profile.css" />
+    <Content Include="Content\request.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -261,6 +263,7 @@
     <Content Include="Views\Profile\view.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\Saved.cshtml" />
+    <Content Include="Views\Request\view.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

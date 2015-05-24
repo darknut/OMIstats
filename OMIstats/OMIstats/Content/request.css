@@ -1,0 +1,39 @@
+﻿h3 {
+    padding-top:20px;
+    color:#336699;
+}
+
+.clean {
+    padding:50px;
+    font-style:italic;
+}
+
+table {
+    padding-bottom:20px;
+}
+
+th {
+    color:#336699;
+    text-align:left;
+    padding:5px;
+}
+
+td {
+    padding:5px;
+}
+
+.tdNombre {
+    min-width:200px;
+}
+
+.tdFoto {
+    width:120px;
+}
+
+.tdFoto img{
+    border-top-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	margin-right: 2px;
+	margin-bottom: 8px;
+    width:100px;
+}
