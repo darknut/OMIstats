@@ -37,3 +37,15 @@ td {
 	margin-bottom: 8px;
     width:100px;
 }
+
+.par {
+    background-color:#DDFFFF;
+}
+
+.impar {
+    background-color:white;
+}
+
+.negritas {
+    font-weight:bold;
+}

@@ -55,6 +55,9 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
         }
 
+        /// <summary>
+        /// Obtiene las peticiones del usuario mandado como parametro
+        /// </summary>
         public static List<Peticion> obtenerPeticionesDeUsuario(Persona usuario)
         {
             List<Peticion> lista = new List<Peticion>();
@@ -75,6 +78,33 @@ namespace OMIstats.Models
                 Peticion p = new Peticion();
                 p.llenarDatos(r);
                 p.usuario = usuario;
+
+                lista.Add(p);
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Obtiene todas las peticiones de la base de datos
+        /// </summary>
+        public static List<Peticion> obtenerPeticiones()
+        {
+            List<Peticion> lista = new List<Peticion>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from peticion order by tipo, subtipo, usuario ");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return lista;
+
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Peticion p = new Peticion();
+                p.llenarDatos(r, true);
 
                 lista.Add(p);
             }

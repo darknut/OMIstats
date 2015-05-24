@@ -1,0 +1,93 @@
+﻿@model List<OMIstats.Models.Peticion>
+
+@{
+    ViewBag.Title = "Administrar peticiones";
+}
+
+@section AddToHead
+{
+    <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script>
+        var quedan = "@Model.Count";
+    </script>
+    <script src="~/js/general.js"></script>
+    <script src="~/js/formas.js"></script>
+    <script src="~/js/request.js"></script>
+    <script src="~/js/admin.js"></script>
+}
+
+<h2 class="titulo">Lista de peticiones</h2>
+
+@if (Model.Count == 0)
+{
+    <div class="clean">No queda ninguna petición</div>
+}
+else
+{
+    int counter = 0;
+
+<table border="1">
+    <tr>
+        <th>
+            Acciones
+        </th>
+        <th>
+            Tipo de petición
+        </th>
+        <th>
+            Usuario
+        </th>
+        <th>
+            Petición
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        string clase;
+        if (counter % 2 == 0)
+        {
+            clase = "par";
+        }
+        else
+        {
+            clase = "impar";
+        }
+        counter++;
+        <tr id='@Url.Content("row" + @item.clave)' class="@clase">
+            <td>
+                <a href="javascript:aprobar(@item.clave)">Aprobar</a>
+                <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                <br />
+                <div id='@Url.Content("error" + @item.clave)' class="textoRojo">
+                Hubo un error
+                </div>
+            </td>
+
+            @if (item.tipo == "usuario")
+            {
+                if (item.subtipo == "nombre")
+                {
+                    <td class="negritas">
+                        Cambio de nombre
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
+                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target="_blank" })
+                    </td>
+                    <td>
+                        <span class="negritas">Nuevo nombre:</span>
+                        @Html.DisplayFor(modelItem => item.datos1)
+                    </td>
+                }
+            }
+
+        </tr>
+    }
+</table>
+
+}

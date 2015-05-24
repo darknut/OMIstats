@@ -1,7 +1,12 @@
 ﻿function ocultaFila(resultado, fila)
 {
     if (resultado == "ok")
+    {
         esconde("row" + fila);
+        quedan = quedan - 1;
+        if (quedan == 0)
+            location.reload();
+    }
     else
         setVisible("error" + fila, true);
 }

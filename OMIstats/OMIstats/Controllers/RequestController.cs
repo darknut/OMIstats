@@ -58,5 +58,30 @@ namespace OMIstats.Controllers
 
             return Json("ok");
         }
+
+        //
+        // POST: /Request/Aprove/
+
+        [HttpPost]
+        public JsonResult Aprove(int clave)
+        {
+            return Json("ok");
+        }
+
+        //
+        // GET: /Request/Manage/
+
+        public ActionResult Manage()
+        {
+            if (!Persona.isLoggedIn(Session["usuario"]))
+                return RedirectToAction("Index", "Home");
+
+            ((Persona)Session["usuario"]).recargarDatos();
+
+            if (!((Persona)Session["usuario"]).admin)
+                return RedirectToAction("Index", "Home");
+
+            return View(Peticion.obtenerPeticiones());
+        }
     }
 }

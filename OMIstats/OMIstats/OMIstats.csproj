@@ -226,6 +226,7 @@
     <Content Include="img\oro.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
+    <Content Include="js\admin.js" />
     <Content Include="js\formas.js" />
     <Content Include="js\general.js" />
     <Content Include="js\fechas.js" />
@@ -265,6 +266,7 @@
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\Saved.cshtml" />
     <Content Include="Views\Request\view.cshtml" />
+    <Content Include="Views\Request\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
