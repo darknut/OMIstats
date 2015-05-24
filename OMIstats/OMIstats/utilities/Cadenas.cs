@@ -31,6 +31,10 @@ namespace OMIstats.Utilities
             s.Replace('Í', 'i');
             s.Replace('Ó', 'o');
             s.Replace('Ú', 'u');
+            s.Replace('ä', 'a');
+            s.Replace('ë', 'e');
+            s.Replace('ï', 'i');
+            s.Replace('ö', 'o');
             s.Replace('ü', 'u');
             s.Replace('ñ', 'n');
             s.Replace('Ñ', 'n');

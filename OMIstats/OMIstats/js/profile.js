@@ -6,6 +6,12 @@
     $("#editProfile").submit();
 }
 
+function mostrarPassword()
+{
+    setVisible("enlaceCambiarPassword", false);
+    setVisible("cambiarPassword", true);
+}
+
 var arrayErroresUsuario = ["disponible", "taken", "number", "alfanumeric", "size"];
 
 function setErrorUsuario(elem)
@@ -54,5 +60,13 @@ $(document).ready(function ()
         if (errorPassword == "password_diferente")
             setCampoError("password3");
         setVisible(errorPassword, true);
+        mostrarPassword();
     }
+
+    if (passwordModificado == "True")
+        mostrarPassword();
+
+    var usuario = document.getElementById("usuario");
+    if (isFinite(usuario.value))
+        usuario.value = "";
 });

@@ -118,6 +118,9 @@ namespace OMIstats.Controllers
             if (!Persona.isLoggedIn(Session["usuario"]) || p == null)
                 return RedirectToAction("Index", "Home");
 
+            if (!String.IsNullOrEmpty(p.password))
+                @ViewBag.passwordModificado = true;
+
             if (!ModelState.IsValid)
                 return Edit();
 
@@ -174,26 +177,13 @@ namespace OMIstats.Controllers
             else
                 p.genero = "F";
 
-            // Guardando los request especiales
-            if (file != null)
-            {
-                Utilities.Archivos.guardaImagen(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
-                // -TODO- Agregar imagen a tabla de Requests
-                needsAdmin = true;
-            }
-
-            if (!p.nombre.Equals(current.nombre))
-            {
-                // -TODO- Agregar nombre a tabla de Requests
-                needsAdmin = true;
-            }
-
             // Se copian los datos que no se pueden modificar
             current.recargarDatos();
             p.admin = current.admin;
             p.clave = current.clave;
             p.ioiID = current.ioiID;
             // Foto y nombre se vuelven "" porque se actualizan por un Admin
+            string nuevoNombre = p.nombre;
             p.foto = "";
             p.nombre = "";
 
@@ -201,6 +191,31 @@ namespace OMIstats.Controllers
             if (p.guardarDatos())
             {
                 ((Persona)Session["usuario"]).recargarDatos();
+
+                // Guardando los request especiales
+                if (file != null)
+                {
+                    string imagen = Utilities.Archivos.guardaImagen(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
+                    Peticion pet = new Peticion();
+                    pet.tipo = "usuario";
+                    pet.subtipo = "foto";
+                    pet.usuario = (Persona)Session["usuario"];
+                    pet.datos1 = imagen;
+                    pet.guardarPeticion();
+                    needsAdmin = true;
+                }
+
+                if (!nuevoNombre.Equals(((Persona)Session["usuario"]).nombre))
+                {
+                    Peticion pet = new Peticion();
+                    pet.tipo = "usuario";
+                    pet.subtipo = "nombre";
+                    pet.usuario = (Persona)Session["usuario"];
+                    pet.datos1 = nuevoNombre;
+                    pet.guardarPeticion();
+                    needsAdmin = true;
+                }
+
                 if (needsAdmin)
                     return RedirectToAction("Saved", "Profile", new { value = "admin" });
                 else

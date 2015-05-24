@@ -121,3 +121,7 @@
 .userDiv {
     height:60px;
 }
+
+.oculto {
+    display:none;
+}

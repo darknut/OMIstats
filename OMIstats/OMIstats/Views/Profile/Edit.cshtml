@@ -14,6 +14,7 @@
       var OMI_minimo = "@ViewBag.minimo";
       var OMI_maximo = "@ViewBag.maximo";
       var generoUsuario = "@Model.genero";
+      var passwordModificado = "@ViewBag.passwordModificado";
 
       var errorImagen = "@ViewBag.errorImagen";
       var errorUsuario = "@ViewBag.errorUsuario";
@@ -59,25 +60,30 @@
                     <div id="size" class="textoRojo">El nombre de usuario debe de estar entre 1 y 20 caracteres</div>
                 </div>
             </div>
-            <div>
-                <div class="label">Contraseña actual:</div>
-                <div class="input">
-                    @Html.PasswordFor(model => model.password)
-                    <div id ="password_invalido" class="textoRojo">La contraseña es incorrecta</div>
-                </div>
+            <div id="enlaceCambiarPassword" class="label">
+                <a href="javascript:mostrarPassword()"> Cambiar contraseña </a>
             </div>
-            <div>
-                <div class="label">Contraseña nueva:</div>
-                <div class="input">
-                    <input type="password" id="password2" name="password2" />
-                    <div id ="password_vacio" class="textoRojo">Escribe una contraseña nueva</div>
+            <div id="cambiarPassword" class="oculto">
+                <div>
+                    <div class="label">Contraseña actual:</div>
+                    <div class="input">
+                        @Html.PasswordFor(model => model.password)
+                        <div id ="password_invalido" class="textoRojo">La contraseña es incorrecta</div>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <div class="label">Repetir contraseña:</div>
-                <div class="input">
-                    <input type="password" id="password3" name="password3" />
-                    <div id ="password_diferente" class="textoRojo">Las contraseñas no coinciden</div>
+                <div>
+                    <div class="label">Contraseña nueva:</div>
+                    <div class="input">
+                        <input type="password" id="password2" name="password2" />
+                        <div id ="password_vacio" class="textoRojo">Escribe una contraseña nueva</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="label">Repetir contraseña:</div>
+                    <div class="input">
+                        <input type="password" id="password3" name="password3" />
+                        <div id ="password_diferente" class="textoRojo">Las contraseñas no coinciden</div>
+                    </div>
                 </div>
             </div>
             <div>

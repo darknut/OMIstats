@@ -17,7 +17,7 @@ namespace OMIstats.Models
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe tu nombre")]
-        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
         [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
         public string nombre { get; set; }
 

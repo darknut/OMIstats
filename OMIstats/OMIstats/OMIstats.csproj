@@ -126,6 +126,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Models\MiembroDelegacion.cs" />
+    <Compile Include="Models\Peticion.cs" />
     <Compile Include="utilities\Acceso.cs" />
     <Compile Include="utilities\Archivos.cs" />
     <Compile Include="utilities\Cadenas.cs" />
@@ -263,6 +264,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="img\temp\" />
     <Folder Include="img\user\" />
   </ItemGroup>
   <ItemGroup>
