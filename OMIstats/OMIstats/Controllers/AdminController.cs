@@ -30,7 +30,20 @@ namespace OMIstats.Controllers
             if (p == null)
                 return RedirectToAction("Index", "Home");
 
-            @ViewBag.logInError = false;
+            ViewBag.logInError = false;
+            ViewBag.changed = false;
+
+            return View(p);
+        }
+
+        //
+        // POST: /Admin/Change/
+
+        [HttpPost]
+        public ActionResult Change(Persona p)
+        {
+            if (!esAdmin() || p == null)
+                return RedirectToAction("Index", "Home");
 
             return View(p);
         }

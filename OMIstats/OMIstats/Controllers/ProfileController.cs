@@ -74,20 +74,6 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Profile/Edit/
-
-        public ActionResult Edit()
-        {
-            if (!estaLoggeado())
-                return RedirectToAction("Index", "Home");
-
-            recargarDatos();
-            ponFechasEnViewBag();
-
-            return View(getUsuario());
-        }
-
-        //
         // GET: /Profile/Saved/
 
         public ActionResult Saved(string value)
@@ -108,6 +94,20 @@ namespace OMIstats.Controllers
             string respuesta = Persona.revisarNombreUsuarioDisponible(getUsuario(), usuario).ToString().ToLower();
 
             return Json(respuesta);
+        }
+
+        //
+        // GET: /Profile/Edit/
+
+        public ActionResult Edit()
+        {
+            if (!estaLoggeado())
+                return RedirectToAction("Index", "Home");
+
+            recargarDatos();
+            ponFechasEnViewBag();
+
+            return View(getUsuario());
         }
 
         //

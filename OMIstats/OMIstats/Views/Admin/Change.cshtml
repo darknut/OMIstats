@@ -54,6 +54,7 @@
 
     @using(@Html.BeginForm())
     {
+        <input type="hidden" name="usuario" value="@Model.usuario" />
         <div> Contraseña: </div>
         <div> @Html.PasswordFor(model => model.password)</div>
 
