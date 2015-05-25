@@ -22,12 +22,12 @@ namespace OMIstats.Controllers
 
         public ActionResult view()
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!estaLoggeado())
                 return RedirectToAction("Index", "Home");
 
-            ((Persona)Session["usuario"]).recargarDatos();
+            recargarDatos();
 
-            return View(Peticion.obtenerPeticionesDeUsuario((Persona) Session["usuario"]));
+            return View(Peticion.obtenerPeticionesDeUsuario(getUsuario());
         }
 
         //
@@ -36,17 +36,17 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Delete(int clave)
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!estaLoggeado())
                 return Json("error");
 
-            ((Persona)Session["usuario"]).recargarDatos();
+            recargarDatos();
 
             Peticion pe = Peticion.obtenerPeticionConClave(clave);
             if (pe == null)
                 return Json("error");
 
-            if (!(((Persona)Session["usuario"]).admin ||
-                  ((Persona)Session["usuario"]).clave == pe.usuario.clave))
+            if (!(esAdmin() ||
+                  getUsuario().clave == pe.usuario.clave))
                 return Json("error");
 
             if (!pe.eliminarPeticion())
@@ -65,12 +65,12 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Aprove(int clave)
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!estaLoggeado())
                 return Json("error");
 
-            ((Persona)Session["usuario"]).recargarDatos();
+            recargarDatos();
 
-            if (!((Persona)Session["usuario"]).admin)
+            if (!esAdmin())
                 return Json("error");
 
             Peticion p = Peticion.obtenerPeticionConClave(clave);
@@ -106,12 +106,12 @@ namespace OMIstats.Controllers
 
         public ActionResult Manage()
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!estaLoggeado())
                 return RedirectToAction("Index", "Home");
 
-            ((Persona)Session["usuario"]).recargarDatos();
+            recargarDatos();
 
-            if (!((Persona)Session["usuario"]).admin)
+            if (!esAdmin())
                 return RedirectToAction("Index", "Home");
 
             ViewBag.totalPeticiones = Peticion.cuentaPeticiones();

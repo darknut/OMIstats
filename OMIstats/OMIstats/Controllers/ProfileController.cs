@@ -55,10 +55,10 @@ namespace OMIstats.Controllers
         {
             if (String.IsNullOrEmpty(usuario))
             {
-                if (Persona.isLoggedIn(Session["usuario"]))
+                if (estaLoggeado())
                 {
-                    ((Persona)Session["usuario"]).recargarDatos();
-                    return View((Persona)Session["usuario"]);
+                    recargarDatos();
+                    return View(getUsuario());
                 }
                 else
                     return RedirectToAction("Index", "Home");
@@ -78,13 +78,13 @@ namespace OMIstats.Controllers
 
         public ActionResult Edit()
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!estaLoggeado())
                 return RedirectToAction("Index", "Home");
 
-            ((Persona)Session["usuario"]).recargarDatos();
+            recargarDatos();
             ponFechasEnViewBag();
 
-            return View((Persona)Session["usuario"]);
+            return View(getUsuario());
         }
 
         //
@@ -102,10 +102,10 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Check(string usuario)
         {
-            if (!Persona.isLoggedIn(Session["usuario"]))
+            if (!estaLoggeado())
                 return Json("error");
 
-            string respuesta = Persona.revisarNombreUsuarioDisponible((Persona)Session["usuario"], usuario).ToString().ToLower();
+            string respuesta = Persona.revisarNombreUsuarioDisponible(getUsuario(), usuario).ToString().ToLower();
 
             return Json(respuesta);
         }
@@ -115,11 +115,11 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p)
         {
-            if (!Persona.isLoggedIn(Session["usuario"]) || p == null)
+            if (!estaLoggeado() || p == null)
                 return RedirectToAction("Index", "Home");
 
             if (!String.IsNullOrEmpty(p.password))
-                @ViewBag.passwordModificado = true;
+                ViewBag.passwordModificado = true;
 
             if (!ModelState.IsValid)
                 return Edit();
@@ -127,7 +127,7 @@ namespace OMIstats.Controllers
             bool needsAdmin = false;
             limpiaErroresViewBag();
 
-            Persona current = (Persona)Session["usuario"];
+            Persona current = getUsuario();
 
             // Validaciones foto
             if (file != null)
@@ -190,7 +190,7 @@ namespace OMIstats.Controllers
             // Se guardan los datos
             if (p.guardarDatos())
             {
-                ((Persona)Session["usuario"]).recargarDatos();
+                recargarDatos();
 
                 // Guardando los request especiales
                 if (file != null)
@@ -199,18 +199,18 @@ namespace OMIstats.Controllers
                     Peticion pet = new Peticion();
                     pet.tipo = "usuario";
                     pet.subtipo = "foto";
-                    pet.usuario = (Persona)Session["usuario"];
+                    pet.usuario = getUsuario();
                     pet.datos1 = imagen;
                     pet.guardarPeticion();
                     needsAdmin = true;
                 }
 
-                if (!nuevoNombre.Equals(((Persona)Session["usuario"]).nombre))
+                if (!nuevoNombre.Equals(getUsuario().nombre))
                 {
                     Peticion pet = new Peticion();
                     pet.tipo = "usuario";
                     pet.subtipo = "nombre";
-                    pet.usuario = (Persona)Session["usuario"];
+                    pet.usuario = getUsuario();
                     pet.datos1 = nuevoNombre;
                     pet.guardarPeticion();
                     needsAdmin = true;

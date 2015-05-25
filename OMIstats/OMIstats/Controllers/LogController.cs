@@ -22,7 +22,7 @@ namespace OMIstats.Controllers
 
         public ActionResult In()
         {
-            if (Persona.isLoggedIn(Session["usuario"]))
+            if (estaLoggeado())
                 return RedirectToAction("Index", "Home");
 
             Persona p = new Persona();
@@ -42,14 +42,14 @@ namespace OMIstats.Controllers
             if (p.logIn())
             {
                 //Log in exitoso
-                Session["usuario"] = p;
+                setUsuario(p);
                 ViewBag.logInError = false;
                 return RedirectToAction("view", "Profile");
             }
             else
             {
                 //Log in fallido
-                Session["usuario"] = new Persona();
+                setUsuario(new Persona());
                 ViewBag.logInError = true;
                 return View(p);
             }
@@ -61,7 +61,7 @@ namespace OMIstats.Controllers
         public ActionResult Out()
         {
             Session.Clear();
-            Session["usuario"] = new Persona();
+            setUsuario(new Persona());
             return RedirectToAction("Index", "Home");
         }
 
