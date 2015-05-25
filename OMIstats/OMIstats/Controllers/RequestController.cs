@@ -27,7 +27,7 @@ namespace OMIstats.Controllers
 
             recargarDatos();
 
-            return View(Peticion.obtenerPeticionesDeUsuario(getUsuario());
+            return View(Peticion.obtenerPeticionesDeUsuario(getUsuario()));
         }
 
         //
