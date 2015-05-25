@@ -1,0 +1,71 @@
+﻿@model OMIstats.Models.Persona
+
+@section AddToHead
+{
+    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/admin.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    string titulo = "";
+    if(Model.admin)
+    {
+        titulo = "Quitar de admin";
+    }else{
+        titulo = "Hacer admin";
+    }
+
+    ViewBag.Title = titulo;
+}
+
+<h2 class="titulo">@titulo a</h2>
+
+<div class="foto" >
+    <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
+</div>
+
+<div class="datosParticipante">
+    <div class="nombrePerfil">@Html.DisplayFor(model => model.nombre)</div>
+
+    <div>
+        <div class="perfilUsuario">
+            Usuario: @Html.DisplayFor(model => model.usuario)
+        </div>
+    </div>
+</div>
+
+<div class="clear">
+    <p>
+        Actualmente este usuario
+        <span class="importante">
+            @if (Model.admin)
+            {
+                <span>ES UN ADMINISTRDOR.</span>
+            }
+            else
+            {
+                <span>NO ES UN ADMINISTRDOR.</span>
+            }
+        </span>
+    </p>
+    <p>
+        Para cambiar esto, introduce de nuevo tu contraseña y da clic en Cambiar.
+    </p>
+
+    @using(@Html.BeginForm())
+    {
+        <div> Contraseña: </div>
+        <div> @Html.PasswordFor(model => model.password)</div>
+
+        <br />
+
+        <div>@Html.Label("Contraseña incorrecta",
+        new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
+              @class = "errorTextoRojo" }) </div>
+
+        <p>
+            <input type="submit" value="Cambiar" />
+        </p>
+    }
+
+</div>

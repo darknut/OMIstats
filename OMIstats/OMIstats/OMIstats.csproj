@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="utilities\Fechas.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\admin.css" />
     <Content Include="Content\cabecera.css" />
     <Content Include="Content\fechas.css" />
     <Content Include="Content\formas.css" />
@@ -267,6 +269,7 @@
     <Content Include="Views\Profile\Saved.cshtml" />
     <Content Include="Views\Request\view.cshtml" />
     <Content Include="Views\Request\Manage.cshtml" />
+    <Content Include="Views\Admin\Change.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -39,8 +39,6 @@ namespace OMIstats.Controllers
             if (!estaLoggeado())
                 return Json("error");
 
-            recargarDatos();
-
             Peticion pe = Peticion.obtenerPeticionConClave(clave);
             if (pe == null)
                 return Json("error");
@@ -65,11 +63,6 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Aprove(int clave)
         {
-            if (!estaLoggeado())
-                return Json("error");
-
-            recargarDatos();
-
             if (!esAdmin())
                 return Json("error");
 
@@ -106,11 +99,6 @@ namespace OMIstats.Controllers
 
         public ActionResult Manage()
         {
-            if (!estaLoggeado())
-                return RedirectToAction("Index", "Home");
-
-            recargarDatos();
-
             if (!esAdmin())
                 return RedirectToAction("Index", "Home");
 

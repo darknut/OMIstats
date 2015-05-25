@@ -37,6 +37,11 @@ namespace OMIstats.Controllers
 
         public bool esAdmin()
         {
+            if (!estaLoggeado())
+                return false;
+
+            recargarDatos();
+
             return getUsuario().admin;
         }
     }

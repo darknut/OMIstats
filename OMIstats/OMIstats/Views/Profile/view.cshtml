@@ -98,20 +98,19 @@
                     </div>
                     <br />
 
-                    if (Model.admin)
-                    {
-                        <div>
-                            <div class="botonPerfil">Eliminar Admin</div>
-                        </div>
-                        <br />
-                    }
-                    else
-                    {
-                        <div>
-                            <div class="botonPerfil">Hacer admin</div>
-                        </div>
-                        <br />
-                    }
+                    <div>
+                        <a href='@Url.Content("/Admin/Change?usuario=" + Model.usuario)' class="botonPerfil">
+                            @if (Model.admin)
+                            {
+                                <span>Eliminar Admin</span>
+                            }
+                            else
+                            {
+                                <span>Hacer admin</span>
+                            }
+                        </a>
+                    </div>
+                    <br />
 
                     <div>
                         <div class="botonPerfil">Unir usuario</div>
