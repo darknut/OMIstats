@@ -9,6 +9,12 @@ namespace OMIstats.Controllers
 {
     public class AdminController : BaseController
     {
+        private void limpiarErroresViewBag()
+        {
+            ViewBag.logInError = false;
+            ViewBag.changed = false;
+        }
+
         //
         // GET: /Admin/
 
@@ -30,8 +36,7 @@ namespace OMIstats.Controllers
             if (p == null)
                 return RedirectToAction("Index", "Home");
 
-            ViewBag.logInError = false;
-            ViewBag.changed = false;
+            limpiarErroresViewBag();
 
             return View(p);
         }
@@ -45,7 +50,24 @@ namespace OMIstats.Controllers
             if (!esAdmin() || p == null)
                 return RedirectToAction("Index", "Home");
 
-            return View(p);
+            limpiarErroresViewBag();
+
+            Persona cambiar = Persona.obtenerPersonaDeUsuario(p.usuario);
+            Persona admin = Persona.obtenerPersonaConClave(getUsuario().clave);
+
+            admin.password = p.password;
+            if (!admin.logIn())
+            {
+                ViewBag.logInError = true;
+                return View(cambiar);
+            }
+
+            cambiar.admin = !cambiar.admin;
+            cambiar.guardarDatos();
+
+            ViewBag.changed = true;
+
+            return View(cambiar);
         }
     }
 }

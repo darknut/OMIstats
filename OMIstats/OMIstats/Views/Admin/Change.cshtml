@@ -34,39 +34,48 @@
     </div>
 </div>
 
-<div class="clear">
-    <p>
-        Actualmente este usuario
-        <span class="importante">
-            @if (Model.admin)
-            {
-                <span>ES UN ADMINISTRDOR.</span>
-            }
-            else
-            {
-                <span>NO ES UN ADMINISTRDOR.</span>
-            }
-        </span>
-    </p>
-    <p>
-        Para cambiar esto, introduce de nuevo tu contraseña y da clic en Cambiar.
-    </p>
-
-    @using(@Html.BeginForm())
-    {
-        <input type="hidden" name="usuario" value="@Model.usuario" />
-        <div> Contraseña: </div>
-        <div> @Html.PasswordFor(model => model.password)</div>
-
-        <br />
-
-        <div>@Html.Label("Contraseña incorrecta",
-        new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
-              @class = "errorTextoRojo" }) </div>
-
+@if (ViewBag.changed)
+{
+    <div class="clear verde">
+        El cambio fue satisfactorio
+    </div>
+}
+else
+{
+    <div class="clear">
         <p>
-            <input type="submit" value="Cambiar" />
+            Actualmente este usuario
+            <span class="importante">
+                @if (Model.admin)
+                {
+                    <span>ES UN ADMINISTRDOR.</span>
+                }
+                else
+                {
+                    <span>NO ES UN ADMINISTRDOR.</span>
+                }
+            </span>
         </p>
-    }
+        <p>
+            Para cambiar esto, introduce de nuevo tu contraseña y da clic en Cambiar.
+        </p>
 
-</div>
+        @using(@Html.BeginForm())
+        {
+            <input type="hidden" name="usuario" value="@Model.usuario" />
+            <div> Contraseña: </div>
+            <div> @Html.PasswordFor(model => model.password)</div>
+
+            <br />
+
+            <div>@Html.Label("Contraseña incorrecta",
+            new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
+                  @class = "errorTextoRojo" }) </div>
+
+            <p>
+                <input type="submit" value="Cambiar" />
+            </p>
+        }
+
+    </div>
+}

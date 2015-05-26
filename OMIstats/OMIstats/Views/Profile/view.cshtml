@@ -123,6 +123,9 @@
     </div>
 
     <div style="clear:both">
-        <!-- -TODO- Enlace -->
-        Si tuviste participaciones que no están listadas en nuestra página, mándanos un correo con los datos faltantes.
+        @if (ViewBag.usuario != null && ViewBag.usuario.clave == Model.clave && !ViewBag.usuario.admin)
+        {
+            <!-- -TODO- Enlace -->
+            <span>Si tuviste participaciones que no están listadas en nuestra página, mándanos un correo con los datos faltantes.</span>
+        }
     </div>
