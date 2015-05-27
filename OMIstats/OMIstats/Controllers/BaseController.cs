@@ -9,6 +9,18 @@ namespace OMIstats.Controllers
 {
     public class BaseController : Controller
     {
+        protected const string ERROR = "error";
+        protected const string OK = "OK";
+
+        protected enum Pagina
+        {
+            HOME,
+            LOGIN,
+            VIEW_PROFILE,
+            SAVED_PROFILE,
+            VIEW_REQUEST
+        }
+
         public BaseController()
         {
             // Se usa System.Web en vez de Session porque a tiempo de construcción, Session aún no esta populada
@@ -35,7 +47,7 @@ namespace OMIstats.Controllers
             Session["usuario"] = p;
         }
 
-        public bool esAdmin()
+        protected bool esAdmin()
         {
             if (!estaLoggeado())
                 return false;
@@ -43,6 +55,24 @@ namespace OMIstats.Controllers
             recargarDatos();
 
             return getUsuario().admin;
+        }
+
+        protected ActionResult RedirectTo(Pagina pagina, object opciones = null)
+        {
+            switch(pagina)
+            {
+                case Pagina.VIEW_REQUEST:
+                    return RedirectToAction("view", "Request");
+                case Pagina.SAVED_PROFILE:
+                    return RedirectToAction("Saved", "Profile", opciones);
+                case Pagina.VIEW_PROFILE:
+                    return RedirectToAction("view", "Profile");
+                case Pagina.LOGIN:
+                    return RedirectToAction("In", "Log");
+                case Pagina.HOME:
+                default:
+                    return RedirectToAction("Index", "Home");
+            }
         }
     }
 }

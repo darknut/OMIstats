@@ -271,6 +271,7 @@
     <Content Include="Views\Request\view.cshtml" />
     <Content Include="Views\Request\Manage.cshtml" />
     <Content Include="Views\Admin\Change.cshtml" />
+    <Content Include="Views\Log\Recover.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

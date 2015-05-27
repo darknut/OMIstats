@@ -16,8 +16,8 @@ namespace OMIstats.Controllers
 
         private void ponFechasEnViewBag()
         {
-            int maximo = MiembroDelegacion.primeraOMIPara((Persona)Session["usuario"]);
-            int minimo = MiembroDelegacion.ultimaOMIComoCompetidorPara((Persona)Session["usuario"]);
+            int maximo = MiembroDelegacion.primeraOMIPara(getUsuario());
+            int minimo = MiembroDelegacion.ultimaOMIComoCompetidorPara(getUsuario());
 
             if (maximo == 0)
                 maximo = DateTime.Today.Year;
@@ -45,7 +45,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("view");
+            return RedirectTo(Pagina.VIEW_PROFILE);
         }
 
         //
@@ -61,7 +61,7 @@ namespace OMIstats.Controllers
                     return View(getUsuario());
                 }
                 else
-                    return RedirectToAction("Index", "Home");
+                    return RedirectTo(Pagina.HOME);
             }
             else
             {
@@ -69,7 +69,7 @@ namespace OMIstats.Controllers
                 if (p != null)
                     return View(p);
                 else
-                    return RedirectToAction("Index", "Home");
+                    return RedirectTo(Pagina.HOME);
             }
         }
 
@@ -89,7 +89,7 @@ namespace OMIstats.Controllers
         public JsonResult Check(string usuario)
         {
             if (!estaLoggeado())
-                return Json("error");
+                return Json(ERROR);
 
             string respuesta = Persona.revisarNombreUsuarioDisponible(getUsuario(), usuario).ToString().ToLower();
 
@@ -102,7 +102,7 @@ namespace OMIstats.Controllers
         public ActionResult Edit()
         {
             if (!estaLoggeado())
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             recargarDatos();
             ponFechasEnViewBag();
@@ -116,7 +116,7 @@ namespace OMIstats.Controllers
         public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p)
         {
             if (!estaLoggeado() || p == null)
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             if (!String.IsNullOrEmpty(p.password))
                 ViewBag.passwordModificado = true;
@@ -217,13 +217,13 @@ namespace OMIstats.Controllers
                 }
 
                 if (needsAdmin)
-                    return RedirectToAction("Saved", "Profile", new { value = "admin" });
+                    return RedirectTo(Pagina.SAVED_PROFILE, new { value = "admin" });
                 else
-                    return RedirectToAction("Saved", "Profile", new { value = "ok" });
+                    return RedirectTo(Pagina.SAVED_PROFILE, new { value = "ok" });
             }
             else
             {
-                return RedirectToAction("Saved", "Profile", new { value = "error" });
+                return RedirectTo(Pagina.SAVED_PROFILE, new { value = "error" });
             }
         }
     }

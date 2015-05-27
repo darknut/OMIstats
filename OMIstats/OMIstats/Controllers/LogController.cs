@@ -9,12 +9,18 @@ namespace OMIstats.Controllers
 {
     public class LogController : BaseController
     {
+        private void limpiarErroresViewBag()
+        {
+            ViewBag.logInError = false;
+            ViewBag.duplicado = false;
+        }
+
         //
         // GET: /Log/
 
         public ActionResult Index()
         {
-            return Redirect("Log/In/");
+            return RedirectTo(Pagina.LOGIN);
         }
 
         //
@@ -23,10 +29,10 @@ namespace OMIstats.Controllers
         public ActionResult In()
         {
             if (estaLoggeado())
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             Persona p = new Persona();
-            ViewBag.logInError = false;
+            limpiarErroresViewBag();
             return View(p);
         }
 
@@ -37,14 +43,14 @@ namespace OMIstats.Controllers
         public ActionResult In(Persona p)
         {
             if (p == null)
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             if (p.logIn())
             {
                 //Log in exitoso
                 setUsuario(p);
                 ViewBag.logInError = false;
-                return RedirectToAction("view", "Profile");
+                return RedirectTo(Pagina.VIEW_PROFILE);
             }
             else
             {
@@ -62,8 +68,40 @@ namespace OMIstats.Controllers
         {
             Session.Clear();
             setUsuario(new Persona());
-            return RedirectToAction("Index", "Home");
+            return RedirectTo(Pagina.HOME);
         }
 
+        //
+        // GET: /Log/Recover/
+
+        public ActionResult Recover()
+        {
+            if(estaLoggeado())
+                return RedirectTo(Pagina.HOME);
+
+            limpiarErroresViewBag();
+            return View(new Persona());
+        }
+
+        //
+        // POST: /Log/Recover/
+
+        [HttpPost]
+        public ActionResult Recover(Persona p)
+        {
+            if (estaLoggeado() || p == null)
+                return RedirectTo(Pagina.HOME);
+
+            limpiarErroresViewBag();
+            p = Persona.obtenerPersonaDeUsuario(p.usuario);
+
+            if (p == null)
+            {
+                ViewBag.logInError = true;
+                return View(new Persona());
+            }
+
+            return View(new Persona());
+        }
     }
 }

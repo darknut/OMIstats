@@ -14,7 +14,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("view");
+            return RedirectTo(Pagina.VIEW_REQUEST);
         }
 
         //
@@ -23,7 +23,7 @@ namespace OMIstats.Controllers
         public ActionResult view()
         {
             if (!estaLoggeado())
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             recargarDatos();
 
@@ -37,24 +37,24 @@ namespace OMIstats.Controllers
         public JsonResult Delete(int clave)
         {
             if (!estaLoggeado())
-                return Json("error");
+                return Json(ERROR);
 
             Peticion pe = Peticion.obtenerPeticionConClave(clave);
             if (pe == null)
-                return Json("error");
+                return Json(ERROR);
 
             if (!(esAdmin() ||
                   getUsuario().clave == pe.usuario.clave))
-                return Json("error");
+                return Json(ERROR);
 
             if (!pe.eliminarPeticion())
-                return Json("error");
+                return Json(ERROR);
 
             if (pe.tipo.Equals("usuario") &&
                 pe.subtipo.Equals("foto"))
                 Utilities.Archivos.eliminarArchivo(pe.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
 
-            return Json("ok");
+            return Json(OK);
         }
 
         //
@@ -64,11 +64,11 @@ namespace OMIstats.Controllers
         public JsonResult Aprove(int clave)
         {
             if (!esAdmin())
-                return Json("error");
+                return Json(ERROR);
 
             Peticion p = Peticion.obtenerPeticionConClave(clave);
             if (p == null)
-                return Json("error");
+                return Json(ERROR);
 
             // Aceptando la petición
             if (p.tipo.Equals("usuario"))
@@ -91,7 +91,7 @@ namespace OMIstats.Controllers
 
             p.eliminarPeticion();
 
-            return Json("ok");
+            return Json(OK);
         }
 
         //
@@ -100,7 +100,7 @@ namespace OMIstats.Controllers
         public ActionResult Manage()
         {
             if (!esAdmin())
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             ViewBag.totalPeticiones = Peticion.cuentaPeticiones();
 

@@ -20,7 +20,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectTo(Pagina.HOME);
         }
 
         //
@@ -29,12 +29,12 @@ namespace OMIstats.Controllers
         public ActionResult Change(string usuario)
         {
             if(!esAdmin() || String.IsNullOrEmpty(usuario))
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             Persona p = Persona.obtenerPersonaDeUsuario(usuario);
 
             if (p == null)
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
 
@@ -48,7 +48,7 @@ namespace OMIstats.Controllers
         public ActionResult Change(Persona p)
         {
             if (!esAdmin() || p == null)
-                return RedirectToAction("Index", "Home");
+                return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
 

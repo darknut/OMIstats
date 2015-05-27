@@ -87,6 +87,7 @@ namespace OMIstats.Models
 
         /// <summary>
         /// Obtiene las primeras 30 peticiones de la base de datos
+        /// Ignora las peticiones de cambio de password
         /// </summary>
         public static List<Peticion> obtenerPeticiones()
         {
@@ -94,7 +95,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select top 30 * from peticion order by tipo, subtipo, usuario ");
+            query.Append(" select top 30 * from peticion where subtipo <> 'password' order by tipo, subtipo, usuario ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return lista;
@@ -114,6 +115,7 @@ namespace OMIstats.Models
 
         /// <summary>
         /// Regresa el total de de peticiones en la base de datos
+        /// Ignora las peticiones de cambio de password
         /// </summary>
         public static int cuentaPeticiones()
         {
@@ -121,7 +123,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select count(*) from peticion  ");
+            query.Append(" select count(*) from peticion where subtipo <> 'password'");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return 0;
