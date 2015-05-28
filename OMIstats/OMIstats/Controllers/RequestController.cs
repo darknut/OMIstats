@@ -50,10 +50,6 @@ namespace OMIstats.Controllers
             if (!pe.eliminarPeticion())
                 return Json(ERROR);
 
-            if (pe.tipo.Equals("usuario") &&
-                pe.subtipo.Equals("foto"))
-                Utilities.Archivos.eliminarArchivo(pe.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
-
             return Json(OK);
         }
 
@@ -70,26 +66,7 @@ namespace OMIstats.Controllers
             if (p == null)
                 return Json(ERROR);
 
-            // Aceptando la petición
-            if (p.tipo.Equals("usuario"))
-            {
-                if (p.subtipo.Equals("nombre"))
-                {
-                    p.usuario.nombre = p.datos1;
-                    p.usuario.guardarDatos();
-                }
-
-                if (p.subtipo.Equals("foto"))
-                {
-                    p.usuario.foto =
-                        Utilities.Archivos.copiarArchivo(p.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
-                                            p.usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
-                    p.usuario.guardarDatos();
-                    Utilities.Archivos.eliminarArchivo(p.datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
-                }
-            }
-
-            p.eliminarPeticion();
+            p.aceptarPeticion();
 
             return Json(OK);
         }

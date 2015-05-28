@@ -187,7 +187,33 @@ namespace OMIstats.Models
             query.Append("delete peticion where clave = ");
             query.Append(clave);
 
-            return !db.EjecutarQuery(query.ToString()).error;
+            if (db.EjecutarQuery(query.ToString()).error)
+                return false;
+
+            if (tipo.Equals("usuario") && subtipo.Equals("foto"))
+                Utilities.Archivos.eliminarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Acepta la peticion y actualiza las tablas correspondientes
+        /// </summary>
+        public void aceptarPeticion()
+        {
+            if (tipo.Equals("usuario"))
+            {
+                if (subtipo.Equals("nombre"))
+                    usuario.nombre = datos1;
+
+                if (subtipo.Equals("foto"))
+                    usuario.foto =
+                        Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
+                                            usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+                usuario.guardarDatos();
+            }
+
+            eliminarPeticion();
         }
     }
 }

@@ -319,8 +319,10 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda los datos en la base de datos
         /// </summary>
+        /// <param name="generarPeticiones">Si nombre y foto deben de guardarse
+        /// directamente en la base de datos o si se deben generar peticiones</param>
         /// <returns>Si el update se ejecutó correctamente</returns>
-        public bool guardarDatos()
+        public bool guardarDatos(bool generarPeticiones = false)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -329,13 +331,25 @@ namespace OMIstats.Models
 
             if (nombre.Length > 0)
             {
-                query.Append(" nombre = ");
-                query.Append(Utilities.Cadenas.comillas(nombre));
-                query.Append(",");
+                if (generarPeticiones)
+                {
+                    Peticion pet = new Peticion();
+                    pet.tipo = "usuario";
+                    pet.subtipo = "nombre";
+                    pet.usuario = this;
+                    pet.datos1 = nombre;
+                    pet.guardarPeticion();
+                }
+                else
+                {
+                    query.Append(" nombre = ");
+                    query.Append(Utilities.Cadenas.comillas(nombre));
+                    query.Append(",");
 
-                query.Append(" nombreHash = HASHBYTES(\'SHA1\', ");
-                query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
-                query.Append("),");
+                    query.Append(" nombreHash = HASHBYTES(\'SHA1\', ");
+                    query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
+                    query.Append("),");
+                }
             }
 
             query.Append(" facebook = ");
@@ -371,9 +385,21 @@ namespace OMIstats.Models
 
             if (foto.Length > 0)
             {
-                query.Append(" foto = ");
-                query.Append(Utilities.Cadenas.comillas(foto));
-                query.Append(",");
+                if (generarPeticiones)
+                {
+                    Peticion pet = new Peticion();
+                    pet.tipo = "usuario";
+                    pet.subtipo = "foto";
+                    pet.usuario = obtenerPersonaConClave(clave);
+                    pet.datos1 = foto;
+                    pet.guardarPeticion();
+                }
+                else
+                {
+                    query.Append(" foto = ");
+                    query.Append(Utilities.Cadenas.comillas(foto));
+                    query.Append(",");
+                }
             }
 
             query.Append(" correo = ");

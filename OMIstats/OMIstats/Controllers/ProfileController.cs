@@ -124,7 +124,6 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return Edit();
 
-            bool needsAdmin = false;
             limpiaErroresViewBag();
 
             Persona current = getUsuario();
@@ -182,41 +181,18 @@ namespace OMIstats.Controllers
             p.admin = current.admin;
             p.clave = current.clave;
             p.ioiID = current.ioiID;
-            // Foto y nombre se vuelven "" porque se actualizan por un Admin
-            string nuevoNombre = p.nombre;
-            p.foto = "";
-            p.nombre = "";
+
+            // Se guarda la imagen en disco
+            if (file != null)
+                p.foto = Utilities.Archivos.guardaArchivo(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
 
             // Se guardan los datos
-            if (p.guardarDatos())
+            if (p.guardarDatos(generarPeticiones:!esAdmin()))
             {
+                string nuevoNombre = p.nombre;
                 recargarDatos();
 
-                // Guardando los request especiales
-                if (file != null)
-                {
-                    string imagen = Utilities.Archivos.guardaArchivo(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
-                    Peticion pet = new Peticion();
-                    pet.tipo = "usuario";
-                    pet.subtipo = "foto";
-                    pet.usuario = getUsuario();
-                    pet.datos1 = imagen;
-                    pet.guardarPeticion();
-                    needsAdmin = true;
-                }
-
-                if (!nuevoNombre.Equals(getUsuario().nombre))
-                {
-                    Peticion pet = new Peticion();
-                    pet.tipo = "usuario";
-                    pet.subtipo = "nombre";
-                    pet.usuario = getUsuario();
-                    pet.datos1 = nuevoNombre;
-                    pet.guardarPeticion();
-                    needsAdmin = true;
-                }
-
-                if (needsAdmin)
+                if (!esAdmin() && (file != null || !nuevoNombre.Equals(getUsuario().nombre)))
                     return RedirectTo(Pagina.SAVED_PROFILE, new { value = "admin" });
                 else
                     return RedirectTo(Pagina.SAVED_PROFILE, new { value = "ok" });
