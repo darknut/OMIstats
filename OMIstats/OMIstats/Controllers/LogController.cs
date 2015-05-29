@@ -12,7 +12,9 @@ namespace OMIstats.Controllers
         private void limpiarErroresViewBag()
         {
             ViewBag.logInError = false;
-            ViewBag.duplicado = false;
+            ViewBag.faltante = false;
+            ViewBag.saved = false;
+            ViewBag.errorMail = false;
         }
 
         //
@@ -100,6 +102,22 @@ namespace OMIstats.Controllers
                 ViewBag.logInError = true;
                 return View(new Persona());
             }
+
+            if (String.IsNullOrEmpty(p.correo))
+            {
+                ViewBag.faltante = true;
+                return View(new Persona());
+            }
+
+            Peticion pe = new Peticion();
+            pe.tipo = "usuario";
+            pe.subtipo = "password";
+            pe.usuario = p;
+            pe.datos1 = Guid.NewGuid().ToString();
+            if (pe.guardarPeticion())
+                ViewBag.saved = true;
+            else
+                ViewBag.errorMail = true;
 
             return View(new Persona());
         }

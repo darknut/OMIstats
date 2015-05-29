@@ -14,6 +14,8 @@ namespace OMIstats.Utilities
         public const string FOLDER_TEMPORAL = "~/img/temp";
         public const string FOLDER_USUARIOS = "~/img/user";
 
+        public const string PASSWORD_HTML = "~/private/cambioPassword.html";
+
         public enum ResultadoImagen
         {
             VALIDA = 0,
@@ -26,6 +28,11 @@ namespace OMIstats.Utilities
             TEMPORAL,
             ESTADOS,
             USUARIOS
+        }
+
+        public enum ArchivosHTML
+        {
+            PASSWORD
         }
 
         public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen)
@@ -119,6 +126,20 @@ namespace OMIstats.Utilities
                 Path.Combine(lugarDestino, nombreDestino), overwrite:true);
 
             return Path.Combine(pathRelativo(folderDestino), nombreDestino);
+        }
+
+        public static string leerArchivoHTML(ArchivosHTML archivo)
+        {
+            string a = "";
+            switch (archivo)
+            {
+                case ArchivosHTML.PASSWORD:
+                    a = PASSWORD_HTML;
+                    break;
+            }
+            a = HttpContext.Current.Server.MapPath(a);
+
+            return System.IO.File.ReadAllText(a);
         }
     }
 }

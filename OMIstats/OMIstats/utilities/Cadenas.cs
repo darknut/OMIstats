@@ -10,6 +10,8 @@ namespace OMIstats.Utilities
     {
         public static string comillas(string cadena)
         {
+            if (String.IsNullOrEmpty(cadena))
+                return "''";
             return "\'" + cadena.Replace("\'", "\'\'") + "\'";
         }
 
@@ -19,6 +21,9 @@ namespace OMIstats.Utilities
         /// </summary>
         public static string quitaEspeciales(string cadena)
         {
+            if (String.IsNullOrEmpty(cadena))
+                return "";
+
             StringBuilder s = new StringBuilder(cadena);
 
             s.Replace('á', 'a');

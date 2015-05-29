@@ -110,7 +110,7 @@ else
                 @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("foto"))
                 {
                     <td class="tdFoto">
-                       <img src='@Url.Content(Path.Combine("/img", ViewBag.usuario.foto))' alt="foto"/>
+                       <img src='@Url.Content(ViewBag.usuario.foto)' alt="foto"/>
                     </td>
                     <td class="tdFoto">
                        <img src='@Url.Content(Path.Combine("/img/temp", Model[j].datos1))' alt="foto"/>

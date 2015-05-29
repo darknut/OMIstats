@@ -95,7 +95,7 @@ namespace OMIstats.Utilities
                     adapter.InsertCommand = new SqlCommand(query, conexion);
                     adapter.InsertCommand.ExecuteNonQuery();
                 }
-                else if (query.StartsWith("select"))
+                else if (query.StartsWith("select") || query.StartsWith("declare"))
                 {
                     dataset.Clear();
                     dataset.Tables.Clear();

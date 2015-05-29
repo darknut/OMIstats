@@ -11,34 +11,50 @@
 
 <h2 class="titulo">Recuperar contraseña</h2>
 
-<div>
+@if (ViewBag.errorMail)
+{
     <!-- -TODO- Agregar enlace -->
-    Escribe tu nombre de usuario y se te enviará un enlace al correo electrónico que tenemos registrado 
-    con el que podrás pedir una nueva contraseña. Si no tienes un correo electrónico registrado o 
-    si ya no tienes acceso al correo electrónico que tenemos o si ese correo
-    no es tuyo, intenta reclamar el perfil del usuario.
-</div>
-<br />
-
-<div>
-    <!-- -TODO- Agregar enlace -->
-    Todos los nombres de usuario son públicos, y pueden consultarse en la página 
-    del perfil de cada usuario. Si no recuerdas tu nombre de usuario, búscate con tu nombre para recordarlo.
-</div>
-<br />
-
-@using(@Html.BeginForm()) {
+    <div class="errorTextoRojo">
+        Ocurrió un error cuando intentábamos enviar tu correo, por favor contáctanos.
+    </div>
+}
+else if (ViewBag.saved)
+{
+    <div class="verde">
+        Se te mandó un correo con un enlace para poder cambiar tu contraseña.
+    </div>
+}
+else
+{
+    <div>
+        <!-- -TODO- Agregar enlace -->
+        Escribe tu nombre de usuario y se te enviará un enlace al correo electrónico que tenemos registrado 
+        con el que podrás pedir una nueva contraseña. Si no tienes un correo electrónico registrado o 
+        si ya no tienes acceso al correo electrónico que tenemos o si ese correo
+        no es tuyo, intenta reclamar el perfil del usuario.
+    </div>
+    <br />
 
     <div>
-        Nombre de usuario:
-        @Html.EditorFor(model => model.usuario)
-        <input type="submit" value="Recuperar" />
+        <!-- -TODO- Agregar enlace -->
+        Todos los nombres de usuario son públicos, y pueden consultarse en la página 
+        del perfil de cada usuario. Si no recuerdas tu nombre de usuario, búscate con tu nombre para recordarlo.
     </div>
+    <br />
 
-    <div>@Html.Label("El nombre de usuario no existe",
-    new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
-          @class = "errorTextoRojo" }) </div>
-    <div>@Html.Label("No hay un correo electrónico registrado para el usuario que proporcionaste",
-    new { style = "display:" + (ViewBag.duplicado ? "inline;" : "none;"),
-          @class = "errorTextoRojo" }) </div>
+    using(@Html.BeginForm()) {
+
+        <div>
+            Nombre de usuario:
+            @Html.EditorFor(model => model.usuario)
+            <input type="submit" value="Recuperar" />
+        </div>
+
+        <div>@Html.Label("El nombre de usuario no existe",
+        new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
+              @class = "errorTextoRojo" }) </div>
+        <div>@Html.Label("No hay un correo electrónico registrado para el usuario que proporcionaste",
+        new { style = "display:" + (ViewBag.faltante ? "inline;" : "none;"),
+              @class = "errorTextoRojo" }) </div>
+    }
 }

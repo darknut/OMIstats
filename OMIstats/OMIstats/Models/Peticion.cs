@@ -30,12 +30,17 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda los datos de una nueva petición en la base de datos
         /// </summary>
-        public void guardarPeticion()
+        /// <returns>Regresa si la peticion se insertó correctamente</returns>
+        public bool guardarPeticion()
         {
+            if (String.IsNullOrEmpty(tipo) || String.IsNullOrEmpty(subtipo))
+                return false;
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" insert into peticion values (");
+            query.Append(" declare @inserted table(clave int); ");
+            query.Append(" insert into peticion output inserted.clave into @inserted values (");
             query.Append(Utilities.Cadenas.comillas(tipo));
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(subtipo));
@@ -50,9 +55,20 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(datos2));
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(datos3));
-            query.Append(")");
+            query.Append("); select clave from @inserted");
 
-            db.EjecutarQuery(query.ToString());
+            if (db.EjecutarQuery(query.ToString()).error)
+                return false;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return false;
+            clave = (int)table.Rows[0][0];
+
+            if (usuario != null && tipo.Equals("usuario") && subtipo.Equals("password"))
+                return Utilities.Correo.enviarPeticionPassword(clave, datos1, usuario.correo);
+
+            return true;
         }
 
         /// <summary>
@@ -60,6 +76,9 @@ namespace OMIstats.Models
         /// </summary>
         public static List<Peticion> obtenerPeticionesDeUsuario(Persona usuario)
         {
+            if (usuario == null)
+                return null;
+
             List<Peticion> lista = new List<Peticion>();
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -156,9 +175,6 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            if (clave == 0)
-                return null;
-
             query.Append(" select * from peticion where clave = ");
             query.Append(clave);
 
@@ -181,6 +197,9 @@ namespace OMIstats.Models
         /// <returns>Si se eliminó correctamente la petición</returns>
         public bool eliminarPeticion()
         {
+            if (String.IsNullOrEmpty(tipo) || String.IsNullOrEmpty(subtipo))
+                return false;
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
@@ -201,6 +220,9 @@ namespace OMIstats.Models
         /// </summary>
         public void aceptarPeticion()
         {
+            if (String.IsNullOrEmpty(tipo) || String.IsNullOrEmpty(subtipo))
+                return;
+
             if (tipo.Equals("usuario"))
             {
                 if (subtipo.Equals("nombre"))

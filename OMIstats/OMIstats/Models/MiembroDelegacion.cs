@@ -15,6 +15,9 @@ namespace OMIstats.Models
         /// </summary>
         public static int primeraOMIPara(Persona p)
         {
+            if (p == null)
+                return 0;
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
@@ -39,6 +42,9 @@ namespace OMIstats.Models
         /// </summary>
         public static int ultimaOMIComoCompetidorPara(Persona p)
         {
+            if (p == null)
+                return 0;
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 

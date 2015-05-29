@@ -4,16 +4,27 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Web;
+using System.Web.Mvc;
 
 namespace OMIstats.Utilities
 {
     public class Correo
     {
+        private static string direccionServer()
+        {
+            HttpRequest request = HttpContext.Current.Request;
+            string urlBase = string.Format("{0}://{1}{2}",
+                request.Url.Scheme,
+                request.Url.Authority,
+                (new System.Web.Mvc.UrlHelper(request.RequestContext)).Content("~"));
+            return urlBase;
+        }
+
         /// <summary>
         /// Manda un correo electronico
         /// </summary>
         /// <returns>Si el correo se mandó satisfactoriamente o no</returns>
-        public static bool mandarCorreo(string destinatario, string asunto, string mensaje)
+        private static bool mandarCorreo(string destinatario, string asunto, string mensaje)
         {
             MailMessage mail = new MailMessage();
 
@@ -21,7 +32,7 @@ namespace OMIstats.Utilities
             mail.From = new MailAddress("omistatstest@outlook.com", "OMI stats test");
             mail.Subject = asunto;
             mail.Body = mensaje;
-            mail.IsBodyHtml = false; // -TODO- Poner el mesaje en un formato bonito
+            mail.IsBodyHtml = true;
 
             SmtpClient smtpMail = new SmtpClient();
 
@@ -49,6 +60,17 @@ namespace OMIstats.Utilities
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Manda un correo para recuperar contraseña
+        /// </summary>
+        public static bool enviarPeticionPassword(int clave, string guid, string correo)
+        {
+            string template = Archivos.leerArchivoHTML(Archivos.ArchivosHTML.PASSWORD);
+            string server = direccionServer();
+            return mandarCorreo(correo, "Solicitud de cambio de contraseña",
+                String.Format(template, server, clave, guid));
         }
     }
 }

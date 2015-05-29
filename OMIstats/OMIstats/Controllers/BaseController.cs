@@ -10,7 +10,7 @@ namespace OMIstats.Controllers
     public class BaseController : Controller
     {
         protected const string ERROR = "error";
-        protected const string OK = "OK";
+        protected const string OK = "ok";
 
         protected enum Pagina
         {

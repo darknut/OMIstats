@@ -195,18 +195,20 @@ namespace OMIstats.Models
         {
             Persona p = new Persona();
             p.clave = clave;
-            p.recargarDatos();
-
-            return p;
+            if (p.recargarDatos())
+                return p;
+            else
+                return null;
         }
 
         /// <summary>
         /// Lee de nuevo los datos del usuario de la base de datos y los actualiza en el objeto
         /// </summary>
-        public void recargarDatos()
+        /// <returns>Si se recargaron satisfactoriamente los datos</returns>
+        public bool recargarDatos()
         {
             if (clave == 0)
-                return;
+                return false;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -215,13 +217,15 @@ namespace OMIstats.Models
             query.Append(clave);
 
             if (db.EjecutarQuery(query.ToString()).error)
-                return;
+                return false;
 
             DataTable table = db.getTable();
             if (table.Rows.Count != 1)
-                return;
+                return false;
 
             llenarDatos(table.Rows[0]);
+
+            return true;
         }
 
         /// <summary>
@@ -238,7 +242,7 @@ namespace OMIstats.Models
             query.Append("select * from persona where admin = 1");
 
             if (db.EjecutarQuery(query.ToString()).error)
-                return null;
+                return admins;
 
             DataTable table = db.getTable();
 
@@ -329,7 +333,7 @@ namespace OMIstats.Models
 
             query.Append(" update persona set ");
 
-            if (nombre.Length > 0)
+            if (!String.IsNullOrEmpty(nombre))
             {
                 if (generarPeticiones)
                 {
@@ -368,7 +372,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(usuario));
             query.Append(",");
 
-            if (password.Length > 0)
+            if (!String.IsNullOrEmpty(password))
             {
                 query.Append(" [password] = HASHBYTES(\'SHA1\', ");
                 query.Append(Utilities.Cadenas.comillas(password));
@@ -383,14 +387,14 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(genero));
             query.Append(",");
 
-            if (foto.Length > 0)
+            if (!String.IsNullOrEmpty(foto))
             {
                 if (generarPeticiones)
                 {
                     Peticion pet = new Peticion();
                     pet.tipo = "usuario";
                     pet.subtipo = "foto";
-                    pet.usuario = obtenerPersonaConClave(clave);
+                    pet.usuario = this;
                     pet.datos1 = foto;
                     pet.guardarPeticion();
                 }
