@@ -25,6 +25,8 @@ namespace OMIstats
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Utilities.Acceso.CADENA_CONEXION = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
+            Utilities.Correo.CORREO = ConfigurationManager.AppSettings.Get("correo");
+            Utilities.Correo.PASSWORD = ConfigurationManager.AppSettings.Get("password");
         }
 
         public void Session_Start()

@@ -10,6 +10,9 @@ namespace OMIstats.Utilities
 {
     public class Correo
     {
+        public static string CORREO;
+        public static string PASSWORD;
+
         private static string direccionServer()
         {
             HttpRequest request = HttpContext.Current.Request;
@@ -29,7 +32,7 @@ namespace OMIstats.Utilities
             MailMessage mail = new MailMessage();
 
             mail.To.Add(destinatario);
-            mail.From = new MailAddress("omistatstest@outlook.com", "OMI stats test");
+            mail.From = new MailAddress(CORREO, "OMI stats test");
             mail.Subject = asunto;
             mail.Body = mensaje;
             mail.IsBodyHtml = true;
@@ -38,7 +41,7 @@ namespace OMIstats.Utilities
 
             smtpMail.Host = "smtp.live.com";
             smtpMail.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpMail.Credentials = new NetworkCredential("omistatstest@outlook.com", "");
+            smtpMail.Credentials = new NetworkCredential(CORREO, PASSWORD);
             smtpMail.EnableSsl = true;
             smtpMail.Port = 587;
             smtpMail.Timeout = 10000;
