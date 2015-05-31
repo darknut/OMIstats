@@ -1,4 +1,5 @@
 ﻿@model List<OMIstats.Models.Peticion>
+@using OMIstats.Models
 
 @{
     ViewBag.Title = "Mis peticiones";
@@ -32,11 +33,11 @@
 
 @foreach (var item in Model)
 {
-    if (item.tipo.Equals("usuario") && item.subtipo.Equals("nombre") && cambioNombre == -1)
+    if (item.tipo == Peticion.TipoPeticion.USUARIO && item.subtipo == Peticion.TipoPeticion.NOMBRE && cambioNombre == -1)
     {
         cambioNombre = i;
     }
-    if (item.tipo.Equals("usuario") && item.subtipo.Equals("foto") && cambioFoto == -1)
+    if (item.tipo == Peticion.TipoPeticion.USUARIO && item.subtipo == Peticion.TipoPeticion.FOTO && cambioFoto == -1)
     {
         cambioFoto = i;
     }
@@ -66,7 +67,7 @@ else
         @for (int j = cambioNombre; j < Model.Count; j++)
         {
             <tr id='@Url.Content("row" + @Model[j].clave)'>
-                @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("nombre"))
+                @if (Model[j].tipo == Peticion.TipoPeticion.USUARIO && Model[j].subtipo == Peticion.TipoPeticion.NOMBRE)
                 {
                     <td class="tdNombre">
                        @ViewBag.usuario.nombre
@@ -107,7 +108,7 @@ else
         @for (int j = cambioFoto; j < Model.Count; j++)
         {
             <tr id='@Url.Content("row" + @Model[j].clave)'>
-                @if (Model[j].tipo.Equals("usuario") && Model[j].subtipo.Equals("foto"))
+                @if (Model[j].tipo == Peticion.TipoPeticion.USUARIO && Model[j].subtipo == Peticion.TipoPeticion.FOTO)
                 {
                     <td class="tdFoto">
                        <img src='@Url.Content(ViewBag.usuario.foto)' alt="foto"/>

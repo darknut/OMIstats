@@ -110,10 +110,9 @@ namespace OMIstats.Controllers
             }
 
             Peticion pe = new Peticion();
-            pe.tipo = "usuario";
-            pe.subtipo = "password";
+            pe.tipo = Peticion.TipoPeticion.USUARIO;
+            pe.subtipo = Peticion.TipoPeticion.PASSWORD;
             pe.usuario = p;
-            pe.datos1 = Guid.NewGuid().ToString();
             if (pe.guardarPeticion())
                 ViewBag.saved = true;
             else

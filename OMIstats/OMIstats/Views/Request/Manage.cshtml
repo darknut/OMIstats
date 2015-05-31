@@ -1,4 +1,5 @@
 ﻿@model List<OMIstats.Models.Peticion>
+@using OMIstats.Models
 
 @{
     ViewBag.Title = "Administrar peticiones";
@@ -79,9 +80,9 @@ else
                 </div>
             </td>
 
-            @if (item.tipo == "usuario")
+            @if (item.tipo == Peticion.TipoPeticion.USUARIO)
             {
-                if (item.subtipo == "nombre")
+                if (item.subtipo == Peticion.TipoPeticion.NOMBRE)
                 {
                     <td class="negritas">
                         Cambio de nombre
@@ -96,7 +97,7 @@ else
                     </td>
                 }
 
-                if (item.subtipo == "foto")
+                if (item.subtipo == Peticion.TipoPeticion.FOTO)
                 {
                     <td class="negritas">
                         Cambio de foto

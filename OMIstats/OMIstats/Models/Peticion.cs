@@ -45,6 +45,9 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
+            if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.PASSWORD)
+                datos1 = Guid.NewGuid().ToString();
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
@@ -74,7 +77,7 @@ namespace OMIstats.Models
                 return false;
             clave = (int)table.Rows[0][0];
 
-            if (usuario != null && tipo.Equals("usuario") && subtipo.Equals("password"))
+            if (usuario != null && tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.PASSWORD)
                 return Utilities.Correo.enviarPeticionPassword(clave, datos1, usuario.correo);
 
             return true;
@@ -218,7 +221,7 @@ namespace OMIstats.Models
             if (db.EjecutarQuery(query.ToString()).error)
                 return false;
 
-            if (tipo.Equals("usuario") && subtipo.Equals("foto"))
+            if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.FOTO)
                 Utilities.Archivos.eliminarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
 
             return true;
@@ -232,17 +235,17 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return;
 
-            if (tipo.Equals("usuario"))
+            if (tipo == TipoPeticion.USUARIO)
             {
-                if (subtipo.Equals("nombre"))
+                if (subtipo == TipoPeticion.NOMBRE)
                     usuario.nombre = datos1;
 
-                if (subtipo.Equals("foto"))
+                if (subtipo == TipoPeticion.FOTO)
                     usuario.foto =
                         Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
                                             usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
 
-                if (subtipo.Equals("password"))
+                if (subtipo == TipoPeticion.PASSWORD)
                     usuario.password = System.Web.Security.Membership.GeneratePassword(8, 3);
 
                 usuario.guardarDatos();

@@ -69,5 +69,51 @@ namespace OMIstats.Controllers
 
             return View(cambiar);
         }
+
+        //
+        // GET: /Admin/ResetPassword/
+
+        public ActionResult ResetPassword(string usuario)
+        {
+            if (!esAdmin() || String.IsNullOrEmpty(usuario))
+                return RedirectTo(Pagina.HOME);
+
+            Persona p = Persona.obtenerPersonaDeUsuario(usuario);
+            if (p == null)
+                return RedirectTo(Pagina.HOME);
+
+            limpiarErroresViewBag();
+            return View(p);
+        }
+
+        //
+        // POST: /Admin/ResetPassword/
+
+        [HttpPost]
+        public ActionResult ResetPassword(Persona p)
+        {
+            if (!esAdmin() || p == null)
+                return RedirectTo(Pagina.HOME);
+
+            limpiarErroresViewBag();
+            p = Persona.obtenerPersonaDeUsuario(p.usuario);
+
+            if (p == null || !ModelState.IsValidField("correo"))
+            {
+                ViewBag.logInError = true;
+                return View(p);
+            }
+
+            Peticion pe = new Peticion();
+            pe.tipo = Peticion.TipoPeticion.USUARIO;
+            pe.subtipo = Peticion.TipoPeticion.PASSWORD;
+            pe.usuario = p;
+            if (pe.guardarPeticion())
+                ViewBag.changed = true;
+            else
+                ViewBag.logInError = true;
+
+            return View(p);
+        }
     }
 }

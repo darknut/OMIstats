@@ -89,7 +89,8 @@
                 if (@ViewBag.usuario.clave != Model.clave)
                 {
                     <div>
-                        <div class="botonPerfil">Mandar contraseña</div>
+                        @Html.ActionLink("Mandar contraseña", "ResetPassword", "Admin",
+                                         new { usuario = Model.usuario }, new { @class = "botonPerfil" })
                     </div>
                     <br />
 
