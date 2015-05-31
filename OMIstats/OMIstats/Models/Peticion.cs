@@ -232,6 +232,10 @@ namespace OMIstats.Models
                     usuario.foto =
                         Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
                                             usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+
+                if (subtipo.Equals("password"))
+                    usuario.password = System.Web.Security.Membership.GeneratePassword(8, 3);
+
                 usuario.guardarDatos();
             }
 

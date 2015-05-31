@@ -32,7 +32,7 @@ namespace OMIstats.Utilities
             MailMessage mail = new MailMessage();
 
             mail.To.Add(destinatario);
-            mail.From = new MailAddress(CORREO, "OMI stats test");
+            mail.From = new MailAddress(CORREO, "OMI stats");
             mail.Subject = asunto;
             mail.Body = mensaje;
             mail.IsBodyHtml = true;

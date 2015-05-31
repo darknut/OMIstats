@@ -83,5 +83,29 @@ namespace OMIstats.Controllers
 
             return View(Peticion.obtenerPeticiones());
         }
+
+        //
+        // GET: /Request/Access/
+
+        public ActionResult Access(string clave, string guid)
+        {
+            if (estaLoggeado() || String.IsNullOrEmpty(clave) || String.IsNullOrEmpty(guid))
+                return RedirectTo(Pagina.HOME);
+
+            int claveInt;
+            if (!Int32.TryParse(clave, out claveInt))
+                return RedirectTo(Pagina.HOME);
+
+            Peticion pe = Peticion.obtenerPeticionConClave(claveInt);
+            if (pe == null || !pe.datos1.Equals(guid))
+            {
+                ViewBag.errorPeticion = true;
+                return View(new Persona());
+            }
+
+            pe.aceptarPeticion();
+            ViewBag.errorPeticion = false;
+            return View(pe.usuario);
+        }
     }
 }
