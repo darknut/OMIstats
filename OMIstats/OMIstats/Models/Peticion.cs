@@ -10,17 +10,26 @@ namespace OMIstats.Models
     public class Peticion
     {
         public int clave { get; set; }
-        public string tipo { get; set; }
-        public string subtipo { get; set; }
+        public TipoPeticion tipo { get; set; }
+        public TipoPeticion subtipo { get; set; }
         public Persona usuario { get; set; }
         public string datos1 { get; set; }
         public string datos2 { get; set; }
         public string datos3 { get; set; }
 
+        public enum TipoPeticion
+        {
+            NULL,
+            USUARIO,
+            NOMBRE,
+            FOTO,
+            PASSWORD
+        }
+
         public Peticion()
         {
-            tipo = "";
-            subtipo = "";
+            tipo = TipoPeticion.NULL;
+            subtipo = TipoPeticion.NULL;
             usuario = null;
             datos1 = "";
             datos2 = "";
@@ -33,7 +42,7 @@ namespace OMIstats.Models
         /// <returns>Regresa si la peticion se insertó correctamente</returns>
         public bool guardarPeticion()
         {
-            if (String.IsNullOrEmpty(tipo) || String.IsNullOrEmpty(subtipo))
+            if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -41,9 +50,9 @@ namespace OMIstats.Models
 
             query.Append(" declare @inserted table(clave int); ");
             query.Append(" insert into peticion output inserted.clave into @inserted values (");
-            query.Append(Utilities.Cadenas.comillas(tipo));
+            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(subtipo));
+            query.Append(Utilities.Cadenas.comillas(subtipo.ToString().ToLower()));
             query.Append(", ");
             if (usuario != null)
                 query.Append(usuario.clave);
@@ -157,8 +166,8 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow datos, bool cargarUsuario = false)
         {
             clave = (int) datos["clave"];
-            tipo = datos["tipo"].ToString();
-            subtipo = datos["subtipo"].ToString();
+            tipo = (TipoPeticion) Enum.Parse(typeof(TipoPeticion), datos["tipo"].ToString().ToUpper());
+            subtipo = (TipoPeticion) Enum.Parse(typeof(TipoPeticion), datos["subtipo"].ToString().ToUpper());
             datos1 = datos["datos1"].ToString();
             datos2 = datos["datos2"].ToString();
             datos3 = datos["datos3"].ToString();
@@ -197,7 +206,7 @@ namespace OMIstats.Models
         /// <returns>Si se eliminó correctamente la petición</returns>
         public bool eliminarPeticion()
         {
-            if (String.IsNullOrEmpty(tipo) || String.IsNullOrEmpty(subtipo))
+            if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -220,7 +229,7 @@ namespace OMIstats.Models
         /// </summary>
         public void aceptarPeticion()
         {
-            if (String.IsNullOrEmpty(tipo) || String.IsNullOrEmpty(subtipo))
+            if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return;
 
             if (tipo.Equals("usuario"))

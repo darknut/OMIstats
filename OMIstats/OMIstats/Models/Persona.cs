@@ -338,8 +338,8 @@ namespace OMIstats.Models
                 if (generarPeticiones)
                 {
                     Peticion pet = new Peticion();
-                    pet.tipo = "usuario";
-                    pet.subtipo = "nombre";
+                    pet.tipo = Peticion.TipoPeticion.USUARIO;
+                    pet.subtipo = Peticion.TipoPeticion.NOMBRE;
                     pet.usuario = this;
                     pet.datos1 = nombre;
                     pet.guardarPeticion();
@@ -392,8 +392,8 @@ namespace OMIstats.Models
                 if (generarPeticiones)
                 {
                     Peticion pet = new Peticion();
-                    pet.tipo = "usuario";
-                    pet.subtipo = "foto";
+                    pet.tipo = Peticion.TipoPeticion.USUARIO;
+                    pet.subtipo = Peticion.TipoPeticion.FOTO;
                     pet.usuario = this;
                     pet.datos1 = foto;
                     pet.guardarPeticion();
