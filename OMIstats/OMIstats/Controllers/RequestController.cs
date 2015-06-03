@@ -107,5 +107,20 @@ namespace OMIstats.Controllers
             ViewBag.errorPeticion = false;
             return View(pe.usuario);
         }
+
+        //
+        // GET: /Request/User/
+
+        public ActionResult User(string usuario)
+        {
+            if (estaLoggeado())
+                return RedirectTo(Pagina.HOME);
+
+            Persona p = Persona.obtenerPersonaDeUsuario(usuario);
+            if (p == null)
+                p = new Persona();
+
+            return View(p);
+        }
     }
 }

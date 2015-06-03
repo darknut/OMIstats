@@ -68,7 +68,8 @@
         @if ((@ViewBag.usuario == null || @ViewBag.usuario.clave == 0) && Regex.IsMatch(Model.usuario, @"^\d+$"))
         {
             <div>
-                <div class="botonPerfil">Reclamar usuario</div>
+                @Html.ActionLink("Reclamar usuario", "User", "Request",
+                                 new { usuario = Model.usuario }, new { @class = "botonPerfil" })
             </div>
             <br />
         }
