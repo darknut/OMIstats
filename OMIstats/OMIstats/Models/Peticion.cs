@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,11 @@ namespace OMIstats.Models
         public TipoPeticion tipo { get; set; }
         public TipoPeticion subtipo { get; set; }
         public Persona usuario { get; set; }
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string datos1 { get; set; }
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string datos2 { get; set; }
+        [MaxLength(300, ErrorMessage = "El tamaño máximo es 300 caracteres")]
         public string datos3 { get; set; }
 
         public enum TipoPeticion

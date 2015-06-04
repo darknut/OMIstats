@@ -1,6 +1,6 @@
 ﻿.foto {
     float:left;
-    width:100px;
+    max-width:100px;
 }
 
 .foto img {
@@ -8,7 +8,8 @@
 	border-bottom-right-radius: 15px;
 	margin-right: 2px;
 	margin-bottom: 8px;
-    width:100px;
+    max-width:100px;
+    max-height:300px;
 }
 
 .datosParticipante {
@@ -100,9 +101,25 @@
     vertical-align:top;
 }
 
+.biglabel {
+    width:350px;
+    display:inline-block;
+    padding-top:15px;
+    padding-left:10px;
+    vertical-align:top;
+}
+
 .input {
     display:inline-block;
     padding-top:15px;
+    vertical-align:top;
+}
+
+.biginput {
+    width:350px;
+    display:inline-block;
+    padding-top:15px;
+    padding-left:10px;
     vertical-align:top;
 }
 
@@ -124,4 +141,13 @@
 
 .oculto {
     display:none;
+}
+
+.opcional {
+    font-style:italic;
+    font-size:10px;
+}
+
+textarea {
+    width:100%;
 }

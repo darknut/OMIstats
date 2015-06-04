@@ -109,9 +109,9 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Request/User/
+        // GET: /Request/Claim/
 
-        public ActionResult User(string usuario)
+        public ActionResult Claim(string usuario)
         {
             if (estaLoggeado())
                 return RedirectTo(Pagina.HOME);
@@ -120,7 +120,29 @@ namespace OMIstats.Controllers
             if (p == null)
                 p = new Persona();
 
-            return View(p);
+            Peticion pe = new Peticion();
+            pe.usuario = p;
+
+            return View(pe);
+        }
+
+        //
+        // POST: /Request/Claim
+
+        [HttpPost]
+        public ActionResult Claim(Peticion pe, HttpPostedFileBase file)
+        {
+            if (pe == null)
+                return RedirectTo(Pagina.HOME);
+
+            pe.usuario = new Persona();
+            pe.usuario.correo = Request["usuario_correo"];
+            pe.usuario.usuario = Request["usuario_usuario"];
+
+            if (!ModelState.IsValid)
+                return Claim(pe.usuario.usuario);
+
+            return View(pe);
         }
     }
 }
