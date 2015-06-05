@@ -184,7 +184,7 @@ namespace OMIstats.Controllers
 
             // Se guarda la imagen en disco
             if (file != null)
-                p.foto = Utilities.Archivos.guardaArchivo(file, "", Utilities.Archivos.FolderImagenes.TEMPORAL);
+                p.foto = Utilities.Archivos.guardaArchivo(file);
 
             // Se guardan los datos
             if (p.guardarDatos(generarPeticiones:!esAdmin()))

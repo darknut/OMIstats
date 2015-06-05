@@ -1,7 +1,14 @@
 ﻿@model OMIstats.Models.Persona
 
 @{
-    ViewBag.Title = "Reclamar usuario";
+    if (ViewBag.admin)
+    {
+        ViewBag.Title = "Asignar usuario";
+    }
+    else
+    {
+        ViewBag.Title = "Reclamar usuario";
+    }
 }
 
 @section AddToHead {
@@ -14,6 +21,7 @@
       var errorImagen = "@ViewBag.errorImagen";
       var errorUsuario = "@ViewBag.errorUsuario";
       var errorMail = "@ViewBag.errorMail";
+      var errorInfo = "@ViewBag.errorInfo";
   </script>
   <script src="/js/formas.js"></script>
   <script src="/js/request.js"></script>
@@ -22,67 +30,110 @@
   </script>
 }
 
-<h2 class="titulo">Reclamar usuario</h2>
+<h2 class="titulo">@ViewBag.Title</h2>
 
-<p>
-    Invitamos a los ex-competidores, asesores, líderes, organizadores y cualquier pesona que haya asistido
-    a una Olimpiada Nacional a que actualice sus datos de contacto. Para ello, es necesario que se reclame
-    uno de los usuarios ya existentes en el sistema.
-</p>
-<p>
-    <!-- -TODO- Agregar enlace -->
-    Todos los nombres de usuario son públicos, y pueden consultarse en la página 
-    del perfil de cada usuario. Puedes buscarte por tu nombre para saber si tu perfil existe en nuestro sistema.
-</p>
-<p>
-    <!-- -TODO- Agregar enlace -->
-    Si ya te buscaste y no encuentras un perfil con tu nombre, y participaste en una Olimpiada Nacional,
-    llena esta otra forma para informarnos al respecto.
-</p>
-<p>
-    Es altamente recomendable que adjuntes a esta petición una foto o un scan de uno de los diplomas que hayas adquirido
-    durante la olimpiada nacional, para asegurarnos de que realmente eres quien dice ser.
-</p>
-<p>
-    Si estás pidiendo un usuario que ya fue asignado a otra persona o si intentas recuperar acceso a tu cuenta,
-    es de suma importancia que nos demuestres tu identidad.
-</p>
+@if (ViewBag.guardado)
+{
+    if (ViewBag.admin)
+    {
+        <p>
+            Se mandaron satisfactoriamente los datos de acceso
+        </p>
+    }
+    else
+    {
+        <p>
+            Se mandó satisfactoriamente tu petición. Un administrador la revisará y de ser aceptada, se te enviarán
+            tus datos de acceso al correo que proporcionaste.
+        </p>
+    }
+}
+else if (ViewBag.errorPeticion)
+{
+    if (ViewBag.admin)
+    {
+        <p>
+            Ocurrió un error, revisa que aún se tenga acceso a la cuenta de correo electrónico.
+        </p>
+    }
+    else
+    {
+        <!-- -TODO- agregar enlace -->
+        <p>
+            Ocurrió un error mientras procesábamos tu petición. Inténtalo de nuevo más tarde y si los errores persisten,
+            avísanos.
+        </p>
+    }
+}
+else
+{
+    if (!ViewBag.admin)
+    {
+        <p>
+            Invitamos a los ex-competidores, asesores, líderes, organizadores y cualquier pesona que haya asistido
+            a una Olimpiada Nacional a que actualice sus datos de contacto. Para ello, es necesario que se reclame
+            uno de los usuarios ya existentes en el sistema.
+        </p>
+        <p>
+            <!-- -TODO- Agregar enlace -->
+            Todos los nombres de usuario son públicos, y pueden consultarse en la página 
+            del perfil de cada usuario. Puedes buscarte por tu nombre para saber si tu perfil existe en nuestro sistema.
+        </p>
+        <p>
+            <!-- -TODO- Agregar enlace -->
+            Si ya te buscaste y no encuentras un perfil con tu nombre, y participaste en una Olimpiada Nacional,
+            llena esta otra forma para informarnos al respecto.
+        </p>
+        <p>
+            Es altamente recomendable que adjuntes a esta petición una foto o un scan de uno de los diplomas que hayas adquirido
+            durante la olimpiada nacional, para asegurarnos de que realmente eres quien dice ser.
+        </p>
+        <p>
+            Si estás pidiendo un usuario que ya fue asignado a otra persona o si intentas recuperar acceso a tu cuenta,
+            es de suma importancia que nos demuestres tu identidad.
+        </p>
+    }
 
-<form name="requestAccess" id="requestAccess" action="/Request/Claim" method="post" enctype="multipart/form-data">
-    <div>
-        <input type="hidden" id="nombre" name="nombre" value="-"/>
+    <form name="requestAccess" id="requestAccess" action="/Request/Claim" method="post" enctype="multipart/form-data">
         <div>
-            <div class="label">Usuario reclamado:</div>
-            <div class="input">
-                @Html.EditorFor(model => model.usuario)
-                <div id="user_not_found" class="textoRojo">El usuario que escribiste no existe</div>
+            <input type="hidden" id="nombre" name="nombre" value="-"/>
+            <div>
+                <div class="label">Usuario reclamado:</div>
+                <div class="input">
+                    @Html.EditorFor(model => model.usuario)
+                    <div id="user_not_found" class="textoRojo">El usuario que escribiste no existe</div>
+                </div>
+            </div>
+            <div>
+                <div class="label">Correo electrónico:</div>
+                <div class="input">
+                    @Html.EditorFor(model => model.correo)
+                    @Html.ValidationMessageFor(model => model.correo)
+                    <div id="error_mail" class="textoRojo">Escribe un correo electrónico</div>
+                </div>
+            </div>
+            @if (!ViewBag.admin)
+            {
+                <div>
+                    <div class="label">Diploma: </div>
+                    <div class="input">
+                        <input type="file" name="file" id="file" />
+                        <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
+                        <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 1MB</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="biglabel">Dinos algo de ti que nos pueda ayudar a comprobar tu identidad <span class="opcional">(opcional)</span>:</div>
+                    <br />
+                    <div class="biginput">
+                        <textarea id="informacion" name="informacion">@ViewBag.informacion</textarea>
+                        <div id="error_info" class="textoRojo">El tamaño máximo es 300 caracteres</div>
+                    </div>
+                </div>
+            }
+            <div>
+                <div class="label"><input type="submit" value="@ViewBag.Title" /></div>
             </div>
         </div>
-        <div>
-            <div class="label">Correo electrónico:</div>
-            <div class="input">
-                @Html.EditorFor(model => model.correo)
-                @Html.ValidationMessageFor(model => model.correo)
-                <div id="error_mail" class="textoRojo">Escribe un correo electrónico</div>
-            </div>
-        </div>
-        <div>
-            <div class="label">Diploma: </div>
-            <div class="input">
-                <input type="file" name="file" id="file" />
-                <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
-                <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 1MB</div>
-            </div>
-        </div>
-        <div>
-            <div class="biglabel">Dinos algo de ti que nos pueda ayudar a comprobar tu identidad <span class="opcional">(opcional)</span>:</div>
-            <br />
-            <div class="biginput">
-                <textarea id="informacion" name="informacion"></textarea>
-            </div>
-        </div>
-        <div>
-            <div class="label"><input type="submit" value="Mandar petición" /></div>
-        </div>
-    </div>
-</form>
+    </form>
+}

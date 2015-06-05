@@ -9,6 +9,7 @@ namespace OMIstats.Utilities
     public class Archivos
     {
         public static readonly List<string> ExtensionesValidas = new List<string> { ".bmp", ".jpg", ".jpeg", ".gif", ".png" };
+        public static readonly List<string> ExtensionesContenedoras = new List<string> { ".docx", ".pdf" };
 
         public const string FOLDER_TEMPORAL = "~/img/temp";
         public const string FOLDER_USUARIOS = "~/img/user";
@@ -34,7 +35,11 @@ namespace OMIstats.Utilities
             PASSWORD
         }
 
-        public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen, int tamaño)
+        /// <summary>
+        /// Regresa si la imagen es válida o no.
+        /// </summary>
+        /// <param name="allowContainer">Si la imagen se permite estar contenida en un docx o pdf</param>
+        public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen, int tamaño, bool allowContainer = false)
         {
             if (imagen == null || String.IsNullOrEmpty(imagen.FileName))
                 return ResultadoImagen.IMAGEN_INVALIDA;
@@ -44,8 +49,16 @@ namespace OMIstats.Utilities
             if (extension.Length < 2)
                 return ResultadoImagen.IMAGEN_INVALIDA;
 
-            if (!ExtensionesValidas.Contains(extension.ToLower()))
-                return ResultadoImagen.IMAGEN_INVALIDA;
+            if (allowContainer)
+            {
+                if (!ExtensionesValidas.Contains(extension.ToLower()) && !ExtensionesContenedoras.Contains(extension.ToLower()))
+                    return ResultadoImagen.IMAGEN_INVALIDA;
+            }
+            else
+            {
+                if (!ExtensionesValidas.Contains(extension.ToLower()))
+                    return ResultadoImagen.IMAGEN_INVALIDA;
+            }
 
             if (imagen.ContentLength > tamaño)
                 return ResultadoImagen.IMAGEN_MUY_GRANDE;

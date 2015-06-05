@@ -110,6 +110,26 @@ else
                         <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Nueva foto</a>
                     </td>
                 }
+
+                if (item.subtipo == Peticion.TipoPeticion.ACCESO)
+                {
+                    <td class="negritas">
+                        Acceso
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
+                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target="_blank" })
+                    </td>
+                    <td>
+                        <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Diploma</a>
+                        <br />
+                        <span class="negritas">Correo:</span>
+                        @Html.DisplayFor(modelItem => item.datos2)
+                        <br />
+                        <span class="negritas">Información:</span>
+                        @Html.DisplayFor(modelItem => item.datos3)
+                    </td>
+                }
             }
 
         </tr>

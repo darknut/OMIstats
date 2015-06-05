@@ -42,4 +42,10 @@ function aplicaErrores()
         setCampoError("correo");
         setVisible("error_mail", true);
     }
+
+    if (errorInfo !== "")
+    {
+        setCampoError("informacion");
+        setVisible("error_info", true);
+    }
 }

@@ -10,8 +10,9 @@ namespace OMIstats.Models
 {
     public class Peticion
     {
-        public static readonly int TamañoFotoMaximo = 1024 * 300;
-        public static readonly int TamañoPeticionMaximo = 1024 * 1024;
+        public const int TamañoFotoMaximo = 1024 * 300;
+        public const int TamañoPeticionMaximo = 1024 * 1024;
+        public const int TamañoDatos3 = 300;
 
         public int clave { get; set; }
         public TipoPeticion tipo { get; set; }
@@ -21,7 +22,7 @@ namespace OMIstats.Models
         public string datos1 { get; set; }
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string datos2 { get; set; }
-        [MaxLength(300, ErrorMessage = "El tamaño máximo es 300 caracteres")]
+        [MaxLength(TamañoDatos3, ErrorMessage = "El tamaño máximo es 300 caracteres")]
         public string datos3 { get; set; }
 
         public enum TipoPeticion
@@ -30,7 +31,8 @@ namespace OMIstats.Models
             USUARIO,
             NOMBRE,
             FOTO,
-            PASSWORD
+            PASSWORD,
+            ACCESO
         }
 
         public Peticion()
@@ -228,7 +230,8 @@ namespace OMIstats.Models
             if (db.EjecutarQuery(query.ToString()).error)
                 return false;
 
-            if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.FOTO)
+            if (tipo == TipoPeticion.USUARIO &&
+                (subtipo == TipoPeticion.FOTO || subtipo == TipoPeticion.ACCESO))
                 Utilities.Archivos.eliminarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
 
             return true;
@@ -254,6 +257,16 @@ namespace OMIstats.Models
 
                 if (subtipo == TipoPeticion.PASSWORD)
                     usuario.password = System.Web.Security.Membership.GeneratePassword(8, 3);
+
+                if (subtipo == TipoPeticion.ACCESO)
+                {
+                    usuario.correo = datos2;
+                    Peticion pe = new Peticion();
+                    pe.tipo = TipoPeticion.USUARIO;
+                    pe.subtipo = TipoPeticion.PASSWORD;
+                    pe.usuario = usuario;
+                    pe.guardarPeticion();
+                }
 
                 usuario.guardarDatos();
             }

@@ -14,6 +14,10 @@ namespace OMIstats.Controllers
             ViewBag.errorImagen = "";
             ViewBag.errorUsuario = "";
             ViewBag.errorMail = "";
+            ViewBag.errorInfo = "";
+            ViewBag.guardado = false;
+            ViewBag.errorPeticion = false;
+            ViewBag.admin = esAdmin();
         }
 
         //
@@ -50,9 +54,15 @@ namespace OMIstats.Controllers
             if (pe == null)
                 return Json(ERROR);
 
-            if (!(esAdmin() ||
-                  getUsuario().clave == pe.usuario.clave))
-                return Json(ERROR);
+            if (!esAdmin())
+            {
+                if(getUsuario().clave != pe.usuario.clave)
+                    return Json(ERROR);
+
+                if (pe.subtipo == Peticion.TipoPeticion.PASSWORD ||
+                    pe.subtipo == Peticion.TipoPeticion.ACCESO)
+                    return Json(ERROR);
+            }
 
             if (!pe.eliminarPeticion())
                 return Json(ERROR);
@@ -120,8 +130,10 @@ namespace OMIstats.Controllers
 
         public ActionResult Claim(string usuario)
         {
-            if (estaLoggeado())
+            if (!esAdmin() && estaLoggeado())
                 return RedirectTo(Pagina.HOME);
+
+            limpiarErroresViewBag();
 
             Persona p = Persona.obtenerPersonaDeUsuario(usuario);
             if (p == null)
@@ -136,7 +148,7 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult Claim(HttpPostedFileBase file, string informacion, Persona p)
         {
-            if (p == null)
+            if (p == null || (!esAdmin() && estaLoggeado()))
                 return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
@@ -157,16 +169,45 @@ namespace OMIstats.Controllers
                 return View(p);
             }
 
+            if (informacion != null && informacion.Length > Peticion.TamañoDatos3)
+            {
+                ViewBag.errorInfo = ERROR;
+                ViewBag.informacion = informacion;
+                return View(p);
+            }
+
             // Validaciones imagen
             if (file != null)
             {
-                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file, Peticion.TamañoPeticionMaximo);
+                Utilities.Archivos.ResultadoImagen resultado =
+                    Utilities.Archivos.esImagenValida(file, Peticion.TamañoPeticionMaximo, allowContainer:true);
                 if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return View(p);
                 }
+                p.foto = Utilities.Archivos.guardaArchivo(file);
             }
+
+            Peticion pe = new Peticion();
+            pe.tipo = Peticion.TipoPeticion.USUARIO;
+            if (esAdmin())
+            {
+                pe.subtipo = Peticion.TipoPeticion.PASSWORD;
+                pe.usuario = temp;
+            }
+            else
+            {
+                pe.subtipo = Peticion.TipoPeticion.ACCESO;
+                pe.usuario = temp;
+                pe.datos1 = p.foto;
+                pe.datos2 = p.correo;
+                pe.datos3 = informacion;
+            }
+            if (pe.guardarPeticion())
+                ViewBag.guardado = true;
+            else
+                ViewBag.errorPeticion = true;
 
             return View(p);
         }

@@ -63,7 +63,6 @@
     </div>
 
     <div class="botones">
-        <!-- -TODO- Agregar enlaces a los lugares correctos -->
 
         @if ((@ViewBag.usuario == null || @ViewBag.usuario.clave == 0) && Regex.IsMatch(Model.usuario, @"^\d+$"))
         {
@@ -96,7 +95,8 @@
                     <br />
 
                     <div>
-                        <div class="botonPerfil">Asignar cuenta</div>
+                        @Html.ActionLink("Asignar cuenta", "Claim", "Request",
+                                         new { usuario = Model.usuario }, new { @class = "botonPerfil" })
                     </div>
                     <br />
 
@@ -115,6 +115,7 @@
                     <br />
 
                     <div>
+                        <!-- -TODO- Agregar enlace -->
                         <div class="botonPerfil">Unir usuario</div>
                     </div>
                     <br />

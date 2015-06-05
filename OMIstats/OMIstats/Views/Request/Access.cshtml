@@ -23,4 +23,18 @@ else
 
     <br />
     <div>Contraseña: @Html.DisplayFor(model => model.password)</div>
+
+    <br />
+    <div>
+        Anótalos pues <span class="errorTextoRojo">no se te volverán a mostrar</span>.
+    </div>
+
+    if (Char.IsDigit(Model.usuario[0]))
+    {
+        <br />
+        <div>
+            <span class="errorTextoRojo">IMPORTANTE:</span> La primera vez que cambies tus datos
+            necesitarás elegir un nuevo nombre de usuario.
+        </div>
+    }
 }
