@@ -1,4 +1,4 @@
-﻿@model OMIstats.Models.Peticion
+﻿@model OMIstats.Models.Persona
 
 @{
     ViewBag.Title = "Reclamar usuario";
@@ -7,6 +7,19 @@
 @section AddToHead {
     <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+}
+
+@section Scripts {
+  <script>
+      var errorImagen = "@ViewBag.errorImagen";
+      var errorUsuario = "@ViewBag.errorUsuario";
+      var errorMail = "@ViewBag.errorMail";
+  </script>
+  <script src="/js/formas.js"></script>
+  <script src="/js/request.js"></script>
+  <script>
+      aplicaErrores();
+  </script>
 }
 
 <h2 class="titulo">Reclamar usuario</h2>
@@ -35,17 +48,22 @@
     es de suma importancia que nos demuestres tu identidad.
 </p>
 
-@using(@Html.BeginForm()) {
+<form name="requestAccess" id="requestAccess" action="/Request/Claim" method="post" enctype="multipart/form-data">
     <div>
+        <input type="hidden" id="nombre" name="nombre" value="-"/>
         <div>
             <div class="label">Usuario reclamado:</div>
-            <div class="input">@Html.EditorFor(model => model.usuario.usuario)</div>
+            <div class="input">
+                @Html.EditorFor(model => model.usuario)
+                <div id="user_not_found" class="textoRojo">El usuario que escribiste no existe</div>
+            </div>
         </div>
         <div>
             <div class="label">Correo electrónico:</div>
             <div class="input">
-                @Html.EditorFor(model => model.usuario.correo)
-                @Html.ValidationMessageFor(model => model.usuario.correo)
+                @Html.EditorFor(model => model.correo)
+                @Html.ValidationMessageFor(model => model.correo)
+                <div id="error_mail" class="textoRojo">Escribe un correo electrónico</div>
             </div>
         </div>
         <div>
@@ -53,19 +71,18 @@
             <div class="input">
                 <input type="file" name="file" id="file" />
                 <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
-                <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 600KB</div>
+                <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 1MB</div>
             </div>
         </div>
         <div>
             <div class="biglabel">Dinos algo de ti que nos pueda ayudar a comprobar tu identidad <span class="opcional">(opcional)</span>:</div>
             <br />
             <div class="biginput">
-                @Html.TextAreaFor(model => model.datos3)
-                @Html.ValidationMessageFor(model => model.datos3)
+                <textarea id="informacion" name="informacion"></textarea>
             </div>
         </div>
         <div>
             <div class="label"><input type="submit" value="Mandar petición" /></div>
         </div>
     </div>
-}
+</form>

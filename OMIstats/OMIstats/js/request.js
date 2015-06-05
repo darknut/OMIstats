@@ -22,3 +22,24 @@ function eliminar(fila)
             function (data) { ocultaFila("error", fila); });
 
 }
+
+function aplicaErrores()
+{
+    if (errorImagen !== "")
+    {
+        setCampoError("file");
+        setVisible(errorImagen, true);
+    }
+
+    if (errorUsuario !== "")
+    {
+        setCampoError("usuario");
+        setVisible(errorUsuario, true);
+    }
+
+    if (errorMail !== "")
+    {
+        setCampoError("correo");
+        setVisible("error_mail", true);
+    }
+}

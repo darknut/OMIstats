@@ -61,7 +61,8 @@ namespace OMIstats.Models
             ALFANUMERIC,
             TAKEN,
             SIZE,
-            ERROR
+            ERROR,
+            USER_NOT_FOUND
         }
 
         public enum ErrorPassword

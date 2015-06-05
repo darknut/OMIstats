@@ -131,7 +131,7 @@ namespace OMIstats.Controllers
             // Validaciones foto
             if (file != null)
             {
-                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file);
+                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
                 if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
@@ -192,7 +192,20 @@ namespace OMIstats.Controllers
                 string nuevoNombre = p.nombre;
                 recargarDatos();
 
-                if (!esAdmin() && (file != null || !nuevoNombre.Equals(getUsuario().nombre)))
+                if (esAdmin())
+                {
+                    if (file != null)
+                    {
+                        p.foto =
+                            Utilities.Archivos.copiarArchivo(p.foto, Utilities.Archivos.FolderImagenes.TEMPORAL,
+                                                p.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+                        p.guardarDatos();
+                    }
+
+                    return RedirectTo(Pagina.SAVED_PROFILE, new { value = "ok" });
+                }
+
+                if (file != null || !nuevoNombre.Equals(getUsuario().nombre))
                     return RedirectTo(Pagina.SAVED_PROFILE, new { value = "admin" });
                 else
                     return RedirectTo(Pagina.SAVED_PROFILE, new { value = "ok" });

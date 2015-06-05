@@ -9,6 +9,13 @@ namespace OMIstats.Controllers
 {
     public class RequestController : BaseController
     {
+        private void limpiarErroresViewBag()
+        {
+            ViewBag.errorImagen = "";
+            ViewBag.errorUsuario = "";
+            ViewBag.errorMail = "";
+        }
+
         //
         // GET: /Request/
 
@@ -120,29 +127,48 @@ namespace OMIstats.Controllers
             if (p == null)
                 p = new Persona();
 
-            Peticion pe = new Peticion();
-            pe.usuario = p;
-
-            return View(pe);
+            return View(p);
         }
 
         //
         // POST: /Request/Claim
 
         [HttpPost]
-        public ActionResult Claim(Peticion pe, HttpPostedFileBase file)
+        public ActionResult Claim(HttpPostedFileBase file, string informacion, Persona p)
         {
-            if (pe == null)
+            if (p == null)
                 return RedirectTo(Pagina.HOME);
 
-            pe.usuario = new Persona();
-            pe.usuario.correo = Request["usuario_correo"];
-            pe.usuario.usuario = Request["usuario_usuario"];
+            limpiarErroresViewBag();
 
             if (!ModelState.IsValid)
-                return Claim(pe.usuario.usuario);
+                return View(p);
 
-            return View(pe);
+            Persona temp = Persona.obtenerPersonaDeUsuario(p.usuario);
+            if (temp == null)
+            {
+                ViewBag.errorUsuario = Persona.DisponibilidadUsuario.USER_NOT_FOUND.ToString().ToLower();
+                return View(p);
+            }
+
+            if (String.IsNullOrEmpty(p.correo))
+            {
+                ViewBag.errorMail = ERROR;
+                return View(p);
+            }
+
+            // Validaciones imagen
+            if (file != null)
+            {
+                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file, Peticion.TamañoPeticionMaximo);
+                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
+                {
+                    ViewBag.errorImagen = resultado.ToString().ToLower();
+                    return View(p);
+                }
+            }
+
+            return View(p);
         }
     }
 }

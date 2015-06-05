@@ -10,6 +10,9 @@ namespace OMIstats.Models
 {
     public class Peticion
     {
+        public static readonly int TamañoFotoMaximo = 1024 * 300;
+        public static readonly int TamañoPeticionMaximo = 1024 * 1024;
+
         public int clave { get; set; }
         public TipoPeticion tipo { get; set; }
         public TipoPeticion subtipo { get; set; }

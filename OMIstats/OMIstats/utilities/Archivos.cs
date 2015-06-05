@@ -9,7 +9,6 @@ namespace OMIstats.Utilities
     public class Archivos
     {
         public static readonly List<string> ExtensionesValidas = new List<string> { ".bmp", ".jpg", ".jpeg", ".gif", ".png" };
-        public static readonly int TamañoMaximo = 1024 * 300;
 
         public const string FOLDER_TEMPORAL = "~/img/temp";
         public const string FOLDER_USUARIOS = "~/img/user";
@@ -35,7 +34,7 @@ namespace OMIstats.Utilities
             PASSWORD
         }
 
-        public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen)
+        public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen, int tamaño)
         {
             if (imagen == null || String.IsNullOrEmpty(imagen.FileName))
                 return ResultadoImagen.IMAGEN_INVALIDA;
@@ -48,7 +47,7 @@ namespace OMIstats.Utilities
             if (!ExtensionesValidas.Contains(extension.ToLower()))
                 return ResultadoImagen.IMAGEN_INVALIDA;
 
-            if (imagen.ContentLength > TamañoMaximo)
+            if (imagen.ContentLength > tamaño)
                 return ResultadoImagen.IMAGEN_MUY_GRANDE;
 
             return ResultadoImagen.VALIDA;
