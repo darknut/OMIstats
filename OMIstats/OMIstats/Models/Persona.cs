@@ -114,12 +114,24 @@ namespace OMIstats.Models
                 return false;
 
             DataTable table = db.getTable();
+
+            if (table.Rows.Count != 1)
+                return false;
+
+            llenarDatos(table.Rows[0], completo: datosCompletos);
+
+            return true;
+
+            /*
+            DataTable table = (new DataSet1TableAdapters.PersonaTableAdapter()).Login(usuario, password);
+
             if (table.Rows.Count != 1)
                 return false;
 
             llenarDatos(table.Rows[0], completo:datosCompletos);
 
             return true;
+             * */
         }
 
         /// <summary>
@@ -235,6 +247,7 @@ namespace OMIstats.Models
         /// </summary>
         public static List<Persona> obtenerAdmins()
         {
+            /*
             List<Persona> admins = new List<Persona>();
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -251,6 +264,19 @@ namespace OMIstats.Models
             {
                 Persona p = new Persona();
                 p.llenarDatos(r, completo:false);
+                admins.Add(p);
+            }
+
+            return admins;
+            */
+
+            List<Persona> admins = new List<Persona>();
+            DataSet1.PersonaDataTable rows = (new DataSet1TableAdapters.PersonaTableAdapter()).GetAdmins();
+
+            foreach (DataRow r in rows.Rows)
+            {
+                Persona p = new Persona();
+                p.llenarDatos(r, completo: false);
                 admins.Add(p);
             }
 

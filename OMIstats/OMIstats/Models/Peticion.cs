@@ -57,7 +57,7 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.PASSWORD)
                 datos1 = Guid.NewGuid().ToString();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            /*Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" declare @inserted table(clave int); ");
@@ -76,15 +76,18 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(datos2));
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(datos3));
-            query.Append("); select clave from @inserted");
+            query.Append("); select clave from @inserted");*/
 
-            if (db.EjecutarQuery(query.ToString()).error)
+            DataSet1.PeticionRow p = (new DataSet1.PeticionDataTable()).AddPeticionRow(tipo.ToString().ToLower(), subtipo.ToString().ToLower(), usuario.clave, datos1, datos2, datos3);
+
+            /*if (db.EjecutarQuery(query.ToString()).error)
                 return false;
 
             DataTable table = db.getTable();
             if (table.Rows.Count != 1)
                 return false;
-            clave = (int)table.Rows[0][0];
+            clave = (int)table.Rows[0][0];*/
+            clave = p.clave;
 
             if (usuario != null && tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.PASSWORD)
                 return Utilities.Correo.enviarPeticionPassword(clave, datos1, usuario.correo);

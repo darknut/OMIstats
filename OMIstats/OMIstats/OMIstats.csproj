@@ -127,6 +127,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="DataSet1.cs">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="Models\Peticion.cs" />
     <Compile Include="utilities\Acceso.cs" />
@@ -149,6 +158,10 @@
     <Compile Include="utilities\Fechas.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Database.mdf" />
+    <Content Include="App_Data\Database_log.ldf">
+      <DependentUpon>Database.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\admin.css" />
     <Content Include="Content\cabecera.css" />
     <Content Include="Content\fechas.css" />
@@ -215,6 +228,17 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="DataSet1.xsc">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
+    <None Include="DataSet1.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="DataSet1.xss">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="img\bronce.png" />
     <Content Include="img\circulo.png" />
@@ -278,7 +302,6 @@
     <Content Include="Views\Request\Claim.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="img\temp\" />
     <Folder Include="img\user\" />
   </ItemGroup>
