@@ -32,6 +32,7 @@ namespace OMIstats.Models
             NOMBRE,
             FOTO,
             PASSWORD,
+            BIENVENIDO,
             ACCESO
         }
 
@@ -54,7 +55,8 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
-            if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.PASSWORD)
+            if (tipo == TipoPeticion.USUARIO &&
+                (subtipo == TipoPeticion.PASSWORD || subtipo == TipoPeticion.BIENVENIDO))
                 datos1 = Guid.NewGuid().ToString();
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -86,8 +88,13 @@ namespace OMIstats.Models
                 return false;
             clave = (int)table.Rows[0][0];
 
-            if (usuario != null && tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.PASSWORD)
-                return Utilities.Correo.enviarPeticionPassword(clave, datos1, usuario.correo);
+            if (usuario != null && tipo == TipoPeticion.USUARIO)
+            {
+                if (subtipo == TipoPeticion.PASSWORD)
+                    return Utilities.Correo.enviarPeticionPassword(clave, datos1, usuario.correo);
+                if (subtipo == TipoPeticion.BIENVENIDO)
+                    return Utilities.Correo.enviarPeticionBienvenido(clave, datos1, usuario.correo);
+            }
 
             return true;
         }
@@ -135,7 +142,8 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select top 30 * from peticion where subtipo <> 'password' order by tipo, subtipo, usuario ");
+            query.Append(" select top 30 * from peticion where subtipo <> 'password' and subtipo <> 'bienvenido'");
+            query.Append(" order by tipo, subtipo, usuario ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return lista;
@@ -163,7 +171,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select count(*) from peticion where subtipo <> 'password'");
+            query.Append(" select count(*) from peticion where subtipo <> 'password' and subtipo <> 'bienvenido'");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return 0;
@@ -238,6 +246,25 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Elimina las peticiones 'ocultas' del usuario
+        /// Estas son las de peticion de acceso o de cambio de password
+        /// Deben de borrarse cuando al usuario se le da un nuevo password
+        /// </summary>
+        private void eliminarPeticionesPassword()
+        {
+            List<Peticion> peticiones = obtenerPeticionesDeUsuario(usuario);
+
+            foreach (Peticion p in peticiones)
+            {
+                if (p.tipo == TipoPeticion.USUARIO &&
+                    (p.subtipo == TipoPeticion.PASSWORD ||
+                     p.subtipo == TipoPeticion.BIENVENIDO ||
+                     p.subtipo == TipoPeticion.ACCESO))
+                    p.eliminarPeticion();
+            }
+        }
+
+        /// <summary>
         /// Acepta la peticion y actualiza las tablas correspondientes
         /// </summary>
         public void aceptarPeticion()
@@ -255,15 +282,18 @@ namespace OMIstats.Models
                         Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
                                             usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
 
-                if (subtipo == TipoPeticion.PASSWORD)
+                if (subtipo == TipoPeticion.PASSWORD || subtipo == TipoPeticion.BIENVENIDO)
+                {
                     usuario.password = System.Web.Security.Membership.GeneratePassword(8, 3);
+                    eliminarPeticionesPassword();
+                }
 
                 if (subtipo == TipoPeticion.ACCESO)
                 {
                     usuario.correo = datos2;
                     Peticion pe = new Peticion();
                     pe.tipo = TipoPeticion.USUARIO;
-                    pe.subtipo = TipoPeticion.PASSWORD;
+                    pe.subtipo = TipoPeticion.BIENVENIDO;
                     pe.usuario = usuario;
                     pe.guardarPeticion();
                 }

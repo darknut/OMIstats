@@ -13,6 +13,9 @@ namespace OMIstats.Utilities
         public static string CORREO;
         public static string PASSWORD;
 
+        public const string TITULO_CORREO_PASSWORD = "Solicitud de cambio de contraseña";
+        public const string TITULO_CORREO_BIENVENIDO = "Bienvenido a OMI stats";
+
         private static string direccionServer()
         {
             HttpRequest request = HttpContext.Current.Request;
@@ -70,10 +73,22 @@ namespace OMIstats.Utilities
         /// </summary>
         public static bool enviarPeticionPassword(int clave, string guid, string correo)
         {
-            string template = Archivos.leerArchivoHTML(Archivos.ArchivosHTML.PASSWORD);
+            return enviarCorreoPeticion(clave, guid, correo, Archivos.ArchivosHTML.PASSWORD, TITULO_CORREO_PASSWORD);
+        }
+
+        /// <summary>
+        /// Manda un correo de bienvenida al usuario
+        /// </summary>
+        public static bool enviarPeticionBienvenido(int clave, string guid, string correo)
+        {
+            return enviarCorreoPeticion(clave, guid, correo, Archivos.ArchivosHTML.BIENVENIDO, TITULO_CORREO_BIENVENIDO);
+        }
+
+        private static bool enviarCorreoPeticion(int clave, string guid, string correo, Archivos.ArchivosHTML archivo, string titulo)
+        {
+            string template = Archivos.leerArchivoHTML(archivo);
             string server = direccionServer();
-            return mandarCorreo(correo, "Solicitud de cambio de contraseña",
-                String.Format(template, server, clave, guid));
+            return mandarCorreo(correo, titulo, String.Format(template, server, clave, guid));
         }
     }
 }

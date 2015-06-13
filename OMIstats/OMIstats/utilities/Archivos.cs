@@ -14,7 +14,8 @@ namespace OMIstats.Utilities
         public const string FOLDER_TEMPORAL = "~/img/temp";
         public const string FOLDER_USUARIOS = "~/img/user";
 
-        public const string PASSWORD_HTML = "~/private/cambioPassword.html";
+        public const string HTML_PASSWORD = "~/private/cambioPassword.html";
+        public const string HTML_BIENVENIDO = "~/private/bienvenido.html";
 
         public enum ResultadoImagen
         {
@@ -32,7 +33,8 @@ namespace OMIstats.Utilities
 
         public enum ArchivosHTML
         {
-            PASSWORD
+            PASSWORD,
+            BIENVENIDO
         }
 
         /// <summary>
@@ -119,7 +121,8 @@ namespace OMIstats.Utilities
         public static void eliminarArchivo(string nombre, FolderImagenes folder)
         {
             string lugarEnDisco = pathAbsoluto(folder);
-            System.IO.File.Delete(Path.Combine(lugarEnDisco, nombre));
+            if (System.IO.File.Exists(lugarEnDisco))
+                System.IO.File.Delete(Path.Combine(lugarEnDisco, nombre));
         }
 
         /// <summary>
@@ -146,7 +149,10 @@ namespace OMIstats.Utilities
             switch (archivo)
             {
                 case ArchivosHTML.PASSWORD:
-                    a = PASSWORD_HTML;
+                    a = HTML_PASSWORD;
+                    break;
+                case ArchivosHTML.BIENVENIDO:
+                    a = HTML_BIENVENIDO;
                     break;
             }
             a = HttpContext.Current.Server.MapPath(a);

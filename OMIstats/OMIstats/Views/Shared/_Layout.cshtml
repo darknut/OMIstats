@@ -22,16 +22,16 @@
     <div class="menu">
 
         <a class="boton" href="/Home">Página principal</a>
-        @if (@ViewBag.usuario != null && @ViewBag.usuario.admin)
+        @if (ViewBag.usuario != null && ViewBag.usuario.admin)
         {
             <a class="boton" href="/Request/Manage">Admin</a>
         }
         <br />
         <div class="usuario">
-            @if (@ViewBag.usuario != null && @ViewBag.usuario.clave > 0)
+            @if (ViewBag.usuario != null && ViewBag.usuario.clave > 0)
             {
                 <span>
-                    @if(@ViewBag.usuario.genero[0] == 'F')
+                    @if(ViewBag.usuario.genero[0] == 'F')
                     {
                         <span>Bienvenida</span>
                     }
@@ -39,15 +39,18 @@
                     {
                         <span>Bienvenido</span>
                     }
-                    @Html.ActionLink((string)@ViewBag.usuario.nombre, "view", "Profile", 
-                                      new { usuario = (string)@ViewBag.usuario.usuario }, 
+                    @Html.ActionLink((string)ViewBag.usuario.nombre, "view", "Profile", 
+                                      new { usuario = (string)ViewBag.usuario.usuario }, 
                                       new { @class = "nombre" })
                 </span>
                 <div>@Html.ActionLink("Cerrar sesión", "Out", "Log")</div>
             }
             else
             {
-                <div>@Html.ActionLink("Iniciar sesión", "In", "Log")</div>
+                <div>
+                    @Html.ActionLink("Iniciar sesión", "In", "Log", null,
+                    (ViewBag._blank != null && ViewBag._blank) ? new { target = "_blank" } : null)
+                </div>
             }
         </div>
     </div>

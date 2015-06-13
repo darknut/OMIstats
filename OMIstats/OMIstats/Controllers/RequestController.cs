@@ -60,7 +60,8 @@ namespace OMIstats.Controllers
                     return Json(ERROR);
 
                 if (pe.subtipo == Peticion.TipoPeticion.PASSWORD ||
-                    pe.subtipo == Peticion.TipoPeticion.ACCESO)
+                    pe.subtipo == Peticion.TipoPeticion.ACCESO ||
+                    pe.subtipo == Peticion.TipoPeticion.BIENVENIDO)
                     return Json(ERROR);
             }
 
@@ -163,6 +164,13 @@ namespace OMIstats.Controllers
                 return View(p);
             }
 
+            if (estaLoggeado())
+            {
+                Persona actual = getUsuario();
+                if (actual != null && actual.clave == temp.clave)
+                    return View(p);
+            }
+
             if (String.IsNullOrEmpty(p.correo))
             {
                 ViewBag.errorMail = ERROR;
@@ -193,7 +201,7 @@ namespace OMIstats.Controllers
             pe.tipo = Peticion.TipoPeticion.USUARIO;
             if (esAdmin())
             {
-                pe.subtipo = Peticion.TipoPeticion.PASSWORD;
+                pe.subtipo = Peticion.TipoPeticion.BIENVENIDO;
                 pe.usuario = temp;
             }
             else

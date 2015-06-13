@@ -121,13 +121,25 @@ else
                         new { usuario = @item.usuario.usuario }, new { @class = "nombre", target="_blank" })
                     </td>
                     <td>
-                        <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Diploma</a>
-                        <br />
+                        @if (!Char.IsDigit(@item.usuario.usuario[0]))
+                        {
+                            <span class="negritas errorTextoRojo">Precaución:</span>
+                            <span>Usuario ya ha sido reclamado</span>
+                            <br />
+                        }
+                        @if (!String.IsNullOrEmpty(@item.datos1))
+                        {
+                            <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Diploma</a>
+                            <br />
+                        }
                         <span class="negritas">Correo:</span>
                         @Html.DisplayFor(modelItem => item.datos2)
                         <br />
-                        <span class="negritas">Información:</span>
-                        @Html.DisplayFor(modelItem => item.datos3)
+                        @if (!String.IsNullOrEmpty(@item.datos3))
+                        {
+                            <span class="negritas">Información:</span>
+                            @Html.DisplayFor(modelItem => item.datos3)
+                        }
                     </td>
                 }
             }
