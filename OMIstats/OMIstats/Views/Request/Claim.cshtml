@@ -18,16 +18,12 @@
 
 @section Scripts {
   <script>
-      var errorImagen = "@ViewBag.errorImagen";
       var errorUsuario = "@ViewBag.errorUsuario";
       var errorMail = "@ViewBag.errorMail";
       var errorInfo = "@ViewBag.errorInfo";
   </script>
   <script src="/js/formas.js"></script>
   <script src="/js/request.js"></script>
-  <script>
-      aplicaErrores();
-  </script>
 }
 
 <h2 class="titulo">@ViewBag.Title</h2>
@@ -117,9 +113,16 @@ else
                 <div>
                     <div class="label">Diploma: </div>
                     <div class="input">
-                        <input type="file" name="file" id="file" />
-                        <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
-                        <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 1MB</div>
+                        <input type="file" name="file" id="file"
+                            class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")" />
+                        @if (ViewBag.errorImagen == "imagen_invalida")
+                        {
+                            <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                        }
+                        @if (ViewBag.errorImagen == "imagen_muy_grande")
+                        {
+                            <div class="errorTextoRojo">El limite de tamaño para una imagen es 1MB</div>
+                        }
                     </div>
                 </div>
                 <div>
