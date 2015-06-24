@@ -96,8 +96,12 @@ else
             <div>
                 <div class="label">Usuario reclamado:</div>
                 <div class="input">
-                    @Html.EditorFor(model => model.usuario)
-                    <div id="user_not_found" class="textoRojo">El usuario que escribiste no existe</div>
+                    @Html.TextBoxFor(model => model.usuario, new {
+                        @class = ViewBag.errorUsuario.Length == 0 ? "" : "input-validation-error" })
+                    @if (ViewBag.errorUsuario.Length != 0)
+                    {
+                        <div id="user_not_found" class="errorTextoRojo">El usuario que escribiste no existe</div>
+                    }
                 </div>
             </div>
             <div>

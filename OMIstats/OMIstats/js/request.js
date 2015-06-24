@@ -25,12 +25,6 @@ function eliminar(fila)
 
 function aplicaErrores()
 {
-    if (errorUsuario !== "")
-    {
-        setCampoError("usuario");
-        setVisible(errorUsuario, true);
-    }
-
     if (errorMail !== "")
     {
         setCampoError("correo");
