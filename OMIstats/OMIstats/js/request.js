@@ -22,18 +22,3 @@ function eliminar(fila)
             function (data) { ocultaFila("error", fila); });
 
 }
-
-function aplicaErrores()
-{
-    if (errorMail !== "")
-    {
-        setCampoError("correo");
-        setVisible("error_mail", true);
-    }
-
-    if (errorInfo !== "")
-    {
-        setCampoError("informacion");
-        setVisible("error_info", true);
-    }
-}

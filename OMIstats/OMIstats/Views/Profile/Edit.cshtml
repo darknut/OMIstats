@@ -13,12 +13,8 @@
   <script>
       var OMI_minimo = "@ViewBag.minimo";
       var OMI_maximo = "@ViewBag.maximo";
-      var generoUsuario = "@Model.genero";
       var passwordModificado = "@ViewBag.passwordModificado";
-
-      var errorImagen = "@ViewBag.errorImagen";
       var errorUsuario = "@ViewBag.errorUsuario";
-      var errorPassword = "@ViewBag.errorPassword";
   </script>
   <script src="/Scripts/jquery-ui-1.8.20.min.js"></script>
   <script src="/js/fechas.js""></script>
@@ -42,9 +38,16 @@
             <div>
                 <div class="label">Sube una foto:</div>
                 <div class="input">
-                    <input type="file" name="file" id="file" />
-                    <div id="imagen_invalida" class="textoRojo">El archivo que enviaste no es una imagen</div>
-                    <div id="imagen_muy_grande" class="textoRojo">El limite de tamaño para una imagen es 300KB</div>
+                    <input type="file" name="file" id="file"
+                        class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
+                    @if (ViewBag.errorImagen == "imagen_invalida")
+                    {
+                        <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                    }
+                    else if (ViewBag.errorImagen == "imagen_muy_grande")
+                    {
+                        <div class="errorTextoRojo">El limite de tamaño para una imagen es 300KB</div>
+                    }
                 </div>
             </div>
             <div class="userDiv">
@@ -67,22 +70,34 @@
                 <div>
                     <div class="label">Contraseña actual:</div>
                     <div class="input">
-                        @Html.PasswordFor(model => model.password)
-                        <div id ="password_invalido" class="textoRojo">La contraseña es incorrecta</div>
+                        @Html.PasswordFor(model => model.password, new {
+                            @class = ViewBag.errorPassword == "password_invalido" ? "input-validation-error" : "" })
+                        @if (ViewBag.errorPassword == "password_invalido")
+                        {
+                            <div class="errorTextoRojo">La contraseña es incorrecta</div>
+                        }
                     </div>
                 </div>
                 <div>
                     <div class="label">Contraseña nueva:</div>
                     <div class="input">
-                        <input type="password" id="password2" name="password2" />
-                        <div id ="password_vacio" class="textoRojo">Escribe una contraseña nueva</div>
+                        <input type="password" id="password2" name="password2"
+                             class="@(ViewBag.errorPassword == "password_vacio" ? "input-validation-error" : "")" />
+                        @if (ViewBag.errorPassword == "password_vacio")
+                        {
+                            <div class="errorTextoRojo">Escribe una contraseña nueva</div>
+                        }
                     </div>
                 </div>
                 <div>
                     <div class="label">Repetir contraseña:</div>
                     <div class="input">
-                        <input type="password" id="password3" name="password3" />
-                        <div id ="password_diferente" class="textoRojo">Las contraseñas no coinciden</div>
+                        <input type="password" id="password3" name="password3"
+                            class="@(ViewBag.errorPassword == "password_diferente" ? "input-validation-error" : "")" />
+                        @if (ViewBag.errorPassword == "password_diferente")
+                        {
+                            <div class="errorTextoRojo">Las contraseñas no coinciden</div>
+                        }
                     </div>
                 </div>
             </div>
@@ -97,8 +112,8 @@
                 <div class="label">Género:</div>
                 <div class="input">
                     <select id="genero" name="genero">
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
+                        <option value="M" @(Model.genero == "M" ? "selected=selected" : "")>Masculino</option>
+                        <option value="F" @(Model.genero == "F" ? "selected=selected" : "")>Femenino</option>
                     </select>
                 </div>
             </div>

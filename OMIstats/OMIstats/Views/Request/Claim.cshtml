@@ -100,16 +100,20 @@ else
                         @class = ViewBag.errorUsuario.Length == 0 ? "" : "input-validation-error" })
                     @if (ViewBag.errorUsuario.Length != 0)
                     {
-                        <div id="user_not_found" class="errorTextoRojo">El usuario que escribiste no existe</div>
+                        <div class="errorTextoRojo">El usuario que escribiste no existe</div>
                     }
                 </div>
             </div>
             <div>
                 <div class="label">Correo electrónico:</div>
                 <div class="input">
-                    @Html.EditorFor(model => model.correo)
+                    @Html.TextBoxFor(model => model.correo, new {
+                        @class = ViewBag.errorMail.Length == 0 ? "" : "input-validation-error" })
                     @Html.ValidationMessageFor(model => model.correo)
-                    <div id="error_mail" class="textoRojo">Escribe un correo electrónico</div>
+                    @if (ViewBag.errorMail.Length != 0)
+                    {
+                        <div class="errorTextoRojo">Escribe un correo electrónico</div>
+                    }
                 </div>
             </div>
             @if (!ViewBag.admin)
@@ -133,8 +137,14 @@ else
                     <div class="biglabel">Dinos algo de ti que nos pueda ayudar a comprobar tu identidad <span class="opcional">(opcional)</span>:</div>
                     <br />
                     <div class="biginput">
-                        <textarea id="informacion" name="informacion">@ViewBag.informacion</textarea>
-                        <div id="error_info" class="textoRojo">El tamaño máximo es 300 caracteres</div>
+                        <textarea id="informacion" name="informacion"
+                            class="@(ViewBag.errorInfo.Length == 0 ? "" : "input-validation-error")">
+                            @ViewBag.informacion
+                        </textarea>
+                        @if (ViewBag.errorInfo.Length != 0)
+                        {
+                           <div class="errorTextoRojo">El tamaño máximo es 300 caracteres</div>
+                        }
                     </div>
                 </div>
             }

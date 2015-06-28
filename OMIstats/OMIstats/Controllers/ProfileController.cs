@@ -33,9 +33,12 @@ namespace OMIstats.Controllers
 
         private void limpiaErroresViewBag()
         {
-            ViewBag.errorImagen = "";
-            ViewBag.errorUsuario = "";
-            ViewBag.errorPassword = "";
+            if (String.IsNullOrEmpty(ViewBag.errorImagen))
+                ViewBag.errorImagen = "";
+            if (String.IsNullOrEmpty(ViewBag.errorUsuario))
+                ViewBag.errorUsuario = "";
+            if (String.IsNullOrEmpty(ViewBag.errorPassword))
+                ViewBag.errorPassword = "";
         }
 
         #endregion
@@ -104,6 +107,7 @@ namespace OMIstats.Controllers
             if (!estaLoggeado())
                 return RedirectTo(Pagina.HOME);
 
+            limpiaErroresViewBag();
             recargarDatos();
             ponFechasEnViewBag();
 

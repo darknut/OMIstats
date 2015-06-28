@@ -35,30 +35,10 @@ $(document).ready(function ()
         txt.value = "";
     setCampoFechas("nacimiento", OMI_minimo + ":" + OMI_maximo);
 
-    document.getElementById("genero").value = generoUsuario;
-
-    if (errorImagen !== "")
-    {
-        setCampoError("file");
-        setVisible(errorImagen, true);
-    }
-
     if (errorUsuario !== "")
     {
         setCampoError("usuario");
         setErrorUsuario(errorUsuario);
-    }
-
-    if (errorPassword !== "")
-    {
-        if (errorPassword == "password_invalido")
-            setCampoError("password");
-        if (errorPassword == "password_vacio")
-            setCampoError("password2");
-        if (errorPassword == "password_diferente")
-            setCampoError("password3");
-        setVisible(errorPassword, true);
-        mostrarPassword();
     }
 
     if (passwordModificado == "True")
