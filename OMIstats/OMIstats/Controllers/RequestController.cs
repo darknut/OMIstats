@@ -29,6 +29,22 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Request/General/
+
+        public ActionResult General()
+        {
+            Peticion pe = new Peticion();
+            if (estaLoggeado())
+            {
+                Persona p = getUsuario();
+                pe.datos1 = p.nombre;
+                pe.datos2 = p.correo;
+            }
+
+            return View(pe);
+        }
+
+        //
         // GET: /Request/view/
 
         public ActionResult view()
