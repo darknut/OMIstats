@@ -115,6 +115,10 @@
     vertical-align:top;
 }
 
+.input select {
+    width:172px;
+}
+
 .biginput {
     width:350px;
     display:inline-block;

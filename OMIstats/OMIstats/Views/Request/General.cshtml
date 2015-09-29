@@ -1,0 +1,52 @@
+﻿@model OMIstats.Models.Peticion
+
+@{
+    ViewBag.Title = "Petición General";
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+}
+
+<h2 class="titulo">Petición General</h2>
+
+<div>Si tienes una duda, queja, sugerencia o pregunta en general, puedes hacerla aquí.</div>
+<br />
+<div>Asegúrate de dejarnos un correo electrónico para poder contestar tu pregunta.</div>
+<br />
+@using (@Html.BeginForm())
+{
+    <div>
+        <div class="label"> Nombre: </div>
+        <div class="input"> @Html.EditorFor(model => model.datos1) </div>
+    </div>
+
+    <div>
+        <div class="label"> Correo: </div>
+        <div class="input"> @Html.EditorFor(model => model.datos2) </div>
+    </div>
+
+    <div>
+        <div class="label"> Tipo de pregunta:</div>
+        <div class="input">
+            <select id="tipo">
+                <option value="duda">Duda</option>
+                <option value="queja">Queja</option>
+                <option value="sugerencia">Sugerencia</option>
+                <option value="pregunta">Pregunta</option>
+                <option value="comentario">Comentario</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <div class="biglabel"> Pregunta: </div>
+        <br />
+        <div class="biginput"> @Html.TextAreaFor(model => model.datos3) </div>
+    </div>
+
+    <div class="label">
+        <input type="submit" value="Mandar pregunta" />
+    </div>
+}

@@ -277,6 +277,7 @@
     <Content Include="Views\Request\Access.cshtml" />
     <Content Include="Views\Admin\ResetPassword.cshtml" />
     <Content Include="Views\Request\Claim.cshtml" />
+    <Content Include="Views\Request\General.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
