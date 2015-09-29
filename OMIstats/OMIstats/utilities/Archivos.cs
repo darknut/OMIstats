@@ -121,7 +121,7 @@ namespace OMIstats.Utilities
         public static void eliminarArchivo(string nombre, FolderImagenes folder)
         {
             string lugarEnDisco = pathAbsoluto(folder);
-            if (System.IO.File.Exists(lugarEnDisco))
+            if (System.IO.File.Exists(Path.Combine(lugarEnDisco, nombre)))
                 System.IO.File.Delete(Path.Combine(lugarEnDisco, nombre));
         }
 
