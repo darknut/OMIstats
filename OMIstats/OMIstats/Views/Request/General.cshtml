@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
 }
 
+@section Scripts {
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+}
+
 <h2 class="titulo">Petición General</h2>
 
 <div>Si tienes una duda, queja, sugerencia o pregunta en general, puedes hacerla aquí.</div>
@@ -44,6 +48,10 @@
         <div class="biglabel"> Pregunta: </div>
         <br />
         <div class="biginput"> @Html.TextAreaFor(model => model.datos3) </div>
+    </div>
+
+    <div>
+        <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
     </div>
 
     <div class="label">

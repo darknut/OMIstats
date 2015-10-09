@@ -1,7 +1,9 @@
-﻿using OMIstats.Models;
+﻿using Newtonsoft.Json;
+using OMIstats.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,6 +13,8 @@ namespace OMIstats.Controllers
     {
         protected const string ERROR = "error";
         protected const string OK = "ok";
+        public static string CAPTCHA_SECRET;
+        public static string CAPTCHA_KEY;
 
         protected enum Pagina
         {
@@ -25,6 +29,7 @@ namespace OMIstats.Controllers
         {
             // Se usa System.Web en vez de Session porque a tiempo de construcción, Session aún no esta populada
             ViewBag.usuario = System.Web.HttpContext.Current.Session["usuario"];
+            ViewBag.captchaKey = CAPTCHA_KEY;
         }
 
         protected bool estaLoggeado()
@@ -72,6 +77,29 @@ namespace OMIstats.Controllers
                 case Pagina.HOME:
                 default:
                     return RedirectToAction("Index", "Home");
+            }
+        }
+
+        protected bool revisaCaptcha()
+        {
+            string captcha = Request.Form["g-recaptcha-response"];
+            if (captcha == null || captcha == "")
+                return false;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://www.google.com");
+                var param = String.Format("/recaptcha/api/siteverify?secret={0}&response={1}",
+                                          CAPTCHA_SECRET,
+                                          captcha);
+
+                var result = client.PostAsync(param, null).Result;
+
+                string response = result.Content.ReadAsStringAsync().Result;
+
+                dynamic google = JsonConvert.DeserializeObject(response);
+
+                return google.success.Value;
             }
         }
     }

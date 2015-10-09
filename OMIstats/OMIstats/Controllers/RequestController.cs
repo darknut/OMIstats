@@ -45,6 +45,16 @@ namespace OMIstats.Controllers
         }
 
         //
+        // POST: /Request/General/
+
+        [HttpPost]
+        public ActionResult General(Peticion pe)
+        {
+            revisaCaptcha();
+            return View(pe);
+        }
+
+        //
         // GET: /Request/view/
 
         public ActionResult view()
