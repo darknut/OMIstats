@@ -10,51 +10,84 @@
 }
 
 @section Scripts {
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
 }
 
 <h2 class="titulo">Petición General</h2>
 
-<div>Si tienes una duda, queja, sugerencia o pregunta en general, puedes hacerla aquí.</div>
-<br />
-<div>Asegúrate de dejarnos un correo electrónico para poder contestar tu pregunta.</div>
-<br />
-@using (@Html.BeginForm())
+@if (ViewBag.guardado)
 {
     <div>
-        <div class="label"> Nombre: </div>
-        <div class="input"> @Html.EditorFor(model => model.datos1) </div>
+        Tu pregunta se guardó satisfactoriamente. Un administrador la revisará y te contestará de ser
+        necesario.
     </div>
-
-    <div>
-        <div class="label"> Correo: </div>
-        <div class="input"> @Html.EditorFor(model => model.datos2) </div>
-    </div>
-
-    <div>
-        <div class="label"> Tipo de pregunta:</div>
-        <div class="input">
-            <select id="tipo">
-                <option value="duda">Duda</option>
-                <option value="queja">Queja</option>
-                <option value="sugerencia">Sugerencia</option>
-                <option value="pregunta">Pregunta</option>
-                <option value="comentario">Comentario</option>
-            </select>
+}
+else
+{
+    <div>Si tienes una duda, queja, sugerencia o pregunta en general, puedes hacerla aquí.</div>
+    <br />
+    <div>Asegúrate de dejarnos un correo electrónico para poder contestar tu pregunta.</div>
+    <br />
+    using (@Html.BeginForm())
+    {
+        <div>
+            <div class="label"> Nombre: </div>
+            <div class="input"> @Html.EditorFor(model => model.datos1)
+                @if (ViewBag.errorUsuario.Length != 0)
+                {
+                    <div class="errorTextoRojo">Escribe tu nombre</div>
+                }
+            </div>
         </div>
-    </div>
 
-    <div>
-        <div class="biglabel"> Pregunta: </div>
-        <br />
-        <div class="biginput"> @Html.TextAreaFor(model => model.datos3) </div>
-    </div>
+        <div>
+            <div class="label"> Correo: </div>
+            <div class="input"> @Html.EditorFor(model => model.datos2)
+                @if (ViewBag.errorMail.Length != 0)
+                {
+                    <div class="errorTextoRojo">Escribe un correo electrónico válido</div>
+                }
+            </div>
+        </div>
 
-    <div>
-        <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
-    </div>
+        <div>
+            <div class="label"> Tipo de pregunta:</div>
+            <div class="input">
+                <select id="subtipo" name="subtipo">
+                    <option value="DUDA">Duda</option>
+                    <option value="QUEJA">Queja</option>
+                    <option value="SUGERENCIA">Sugerencia</option>
+                    <option value="PREGUNTA">Pregunta</option>
+                    <option value="COMENTARIO">Comentario</option>
+                </select>
+            </div>
+        </div>
 
-    <div class="label">
-        <input type="submit" value="Mandar pregunta" />
-    </div>
+        <div>
+            <div class="biglabel"> Pregunta: </div>
+            <br />
+            <div class="biginput"> @Html.TextAreaFor(model => model.datos3)
+                @if (ViewBag.errorInfo.Length != 0)
+                {
+                    <div class="errorTextoRojo">Escribe una pregunta entre 1 y 300 caracteres.</div>
+                }
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+            </div>
+            @if (ViewBag.errorCaptcha == true)
+            {
+                <div>
+                    <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                </div>
+            }
+        </div>
+
+        <div class="label">
+            <input type="submit" value="Mandar pregunta" />
+        </div>
+    }
 }

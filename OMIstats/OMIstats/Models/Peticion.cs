@@ -33,7 +33,13 @@ namespace OMIstats.Models
             FOTO,
             PASSWORD,
             BIENVENIDO,
-            ACCESO
+            ACCESO,
+            GENERAL,
+            DUDA,
+            QUEJA,
+            SUGERENCIA,
+            PREGUNTA,
+            COMENTARIO
         }
 
         public Peticion()

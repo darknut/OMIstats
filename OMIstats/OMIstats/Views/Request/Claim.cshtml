@@ -16,16 +16,6 @@
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
 }
 
-@section Scripts {
-  <script>
-      var errorUsuario = "@ViewBag.errorUsuario";
-      var errorMail = "@ViewBag.errorMail";
-      var errorInfo = "@ViewBag.errorInfo";
-  </script>
-  <script src="/js/formas.js"></script>
-  <script src="/js/request.js"></script>
-}
-
 <h2 class="titulo">@ViewBag.Title</h2>
 
 @if (ViewBag.guardado)

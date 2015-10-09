@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -15,6 +16,7 @@ namespace OMIstats.Controllers
             ViewBag.errorUsuario = "";
             ViewBag.errorMail = "";
             ViewBag.errorInfo = "";
+            ViewBag.errorCaptcha = false;
             ViewBag.guardado = false;
             ViewBag.errorPeticion = false;
             ViewBag.admin = esAdmin();
@@ -40,6 +42,7 @@ namespace OMIstats.Controllers
                 pe.datos1 = p.nombre;
                 pe.datos2 = p.correo;
             }
+            limpiarErroresViewBag();
 
             return View(pe);
         }
@@ -50,7 +53,40 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult General(Peticion pe)
         {
-            revisaCaptcha();
+            limpiarErroresViewBag();
+
+            if (pe.datos1 == null || pe.datos1.Trim().Length == 0)
+            {
+                ViewBag.errorUsuario = ERROR;
+                return View(pe);
+            }
+
+            if (pe.datos2 == null || !Regex.IsMatch(pe.datos2, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"))
+            {
+                ViewBag.errorMail = ERROR;
+                return View(pe);
+            }
+
+            if (pe.datos3 == null || pe.datos3.Trim().Length == 0)
+            {
+                ViewBag.errorInfo = ERROR;
+                return View(pe);
+            }
+
+            if (!revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return View(pe);
+            }
+
+            if (pe.subtipo == null) //Quien mande un subtipo inválido, esta tratando de tronar la pagina.
+                return RedirectTo(Pagina.HOME);
+
+            pe.tipo = Peticion.TipoPeticion.GENERAL;
+
+            // TODO: Agregar Peticion a la base
+
+            ViewBag.guardado = true;
             return View(pe);
         }
 
