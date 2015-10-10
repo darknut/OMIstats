@@ -79,12 +79,13 @@ namespace OMIstats.Controllers
                 return View(pe);
             }
 
-            if (pe.subtipo == null) //Quien mande un subtipo inválido, esta tratando de tronar la pagina.
+            if (pe.subtipo == Peticion.TipoPeticion.NULL) //Quien mande un subtipo inválido, esta tratando de tronar la pagina.
                 return RedirectTo(Pagina.HOME);
 
             pe.tipo = Peticion.TipoPeticion.GENERAL;
 
-            // TODO: Agregar Peticion a la base
+            if (!pe.guardarPeticion())
+                return RedirectTo(Pagina.ERROR);
 
             ViewBag.guardado = true;
             return View(pe);

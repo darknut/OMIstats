@@ -13,9 +13,8 @@
 
 @if (ViewBag.errorMail)
 {
-    <!-- -TODO- Agregar enlace -->
     <div class="errorTextoRojo">
-        Ocurrió un error cuando intentábamos enviar tu correo, por favor contáctanos.
+        Ocurrió un error cuando intentábamos enviar tu correo, por favor <a href="/Request/General">contáctanos</a>.
     </div>
 }
 else if (ViewBag.saved)

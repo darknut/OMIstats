@@ -22,7 +22,8 @@ namespace OMIstats.Controllers
             LOGIN,
             VIEW_PROFILE,
             SAVED_PROFILE,
-            VIEW_REQUEST
+            VIEW_REQUEST,
+            ERROR
         }
 
         public BaseController()
@@ -74,6 +75,8 @@ namespace OMIstats.Controllers
                     return RedirectToAction("view", "Profile");
                 case Pagina.LOGIN:
                     return RedirectToAction("In", "Log");
+                case Pagina.ERROR:
+                    // -TODO-: Redirect to error page
                 case Pagina.HOME:
                 default:
                     return RedirectToAction("Index", "Home");
