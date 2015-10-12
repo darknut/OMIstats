@@ -1,7 +1,15 @@
 ﻿function aprobar(fila)
 {
+    setVisible("loading" + fila, true);
+
+    var control = document.getElementById("correoRespuesta" + fila);
+    var mensaje = "";
+
+    if (control != null)
+        mensaje = control.value;
+
     llamadaAjax("/Request/Aprove",
-        { clave: fila },
+        { clave: fila, mensaje: mensaje },
         function (data) { ocultaFila(data, fila); },
         function (data) { ocultaFila("error", fila); });
 }

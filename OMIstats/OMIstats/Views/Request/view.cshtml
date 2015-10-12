@@ -77,6 +77,7 @@ else
                     </td>
                     <td>
                        <a href="javascript:eliminar(@Model[j].clave)">Eliminar</a>
+                       <img class="textoRojo" id='@Url.Content("loading" + @Model[j].clave)' src="~/img/ajax-loader.gif" />
                        <div id='@Url.Content("error" + @Model[j].clave)' class="textoRojo">
                         Hubo un error. Inténtalo más tarde.
                        </div>
@@ -118,6 +119,7 @@ else
                     </td>
                     <td>
                        <a href="javascript:eliminar(@Model[j].clave)">Eliminar</a>
+                       <img class="textoRojo" id='@Url.Content("loading" + @Model[j].clave)' src="~/img/ajax-loader.gif" />
                        <div id='@Url.Content("error" + @Model[j].clave)' class="textoRojo">
                         Hubo un error. Inténtalo más tarde.
                        </div>

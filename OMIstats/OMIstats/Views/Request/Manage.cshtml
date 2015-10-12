@@ -72,12 +72,23 @@ else
         counter++;
         <tr id='@Url.Content("row" + @item.clave)' class="@clase">
             <td>
-                <a href="javascript:aprobar(@item.clave)">Aprobar</a>
-                <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                @if (item.tipo == Peticion.TipoPeticion.GENERAL)
+                {
+                    <div class="biginput">
+                        <textarea cols="20" id="@Url.Content("correoRespuesta" + @item.clave)" rows="2"></textarea>
+                    </div>
+                    <a href="javascript:aprobar(@item.clave)">Responder</a>
+                }
+                else
+                {
+                    <a href="javascript:aprobar(@item.clave)">Aprobar</a>
+                }
+                <a class="errorTextoRojo" href="javascript:eliminar(@item.clave)">Eliminar</a>
                 <br />
                 <div id='@Url.Content("error" + @item.clave)' class="textoRojo">
-                Hubo un error
+                    Hubo un error, recarga la página e intenta de nuevo.
                 </div>
+                <img class="textoRojo" id='@Url.Content("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
             </td>
 
             @if (item.tipo == Peticion.TipoPeticion.USUARIO)
@@ -142,6 +153,18 @@ else
                         }
                     </td>
                 }
+            }
+            else if (item.tipo == Peticion.TipoPeticion.GENERAL)
+            {
+                <td class="negritas">
+                    @item.subtipo
+                </td>
+                <td>
+                    @item.datos1
+                </td>
+                <td>
+                    @item.datos3
+                </td>
             }
 
         </tr>

@@ -138,7 +138,7 @@ namespace OMIstats.Controllers
         // POST: /Request/Aprove/
 
         [HttpPost]
-        public JsonResult Aprove(int clave)
+        public JsonResult Aprove(int clave, string mensaje)
         {
             if (!esAdmin())
                 return Json(ERROR);
@@ -147,9 +147,16 @@ namespace OMIstats.Controllers
             if (p == null)
                 return Json(ERROR);
 
-            p.aceptarPeticion();
+            if (p.tipo == Peticion.TipoPeticion.GENERAL)
+            {
+                p.usuario = getUsuario();
+                p.datos3 = mensaje;
+            }
 
-            return Json(OK);
+            if (p.aceptarPeticion())
+                return Json(OK);
+
+            return Json(ERROR);
         }
 
         //

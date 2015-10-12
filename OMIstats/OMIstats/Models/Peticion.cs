@@ -256,7 +256,7 @@ namespace OMIstats.Models
         /// Estas son las de peticion de acceso o de cambio de password
         /// Deben de borrarse cuando al usuario se le da un nuevo password
         /// </summary>
-        private void eliminarPeticionesPassword()
+        private bool eliminarPeticionesPassword()
         {
             List<Peticion> peticiones = obtenerPeticionesDeUsuario(usuario);
 
@@ -266,17 +266,20 @@ namespace OMIstats.Models
                     (p.subtipo == TipoPeticion.PASSWORD ||
                      p.subtipo == TipoPeticion.BIENVENIDO ||
                      p.subtipo == TipoPeticion.ACCESO))
-                    p.eliminarPeticion();
+                    if (!p.eliminarPeticion())
+                        return false;
             }
+
+            return true;
         }
 
         /// <summary>
         /// Acepta la peticion y actualiza las tablas correspondientes
         /// </summary>
-        public void aceptarPeticion()
+        public bool aceptarPeticion()
         {
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
-                return;
+                return false;
 
             if (tipo == TipoPeticion.USUARIO)
             {
@@ -291,7 +294,8 @@ namespace OMIstats.Models
                 if (subtipo == TipoPeticion.PASSWORD || subtipo == TipoPeticion.BIENVENIDO)
                 {
                     usuario.password = System.Web.Security.Membership.GeneratePassword(8, 3);
-                    eliminarPeticionesPassword();
+                    if (!eliminarPeticionesPassword())
+                        return false;
                 }
 
                 if (subtipo == TipoPeticion.ACCESO)
@@ -301,13 +305,24 @@ namespace OMIstats.Models
                     pe.tipo = TipoPeticion.USUARIO;
                     pe.subtipo = TipoPeticion.BIENVENIDO;
                     pe.usuario = usuario;
-                    pe.guardarPeticion();
+                    if (!pe.guardarPeticion())
+                        return false;
                 }
 
-                usuario.guardarDatos();
+                if (!usuario.guardarDatos())
+                    return false;
+            }
+            else if (tipo == TipoPeticion.GENERAL)
+            {
+                if (!Utilities.Correo.enviarRespuestaPeiticionGeneral(
+                    datos2, datos3, usuario.correo, subtipo))
+                    return false;
             }
 
-            eliminarPeticion();
+            if (!eliminarPeticion())
+                return false;
+
+            return true;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace OMIstats.Utilities
 
         public const string TITULO_CORREO_PASSWORD = "Solicitud de cambio de contraseña";
         public const string TITULO_CORREO_BIENVENIDO = "Bienvenido a OMI stats";
+        public const string TITULO_CORREO_GENERAL = "Respondiendo a tu {0} en OMI stats";
 
         private static string direccionServer()
         {
@@ -30,7 +31,7 @@ namespace OMIstats.Utilities
         /// Manda un correo electronico
         /// </summary>
         /// <returns>Si el correo se mandó satisfactoriamente o no</returns>
-        private static bool mandarCorreo(string destinatario, string asunto, string mensaje)
+        private static bool mandarCorreo(string destinatario, string asunto, string mensaje, string responderA = null)
         {
             MailMessage mail = new MailMessage();
 
@@ -38,6 +39,8 @@ namespace OMIstats.Utilities
             mail.From = new MailAddress(CORREO, "OMI stats");
             mail.Subject = asunto;
             mail.Body = mensaje;
+            if (responderA != null)
+                mail.ReplyToList.Add(new MailAddress(responderA));
             mail.IsBodyHtml = true;
 
             SmtpClient smtpMail = new SmtpClient();
@@ -82,6 +85,18 @@ namespace OMIstats.Utilities
         public static bool enviarPeticionBienvenido(int clave, string guid, string correo)
         {
             return enviarCorreoPeticion(clave, guid, correo, Archivos.ArchivosHTML.BIENVENIDO, TITULO_CORREO_BIENVENIDO);
+        }
+
+        /// <summary>
+        /// Manda un coreo para responder a una petición general
+        /// </summary>
+        /// <param name="destinatario"></param>
+        /// <param name="mensaje"></param>
+        /// <param name="responderA"></param>
+        /// <returns></returns>
+        public static bool enviarRespuestaPeiticionGeneral(string destinatario, string mensaje, string responderA, Models.Peticion.TipoPeticion peticion)
+        {
+            return mandarCorreo(destinatario, String.Format(TITULO_CORREO_GENERAL, peticion.ToString().ToLower()), mensaje, responderA);
         }
 
         private static bool enviarCorreoPeticion(int clave, string guid, string correo, Archivos.ArchivosHTML archivo, string titulo)

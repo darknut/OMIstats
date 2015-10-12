@@ -216,6 +216,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="img\ajax-loader.gif" />
     <Content Include="img\bronce.png" />
     <Content Include="img\circulo.png" />
     <Content Include="img\domi.gif" />
