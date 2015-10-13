@@ -16,6 +16,7 @@ namespace OMIstats.Utilities
 
         public const string HTML_PASSWORD = "~/private/cambioPassword.html";
         public const string HTML_BIENVENIDO = "~/private/bienvenido.html";
+        public const string HTML_FIRMA = "~/private/firma.html";
 
         public enum ResultadoImagen
         {
@@ -34,7 +35,8 @@ namespace OMIstats.Utilities
         public enum ArchivosHTML
         {
             PASSWORD,
-            BIENVENIDO
+            BIENVENIDO,
+            FIRMA
         }
 
         /// <summary>
@@ -153,6 +155,9 @@ namespace OMIstats.Utilities
                     break;
                 case ArchivosHTML.BIENVENIDO:
                     a = HTML_BIENVENIDO;
+                    break;
+                case ArchivosHTML.FIRMA:
+                    a = HTML_FIRMA;
                     break;
             }
             a = HttpContext.Current.Server.MapPath(a);

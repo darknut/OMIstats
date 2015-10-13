@@ -34,13 +34,23 @@ namespace OMIstats.Utilities
         private static bool mandarCorreo(string destinatario, string asunto, string mensaje, string responderA = null)
         {
             MailMessage mail = new MailMessage();
+            string firma = "";
 
             mail.To.Add(destinatario);
             mail.From = new MailAddress(CORREO, "OMI stats");
             mail.Subject = asunto;
-            mail.Body = mensaje;
             if (responderA != null)
+            {
                 mail.ReplyToList.Add(new MailAddress(responderA));
+            }
+            else
+            {
+                string server = direccionServer();
+                firma = Archivos.leerArchivoHTML(Archivos.ArchivosHTML.FIRMA);
+                firma = String.Format(firma, server);
+                mensaje += firma;
+            }
+            mail.Body = mensaje;
             mail.IsBodyHtml = true;
 
             SmtpClient smtpMail = new SmtpClient();

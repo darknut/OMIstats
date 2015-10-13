@@ -238,6 +238,7 @@
     <Content Include="js\request.js" />
     <Content Include="private\cambioPassword.html" />
     <Content Include="private\bienvenido.html" />
+    <Content Include="private\firma.html" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
