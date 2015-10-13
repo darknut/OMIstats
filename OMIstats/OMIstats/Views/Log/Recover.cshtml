@@ -7,6 +7,11 @@
 @section AddToHead
 {
   <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+  <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@section Scripts {
+  <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
 }
 
 <h2 class="titulo">Recuperar contraseña</h2>
@@ -40,12 +45,28 @@ else
     </div>
     <br />
 
-    using(@Html.BeginForm()) {
+    using (@Html.BeginForm(null, null, FormMethod.Post, new { name = "recoverForm", id = "recoverForm" }))
+    {
+
+        <div class="label">
+            Nombre de usuario:@Html.EditorFor(model => model.usuario)
+        </div>
 
         <div>
-            Nombre de usuario:
-            @Html.EditorFor(model => model.usuario)
-            <input type="submit" value="Recuperar" />
+            <div>
+                <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+            </div>
+            @if (ViewBag.errorCaptcha == true)
+            {
+                <div>
+                    <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                </div>
+            }
+        </div>
+
+        <div>
+            <input type="button" onclick="muestraLoadGifYSubmit('recoverForm')" value="Recuperar"/>
+            <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
         </div>
 
         <div>@Html.Label("El nombre de usuario no existe",

@@ -10,3 +10,8 @@ function esconde(id)
 {
     $("#" + id).hide("slow");
 }
+
+function muestraLoadGifYSubmit(formId) {
+    setVisible("loading", true);
+    $("#" + formId).submit();
+}

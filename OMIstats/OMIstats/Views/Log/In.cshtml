@@ -1,10 +1,16 @@
 ﻿@model OMIstats.Models.Persona
 
+@section AddToHead
+{
+    <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
+}
+
 @{
     ViewBag.Title = "Iniciar sesión";
 }
 
-@using(@Html.BeginForm()) {
+@using (@Html.BeginForm(null, null, FormMethod.Post, new { name = "logInForm", id = "logInForm" }))
+{
 
     <h1 class="titulo">Iniciar sesión</h1>
 
@@ -23,7 +29,8 @@
           @class = "errorTextoRojo" }) </div>
 
     <p>
-        <input type="submit" value="Entrar" />
+        <input type="button" onclick="muestraLoadGifYSubmit('logInForm')" value="Entrar"/>
+        <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
     </p>
 }
 

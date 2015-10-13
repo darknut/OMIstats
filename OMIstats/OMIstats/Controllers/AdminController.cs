@@ -96,7 +96,9 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
+            string mail = p.correo;
             p = Persona.obtenerPersonaDeUsuario(p.usuario);
+            p.correo = mail;
 
             if (p == null || !ModelState.IsValidField("correo"))
             {
