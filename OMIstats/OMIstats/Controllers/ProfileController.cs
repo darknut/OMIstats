@@ -39,6 +39,8 @@ namespace OMIstats.Controllers
                 ViewBag.errorUsuario = "";
             if (String.IsNullOrEmpty(ViewBag.errorPassword))
                 ViewBag.errorPassword = "";
+            if (ViewBag.errorCaptcha == null)
+                ViewBag.errorCaptcha = false;
         }
 
         #endregion
@@ -129,6 +131,12 @@ namespace OMIstats.Controllers
                 return Edit();
 
             limpiaErroresViewBag();
+
+            if (!esAdmin() && !revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return Edit();
+            }
 
             Persona current = getUsuario();
 

@@ -1,5 +1,6 @@
 ﻿function revisa()
 {
+    setVisible("loading", true);
     var txt = document.getElementById("nacimiento");
     if (txt.value == "")
         txt.value = "01/01/1900";
@@ -22,10 +23,11 @@ function setErrorUsuario(elem)
 
 function checarUsuario()
 {
+    setVisible("loadingUser", true);
     llamadaAjax("/Profile/Check",
                 { usuario: document.getElementById("usuario").value },
-                function (data) { setErrorUsuario(data); },
-                function (data) { setNoDisponible(); });
+                function (data) { setVisible("loadingUser", false); setErrorUsuario(data); },
+                function (data) { setVisible("loadingUser", false); setNoDisponible(); });
 }
 
 $(document).ready(function ()

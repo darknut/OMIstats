@@ -20,6 +20,7 @@
   <script src="/js/fechas.js""></script>
   <script src="/js/formas.js"></script>
   <script src="/js/profile.js"></script>
+  <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
 }
 
 @{
@@ -55,6 +56,7 @@
                 <div class="input">
                     @Html.TextBoxFor(model => model.usuario)
                     <input type="button" onclick="checarUsuario()" value="Revisar disponibilidad" />
+                    <img class="textoRojo" id='loadingUser' src="~/img/ajax-loader.gif" />
                     <br />
                     <div id="disponible" class="textoVerde">El nombre de usuario está disponible</div>
                     <div id="taken" class="textoRojo">El nombre de usuario no está disponible</div>
@@ -153,9 +155,23 @@
                 </div>
             </div>
 
-            <div>
-                <div class="label"></div>
-                <div class="input"> <input type="button"  onclick="revisa()"  value="Enviar"/> </div>
+            @if(!Model.admin)
+            {
+                <div>
+                    <div>
+                        <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+                    </div>
+                    @if (ViewBag.errorCaptcha == true)
+                    {
+                        <div>
+                            <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                        </div>
+                    }
+                </div>
+            }
+            <div class="label">
+                <input type="button"  onclick="revisa()"  value="Enviar"/>
+                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
             </div>
         </div>
     </div>

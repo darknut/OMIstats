@@ -15,6 +15,7 @@ namespace OMIstats.Controllers
             ViewBag.faltante = false;
             ViewBag.saved = false;
             ViewBag.errorMail = false;
+            ViewBag.errorCaptcha = false;
         }
 
         //
@@ -95,6 +96,12 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
+            if (!revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return View(p);
+            }
+
             p = Persona.obtenerPersonaDeUsuario(p.usuario);
 
             if (p == null)

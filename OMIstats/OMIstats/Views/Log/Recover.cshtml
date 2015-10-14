@@ -19,7 +19,7 @@
 @if (ViewBag.errorMail)
 {
     <div class="errorTextoRojo">
-        Ocurrió un error cuando intentábamos enviar tu correo, por favor <a href="/Request/General">contáctanos</a>.
+        Ocurrió un error cuando intentábamos enviar tu correo, intentalo de nuevo y si los problemas persisten, por favor <a href="/Request/General">contáctanos</a>.
     </div>
 }
 else if (ViewBag.saved)
@@ -48,8 +48,21 @@ else
     using (@Html.BeginForm(null, null, FormMethod.Post, new { name = "recoverForm", id = "recoverForm" }))
     {
 
-        <div class="label">
-            Nombre de usuario:@Html.EditorFor(model => model.usuario)
+        <div>
+            <div class="label">Nombre de usuario:</div>
+            <div class="input">
+                @Html.EditorFor(model => model.usuario)
+                <div>
+                    @Html.Label("El nombre de usuario no existe",
+                    new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
+                      @class = "errorTextoRojo" })
+                </div>
+                <div>
+                    @Html.Label("No hay un correo electrónico registrado para el usuario que proporcionaste",
+                    new { style = "display:" + (ViewBag.faltante ? "inline;" : "none;"),
+                      @class = "errorTextoRojo" })
+                </div>
+            </div>
         </div>
 
         <div>
@@ -64,16 +77,9 @@ else
             }
         </div>
 
-        <div>
+        <div class="label">
             <input type="button" onclick="muestraLoadGifYSubmit('recoverForm')" value="Recuperar"/>
             <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
         </div>
-
-        <div>@Html.Label("El nombre de usuario no existe",
-        new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
-              @class = "errorTextoRojo" }) </div>
-        <div>@Html.Label("No hay un correo electrónico registrado para el usuario que proporcionaste",
-        new { style = "display:" + (ViewBag.faltante ? "inline;" : "none;"),
-              @class = "errorTextoRojo" }) </div>
     }
 }
