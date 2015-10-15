@@ -324,5 +324,20 @@ namespace OMIstats.Models
 
             return true;
         }
+
+        /// <summary>
+        /// Cuando un usuario hace log in, borramos todas las peticiones de
+        /// cambio de password que hay de su usuario
+        /// </summary>
+        public static void borraPeticionesPassword(Persona usuario)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("delete peticion where tipo = 'usuario' and subtipo = 'password' and usuario =  ");
+            query.Append(usuario.clave);
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 }

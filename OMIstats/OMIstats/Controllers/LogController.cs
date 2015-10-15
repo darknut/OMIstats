@@ -53,6 +53,7 @@ namespace OMIstats.Controllers
                 //Log in exitoso
                 setUsuario(p);
                 ViewBag.logInError = false;
+                Peticion.borraPeticionesPassword(p);
                 return RedirectTo(Pagina.VIEW_PROFILE);
             }
             else
