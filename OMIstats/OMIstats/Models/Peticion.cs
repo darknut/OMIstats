@@ -334,7 +334,8 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append("delete peticion where tipo = 'usuario' and subtipo = 'password' and usuario =  ");
+            query.Append("delete peticion where tipo = 'usuario'");
+            query.Append(" and (subtipo = 'password' or subtipo = 'bienvenido') and usuario =  ");
             query.Append(usuario.clave);
 
             db.EjecutarQuery(query.ToString());
