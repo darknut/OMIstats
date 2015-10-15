@@ -1,0 +1,22 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+</head>
+<body>
+    <h2>
+        @if (ViewBag.errorCode == "404")
+        {
+            <span>Error 404</span>
+        }
+        else
+        {
+            <span>Lo sentimos, pero hubo un error procesando tu petición.</span>
+        }
+    </h2>
+</body>
+</html>

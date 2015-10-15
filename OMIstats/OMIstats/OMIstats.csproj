@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -265,7 +266,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Log\In.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
@@ -280,6 +280,7 @@
     <Content Include="Views\Admin\ResetPassword.cshtml" />
     <Content Include="Views\Request\Claim.cshtml" />
     <Content Include="Views\Request\General.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
