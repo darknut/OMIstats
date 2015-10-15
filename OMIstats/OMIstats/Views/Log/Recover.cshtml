@@ -21,11 +21,21 @@
     <div class="errorTextoRojo">
         Ocurrió un error cuando intentábamos enviar tu correo, intentalo de nuevo y si los problemas persisten, por favor <a href="/Request/General">contáctanos</a>.
     </div>
+    <br />
+    <br />
+    <div>
+        @Html.ActionLink("Volver", "Recover", "Log")
+    </div>
 }
 else if (ViewBag.saved)
 {
     <div class="verde">
         Se te mandó un correo con un enlace para poder cambiar tu contraseña.
+    </div>
+    <br />
+    <br />
+    <div>
+        @Html.ActionLink("Volver", "In", "Log")
     </div>
 }
 else

@@ -11,6 +11,10 @@
     }
 }
 
+@section Scripts {
+  <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
+}
+
 @section AddToHead {
     <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
@@ -32,6 +36,11 @@
             Se mandó satisfactoriamente tu petición. Un administrador la revisará y de ser aceptada, se te enviarán
             tus datos de acceso al correo que proporcionaste.
         </p>
+
+        <br />
+        <div>
+            @Html.ActionLink("Volver", "In", "Log")
+        </div>
     }
 }
 else if (ViewBag.errorPeticion)
@@ -48,6 +57,12 @@ else if (ViewBag.errorPeticion)
             Ocurrió un error mientras procesábamos tu petición. Inténtalo de nuevo más tarde y si los errores persisten,
              <a href="/Request/General">contáctanos</a>.
         </p>
+
+        <br />
+        <br />
+        <div>
+            @Html.ActionLink("Volver", "Claim", "Request")
+        </div>
     }
 }
 else
@@ -136,9 +151,24 @@ else
                         }
                     </div>
                 </div>
+
+                <div>
+                    <div>
+                        <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+                    </div>
+                    @if (ViewBag.errorCaptcha == true)
+                    {
+                        <div>
+                            <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                        </div>
+                    }
+                </div>
             }
             <div>
-                <div class="label"><input type="submit" value="@ViewBag.Title" /></div>
+                <div class="label">
+                    <input type="button" onclick="muestraLoadGifYSubmit('requestAccess')" value="@ViewBag.Title"/>
+                    <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                </div>
             </div>
         </div>
     </form>

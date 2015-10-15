@@ -224,6 +224,12 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
 
+            if (!esAdmin() && !revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return View(p);
+            }
+
             if (!ModelState.IsValid)
                 return View(p);
 
