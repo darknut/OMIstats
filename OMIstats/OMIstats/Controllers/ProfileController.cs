@@ -66,7 +66,7 @@ namespace OMIstats.Controllers
                     return View(getUsuario());
                 }
                 else
-                    return RedirectTo(Pagina.HOME);
+                    return RedirectTo(Pagina.ERROR, 401);
             }
             else
             {
@@ -74,7 +74,7 @@ namespace OMIstats.Controllers
                 if (p != null)
                     return View(p);
                 else
-                    return RedirectTo(Pagina.HOME);
+                    return RedirectTo(Pagina.ERROR, 404);
             }
         }
 
@@ -107,7 +107,7 @@ namespace OMIstats.Controllers
         public ActionResult Edit()
         {
             if (!estaLoggeado())
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 401);
 
             limpiaErroresViewBag();
             recargarDatos();
@@ -122,7 +122,7 @@ namespace OMIstats.Controllers
         public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p)
         {
             if (!estaLoggeado() || p == null)
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 401);
 
             if (!String.IsNullOrEmpty(p.password))
                 ViewBag.passwordModificado = true;

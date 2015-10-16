@@ -76,7 +76,9 @@ namespace OMIstats.Controllers
                 case Pagina.LOGIN:
                     return RedirectToAction("In", "Log");
                 case Pagina.ERROR:
-                    return RedirectToAction("Display", "Error");
+                    if (opciones != null)
+                        return RedirectToAction("Index", "Error", new { code = opciones.ToString() });
+                    return RedirectToAction("Index", "Error");
                 case Pagina.HOME:
                 default:
                     return RedirectToAction("Index", "Home");

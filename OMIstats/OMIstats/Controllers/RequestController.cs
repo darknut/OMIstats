@@ -80,12 +80,12 @@ namespace OMIstats.Controllers
             }
 
             if (pe.subtipo == Peticion.TipoPeticion.NULL) //Quien mande un subtipo inválido, esta tratando de tronar la pagina.
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 500);
 
             pe.tipo = Peticion.TipoPeticion.GENERAL;
 
             if (!pe.guardarPeticion())
-                return RedirectTo(Pagina.ERROR);
+                return RedirectTo(Pagina.ERROR, 500);
 
             ViewBag.guardado = true;
             return View(pe);
@@ -97,7 +97,7 @@ namespace OMIstats.Controllers
         public ActionResult view()
         {
             if (!estaLoggeado())
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 401);
 
             recargarDatos();
 
@@ -165,7 +165,7 @@ namespace OMIstats.Controllers
         public ActionResult Manage()
         {
             if (!esAdmin())
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 403);
 
             ViewBag.totalPeticiones = Peticion.cuentaPeticiones();
 

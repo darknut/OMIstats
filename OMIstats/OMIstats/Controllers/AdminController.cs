@@ -20,7 +20,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectTo(Pagina.HOME);
+            return RedirectTo(Pagina.ERROR, 404);
         }
 
         //
@@ -29,12 +29,12 @@ namespace OMIstats.Controllers
         public ActionResult Change(string usuario)
         {
             if(!esAdmin() || String.IsNullOrEmpty(usuario))
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 403);
 
             Persona p = Persona.obtenerPersonaDeUsuario(usuario);
 
             if (p == null)
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 404);
 
             limpiarErroresViewBag();
 
@@ -48,7 +48,7 @@ namespace OMIstats.Controllers
         public ActionResult Change(Persona p)
         {
             if (!esAdmin() || p == null)
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 403);
 
             limpiarErroresViewBag();
 
@@ -76,11 +76,11 @@ namespace OMIstats.Controllers
         public ActionResult ResetPassword(string usuario)
         {
             if (!esAdmin() || String.IsNullOrEmpty(usuario))
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 403);
 
             Persona p = Persona.obtenerPersonaDeUsuario(usuario);
             if (p == null)
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 404);
 
             limpiarErroresViewBag();
             return View(p);
@@ -93,7 +93,7 @@ namespace OMIstats.Controllers
         public ActionResult ResetPassword(Persona p)
         {
             if (!esAdmin() || p == null)
-                return RedirectTo(Pagina.HOME);
+                return RedirectTo(Pagina.ERROR, 403);
 
             limpiarErroresViewBag();
             string mail = p.correo;
