@@ -152,6 +152,7 @@
   <ItemGroup>
     <Content Include="Content\admin.css" />
     <Content Include="Content\cabecera.css" />
+    <Content Include="Content\error.css" />
     <Content Include="Content\fechas.css" />
     <Content Include="Content\formas.css" />
     <Content Include="Content\general.css" />
@@ -225,6 +226,7 @@
     <Content Include="img\homepage.png" />
     <Content Include="img\ioi.png" />
     <Content Include="img\karel.bmp" />
+    <Content Include="img\karelX.png" />
     <Content Include="img\logo.png" />
     <Content Include="img\mail.png" />
     <Content Include="img\omi.png" />

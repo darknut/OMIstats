@@ -6,17 +6,47 @@
 <html>
 <head>
     <title>Error</title>
+    <link rel="stylesheet" href="~/Content/error.css" type="text/css" />
 </head>
 <body>
-    <h2>
-        @if (ViewBag.errorCode == "404")
-        {
-            <span>Error 404</span>
-        }
-        else
-        {
-            <span>Lo sentimos, pero hubo un error procesando tu petición.</span>
-        }
-    </h2>
+    <div class="content">
+        <div>
+            <img src="~/img/karelX.png" class="karel"/>
+        </div>
+        <div class="left">
+            @if (ViewBag.errorCode == "404")
+            {
+                <p class="titulo">Error 404</p>
+                <p class="texto">La página que intentaste acceder no existe.</p>
+            }
+            else if (ViewBag.errorCode == "401")
+            {
+                <p class="titulo">Error 401</p>
+                <p class="texto">No tienes permiso para acceder a este recurso.</p>
+            }
+            else if (ViewBag.errorCode == "403")
+            {
+                <p class="titulo">Error 403</p>
+                <p class="texto">No se puede acceder a este recurso.</p>
+            }
+            else if (ViewBag.errorCode == "500")
+            {
+                <p class="titulo">Error 500</p>
+                <p class="texto">Error interno, si sigues experimentando este error,
+                    por favor contacta al administrador del sitio a
+                    <a href="mailto:felix.cuadrilla@gmail.com">felix.cuadrilla@gmail.com</a>
+                </p>
+            }
+            else
+            {
+                <p class="titulo">Error</p>
+                <p class="texto">Lo sentimos, pero hubo un error procesando tu petición.</p>
+            }
+        </div>
+        <br />
+    </div>
+    <div class="volver">
+        <a href="/">Regresar</a>
+    </div>
 </body>
 </html>
