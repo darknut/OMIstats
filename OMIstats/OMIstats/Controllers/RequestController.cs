@@ -10,18 +10,6 @@ namespace OMIstats.Controllers
 {
     public class RequestController : BaseController
     {
-        private void limpiarErroresViewBag()
-        {
-            ViewBag.errorImagen = "";
-            ViewBag.errorUsuario = "";
-            ViewBag.errorMail = "";
-            ViewBag.errorInfo = "";
-            ViewBag.errorCaptcha = false;
-            ViewBag.guardado = false;
-            ViewBag.errorPeticion = false;
-            ViewBag.admin = esAdmin();
-        }
-
         //
         // GET: /Request/
 

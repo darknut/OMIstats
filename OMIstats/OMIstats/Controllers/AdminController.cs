@@ -9,12 +9,6 @@ namespace OMIstats.Controllers
 {
     public class AdminController : BaseController
     {
-        private void limpiarErroresViewBag()
-        {
-            ViewBag.logInError = false;
-            ViewBag.changed = false;
-        }
-
         //
         // GET: /Admin/
 
@@ -65,7 +59,7 @@ namespace OMIstats.Controllers
             cambiar.admin = !cambiar.admin;
             cambiar.guardarDatos();
 
-            ViewBag.changed = true;
+            ViewBag.guardado = true;
 
             return View(cambiar);
         }
@@ -111,7 +105,7 @@ namespace OMIstats.Controllers
             pe.subtipo = Peticion.TipoPeticion.PASSWORD;
             pe.usuario = p;
             if (pe.guardarPeticion())
-                ViewBag.changed = true;
+                ViewBag.guardado = true;
             else
                 ViewBag.logInError = true;
 

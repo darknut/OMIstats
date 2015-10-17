@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace OMIstats.Controllers
 {
-    public class EstadosController : Controller
+    public class EstadosController : BaseController
     {
         //
         // GET: /Estados/

@@ -9,7 +9,7 @@
 
 @{
     string titulo = "";
-    if (ViewBag.changed)
+    if (ViewBag.guardado)
     {
         titulo = "Cambio satisfactorio";
     }else if(Model.admin)
@@ -38,7 +38,7 @@
     </div>
 </div>
 
-@if (ViewBag.changed)
+@if (ViewBag.guardado)
 {
     <div class="clear verde">
         El cambio fue satisfactorio

@@ -9,15 +9,6 @@ namespace OMIstats.Controllers
 {
     public class LogController : BaseController
     {
-        private void limpiarErroresViewBag()
-        {
-            ViewBag.logInError = false;
-            ViewBag.faltante = false;
-            ViewBag.saved = false;
-            ViewBag.errorMail = false;
-            ViewBag.errorCaptcha = false;
-        }
-
         //
         // GET: /Log/
 
@@ -122,7 +113,7 @@ namespace OMIstats.Controllers
             pe.subtipo = Peticion.TipoPeticion.PASSWORD;
             pe.usuario = p;
             if (pe.guardarPeticion())
-                ViewBag.saved = true;
+                ViewBag.guardado = true;
             else
                 ViewBag.errorMail = true;
 

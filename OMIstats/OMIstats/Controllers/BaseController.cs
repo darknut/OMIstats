@@ -13,6 +13,7 @@ namespace OMIstats.Controllers
     {
         protected const string ERROR = "error";
         protected const string OK = "ok";
+        protected const string ADMIN = "admin";
         public static string CAPTCHA_SECRET;
         public static string CAPTCHA_KEY;
 
@@ -51,6 +52,21 @@ namespace OMIstats.Controllers
         protected void setUsuario(Persona p)
         {
             Session["usuario"] = p;
+        }
+
+        protected void limpiarParams(Pagina p)
+        {
+            Session[p.ToString() + "params"] = null;
+        }
+
+        protected object obtenerParams(Pagina p)
+        {
+            return Session[p.ToString() + "params"] = null;
+        }
+
+        protected void guardarParams(Pagina p, object pa)
+        {
+            Session[p.ToString() + "params"] = pa;
         }
 
         protected bool esAdmin()
@@ -106,6 +122,25 @@ namespace OMIstats.Controllers
 
                 return google.success.Value;
             }
+        }
+
+        protected void limpiarErroresViewBag()
+        {
+            ViewBag.logInError = false;
+            ViewBag.faltante = false;
+            ViewBag.guardado = false;
+            ViewBag.errorMail = "";
+            if (ViewBag.errorCaptcha == null)
+                ViewBag.errorCaptcha = false;
+            if (ViewBag.errorImagen == null)
+                ViewBag.errorImagen = "";
+            if (ViewBag.errorUsuario == null)
+                ViewBag.errorUsuario = "";
+            if (ViewBag.errorPassword == null)
+                ViewBag.errorPassword = "";
+            ViewBag.errorInfo = "";
+            ViewBag.errorPeticion = false;
+            ViewBag.admin = esAdmin();
         }
     }
 }

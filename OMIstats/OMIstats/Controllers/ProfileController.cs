@@ -31,18 +31,6 @@ namespace OMIstats.Controllers
             ViewBag.minimo = minimo;
         }
 
-        private void limpiaErroresViewBag()
-        {
-            if (String.IsNullOrEmpty(ViewBag.errorImagen))
-                ViewBag.errorImagen = "";
-            if (String.IsNullOrEmpty(ViewBag.errorUsuario))
-                ViewBag.errorUsuario = "";
-            if (String.IsNullOrEmpty(ViewBag.errorPassword))
-                ViewBag.errorPassword = "";
-            if (ViewBag.errorCaptcha == null)
-                ViewBag.errorCaptcha = false;
-        }
-
         #endregion
 
         //
@@ -81,8 +69,14 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/Saved/
 
-        public ActionResult Saved(string value)
+        public ActionResult Saved()
         {
+            string value = (string) obtenerParams(Pagina.SAVED_PROFILE);
+            limpiarParams(Pagina.SAVED_PROFILE);
+
+            if (value == null)
+                return RedirectTo(Pagina.HOME);
+
             ViewBag.value = value;
             return View();
         }
@@ -109,7 +103,7 @@ namespace OMIstats.Controllers
             if (!estaLoggeado())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            limpiaErroresViewBag();
+            limpiarErroresViewBag();
             recargarDatos();
             ponFechasEnViewBag();
 
@@ -130,7 +124,7 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return Edit();
 
-            limpiaErroresViewBag();
+            limpiarErroresViewBag();
 
             if (!esAdmin() && !revisaCaptcha())
             {
@@ -217,17 +211,25 @@ namespace OMIstats.Controllers
                         p.guardarDatos();
                     }
 
-                    return RedirectTo(Pagina.SAVED_PROFILE, new { value = "ok" });
+                    guardarParams(Pagina.SAVED_PROFILE, OK);
+                    return RedirectTo(Pagina.SAVED_PROFILE);
                 }
 
                 if (file != null || p.nombre.Length > 0)
-                    return RedirectTo(Pagina.SAVED_PROFILE, new { value = "admin" });
+                {
+                    guardarParams(Pagina.SAVED_PROFILE, ADMIN);
+                    return RedirectTo(Pagina.SAVED_PROFILE);
+                }
                 else
-                    return RedirectTo(Pagina.SAVED_PROFILE, new { value = "ok" });
+                {
+                    guardarParams(Pagina.SAVED_PROFILE, OK);
+                    return RedirectTo(Pagina.SAVED_PROFILE);
+                }
             }
             else
             {
-                return RedirectTo(Pagina.SAVED_PROFILE, new { value = "error" });
+                guardarParams(Pagina.SAVED_PROFILE, ERROR);
+                return RedirectTo(Pagina.SAVED_PROFILE);
             }
         }
     }
