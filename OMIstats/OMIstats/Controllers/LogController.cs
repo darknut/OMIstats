@@ -115,7 +115,7 @@ namespace OMIstats.Controllers
             if (pe.guardarPeticion())
                 ViewBag.guardado = true;
             else
-                ViewBag.errorMail = true;
+                ViewBag.errorMail = ERROR;
 
             return View(new Persona());
         }

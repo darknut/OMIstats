@@ -61,7 +61,7 @@ namespace OMIstats.Controllers
 
         protected object obtenerParams(Pagina p)
         {
-            return Session[p.ToString() + "params"] = null;
+            return Session[p.ToString() + "params"];
         }
 
         protected void guardarParams(Pagina p, object pa)
