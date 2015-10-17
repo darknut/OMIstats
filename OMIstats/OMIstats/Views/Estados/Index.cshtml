@@ -1,0 +1,47 @@
+﻿@model List<OMIstats.Models.Estado>
+
+@section AddToHead
+{
+
+}
+
+@{
+    ViewBag.Title = "Estados";
+}
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>
+                
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Sitio web / Contacto
+            </th>
+            <th>
+                Delegado
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr id='@Url.Content("row" + @item.clave)'>
+            <td>
+                <img src="@Url.Content("img\\estados\\" + item.clave + ".png")"/>
+                @item.clave
+            </td>
+            <td>
+                @item.nombre
+            </td>
+            <td>
+                @item.sitio
+            </td>
+            <td>
+                @item.nombreDelegado
+            </td>
+        </tr>
+    }
+</table>

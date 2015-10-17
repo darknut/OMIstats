@@ -121,6 +121,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="Models\Peticion.cs" />
     <Compile Include="utilities\Acceso.cs" />
@@ -283,9 +285,11 @@
     <Content Include="Views\Request\Claim.cshtml" />
     <Content Include="Views\Request\General.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Estados\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="img\estados\" />
     <Folder Include="img\temp\" />
     <Folder Include="img\user\" />
   </ItemGroup>
