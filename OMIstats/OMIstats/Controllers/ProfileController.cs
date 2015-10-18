@@ -12,8 +12,6 @@ namespace OMIstats.Controllers
         private const int AñoMinimo = 1950;
         private const int EdadMaxima = 20;
 
-        #region Metodos privados
-
         private void ponFechasEnViewBag()
         {
             int maximo = MiembroDelegacion.primeraOMIPara(getUsuario());
@@ -30,8 +28,6 @@ namespace OMIstats.Controllers
             ViewBag.maximo = maximo;
             ViewBag.minimo = minimo;
         }
-
-        #endregion
 
         //
         // GET: /Profile/
@@ -50,11 +46,13 @@ namespace OMIstats.Controllers
             {
                 if (estaLoggeado())
                 {
-                    recargarDatos();
                     return View(getUsuario());
                 }
                 else
-                    return RedirectTo(Pagina.ERROR, 401);
+                {
+                    guardarParams(Pagina.LOGIN, Pagina.VIEW_PROFILE, "");
+                    return RedirectTo(Pagina.LOGIN);
+                }
             }
             else
             {
@@ -101,10 +99,12 @@ namespace OMIstats.Controllers
         public ActionResult Edit()
         {
             if (!estaLoggeado())
-                return RedirectTo(Pagina.ERROR, 401);
+            {
+                guardarParams(Pagina.LOGIN, Pagina.EDIT_PROFILE, "");
+                return RedirectTo(Pagina.LOGIN);
+            }
 
             limpiarErroresViewBag();
-            recargarDatos();
             ponFechasEnViewBag();
 
             return View(getUsuario());
@@ -116,7 +116,7 @@ namespace OMIstats.Controllers
         public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p)
         {
             if (!estaLoggeado() || p == null)
-                return RedirectTo(Pagina.ERROR, 401);
+                return RedirectTo(Pagina.HOME);
 
             if (!String.IsNullOrEmpty(p.password))
                 ViewBag.passwordModificado = true;
@@ -183,7 +183,6 @@ namespace OMIstats.Controllers
                 p.genero = "F";
 
             // Se copian los datos que no se pueden modificar
-            current.recargarDatos();
             p.admin = current.admin;
             p.clave = current.clave;
             p.ioiID = current.ioiID;
@@ -199,6 +198,7 @@ namespace OMIstats.Controllers
             // Se guardan los datos
             if (p.guardarDatos(generarPeticiones:!esAdmin()))
             {
+                // Se modificaron los datos del usuario, tenemos que recargarlos en la variable de sesion
                 recargarDatos();
 
                 if (esAdmin())

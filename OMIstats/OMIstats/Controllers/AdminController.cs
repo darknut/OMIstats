@@ -22,13 +22,22 @@ namespace OMIstats.Controllers
 
         public ActionResult Change(string usuario)
         {
-            if(!esAdmin() || String.IsNullOrEmpty(usuario))
-                return RedirectTo(Pagina.ERROR, 403);
+            if (!estaLoggeado())
+            {
+                guardarParams(Pagina.LOGIN, Pagina.ADMIN_CHANGE, usuario);
+                return RedirectTo(Pagina.LOGIN);
+            }
+
+            if(!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
 
             Persona p = Persona.obtenerPersonaDeUsuario(usuario);
-
             if (p == null)
                 return RedirectTo(Pagina.ERROR, 404);
+
+            Persona u = getUsuario();
+            if (u.usuario == p.usuario)
+                return RedirectTo(Pagina.ERROR, 401);
 
             limpiarErroresViewBag();
 
@@ -42,7 +51,7 @@ namespace OMIstats.Controllers
         public ActionResult Change(Persona p)
         {
             if (!esAdmin() || p == null)
-                return RedirectTo(Pagina.ERROR, 403);
+                return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
 
@@ -69,12 +78,22 @@ namespace OMIstats.Controllers
 
         public ActionResult ResetPassword(string usuario)
         {
-            if (!esAdmin() || String.IsNullOrEmpty(usuario))
-                return RedirectTo(Pagina.ERROR, 403);
+            if (!estaLoggeado())
+            {
+                guardarParams(Pagina.LOGIN, Pagina.ADMIN_RESET_PASSWORD, usuario);
+                return RedirectTo(Pagina.LOGIN);
+            }
+
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
 
             Persona p = Persona.obtenerPersonaDeUsuario(usuario);
             if (p == null)
                 return RedirectTo(Pagina.ERROR, 404);
+
+            Persona u = getUsuario();
+            if (u.usuario == p.usuario)
+                return RedirectTo(Pagina.ERROR, 401);
 
             limpiarErroresViewBag();
             return View(p);
@@ -87,7 +106,7 @@ namespace OMIstats.Controllers
         public ActionResult ResetPassword(Persona p)
         {
             if (!esAdmin() || p == null)
-                return RedirectTo(Pagina.ERROR, 403);
+                return RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
             string mail = p.correo;

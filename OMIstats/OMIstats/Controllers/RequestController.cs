@@ -85,9 +85,13 @@ namespace OMIstats.Controllers
         public ActionResult view()
         {
             if (!estaLoggeado())
-                return RedirectTo(Pagina.ERROR, 401);
+            {
+                guardarParams(Pagina.LOGIN, Pagina.VIEW_REQUEST, "");
+                return RedirectTo(Pagina.LOGIN);
+            }
 
-            recargarDatos();
+            if (esAdmin())
+                return RedirectTo(Pagina.MANAGE_REQUEST);
 
             return View(Peticion.obtenerPeticionesDeUsuario(getUsuario()));
         }
@@ -152,8 +156,14 @@ namespace OMIstats.Controllers
 
         public ActionResult Manage()
         {
+            if (!estaLoggeado())
+            {
+                guardarParams(Pagina.LOGIN, Pagina.MANAGE_REQUEST, "");
+                return RedirectTo(Pagina.LOGIN);
+            }
+
             if (!esAdmin())
-                return RedirectTo(Pagina.ERROR, 403);
+                return RedirectTo(Pagina.VIEW_REQUEST);
 
             ViewBag.totalPeticiones = Peticion.cuentaPeticiones();
 
@@ -165,12 +175,21 @@ namespace OMIstats.Controllers
 
         public ActionResult Access(string clave, string guid)
         {
-            if (estaLoggeado() || String.IsNullOrEmpty(clave) || String.IsNullOrEmpty(guid))
+            if (estaLoggeado())
                 return RedirectTo(Pagina.HOME);
+
+            if (String.IsNullOrEmpty(clave) || String.IsNullOrEmpty(guid))
+            {
+                ViewBag.errorPeticion = true;
+                return View(new Persona());
+            }
 
             int claveInt;
             if (!Int32.TryParse(clave, out claveInt))
-                return RedirectTo(Pagina.HOME);
+            {
+                ViewBag.errorPeticion = true;
+                return View(new Persona());
+            }
 
             Peticion pe = Peticion.obtenerPeticionConClave(claveInt);
             if (pe == null || !pe.datos1.Equals(guid))

@@ -45,7 +45,15 @@ namespace OMIstats.Controllers
                 setUsuario(p);
                 ViewBag.logInError = false;
                 Peticion.borraPeticionesPassword(p);
-                return RedirectTo(Pagina.VIEW_PROFILE);
+
+                Object t = obtenerParams(Pagina.LOGIN);
+                if (t != null)
+                {
+                    KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;
+                    return RedirectTo(redireccion.Key, redireccion.Value);
+                }
+
+                return RedirectTo(Pagina.HOME);
             }
             else
             {

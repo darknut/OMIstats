@@ -22,15 +22,22 @@ namespace OMIstats.Controllers
             HOME,
             LOGIN,
             VIEW_PROFILE,
+            EDIT_PROFILE,
             SAVED_PROFILE,
             VIEW_REQUEST,
-            ERROR
+            MANAGE_REQUEST,
+            ERROR,
+            ADMIN_CHANGE,
+            ADMIN_RESET_PASSWORD
         }
 
         public BaseController()
         {
             // Se usa System.Web en vez de Session porque a tiempo de construcción, Session aún no esta populada
-            ViewBag.usuario = System.Web.HttpContext.Current.Session["usuario"];
+            Persona usuario = (Persona) System.Web.HttpContext.Current.Session["usuario"];
+            if (usuario != null)
+                usuario.recargarDatos();
+            ViewBag.usuario = usuario;
             ViewBag.captchaKey = CAPTCHA_KEY;
         }
 
@@ -69,12 +76,15 @@ namespace OMIstats.Controllers
             Session[p.ToString() + "params"] = pa;
         }
 
+        protected void guardarParams(Pagina p, Pagina p2, string s)
+        {
+            Session[p.ToString() + "params"] = new KeyValuePair<Pagina, string> (p2, s);
+        }
+
         protected bool esAdmin()
         {
             if (!estaLoggeado())
                 return false;
-
-            recargarDatos();
 
             return getUsuario().admin;
         }
@@ -85,9 +95,15 @@ namespace OMIstats.Controllers
             {
                 case Pagina.VIEW_REQUEST:
                     return RedirectToAction("view", "Request");
+                case Pagina.MANAGE_REQUEST:
+                    return RedirectToAction("Manage", "Request");
                 case Pagina.SAVED_PROFILE:
                     return RedirectToAction("Saved", "Profile", opciones);
+                case Pagina.EDIT_PROFILE:
+                    return RedirectToAction("Edit", "Profile");
                 case Pagina.VIEW_PROFILE:
+                    if (opciones != null)
+                        return RedirectToAction("view", "Profile", new { usuario = opciones.ToString() });
                     return RedirectToAction("view", "Profile");
                 case Pagina.LOGIN:
                     return RedirectToAction("In", "Log");
@@ -95,6 +111,14 @@ namespace OMIstats.Controllers
                     if (opciones != null)
                         return RedirectToAction("Index", "Error", new { code = opciones.ToString() });
                     return RedirectToAction("Index", "Error");
+                case Pagina.ADMIN_CHANGE:
+                    if (opciones != null)
+                        return RedirectToAction("Change", "Admin", new { usuario = opciones.ToString() });
+                    return RedirectTo(Pagina.ERROR, 404);
+                case Pagina.ADMIN_RESET_PASSWORD:
+                    if (opciones != null)
+                        return RedirectToAction("ResetPassword", "Admin", new { usuario = opciones.ToString() });
+                    return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.HOME:
                 default:
                     return RedirectToAction("Index", "Home");
