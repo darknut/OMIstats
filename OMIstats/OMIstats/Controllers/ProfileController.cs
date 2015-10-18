@@ -42,11 +42,15 @@ namespace OMIstats.Controllers
 
         public ActionResult view(string usuario)
         {
+            limpiarErroresViewBag();
+
             if (String.IsNullOrEmpty(usuario))
             {
                 if (estaLoggeado())
                 {
-                    return View(getUsuario());
+                    Persona p = getUsuario();
+                    ViewBag.tienePeticiones = p.tienePeticiones();
+                    return View(p);
                 }
                 else
                 {
@@ -58,9 +62,16 @@ namespace OMIstats.Controllers
             {
                 Persona p = Persona.obtenerPersonaDeUsuario(usuario);
                 if (p != null)
+                {
+                    Persona u = getUsuario();
+                    if (p.usuario == u.usuario)
+                        ViewBag.tienePeticiones = p.tienePeticiones();
                     return View(p);
+                }
                 else
+                {
                     return RedirectTo(Pagina.ERROR, 404);
+                }
             }
         }
 

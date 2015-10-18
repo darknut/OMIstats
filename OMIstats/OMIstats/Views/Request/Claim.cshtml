@@ -101,7 +101,7 @@ else
                 <div class="label">Usuario reclamado:</div>
                 <div class="input">
                     @Html.TextBoxFor(model => model.usuario, new {
-                        @class = ViewBag.errorUsuario.Length == 0 ? "" : "input-validation-error" })
+                        @class = ViewBag.errorUsuario.Length == 0 ? "" : "input-validation-error" }) <!-- -TODO- Agregar enlace a buscar usuario -->
                     @if (ViewBag.errorUsuario.Length != 0)
                     {
                         <div class="errorTextoRojo">El usuario que escribiste no existe</div>

@@ -125,6 +125,13 @@
 
     </div>
 
+    @if (ViewBag.tienePeticiones)
+    {
+        <div style="clear:both">
+            Tienes peticiones que los administradores aún no han respondido, si quieres verlas, da clic <a href="/Request/view">aquí</a>.
+        </div>
+    }
+
     <div style="clear:both">
         @if (ViewBag.usuario != null && ViewBag.usuario.clave == Model.clave && !ViewBag.usuario.admin)
         {
