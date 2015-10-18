@@ -79,6 +79,10 @@ namespace OMIstats.Controllers
                     return View(estado);
                 }
             }
+            else
+            {
+                ViewBag.delegadoModificado = false;
+            }
 
             if (!ModelState.IsValid)
                 return View(estado);
