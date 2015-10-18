@@ -19,6 +19,7 @@ namespace OMIstats.Models
         public int claveDelegado { get; set; }
         public string usuarioDelegado { get; set; }
         public string nombreDelegado { get; set; }
+        public string mailDelegado { get; set; }
 
         public Estado()
         {
@@ -69,6 +70,7 @@ namespace OMIstats.Models
             {
                 nombreDelegado = delegado.nombre;
                 usuarioDelegado = delegado.usuario;
+                mailDelegado = delegado.correo;
             }
         }
     }

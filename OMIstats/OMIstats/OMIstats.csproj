@@ -155,6 +155,7 @@
     <Content Include="Content\admin.css" />
     <Content Include="Content\cabecera.css" />
     <Content Include="Content\error.css" />
+    <Content Include="Content\estados.css" />
     <Content Include="Content\fechas.css" />
     <Content Include="Content\formas.css" />
     <Content Include="Content\general.css" />
@@ -222,6 +223,7 @@
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="img\ajax-loader.gif" />
     <Content Include="img\bronce.png" />
+    <Content Include="img\celdafondo.png" />
     <Content Include="img\circulo.png" />
     <Content Include="img\domi.gif" />
     <Content Include="img\facebook.png" />

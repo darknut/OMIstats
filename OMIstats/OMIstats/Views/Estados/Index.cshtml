@@ -2,45 +2,54 @@
 
 @section AddToHead
 {
-
+    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
 }
 
 @{
     ViewBag.Title = "Estados";
 }
 
-<table border="1">
+<h1 class="titulo">Estados</h1>
+
+<table class="table">
     <thead>
-        <tr>
-            <th>
+        <tr class="table-header">
+            <th class="bottom-border right-border">
                 
             </th>
-            <th>
+            <th class="bottom-border right-border">
+                Clave
+            </th>
+            <th class="bottom-border right-border">
                 Estado
             </th>
-            <th>
-                Sitio web / Contacto
-            </th>
-            <th>
+            <th class="bottom-border right-border">
                 Delegado
+            </th>
+            <th class="bottom-border">
+                Sitio web
             </th>
         </tr>
     </thead>
     @foreach (var item in Model)
     {
         <tr id='@Url.Content("row" + @item.clave)'>
-            <td>
-                <img src="@Url.Content("img\\estados\\" + item.clave + ".png")"/>
+            <td class="table-td center right-border">
+                <img src="@Url.Content("img\\estados\\" + item.clave + ".png")" class="logoEstado"/>
+            </td>
+            <td class="table-td right-border">
                 @item.clave
             </td>
-            <td>
+            <td class="table-td right-border">
                 @item.nombre
             </td>
-            <td>
-                @item.sitio
-            </td>
-            <td>
+            <td class="table-td right-border">
                 @item.nombreDelegado
+                <br />
+                <a href="@Url.Content("mailto:" + item.mailDelegado)" target="_blank" >@item.mailDelegado</a>
+            </td>
+            <td class="table-td">
+                <a href ="@item.sitio" target="_blank">@item.sitio</a>
             </td>
         </tr>
     }
