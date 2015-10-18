@@ -238,6 +238,7 @@
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
     <Content Include="js\admin.js" />
+    <Content Include="js\estados.js" />
     <Content Include="js\formas.js" />
     <Content Include="js\general.js" />
     <Content Include="js\fechas.js" />
@@ -288,6 +289,7 @@
     <Content Include="Views\Request\General.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Estados\Index.cshtml" />
+    <Content Include="Views\Estados\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

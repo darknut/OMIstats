@@ -31,7 +31,7 @@ namespace OMIstats.Models
         [MaxLength(15, ErrorMessage = "El tamaño máximo es de 15 caracteres")]
         public string twitter { get; set; }
 
-        [RegularExpression(@"^(https?:\/\/)?((([\w-]+)\.){2,})([\/\w\.-]+)(\?[\/\w\.-=%&]*)?$", ErrorMessage = "Escribe una URL válida")]
+        [RegularExpression(@"^(https?:\/\/)?((([\w-]+)\.){1,})([\/\w\.-]+)(\?[\/\w\.-=%&]*)?$", ErrorMessage = "Escribe una URL válida")]
         [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
         public string sitio { get; set; }
 
@@ -84,7 +84,7 @@ namespace OMIstats.Models
             correo = "";
             usuario = "";
             admin = false;
-            genero = " ";
+            genero = "M";
             foto = "";
             ioiID = 0;
             password = "";
@@ -181,6 +181,34 @@ namespace OMIstats.Models
 
             DataTable table = db.getTable();
             if (table.Rows.Count != 1)
+                return null;
+
+            Persona p = new Persona();
+            p.llenarDatos(table.Rows[0]);
+
+            return p;
+        }
+
+        /// <summary>
+        /// Regresa el objeto persona asociado con el nombre mandado como parámetro
+        /// </summary>
+        public static Persona obtenerPersonaConNombre(string nombre)
+        {
+            if (String.IsNullOrEmpty(nombre))
+                return null;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where nombreHash = HASHBYTES(\'SHA1\', ");
+            query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
+            query.Append(")");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count == 0)
                 return null;
 
             Persona p = new Persona();
@@ -439,6 +467,32 @@ namespace OMIstats.Models
                     return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Crea un nuevo usuario con los datos en el objeto
+        /// </summary>
+        public void nuevoUsuario(Utilities.Archivos.FotoInicial fotoInicial = Utilities.Archivos.FotoInicial.KAREL)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" declare @inserted table(clave int); ");
+            query.Append(" insert into persona (nombre) output inserted.clave into @inserted values( ");
+            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append("); select clave from @inserted ");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return;
+            clave = (int)table.Rows[0][0];
+            usuario = clave.ToString();
+            foto = Utilities.Archivos.obtenerFotoInicial(fotoInicial);
+
+            guardarDatos();
         }
     }
 }

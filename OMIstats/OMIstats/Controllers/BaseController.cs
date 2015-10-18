@@ -28,7 +28,8 @@ namespace OMIstats.Controllers
             MANAGE_REQUEST,
             ERROR,
             ADMIN_CHANGE,
-            ADMIN_RESET_PASSWORD
+            ADMIN_RESET_PASSWORD,
+            EDIT_ESTADO
         }
 
         public BaseController()
@@ -95,6 +96,10 @@ namespace OMIstats.Controllers
             {
                 case Pagina.VIEW_REQUEST:
                     return RedirectToAction("view", "Request");
+                case Pagina.EDIT_ESTADO:
+                    if (opciones != null)
+                        return RedirectToAction("Edit", "Estado", new { estado = opciones.ToString() });
+                    return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.MANAGE_REQUEST:
                     return RedirectToAction("Manage", "Request");
                 case Pagina.SAVED_PROFILE:

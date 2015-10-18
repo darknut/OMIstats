@@ -56,3 +56,19 @@
 .left-border{
     border-left: solid 4px #336699;
 }
+
+.logoEdit {
+    float: left;
+    max-width: 150px;
+}
+
+.logoEdit img {
+	margin-bottom: 8px;
+    max-width: 150px;
+    max-height: 65px;
+}
+
+.datosEstado {
+    float:left;
+    padding-left:10px;
+}

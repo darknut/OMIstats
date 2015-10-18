@@ -13,10 +13,15 @@ namespace OMIstats.Utilities
 
         public const string FOLDER_TEMPORAL = "~/img/temp";
         public const string FOLDER_USUARIOS = "~/img/user";
+        public const string FOLDER_ESTADOS = "~/img/estados";
 
         public const string HTML_PASSWORD = "~/private/cambioPassword.html";
         public const string HTML_BIENVENIDO = "~/private/bienvenido.html";
         public const string HTML_FIRMA = "~/private/firma.html";
+
+        public const string FOTO_KAREL = "\\img\\karel.bmp";
+        public const string FOTO_DOMI = "\\img\\domi.gif";
+        public const string FOTO_OMI = "\\img\\omi.png";
 
         public enum ResultadoImagen
         {
@@ -39,11 +44,18 @@ namespace OMIstats.Utilities
             FIRMA
         }
 
+        public enum FotoInicial
+        {
+            KAREL,
+            DOMI,
+            OMI
+        }
+
         /// <summary>
         /// Regresa si la imagen es válida o no.
         /// </summary>
         /// <param name="allowContainer">Si la imagen se permite estar contenida en un docx o pdf</param>
-        public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen, int tamaño, bool allowContainer = false)
+        public static ResultadoImagen esImagenValida(HttpPostedFileBase imagen, int tamaño = -1, bool allowContainer = false)
         {
             if (imagen == null || String.IsNullOrEmpty(imagen.FileName))
                 return ResultadoImagen.IMAGEN_INVALIDA;
@@ -64,7 +76,7 @@ namespace OMIstats.Utilities
                     return ResultadoImagen.IMAGEN_INVALIDA;
             }
 
-            if (imagen.ContentLength > tamaño)
+            if (tamaño != -1 && imagen.ContentLength > tamaño)
                 return ResultadoImagen.IMAGEN_MUY_GRANDE;
 
             return ResultadoImagen.VALIDA;
@@ -80,6 +92,9 @@ namespace OMIstats.Utilities
                     break;
                 case FolderImagenes.USUARIOS:
                     s = FOLDER_USUARIOS;
+                    break;
+                case FolderImagenes.ESTADOS:
+                    s = FOLDER_ESTADOS;
                     break;
             }
 
@@ -163,6 +178,21 @@ namespace OMIstats.Utilities
             a = HttpContext.Current.Server.MapPath(a);
 
             return System.IO.File.ReadAllText(a);
+        }
+
+        public static string obtenerFotoInicial(FotoInicial foto)
+        {
+            switch (foto)
+            {
+                case FotoInicial.KAREL:
+                    return FOTO_KAREL;
+                case FotoInicial.DOMI:
+                    return FOTO_DOMI;
+                case FotoInicial.OMI:
+                    return FOTO_OMI;
+            }
+
+            return "";
         }
     }
 }

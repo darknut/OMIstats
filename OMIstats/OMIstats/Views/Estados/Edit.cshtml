@@ -1,0 +1,126 @@
+﻿@model OMIstats.Models.Estado
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/estados.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@section scripts
+{
+  <script>
+      var delegadoModificado = "@ViewBag.delegadoModificado";
+  </script>
+  <script src="/js/estados.js"></script>
+}
+
+@{
+    ViewBag.Title = "Actualizar Estado";
+}
+
+<h1 class="titulo">@Model.nombre</h1>
+
+@if (ViewBag.guardado)
+{
+    <p class="verde">
+        Los cambios se guardaron satisfactoriamente.
+    </p>
+    <p>
+        <a href="/Estados">Volver a estados</a>
+    </p>
+
+}
+else
+{
+    <form name="editEstado" id="editEstado" action="/Estados/Edit" method="post" enctype="multipart/form-data">
+        <div>
+            <div class="logoEdit">
+                <img src='@Url.Content("..\\img\\estados\\" + Model.clave + ".png")'/>
+            </div>
+
+            <div class="datosEstado">
+                <div>
+                    <div class="label">Actualizar logo:</div>
+                    <div class="input">
+                        <input type="file" name="file" id="file"
+                            class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
+                            @if (ViewBag.errorImagen == "imagen_invalida")
+                            {
+                                <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                            }
+                    </div>
+                </div>
+                <div>
+                    <div class="label">Sitio web:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.sitio, new { @class = "inputSitio" })
+                        @Html.ValidationMessageFor(model => model.sitio)
+                    </div>
+                </div>
+                <div id="datosDelegado" class="oculto">
+                    @if (!ViewBag.usuario.admin)
+                    {
+                        <div>
+                            <div class="biglabel">
+                                <span class="errorTextoRojo">ADVERTENCIA:</span>
+                                 Cambiar de delegado te quitará todos los privilegios y se los dará al nuevo usuario.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="biglabel">
+                                <span class="errorTextoRojo">Verifica</span>
+                                 que estás escribiendo el nombre completo del delegado.
+                                 Puedes buscar en los usuarios para saber si lo estás escribiéndolo correctamente.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="biglabel">
+                                <span class="errorTextoRojo">Para cancelar:</span>
+                                 Simplemente deja en blanco estos campos.
+                            </div>
+                        </div>
+                    }
+                    <div>
+                        <div class="label">Delegado:</div>
+                        <div class="input">
+                            @Html.TextBoxFor(model => model.nombreDelegado, new {
+                                @class = ViewBag.errorUsuario == "error" ? "input-validation-error" : "" }) <!-- -TODO- Agregar buscar usuario -->
+                            @Html.ValidationMessageFor(model => model.nombreDelegado)
+                            @if (ViewBag.errorUsuario == "error")
+                            {
+                                <div class="errorTextoRojo">Escribe el nombre del delegado</div>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <div class="label">Correo electrónico:</div>
+                        <div class="input">
+                            @Html.TextBoxFor(model => model.mailDelegado,  new {
+                                @class = ViewBag.errorMail == "error" ? "input-validation-error inputSitio" : "inputSitio" } )
+                            @Html.ValidationMessageFor(model => model.mailDelegado)
+                            @if (ViewBag.errorMail == "error")
+                            {
+                                <div class="errorTextoRojo">Escribe el correo del delegado</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div id="enlaceCambiarDelegado" class="label">
+                        <a href="javascript:mostrarDelegado()"> Cambiar delegado </a>
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.clave)
+                @Html.HiddenFor(model => model.nombre)
+                <div class="label">
+                    <input type="button"  onclick="muestraLoadGifYSubmit('editEstado')"  value="Enviar"/>
+                    <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
+    <div class="clear">
+
+    </div>
