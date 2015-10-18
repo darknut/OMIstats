@@ -45,7 +45,7 @@
                 @if (ViewBag.usuario.admin || (item.claveDelegado != 0 && ViewBag.usuario.clave == item.claveDelegado))
                 {
                     <br />
-                    <a href="@Url.Content("/Estados/Edit?estado=" + item.clave)">Actualizar datos</a>
+                    <a href="@Url.Content("/Estado/Edit?estado=" + item.clave)">Actualizar datos</a>
                 }
             </td>
             <td class="table-td right-border">
