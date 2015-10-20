@@ -10,3 +10,81 @@
 }
 
 <h1 class="titulo">Olimpiadas</h1>
+
+<table class="table">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">
+
+            </th>
+            <th class="bottom-border right-border">
+                Año
+            </th>
+            <th class="bottom-border right-border">
+                Ciudad Sede
+            </th>
+            <th class="bottom-border right-border">
+                Fechas
+            </th>
+            <th class="bottom-border right-border break-word">
+                Escuela Sede
+            </th>
+            <th class="bottom-border right-border">
+                Competidores
+            </th>
+            <th class="bottom-border right-border break-word">
+                Estados participantes
+            </th>
+            <th class="bottom-border right-border">
+                Media
+            </th>
+            <th class="bottom-border">
+                Mediana
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="table-td center right-border">
+               <a href ="@Url.Content("/Olimpiada?clave=" + item.numero)" >@Url.Content(item.numero + "a OMI")</a>
+            </td>
+            <td class="table-td right-border center">
+                @item.año
+            </td>
+            <td class="table-td right-border break-word">
+                @item.ciudad, <a href ="@Url.Content("/Estado?clave=" + item.claveEstado)" class="nombre">@item.nombreEstado </a>
+            </td>
+            <td class="table-td right-border break-word">
+                @item.friendlyDate
+            </td>
+            <td class="table-td right-border break">
+                <a href="@Url.Content("/Institucion?clave=" + item.claveEscuela)" class="nombre"> @item.nombreEscuela </a>
+            </td>
+            <td class="table-td right-border center">
+                @if (item.participantes > 0)
+                {
+                    @item.participantes
+                }
+            </td>
+            <td class="table-td right-border center">
+                @if (item.estados > 0)
+                {
+                    @item.estados
+                }
+            </td>
+            <td class="table-td right-border center">
+                @if (item.media > 0)
+                {
+                    @item.media
+                }
+            </td>
+            <td class="table-td center">
+                @if (item.mediana > 0)
+                {
+                    @item.mediana
+                }
+            </td>
+        </tr>
+    }
+</table>

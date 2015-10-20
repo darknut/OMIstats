@@ -7,6 +7,52 @@ namespace OMIstats.Utilities
 {
     public class Fechas
     {
+        public static string friendlyString(DateTime fecha)
+        {
+            string s = fecha.Day + " de ";
+            switch (fecha.Month)
+            {
+                case 1:
+                    s += "enero";
+                    break;
+                case 2:
+                    s += "febero";
+                    break;
+                case 3:
+                    s += "marzo";
+                    break;
+                case 4:
+                    s += "abril";
+                    break;
+                case 5:
+                    s += "mayo";
+                    break;
+                case 6:
+                    s += "junio";
+                    break;
+                case 7:
+                    s += "julio";
+                    break;
+                case 8:
+                    s += "agosto";
+                    break;
+                case 9:
+                    s += "septiembre";
+                    break;
+                case 10:
+                    s += "octubre";
+                    break;
+                case 11:
+                    s += "noviembre";
+                    break;
+                case 12:
+                    s += "diciembre";
+                    break;
+            }
+
+            return s;
+        }
+
         public static DateTime stringToDate(string fecha)
         {
             if (String.IsNullOrEmpty(fecha))

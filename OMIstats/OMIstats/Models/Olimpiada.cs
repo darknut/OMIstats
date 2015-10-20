@@ -20,7 +20,9 @@ namespace OMIstats.Models
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
-        public string estado { get; set; }
+        public string claveEstado { get; set; }
+
+        public string nombreEstado { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
         public float año { get; set; }
@@ -46,13 +48,36 @@ namespace OMIstats.Models
         public int participantes { get; set; }
 
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
-        public string escuela { get; set; }
+        public string nombreEscuela { get; set; }
+
+        public int claveEscuela { get; set; }
+
+        public string friendlyDate { get; set; }
+
+        public Olimpiada()
+        {
+            numero = "";
+            ciudad = "";
+            año = 0;
+            inicio = new DateTime();
+            fin = new DateTime();
+            media = 0;
+            mediana = 0;
+            video = "";
+            poster = "";
+            estados = 0;
+            participantes = 0;
+            claveEstado = "";
+            nombreEstado = "";
+            claveEscuela = 0;
+            nombreEscuela = "";
+            friendlyDate = "";
+        }
 
         private void llenarDatos(DataRow datos)
         {
             numero = datos["numero"].ToString().Trim();
             ciudad = datos["ciudad"].ToString().Trim();
-            estado = datos["estado"].ToString().Trim();
             año = float.Parse(datos["año"].ToString().Trim());
             inicio = Utilities.Fechas.stringToDate(datos["inicio"].ToString().Trim());
             fin = Utilities.Fechas.stringToDate(datos["fin"].ToString().Trim());
@@ -62,7 +87,23 @@ namespace OMIstats.Models
             poster = datos["poster"].ToString().Trim();
             estados = (int)datos["estados"];
             participantes = (int)datos["participantes"];
-            // -TODO- Cargar escuela?
+
+            claveEstado = datos["estado"].ToString().Trim();
+            Estado estado = Estado.obtenerEstadoConClave(claveEstado);
+            if (estado != null)
+                nombreEstado = estado.nombre;
+
+            claveEscuela = (int)datos["escuela"];
+            Institucion institucion = Institucion.obtenerInstitucionConClave(claveEscuela);
+            if (institucion != null)
+                nombreEscuela = institucion.nombreCorto;
+
+            if (inicio.Month == fin.Month)
+                friendlyDate = "Del " + inicio.Day +
+                                " al " + Utilities.Fechas.friendlyString(fin);
+            else
+                friendlyDate = "Del " + Utilities.Fechas.friendlyString(inicio) +
+                               " al " + Utilities.Fechas.friendlyString(fin);
         }
 
         public static List<Olimpiada> obtenerOlimpiadas()
@@ -71,7 +112,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from olimpiada ");
+            query.Append(" select * from olimpiada order by año desc");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return lista;

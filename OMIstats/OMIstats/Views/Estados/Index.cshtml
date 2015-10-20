@@ -41,7 +41,7 @@
                 @item.clave
             </td>
             <td class="table-td right-border">
-                @item.nombre
+                <a href ="@Url.Content("/Estado?clave=" + item.clave)" class="nombre">@item.nombre</a>
                 @if (ViewBag.usuario.admin || (item.claveDelegado != 0 && ViewBag.usuario.clave == item.claveDelegado))
                 {
                     <br />
