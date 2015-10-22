@@ -1,0 +1,57 @@
+﻿.center {
+    text-align: center;
+}
+
+.break-word {
+    width: 150px;
+    word-wrap: break-word;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table-header {
+	font-size: 18px;
+	color: #336699;
+    text-align: left;
+}
+
+.table-header th {
+    padding-right: 10px;
+    padding-left: 5px;
+}
+
+.table-td {
+	font-size: 16px;
+	color: #333333;
+	padding-left: 5px;
+    padding-right: 10px;
+	background-image: url(../img/celdafondo.png);
+	background-repeat: repeat-x;
+    height: 74px;
+}
+
+.border {
+    border: solid 4px #336699;
+}
+
+.no-border {
+    border: none;
+}
+
+.top-border {
+    border-top: solid 4px #336699;
+}
+
+.right-border {
+    border-right: solid 4px #336699;
+}
+
+.bottom-border {
+    border-bottom: solid 4px #336699;
+}
+
+.left-border{
+    border-left: solid 4px #336699;
+}

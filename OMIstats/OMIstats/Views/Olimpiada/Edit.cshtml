@@ -1,0 +1,41 @@
+﻿@model OMIstats.Models.Olimpiada
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@{
+    ViewBag.Title = "Editar Olimpiada";
+}
+
+<h1 class="titulo">Editar Olimpiada</h1>
+
+@if (ViewBag.guardado)
+{
+    <p class="verde">
+        Los cambios se guardaron satisfactoriamente.
+    </p>
+    <p>
+        <a href="/Olimpiadas">Volver a olimpiadas</a>
+    </p>
+
+}
+else
+{
+   <form name="editOlimpiada" id="editOlimpiada" action="/Olimpiada/Edit" method="post" enctype="multipart/form-data">
+        <div>
+            <div class="logoOMI">
+                <img src='@Url.Content("..\\img\\olimpiada\\" + Model.numero + ".png")'/>
+            </div>
+
+            <div class="datosOlimpiada">
+            </div>
+        </div>
+    </form>
+}
+    <div class="clear">
+
+    </div>

@@ -124,6 +124,7 @@
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OlimpiadaController.cs" />
     <Compile Include="Controllers\OlimpiadasController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -167,6 +168,7 @@
     <Content Include="Content\olimpiadas.css" />
     <Content Include="Content\profile.css" />
     <Content Include="Content\request.css" />
+    <Content Include="Content\tablas.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -296,6 +298,7 @@
     <Content Include="Views\Estados\Index.cshtml" />
     <Content Include="Views\Estado\Edit.cshtml" />
     <Content Include="Views\Olimpiadas\Index.cshtml" />
+    <Content Include="Views\Olimpiada\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

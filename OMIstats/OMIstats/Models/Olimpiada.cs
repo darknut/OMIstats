@@ -129,5 +129,31 @@ namespace OMIstats.Models
 
             return lista;
         }
+
+        /// <summary>
+        /// Regresa el objeto olimpiada relacionado con la clave mandada como parametro
+        /// </summary>
+        /// <param name="clave">La clave de la olimpiada</param>
+        /// <returns>El objeto olimpiada</returns>
+        public static Olimpiada obtenerOlimpiadaConClave(string clave)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from olimpiada where numero = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Olimpiada o = new Olimpiada();
+            o.llenarDatos(table.Rows[0]);
+
+            return o;
+        }
     }
 }

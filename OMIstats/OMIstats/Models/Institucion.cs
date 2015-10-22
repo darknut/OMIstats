@@ -27,6 +27,8 @@ namespace OMIstats.Models
 
         public bool universidad { get; set; }
 
+        public bool publica { get; set; }
+
         public Institucion()
         {
             clave = 0;
@@ -51,6 +53,7 @@ namespace OMIstats.Models
             secundaria = (bool)datos["secundaria"];
             preparatoria = (bool)datos["preparatoria"];
             universidad = (bool)datos["universidad"];
+            publica = (bool)datos["publica"];
         }
 
         public static Institucion obtenerInstitucionConClave(int clave)

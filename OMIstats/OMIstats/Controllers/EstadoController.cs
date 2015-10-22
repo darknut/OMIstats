@@ -14,12 +14,11 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            // -TODO- Redirigir a Vista de Estado
             return RedirectTo(Pagina.ERROR, 404);
         }
 
         //
-        // GET: /Estados/Edit/
+        // GET: /Estado/Edit/
 
         public ActionResult Edit(string estado)
         {
@@ -48,7 +47,7 @@ namespace OMIstats.Controllers
         }
 
         //
-        // POST: /Estados/Edit/
+        // POST: /Estado/Edit/
 
         [HttpPost]
         public ActionResult Edit(HttpPostedFileBase file, Estado estado)

@@ -68,12 +68,12 @@ namespace OMIstats.Controllers
             }
 
             if (pe.subtipo == Peticion.TipoPeticion.NULL) //Quien mande un subtipo inválido, esta tratando de tronar la pagina.
-                return RedirectTo(Pagina.ERROR, 500);
+                return RedirectTo(Pagina.ERROR);
 
             pe.tipo = Peticion.TipoPeticion.GENERAL;
 
             if (!pe.guardarPeticion())
-                return RedirectTo(Pagina.ERROR, 500);
+                return RedirectTo(Pagina.ERROR);
 
             ViewBag.guardado = true;
             return View(pe);
