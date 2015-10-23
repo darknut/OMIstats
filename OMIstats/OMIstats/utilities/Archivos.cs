@@ -14,6 +14,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_TEMPORAL = "~/img/temp";
         public const string FOLDER_USUARIOS = "~/img/user";
         public const string FOLDER_ESTADOS = "~/img/estados";
+        public const string FOLDER_OLIMPIADAS = "~/img/omi";
 
         public const string HTML_PASSWORD = "~/private/cambioPassword.html";
         public const string HTML_BIENVENIDO = "~/private/bienvenido.html";
@@ -34,7 +35,8 @@ namespace OMIstats.Utilities
         {
             TEMPORAL,
             ESTADOS,
-            USUARIOS
+            USUARIOS,
+            OLIMPIADAS
         }
 
         public enum ArchivosHTML
@@ -138,8 +140,8 @@ namespace OMIstats.Utilities
         public static void eliminarArchivo(string nombre, FolderImagenes folder)
         {
             string lugarEnDisco = pathAbsoluto(folder);
-            if (System.IO.File.Exists(Path.Combine(lugarEnDisco, nombre)))
-                System.IO.File.Delete(Path.Combine(lugarEnDisco, nombre));
+            if (File.Exists(Path.Combine(lugarEnDisco, nombre)))
+                File.Delete(Path.Combine(lugarEnDisco, nombre));
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace OMIstats.Utilities
             if (Path.GetExtension(nombreDestino).Length < 2)
                 nombreDestino += Path.GetExtension(nombreOrigen);
 
-            System.IO.File.Copy(Path.Combine(lugarOrigen, nombreOrigen),
+            File.Copy(Path.Combine(lugarOrigen, nombreOrigen),
                 Path.Combine(lugarDestino, nombreDestino), overwrite:true);
 
             return Path.Combine(pathRelativo(folderDestino), nombreDestino);
@@ -177,7 +179,7 @@ namespace OMIstats.Utilities
             }
             a = HttpContext.Current.Server.MapPath(a);
 
-            return System.IO.File.ReadAllText(a);
+            return File.ReadAllText(a);
         }
 
         public static string obtenerFotoInicial(FotoInicial foto)
@@ -193,6 +195,12 @@ namespace OMIstats.Utilities
             }
 
             return "";
+        }
+
+        public static bool existeArchivo(FolderImagenes folder, string imagen)
+        {
+            string path = pathAbsoluto(folder);
+            return File.Exists(Path.Combine(path, imagen));
         }
     }
 }

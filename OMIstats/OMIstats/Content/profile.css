@@ -127,6 +127,10 @@
     vertical-align:top;
 }
 
+.smallInput {
+    width: 40px;
+}
+
 .inputSitio{
     width:320px;
 }

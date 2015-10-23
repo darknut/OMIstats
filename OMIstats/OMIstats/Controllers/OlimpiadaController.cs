@@ -37,8 +37,33 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             limpiarErroresViewBag();
+            ViewBag.clave = clave;
 
             return View(o);
+        }
+
+        //
+        // POST: /Olimpiada/Edit/
+
+        [HttpPost]
+        public ActionResult Edit(Olimpiada omi, string clave, HttpPostedFileBase fileLogo, HttpPostedFileBase filePoster)
+        {
+            if (!esAdmin() || omi == null)
+                return RedirectTo(Pagina.HOME);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave);
+            if (o == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            limpiarErroresViewBag();
+            ViewBag.clave = clave;
+            omi.logo = o.logo;
+
+
+            if (!ModelState.IsValid)
+                return View(omi);
+
+            return View(omi);
         }
     }
 }

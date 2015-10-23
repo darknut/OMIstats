@@ -3,7 +3,8 @@
     max-width: 150px;
 }
 
-.datosOlimpiada {
-    float:left;
-    padding-left:10px;
+.datosOlimpiadaEdit {
+    float: left;
+    padding-left: 10px;
+    margin-top: 20px;
 }

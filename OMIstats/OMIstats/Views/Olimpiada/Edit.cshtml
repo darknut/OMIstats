@@ -28,10 +28,109 @@ else
    <form name="editOlimpiada" id="editOlimpiada" action="/Olimpiada/Edit" method="post" enctype="multipart/form-data">
         <div>
             <div class="logoOMI">
-                <img src='@Url.Content("..\\img\\olimpiada\\" + Model.numero + ".png")'/>
+                <img src="@Url.Content("..\\img\\omi\\" + Model.logo)"/>
             </div>
 
-            <div class="datosOlimpiada">
+            <div class="clear"></div>
+
+            <div class="datosOlimpiadaEdit">
+                 <div>
+                    <div class="label">Número:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.numero, new { @class = "smallInput" })
+                        @Html.ValidationMessageFor(model => model.numero)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Año:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.año, new { @class = "smallInput" })
+                        @Html.ValidationMessageFor(model => model.año)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Estado:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.claveEstado, new { @class = "smallInput" })
+                        @Html.ValidationMessageFor(model => model.claveEstado)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Ciudad:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.ciudad)
+                        @Html.ValidationMessageFor(model => model.ciudad)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Inicio:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.inicio, "{0:dd/MM/yyyy}")
+                        @Html.ValidationMessageFor(model => model.inicio, "No escribiste una fecha válida")
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Fin:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.fin, "{0:dd/MM/yyyy}")
+                        @Html.ValidationMessageFor(model => model.fin, "No escribiste una fecha válida")
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Escuela sede:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.nombreEscuela)
+                        @Html.ValidationMessageFor(model => model.nombreEscuela) <!-- -TODO- Agregar enlace a buscar escuelas -->
+                    </div>
+                </div>
+
+                <br />
+                <hr />
+
+                <div>
+                    <div class="label">Video:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.video)
+                        @Html.ValidationMessageFor(model => model.video)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Actualizar logo:</div>
+                    <div class="input">
+                        <input type="file" name="fileLogo" id="fileLogo"
+                            class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
+                            @if (ViewBag.errorImagen == "imagen_invalida")
+                            {
+                                <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                            }
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Actualizar poster:</div>
+                    <div class="input">
+                        <input type="file" name="filePoster" id="filePoster"
+                            class="@(ViewBag.errorInfo.Length == 0 ? "" : "input-validation-error")"/>
+                            @if (ViewBag.errorInfo == "imagen_invalida")
+                            {
+                                <div class="errorTextoRojo">El archivo que enviaste no es valido.</div>
+                            }
+                    </div>
+                </div>
+
+                <input type="hidden" value="@ViewBag.clave" id="clave" name="clave" />
+
+                <div class="label">
+                    <input type="button"  onclick="muestraLoadGifYSubmit('editOlimpiada')"  value="Enviar"/>
+                    <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                </div>
             </div>
         </div>
     </form>

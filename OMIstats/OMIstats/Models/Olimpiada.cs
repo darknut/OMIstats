@@ -54,6 +54,8 @@ namespace OMIstats.Models
 
         public string friendlyDate { get; set; }
 
+        public string logo { get; set; }
+
         public Olimpiada()
         {
             numero = "";
@@ -72,6 +74,7 @@ namespace OMIstats.Models
             claveEscuela = 0;
             nombreEscuela = "";
             friendlyDate = "";
+            logo = "";
         }
 
         private void llenarDatos(DataRow datos)
@@ -104,6 +107,12 @@ namespace OMIstats.Models
             else
                 friendlyDate = "Del " + Utilities.Fechas.friendlyString(inicio) +
                                " al " + Utilities.Fechas.friendlyString(fin);
+
+            if (Utilities.Archivos.existeArchivo(Utilities.Archivos.FolderImagenes.OLIMPIADAS,
+                System.IO.Path.Combine(numero, ".png")))
+                logo = System.IO.Path.Combine(numero, ".png");
+            else
+                logo = "omi.png";
         }
 
         public static List<Olimpiada> obtenerOlimpiadas()
