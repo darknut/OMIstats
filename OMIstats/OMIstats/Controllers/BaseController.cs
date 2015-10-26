@@ -176,6 +176,8 @@ namespace OMIstats.Controllers
             ViewBag.errorPeticion = false;
             ViewBag.admin = esAdmin();
             ViewBag.tienePeticiones = false;
+            ViewBag.errorOMI = false;
+            ViewBag.errorEstado = false;
         }
     }
 }

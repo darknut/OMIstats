@@ -59,9 +59,43 @@ namespace OMIstats.Controllers
             ViewBag.clave = clave;
             omi.logo = o.logo;
 
-
             if (!ModelState.IsValid)
                 return View(omi);
+
+            if (omi.numero.Trim().Length == 0 || omi.numero == "TMP")
+            {
+                ViewBag.errorOMI = true;
+                return View(omi);
+            }
+
+            Estado e = Estado.obtenerEstadoConClave(omi.claveEstado);
+            if (e == null)
+            {
+                ViewBag.errorEstado = true;
+                return View(omi);
+            }
+
+            if (fileLogo != null)
+            {
+                Utilities.Archivos.ResultadoImagen resultadoLogo = Utilities.Archivos.esImagenValida(fileLogo);
+                if (resultadoLogo != Utilities.Archivos.ResultadoImagen.VALIDA)
+                {
+                    ViewBag.errorImagen = resultadoLogo.ToString().ToLower();
+                    return View(omi);
+                }
+            }
+
+            if (filePoster != null)
+            {
+                Utilities.Archivos.ResultadoImagen resultadoPoster = Utilities.Archivos.esImagenValida(filePoster, allowContainer: true);
+                if (resultadoPoster != Utilities.Archivos.ResultadoImagen.VALIDA)
+                {
+                    ViewBag.errorInfo = resultadoPoster.ToString().ToLower();
+                    return View(omi);
+                }
+            }
+
+            omi.guardarDatos(clave: clave);
 
             return View(omi);
         }

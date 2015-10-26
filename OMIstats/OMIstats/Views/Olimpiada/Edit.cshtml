@@ -39,6 +39,10 @@ else
                     <div class="input">
                         @Html.TextBoxFor(model => model.numero, new { @class = "smallInput" })
                         @Html.ValidationMessageFor(model => model.numero)
+                        @if (ViewBag.errorOMI == true)
+                        {
+                            <div class="errorTextoRojo">Escribe un número de olimpiada válido</div>
+                        }
                     </div>
                 </div>
 
@@ -46,7 +50,7 @@ else
                     <div class="label">Año:</div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.año, new { @class = "smallInput" })
-                        @Html.ValidationMessageFor(model => model.año)
+                        @Html.ValidationMessageFor(model => model.año, "Escribe un año válido")
                     </div>
                 </div>
 
@@ -55,6 +59,10 @@ else
                     <div class="input">
                         @Html.TextBoxFor(model => model.claveEstado, new { @class = "smallInput" })
                         @Html.ValidationMessageFor(model => model.claveEstado)
+                        @if (ViewBag.errorEstado == true)
+                        {
+                            <div class="errorTextoRojo">La clave del estado es inválida</div>
+                        }
                     </div>
                 </div>
 
@@ -94,7 +102,7 @@ else
                 <hr />
 
                 <div>
-                    <div class="label">Video:</div>
+                    <div class="label">Youtube video id:</div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.video)
                         @Html.ValidationMessageFor(model => model.video)

@@ -11,7 +11,7 @@ namespace OMIstats.Models
     public class Olimpiada
     {
         [Required(ErrorMessage = "Campo requerido")]
-        [MaxLength(6, ErrorMessage = "El tamaño máximo es 6 caracteres")]
+        [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
         public string numero { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
@@ -101,12 +101,15 @@ namespace OMIstats.Models
             if (institucion != null)
                 nombreEscuela = institucion.nombreCorto;
 
-            if (inicio.Month == fin.Month)
-                friendlyDate = "Del " + inicio.Day +
-                                " al " + Utilities.Fechas.friendlyString(fin);
-            else
-                friendlyDate = "Del " + Utilities.Fechas.friendlyString(inicio) +
-                               " al " + Utilities.Fechas.friendlyString(fin);
+            if (inicio.Year > 1990)
+            {
+                if (inicio.Month == fin.Month)
+                    friendlyDate = "Del " + inicio.Day +
+                                    " al " + Utilities.Fechas.friendlyString(fin);
+                else
+                    friendlyDate = "Del " + Utilities.Fechas.friendlyString(inicio) +
+                                   " al " + Utilities.Fechas.friendlyString(fin);
+            }
 
             if (Utilities.Archivos.existeArchivo(Utilities.Archivos.FolderImagenes.OLIMPIADAS,
                 System.IO.Path.Combine(numero, ".png")))
@@ -163,6 +166,12 @@ namespace OMIstats.Models
             o.llenarDatos(table.Rows[0]);
 
             return o;
+        }
+
+        public void guardarDatos(string clave = null)
+        {
+            if (clave == null)
+                clave = numero;
         }
     }
 }
