@@ -61,8 +61,8 @@ namespace OMIstats.Models
             numero = "";
             ciudad = "";
             año = 0;
-            inicio = new DateTime();
-            fin = new DateTime();
+            inicio = new DateTime(1990, 1, 1);
+            fin = new DateTime(1990, 1, 1);
             media = 0;
             mediana = 0;
             video = "";
@@ -168,10 +168,55 @@ namespace OMIstats.Models
             return o;
         }
 
-        public void guardarDatos(string clave = null)
+        /// <summary>
+        /// Guarda los datos del objeto en la base de datos
+        /// </summary>
+        /// <param name="clave">La nueva clave para el objeto</param>
+        /// <param name="todos">true si todos los valores deben de guardarse,
+        /// false si solo los valores estaticos deben de guardarse</param>
+        /// <returns>Si se guardó satisfactoriamente el objeto</returns>
+        /// <remarks>Crea un nuevo objeto instutucion si la institucion
+        /// referenciada no existe</remarks>
+        public bool guardarDatos(string clave = null, bool todos = false)
         {
             if (clave == null)
                 clave = numero;
+
+            if (claveEscuela == 0)
+            {
+                // -TODO- Agregar escuela cuando no tiene clave
+            }
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update olimpiada set numero = ");
+            query.Append(Utilities.Cadenas.comillas(numero));
+            query.Append(", año = ");
+            query.Append(año);
+            query.Append(", estado = ");
+            query.Append(Utilities.Cadenas.comillas(claveEstado));
+            query.Append(", ciudad = ");
+            query.Append(Utilities.Cadenas.comillas(ciudad));
+            query.Append(", inicio = ");
+            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(inicio)));
+            query.Append(", fin = ");
+            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(fin)));
+            query.Append(", escuela = ");
+            query.Append(claveEscuela);
+            query.Append(", video = ");
+            query.Append(Utilities.Cadenas.comillas(video));
+            query.Append(", poster = ");
+            query.Append(Utilities.Cadenas.comillas(poster));
+            if (todos)
+            {
+                query.Append("");
+                // -TODO- Agregar le resto de los datos
+            }
+            query.Append(" where numero = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+
+            return !db.EjecutarQuery(query.ToString()).error;
         }
     }
 }
