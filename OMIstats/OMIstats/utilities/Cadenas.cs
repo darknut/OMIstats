@@ -46,11 +46,25 @@ namespace OMIstats.Utilities
             s.Replace('\'', ' ');
             s.Replace('-', ' ');
             s.Replace('.', ' ');
+            s.Replace('#', ' ');
 
             string r = s.ToString();
 
             while (r.IndexOf("  ") >= 0)
                 r = r.Replace("  ", " ");
+
+            return r.Trim().ToLower();
+        }
+
+        public static string quitaEspacios(string cadena)
+        {
+            if (String.IsNullOrEmpty(cadena))
+                return "";
+
+            string r = s.ToString();
+
+            while (r.IndexOf(" ") >= 0)
+                r = r.Replace(" ", "");
 
             return r.Trim().ToLower();
         }

@@ -56,6 +56,11 @@ namespace OMIstats.Models
             publica = (bool)datos["publica"];
         }
 
+        /// <summary>
+        /// Obtiene la insticucion con la clave mandada como parametro
+        /// </summary>
+        /// <param name="clave">La clave de la institucion</param>
+        /// <returns>El objeto institucion</returns>
         public static Institucion obtenerInstitucionConClave(int clave)
         {
             Utilities.Acceso db = new Utilities.Acceso();
@@ -77,6 +82,11 @@ namespace OMIstats.Models
             return i;
         }
 
+        /// <summary>
+        /// Regresa la institucion con el nombre corto mandado como parametro
+        /// </summary>
+        /// <param name="nombre">El nombre corto de la institucion</param>
+        /// <returns>El objeto institucion</returns>
         public static Institucion obtenerInstitucionConNombreCorto(string nombre)
         {
             Utilities.Acceso db = new Utilities.Acceso();
@@ -98,9 +108,78 @@ namespace OMIstats.Models
             return i;
         }
 
+        /// <summary>
+        /// Guarda los datos en este objeto a la base de datos
+        /// </summary>
+        public void guardarDatos()
+        {
+            if (nombreCorto.Length == 0)
+            {
+                nombreCorto = nombre;
+                if (nombreCorto.Length > 20)
+                    nombreCorto = nombreCorto.Substring(0, 20);
+            }
+
+            if (nombreURL.Length == 0)
+            {
+                nombreURL = nombreCorto;
+                nombreURL = Utilities.Cadenas.quitaEspeciales(nombreURL);
+                nombreURL = Utilities.Cadenas.quitaEspacios(nombreURL);
+                if (nombreURL.Length > 10)
+                    nombreURL = nombreURL.Substring(0, 10);
+            }
+
+            string hash = Utilities.Cadenas.quitaEspeciales(nombre);
+            hash = Utilities.Cadenas.quitaEspacios(hash);
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update institucion set nombre = ");
+            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append(", nombrecorto = ");
+            query.Append(Utilities.Cadenas.comillas(nombreCorto));
+            query.Append(", nombreurl = ");
+            query.Append(Utilities.Cadenas.comillas(nombreURL));
+            query.Append(", url = ");
+            query.Append(Utilities.Cadenas.comillas(URL));
+            query.Append(", nombrehash = HASHBYTES(\'SHA1\', ");
+            query.Append(Utilities.Cadenas.comillas(hash));
+            query.Append("), primaria = ");
+            query.Append(primaria ? "1" : "0");
+            query.Append(", secundaria = ");
+            query.Append(secundaria ? "1" : "0");
+            query.Append(", preparatoria = ");
+            query.Append(preparatoria ? "1" : "0");
+            query.Append(", universidad = ");
+            query.Append(universidad ? "1" : "0");
+            query.Append(", publica = ");
+            query.Append(publica ? "1" : "0");
+            query.Append(" where clave = ");
+            query.Append(clave);
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        /// <summary>
+        /// Guarda una nueva institucion en la base de datos
+        /// </summary>
         public void nuevaInstitucion()
         {
-            // -TODO- guardar institucion
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" declare @inserted table(clave int); ");
+            query.Append(" insert into institucion output inserted.clave into @inserted values (");
+            query.Append("'', '', '', '', '', 0, 0, 0, 0, 0);");
+            query.Append(" select clave from @inserted");
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return;
+            clave = (int)table.Rows[0][0];
+
+            guardarDatos();
         }
     }
 }
