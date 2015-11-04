@@ -139,6 +139,15 @@ else
                     <input type="button"  onclick="muestraLoadGifYSubmit('editOlimpiada')"  value="Enviar"/>
                     <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
                 </div>
+
+                @if (ViewBag.errorGuardar == true)
+                {
+                    <div>
+                        <div class="biginput">
+                            <div class="errorTextoRojo">Ocurrió un error mientras se guardaban los datos.</div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </form>

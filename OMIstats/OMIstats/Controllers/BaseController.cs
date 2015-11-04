@@ -178,6 +178,7 @@ namespace OMIstats.Controllers
             ViewBag.tienePeticiones = false;
             ViewBag.errorOMI = false;
             ViewBag.errorEstado = false;
+            ViewBag.errorGuardar = false;
         }
     }
 }

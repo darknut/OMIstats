@@ -93,9 +93,24 @@ namespace OMIstats.Controllers
                     ViewBag.errorInfo = resultadoPoster.ToString().ToLower();
                     return View(omi);
                 }
+                omi.poster = filePoster.FileName;
             }
 
-            omi.guardarDatos(clave: clave);
+            if (!omi.guardarDatos(clave: clave))
+            {
+                ViewBag.errorGuardar = true;
+                return View(omi);
+            }
+
+            if (fileLogo != null)
+                Utilities.Archivos.guardaArchivo(fileLogo, omi.numero + ".png",
+                    Utilities.Archivos.FolderImagenes.OLIMPIADAS);
+
+            if (filePoster != null)
+                Utilities.Archivos.guardaArchivo(filePoster, filePoster.FileName,
+                    Utilities.Archivos.FolderImagenes.POSTERS);
+
+            ViewBag.guardado = true;
 
             return View(omi);
         }

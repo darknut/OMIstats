@@ -303,6 +303,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="img\estados\" />
+    <Folder Include="img\posters\" />
     <Folder Include="img\temp\" />
     <Folder Include="img\user\" />
   </ItemGroup>

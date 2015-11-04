@@ -76,5 +76,31 @@ namespace OMIstats.Models
 
             return i;
         }
+
+        public static Institucion obtenerInstitucionConNombreCorto(string nombre)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from institucion where nombrecorto = ");
+            query.Append(Utilities.Cadenas.comillas(nombre));
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Institucion i = new Institucion();
+            i.llenarDatos(table.Rows[0]);
+
+            return i;
+        }
+
+        public void nuevaInstitucion()
+        {
+            // -TODO- guardar institucion
+        }
     }
 }

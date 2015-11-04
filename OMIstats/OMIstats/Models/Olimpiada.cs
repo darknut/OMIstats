@@ -112,8 +112,8 @@ namespace OMIstats.Models
             }
 
             if (Utilities.Archivos.existeArchivo(Utilities.Archivos.FolderImagenes.OLIMPIADAS,
-                System.IO.Path.Combine(numero, ".png")))
-                logo = System.IO.Path.Combine(numero, ".png");
+                numero + ".png"))
+                logo = numero + ".png";
             else
                 logo = "omi.png";
         }
@@ -184,7 +184,14 @@ namespace OMIstats.Models
 
             if (claveEscuela == 0)
             {
-                // -TODO- Agregar escuela cuando no tiene clave
+                Institucion i = Institucion.obtenerInstitucionConNombreCorto(nombreEscuela);
+                if (i == null)
+                {
+                    i = new Institucion();
+                    i.nombre = nombreEscuela;
+                    i.nuevaInstitucion();
+                }
+                claveEscuela = i.clave;
             }
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -210,8 +217,14 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(poster));
             if (todos)
             {
-                query.Append("");
-                // -TODO- Agregar le resto de los datos
+                query.Append(", media = ");
+                query.Append(media);
+                query.Append(", mediana = ");
+                query.Append(mediana);
+                query.Append(", estados = ");
+                query.Append(estados);
+                query.Append(", participantes = ");
+                query.Append(participantes);
             }
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));

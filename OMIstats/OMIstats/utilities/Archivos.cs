@@ -15,6 +15,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_USUARIOS = "~/img/user";
         public const string FOLDER_ESTADOS = "~/img/estados";
         public const string FOLDER_OLIMPIADAS = "~/img/omi";
+        public const string FOLDER_POSTERS = "~/img/posters";
 
         public const string HTML_PASSWORD = "~/private/cambioPassword.html";
         public const string HTML_BIENVENIDO = "~/private/bienvenido.html";
@@ -36,7 +37,8 @@ namespace OMIstats.Utilities
             TEMPORAL,
             ESTADOS,
             USUARIOS,
-            OLIMPIADAS
+            OLIMPIADAS,
+            POSTERS
         }
 
         public enum ArchivosHTML
@@ -97,6 +99,12 @@ namespace OMIstats.Utilities
                     break;
                 case FolderImagenes.ESTADOS:
                     s = FOLDER_ESTADOS;
+                    break;
+                case FolderImagenes.OLIMPIADAS:
+                    s = FOLDER_OLIMPIADAS;
+                    break;
+                case FolderImagenes.POSTERS:
+                    s = FOLDER_POSTERS;
                     break;
             }
 

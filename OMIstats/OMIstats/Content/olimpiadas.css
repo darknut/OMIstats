@@ -1,6 +1,10 @@
 ﻿.logoOMI {
     float: left;
-    max-width: 150px;
+}
+
+.logoOMI img {
+    max-height: 200px;
+    max-width: 500px;
 }
 
 .datosOlimpiadaEdit {
