@@ -109,6 +109,32 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa la institucion con el nombre url mandado como parametro
+        /// </summary>
+        /// <param name="nombre">El nombre url de la institucion</param>
+        /// <returns>El objeto institucion</returns>
+        public static Institucion obtenerInstitucionConNombreURL(string url)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from institucion where nombreurl = ");
+            query.Append(Utilities.Cadenas.comillas(url));
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Institucion i = new Institucion();
+            i.llenarDatos(table.Rows[0]);
+
+            return i;
+        }
+
+        /// <summary>
         /// Guarda los datos en este objeto a la base de datos
         /// </summary>
         public void guardarDatos()
@@ -116,8 +142,16 @@ namespace OMIstats.Models
             if (nombreCorto.Length == 0)
             {
                 nombreCorto = nombre;
-                if (nombreCorto.Length > 20)
-                    nombreCorto = nombreCorto.Substring(0, 20);
+                if (nombreCorto.Length > 17)
+                    nombreCorto = nombreCorto.Substring(0, 17);
+
+                if (obtenerInstitucionConNombreCorto(nombreCorto) != null)
+                {
+                    int counter = 0;
+                    while (obtenerInstitucionConNombreCorto(nombreCorto + counter) != null)
+                        counter++;
+                    nombreCorto += counter;
+                }
             }
 
             if (nombreURL.Length == 0)
@@ -125,8 +159,16 @@ namespace OMIstats.Models
                 nombreURL = nombreCorto;
                 nombreURL = Utilities.Cadenas.quitaEspeciales(nombreURL);
                 nombreURL = Utilities.Cadenas.quitaEspacios(nombreURL);
-                if (nombreURL.Length > 10)
-                    nombreURL = nombreURL.Substring(0, 10);
+                if (nombreURL.Length > 7)
+                    nombreURL = nombreURL.Substring(0, 7);
+
+                if (obtenerInstitucionConNombreURL(nombreURL) != null)
+                {
+                    int counter = 0;
+                    while (obtenerInstitucionConNombreURL(nombreURL + counter) != null)
+                        counter++;
+                    nombreURL += counter;
+                }
             }
 
             string hash = Utilities.Cadenas.quitaEspeciales(nombre);
@@ -173,6 +215,8 @@ namespace OMIstats.Models
             query.Append(" insert into institucion output inserted.clave into @inserted values (");
             query.Append("'', '', '', '', '', 0, 0, 0, 0, 0);");
             query.Append(" select clave from @inserted");
+
+            db.EjecutarQuery(query.ToString());
 
             DataTable table = db.getTable();
             if (table.Rows.Count != 1)

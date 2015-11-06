@@ -52,6 +52,8 @@ namespace OMIstats.Models
 
         public int claveEscuela { get; set; }
 
+        public string escuelaURL { get; set; }
+
         public string friendlyDate { get; set; }
 
         public string logo { get; set; }
@@ -99,7 +101,10 @@ namespace OMIstats.Models
             claveEscuela = (int)datos["escuela"];
             Institucion institucion = Institucion.obtenerInstitucionConClave(claveEscuela);
             if (institucion != null)
+            {
                 nombreEscuela = institucion.nombreCorto;
+                escuelaURL = institucion.nombreURL;
+            }
 
             if (inicio.Year > 1990)
             {
@@ -184,14 +189,17 @@ namespace OMIstats.Models
 
             if (claveEscuela == 0)
             {
-                Institucion i = Institucion.obtenerInstitucionConNombreCorto(nombreEscuela);
-                if (i == null)
+                if (!String.IsNullOrEmpty(nombreEscuela))
                 {
-                    i = new Institucion();
-                    i.nombre = nombreEscuela;
-                    i.nuevaInstitucion();
+                    Institucion i = Institucion.obtenerInstitucionConNombreCorto(nombreEscuela);
+                    if (i == null)
+                    {
+                        i = new Institucion();
+                        i.nombre = nombreEscuela;
+                        i.nuevaInstitucion();
+                    }
+                    claveEscuela = i.clave;
                 }
-                claveEscuela = i.clave;
             }
 
             Utilities.Acceso db = new Utilities.Acceso();

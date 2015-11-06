@@ -61,12 +61,10 @@ namespace OMIstats.Utilities
             if (String.IsNullOrEmpty(cadena))
                 return "";
 
-            string r = s.ToString();
+            while (cadena.IndexOf(" ") >= 0)
+                cadena = cadena.Replace(" ", "");
 
-            while (r.IndexOf(" ") >= 0)
-                r = r.Replace(" ", "");
-
-            return r.Trim().ToLower();
+            return cadena.Trim().ToLower();
         }
     }
 }

@@ -67,7 +67,7 @@
                     @item.friendlyDate
                 </td>
                 <td class="table-td right-border break">
-                    <a href="@Url.Content("/Institucion?clave=" + item.claveEscuela)" class="nombre"> @item.nombreEscuela </a>
+                    <a href="@Url.Content("/Institucion?url=" + item.escuelaURL)" class="nombre"> @item.nombreEscuela </a>
                 </td>
                 <td class="table-td right-border center">
                     @if (item.participantes > 0)
