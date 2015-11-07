@@ -52,6 +52,8 @@ namespace OMIstats.Models
 
         public int claveEscuela { get; set; }
 
+        public string nombreEscuelaCompleto { get; set; }
+
         public string escuelaURL { get; set; }
 
         public string friendlyDate { get; set; }
@@ -104,6 +106,7 @@ namespace OMIstats.Models
             {
                 nombreEscuela = institucion.nombreCorto;
                 escuelaURL = institucion.nombreURL;
+                nombreEscuelaCompleto = institucion.nombre;
             }
 
             if (inicio.Year > 1990)
@@ -238,6 +241,20 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(clave));
 
             return !db.EjecutarQuery(query.ToString()).error;
+        }
+
+        /// <summary>
+        /// Crea una nueva OMI en el sitio completamente vacia con clave TMP
+        /// </summary>
+        public static void nuevaOMI()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" insert into olimpiada values ('TMP', '', 'MEX', '0',");
+            query.Append(" '', '', 0, 0, '', '', 0, 0, 0) ");
+
+            db.EjecutarQuery(query.ToString());
         }
     }
 }

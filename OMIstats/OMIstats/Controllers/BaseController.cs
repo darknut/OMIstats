@@ -30,7 +30,8 @@ namespace OMIstats.Controllers
             ADMIN_CHANGE,
             ADMIN_RESET_PASSWORD,
             EDIT_ESTADO,
-            EDIT_OLIMPIADA
+            EDIT_OLIMPIADA,
+            OLIMPIADAS
         }
 
         public BaseController()
@@ -129,6 +130,8 @@ namespace OMIstats.Controllers
                     if (opciones != null)
                         return RedirectToAction("ResetPassword", "Admin", new { usuario = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
+                case Pagina.OLIMPIADAS:
+                    return RedirectToAction("Index", "Olimpiadas");
                 case Pagina.HOME:
                 default:
                     return RedirectToAction("Index", "Home");

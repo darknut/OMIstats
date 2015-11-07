@@ -18,6 +18,24 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Olimpiada/New/
+
+        public ActionResult New()
+        {
+            if (!estaLoggeado())
+            {
+                guardarParams(Pagina.LOGIN, Pagina.OLIMPIADAS, "");
+                return RedirectTo(Pagina.LOGIN);
+            }
+
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Olimpiada.nuevaOMI();
+            return RedirectTo(Pagina.EDIT_OLIMPIADA, "TMP");
+        }
+
+        //
         // GET: /Olimpiada/Edit/
 
         public ActionResult Edit(string clave)
