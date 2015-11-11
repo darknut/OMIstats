@@ -12,9 +12,20 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/
 
-        public ActionResult Index()
+        public ActionResult Index(string clave)
         {
-            return RedirectTo(Pagina.ERROR, 404);
+            if (clave == "TMP")
+                return RedirectTo(Pagina.EDIT_OLIMPIADA, clave);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave);
+
+            if (o == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            limpiarErroresViewBag();
+            ViewBag.clave = clave;
+
+            return View(o);
         }
 
         //

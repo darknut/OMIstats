@@ -1,5 +1,22 @@
-﻿.logoOMI {
+﻿.OMItituloFlexBox {
+    display: flex;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.tituloOMI {
+    height: inherit;
+    align-self: center;
+}
+
+.botonOMI {
+    align-self: center;
+    margin-left: 35px;
+}
+
+.logoOMI {
     float: left;
+    margin-right: 20px;
 }
 
 .logoOMI img {

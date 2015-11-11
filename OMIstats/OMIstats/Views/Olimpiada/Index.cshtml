@@ -1,0 +1,66 @@
+﻿@model OMIstats.Models.Olimpiada
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@{
+    ViewBag.Title = Model.numero + "ª OMI";
+}
+
+<div class="OMItituloFlexBox">
+    <div class="logoOMI">
+        <img src="@Url.Content("..\\img\\omi\\" + Model.logo)"/>
+    </div>
+    <h2 class="titulo tituloOMI">
+        @Url.Content(Model.numero + "ª OMI: " + @Model.ciudad + ", " + @Model.nombreEstado + " " + @Model.año)
+    </h2>
+    @if (ViewBag.admin)
+    {
+        <a href="@Url.Content("/Olimpiada/Edit?clave=" + Model.numero)" class="boton botonOMI">Actualizar</a>
+    }
+</div>
+
+<div class="clear">
+
+</div>
+
++VIDEO, +POSTER
+
+<table>
+    <tr>
+        <td class="table-td right-border break-word">
+            @Model.friendlyDate
+        </td>
+        <td class="table-td right-border break">
+            <a href="@Url.Content("/Institucion?url=" + Model.escuelaURL)" class="nombre"> @Model.nombreEscuelaCompleto </a>
+        </td>
+        <td class="table-td right-border center">
+            @if (Model.participantes > 0)
+            {
+                @Model.participantes
+            }
+        </td>
+        <td class="table-td right-border center">
+            @if (Model.estados > 0)
+            {
+                @Model.estados
+            }
+        </td>
+        <td class="table-td right-border center">
+            @if (Model.media > 0)
+            {
+                @Model.media
+            }
+        </td>
+        <td class="table-td center">
+            @if (Model.mediana > 0)
+            {
+                @Model.mediana
+            }
+        </td>
+        </tr>
+</table>

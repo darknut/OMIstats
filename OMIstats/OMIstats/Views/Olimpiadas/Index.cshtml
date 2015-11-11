@@ -51,11 +51,6 @@
             <tr>
                 <td class="table-td center right-border">
                    <a href ="@Url.Content("/Olimpiada?clave=" + item.numero)" >@Url.Content(item.numero + "ª OMI")</a>
-                    @if (ViewBag.admin)
-                    {
-                        <br />
-                        <a href="@Url.Content("/Olimpiada/Edit?clave=" + item.numero)">Actualizar</a>
-                    }
                 </td>
                 <td class="table-td right-border center">
                     @item.año
