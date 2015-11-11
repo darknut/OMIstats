@@ -24,43 +24,83 @@
     }
 </div>
 
-<div class="clear">
+<div>
+
+    <div class="datosOlimpiada">
+        @if (Model.poster != null && Model.poster.Length > 0)
+        {
+            <div>
+                <div class="biglabel">
+                    <a href="@Url.Content("~/img/posters/" + Model.poster)" target="_blank">Poster</a>
+                </div>
+            </div>
+        }
+
+        <div>
+            <div class="biglabel">
+                Fechas: @Model.friendlyDate
+            </div>
+        </div>
+
+        @if (Model.nombreEscuelaCompleto != null && Model.nombreEscuelaCompleto.Length > 0)
+        {
+            <div>
+                <div class="biglabel">
+                    Escuela sede: <a href="@Url.Content("/Institucion?url=" + Model.escuelaURL)" class="nombre"> @Model.nombreEscuelaCompleto </a>
+                </div>
+            </div>
+        }
+
+        @if (Model.estados > 0)
+        {
+            <div>
+                <div class="biglabel">
+                    Estados participantes: @Model.estados
+                </div>
+            </div>
+        }
+
+        @if (Model.participantes > 0)
+        {
+            <div>
+                <div class="biglabel">
+                    Competidores: @Model.participantes
+                </div>
+            </div>
+        }
+
+        @if (Model.media > 0)
+        {
+            <div>
+                <div class="biglabel">
+                    Media: @Model.media
+                </div>
+            </div>
+        }
+
+        @if (Model.mediana > 0)
+        {
+            <div>
+                <div class="biglabel">
+                    Media: @Model.mediana
+                </div>
+            </div>
+        }
+
+        <!-- -TODO- Agregar datos calculados como mejor score, corte de medallas, numero de medallistas,
+        numero de 0's, etc -->
+    </div>
+
+
+    @if (Model.video != null && Model.video.Length > 0)
+    {
+        <div class="videoOMI">
+            <iframe width="300" height="169" src="@Url.Content("https://www.youtube.com/embed/" + Model.video)" frameborder="0" allowfullscreen></iframe>
+        </div>
+    }
 
 </div>
 
-+VIDEO, +POSTER
+<div class="clear">
 
-<table>
-    <tr>
-        <td class="table-td right-border break-word">
-            @Model.friendlyDate
-        </td>
-        <td class="table-td right-border break">
-            <a href="@Url.Content("/Institucion?url=" + Model.escuelaURL)" class="nombre"> @Model.nombreEscuelaCompleto </a>
-        </td>
-        <td class="table-td right-border center">
-            @if (Model.participantes > 0)
-            {
-                @Model.participantes
-            }
-        </td>
-        <td class="table-td right-border center">
-            @if (Model.estados > 0)
-            {
-                @Model.estados
-            }
-        </td>
-        <td class="table-td right-border center">
-            @if (Model.media > 0)
-            {
-                @Model.media
-            }
-        </td>
-        <td class="table-td center">
-            @if (Model.mediana > 0)
-            {
-                @Model.mediana
-            }
-        </td>
-        </tr>
-</table>
+</div>
