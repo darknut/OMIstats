@@ -1,0 +1,26 @@
+﻿.logoEscuela {
+    display:flex;
+    height:200px;
+    width:200px;
+    float:left;
+    margin-right: 2px;
+	margin-bottom: 8px;
+}
+
+.logoEscuela img {
+    max-width:200px;
+    max-height:200px;
+    align-self:center;
+}
+
+.datosEscuela {
+    float:left;
+    padding-left:10px;
+}
+
+.labelEscuela {
+    display:inline-block;
+    padding-top:15px;
+    padding-left:10px;
+    vertical-align:top;
+}

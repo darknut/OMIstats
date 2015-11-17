@@ -121,6 +121,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\EscuelaController.cs" />
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -160,6 +161,7 @@
     <Content Include="Content\admin.css" />
     <Content Include="Content\cabecera.css" />
     <Content Include="Content\error.css" />
+    <Content Include="Content\escuelas.css" />
     <Content Include="Content\estados.css" />
     <Content Include="Content\fechas.css" />
     <Content Include="Content\formas.css" />
@@ -300,9 +302,11 @@
     <Content Include="Views\Olimpiadas\Index.cshtml" />
     <Content Include="Views\Olimpiada\Edit.cshtml" />
     <Content Include="Views\Olimpiada\Index.cshtml" />
+    <Content Include="Views\Escuela\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="img\escuelas\" />
     <Folder Include="img\estados\" />
     <Folder Include="img\posters\" />
     <Folder Include="img\temp\" />

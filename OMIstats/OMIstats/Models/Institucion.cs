@@ -29,6 +29,8 @@ namespace OMIstats.Models
 
         public bool publica { get; set; }
 
+        public string logo { get; set; }
+
         public Institucion()
         {
             clave = 0;
@@ -54,6 +56,12 @@ namespace OMIstats.Models
             preparatoria = (bool)datos["preparatoria"];
             universidad = (bool)datos["universidad"];
             publica = (bool)datos["publica"];
+
+            if (Utilities.Archivos.existeArchivo(Utilities.Archivos.FolderImagenes.ESCUELAS,
+                                                clave + ".png"))
+                logo = clave + ".png";
+            else
+                logo = "omi.png";
         }
 
         /// <summary>
