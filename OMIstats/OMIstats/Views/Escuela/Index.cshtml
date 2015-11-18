@@ -2,16 +2,45 @@
 
 @section AddToHead
 {
-    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
-    <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/escuelas.css" type="text/css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = "Institución";
+    ViewBag.Title = "Datos de institución";
 }
 
-<h2 class="titulo">Institución</h2>
+<h2 class="titulo">Datos de institución</h2>
+
+<div class="sedes">
+    @if (ViewBag.sedes != null && ViewBag.sedes.Count > 0)
+    {
+        <span>Sede de la:</span>
+        for (int i = 0; i < ViewBag.sedes.Count; i++)
+        {
+            if(i == ViewBag.sedes.Count - 1 && i != 0)
+            {
+                <span> y </span>
+            }
+            if(i == ViewBag.sedes.Count - 1)
+            {
+                <span>
+                    <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
+                        @Url.Content(ViewBag.sedes[i].numero + "ª")
+                    </a>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
+                        @Url.Content(ViewBag.sedes[i].numero + "ª")
+                    </a>,
+                </span>
+            }
+        }
+        <span>&nbsp;OMI</span>
+    }
+</div>
 
 <div>
     <div class="logoEscuela" >
@@ -19,15 +48,12 @@
     </div>
 
     <div class="datosEscuela">
-        <div>
-            <div class="labelEscuela">
-                Nombre oficial: <b> @Model.nombre </b>
+        <div class="nombreContainer">
+            <div class="labelEscuela nombreEscuela">
+               @Model.nombre
             </div>
-        </div>
-
-        <div>
-            <div class="labelEscuela">
-                Nombre corto o siglas: @Model.nombreCorto
+            <div class="labelEscuela nombreCorto">
+                "@Model.nombreCorto"
             </div>
         </div>
 
@@ -101,41 +127,8 @@
 
 </div>
 
-<div class="contenedorMedallas">
-    <div class="medallero">
-        <!-- -TODO- Agregar medallero -->
-    </div>
-
-    <div class="sedes">
-        @if (ViewBag.sedes != null && ViewBag.sedes.Count > 0)
-        {
-            <span>Sede de la:</span>
-            for (int i = 0; i < ViewBag.sedes.Count; i++)
-            {
-                if(i == ViewBag.sedes.Count - 1 && i != 0)
-                {
-                    <span> y </span>
-                }
-                if(i == ViewBag.sedes.Count - 1)
-                {
-                    <span>
-                        <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
-                            @Url.Content(ViewBag.sedes[i].numero + "ª")
-                        </a>
-                    </span>
-                }
-                else
-                {
-                    <span>
-                        <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
-                            @Url.Content(ViewBag.sedes[i].numero + "ª")
-                        </a>,
-                    </span>
-                }
-            }
-            <span>OMI</span>
-        }
-    </div>
+<div class="medallero">
+    <!-- -TODO- Agregar medallero -->
 </div>
 
 <div class="clear">

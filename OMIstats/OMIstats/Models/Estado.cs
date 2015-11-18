@@ -136,5 +136,35 @@ namespace OMIstats.Models
 
             return !db.EjecutarQuery(query.ToString()).error;
         }
+
+        /// <summary>
+        /// Regresa una lista de las olimpiadas en las que el estado instanciado
+        /// fue la escuela sede
+        /// </summary>
+        /// <returns>La lista de olimpiadas</returns>
+        public List<Olimpiada> obtenerOlimpiadasSede()
+        {
+            List<Olimpiada> list = new List<Olimpiada>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select numero from Olimpiada where estado = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count == 0)
+                return list;
+
+            foreach (DataRow r in table.Rows)
+            {
+                string numero = r[0].ToString();
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero);
+                list.Add(o);
+            }
+
+            return list;
+        }
     }
 }

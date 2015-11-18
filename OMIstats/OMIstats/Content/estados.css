@@ -4,6 +4,19 @@
     padding-top: 5px;
 }
 
+.logoEstadoFloat {
+    max-width: 300px;
+    max-height: 100px;
+    padding-top: 20px;
+    padding-left: 20px;
+    float: left;
+}
+
+.logoEstadoFloat img {
+    max-width: 300px;
+    max-height: 100px;
+}
+
 .logoEdit {
     float: left;
     max-width: 150px;
@@ -18,4 +31,19 @@
 .datosEstado {
     float:left;
     padding-left:10px;
+}
+
+.tituloEstado {
+    display:flex;
+    padding-top: 20px;
+    height:100%;
+}
+
+.sedes {
+    margin-top:20px;
+    margin-left:10px;
+    margin-bottom:15px;
+    font-size:15pt;
+    font-weight:bold;
+    color:#336699;
 }

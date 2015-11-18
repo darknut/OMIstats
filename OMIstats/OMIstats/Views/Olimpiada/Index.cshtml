@@ -16,7 +16,9 @@
         <img src="@Url.Content("..\\img\\omi\\" + Model.logo)"/>
     </div>
     <h2 class="titulo tituloOMI">
-        @Url.Content(Model.numero + "ª OMI: " + @Model.ciudad + ", " + @Model.nombreEstado + " " + @Model.año)
+        @Url.Content(Model.numero + "ª OMI: " + @Model.ciudad + ", ")
+        <a href="@Url.Content("/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
+        @Model.año
     </h2>
     @if (ViewBag.admin)
     {

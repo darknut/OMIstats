@@ -303,6 +303,7 @@
     <Content Include="Views\Olimpiada\Edit.cshtml" />
     <Content Include="Views\Olimpiada\Index.cshtml" />
     <Content Include="Views\Escuela\Index.cshtml" />
+    <Content Include="Views\Estado\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

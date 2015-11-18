@@ -1,0 +1,66 @@
+﻿@model OMIstats.Models.Estado
+
+@section AddToHead
+{
+    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = Model.nombre;
+}
+
+<div class="sedes">
+    @if (ViewBag.sedes != null && ViewBag.sedes.Count > 0)
+    {
+        <span>Sede de la:</span>
+        for (int i = 0; i < ViewBag.sedes.Count; i++)
+        {
+            if(i == ViewBag.sedes.Count - 1 && i != 0)
+            {
+                <span> y </span>
+            }
+            if(i == ViewBag.sedes.Count - 1)
+            {
+                <span>
+                    <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
+                        @Url.Content(ViewBag.sedes[i].numero + "ª")
+                    </a>
+                </span>
+            }
+            else
+            {
+                <span>
+                    <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
+                        @Url.Content(ViewBag.sedes[i].numero + "ª")
+                    </a>,
+                </span>
+            }
+        }
+        <span>&nbsp;OMI</span>
+    }
+</div>
+
+<div>
+    <div class="logoEstadoFloat" >
+        <img src="@Url.Content("~/img/estados/" + Model.clave + ".png")"/>
+    </div>
+
+    <div class="datosEstado tituloEstado">
+        <div>
+            <h2 class="titulo">@Model.nombre</h2>
+        </div>
+    </div>
+</div>
+
+<div class="clear">
+
+</div>
+
+<div class="medallero">
+    <!-- -TODO- Agregar medallero -->
+</div>
+
+<div class="clear">
+
+</div>
+

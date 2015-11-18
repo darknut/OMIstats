@@ -12,9 +12,16 @@ namespace OMIstats.Controllers
         //
         // GET: /Estado/
 
-        public ActionResult Index()
+        public ActionResult Index(string clave)
         {
-            return RedirectTo(Pagina.ERROR, 404);
+            Estado e = Estado.obtenerEstadoConClave(clave);
+
+            if (e == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            ViewBag.sedes = e.obtenerOlimpiadasSede();
+
+            return View(e);
         }
 
         //
