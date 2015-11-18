@@ -36,8 +36,13 @@
     float: right;
 }
 
-.videoOMI {
+.mediaOMI {
+    text-align:center;
     float: right;
     margin-right: 50px;
     margin-top: 15px;
+}
+
+.mediaOMI img {
+    border-radius:5%;
 }

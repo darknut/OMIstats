@@ -27,14 +27,6 @@
 <div>
 
     <div class="datosOlimpiada">
-        @if (Model.poster != null && Model.poster.Length > 0)
-        {
-            <div>
-                <div class="biglabel">
-                    <a href="@Url.Content("~/img/posters/" + Model.poster)" target="_blank">Poster</a>
-                </div>
-            </div>
-        }
 
         <div>
             <div class="biglabel">
@@ -91,11 +83,21 @@
         numero de 0's, etc -->
     </div>
 
-
     @if (Model.video != null && Model.video.Length > 0)
     {
-        <div class="videoOMI">
+        <div class="mediaOMI">
             <iframe width="300" height="169" src="@Url.Content("https://www.youtube.com/embed/" + Model.video)" frameborder="0" allowfullscreen></iframe>
+        </div>
+    }
+
+    @if (Model.poster != null && Model.poster.Length > 0)
+    {
+        <div class="mediaOMI">
+            <a href="@Url.Content("~/img/posters/" + Model.poster)" target="_blank" class="nombre">
+                <img src="~/img/posters/mini.png"/>
+                <br />
+                Poster
+            </a>
         </div>
     }
 

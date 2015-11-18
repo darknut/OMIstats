@@ -24,3 +24,19 @@
     padding-left:10px;
     vertical-align:top;
 }
+
+.contenedorMedallas {
+    display:flex;
+    flex-direction:row;
+}
+
+.medallero {
+    width:200px;
+}
+
+.sedes {
+    padding-left:20px;
+    font-size:15pt;
+    font-weight:bold;
+    color:#336699;
+}

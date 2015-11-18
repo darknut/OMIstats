@@ -18,6 +18,8 @@ namespace OMIstats.Controllers
             if (i == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            ViewBag.sedes = i.obtenerOlimpiadasSede();
+
             return View(i);
         }
 
