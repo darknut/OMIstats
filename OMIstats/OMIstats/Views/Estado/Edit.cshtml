@@ -54,7 +54,7 @@ else
                 <div>
                     <div class="label">Sitio web:</div>
                     <div class="input">
-                        @Html.TextBoxFor(model => model.sitio, new { @class = "inputSitio" })
+                        @Html.TextBoxFor(model => model.sitio, new { @class = "inputLarge" })
                         @Html.ValidationMessageFor(model => model.sitio)
                     </div>
                 </div>
@@ -97,7 +97,7 @@ else
                         <div class="label">Correo electrónico:</div>
                         <div class="input">
                             @Html.TextBoxFor(model => model.mailDelegado,  new {
-                                @class = ViewBag.errorMail == "error" ? "input-validation-error inputSitio" : "inputSitio" } )
+                                @class = ViewBag.errorMail == "error" ? "input-validation-error inputLarge" : "inputLarge" } )
                             @Html.ValidationMessageFor(model => model.mailDelegado)
                             @if (ViewBag.errorMail == "error")
                             {

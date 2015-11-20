@@ -131,7 +131,7 @@
     width: 40px;
 }
 
-.inputSitio{
+.inputLarge{
     width:320px;
 }
 
@@ -158,4 +158,9 @@
 
 textarea {
     width:100%;
+}
+
+.minimensaje {
+    font-style:italic;
+    font-size:10pt;
 }

@@ -1,0 +1,114 @@
+﻿@model OMIstats.Models.Institucion
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/escuelas.css" type="text/css"/>
+}
+
+@{
+    ViewBag.Title = "Actualizar institución";
+}
+
+<form name="editEscuela" id="editEscuela" action="/Escuela/Edit" method="post" enctype="multipart/form-data">
+    <div class="contentEdit">
+        <div class="logoEscuela" >
+            <img src="@Url.Content("~/img/escuelas/" + Model.logo)"/>
+        </div>
+
+        <div class="datosEscuela">
+            <div>
+                <div class="label">Nombre oficial:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nombre, new { @class = "inputLarge" })
+                    @Html.ValidationMessageFor(model => model.nombre)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Nombre corto o siglas:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nombreCorto)
+                    @Html.ValidationMessageFor(model => model.nombreCorto)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">
+                    Nombre común:
+                    <br />
+                    <div class="minimensaje">(sin espacios)</div>
+                </div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nombreURL)
+                    @Html.ValidationMessageFor(model => model.nombreURL)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Escuela pública:</div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.publica)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Primaria:</div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.primaria)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Secundaria:</div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.secundaria)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Preparatoria:</div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.preparatoria)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Universidad:</div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.universidad)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Actualizar logo:</div>
+                <div class="input">
+                    <input type="file" name="file" id="file"
+                        class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
+                        @if (ViewBag.errorImagen == "imagen_invalida")
+                        {
+                            <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                        }
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Sitio web:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.URL, new { @class = "inputLarge" })
+                    @Html.ValidationMessageFor(model => model.URL)
+                </div>
+            </div>
+
+            <div class="label">
+                <input type="button"  onclick="muestraLoadGifYSubmit('editEscuela')" value="Enviar"/>
+                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="clear">
+
+</div>
