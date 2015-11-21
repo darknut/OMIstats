@@ -103,8 +103,6 @@ namespace OMIstats.Controllers
                 guardarParams(Pagina.SAVED_ESCUELA, ERROR);
                 return RedirectTo(Pagina.SAVED_ESCUELA);
             }
-
-            return View(escuela);
         }
     }
 }
