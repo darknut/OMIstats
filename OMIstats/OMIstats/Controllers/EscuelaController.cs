@@ -12,9 +12,9 @@ namespace OMIstats.Controllers
         //
         // GET: /Escuela/
 
-        public ActionResult Index(string clave)
+        public ActionResult Index(string url)
         {
-            Institucion i = Institucion.obtenerInstitucionConNombreURL(clave);
+            Institucion i = Institucion.obtenerInstitucionConNombreURL(url);
             if (i == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
@@ -26,15 +26,15 @@ namespace OMIstats.Controllers
         //
         // GET: /Escuela/Edit/
 
-        public ActionResult Edit(string clave)
+        public ActionResult Edit(string url)
         {
             if (!estaLoggeado())
             {
-                guardarParams(Pagina.LOGIN, Pagina.EDIT_ESCUELA, clave);
+                guardarParams(Pagina.LOGIN, Pagina.EDIT_ESCUELA, url);
                 return RedirectTo(Pagina.LOGIN);
             }
 
-            Institucion i = Institucion.obtenerInstitucionConNombreURL(clave);
+            Institucion i = Institucion.obtenerInstitucionConNombreURL(url);
 
             if (i == null)
                 return RedirectTo(Pagina.ERROR, 404);
@@ -57,6 +57,52 @@ namespace OMIstats.Controllers
                 RedirectTo(Pagina.HOME);
 
             limpiarErroresViewBag();
+
+            if (!esAdmin() && !revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return View(escuela);
+            }
+
+            if (!ModelState.IsValid)
+                return View(escuela);
+
+            // Validaciones logo
+            if (file != null)
+            {
+                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file);
+                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
+                {
+                    ViewBag.errorImagen = resultado.ToString().ToLower();
+                    return View(escuela);
+                }
+                escuela.logo = Utilities.Archivos.guardaArchivo(file);
+            }
+
+            // Se guardan los datos
+            if (escuela.guardarDatos(generarPeticiones: !esAdmin()))
+            {
+                if (esAdmin())
+                {
+                    if (file != null)
+                    {
+                        Utilities.Archivos.copiarArchivo(escuela.logo, Utilities.Archivos.FolderImagenes.TEMPORAL,
+                                        escuela.clave.ToString(), Utilities.Archivos.FolderImagenes.ESCUELAS);
+                        Utilities.Archivos.eliminarArchivo(escuela.logo, Utilities.Archivos.FolderImagenes.TEMPORAL);
+                    }
+
+                    guardarParams(Pagina.SAVED_ESCUELA, OK);
+                    return RedirectTo(Pagina.SAVED_ESCUELA);
+                }
+
+                guardarParams(Pagina.SAVED_ESCUELA, OK);
+                return RedirectTo(Pagina.SAVED_ESCUELA);
+            }
+            else
+            {
+                guardarParams(Pagina.SAVED_ESCUELA, ERROR);
+                return RedirectTo(Pagina.SAVED_ESCUELA);
+            }
 
             return View(escuela);
         }

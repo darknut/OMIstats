@@ -216,9 +216,11 @@ namespace OMIstats.Controllers
                 {
                     if (file != null)
                     {
+                        string oldFoto = p.foto;
                         p.foto =
                             Utilities.Archivos.copiarArchivo(p.foto, Utilities.Archivos.FolderImagenes.TEMPORAL,
                                                 p.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+                        Utilities.Archivos.eliminarArchivo(oldFoto, Utilities.Archivos.FolderImagenes.TEMPORAL);
                         p.guardarDatos();
                     }
 

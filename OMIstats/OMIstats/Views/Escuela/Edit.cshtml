@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="~/Content/escuelas.css" type="text/css"/>
 }
 
+@section scripts
+{
+    <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
+}
+
 @{
     ViewBag.Title = "Actualizar institución";
 }
@@ -96,10 +101,28 @@
             <div>
                 <div class="label">Sitio web:</div>
                 <div class="input">
-                    @Html.TextBoxFor(model => model.URL, new { @class = "inputLarge" })
-                    @Html.ValidationMessageFor(model => model.URL)
+                    @Html.TextBoxFor(model => model.pagina, new { @class = "inputLarge" })
+                    @Html.ValidationMessageFor(model => model.pagina)
                 </div>
             </div>
+
+            @if(!ViewBag.admin)
+            {
+                <div>
+                    <div>
+                        <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+                    </div>
+                    @if (ViewBag.errorCaptcha == true)
+                    {
+                        <div>
+                            <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                        </div>
+                    }
+                </div>
+            }
+
+            @Html.HiddenFor(model => model.clave)
+            @Html.HiddenFor(model => model.logo)
 
             <div class="label">
                 <input type="button"  onclick="muestraLoadGifYSubmit('editEscuela')" value="Enviar"/>

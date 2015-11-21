@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -11,13 +12,24 @@ namespace OMIstats.Models
     {
         public int clave { get; set; }
 
+        [Required(ErrorMessage = "Escribe el nombre de la escuela")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string nombre { get; set; }
 
+        [Required(ErrorMessage = "Escribe el nombre corto de la escuela")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
+        [MaxLength(20, ErrorMessage = "El tamaño máximo es 20 caracteres")]
         public string nombreCorto { get; set; }
 
+        [Required(ErrorMessage = "Escribe el nombre común de la escuela")]
+        [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Solo se permiten letras y números. No espacios.")]
+        [MaxLength(10, ErrorMessage = "El tamaño máximo es 10 caracteres")]
         public string nombreURL { get; set; }
 
-        public string URL { get; set; }
+        [RegularExpression(@"^(https?:\/\/).*$", ErrorMessage = "Escribe una dirección de internet")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
+        public string pagina { get; set; }
 
         public bool primaria { get; set; }
 
@@ -37,7 +49,7 @@ namespace OMIstats.Models
             nombre = "";
             nombreCorto = "";
             nombreURL = "";
-            URL = "";
+            pagina = "";
             primaria = false;
             secundaria = false;
             preparatoria = false;
@@ -50,7 +62,7 @@ namespace OMIstats.Models
             nombre = datos["nombre"].ToString().Trim();
             nombreCorto = datos["nombrecorto"].ToString().Trim();
             nombreURL = datos["nombreurl"].ToString().Trim();
-            URL = datos["url"].ToString().Trim();
+            pagina = datos["url"].ToString().Trim();
             primaria = (bool)datos["primaria"];
             secundaria = (bool)datos["secundaria"];
             preparatoria = (bool)datos["preparatoria"];
@@ -192,7 +204,7 @@ namespace OMIstats.Models
             query.Append(", nombreurl = ");
             query.Append(Utilities.Cadenas.comillas(nombreURL));
             query.Append(", url = ");
-            query.Append(Utilities.Cadenas.comillas(URL));
+            query.Append(Utilities.Cadenas.comillas(pagina));
             query.Append(", nombrehash = HASHBYTES(\'SHA1\', ");
             query.Append(Utilities.Cadenas.comillas(hash));
             query.Append("), primaria = ");
@@ -262,6 +274,18 @@ namespace OMIstats.Models
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Guarda los datos en la base de datos
+        /// </summary>
+        /// <param name="generarPeticiones">Si se deben de generar peticiones 
+        /// o guardar directamente los datos</param>
+        /// <returns>Si se guardaron los datos satisfactoriamente</returns>
+        public bool guardarDatos(bool generarPeticiones)
+        {
+            // -TODO- Guardar datos o peticiones
+            return true;
         }
     }
 }

@@ -32,7 +32,8 @@ namespace OMIstats.Controllers
             EDIT_ESTADO,
             EDIT_OLIMPIADA,
             OLIMPIADAS,
-            EDIT_ESCUELA
+            EDIT_ESCUELA,
+            SAVED_ESCUELA
         }
 
         public BaseController()
@@ -106,7 +107,9 @@ namespace OMIstats.Controllers
                 case Pagina.MANAGE_REQUEST:
                     return RedirectToAction("Manage", "Request");
                 case Pagina.SAVED_PROFILE:
-                    return RedirectToAction("Saved", "Profile", opciones);
+                    return RedirectToAction("Saved", "Profile");
+                case Pagina.SAVED_ESCUELA:
+                    return RedirectToAction("Saved", "Escuela");
                 case Pagina.EDIT_PROFILE:
                     return RedirectToAction("Edit", "Profile");
                 case Pagina.EDIT_OLIMPIADA:
@@ -115,7 +118,7 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.EDIT_ESCUELA:
                     if (opciones != null)
-                        return RedirectToAction("Edit", "Escuela", new { clave = opciones.ToString() });
+                        return RedirectToAction("Edit", "Escuela", new { url = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.VIEW_PROFILE:
                     if (opciones != null)
