@@ -13,25 +13,21 @@
     align-self:center;
 }
 
-.datosEscuela {
+.datosEscuelaEdit {
     float:left;
     padding-left:10px;
 }
 
 .labelEscuela {
-    display:inline-block;
     padding-top:15px;
     padding-left:10px;
     vertical-align:top;
 }
 
-.nombreContainer {
-    display:inline-block;
-    float:left;
-    padding-left:10px;
-}
-
 .nombreEscuela {
+    padding-top:15px;
+    padding-left:20px;
+    display:inline-block;
     font-weight:bold;
     font-size:14pt;
 }
@@ -64,6 +60,7 @@
 }
 
 .botonEscuela {
+    padding-top:15px;
     flex:1 1 auto;
     text-align:right;
     margin-right:50px;
@@ -75,6 +72,8 @@
 }
 
 .detallesEscuela {
+    float:left;
+    padding-left:10px;
     display:flex;
     flex-direction:row;
     flex:1 1 auto;
