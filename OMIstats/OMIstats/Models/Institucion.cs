@@ -157,21 +157,16 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda los datos en este objeto a la base de datos
         /// </summary>
-        public void guardarDatos()
+        private bool guardarDatos()
         {
+            if (nombre.Length == 0)
+                return false;
+
             if (nombreCorto.Length == 0)
             {
                 nombreCorto = nombre;
-                if (nombreCorto.Length > 17)
-                    nombreCorto = nombreCorto.Substring(0, 17);
-
-                if (obtenerInstitucionConNombreCorto(nombreCorto) != null)
-                {
-                    int counter = 0;
-                    while (obtenerInstitucionConNombreCorto(nombreCorto + counter) != null)
-                        counter++;
-                    nombreCorto += counter;
-                }
+                if (nombreCorto.Length > 20)
+                    nombreCorto = nombreCorto.Substring(0, 20);
             }
 
             if (nombreURL.Length == 0)
@@ -179,16 +174,30 @@ namespace OMIstats.Models
                 nombreURL = nombreCorto;
                 nombreURL = Utilities.Cadenas.quitaEspeciales(nombreURL);
                 nombreURL = Utilities.Cadenas.quitaEspacios(nombreURL);
-                if (nombreURL.Length > 7)
-                    nombreURL = nombreURL.Substring(0, 7);
+            }
 
-                if (obtenerInstitucionConNombreURL(nombreURL) != null)
+            Institucion temp = obtenerInstitucionConNombreURL(nombreURL);
+            if (!(temp == null || temp.clave == clave))
+            {
+                int counter = 0;
+                int caracters = 1;
+                int nextIncrement = 10;
+                while (true)
                 {
-                    int counter = 0;
-                    while (obtenerInstitucionConNombreURL(nombreURL + counter) != null)
-                        counter++;
-                    nombreURL += counter;
+                    if (nombreURL.Length > (10 - caracters))
+                        nombreURL = nombreURL.Substring(0, 10 - caracters);
+
+                    if (obtenerInstitucionConNombreURL(nombreURL + counter.ToString()) == null)
+                        break;
+                    counter++;
+
+                    if (counter == nextIncrement)
+                    {
+                        caracters++;
+                        nextIncrement *= 10;
+                    }
                 }
+                nombreURL += counter.ToString();
             }
 
             string hash = Utilities.Cadenas.quitaEspeciales(nombre);
@@ -220,13 +229,13 @@ namespace OMIstats.Models
             query.Append(" where clave = ");
             query.Append(clave);
 
-            db.EjecutarQuery(query.ToString());
+            return !db.EjecutarQuery(query.ToString()).error;
         }
 
         /// <summary>
         /// Guarda una nueva institucion en la base de datos
         /// </summary>
-        public void nuevaInstitucion()
+        public bool nuevaInstitucion()
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -240,10 +249,10 @@ namespace OMIstats.Models
 
             DataTable table = db.getTable();
             if (table.Rows.Count != 1)
-                return;
+                return false;
             clave = (int)table.Rows[0][0];
 
-            guardarDatos();
+            return guardarDatos();
         }
 
         /// <summary>
@@ -282,10 +291,17 @@ namespace OMIstats.Models
         /// <param name="generarPeticiones">Si se deben de generar peticiones 
         /// o guardar directamente los datos</param>
         /// <returns>Si se guardaron los datos satisfactoriamente</returns>
-        public bool guardarDatos(bool generarPeticiones)
+        public bool guardar(bool generarPeticiones)
         {
-            // -TODO- Guardar datos o peticiones
-            return true;
+            if (generarPeticiones)
+            {
+                // -TODO- Generar peticiones
+                return true;
+            }
+            else
+            {
+                return guardarDatos();
+            }
         }
     }
 }

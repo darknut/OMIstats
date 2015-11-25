@@ -1,6 +1,7 @@
 ﻿using OMIstats.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -19,6 +20,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             ViewBag.sedes = i.obtenerOlimpiadasSede();
+            limpiarErroresViewBag();
 
             return View(i);
         }
@@ -76,11 +78,11 @@ namespace OMIstats.Controllers
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return View(escuela);
                 }
-                escuela.logo = Utilities.Archivos.guardaArchivo(file);
+                escuela.logo = Utilities.Archivos.guardaArchivo(file, Path.GetFileNameWithoutExtension(file.FileName) + ".png");
             }
 
             // Se guardan los datos
-            if (escuela.guardarDatos(generarPeticiones: !esAdmin()))
+            if (escuela.guardar(generarPeticiones: !esAdmin()))
             {
                 if (esAdmin())
                 {
@@ -92,17 +94,33 @@ namespace OMIstats.Controllers
                     }
 
                     guardarParams(Pagina.SAVED_ESCUELA, OK);
-                    return RedirectTo(Pagina.SAVED_ESCUELA);
+                    return RedirectTo(Pagina.SAVED_ESCUELA, escuela.nombreURL);
                 }
 
-                guardarParams(Pagina.SAVED_ESCUELA, OK);
-                return RedirectTo(Pagina.SAVED_ESCUELA);
+                guardarParams(Pagina.SAVED_ESCUELA, ADMIN);
+                return RedirectTo(Pagina.SAVED_ESCUELA, escuela.nombreURL);
             }
             else
             {
                 guardarParams(Pagina.SAVED_ESCUELA, ERROR);
-                return RedirectTo(Pagina.SAVED_ESCUELA);
+                return RedirectTo(Pagina.SAVED_ESCUELA, escuela.nombreURL);
             }
+        }
+
+        //
+        // GET: /Escuela/Saved/
+
+        public ActionResult Saved(string url)
+        {
+            string value = (string)obtenerParams(Pagina.SAVED_ESCUELA);
+            limpiarParams(Pagina.SAVED_ESCUELA);
+
+            if (value == null)
+                return RedirectTo(Pagina.HOME);
+
+            ViewBag.value = value;
+            ViewBag.redirectURL = url;
+            return View();
         }
     }
 }

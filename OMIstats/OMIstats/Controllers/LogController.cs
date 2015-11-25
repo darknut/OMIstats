@@ -47,6 +47,7 @@ namespace OMIstats.Controllers
                 Peticion.borraPeticionesPassword(p);
 
                 Object t = obtenerParams(Pagina.LOGIN);
+                limpiarParams(Pagina.LOGIN);
                 if (t != null)
                 {
                     KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;

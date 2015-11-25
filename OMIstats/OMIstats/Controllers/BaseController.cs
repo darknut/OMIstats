@@ -109,7 +109,9 @@ namespace OMIstats.Controllers
                 case Pagina.SAVED_PROFILE:
                     return RedirectToAction("Saved", "Profile");
                 case Pagina.SAVED_ESCUELA:
-                    return RedirectToAction("Saved", "Escuela");
+                    if (opciones == null)
+                        return RedirectTo(Pagina.ERROR, 404);
+                    return RedirectToAction("Saved", "Escuela", new { url = opciones.ToString() });
                 case Pagina.EDIT_PROFILE:
                     return RedirectToAction("Edit", "Profile");
                 case Pagina.EDIT_OLIMPIADA:

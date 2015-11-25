@@ -26,8 +26,9 @@
 }
 
 .nombreContainer {
-    display:flex;
-    flex-direction:column;
+    display:inline-block;
+    float:left;
+    padding-left:10px;
 }
 
 .nombreEscuela {
@@ -37,7 +38,11 @@
 
 .nombreCorto {
     text-align:right;
+    padding-top:15px;
     padding-bottom:30px;
+    width:100%;
+    font-weight:normal;
+    font-size:11pt;
 }
 
 .medallero {
@@ -47,6 +52,7 @@
 .sedes {
     margin-top:20px;
     margin-left:10px;
+    margin-bottom:20px;
     font-size:15pt;
     font-weight:bold;
     color:#336699;
@@ -55,4 +61,21 @@
 .contentEdit {
     margin-top:30px;
     margin-left:15px;
+}
+
+.botonEscuela {
+    flex:1 1 auto;
+    text-align:right;
+    margin-right:50px;
+}
+
+.datosEscuelaContainer {
+    display:flex;
+    flex-direction:column;
+}
+
+.detallesEscuela {
+    display:flex;
+    flex-direction:row;
+    flex:1 1 auto;
 }

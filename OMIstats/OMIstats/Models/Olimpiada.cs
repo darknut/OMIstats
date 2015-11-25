@@ -199,7 +199,8 @@ namespace OMIstats.Models
                     {
                         i = new Institucion();
                         i.nombre = nombreEscuela;
-                        i.nuevaInstitucion();
+                        if (!i.nuevaInstitucion())
+                            return false;
                     }
                     claveEscuela = i.clave;
                 }

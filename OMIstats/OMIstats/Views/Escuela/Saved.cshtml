@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Actualizar Institución";
+}
+
+<h2 class="titulo">Actualizar Institución</h2>
+
+@if (@ViewBag.value == "ok")
+{
+    <div>Los cambios se guardaron satisfactoriamente</div>
+}
+else if (@ViewBag.value == "admin")
+{
+    <div>
+        Gracias por ayudarnos a actualizar los datos de esta institución,
+        sin embargo, necesitamos corroborar estos datos.
+        <br />
+        <br />
+        Un administrador revisará los cambios que solicitaste y de ser aprobados
+        se actualizarán los datos de la institución.
+    </div>
+}
+else if (@ViewBag.value == "error")
+{
+    <div class="errorTextoRojo">
+        Ocurrió un error mientras guardábamos los datos.
+        <br />
+        <br />
+        Inténtalo otra vez más tarde, y si persiste el error, <a href="/Request/General">contáctanos</a>.
+    </div>
+}
+
+<br />
+
+@Html.ActionLink("Regresar al perfil de la institución", "Index", "Escuela", new { url = ViewBag.redirectURL }, null)

@@ -47,76 +47,87 @@
         <img src="@Url.Content("~/img/escuelas/" + Model.logo)"/>
     </div>
 
-    <div class="datosEscuela">
+    <div class="datosEscuelaContainer">
         <div class="nombreContainer">
             <div class="labelEscuela nombreEscuela">
-               @Model.nombre
-            </div>
-            <div class="labelEscuela nombreCorto">
-                "@Model.nombreCorto"
+                @Model.nombre
+                <div class="nombreCorto">
+                    "@Model.nombreCorto"
+                </div>
             </div>
         </div>
+        <div class="datosEscuela">
+            <div class="detallesEscuela">
+                <div>
+                    @if (Model.pagina != null && Model.pagina.Length > 0)
+                    {
+                        <div>
+                            <div class="labelEscuela">
+                                Página web: <a href="@Model.pagina" target="_blank"> @Model.pagina </a>
+                            </div>
+                        </div>
+                    }
 
-        @if (Model.pagina != null && Model.pagina.Length > 0)
-        {
-            <div>
-                <div class="labelEscuela">
-                    Página web: <a href="@Model.pagina" target="_blank"> @Model.pagina </a>
+                    @if (Model.primaria || Model.secundaria || Model.preparatoria || Model.universidad)
+                    {
+                        <div>
+                            <div class="labelEscuela">
+                                Nivel educativo:
+                                @if (Model.primaria)
+                                {
+                                    <span>Primaria</span>
+                                    if (Model.secundaria || Model.preparatoria || Model.universidad)
+                                    {
+                                        <span>|</span>
+                                    }
+                                }
+
+                                @if (Model.secundaria)
+                                {
+                                    <span>Secundaria</span>
+                                    if (Model.preparatoria || Model.universidad)
+                                    {
+                                        <span>|</span>
+                                    }
+                                }
+
+                                @if (Model.preparatoria)
+                                {
+                                    <span>Preparatoria</span>
+                                    if (Model.universidad)
+                                    {
+                                        <span>|</span>
+                                    }
+                                }
+
+                                @if (Model.universidad)
+                                {
+                                    <span>Universidad</span>
+                                }
+
+                            </div>
+                        </div>
+                    }
+
+                    <div>
+                        <div class="labelEscuela">
+                            @if (Model.publica)
+                            {
+                                <span>Escuela Pública</span>
+                            }
+                            else
+                            {
+                                <span>Escuela Privada</span>
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
-        }
 
-        @if (Model.primaria || Model.secundaria || Model.preparatoria || Model.universidad)
-        {
-            <div>
-                <div class="labelEscuela">
-                    Nivel educativo:
-                    @if (Model.primaria)
-                    {
-                        <span>Primaria</span>
-                        if (Model.secundaria || Model.preparatoria || Model.universidad)
-                        {
-                            <span>|</span>
-                        }
-                    }
-
-                    @if (Model.secundaria)
-                    {
-                        <span>Secundaria</span>
-                        if (Model.preparatoria || Model.universidad)
-                        {
-                            <span>|</span>
-                        }
-                    }
-
-                    @if (Model.preparatoria)
-                    {
-                        <span>Preparatoria</span>
-                        if (Model.universidad)
-                        {
-                            <span>|</span>
-                        }
-                    }
-
-                    @if (Model.universidad)
-                    {
-                        <span>Universidad</span>
-                    }
-
-                </div>
-            </div>
-        }
-
-        <div>
-            <div class="labelEscuela">
-                Escuela Pública:
-                @if (Model.publica)
+                @if (ViewBag.admin)
                 {
-                    <span>Sí</span>
-                }
-                else
-                {
-                    <span>No</span>
+                    <div class="botonEscuela">
+                        <a href="@Url.Content("/Escuela/Edit?url=" + Model.nombreURL)" class="boton">Actualizar</a>
+                    </div>
                 }
             </div>
         </div>
