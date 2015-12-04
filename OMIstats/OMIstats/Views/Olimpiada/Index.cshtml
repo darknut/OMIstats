@@ -22,7 +22,10 @@
     </h2>
     @if (ViewBag.admin)
     {
-        <a href="@Url.Content("/Olimpiada/Edit?clave=" + Model.numero)" class="boton botonOMI">Actualizar</a>
+        <div class="adminButtons">
+            <a href="@Url.Content("/Olimpiada/Edit?clave=" + Model.numero)" class="boton botonOMI">Actualizar</a>
+            <a href="@Url.Content("/Olimpiada/Attendees?clave=" + Model.numero)" class="boton botonOMI">Participantes</a>
+        </div>
     }
 </div>
 

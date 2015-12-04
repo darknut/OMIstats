@@ -12,6 +12,7 @@
 .botonOMI {
     align-self: center;
     margin-left: 35px;
+    margin-bottom: 10px;
 }
 
 .logoOMI {
@@ -45,4 +46,9 @@
 
 .mediaOMI img {
     border-radius:5%;
+}
+
+.adminButtons {
+    display:flex;
+    flex-direction:column;
 }

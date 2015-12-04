@@ -10,6 +10,14 @@ namespace OMIstats.Models
 {
     public class Institucion
     {
+        public enum NivelInstitucion
+        {
+            PRIMARIA,
+            SECUNDARIA,
+            PREPARATORIA,
+            UNIVERSIDAD
+        }
+
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre de la escuela")]

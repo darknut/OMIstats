@@ -60,6 +60,8 @@ namespace OMIstats.Models
 
         public string logo { get; set; }
 
+        public List<MiembroDelegacion> asistentes;
+
         public Olimpiada()
         {
             numero = "";
@@ -79,6 +81,8 @@ namespace OMIstats.Models
             nombreEscuela = "";
             friendlyDate = "";
             logo = "";
+
+            asistentes = null;
         }
 
         private void llenarDatos(DataRow datos)
@@ -256,6 +260,14 @@ namespace OMIstats.Models
             query.Append(" '', '', 0, 0, '', '', 0, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        /// <summary>
+        /// Carga los asistentes de la OMI y los deja en la lista asistentes
+        /// </summary>
+        public void cargarAsistentes()
+        {
+            asistentes = MiembroDelegacion.cargarAsistentesOMI(numero);
         }
     }
 }
