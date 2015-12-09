@@ -263,11 +263,24 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Carga los asistentes de la OMI y los deja en la lista asistentes
+        /// Regresa la tabla de asistentes en un formato tabulado con comas
+        /// para la edición manual para admins
         /// </summary>
-        public void cargarAsistentes()
+        /// <returns>La tabla tabulada con comas</returns>
+        public string obtenerTablaAsistentes()
         {
-            asistentes = MiembroDelegacion.cargarAsistentesOMI(numero);
+            if (asistentes == null)
+                asistentes = MiembroDelegacion.cargarAsistentesOMI(numero);
+
+            StringBuilder tabla = new StringBuilder();
+
+            foreach (MiembroDelegacion asistente in asistentes)
+            {
+                tabla.Append(asistente.obtenerLineaAdmin());
+                tabla.Append("\n");
+            }
+
+            return tabla.ToString();
         }
     }
 }

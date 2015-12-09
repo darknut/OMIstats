@@ -31,9 +31,10 @@ namespace OMIstats.Models
         // Este objeto debe de ser contenido por un objeto olimpiada,
         // por eso no cargamos un objeto olimpiada aqui
 
-        public Persona miembro;
-        public Institucion escuela;
         public string usuario;
+        public string nombreAsistente;
+        public string fechaNacimiento;
+        public string correo;
         public string genero;
         public string nombreEscuela;
         public bool escuelaPublica;
@@ -43,6 +44,22 @@ namespace OMIstats.Models
         public string estado;
         public TipoAsistente tipo;
         public TipoMedalla medalla;
+
+        private void llenarDatos(DataRow row)
+        {
+            usuario = row["usuario"].ToString().Trim();
+            nombreAsistente = row["nombre"].ToString().Trim();
+            estado = row["estado"].ToString().Trim();
+            tipo = (TipoAsistente) Enum.Parse(typeof (TipoAsistente), row["tipo"].ToString().ToUpper());
+            clave = row["clave"].ToString().Trim();
+            fechaNacimiento = row["nacimiento"].ToString().Trim();
+            genero = row["genero"].ToString().Trim();
+            correo = row["correo"].ToString().Trim();
+            nombreEscuela = row["nombreCorto"].ToString().Trim();
+            nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
+            añoEscuela = (int)row["año"];
+            escuelaPublica = (bool)row["publica"];
+        }
 
         /// <summary>
         /// Regresa el año de la primera OMI para la persona mandada como parametro
@@ -106,24 +123,70 @@ namespace OMIstats.Models
         /// <returns>Una lista con los asistentes de la OMI</returns>
         public static List<MiembroDelegacion> cargarAsistentesOMI(string omi)
         {
-            List<MiembroDelegacion> list = new List<MiembroDelegacion>();
+            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
             if (omi == null)
                 return null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from MiembroDelegacion ");
-            query.Append(" where olimpiada = ");
+            query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
+            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" md.año, i.publica from miembrodelegacion as md");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" inner join Institucion as i on i.clave = md.institucion");
+            query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
-            query.Append(" order by clave ");
+            query.Append(" order by md.clave ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
-            // -TODO- Cargar los miembros de la delegacion
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r);
 
-            return list;
+                lista.Add(md);
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Regresa los datos en este objeto como un string separado por comas
+        /// para que los admins puedan ver los datos en una tabla
+        /// </summary>
+        /// <returns>Los datos separados por coma</returns>
+        public string obtenerLineaAdmin()
+        {
+            StringBuilder s = new StringBuilder();
+
+            s.Append(usuario);
+            s.Append(", ");
+            s.Append(nombreAsistente);
+            s.Append(", ");
+            s.Append(estado);
+            s.Append(", ");
+            s.Append(tipo.ToString().ToLower());
+            s.Append(", ");
+            s.Append(clave);
+            s.Append(", ");
+            s.Append(fechaNacimiento);
+            s.Append(", ");
+            s.Append(genero);
+            s.Append(", ");
+            s.Append(correo);
+            s.Append(", ");
+            s.Append(nombreEscuela);
+            s.Append(", ");
+            s.Append(nivelEscuela.ToString().ToLower());
+            s.Append(", ");
+            s.Append(añoEscuela);
+            s.Append(", ");
+            s.Append(escuelaPublica ? "publica" : "privada");
+
+            return s.ToString();
         }
     }
 }

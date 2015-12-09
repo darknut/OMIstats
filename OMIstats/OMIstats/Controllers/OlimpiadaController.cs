@@ -163,7 +163,8 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            o.cargarAsistentes();
+            ViewBag.asistentes = o.obtenerTablaAsistentes();
+            ViewBag.omi = clave;
 
             return View();
         }

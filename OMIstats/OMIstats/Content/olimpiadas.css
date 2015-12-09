@@ -52,3 +52,21 @@
     display:flex;
     flex-direction:column;
 }
+
+.tablaAsistentes {
+    margin-left:20px;
+    width:90%;
+    height:800px;
+}
+
+.ejemplos {
+    margin-left:20px;
+}
+
+.opcional {
+    font-style:italic;
+}
+
+.instrucciones {
+    font-weight:bold;
+}

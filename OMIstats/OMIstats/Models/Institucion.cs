@@ -12,6 +12,7 @@ namespace OMIstats.Models
     {
         public enum NivelInstitucion
         {
+            NULL,
             PRIMARIA,
             SECUNDARIA,
             PREPARATORIA,
