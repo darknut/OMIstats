@@ -188,5 +188,16 @@ namespace OMIstats.Models
 
             return s.ToString();
         }
+
+        /// <summary>
+        /// Guarda la linea mandada como parametro en la base de datos
+        /// </summary>
+        /// <param name="omi">La clave de la olimpiada</param>
+        /// <param name="linea">Los datos tabulados por comas</param>
+        /// <returns>Si hubo un error, devuelve true</returns>
+        public static bool guardarLineaAdmin(string omi, string linea)
+        {
+            return false;
+        }
     }
 }

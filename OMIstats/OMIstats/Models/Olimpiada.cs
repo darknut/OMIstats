@@ -282,5 +282,29 @@ namespace OMIstats.Models
 
             return tabla.ToString();
         }
+
+        /// <summary>
+        /// Guarda en la base de datos la tabla de asistentes
+        /// </summary>
+        /// <param name="tabla">La nueva tabla de asistentes, un asistente por renglon
+        /// y tabulada con comas</param>
+        /// <returns>Los registros que ocasionaron error</returns>
+        public string guardarTablaAsistentes(string tabla)
+        {
+            StringBuilder errores = new StringBuilder();
+            string[] lineas;
+
+            lineas = tabla.Split('\n');
+            foreach (string linea in lineas)
+            {
+                if (MiembroDelegacion.guardarLineaAdmin(numero, linea))
+                {
+                    errores.Append(linea);
+                    errores.Append("\n");
+                }
+            }
+
+            return errores.ToString();
+        }
     }
 }

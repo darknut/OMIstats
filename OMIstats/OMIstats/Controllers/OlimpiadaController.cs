@@ -168,5 +168,27 @@ namespace OMIstats.Controllers
 
             return View();
         }
+
+        //
+        // POST: /Olimpiada/Attendees/
+
+        [HttpPost]
+        public ActionResult Attendees(string tabla, string clave)
+        {
+            if (!esAdmin() || tabla == null || clave == null)
+                return RedirectTo(Pagina.HOME);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave);
+
+            if (o == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            ViewBag.asistentes = tabla;
+            ViewBag.omi = clave;
+
+            ViewBag.errores = o.guardarTablaAsistentes(tabla);
+            // -TODO- Agregar errores
+            return View();
+        }
     }
 }
