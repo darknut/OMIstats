@@ -45,6 +45,8 @@ namespace OMIstats.Models
 
         public int estados { get; set; }
 
+        public bool datosPublicos { get; set; }
+
         public int participantes { get; set; }
 
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
@@ -98,6 +100,7 @@ namespace OMIstats.Models
             poster = datos["poster"].ToString().Trim();
             estados = (int)datos["estados"];
             participantes = (int)datos["participantes"];
+            datosPublicos = (bool)datos["datospublicos"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -184,12 +187,10 @@ namespace OMIstats.Models
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
         /// <param name="clave">La nueva clave para el objeto</param>
-        /// <param name="todos">true si todos los valores deben de guardarse,
-        /// false si solo los valores estaticos deben de guardarse</param>
         /// <returns>Si se guardó satisfactoriamente el objeto</returns>
         /// <remarks>Crea un nuevo objeto instutucion si la institucion
         /// referenciada no existe</remarks>
-        public bool guardarDatos(string clave = null, bool todos = false)
+        public bool guardarDatos(string clave = null)
         {
             if (clave == null)
                 clave = numero;
@@ -231,17 +232,16 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(video));
             query.Append(", poster = ");
             query.Append(Utilities.Cadenas.comillas(poster));
-            if (todos)
-            {
-                query.Append(", media = ");
-                query.Append(media);
-                query.Append(", mediana = ");
-                query.Append(mediana);
-                query.Append(", estados = ");
-                query.Append(estados);
-                query.Append(", participantes = ");
-                query.Append(participantes);
-            }
+            query.Append(", media = ");
+            query.Append(media);
+            query.Append(", mediana = ");
+            query.Append(mediana);
+            query.Append(", estados = ");
+            query.Append(estados);
+            query.Append(", participantes = ");
+            query.Append(participantes);
+            query.Append(", datospublicos = ");
+            query.Append(datosPublicos ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
 

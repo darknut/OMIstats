@@ -91,6 +91,45 @@ else
                 </div>
 
                 <div>
+                    <div class="label">Media:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.media)
+                        @Html.ValidationMessageFor(model => model.media)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Mediana:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.mediana)
+                        @Html.ValidationMessageFor(model => model.mediana)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Estados participantes:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.estados)
+                        @Html.ValidationMessageFor(model => model.estados)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Número de participantes:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.participantes)
+                        @Html.ValidationMessageFor(model => model.participantes)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Datos públicos:</div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.datosPublicos)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">Escuela sede:</div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.nombreEscuela)

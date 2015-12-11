@@ -30,4 +30,9 @@
 
 <form name="asistentesOMI" id="asistentesOMI" action="/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
     <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.asistentes</textarea>
+
+    <div class="label">
+        <input type="button" onclick="muestraLoadGifYSubmit('asistentesOMI')" value="Enviar"/>
+        <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+    </div>
 </form>
