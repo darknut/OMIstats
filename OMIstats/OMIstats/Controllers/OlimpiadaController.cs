@@ -67,6 +67,7 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
             ViewBag.clave = clave;
+            ViewBag.poster = o.poster;
 
             return View(o);
         }
@@ -75,7 +76,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/Edit/
 
         [HttpPost]
-        public ActionResult Edit(Olimpiada omi, string clave, HttpPostedFileBase fileLogo, HttpPostedFileBase filePoster)
+        public ActionResult Edit(Olimpiada omi, string clave, string poster, HttpPostedFileBase fileLogo, HttpPostedFileBase filePoster)
         {
             if (!esAdmin() || omi == null)
                 return RedirectTo(Pagina.HOME);
@@ -86,6 +87,8 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
             ViewBag.clave = clave;
+            ViewBag.poster = poster;
+            omi.poster = poster;
             omi.logo = o.logo;
 
             if (!ModelState.IsValid)
