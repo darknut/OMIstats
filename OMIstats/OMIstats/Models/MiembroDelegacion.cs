@@ -28,6 +28,23 @@ namespace OMIstats.Models
             NADA
         }
 
+        private enum Campos
+        {
+            USUARIO = 0,
+            NOMBRE,
+            ESTADO,
+            TIPO,
+            CLAVE,
+            NACIMIENTO,
+            GENERO,
+            CORREO,
+            ESCUELA,
+            NIVEL,
+            AÑO,
+            PRIVADA,
+            ELIMINAR
+        }
+
         // Este objeto debe de ser contenido por un objeto olimpiada,
         // por eso no cargamos un objeto olimpiada aqui
 
@@ -59,6 +76,14 @@ namespace OMIstats.Models
             nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
             añoEscuela = (int)row["año"];
             escuelaPublica = (bool)row["publica"];
+        }
+
+        private static string obtenerCampo(string []datos, Campos campo)
+        {
+            int i = (int)campo;
+            if (datos.Length <= i)
+                return null;
+            return datos[i];
         }
 
         /// <summary>
@@ -197,6 +222,33 @@ namespace OMIstats.Models
         /// <returns>Si hubo un error, devuelve true</returns>
         public static bool guardarLineaAdmin(string omi, string linea)
         {
+            try
+            {
+                string[] datos = linea.Split(',');
+
+                // Verificar que exista el usuario
+
+                string usuario = obtenerCampo(datos, Campos.USUARIO);
+                if (usuario == null)
+                    return true;
+
+                if (usuario.Length == 0)
+                {
+                    // El usuario se desconoce, hay que buscarlo
+                }
+                else
+                {
+                    // El usuario ya existe, hay que actualizar los datos
+
+                    Persona p = Persona.obtenerPersonaDeUsuario(usuario);
+                    if (p == null)
+                        return true;
+                }
+            }
+            catch (Exception)
+            {
+                return true;
+            }
             return false;
         }
     }

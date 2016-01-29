@@ -70,3 +70,9 @@
 .instrucciones {
     font-weight:bold;
 }
+
+.code {
+    margin-left:35px;
+    font-size:12px;
+    font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+}

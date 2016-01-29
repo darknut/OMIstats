@@ -168,6 +168,7 @@ namespace OMIstats.Controllers
 
             ViewBag.asistentes = o.obtenerTablaAsistentes();
             ViewBag.omi = clave;
+            limpiarErroresViewBag();
 
             return View();
         }
@@ -186,11 +187,11 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            limpiarErroresViewBag();
             ViewBag.asistentes = tabla;
             ViewBag.omi = clave;
+            ViewBag.errorInfo = o.guardarTablaAsistentes(tabla);
 
-            ViewBag.errores = o.guardarTablaAsistentes(tabla);
-            // -TODO- Agregar errores
             return View();
         }
     }

@@ -11,6 +11,23 @@
 
 <h2 class="titulo">Asistentes de la @Url.Content(ViewBag.omi + "ª") OMI</h2>
 
+@if (ViewBag.errorInfo != "")
+{
+    <p class="ejemplos errorTextoRojo instrucciones">
+        Hubo un error en las siguientes líneas
+    </p>
+
+    <p class="ejemplos code">
+        @Html.Raw(Html.Encode(ViewBag.errorInfo).Replace("\n", "<br />"))
+    </p>
+
+    <p class="ejemplos">
+        El resto de las líneas se guardaron satisfactoriamente
+    </p>
+}
+else
+{
+
 <p class="ejemplos">
     <span class="instrucciones">ORDEN:</span> <span class="opcional">(campos en italicas son opcionales)</span>
 </p>
@@ -28,6 +45,7 @@
     <br />
     , Fulanita Perez, MDF, competidor, DIF-3, , F, , EST 99, secundaria, 3, privada, ELIMINAR
 </p>
+}
 
 <form name="asistentesOMI" id="asistentesOMI" action="/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
     <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.asistentes</textarea>
