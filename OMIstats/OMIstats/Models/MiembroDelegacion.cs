@@ -11,6 +11,7 @@ namespace OMIstats.Models
     {
         public enum TipoAsistente
         {
+            NULL,
             COMPETIDOR,
             ASESOR,
             LIDER,
@@ -22,27 +23,11 @@ namespace OMIstats.Models
 
         public enum TipoMedalla
         {
+            NULL,
             ORO,
             PLATA,
             BRONCE,
-            NADA
-        }
-
-        private enum Campos
-        {
-            USUARIO = 0,
-            NOMBRE,
-            ESTADO,
-            TIPO,
-            CLAVE,
-            NACIMIENTO,
-            GENERO,
-            CORREO,
-            ESCUELA,
-            NIVEL,
-            AÑO,
-            PRIVADA,
-            ELIMINAR
+            NADA,
         }
 
         // Este objeto debe de ser contenido por un objeto olimpiada,
@@ -62,6 +47,27 @@ namespace OMIstats.Models
         public TipoAsistente tipo;
         public TipoMedalla medalla;
 
+        private bool eliminar;
+
+        public MiembroDelegacion()
+        {
+            usuario = "";
+            nombreAsistente = "";
+            fechaNacimiento = "";
+            correo = "";
+            genero = "";
+            nombreEscuela = "";
+            escuelaPublica = false;
+            nivelEscuela = Institucion.NivelInstitucion.NULL;
+            añoEscuela = 0;
+            clave = "";
+            estado = "";
+            tipo = TipoAsistente.NULL;
+            medalla = TipoMedalla.NULL;
+
+            eliminar = false;
+        }
+
         private void llenarDatos(DataRow row)
         {
             usuario = row["usuario"].ToString().Trim();
@@ -78,12 +84,34 @@ namespace OMIstats.Models
             escuelaPublica = (bool)row["publica"];
         }
 
-        private static string obtenerCampo(string []datos, Campos campo)
+        private void obtenerCampos(string []datos)
         {
-            int i = (int)campo;
-            if (datos.Length <= i)
-                return null;
-            return datos[i];
+            if (datos.Length > 0)
+                usuario = datos[0].Trim();
+            if (datos.Length > 1)
+                nombreAsistente = datos[1].Trim();
+            if (datos.Length > 2)
+                estado = datos[2].Trim();
+            if (datos.Length > 3)
+                tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[3].Trim().ToUpper());
+            if (datos.Length > 4)
+                clave = datos[4].Trim();
+            if (datos.Length > 5)
+                fechaNacimiento = datos[5].Trim();
+            if (datos.Length > 6)
+                genero = datos[6].Trim().ToCharArray()[0].ToString().ToUpper();
+            if (datos.Length > 7)
+                correo = datos[7].Trim();
+            if (datos.Length > 8)
+                nombreEscuela = datos[8].Trim();
+            if (datos.Length > 9)
+                nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[9].Trim().ToUpper());
+            if (datos.Length > 10)
+                añoEscuela = Int32.Parse(datos[10]);
+            if (datos.Length > 11)
+                escuelaPublica = datos[11].Trim().Equals("publica", StringComparison.InvariantCultureIgnoreCase);
+            if (datos.Length > 12)
+                eliminar = datos[12].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -222,28 +250,81 @@ namespace OMIstats.Models
         /// <returns>Si hubo un error, devuelve true</returns>
         public static bool guardarLineaAdmin(string omi, string linea)
         {
+            if (linea.Trim().Length == 0)
+                return false;
+
             try
             {
+                Persona p = null;
                 string[] datos = linea.Split(',');
+
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.obtenerCampos(datos);
+
+                // Verificamos que los datos mandatorios se hayan dado
+
+                if (md.nombreAsistente.Length == 0 ||
+                    md.estado.Length == 0 ||
+                    md.tipo == TipoAsistente.NULL ||
+                    md.clave.Length == 0 ||
+                    md.genero.Length != 1 ||
+                    md.nombreEscuela.Length == 0 ||
+                    md.nivelEscuela == Institucion.NivelInstitucion.NULL ||
+                    md.añoEscuela == 0)
+                    return true;
 
                 // Verificar que exista el usuario
 
-                string usuario = obtenerCampo(datos, Campos.USUARIO);
-                if (usuario == null)
-                    return true;
-
-                if (usuario.Length == 0)
+                if (md.usuario.Length == 0)
                 {
                     // El usuario se desconoce, hay que buscarlo
+
+                    p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
+
+                    // El usuario es nuevo, lo creamos
+
+                    if (p == null)
+                    {
+                        p = new Persona();
+                        p.nombre = md.nombreAsistente;
+
+                        Utilities.Archivos.FotoInicial foto = Utilities.Archivos.FotoInicial.DOMI;
+                        if (md.tipo == TipoAsistente.COMI || md.tipo == TipoAsistente.COLO)
+                            foto = Utilities.Archivos.FotoInicial.OMI;
+                        if (md.tipo == TipoAsistente.COMPETIDOR)
+                            foto = Utilities.Archivos.FotoInicial.KAREL;
+
+                        p.nuevoUsuario(foto);
+                    }
                 }
                 else
                 {
-                    // El usuario ya existe, hay que actualizar los datos
+                    // El usuario está presente, lo sacamos de la base
 
-                    Persona p = Persona.obtenerPersonaDeUsuario(usuario);
+                    p = Persona.obtenerPersonaDeUsuario(md.usuario);
+
+                    // Si el usuario no existe, hay que lanzar un error
+
                     if (p == null)
                         return true;
                 }
+
+                // Ya se tiene un usuario valido, guardamos sus datos
+
+                p.nombre = md.nombreAsistente;
+
+                if (md.fechaNacimiento.Length > 0)
+                    p.nacimiento = Utilities.Fechas.stringToDate(md.fechaNacimiento);
+
+                p.genero = md.genero;
+
+                if (md.correo.Length > 0)
+                    p.correo = md.correo;
+
+                if (!p.guardarDatos())
+                    return true;
+
+                md.usuario = p.usuario;
             }
             catch (Exception)
             {

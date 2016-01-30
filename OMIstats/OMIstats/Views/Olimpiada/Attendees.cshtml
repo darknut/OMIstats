@@ -11,48 +11,57 @@
 
 <h2 class="titulo">Asistentes de la @Url.Content(ViewBag.omi + "ª") OMI</h2>
 
-@if (ViewBag.errorInfo != "")
+@if (ViewBag.guardado)
 {
-    <p class="ejemplos errorTextoRojo instrucciones">
-        Hubo un error en las siguientes líneas
-    </p>
-
-    <p class="ejemplos code">
-        @Html.Raw(Html.Encode(ViewBag.errorInfo).Replace("\n", "<br />"))
+    <p class="ejemplos verde">
+        Los cambios de guardaron satisfactoriamente.
     </p>
 
     <p class="ejemplos">
-        El resto de las líneas se guardaron satisfactoriamente
+        <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.omi)">Volver al perfil de la Olimpiada</a>
     </p>
 }
 else
 {
+    if (ViewBag.errorOMI)
+    {
+        <p class="ejemplos errorTextoRojo instrucciones">
+            Hubo un error en las siguientes líneas
+        </p>
 
-<p class="ejemplos">
-    <span class="instrucciones">ORDEN:</span> <span class="opcional">(campos en italicas son opcionales)</span>
-</p>
+        <p class="ejemplos">
+            El resto de las líneas se guardaron satisfactoriamente
+        </p>
+    }
+    else
+    {
 
-<p class="ejemplos">
-    <span class="opcional">usuario</span>, nombre, estado, tipo asistente, clave, <span class="opcional">fecha nacimiento</span>, genero, <span class="opcional">correo</span>, escuela, nivel escuela, año escolar, publica o privada, <splan class="opcional">ELIMINAR</splan>
-</p>
+        <p class="ejemplos">
+            <span class="instrucciones">ORDEN:</span> <span class="opcional">(campos en italicas son opcionales)</span>
+        </p>
 
-<p class="ejemplos">
-    <span class="instrucciones">EJEMPLOS:</span>
-</p>
+        <p class="ejemplos">
+            <span class="opcional">usuario</span>, nombre, estado, tipo asistente, clave, <span class="opcional">fecha nacimiento</span>, genero, <span class="opcional">correo</span>, escuela, nivel escuela, año escolar, publica o privada, <splan class="opcional">ELIMINAR</splan>
+        </p>
 
-<p class="ejemplos">
-    darknut, Félix Rafael Horta Cuadrilla, MEX, competidor, MEX-1, 12/07/1988, M, felix.cuadrilla@gmail.com, CECyT 9, preparatoria, 2, publica
-    <br />
-    , Fulanita Perez, MDF, competidor, DIF-3, , F, , EST 99, secundaria, 3, privada, ELIMINAR
-</p>
+        <p class="ejemplos">
+            <span class="instrucciones">EJEMPLOS:</span>
+        </p>
+
+        <p class="ejemplos">
+            darknut, Félix Rafael Horta Cuadrilla, MEX, competidor, MEX-1, 12/07/1988, M, felix.cuadrilla@gmail.com, CECyT 9, preparatoria, 2, publica
+            <br />
+            , Fulanita Perez, MDF, competidor, DIF-3, , F, , EST 99, secundaria, 3, privada, ELIMINAR
+        </p>
+    }
+
+    <form name="asistentesOMI" id="asistentesOMI" action="/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
+        <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.asistentes</textarea>
+        <input name="clave" id="clave" type="hidden" value="@ViewBag.omi" />
+
+        <div class="ejemplos">
+            <input type="button" onclick="muestraLoadGifYSubmit('asistentesOMI')" value="Enviar"/>
+            <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+        </div>
+    </form>
 }
-
-<form name="asistentesOMI" id="asistentesOMI" action="/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
-    <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.asistentes</textarea>
-    <input name="clave" id="clave" type="hidden" value="@ViewBag.omi" />
-
-    <div class="ejemplos">
-        <input type="button" onclick="muestraLoadGifYSubmit('asistentesOMI')" value="Enviar"/>
-        <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
-    </div>
-</form>

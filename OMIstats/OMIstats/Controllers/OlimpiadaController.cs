@@ -188,9 +188,17 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             limpiarErroresViewBag();
-            ViewBag.asistentes = tabla;
             ViewBag.omi = clave;
-            ViewBag.errorInfo = o.guardarTablaAsistentes(tabla);
+
+            string errores = o.guardarTablaAsistentes(tabla);
+
+            if (errores.Length > 0)
+            {
+                ViewBag.errorOMI = true;
+                ViewBag.asistentes = errores;
+            }
+            else
+                ViewBag.guardado = true;
 
             return View();
         }
