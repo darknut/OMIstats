@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace OMIstats.Models
@@ -28,6 +29,18 @@ namespace OMIstats.Models
             PLATA,
             BRONCE,
             NADA,
+        }
+
+        public enum TipoError
+        {
+            OK,
+            CASTING,
+            FALTAN_CAMPOS,
+            USUARIO_INEXISTENTE,
+            CAMPOS_USUARIO,
+            FECHA_NACIMIENTO,
+            CORREO,
+            ESTADO
         }
 
         // Este objeto debe de ser contenido por un objeto olimpiada,
@@ -247,125 +260,145 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="omi">La clave de la olimpiada</param>
         /// <param name="linea">Los datos tabulados por comas</param>
-        /// <returns>Si hubo un error, devuelve true</returns>
-        public static bool guardarLineaAdmin(string omi, string linea)
+        /// <returns>Si hubo un error, lo devuelve</returns>
+        public static TipoError guardarLineaAdmin(string omi, string linea)
         {
             if (linea.Trim().Length == 0)
-                return false;
+                return TipoError.OK;
+
+            Persona p = null;
+            string[] datos = linea.Split(',');
+            MiembroDelegacion md = new MiembroDelegacion();
 
             try
             {
-                Persona p = null;
-                string[] datos = linea.Split(',');
-
-                MiembroDelegacion md = new MiembroDelegacion();
                 md.obtenerCampos(datos);
-
-                // Verificamos que los datos mandatorios se hayan dado
-
-                if (md.nombreAsistente.Length == 0 ||
-                    md.estado.Length == 0 ||
-                    md.tipo == TipoAsistente.NULL ||
-                    md.clave.Length == 0 ||
-                    md.genero.Length != 1 ||
-                    md.nombreEscuela.Length == 0 ||
-                    md.nivelEscuela == Institucion.NivelInstitucion.NULL ||
-                    md.añoEscuela == 0)
-                    return true;
-
-                // Verificar que exista el usuario
-
-                if (md.usuario.Length == 0)
-                {
-                    // El usuario se desconoce, hay que buscarlo
-
-                    p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
-
-                    // El usuario es nuevo, lo creamos
-
-                    if (p == null)
-                    {
-                        p = new Persona();
-                        p.nombre = md.nombreAsistente;
-
-                        Utilities.Archivos.FotoInicial foto = Utilities.Archivos.FotoInicial.DOMI;
-                        if (md.tipo == TipoAsistente.COMI || md.tipo == TipoAsistente.COLO)
-                            foto = Utilities.Archivos.FotoInicial.OMI;
-                        if (md.tipo == TipoAsistente.COMPETIDOR)
-                            foto = Utilities.Archivos.FotoInicial.KAREL;
-
-                        p.nuevoUsuario(foto);
-                    }
-                }
-                else
-                {
-                    // El usuario está presente, lo sacamos de la base
-
-                    p = Persona.obtenerPersonaDeUsuario(md.usuario);
-
-                    // Si el usuario no existe, hay que lanzar un error
-
-                    if (p == null)
-                        return true;
-                }
-
-                // Ya se tiene un usuario valido, guardamos sus datos
-
-                p.nombre = md.nombreAsistente;
-
-                if (md.fechaNacimiento.Length > 0)
-                    p.nacimiento = Utilities.Fechas.stringToDate(md.fechaNacimiento);
-
-                p.genero = md.genero;
-
-                if (md.correo.Length > 0)
-                    p.correo = md.correo;
-
-                if (!p.guardarDatos())
-                    return true;
-
-                md.usuario = p.usuario;
-
-                // Revisamos que exista la escuela
-
-                Institucion i = Institucion.buscarInstitucionConNombre(md.nombreEscuela);
-
-                if (i == null)
-                {
-                    // La escuela es nueva, creamos una nueva.
-
-                    i = new Institucion();
-                    i.nombre = md.nombreEscuela;
-                    i.nuevaInstitucion();
-                }
-
-                // Ya tenemos un objeto institución, actualizamos los datos
-
-                switch (md.nivelEscuela)
-                {
-                    case Institucion.NivelInstitucion.PRIMARIA:
-                        i.primaria = true;
-                        break;
-                    case Institucion.NivelInstitucion.SECUNDARIA:
-                        i.secundaria = true;
-                        break;
-                    case Institucion.NivelInstitucion.PREPARATORIA:
-                        i.preparatoria = true;
-                        break;
-                    case Institucion.NivelInstitucion.UNIVERSIDAD:
-                        i.universidad = true;
-                        break;
-                }
-
-                i.publica = md.escuelaPublica;
-
-                i.guardar(generarPeticiones: false);
             }
             catch (Exception)
             {
-                return true;
+                return TipoError.CASTING;
             }
-            return false;
+
+            // Verificamos que los datos mandatorios se hayan dado
+
+            if (md.nombreAsistente.Length == 0 ||
+                md.estado.Length == 0 ||
+                md.tipo == TipoAsistente.NULL ||
+                md.clave.Length == 0 ||
+                md.genero.Length != 1 ||
+                md.nombreEscuela.Length == 0 ||
+                md.nivelEscuela == Institucion.NivelInstitucion.NULL ||
+                md.añoEscuela == 0)
+                return TipoError.FALTAN_CAMPOS;
+
+            // Verificar que exista el usuario
+
+            if (md.usuario.Length == 0)
+            {
+                // El usuario se desconoce, hay que buscarlo
+
+                p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
+
+                // El usuario es nuevo, lo creamos
+
+                if (p == null)
+                {
+                    p = new Persona();
+                    p.nombre = md.nombreAsistente;
+
+                    Utilities.Archivos.FotoInicial foto = Utilities.Archivos.FotoInicial.DOMI;
+                    if (md.tipo == TipoAsistente.COMI || md.tipo == TipoAsistente.COLO)
+                        foto = Utilities.Archivos.FotoInicial.OMI;
+                    if (md.tipo == TipoAsistente.COMPETIDOR)
+                        foto = Utilities.Archivos.FotoInicial.KAREL;
+
+                    p.nuevoUsuario(foto);
+                }
+            }
+            else
+            {
+                // El usuario está presente, lo sacamos de la base
+
+                p = Persona.obtenerPersonaDeUsuario(md.usuario);
+
+                // Si el usuario no existe, hay que lanzar un error
+
+                if (p == null)
+                    return TipoError.USUARIO_INEXISTENTE;
+            }
+
+            // Ya se tiene un usuario valido, guardamos sus datos
+
+            p.nombre = md.nombreAsistente;
+
+            try
+            {
+                if (md.fechaNacimiento.Length > 0)
+                    p.nacimiento = Utilities.Fechas.stringToDate(md.fechaNacimiento);
+            }
+            catch (Exception)
+            {
+                return TipoError.FECHA_NACIMIENTO;
+            }
+
+            p.genero = md.genero;
+
+            if (md.correo.Length > 0)
+            {
+                Regex regex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$");
+                if (!regex.IsMatch(md.correo))
+                    return TipoError.CORREO;
+                p.correo = md.correo;
+            }
+
+            if (!p.guardarDatos())
+                return TipoError.CAMPOS_USUARIO;
+
+            md.usuario = p.usuario;
+
+            // Revisamos que exista la escuela
+
+            Institucion i = Institucion.buscarInstitucionConNombre(md.nombreEscuela);
+
+            if (i == null)
+            {
+                // La escuela es nueva, creamos una nueva.
+
+                i = new Institucion();
+                i.nombre = md.nombreEscuela;
+                i.nuevaInstitucion();
+            }
+
+            // Ya tenemos un objeto institución, actualizamos los datos
+
+            switch (md.nivelEscuela)
+            {
+                case Institucion.NivelInstitucion.PRIMARIA:
+                    i.primaria = true;
+                    break;
+                case Institucion.NivelInstitucion.SECUNDARIA:
+                    i.secundaria = true;
+                    break;
+                case Institucion.NivelInstitucion.PREPARATORIA:
+                    i.preparatoria = true;
+                    break;
+                case Institucion.NivelInstitucion.UNIVERSIDAD:
+                    i.universidad = true;
+                    break;
+            }
+
+            i.publica = md.escuelaPublica;
+
+            i.guardar(generarPeticiones: false);
+
+            // Revisamos que el estado exista
+
+            Estado e = Estado.obtenerEstadoConClave(md.estado);
+
+            if (e == null)
+                return TipoError.ESTADO;
+
+            return TipoError.OK;
         }
     }
 }

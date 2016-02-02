@@ -297,9 +297,12 @@ namespace OMIstats.Models
             lineas = tabla.Split('\n');
             foreach (string linea in lineas)
             {
-                if (MiembroDelegacion.guardarLineaAdmin(numero, linea))
+                MiembroDelegacion.TipoError error = MiembroDelegacion.guardarLineaAdmin(numero, linea.Trim());
+                if (error != MiembroDelegacion.TipoError.OK)
                 {
-                    errores.Append(linea);
+                    errores.Append(linea.Trim());
+                    errores.Append(": ");
+                    errores.Append(error.ToString());
                     errores.Append("\n");
                 }
             }
