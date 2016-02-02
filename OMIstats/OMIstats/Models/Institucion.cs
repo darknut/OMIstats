@@ -164,6 +164,47 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa la institucion con el nombre mandado como parametro
+        /// Este método busca en todos los campos de nombre: nombre, nombrecorto y nombreurl
+        /// </summary>
+        /// <param name="nombre">El nombre de la institucion</param>
+        /// <returns>El objeto institucion</returns>
+        public static Institucion buscarInstitucionConNombre(string nombre)
+        {
+            Institucion i = obtenerInstitucionConNombreCorto(nombre);
+
+            if (i != null)
+                return i;
+
+            i = obtenerInstitucionConNombreURL(nombre);
+
+            if (i != null)
+                return i;
+
+            string hash = Utilities.Cadenas.quitaEspeciales(nombre);
+            hash = Utilities.Cadenas.quitaEspacios(hash);
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from institucion where nombrehash = HASHBYTES(\'SHA1\', ");
+            query.Append(Utilities.Cadenas.comillas(hash));
+            query.Append(")");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            i = new Institucion();
+            i.llenarDatos(table.Rows[0]);
+
+            return i;
+        }
+
+        /// <summary>
         /// Guarda los datos en este objeto a la base de datos
         /// </summary>
         private bool guardarDatos()
@@ -183,6 +224,8 @@ namespace OMIstats.Models
                 nombreURL = nombreCorto;
                 nombreURL = Utilities.Cadenas.quitaEspeciales(nombreURL);
                 nombreURL = Utilities.Cadenas.quitaEspacios(nombreURL);
+                if (nombreURL.Length > 10)
+                    nombreURL = nombreURL.Substring(0, 10);
             }
 
             Institucion temp = obtenerInstitucionConNombreURL(nombreURL);

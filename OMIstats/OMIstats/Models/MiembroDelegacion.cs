@@ -325,6 +325,41 @@ namespace OMIstats.Models
                     return true;
 
                 md.usuario = p.usuario;
+
+                // Revisamos que exista la escuela
+
+                Institucion i = Institucion.buscarInstitucionConNombre(md.nombreEscuela);
+
+                if (i == null)
+                {
+                    // La escuela es nueva, creamos una nueva.
+
+                    i = new Institucion();
+                    i.nombre = md.nombreEscuela;
+                    i.nuevaInstitucion();
+                }
+
+                // Ya tenemos un objeto institución, actualizamos los datos
+
+                switch (md.nivelEscuela)
+                {
+                    case Institucion.NivelInstitucion.PRIMARIA:
+                        i.primaria = true;
+                        break;
+                    case Institucion.NivelInstitucion.SECUNDARIA:
+                        i.secundaria = true;
+                        break;
+                    case Institucion.NivelInstitucion.PREPARATORIA:
+                        i.preparatoria = true;
+                        break;
+                    case Institucion.NivelInstitucion.UNIVERSIDAD:
+                        i.universidad = true;
+                        break;
+                }
+
+                i.publica = md.escuelaPublica;
+
+                i.guardar(generarPeticiones: false);
             }
             catch (Exception)
             {
