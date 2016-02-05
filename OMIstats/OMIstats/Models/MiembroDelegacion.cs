@@ -17,9 +17,10 @@ namespace OMIstats.Models
             ASESOR,
             LIDER,
             DELEGADO,
+            DELELIDER,
             COMI,
             COLO,
-            INVITADO
+            INVITADO,
         }
 
         public enum TipoMedalla
@@ -310,15 +311,43 @@ namespace OMIstats.Models
             if (linea.Trim().Length == 0)
                 return TipoError.OK;
 
-            Persona p = null;
-            string[] datos = linea.Split(',');
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
             MiembroDelegacion md = new MiembroDelegacion();
+            Persona p = null;
+            DataTable table = null;
+
+            string[] datos = linea.Split(',');
 
             // Casteamos los datos del string a variables
 
             TipoError err = md.obtenerCampos(datos);
             if (err != TipoError.OK)
                 return err;
+
+            // Borramos al usuario de la tabla
+
+            if (md.eliminar)
+            {
+                p = Persona.obtenerPersonaDeUsuario(md.usuario);
+                if (p == null)
+                    return TipoError.OK;
+
+                query.Append(" delete miembrodelegacion ");
+                query.Append(" where olimpiada = ");
+                query.Append(Utilities.Cadenas.comillas(omi));
+                query.Append(" and persona = ");
+                query.Append(p.clave);
+                query.Append(" and estado = ");
+                query.Append(Utilities.Cadenas.comillas(md.estado));
+
+                db.EjecutarQuery(query.ToString());
+                table = db.getTable();
+
+                // -TODO- Eliminar antigua clave en tabla resultados
+
+                return TipoError.OK;
+            }
 
             // Verificamos que los datos mandatorios se hayan dado
 
@@ -441,17 +470,17 @@ namespace OMIstats.Models
 
             // Buscamos ahora si ya hay un miembro con estos datos
 
-            StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
-
             query.Append(" select * from miembrodelegacion ");
             query.Append(" where olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and persona = ");
             query.Append(p.clave);
+            // Agregamos estado por casos como Martín que tienen dos roles en diferentes estados
+            query.Append(" and estado = ");
+            query.Append(Utilities.Cadenas.comillas(md.estado));
 
             db.EjecutarQuery(query.ToString());
-            DataTable table = db.getTable();
+            table = db.getTable();
 
             if (table.Rows.Count == 0)
             {
@@ -487,10 +516,13 @@ namespace OMIstats.Models
                 MiembroDelegacion md_current = new MiembroDelegacion();
                 md_current.llenarDatos(table.Rows[0], incluirTablasAjenas: false);
 
+                if (md_current.clave != md.clave)
+                {
+                    // -TODO- Eliminar antigua clave en tabla resultados
+                }
+
                 query.Clear();
-                query.Append(" update miembrodelegacion set estado = ");
-                query.Append(Utilities.Cadenas.comillas(md.estado));
-                query.Append(", clave = ");
+                query.Append(" update miembrodelegacion set clave = ");
                 query.Append(Utilities.Cadenas.comillas(md.clave));
                 query.Append(", tipo = ");
                 query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
@@ -504,6 +536,8 @@ namespace OMIstats.Models
                 query.Append(Utilities.Cadenas.comillas(omi));
                 query.Append(" and persona = ");
                 query.Append(p.clave);
+                query.Append(" and estado = ");
+                query.Append(Utilities.Cadenas.comillas(md.estado));
 
                 db.EjecutarQuery(query.ToString());
             }
