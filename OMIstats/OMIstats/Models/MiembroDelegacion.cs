@@ -25,6 +25,9 @@ namespace OMIstats.Models
         public enum TipoMedalla
         {
             NULL,
+            ORO_1,
+            ORO_2,
+            ORO_3,
             ORO,
             PLATA,
             BRONCE,
@@ -34,13 +37,16 @@ namespace OMIstats.Models
         public enum TipoError
         {
             OK,
-            CASTING,
             FALTAN_CAMPOS,
             USUARIO_INEXISTENTE,
             CAMPOS_USUARIO,
             FECHA_NACIMIENTO,
             CORREO,
-            ESTADO
+            ESTADO,
+            TIPO_ASISTENTE,
+            GENERO,
+            NIVEL_INSTITUCION,
+            AñO_ESCUELA
         }
 
         // Este objeto debe de ser contenido por un objeto olimpiada,
@@ -81,23 +87,28 @@ namespace OMIstats.Models
             eliminar = false;
         }
 
-        private void llenarDatos(DataRow row)
+        private void llenarDatos(DataRow row, bool incluirTablasAjenas)
         {
-            usuario = row["usuario"].ToString().Trim();
-            nombreAsistente = row["nombre"].ToString().Trim();
+            if (incluirTablasAjenas)
+            {
+                usuario = row["usuario"].ToString().Trim();
+                nombreAsistente = row["nombre"].ToString().Trim();
+                fechaNacimiento = row["nacimiento"].ToString().Trim();
+                genero = row["genero"].ToString().Trim();
+                correo = row["correo"].ToString().Trim();
+                nombreEscuela = row["nombreCorto"].ToString().Trim();
+                escuelaPublica = (bool)row["publica"];
+            }
+
             estado = row["estado"].ToString().Trim();
-            tipo = (TipoAsistente) Enum.Parse(typeof (TipoAsistente), row["tipo"].ToString().ToUpper());
             clave = row["clave"].ToString().Trim();
-            fechaNacimiento = row["nacimiento"].ToString().Trim();
-            genero = row["genero"].ToString().Trim();
-            correo = row["correo"].ToString().Trim();
-            nombreEscuela = row["nombreCorto"].ToString().Trim();
+            tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
+            medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString().ToUpper());
             nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
             añoEscuela = (int)row["año"];
-            escuelaPublica = (bool)row["publica"];
         }
 
-        private void obtenerCampos(string []datos)
+        private TipoError obtenerCampos(string []datos)
         {
             if (datos.Length > 0)
                 usuario = datos[0].Trim();
@@ -105,26 +116,59 @@ namespace OMIstats.Models
                 nombreAsistente = datos[1].Trim();
             if (datos.Length > 2)
                 estado = datos[2].Trim();
-            if (datos.Length > 3)
-                tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[3].Trim().ToUpper());
+            try
+            {
+                if (datos.Length > 3)
+                    tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[3].Trim().ToUpper());
+            }
+            catch (Exception)
+            {
+                return TipoError.TIPO_ASISTENTE;
+            }
             if (datos.Length > 4)
                 clave = datos[4].Trim();
             if (datos.Length > 5)
                 fechaNacimiento = datos[5].Trim();
-            if (datos.Length > 6)
-                genero = datos[6].Trim().ToCharArray()[0].ToString().ToUpper();
+            try
+            {
+                if (datos.Length > 6)
+                    genero = datos[6].Trim().ToCharArray()[0].ToString().ToUpper();
+                if (genero != "M" && genero != "F")
+                    return TipoError.GENERO;
+            }
+            catch (Exception)
+            {
+                return TipoError.GENERO;
+            }
             if (datos.Length > 7)
                 correo = datos[7].Trim();
             if (datos.Length > 8)
                 nombreEscuela = datos[8].Trim();
-            if (datos.Length > 9)
-                nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[9].Trim().ToUpper());
-            if (datos.Length > 10)
-                añoEscuela = Int32.Parse(datos[10]);
+            try
+            {
+                if (datos.Length > 9)
+                    nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[9].Trim().ToUpper());
+            }
+            catch (Exception)
+            {
+                return TipoError.NIVEL_INSTITUCION;
+            }
+            try
+            {
+                if (datos.Length > 10)
+                    añoEscuela = Int32.Parse(datos[10]);
+                if (añoEscuela < 1 || añoEscuela > 6)
+                    return TipoError.AñO_ESCUELA;
+            } catch (Exception)
+            {
+                return TipoError.AñO_ESCUELA;
+            }
             if (datos.Length > 11)
                 escuelaPublica = datos[11].Trim().Equals("publica", StringComparison.InvariantCultureIgnoreCase);
             if (datos.Length > 12)
                 eliminar = datos[12].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
+
+            return TipoError.OK;
         }
 
         /// <summary>
@@ -197,7 +241,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
-            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel, md.medalla,");
             query.Append(" md.año, i.publica from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" inner join Institucion as i on i.clave = md.institucion");
@@ -211,7 +255,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 MiembroDelegacion md = new MiembroDelegacion();
-                md.llenarDatos(r);
+                md.llenarDatos(r, incluirTablasAjenas:true);
 
                 lista.Add(md);
             }
@@ -270,14 +314,11 @@ namespace OMIstats.Models
             string[] datos = linea.Split(',');
             MiembroDelegacion md = new MiembroDelegacion();
 
-            try
-            {
-                md.obtenerCampos(datos);
-            }
-            catch (Exception)
-            {
-                return TipoError.CASTING;
-            }
+            // Casteamos los datos del string a variables
+
+            TipoError err = md.obtenerCampos(datos);
+            if (err != TipoError.OK)
+                return err;
 
             // Verificamos que los datos mandatorios se hayan dado
 
@@ -397,6 +438,75 @@ namespace OMIstats.Models
 
             if (e == null)
                 return TipoError.ESTADO;
+
+            // Buscamos ahora si ya hay un miembro con estos datos
+
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select * from miembrodelegacion ");
+            query.Append(" where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and persona = ");
+            query.Append(p.clave);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+            {
+                // El usuario no existe, lo agregamos
+
+                query.Clear();
+                query.Append(" insert into miembrodelegacion values (");
+                query.Append(Utilities.Cadenas.comillas(omi));
+                query.Append(", ");
+                query.Append(Utilities.Cadenas.comillas(md.estado));
+                query.Append(", ");
+                query.Append(Utilities.Cadenas.comillas(md.clave));
+                query.Append(", ");
+                query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
+                query.Append(", ");
+                query.Append(p.clave);
+                query.Append(", ");
+                query.Append((int)md.medalla);
+                query.Append(", ");
+                query.Append((int)i.clave);
+                query.Append(", ");
+                query.Append((int)md.nivelEscuela);
+                query.Append(", ");
+                query.Append(md.añoEscuela);
+                query.Append(")");
+
+                db.EjecutarQuery(query.ToString());
+            }
+            else
+            {
+                // El usuario existe, cargamos los datos y los actualizamos
+
+                MiembroDelegacion md_current = new MiembroDelegacion();
+                md_current.llenarDatos(table.Rows[0], incluirTablasAjenas: false);
+
+                query.Clear();
+                query.Append(" update miembrodelegacion set estado = ");
+                query.Append(Utilities.Cadenas.comillas(md.estado));
+                query.Append(", clave = ");
+                query.Append(Utilities.Cadenas.comillas(md.clave));
+                query.Append(", tipo = ");
+                query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
+                query.Append(", institucion = ");
+                query.Append((int)i.clave);
+                query.Append(", nivel = ");
+                query.Append((int)md.nivelEscuela);
+                query.Append(", año = ");
+                query.Append(md.añoEscuela);
+                query.Append(" where olimpiada = ");
+                query.Append(Utilities.Cadenas.comillas(omi));
+                query.Append(" and persona = ");
+                query.Append(p.clave);
+
+                db.EjecutarQuery(query.ToString());
+            }
 
             return TipoError.OK;
         }
