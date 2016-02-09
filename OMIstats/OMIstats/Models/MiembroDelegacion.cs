@@ -344,7 +344,7 @@ namespace OMIstats.Models
                 db.EjecutarQuery(query.ToString());
                 table = db.getTable();
 
-                // -TODO- Eliminar antigua clave en tabla resultados
+                // -TODO- Eliminar clave en tabla resultados
 
                 return TipoError.OK;
             }
@@ -518,7 +518,7 @@ namespace OMIstats.Models
 
                 if (md_current.clave != md.clave)
                 {
-                    // -TODO- Eliminar antigua clave en tabla resultados
+                    // -TODO- Actualizar clave en tabla resultados
                 }
 
                 query.Clear();

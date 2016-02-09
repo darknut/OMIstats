@@ -108,3 +108,27 @@
 <div class="clear">
 
 </div>
+
+<div class="datosOlimpiada">
+
+    <h1 class="titulo">Día 1</h1>
+
+    @if (ViewBag.dia1[0] != null)
+    {
+        <p>
+            Problema 1: @ViewBag.dia1[0].nombre
+        </p>
+    }
+    else
+    {
+        <p>
+            Agregar Problema 1
+        </p>
+    }
+
+    <h1 class="titulo">Día 2</h1>
+</div>
+
+<div class="clear">
+
+</div>
