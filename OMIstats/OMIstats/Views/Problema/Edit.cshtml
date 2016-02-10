@@ -1,0 +1,74 @@
+﻿@model OMIstats.Models.Problema
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@{
+    ViewBag.Title = "Editar problema";
+}
+
+<h1 class="titulo">Editar problema</h1>
+
+<form name="editProblema" id="editProblema" action="/Problema/Edit" method="post" enctype="multipart/form-data">
+    <div class="datosFloat">
+        <div>
+            <div class="label">Nombre:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.nombre)
+                @Html.ValidationMessageFor(model => model.nombre)
+            </div>
+        </div>
+
+        <div>
+            <div class="label">URL:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.url)
+                @Html.ValidationMessageFor(model => model.url)
+            </div>
+        </div>
+
+        <div>
+            <div class="label">Media:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.media, new { @class = "smallInput" })
+                @Html.ValidationMessageFor(model => model.media)
+            </div>
+        </div>
+
+        <div>
+            <div class="label">Mediana:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.mediana, new { @class = "smallInput" })
+                @Html.ValidationMessageFor(model => model.mediana)
+            </div>
+        </div>
+
+        <div>
+            <div class="label">Ceros:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.ceros, new { @class = "smallInput" })
+                @Html.ValidationMessageFor(model => model.ceros)
+            </div>
+        </div>
+
+        <div>
+            <div class="label">Perfectos:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.perfectos, new { @class = "smallInput" })
+                @Html.ValidationMessageFor(model => model.perfectos)
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.olimpiada)
+        @Html.HiddenFor(model => model.dia)
+        @Html.HiddenFor(model => model.numero)
+
+        <div class="label">
+            <input type="button" onclick="muestraLoadGifYSubmit('editProblema')" value="Enviar"/>
+            <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+        </div>
+    </div>
+</form>

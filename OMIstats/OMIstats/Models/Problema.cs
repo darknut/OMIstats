@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -15,8 +16,10 @@ namespace OMIstats.Models
 
         public int numero { get; set; }
 
+        [MaxLength(30, ErrorMessage = "El tamaño máximo es de 30 caracteres")]
         public string nombre { get; set; }
 
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string url { get; set; }
 
         public float media { get; set; }
@@ -78,6 +81,44 @@ namespace OMIstats.Models
             }
 
             return problemas;
+        }
+
+        /// <summary>
+        /// Obtiene el problema de la base de datos.
+        /// De no existir, se regresa un objeto nuevo (sin actualizar la base)
+        /// </summary>
+        /// <param name="omi">La omi del problema</param>
+        /// <param name="dia">El día del problema</param>
+        /// <param name="numero">El numero del problema</param>
+        /// <returns>El objeto problema</returns>
+        public static Problema obtenerProblema(string omi, int dia, int numero)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from problema where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and numero = ");
+            query.Append(numero);
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            Problema p = new Problema();
+            if (table.Rows.Count == 0)
+            {
+                p.olimpiada = omi;
+                p.dia = dia;
+                p.numero = numero;
+            }
+            else
+            {
+                p.llenarDatos(table.Rows[0]);
+            }
+            return p;
         }
     }
 }

@@ -127,6 +127,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OlimpiadaController.cs" />
     <Compile Include="Controllers\OlimpiadasController.cs" />
+    <Compile Include="Controllers\ProblemaController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -308,6 +309,7 @@
     <Content Include="Views\Escuela\Edit.cshtml" />
     <Content Include="Views\Escuela\Saved.cshtml" />
     <Content Include="Views\Olimpiada\Attendees.cshtml" />
+    <Content Include="Views\Problema\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

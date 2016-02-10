@@ -35,7 +35,7 @@
 
         <div>
             <div class="biglabel">
-                Fechas: @Model.friendlyDate
+                @Model.friendlyDate
             </div>
         </div>
 
@@ -48,43 +48,8 @@
             </div>
         }
 
-        @if (Model.estados > 0)
-        {
-            <div>
-                <div class="biglabel">
-                    Estados participantes: @Model.estados
-                </div>
-            </div>
-        }
-
-        @if (Model.participantes > 0)
-        {
-            <div>
-                <div class="biglabel">
-                    Competidores: @Model.participantes
-                </div>
-            </div>
-        }
-
-        @if (Model.media > 0)
-        {
-            <div>
-                <div class="biglabel">
-                    Media: @Model.media
-                </div>
-            </div>
-        }
-
-        @if (Model.mediana > 0)
-        {
-            <div>
-                <div class="biglabel">
-                    Media: @Model.mediana
-                </div>
-            </div>
-        }
-
-        <!-- -TODO- Agregar datos calculados como mejor score, corte de medallas, numero de medallistas,
+        <!-- -TODO- Poner media, mediana, estados y participantes en algun lado.
+            Agregar datos calculados como mejor score, corte de medallas, numero de medallistas,
         numero de 0's, etc -->
     </div>
 
@@ -109,26 +74,84 @@
 
 </div>
 
-<div class="datosOlimpiada">
+@if(ViewBag.admin ||
+    ViewBag.dia1[0] != null || ViewBag.dia1[1] != null ||
+    ViewBag.dia1[2] != null || ViewBag.dia1[3] != null ||
+    ViewBag.dia2[0] != null || ViewBag.dia2[1] != null ||
+    ViewBag.dia2[2] != null || ViewBag.dia2[3] != null)
+{
+    <div class="datosOlimpiada problemasColumnas">
 
-    <h1 class="titulo">Día 1</h1>
+        <div>
+            <h1 class="titulo">Día 1</h1>
+            <ul>
+                @for(var i = 0; i < 4; i++)
+                {
+                    if(ViewBag.admin)
+                    {
+                        <li>
+                            <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=" + (i + 1))"
+                                class="nombre">
+                                @if(ViewBag.dia1[i] != null)
+                                {
+                                    @ViewBag.dia1[i].nombre
+                                }
+                                else
+                                {
+                                    <span>Agregar Problema @(i + 1)</span>
+                                }
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        if (ViewBag.dia1[i] != null)
+                        {
+                            <li>
+                                <a href="@ViewBag.dia1[i].url" class="nombre">@ViewBag.dia1[i].nombre</a>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
 
-    @if (ViewBag.dia1[0] != null)
-    {
-        <p>
-            Problema 1: @ViewBag.dia1[0].nombre
-        </p>
-    }
-    else
-    {
-        <p>
-            Agregar Problema 1
-        </p>
-    }
+        <div>
+            <h1 class="titulo">Día 2</h1>
+            <ul>
+                @for(var i = 0; i < 4; i++)
+                {
+                    if(ViewBag.admin)
+                    {
+                        <li>
+                            <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1))"
+                                class="nombre">
+                                @if(ViewBag.dia2[i] != null)
+                                {
+                                    @ViewBag.dia2[i].nombre
+                                }
+                                else
+                                {
+                                    <span>Agregar Problema @(i + 1)</span>
+                                }
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        if (ViewBag.dia2[i] != null)
+                        {
+                            <li>
+                                <a href="@ViewBag.dia2[i].url" class="nombre">@ViewBag.dia2[i].nombre</a>
+                            </li>
+                        }
+                    }
+                }
+            </ul>
+        </div>
+    </div>
 
-    <h1 class="titulo">Día 2</h1>
-</div>
+    <div class="clear">
 
-<div class="clear">
-
-</div>
+    </div>
+}

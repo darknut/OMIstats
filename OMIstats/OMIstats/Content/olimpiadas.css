@@ -76,3 +76,13 @@
     font-size:12px;
     font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
 }
+
+.problemasColumnas {
+    display:flex;
+    flex-direction:row;
+    width:100%;
+}
+
+.problemasColumnas > div {
+    width:50%;
+}

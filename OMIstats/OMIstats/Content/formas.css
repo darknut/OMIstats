@@ -7,3 +7,8 @@
     color:red;
     display:none;
 }
+
+.datosFloat {
+    float:left;
+    padding-left:10px;
+}

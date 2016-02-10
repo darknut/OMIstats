@@ -34,7 +34,8 @@ namespace OMIstats.Controllers
             OLIMPIADAS,
             EDIT_ESCUELA,
             SAVED_ESCUELA,
-            ATTENDEES_OMI
+            ATTENDEES_OMI,
+            PROBLEMA
         }
 
         public BaseController()
@@ -147,6 +148,14 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.OLIMPIADAS:
                     return RedirectToAction("Index", "Olimpiadas");
+                case Pagina.PROBLEMA:
+                    if (opciones != null)
+                    {
+                        string[] param = opciones.ToString().Split(':');
+                        if (param.Length == 3)
+                            return RedirectToAction("Edit", "Problema", new { omi = param[0], dia = param[1], numero = param[2] });
+                    }
+                    return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.HOME:
                 default:
                     return RedirectToAction("Index", "Home");
