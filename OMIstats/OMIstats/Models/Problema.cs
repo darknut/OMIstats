@@ -16,10 +16,10 @@ namespace OMIstats.Models
 
         public int numero { get; set; }
 
-        [MaxLength(30, ErrorMessage = "El tamaño máximo es de 30 caracteres")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string nombre { get; set; }
 
-        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
         public string url { get; set; }
 
         public float media { get; set; }
@@ -119,6 +119,49 @@ namespace OMIstats.Models
                 p.llenarDatos(table.Rows[0]);
             }
             return p;
+        }
+
+        /// <summary>
+        /// Guarda los datos del objeto en la base de datos
+        /// si el objeto no existe, lo crea.
+        /// </summary>
+        public void guardar()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" insert into problema values( ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(", ");
+            query.Append(dia);
+            query.Append(", ");
+            query.Append(numero);
+            query.Append(", '', '', 0.0, 0, 0, 0)");
+
+            db.EjecutarQuery(query.ToString());
+
+            query.Clear();
+
+            query.Append(" update problema set nombre = ");
+            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append(", url = ");
+            query.Append(Utilities.Cadenas.comillas(url));
+            query.Append(", media = ");
+            query.Append(media);
+            query.Append(", mediana = ");
+            query.Append(mediana);
+            query.Append(", ceros = ");
+            query.Append(ceros);
+            query.Append(", perfectos = ");
+            query.Append(perfectos);
+            query.Append(" where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and numero = ");
+            query.Append(numero);
+
+            db.EjecutarQuery(query.ToString());
         }
     }
 }

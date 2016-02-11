@@ -65,7 +65,12 @@ namespace OMIstats.Controllers
             if (p.numero < 1 || p.numero > 4)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            return View(p);
+            if (!ModelState.IsValid)
+                return View(p);
+
+            p.guardar();
+
+            return RedirectTo(Pagina.OLIMPIADA, p.olimpiada);
         }
     }
 }

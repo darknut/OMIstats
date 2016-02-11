@@ -113,6 +113,13 @@ namespace OMIstats.Utilities
             {
                 resultado.error = true;
                 resultado.descripcion = e.Message;
+                try
+                {
+                    Desconectar();
+                }
+                catch (Exception)
+                {
+                }
                 return resultado;
             }
 
