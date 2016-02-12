@@ -10,6 +10,8 @@ namespace OMIstats.Models
 {
     public class Olimpiada
     {
+        public const string TEMP_CLAVE = "TMP";
+
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
         public string numero { get; set; }
@@ -256,7 +258,9 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" insert into olimpiada values ('TMP', '', 'MEX', '0',");
+            query.Append(" insert into olimpiada values (");
+            query.Append(Utilities.Cadenas.comillas(TEMP_CLAVE));
+            query.Append(", '', 'MEX', '0',");
             query.Append(" '', '', 0, 0, '', '', 0, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());

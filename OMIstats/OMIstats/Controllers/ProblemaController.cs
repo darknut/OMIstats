@@ -56,7 +56,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada);
-            if (o == null)
+            if (o == null || p.olimpiada == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 401);
 
             if (p.dia != 1 && p.dia != 2)

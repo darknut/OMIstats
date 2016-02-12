@@ -14,7 +14,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index(string clave)
         {
-            if (clave == "TMP")
+            if (clave == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.EDIT_OLIMPIADA, clave);
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave);
@@ -46,7 +46,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 401);
 
             Olimpiada.nuevaOMI();
-            return RedirectTo(Pagina.EDIT_OLIMPIADA, "TMP");
+            return RedirectTo(Pagina.EDIT_OLIMPIADA, Olimpiada.TEMP_CLAVE);
         }
 
         //
@@ -97,7 +97,7 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(omi);
 
-            if (omi.numero.Trim().Length == 0 || omi.numero == "TMP")
+            if (omi.numero.Trim().Length == 0 || omi.numero == Olimpiada.TEMP_CLAVE)
             {
                 ViewBag.errorOMI = true;
                 return View(omi);
@@ -187,7 +187,7 @@ namespace OMIstats.Controllers
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave);
 
-            if (o == null)
+            if (o == null || clave == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
 
             limpiarErroresViewBag();

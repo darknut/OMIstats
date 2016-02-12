@@ -46,7 +46,7 @@
     </thead>
     @foreach (var item in Model)
     {
-        if (item.numero != "TMP" || ViewBag.admin)
+        if (item.numero != OMIstats.Models.Olimpiada.TEMP_CLAVE || ViewBag.admin)
         {
             <tr>
                 <td class="table-td center right-border">
