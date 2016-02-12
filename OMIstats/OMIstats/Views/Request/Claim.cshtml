@@ -166,8 +166,11 @@ else
             }
             <div>
                 <div class="label">
-                    <input type="button" onclick="muestraLoadGifYSubmit('requestAccess')" value="@ViewBag.Title"/>
+                    <input type="submit" onclick="muestraLoadGifYSubmit('requestAccess')" value="@ViewBag.Title"/>
                     <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                </div>
+                <div class="input floatRight">
+                    <a href="/Home"><input type="button" value="Cancelar" /></a>
                 </div>
             </div>
         </div>

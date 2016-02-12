@@ -169,9 +169,14 @@
                     }
                 </div>
             }
-            <div class="label">
-                <input type="button"  onclick="revisa()"  value="Enviar"/>
-                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+            <div>
+                <div class="label">
+                    <input type="submit" onclick="revisa()" value="Enviar"/>
+                    <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                </div>
+                <div class="input floatRight">
+                    <a href="/Profile/view"><input type="button" value="Cancelar" /></a>
+                </div>
             </div>
         </div>
     </div>

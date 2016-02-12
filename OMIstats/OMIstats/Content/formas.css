@@ -12,3 +12,7 @@
     float:left;
     padding-left:10px;
 }
+
+.floatRight {
+    float:right;
+}

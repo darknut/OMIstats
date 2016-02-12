@@ -124,9 +124,14 @@
             @Html.HiddenFor(model => model.clave)
             @Html.HiddenFor(model => model.logo)
 
-            <div class="label">
-                <input type="button"  onclick="muestraLoadGifYSubmit('editEscuela')" value="Enviar"/>
-                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+            <div>
+                <div class="label">
+                    <input type="submit" onclick="muestraLoadGifYSubmit('editEscuela')" value="Enviar"/>
+                    <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                </div>
+                <div class="input floatRight">
+                    <a href="@("/Escuela?url=" + Model.nombreURL)"><input type="button" value="Cancelar" /></a>
+                </div>
             </div>
         </div>
     </div>

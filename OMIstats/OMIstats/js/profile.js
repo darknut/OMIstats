@@ -4,7 +4,6 @@
     var txt = document.getElementById("nacimiento");
     if (txt.value == "")
         txt.value = "01/01/1900";
-    $("#editProfile").submit();
 }
 
 function mostrarPassword()
