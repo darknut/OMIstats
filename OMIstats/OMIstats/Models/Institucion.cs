@@ -330,7 +330,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 string numero = r[0].ToString();
-                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero);
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero, Olimpiada.TipoOlimpiada.OMI);
                 list.Add(o);
             }
 

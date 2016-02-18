@@ -31,7 +31,7 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, Olimpiada.TipoOlimpiada.OMI);
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 401);
 
@@ -55,7 +55,7 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.HOME);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, Olimpiada.TipoOlimpiada.OMI);
             if (o == null || p.olimpiada == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 401);
 

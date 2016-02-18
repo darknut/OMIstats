@@ -137,6 +137,14 @@ else
                     </div>
                 </div>
 
+                <div>
+                    <div class="label">IOI:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.relacion)
+                        @Html.ValidationMessageFor(model => model.relacion)
+                    </div>
+                </div>
+
                 <br />
                 <hr />
 
@@ -145,6 +153,14 @@ else
                     <div class="input">
                         @Html.TextBoxFor(model => model.video)
                         @Html.ValidationMessageFor(model => model.video)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Reporte (.docx):</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.reporte)
+                        @Html.ValidationMessageFor(model => model.reporte)
                     </div>
                 </div>
 
@@ -172,6 +188,8 @@ else
                     </div>
                 </div>
 
+                @Html.HiddenFor(model => model.tipoOlimpiada)
+                @Html.HiddenFor(model => model.pais)
                 <input type="hidden" value="@ViewBag.clave" id="clave" name="clave" />
                 <input type="hidden" value="@ViewBag.poster" id="poster" name="poster" />
 

@@ -15,7 +15,7 @@ namespace OMIstats.Controllers
         public ActionResult Index()
         {
             limpiarErroresViewBag();
-            return View(Olimpiada.obtenerOlimpiadas());
+            return View(Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI));
         }
 
     }
