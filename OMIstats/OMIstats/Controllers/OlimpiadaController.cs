@@ -25,8 +25,8 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.clave = clave;
 
-            ViewBag.dia1 = Problema.obtenerProblemasDeOMI(clave, 1);
-            ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, 2);
+            ViewBag.dia1 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
+            ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
 
             return View(o);
         }

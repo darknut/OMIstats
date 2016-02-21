@@ -320,7 +320,7 @@ namespace OMIstats.Models
         public string obtenerTablaAsistentes()
         {
             if (asistentes == null)
-                asistentes = MiembroDelegacion.cargarAsistentesOMI(numero);
+                asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada);
 
             StringBuilder tabla = new StringBuilder();
 
@@ -347,7 +347,7 @@ namespace OMIstats.Models
             lineas = tabla.Split('\n');
             foreach (string linea in lineas)
             {
-                MiembroDelegacion.TipoError error = MiembroDelegacion.guardarLineaAdmin(numero, linea.Trim());
+                MiembroDelegacion.TipoError error = MiembroDelegacion.guardarLineaAdmin(numero, tipoOlimpiada, linea.Trim());
                 if (error != MiembroDelegacion.TipoError.OK)
                 {
                     errores.Append(linea.Trim());

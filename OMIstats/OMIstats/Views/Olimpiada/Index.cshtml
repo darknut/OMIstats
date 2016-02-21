@@ -82,18 +82,21 @@
 
 </div>
 
-@if(ViewBag.admin ||
-    ViewBag.dia1[0] != null || ViewBag.dia1[1] != null ||
-    ViewBag.dia1[2] != null || ViewBag.dia1[3] != null ||
-    ViewBag.dia2[0] != null || ViewBag.dia2[1] != null ||
-    ViewBag.dia2[2] != null || ViewBag.dia2[3] != null)
+@if(ViewBag.admin || ViewBag.dia1[0] != null || ViewBag.dia2[0] != null)
 {
     <div class="datosOlimpiada problemasColumnas">
 
         <div>
-            <h1 class="titulo">Día 1</h1>
+            @if (ViewBag.dia2[0] == null)
+            {
+                <h1 class="titulo">Problemas</h1>
+            }
+            else
+            {
+                <h1 class="titulo">Día 1</h1>
+            }
             <ul>
-                @for(var i = 0; i < 4; i++)
+                @for(var i = 0; i < 6; i++)
                 {
                     if(ViewBag.admin)
                     {
@@ -107,6 +110,7 @@
                                 else
                                 {
                                     <span>Agregar Problema @(i + 1)</span>
+                                    { break; }
                                 }
                             </a>
                         </li>
@@ -124,39 +128,43 @@
             </ul>
         </div>
 
-        <div>
-            <h1 class="titulo">Día 2</h1>
-            <ul>
-                @for(var i = 0; i < 4; i++)
-                {
-                    if(ViewBag.admin)
+        @if (ViewBag.admin || ViewBag.dia2[0] != null)
+        {
+            <div>
+                <h1 class="titulo">Día 2</h1>
+                <ul>
+                    @for(var i = 0; i < 6; i++)
                     {
-                        <li>
-                            <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1))"
-                                class="nombre">
-                                @if(ViewBag.dia2[i] != null)
-                                {
-                                    @ViewBag.dia2[i].nombre
-                                }
-                                else
-                                {
-                                    <span>Agregar Problema @(i + 1)</span>
-                                }
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        if (ViewBag.dia2[i] != null)
+                        if(ViewBag.admin)
                         {
                             <li>
-                                <a href="@ViewBag.dia2[i].url" class="nombre" target="_blank">@ViewBag.dia2[i].nombre</a>
+                                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1))"
+                                    class="nombre">
+                                    @if(ViewBag.dia2[i] != null)
+                                    {
+                                        @ViewBag.dia2[i].nombre
+                                    }
+                                    else
+                                    {
+                                        <span>Agregar Problema @(i + 1)</span>
+                                        { break; }
+                                    }
+                                </a>
                             </li>
                         }
+                        else
+                        {
+                            if (ViewBag.dia2[i] != null)
+                            {
+                                <li>
+                                    <a href="@ViewBag.dia2[i].url" class="nombre" target="_blank">@ViewBag.dia2[i].nombre</a>
+                                </li>
+                            }
+                        }
                     }
-                }
-            </ul>
-        </div>
+                </ul>
+            </div>
+        }
     </div>
 
     <div class="clear">

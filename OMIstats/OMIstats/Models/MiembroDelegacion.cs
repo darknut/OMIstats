@@ -231,8 +231,9 @@ namespace OMIstats.Models
         /// Regresa todos los asistentes de la olimpiada mandada como parámetro
         /// </summary>
         /// <param name="omi">La omi de la que se necesitan los asistentes</param>
+        /// <param name="tipoOlimpiada">El tipo de la olimpiada de la que se requieren asistentes</param>
         /// <returns>Una lista con los asistentes de la OMI</returns>
-        public static List<MiembroDelegacion> cargarAsistentesOMI(string omi)
+        public static List<MiembroDelegacion> cargarAsistentesOMI(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
             if (omi == null)
@@ -248,6 +249,8 @@ namespace OMIstats.Models
             query.Append(" inner join Institucion as i on i.clave = md.institucion");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and md.clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by md.clave ");
 
             db.EjecutarQuery(query.ToString());
@@ -304,9 +307,10 @@ namespace OMIstats.Models
         /// Guarda la linea mandada como parametro en la base de datos
         /// </summary>
         /// <param name="omi">La clave de la olimpiada</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada a los que los datos pertenecen</param>
         /// <param name="linea">Los datos tabulados por comas</param>
         /// <returns>Si hubo un error, lo devuelve</returns>
-        public static TipoError guardarLineaAdmin(string omi, string linea)
+        public static TipoError guardarLineaAdmin(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string linea)
         {
             if (linea.Trim().Length == 0)
                 return TipoError.OK;
@@ -340,6 +344,8 @@ namespace OMIstats.Models
                 query.Append(p.clave);
                 query.Append(" and estado = ");
                 query.Append(Utilities.Cadenas.comillas(md.estado));
+                query.Append(" and clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
                 db.EjecutarQuery(query.ToString());
                 table = db.getTable();
@@ -475,6 +481,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and persona = ");
             query.Append(p.clave);
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             // Agregamos estado por casos como Martín que tienen dos roles en diferentes estados
             query.Append(" and estado = ");
             query.Append(Utilities.Cadenas.comillas(md.estado));
@@ -491,6 +499,8 @@ namespace OMIstats.Models
                 query.Append(Utilities.Cadenas.comillas(omi));
                 query.Append(", ");
                 query.Append(Utilities.Cadenas.comillas(md.estado));
+                query.Append(", ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
                 query.Append(", ");
                 query.Append(Utilities.Cadenas.comillas(md.clave));
                 query.Append(", ");
@@ -538,6 +548,8 @@ namespace OMIstats.Models
                 query.Append(p.clave);
                 query.Append(" and estado = ");
                 query.Append(Utilities.Cadenas.comillas(md.estado));
+                query.Append(" and clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
                 db.EjecutarQuery(query.ToString());
             }

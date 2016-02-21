@@ -41,7 +41,7 @@ namespace OMIstats.Controllers
             if (numero < 1 || numero > 4)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Problema p = Problema.obtenerProblema(omi, dia, numero);
+            Problema p = Problema.obtenerProblema(omi, Olimpiada.TipoOlimpiada.OMI, dia, numero);
 
             return View(p);
         }
@@ -68,6 +68,7 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(p);
 
+            p.tipoOlimpiada = Olimpiada.TipoOlimpiada.OMI;
             p.guardar();
 
             return RedirectTo(Pagina.OLIMPIADA, p.olimpiada);
