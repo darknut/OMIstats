@@ -36,7 +36,8 @@ namespace OMIstats.Controllers
             SAVED_ESCUELA,
             ATTENDEES_OMI,
             PROBLEMA,
-            OLIMPIADA
+            OLIMPIADA,
+            RESULTS_TABLE
         }
 
         public BaseController()
@@ -124,6 +125,10 @@ namespace OMIstats.Controllers
                 case Pagina.ATTENDEES_OMI:
                     if (opciones != null)
                         return RedirectToAction("Attendees", "Olimpiada", new { clave = opciones.ToString() });
+                    return RedirectTo(Pagina.ERROR, 404);
+                case Pagina.RESULTS_TABLE:
+                    if (opciones != null)
+                        return RedirectToAction("ResultsTable", "Olimpiada", new { clave = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.EDIT_ESCUELA:
                     if (opciones != null)

@@ -74,7 +74,8 @@ namespace OMIstats.Models
 
         public string logo { get; set; }
 
-        public List<MiembroDelegacion> asistentes;
+        private List<MiembroDelegacion> asistentes;
+        private List<Resultados> resultados;
 
         public enum TipoOlimpiada
         {
@@ -327,6 +328,29 @@ namespace OMIstats.Models
             foreach (MiembroDelegacion asistente in asistentes)
             {
                 tabla.Append(asistente.obtenerLineaAdmin());
+                tabla.Append("\n");
+            }
+
+            return tabla.ToString();
+        }
+
+        /// <summary>
+        /// Regresa la tabla de puntos en formato tabulado, con el número de problemas
+        /// mandado como parámetro
+        /// </summary>
+        /// <param name="problemasDia1">El número de problemas a desplegar el día 1</param>
+        /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
+        /// <returns></returns>
+        public string obtenerResultadosAdmin(int problemasDia1, int problemasDia2)
+        {
+            if (resultados == null)
+                resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
+
+            StringBuilder tabla = new StringBuilder();
+
+            foreach (Resultados resultado in resultados)
+            {
+                tabla.Append(resultado.obtenerLineaAdmin(problemasDia1, problemasDia2));
                 tabla.Append("\n");
             }
 

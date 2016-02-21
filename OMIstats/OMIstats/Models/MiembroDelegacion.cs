@@ -23,18 +23,6 @@ namespace OMIstats.Models
             INVITADO,
         }
 
-        public enum TipoMedalla
-        {
-            NULL,
-            ORO_1,
-            ORO_2,
-            ORO_3,
-            ORO,
-            PLATA,
-            BRONCE,
-            NADA,
-        }
-
         public enum TipoError
         {
             OK,
@@ -65,7 +53,6 @@ namespace OMIstats.Models
         public string clave;
         public string estado;
         public TipoAsistente tipo;
-        public TipoMedalla medalla;
 
         private bool eliminar;
 
@@ -83,7 +70,6 @@ namespace OMIstats.Models
             clave = "";
             estado = "";
             tipo = TipoAsistente.NULL;
-            medalla = TipoMedalla.NULL;
 
             eliminar = false;
         }
@@ -104,7 +90,6 @@ namespace OMIstats.Models
             estado = row["estado"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
             tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
-            medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString().ToUpper());
             nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
             añoEscuela = (int)row["año"];
         }
@@ -200,7 +185,7 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Regresa el año de la ultima OMI como competirdor para la persona mandada como parámetro
+        /// Regresa el año de la ultima OMI como competidor para la persona mandada como parámetro
         /// De no encontrarse ninguna, se devuelve 0
         /// </summary>
         public static int ultimaOMIComoCompetidorPara(Persona p)
@@ -243,7 +228,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
-            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel, md.medalla,");
+            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" inner join Institucion as i on i.clave = md.institucion");
@@ -507,8 +492,6 @@ namespace OMIstats.Models
                 query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
                 query.Append(", ");
                 query.Append(p.clave);
-                query.Append(", ");
-                query.Append((int)md.medalla);
                 query.Append(", ");
                 query.Append((int)i.clave);
                 query.Append(", ");

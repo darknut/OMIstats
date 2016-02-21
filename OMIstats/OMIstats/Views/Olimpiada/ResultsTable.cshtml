@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Tabla de resultados";
+}
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+}
+
+<h2 class="titulo">Tabla de resultados de la @Url.Content(ViewBag.omi + "ª") OMI</h2>
+
+@if (ViewBag.guardado)
+{
+    <p class="ejemplos verde">
+        Los cambios de guardaron satisfactoriamente.
+    </p>
+
+    <p class="ejemplos">
+        <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.omi)">Volver al perfil de la Olimpiada</a>
+    </p>
+}
+else
+{
+    if (ViewBag.errorOMI)
+    {
+        <p class="ejemplos errorTextoRojo instrucciones">
+            Hubo un error en las siguientes líneas
+        </p>
+
+        <p class="ejemplos">
+            El resto de las líneas se guardaron satisfactoriamente
+        </p>
+    }
+    else
+    {
+
+        <p class="ejemplos">
+            <span class="instrucciones">ORDEN:</span> <span class="opcional">(campos en italicas son opcionales)</span>
+        </p>
+
+        <p class="ejemplos">
+            clave,
+            @for(var i = 1; i <= ViewBag.dia1; i++)
+            {
+                @("problema" + i + "Dia1, ")
+            }
+            totalDia1,
+            @for(var i = 1; i <= ViewBag.dia2; i++)
+            {
+                @("problema" + i + "Dia2, ")
+            }
+            totalDia2, total, <span class="opcional">medalla, IOI, ELIMINAR</span>
+        </p>
+
+        <p class="ejemplos">
+            <span class="instrucciones">EJEMPLOS:</span> <span class="opcional">(los totales se pueden dejar en 0)</span>
+        </p>
+
+        <p class="ejemplos">
+            MEX-1,
+            @{var total1 = 0;}
+            @for(var i = 1; i <= ViewBag.dia1; i++)
+            {
+                total1 += 100;
+                @("100, ")
+            }
+            @(total1),
+            @{var total2 = 0;}
+            @for(var i = 1; i <= ViewBag.dia2; i++)
+            {
+                total2 += 100;
+                @("100, ")
+            }
+            @(total2),
+            @(total1 + total2), ORO_3, A
+            <br />
+            YUC-3,
+            @for(var i = 1; i <= ViewBag.dia1; i++)
+            {
+                @("60, ")
+            }
+            0,
+            @for(var i = 1; i <= ViewBag.dia2; i++)
+            {
+                @("40, ")
+            }
+            0, 0
+        </p>
+    }
+
+    <form name="resultadosOMI" id="resultadosOMI" action="/Olimpiada/ResultsTable" method="post" enctype="multipart/form-data">
+        <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.resultados</textarea>
+        <input name="clave" id="clave" type="hidden" value="@ViewBag.omi" />
+
+        <div class="ejemplos">
+            <input type="button" onclick="muestraLoadGifYSubmit('resultadosOMI')" value="Enviar"/>
+            <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+        </div>
+    </form>
+}
