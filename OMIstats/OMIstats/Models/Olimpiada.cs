@@ -340,7 +340,7 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="problemasDia1">El número de problemas a desplegar el día 1</param>
         /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
-        /// <returns></returns>
+        /// <returns>La tabla con los resultados</returns>
         public string obtenerResultadosAdmin(int problemasDia1, int problemasDia2)
         {
             if (resultados == null)
@@ -373,6 +373,35 @@ namespace OMIstats.Models
             {
                 MiembroDelegacion.TipoError error = MiembroDelegacion.guardarLineaAdmin(numero, tipoOlimpiada, linea.Trim());
                 if (error != MiembroDelegacion.TipoError.OK)
+                {
+                    errores.Append(linea.Trim());
+                    errores.Append(": ");
+                    errores.Append(error.ToString());
+                    errores.Append("\n");
+                }
+            }
+
+            return errores.ToString();
+        }
+
+        /// <summary>
+        /// Guarda en la base de datos la tabla de resultados
+        /// </summary>
+        /// <param name="tabla">La nueva tabla de resultados, un competidor por renglon
+        /// y tabulada con comas</param>
+        /// <param name="problemasDia1">El número de problemas a desplegar el día 1</param>
+        /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
+        /// <returns>Los registros que ocasionaron error</returns>
+        public string guardarTablaResultados(string tabla, int problemasDia1, int problemasDia2)
+        {
+            StringBuilder errores = new StringBuilder();
+            string[] lineas;
+
+            lineas = tabla.Split('\n');
+            foreach (string linea in lineas)
+            {
+                Resultados.TipoError error = Resultados.guardarLineaAdmin(numero, tipoOlimpiada, problemasDia1, problemasDia2, linea.Trim());
+                if (error != Resultados.TipoError.OK)
                 {
                     errores.Append(linea.Trim());
                     errores.Append(": ");

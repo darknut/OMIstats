@@ -243,5 +243,48 @@ namespace OMIstats.Controllers
 
             return View();
         }
+
+        //
+        // POST: /Olimpiada/ResultsTable/
+
+        [HttpPost]
+        public ActionResult ResultsTable(string tabla, string clave)
+        {
+            if (!esAdmin() || tabla == null || clave == null)
+                return RedirectTo(Pagina.HOME);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+
+            if (o == null || clave == Olimpiada.TEMP_CLAVE)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            limpiarErroresViewBag();
+            ViewBag.omi = clave;
+
+            List<Problema> lista = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
+            for (ViewBag.dia1 = 0; ViewBag.dia1 < lista.Count; ViewBag.dia1++)
+            {
+                if (lista[ViewBag.dia1] == null)
+                    break;
+            }
+            lista = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
+            for (ViewBag.dia2 = 0; ViewBag.dia2 < lista.Count; ViewBag.dia2++)
+            {
+                if (lista[ViewBag.dia2] == null)
+                    break;
+            }
+
+            string errores = o.guardarTablaResultados(tabla, ViewBag.dia1, ViewBag.dia2);
+
+            if (errores.Length > 0)
+            {
+                ViewBag.errorOMI = true;
+                ViewBag.asistentes = errores;
+            }
+            else
+                ViewBag.guardado = true;
+
+            return View();
+        }
     }
 }

@@ -26,7 +26,9 @@ namespace OMIstats.Models
             OK,
             FALTAN_CAMPOS,
             CLAVE_INEXISTENTE,
-            ESPERABA_NUMEROS
+            ESPERABA_NUMEROS,
+            MEDALLA_DESCONOCIDA,
+            EQUIPO_IOI_INCORRECTO
         }
 
         // Este objeto debe de ser contenido por un objeto olimpiada,
@@ -51,18 +53,13 @@ namespace OMIstats.Models
             usuario = 0;
             estado = "";
             clave = "";
-            dia1 = null;
             totalDia1 = 0;
-            dia2 = null;
             totalDia2 = 0;
             total = 0;
             medalla = TipoMedalla.NULL;
             publico = false;
             ioi = "";
-        }
 
-        private void llenarDatos(DataRow row)
-        {
             dia1 = new List<int>();
             dia1.Add(0);
             dia1.Add(0);
@@ -78,7 +75,10 @@ namespace OMIstats.Models
             dia2.Add(0);
             dia2.Add(0);
             dia2.Add(0);
+        }
 
+        private void llenarDatos(DataRow row)
+        {
             usuario = (int)row["concursante"];
             clave = row["clave"].ToString().Trim();
             estado = row["estado"].ToString().Trim();
@@ -100,6 +100,62 @@ namespace OMIstats.Models
             medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString().ToUpper());
             publico = (bool)row["publico"];
             ioi = row["ioi"].ToString().Trim();
+        }
+
+        private TipoError obtenerCampos(string[] datos, int problemasDia1, int problemasDia2)
+        {
+            int indice = 0;
+            if (datos.Length > indice)
+                clave = datos[indice++].Trim();
+            try
+            {
+                for(int i = 0; i < problemasDia1; i++)
+                {
+                    if (datos.Length > indice)
+                        dia1[i] = Int32.Parse(datos[indice++]);
+                }
+                if (datos.Length > indice)
+                    totalDia1 = Int32.Parse(datos[indice++]);
+                for (int i = 0; i < problemasDia2; i++)
+                {
+                    if (datos.Length > indice)
+                        dia2[i] = Int32.Parse(datos[indice++]);
+                }
+                if (datos.Length > indice)
+                    totalDia2 = Int32.Parse(datos[indice++]);
+                if (datos.Length > indice)
+                    total = Int32.Parse(datos[indice++]);
+            }
+            catch (Exception)
+            {
+                return TipoError.ESPERABA_NUMEROS;
+            }
+
+            try
+            {
+                if (datos.Length > indice)
+                    medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), datos[indice++].Trim().ToUpper());
+            }
+            catch (Exception)
+            {
+                return TipoError.MEDALLA_DESCONOCIDA;
+            }
+
+            if (datos.Length > indice)
+            {
+                ioi = datos[indice++].Trim();
+                if (ioi.Length > 0)
+                {
+                    ioi = ioi.Substring(0, 1);
+                    if (ioi != "A" && ioi != "B")
+                        return TipoError.EQUIPO_IOI_INCORRECTO;
+                }
+            }
+
+            if (datos.Length > indice)
+                eliminar = datos[indice].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
+
+            return TipoError.OK;
         }
 
         /// <summary>
@@ -175,6 +231,36 @@ namespace OMIstats.Models
             s.Append(ioi);
 
             return s.ToString();
+        }
+
+          /// <summary>
+        /// Guarda la linea mandada como parametro en la base de datos
+        /// </summary>
+        /// <param name="omi">La clave de la olimpiada</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada a los que los datos pertenecen</param>
+        /// <param name="problemasDia1">El número de problemas a desplegar el día 1</param>
+        /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
+        /// <param name="linea">Los datos tabulados por comas</param>
+        /// <returns>Si hubo un error, lo devuelve</returns>
+        public static TipoError guardarLineaAdmin(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, int problemasDia1, int problemasDia2, string linea)
+        {
+            if (linea.Trim().Length == 0)
+                return TipoError.OK;
+
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+            Resultados res = new Resultados();
+            DataTable table = null;
+
+            string[] datos = linea.Split(',');
+
+            // Casteamos los datos del string a variables
+
+            TipoError err = res.obtenerCampos(datos, problemasDia1, problemasDia2);
+            if (err != TipoError.OK)
+                return err;
+
+            return TipoError.OK;
         }
     }
 }
