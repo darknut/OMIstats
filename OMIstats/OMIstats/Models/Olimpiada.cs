@@ -338,15 +338,15 @@ namespace OMIstats.Models
         /// Regresa la tabla de puntos en formato tabulado, con el número de problemas
         /// mandado como parámetro
         /// </summary>
-        /// <param name="problemasDia1">El número de problemas a desplegar el día 1</param>
-        /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
         /// <returns>La tabla con los resultados</returns>
-        public string obtenerResultadosAdmin(int problemasDia1, int problemasDia2)
+        public string obtenerResultadosAdmin()
         {
             if (resultados == null)
                 resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
 
             StringBuilder tabla = new StringBuilder();
+            int problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
+            int problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
 
             foreach (Resultados resultado in resultados)
             {
@@ -389,15 +389,16 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="tabla">La nueva tabla de resultados, un competidor por renglon
         /// y tabulada con comas</param>
-        /// <param name="problemasDia1">El número de problemas a desplegar el día 1</param>
-        /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
         /// <returns>Los registros que ocasionaron error</returns>
-        public string guardarTablaResultados(string tabla, int problemasDia1, int problemasDia2)
+        public string guardarTablaResultados(string tabla)
         {
             StringBuilder errores = new StringBuilder();
             string[] lineas;
 
             lineas = tabla.Split('\n');
+            int problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
+            int problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
+
             foreach (string linea in lineas)
             {
                 Resultados.TipoError error = Resultados.guardarLineaAdmin(numero, tipoOlimpiada, problemasDia1, problemasDia2, linea.Trim());

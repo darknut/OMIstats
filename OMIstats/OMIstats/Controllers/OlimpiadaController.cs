@@ -225,20 +225,10 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            List<Problema> lista = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
-            for (ViewBag.dia1 = 0; ViewBag.dia1 < lista.Count; ViewBag.dia1++)
-            {
-                if (lista[ViewBag.dia1] == null)
-                    break;
-            }
-            lista = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
-            for (ViewBag.dia2 = 0; ViewBag.dia2 < lista.Count; ViewBag.dia2++)
-            {
-                if (lista[ViewBag.dia2] == null)
-                    break;
-            }
+            ViewBag.dia1 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 1);
+            ViewBag.dia2 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 2);
             ViewBag.omi = clave;
-            ViewBag.resultados = o.obtenerResultadosAdmin(ViewBag.dia1, ViewBag.dia2);
+            ViewBag.resultados = o.obtenerResultadosAdmin();
             limpiarErroresViewBag();
 
             return View();
@@ -260,26 +250,14 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
             ViewBag.omi = clave;
-
-            List<Problema> lista = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
-            for (ViewBag.dia1 = 0; ViewBag.dia1 < lista.Count; ViewBag.dia1++)
-            {
-                if (lista[ViewBag.dia1] == null)
-                    break;
-            }
-            lista = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
-            for (ViewBag.dia2 = 0; ViewBag.dia2 < lista.Count; ViewBag.dia2++)
-            {
-                if (lista[ViewBag.dia2] == null)
-                    break;
-            }
-
-            string errores = o.guardarTablaResultados(tabla, ViewBag.dia1, ViewBag.dia2);
+            ViewBag.dia1 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 1);
+            ViewBag.dia2 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 2);
+            string errores = o.guardarTablaResultados(tabla);
 
             if (errores.Length > 0)
             {
                 ViewBag.errorOMI = true;
-                ViewBag.asistentes = errores;
+                ViewBag.resultados = errores;
             }
             else
                 ViewBag.guardado = true;

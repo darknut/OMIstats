@@ -35,12 +35,14 @@ namespace OMIstats.Models
             TIPO_ASISTENTE,
             GENERO,
             NIVEL_INSTITUCION,
-            AñO_ESCUELA
+            AñO_ESCUELA,
+            CLAVE_DUPLICADA
         }
 
         // Este objeto debe de ser contenido por un objeto olimpiada,
         // por eso no cargamos un objeto olimpiada aqui
 
+        public int claveUsuario;
         public string usuario;
         public string nombreAsistente;
         public string fechaNacimiento;
@@ -79,6 +81,7 @@ namespace OMIstats.Models
             if (incluirTablasAjenas)
             {
                 usuario = row["usuario"].ToString().Trim();
+                claveUsuario = (int)row["persona"];
                 nombreAsistente = row["nombre"].ToString().Trim();
                 fechaNacimiento = row["nacimiento"].ToString().Trim();
                 genero = row["genero"].ToString().Trim();
@@ -229,7 +232,7 @@ namespace OMIstats.Models
 
             query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
-            query.Append(" md.año, i.publica from miembrodelegacion as md");
+            query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" inner join Institucion as i on i.clave = md.institucion");
             query.Append(" where md.olimpiada = ");
@@ -333,9 +336,7 @@ namespace OMIstats.Models
                 query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
                 db.EjecutarQuery(query.ToString());
-                table = db.getTable();
-
-                // -TODO- Eliminar clave en tabla resultados
+                Resultados.eliminarResultado(omi, tipoOlimpiada, md.clave);
 
                 return TipoError.OK;
             }
@@ -511,7 +512,8 @@ namespace OMIstats.Models
 
                 if (md_current.clave != md.clave)
                 {
-                    // -TODO- Actualizar clave en tabla resultados
+                    if (!Resultados.cambiarClave(omi, tipoOlimpiada, md_current.clave, md.clave))
+                        return TipoError.CLAVE_DUPLICADA;
                 }
 
                 query.Clear();
@@ -538,6 +540,46 @@ namespace OMIstats.Models
             }
 
             return TipoError.OK;
+        }
+
+        /// <summary>
+        /// Regresa una lista de miembro de la delegación con la clave mandada como parametro
+        /// </summary>
+        /// <param name="omi">La olimpiada de la clave</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="clave">La clave buscada</param>
+        /// <returns>La lista de miembros con la clave buscada</returns>
+        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string clave)
+        {
+            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
+            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" inner join Institucion as i on i.clave = md.institucion");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and md.clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and md.clave = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" order by md.clave ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r, incluirTablasAjenas: true);
+
+                lista.Add(md);
+            }
+
+            return lista;
         }
     }
 }

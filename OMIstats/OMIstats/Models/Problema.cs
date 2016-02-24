@@ -92,6 +92,25 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa cuántos problemas hay en el día de la omi seleccionada
+        /// </summary>
+        /// <param name="omi">La omi cuyos problemas se necesitan</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="dia">El dia de los problemas</param>
+        /// <returns>Un número entre 0 y 6 con los problemas de la OMI</returns>
+        public static int obtenerCantidadDeProblemas(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, int dia)
+        {
+            List<Problema> lista = obtenerProblemasDeOMI(omi, tipoOlimpiada, dia);
+            int i = 0;
+            for (i = 0; i < lista.Count; i++)
+            {
+                if (lista[i] == null)
+                    break;
+            }
+            return i;
+        }
+
+        /// <summary>
         /// Obtiene el problema de la base de datos.
         /// De no existir, se regresa un objeto nuevo (sin actualizar la base)
         /// </summary>
