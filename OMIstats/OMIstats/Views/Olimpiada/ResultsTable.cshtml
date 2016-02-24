@@ -41,7 +41,7 @@ else
         </p>
 
         <p class="ejemplos">
-            clave,
+            clave, estado (requerido solo para claves UNK)
             @for(var i = 1; i <= ViewBag.dia1; i++)
             {
                 @("problema" + i + "Dia1, ")
@@ -59,7 +59,7 @@ else
         </p>
 
         <p class="ejemplos">
-            MEX-1,
+            MEX-1, ,
             @{var total1 = 0;}
             @for(var i = 1; i <= ViewBag.dia1; i++)
             {
@@ -76,7 +76,7 @@ else
             @(total2),
             @(total1 + total2), ORO_3, A
             <br />
-            UNK-3,
+            UNK-3, YUC,
             @for(var i = 1; i <= ViewBag.dia1; i++)
             {
                 @("60, ")

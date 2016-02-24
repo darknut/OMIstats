@@ -146,7 +146,7 @@ namespace OMIstats.Models
             {
                 if (datos.Length > 10)
                     añoEscuela = Int32.Parse(datos[10]);
-                if (añoEscuela < 1 || añoEscuela > 6)
+                if (añoEscuela < 0 || añoEscuela > 6)
                     return TipoError.AñO_ESCUELA;
             } catch (Exception)
             {
@@ -347,10 +347,7 @@ namespace OMIstats.Models
                 md.estado.Length == 0 ||
                 md.tipo == TipoAsistente.NULL ||
                 md.clave.Length == 0 ||
-                md.genero.Length != 1 ||
-                md.nombreEscuela.Length == 0 ||
-                md.nivelEscuela == Institucion.NivelInstitucion.NULL ||
-                md.añoEscuela == 0)
+                md.genero.Length != 1)
                 return TipoError.FALTAN_CAMPOS;
 
             // Verificar que exista el usuario
@@ -420,38 +417,43 @@ namespace OMIstats.Models
 
             // Revisamos que exista la escuela
 
-            Institucion i = Institucion.buscarInstitucionConNombre(md.nombreEscuela);
+            Institucion i = null;
 
-            if (i == null)
+            if (md.nombreEscuela.Length > 0)
             {
-                // La escuela es nueva, creamos una nueva.
+                i = Institucion.buscarInstitucionConNombre(md.nombreEscuela);
 
-                i = new Institucion();
-                i.nombre = md.nombreEscuela;
-                i.nuevaInstitucion();
+                if (i == null)
+                {
+                    // La escuela es nueva, creamos una nueva.
+
+                    i = new Institucion();
+                    i.nombre = md.nombreEscuela;
+                    i.nuevaInstitucion();
+                }
+
+                // Ya tenemos un objeto institución, actualizamos los datos
+
+                switch (md.nivelEscuela)
+                {
+                    case Institucion.NivelInstitucion.PRIMARIA:
+                        i.primaria = true;
+                        break;
+                    case Institucion.NivelInstitucion.SECUNDARIA:
+                        i.secundaria = true;
+                        break;
+                    case Institucion.NivelInstitucion.PREPARATORIA:
+                        i.preparatoria = true;
+                        break;
+                    case Institucion.NivelInstitucion.UNIVERSIDAD:
+                        i.universidad = true;
+                        break;
+                }
+
+                i.publica = md.escuelaPublica;
+
+                i.guardar(generarPeticiones: false);
             }
-
-            // Ya tenemos un objeto institución, actualizamos los datos
-
-            switch (md.nivelEscuela)
-            {
-                case Institucion.NivelInstitucion.PRIMARIA:
-                    i.primaria = true;
-                    break;
-                case Institucion.NivelInstitucion.SECUNDARIA:
-                    i.secundaria = true;
-                    break;
-                case Institucion.NivelInstitucion.PREPARATORIA:
-                    i.preparatoria = true;
-                    break;
-                case Institucion.NivelInstitucion.UNIVERSIDAD:
-                    i.universidad = true;
-                    break;
-            }
-
-            i.publica = md.escuelaPublica;
-
-            i.guardar(generarPeticiones: false);
 
             // Revisamos que el estado exista
 
@@ -494,7 +496,7 @@ namespace OMIstats.Models
                 query.Append(", ");
                 query.Append(p.clave);
                 query.Append(", ");
-                query.Append((int)i.clave);
+                query.Append(i == null ? "0" : i.clave.ToString());
                 query.Append(", ");
                 query.Append((int)md.nivelEscuela);
                 query.Append(", ");
@@ -522,7 +524,7 @@ namespace OMIstats.Models
                 query.Append(", tipo = ");
                 query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
                 query.Append(", institucion = ");
-                query.Append((int)i.clave);
+                query.Append(i == null ? "0" : i.clave.ToString());
                 query.Append(", nivel = ");
                 query.Append((int)md.nivelEscuela);
                 query.Append(", año = ");

@@ -29,7 +29,8 @@ namespace OMIstats.Models
             CLAVE_DUPLICADA,
             ESPERABA_NUMEROS,
             MEDALLA_DESCONOCIDA,
-            EQUIPO_IOI_INCORRECTO
+            EQUIPO_IOI_INCORRECTO,
+            ESTADO_INEXISTENTE
         }
 
         private const string CLAVE_DESCONOCIDA = "UNK";
@@ -110,6 +111,8 @@ namespace OMIstats.Models
             int indice = 0;
             if (datos.Length > indice)
                 clave = datos[indice++].Trim();
+            if (datos.Length > indice)
+                estado = datos[indice++].Trim();
             try
             {
                 for(int i = 0; i < problemasDia1; i++)
@@ -208,6 +211,8 @@ namespace OMIstats.Models
             StringBuilder s = new StringBuilder();
 
             s.Append(clave);
+            s.Append(", ");
+            s.Append(estado);
             s.Append(", ");
 
             for (int i = 0; i < problemasDia1; i++)
@@ -321,7 +326,13 @@ namespace OMIstats.Models
 
             // Revisamos si hay mas de un usuario con esa clave
 
-            if (!res.clave.StartsWith(CLAVE_DESCONOCIDA))
+            if (res.clave.StartsWith(CLAVE_DESCONOCIDA))
+            {
+                Estado e = Estado.obtenerEstadoConClave(res.estado);
+                if (e == null)
+                    return TipoError.ESTADO_INEXISTENTE;
+            }
+            else
             {
                 List<MiembroDelegacion> lista = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, res.clave);
                 if (lista.Count == 0)
@@ -353,11 +364,11 @@ namespace OMIstats.Models
             {
                 query.Append(" concursante = ");
                 query.Append(m.claveUsuario);
-                query.Append(", estado = ");
-                query.Append(Utilities.Cadenas.comillas(m.estado));
                 query.Append(", ");
             }
-            query.Append(" puntosD1P1 = ");
+            query.Append(" estado = ");
+            query.Append(Utilities.Cadenas.comillas(m == null ? res.estado : m.estado));
+            query.Append(", puntosD1P1 = ");
             query.Append(res.dia1[0]);
             query.Append(", puntosD1P2 = ");
             query.Append(res.dia1[1]);
