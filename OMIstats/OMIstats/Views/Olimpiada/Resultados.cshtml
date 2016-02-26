@@ -1,0 +1,15 @@
+﻿@model OMIstats.Models.Olimpiada
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@{
+    ViewBag.Title = Model.numero + "ª OMI";
+}
+
+
+<h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>

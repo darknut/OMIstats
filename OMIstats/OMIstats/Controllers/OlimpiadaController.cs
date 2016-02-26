@@ -264,5 +264,20 @@ namespace OMIstats.Controllers
 
             return View();
         }
+
+        //
+        // GET: /Olimpiada/Resultados/
+
+        public ActionResult Resultados(string clave)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+
+            if (o == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            limpiarErroresViewBag();
+
+            return View(o);
+        }
     }
 }
