@@ -33,11 +33,10 @@ namespace OMIstats.Models
             ESTADO_INEXISTENTE
         }
 
-        private const string CLAVE_DESCONOCIDA = "UNK";
+        public const string CLAVE_DESCONOCIDA = "UNK";
 
-        // Este objeto debe de ser contenido por un objeto olimpiada,
-        // por eso no cargamos un objeto olimpiada aqui
-
+        private string omi;
+        private Olimpiada.TipoOlimpiada tipoOlimpiada;
         public int usuario;
         public string estado;
         public string clave;
@@ -50,10 +49,16 @@ namespace OMIstats.Models
         public bool publico;
         public string ioi;
 
+        public Persona persona;
+        public Institucion escuela;
+
         private bool eliminar;
 
         public Resultados()
         {
+            omi = "";
+            tipoOlimpiada = Olimpiada.TipoOlimpiada.NULL;
+
             usuario = 0;
             estado = "";
             clave = "";
@@ -63,6 +68,9 @@ namespace OMIstats.Models
             medalla = TipoMedalla.NULL;
             publico = false;
             ioi = "";
+
+            persona = null;
+            escuela = null;
 
             dia1 = new List<int>();
             dia1.Add(0);
@@ -81,7 +89,7 @@ namespace OMIstats.Models
             dia2.Add(0);
         }
 
-        private void llenarDatos(DataRow row)
+        private void llenarDatos(DataRow row, bool cargarObjetos)
         {
             usuario = (int)row["concursante"];
             clave = row["clave"].ToString().Trim();
@@ -104,6 +112,16 @@ namespace OMIstats.Models
             medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString().ToUpper());
             publico = (bool)row["publico"];
             ioi = row["ioi"].ToString().Trim();
+
+            if (cargarObjetos)
+            {
+                persona = Persona.obtenerPersonaConClave(usuario);
+                if (!clave.StartsWith(CLAVE_DESCONOCIDA))
+                {
+                    escuela = Institucion.obtenerInstitucionConNombreCorto(
+                        MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0].nombreEscuela);
+                }
+            }
         }
 
         private TipoError obtenerCampos(string[] datos, int problemasDia1, int problemasDia2)
@@ -169,8 +187,9 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="omi">La olimpiada en cuestión</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="cargarObjetos">Si los objetos deben de llenarse</param>
         /// <returns>Una lista con los resultados</returns>
-        public static List<Resultados> cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static List<Resultados> cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
         {
             List<Resultados> lista = new List<Resultados>();
             if (omi == null)
@@ -192,7 +211,9 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.llenarDatos(r);
+                res.omi = omi;
+                res.tipoOlimpiada = tipoOlimpiada;
+                res.llenarDatos(r, cargarObjetos);
 
                 lista.Add(res);
             }
@@ -412,6 +433,51 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
 
             return TipoError.OK;
+        }
+
+        /// <summary>
+        /// Determina si se deben de desplegar los resultados de los problemas individuales
+        /// </summary>
+        /// <param name="clave">La clave de la olimpiada</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <returns>Si se deben desplegar los resultados o no</returns>
+        public static bool mostrarResultadosIndividuales(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select count(*) from resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and ((puntosD1P1 + puntosD1P2 + puntosD1P3 + puntosD1P4 + puntosD1P5 + puntosD1P6) <> puntosD1 ");
+            query.Append(" or (puntosD2P1 + puntosD2P2 + puntosD2P3 + puntosD2P4 + puntosD2P5 + puntosD2P6) <> puntosD2)");
+
+            db.EjecutarQuery(query.ToString());
+
+            return ((int)db.getTable().Rows[0][0]) == 0;
+        }
+
+        /// <summary>
+        /// Determina si se deben de desplegar los resultados de los dias individuales
+        /// </summary>
+        /// <param name="clave">La clave de la olimpiada</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <returns>Si se deben desplegar los resultados o no</returns>
+        public static bool mostrarResultadosPorDia(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select count(*) from resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and (puntosD1 + puntosD2) <> puntos ");
+
+            db.EjecutarQuery(query.ToString());
+
+            return ((int)db.getTable().Rows[0][0]) == 0;
         }
     }
 }

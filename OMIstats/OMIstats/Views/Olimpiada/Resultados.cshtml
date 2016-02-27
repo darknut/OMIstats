@@ -13,3 +13,140 @@
 
 
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
+
+<table>
+    <tr>
+        <th>Lugar</th>
+        <th>Género</th>
+        <th>Competidor</th>
+        <th>Clave</th>
+        @if (ViewBag.mostrarIndividual)
+        {
+            for (var i = 0; i < ViewBag.dia1; i++)
+            {
+                <th><a href="@ViewBag.problemasDia1[i].url"> @("P" + (i + 1))</a></th>
+            }
+        }
+        @if (ViewBag.mostrarDia)
+        {
+            <th>D1</th>
+        }
+        @if (ViewBag.mostrarIndividual)
+        {
+            for (var i = 0; i < ViewBag.dia2; i++)
+            {
+                <th><a href="@ViewBag.problemasDia2[i].url"> @("P" + (i + 1))</a></th>
+            }
+        }
+        @if (ViewBag.mostrarDia)
+        {
+            <th>D2</th>
+        }
+        <th>Total</th>
+        <th>Medalla</th>
+        <th>Escuela</th>
+        <th>Tipo</th>
+    </tr>
+    @{var lugar = 1;}
+    @for (var l = 0; l < ViewBag.resultados.Count; l++)
+    {
+        if (!ViewBag.resultados[l].clave.StartsWith(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA))
+        {
+            var mostrar = ViewBag.admin || Model.datosPublicos || ViewBag.resultados[l].publico || 
+                (ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
+                 ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
+                 ViewBag.resultados[l].usuario == ViewBag.claveUsuario;
+            <tr>
+                <td>@(lugar++)</td>
+                <td>
+                    @if (mostrar)
+                    {
+                        <span>
+                            @ViewBag.resultados[l].persona.genero
+                        </span>
+                    }
+                </td>
+                <td>
+                    @if (mostrar)
+                    {
+                        <span>
+                            @ViewBag.resultados[l].persona.nombre
+                        </span>
+                    }
+                </td>
+                <td>
+                    @if (mostrar)
+                    {
+                        <span>
+                            @ViewBag.resultados[l].clave
+                        </span>
+                    }
+                </td>
+                @if (ViewBag.mostrarIndividual)
+                {
+                    for (var i = 0; i < ViewBag.dia1; i++)
+                    {
+                        <td>
+                            @ViewBag.resultados[l].dia1[i]
+                        </td>
+                    }
+                }
+                @if (ViewBag.mostrarDia)
+                {
+                    <td>
+                        @ViewBag.resultados[l].totalDia1
+                    </td>
+                }
+                @if (ViewBag.mostrarIndividual)
+                {
+                    for (var i = 0; i < ViewBag.dia2; i++)
+                    {
+                         <td>
+                            @ViewBag.resultados[l].dia2[i]
+                        </td>
+                    }
+                }
+                @if (ViewBag.mostrarDia)
+                {
+                    <td>
+                        @ViewBag.resultados[l].totalDia2
+                    </td>
+                }
+                <td>
+                    @ViewBag.resultados[l].total
+                </td>
+                <td>
+                    @if( (ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
+                          ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NULL))
+                    {
+                        <span>
+                            @ViewBag.resultados[l].medalla.ToString()
+                        </span>
+                    }
+                </td>
+                <td>
+                    @if (mostrar && ViewBag.resultados[l].escuela != null)
+                    {
+                        <span>
+                            @ViewBag.resultados[l].escuela.nombre
+                        </span>
+                    }
+                </td>
+                <td>
+                    @if (mostrar && ViewBag.resultados[l].escuela != null)
+                    {
+                        if (ViewBag.resultados[l].escuela.publica)
+                        {
+                            <span>G</span>
+                        }
+                        else
+                        {
+                            <span>P</span>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    }
+
+</table>
