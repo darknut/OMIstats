@@ -236,6 +236,9 @@
     <Content Include="img\ajax-loader.gif" />
     <Content Include="img\bronce.png" />
     <Content Include="img\celdafondo.png" />
+    <Content Include="img\celdafondobronce.png" />
+    <Content Include="img\celdafondooro.png" />
+    <Content Include="img\celdafondoplata.png" />
     <Content Include="img\circulo.png" />
     <Content Include="img\domi.gif" />
     <Content Include="img\facebook.png" />

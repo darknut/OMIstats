@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
 }
 
 @{
@@ -14,71 +15,108 @@
 
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
 
-<table>
-    <tr>
-        <th>Lugar</th>
-        <th>Género</th>
-        <th>Competidor</th>
-        <th>Clave</th>
-        @if (ViewBag.mostrarIndividual)
-        {
-            for (var i = 0; i < ViewBag.dia1; i++)
+<table class="table tablePadding">
+    <thead>
+        <tr class="table-header">
+            <th></th>
+            <th class="bottom-border right-border">Lugar</th>
+            <th class="bottom-border right-border">Género</th>
+            <th class="bottom-border right-border">Competidor</th>
+            <th class="bottom-border right-border">Clave</th>
+            @if (ViewBag.mostrarIndividual)
             {
-                <th><a href="@ViewBag.problemasDia1[i].url"> @("P" + (i + 1))</a></th>
+                for (var i = 0; i < ViewBag.dia1; i++)
+                {
+                    <th class="bottom-border right-border"><a href="@ViewBag.problemasDia1[i].url"> @("P" + (i + 1))</a></th>
+                }
             }
-        }
-        @if (ViewBag.mostrarDia)
-        {
-            <th>D1</th>
-        }
-        @if (ViewBag.mostrarIndividual)
-        {
-            for (var i = 0; i < ViewBag.dia2; i++)
+            @if (ViewBag.mostrarDia)
             {
-                <th><a href="@ViewBag.problemasDia2[i].url"> @("P" + (i + 1))</a></th>
+                <th class="bottom-border right-border">D1</th>
             }
-        }
-        @if (ViewBag.mostrarDia)
-        {
-            <th>D2</th>
-        }
-        <th>Total</th>
-        <th>Medalla</th>
-        <th>Escuela</th>
-        <th>Tipo</th>
-    </tr>
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia2; i++)
+                {
+                    <th class="bottom-border right-border"><a href="@ViewBag.problemasDia2[i].url"> @("P" + (i + 1))</a></th>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <th class="bottom-border right-border">D2</th>
+            }
+            <th class="bottom-border right-border">Total</th>
+            <th class="bottom-border right-border">Medalla</th>
+            <th class="bottom-border right-border">Escuela</th>
+            <th class="bottom-border">Tipo</th>
+        </tr>
+    </thead>
     @{var lugar = 1;}
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
         if (!ViewBag.resultados[l].clave.StartsWith(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA))
         {
-            var mostrar = ViewBag.admin || Model.datosPublicos || ViewBag.resultados[l].publico || 
-                (ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
-                 ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
-                 ViewBag.resultados[l].usuario == ViewBag.claveUsuario;
+            OMIstats.Models.Resultados datos = ViewBag.resultados[l];
+            string claseCSS = "";
+            switch (datos.medalla)
+            {
+                case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
+                    {
+                        claseCSS = "table-td-bronce";
+                        break;
+                    }
+                case OMIstats.Models.Resultados.TipoMedalla.PLATA:
+                    {
+                        claseCSS = "table-td-plata";
+                        break;
+                    }
+                case OMIstats.Models.Resultados.TipoMedalla.ORO:
+                case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
+                case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
+                case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                    {
+                        claseCSS = "table-td-oro";
+                        break;
+                    }
+            }
+            bool mostrar = ViewBag.admin || Model.datosPublicos || datos.publico ||
+                (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
+                 datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
+                 datos.usuario == ViewBag.claveUsuario;
             <tr>
-                <td>@(lugar++)</td>
-                <td>
+                <td class="ioi-mini-imagen">
+                    @if(datos.ioi == "A" || datos.ioi == "B")
+                    {
+                        <img src="/img/ioi.png" />
+                        <!-- -TODO- Agregar enlace a IOI -->
+                    }
+                </td>
+                <td class="@("table-td center right-border " + claseCSS)">
+                    @(lugar++)
+                </td>
+                <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
                         <span>
-                            @ViewBag.resultados[l].persona.genero
+                            @datos.persona.genero
                         </span>
                     }
                 </td>
-                <td>
+                <td class="@("table-td break-word right-border " + claseCSS)">
                     @if (mostrar)
                     {
                         <span>
-                            @ViewBag.resultados[l].persona.nombre
+                            <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario)">
+                                @datos.persona.nombre
+                            </a>
                         </span>
                     }
                 </td>
-                <td>
+                <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
                         <span>
-                            @ViewBag.resultados[l].clave
+                            @datos.clave
                         </span>
                     }
                 </td>
@@ -86,56 +124,71 @@
                 {
                     for (var i = 0; i < ViewBag.dia1; i++)
                     {
-                        <td>
-                            @ViewBag.resultados[l].dia1[i]
+                        <td class="@("table-td center right-border " + claseCSS)">
+                            @datos.dia1[i]
                         </td>
                     }
                 }
                 @if (ViewBag.mostrarDia)
                 {
-                    <td>
-                        @ViewBag.resultados[l].totalDia1
+                    <td class="@("table-td center right-border " + claseCSS)">
+                        @datos.totalDia1
                     </td>
                 }
                 @if (ViewBag.mostrarIndividual)
                 {
                     for (var i = 0; i < ViewBag.dia2; i++)
                     {
-                         <td>
-                            @ViewBag.resultados[l].dia2[i]
+                         <td class="@("table-td center right-border " + claseCSS)">
+                            @datos.dia2[i]
                         </td>
                     }
                 }
                 @if (ViewBag.mostrarDia)
                 {
-                    <td>
-                        @ViewBag.resultados[l].totalDia2
+                    <td class="@("table-td center right-border " + claseCSS)">
+                        @datos.totalDia2
                     </td>
                 }
-                <td>
-                    @ViewBag.resultados[l].total
+                <td class="@("table-td center right-border " + claseCSS)">
+                    @datos.total
                 </td>
-                <td>
-                    @if( (ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
-                          ViewBag.resultados[l].medalla != OMIstats.Models.Resultados.TipoMedalla.NULL))
+                <td class="@("table-td center right-border " + claseCSS)">
+                    @if( (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
+                         datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL))
                     {
                         <span>
-                            @ViewBag.resultados[l].medalla.ToString()
+                            @if (datos.medalla == OMIstats.Models.Resultados.TipoMedalla.ORO_1 ||
+                                 datos.medalla == OMIstats.Models.Resultados.TipoMedalla.ORO_2 ||
+                                 datos.medalla == OMIstats.Models.Resultados.TipoMedalla.ORO_3)
+                            {
+                                <span>ORO</span>
+                            }
+                            else
+                            {
+                                if (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL &&
+                                    datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA)
+                                {
+                                    <span>@datos.medalla.ToString()</span>
+                                }
+                            }
                         </span>
                     }
                 </td>
-                <td>
-                    @if (mostrar && ViewBag.resultados[l].escuela != null)
+                <td class="@("table-td break-word right-border " + claseCSS)">
+                    @if (mostrar && datos.escuela != null)
                     {
                         <span>
-                            @ViewBag.resultados[l].escuela.nombre
+                            <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL)">
+                                @datos.escuela.nombreCorto
+                            </a>
                         </span>
                     }
                 </td>
-                <td>
-                    @if (mostrar && ViewBag.resultados[l].escuela != null)
+                <td class="@("table-td center " + claseCSS)">
+                    @if (mostrar && datos.escuela != null)
                     {
-                        if (ViewBag.resultados[l].escuela.publica)
+                        if (datos.escuela.publica)
                         {
                             <span>G</span>
                         }

@@ -32,6 +32,18 @@
     height: 74px;
 }
 
+.table-td-oro {
+	background-image:url(../img/celdafondooro.png);
+}
+
+.table-td-plata {
+	background-image:url(../img/celdafondoplata.png);
+}
+
+.table-td-bronce {
+	background-image:url(../img/celdafondobronce.png);
+}
+
 .border {
     border: solid 4px #336699;
 }

@@ -86,3 +86,15 @@
 .problemasColumnas > div {
     width:50%;
 }
+
+.tablePadding {
+    margin-left:20px;
+}
+
+.ioi-mini-imagen {
+    width:40px;
+}
+
+.ioi-mini-imagen > img {
+    width:30px;
+}
