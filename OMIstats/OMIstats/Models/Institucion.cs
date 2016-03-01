@@ -37,7 +37,7 @@ namespace OMIstats.Models
         public string nombreURL { get; set; }
 
         [RegularExpression(@"^(https?:\/\/).*$", ErrorMessage = "Escribe una dirección de internet")]
-        [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string pagina { get; set; }
 
         public bool primaria { get; set; }
@@ -250,6 +250,30 @@ namespace OMIstats.Models
                     }
                 }
                 nombreURL += counter.ToString();
+            }
+
+            temp = obtenerInstitucionConNombreCorto(nombreCorto);
+            if (!(temp == null || temp.clave == clave))
+            {
+                int counter = 0;
+                int caracters = 1;
+                int nextIncrement = 10;
+                while (true)
+                {
+                    if (nombreCorto.Length > (20 - caracters))
+                        nombreCorto = nombreCorto.Substring(0, 20 - caracters);
+
+                    if (obtenerInstitucionConNombreCorto(nombreCorto + counter.ToString()) == null)
+                        break;
+                    counter++;
+
+                    if (counter == nextIncrement)
+                    {
+                        caracters++;
+                        nextIncrement *= 10;
+                    }
+                }
+                nombreCorto += counter.ToString();
             }
 
             string hash = Utilities.Cadenas.quitaEspeciales(nombre);
