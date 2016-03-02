@@ -34,6 +34,7 @@ namespace OMIstats.Models
         }
 
         public const string CLAVE_DESCONOCIDA = "UNK";
+        public const string CLAVE_FALTANTE = "???";
 
         private string omi;
         private Olimpiada.TipoOlimpiada tipoOlimpiada;
@@ -347,13 +348,14 @@ namespace OMIstats.Models
 
             // Revisamos si hay mas de un usuario con esa clave
 
-            if (res.clave.StartsWith(CLAVE_DESCONOCIDA))
+            if (res.clave.StartsWith(CLAVE_DESCONOCIDA) || res.clave.StartsWith(CLAVE_FALTANTE))
             {
                 Estado e = Estado.obtenerEstadoConClave(res.estado);
                 if (e == null)
                     return TipoError.ESTADO_INEXISTENTE;
             }
-            else
+
+            if (!res.clave.StartsWith(CLAVE_DESCONOCIDA))
             {
                 List<MiembroDelegacion> lista = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, res.clave);
                 if (lista.Count == 0)

@@ -47,8 +47,7 @@
             }
             <th class="bottom-border right-border">Total</th>
             <th class="bottom-border right-border">Medalla</th>
-            <th class="bottom-border right-border">Escuela</th>
-            <th class="bottom-border">Tipo</th>
+            <th class="bottom-border">Escuela</th>
         </tr>
     </thead>
     @{var lugar = 1;}
@@ -97,9 +96,14 @@
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
-                        <span>
-                            @datos.persona.genero
-                        </span>
+                        if(datos.persona.genero == "M")
+                        {
+                           <span class="azul">H</span>
+                        }
+                        else
+                        {
+                           <span class="rosa">M</span>
+                        }
                     }
                 </td>
                 <td class="@("table-td break-word right-border " + claseCSS)">
@@ -115,9 +119,18 @@
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
-                        <span>
-                            @datos.clave
-                        </span>
+                        if (datos.clave.StartsWith(OMIstats.Models.Resultados.CLAVE_FALTANTE))
+                        {
+                            <span>
+                                @datos.estado
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @datos.clave
+                            </span>
+                        }
                     }
                 </td>
                 @if (ViewBag.mostrarIndividual)
@@ -175,7 +188,7 @@
                         </span>
                     }
                 </td>
-                <td class="@("table-td break-word right-border " + claseCSS)">
+                <td class="@("table-td break-word " + claseCSS)">
                     @if (mostrar && datos.escuela != null)
                     {
                         <span>
@@ -183,19 +196,6 @@
                                 @datos.escuela.nombreCorto
                             </a>
                         </span>
-                    }
-                </td>
-                <td class="@("table-td center " + claseCSS)">
-                    @if (mostrar && datos.escuela != null)
-                    {
-                        if (datos.escuela.publica)
-                        {
-                            <span>G</span>
-                        }
-                        else
-                        {
-                            <span>P</span>
-                        }
                     }
                 </td>
             </tr>
