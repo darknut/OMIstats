@@ -308,7 +308,7 @@ namespace OMIstats.Controllers
 
             o.calcularNumeros();
 
-            return RedirectTo(Pagina.EDIT_OLIMPIADA, clave);
+            return RedirectTo(Pagina.OLIMPIADA, clave);
         }
     }
 }

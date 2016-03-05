@@ -429,7 +429,15 @@ namespace OMIstats.Models
 
             guardarDatos();
 
-            // -TODO- Agregar calcualr problemas
+            List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 1);
+            foreach (Problema p in lista)
+                if (p != null)
+                    p.calcularNumeros();
+
+            lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 2);
+            foreach (Problema p in lista)
+                if (p != null)
+                    p.calcularNumeros();
         }
     }
 }
