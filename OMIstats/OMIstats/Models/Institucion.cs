@@ -379,5 +379,21 @@ namespace OMIstats.Models
                 return guardarDatos();
             }
         }
+
+        /// <summary>
+        /// Borra de la base de datos todas las instituciones sin competidores o olimpiadas asignadas
+        /// </summary>
+        public static void borrarZombies()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" delete institucion where clave in ( ");
+            query.Append(" select clave from Institucion where clave ");
+            query.Append(" not in (select escuela from Olimpiada) and clave not in ");
+            query.Append(" (select institucion from MiembroDelegacion))");
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 }

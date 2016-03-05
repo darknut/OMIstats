@@ -130,5 +130,19 @@ namespace OMIstats.Controllers
 
             return View(p);
         }
+
+        //
+        // GET: /Admin/Zombies/
+
+        public ActionResult Zombies()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.HOME);
+
+            Institucion.borrarZombies();
+            Persona.borrarZombies();
+
+            return RedirectTo(Pagina.MANAGE_REQUEST);
+        }
     }
 }

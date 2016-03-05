@@ -494,5 +494,21 @@ namespace OMIstats.Models
 
             guardarDatos();
         }
+
+        /// <summary>
+        /// Borra de la base de datos todos los competidores sin ningún rol en la OMI
+        /// </summary>
+        public static void borrarZombies()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" delete persona where clave in ( ");
+            query.Append(" select clave from Persona where clave ");
+            query.Append(" not in (select distinct(Persona) from MiembroDelegacion) and clave not in ");
+            query.Append(" (select delegado from Estado))");
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 }
