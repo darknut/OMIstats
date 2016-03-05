@@ -88,15 +88,17 @@
 }
 
 .tablePadding {
-    margin-left:20px;
+    margin-left:10px;
+    margin-top:30px;
+    margin-bottom:30px;
 }
 
 .ioi-mini-imagen {
-    width:40px;
+    width:30px;
 }
 
 .ioi-mini-imagen > img {
-    width:30px;
+    width:25px;
 }
 
 .azul {
@@ -105,4 +107,26 @@
 
 .rosa {
     color: #BA1393;
+}
+
+.table-header {
+	font-size: 10pt;
+}
+
+.table-td {
+	font-size: 10pt;
+    height: 40px;
+}
+
+.escuela-td {
+    width:100px;
+}
+
+.resultado-dia {
+    font-weight:bold;
+}
+
+.resultado-total {
+    font-weight:bold;
+    font-size: 11pt;
 }

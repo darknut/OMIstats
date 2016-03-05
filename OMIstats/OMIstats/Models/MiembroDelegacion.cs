@@ -87,7 +87,8 @@ namespace OMIstats.Models
                 genero = row["genero"].ToString().Trim();
                 correo = row["correo"].ToString().Trim();
                 nombreEscuela = row["nombreCorto"].ToString().Trim();
-                escuelaPublica = (bool)row["publica"];
+                if (row["publica"] != DBNull.Value)
+                    escuelaPublica = (bool)row["publica"];
             }
 
             estado = row["estado"].ToString().Trim();
@@ -136,7 +137,12 @@ namespace OMIstats.Models
             try
             {
                 if (datos.Length > 9)
-                    nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[9].Trim().ToUpper());
+                {
+                    if (datos[9].Trim().Length == 0)
+                        nivelEscuela = Institucion.NivelInstitucion.NULL;
+                    else
+                        nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[9].Trim().ToUpper());
+                }
             }
             catch (Exception)
             {
@@ -145,7 +151,12 @@ namespace OMIstats.Models
             try
             {
                 if (datos.Length > 10)
-                    añoEscuela = Int32.Parse(datos[10]);
+                {
+                    if (datos[10].Trim().Length == 0)
+                        añoEscuela = 0;
+                    else
+                        añoEscuela = Int32.Parse(datos[10]);
+                }
                 if (añoEscuela < 0 || añoEscuela > 6)
                     return TipoError.AñO_ESCUELA;
             } catch (Exception)
@@ -561,7 +572,7 @@ namespace OMIstats.Models
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
-            query.Append(" inner join Institucion as i on i.clave = md.institucion");
+            query.Append(" left outer join Institucion as i on i.clave = md.institucion");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and md.clase = ");

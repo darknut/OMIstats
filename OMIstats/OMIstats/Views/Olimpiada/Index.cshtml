@@ -77,7 +77,7 @@
     @if (Model.reporte != null && Model.reporte.Length > 0)
     {
         <div class="mediaOMI">
-            <a href="@Model.reporte" class="nombre">
+            <a href="@Uri.EscapeUriString(Model.reporte)" class="nombre">
                 <img src="~/img/docx.png"/><br />Reporte</a>
         </div>
     }

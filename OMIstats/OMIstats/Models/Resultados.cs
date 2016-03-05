@@ -159,7 +159,15 @@ namespace OMIstats.Models
             try
             {
                 if (datos.Length > indice)
-                    medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), datos[indice++].Trim().ToUpper());
+                {
+                    if (datos[indice].Trim().Length == 0)
+                    {
+                        medalla = TipoMedalla.NADA;
+                        indice++;
+                    }
+                    else
+                        medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), datos[indice++].Trim().ToUpper());
+                }
             }
             catch (Exception)
             {

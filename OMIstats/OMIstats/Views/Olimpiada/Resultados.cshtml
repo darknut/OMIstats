@@ -2,10 +2,10 @@
 
 @section AddToHead
 {
-    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
 }
 
 @{
@@ -15,7 +15,7 @@
 
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
 
-<table class="table tablePadding">
+<table class="table tablePadding tablaResultados">
     <thead>
         <tr class="table-header">
             <th></th>
@@ -27,7 +27,7 @@
             {
                 for (var i = 0; i < ViewBag.dia1; i++)
                 {
-                    <th class="bottom-border right-border"><a href="@ViewBag.problemasDia1[i].url"> @("P" + (i + 1))</a></th>
+                    <th class="bottom-border right-border"><a href="@ViewBag.problemasDia1[i].url" target="_blank"> @("P" + (i + 1))</a></th>
                 }
             }
             @if (ViewBag.mostrarDia)
@@ -38,7 +38,7 @@
             {
                 for (var i = 0; i < ViewBag.dia2; i++)
                 {
-                    <th class="bottom-border right-border"><a href="@ViewBag.problemasDia2[i].url"> @("P" + (i + 1))</a></th>
+                    <th class="bottom-border right-border"><a href="@ViewBag.problemasDia2[i].url" target="_blank"> @("P" + (i + 1))</a></th>
                 }
             }
             @if (ViewBag.mostrarDia)
@@ -144,7 +144,7 @@
                 }
                 @if (ViewBag.mostrarDia)
                 {
-                    <td class="@("table-td center right-border " + claseCSS)">
+                    <td class="@("table-td center right-border resultado-dia " + claseCSS)">
                         @datos.totalDia1
                     </td>
                 }
@@ -159,11 +159,11 @@
                 }
                 @if (ViewBag.mostrarDia)
                 {
-                    <td class="@("table-td center right-border " + claseCSS)">
+                    <td class="@("table-td center right-border resultado-dia " + claseCSS)">
                         @datos.totalDia2
                     </td>
                 }
-                <td class="@("table-td center right-border " + claseCSS)">
+                <td class="@("table-td center right-border resultado-total " + claseCSS)">
                     @datos.total
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
@@ -188,7 +188,7 @@
                         </span>
                     }
                 </td>
-                <td class="@("table-td break-word " + claseCSS)">
+                <td class="@("table-td break-word escuela-td " + claseCSS)">
                     @if (mostrar && datos.escuela != null)
                     {
                         <span>
