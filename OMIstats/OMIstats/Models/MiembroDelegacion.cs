@@ -594,5 +594,48 @@ namespace OMIstats.Models
 
             return lista;
         }
+
+        /// <summary>
+        /// Regresa el número de estados participantes en la Olimpiada mandada como parámetro
+        /// </summary>
+        /// <param name="omi">La OMI deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
+        /// <returns>Cuantos estados participaron</returns>
+        public static int obtenerEstadosParticipantes(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select count(distinct(Estado)) from MiembroDelegacion where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+
+            return (int)db.getTable().Rows[0][0];
+        }
+
+        /// <summary>
+        /// Regresa el número de participantes en la Olimpiada mandada como parámetro
+        /// </summary>
+        /// <param name="omi">La OMI deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
+        /// <returns>Cuantos competidores participaron</returns>
+        public static int obtenerParticipantes(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select COUNT(*) from MiembroDelegacion where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and tipo = ");
+            query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            return (int)db.getTable().Rows[0][0];
+        }
     }
 }

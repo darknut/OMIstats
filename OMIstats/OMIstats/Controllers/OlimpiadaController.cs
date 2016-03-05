@@ -27,6 +27,7 @@ namespace OMIstats.Controllers
 
             ViewBag.dia1 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
             ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             return View(o);
         }
@@ -287,8 +288,27 @@ namespace OMIstats.Controllers
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
             ViewBag.claveUsuario = getUsuario().clave;
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             return View(o);
+        }
+
+        //
+        // GET: /Olimpiada/Numeros/
+
+        public ActionResult Numeros(string clave)
+        {
+            if (!esAdmin() || clave == null)
+                return RedirectTo(Pagina.HOME);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+
+            if (o == null || clave == Olimpiada.TEMP_CLAVE)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            o.calcularNumeros();
+
+            return RedirectTo(Pagina.EDIT_OLIMPIADA, clave);
         }
     }
 }

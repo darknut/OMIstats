@@ -9,6 +9,7 @@
 
 .table {
     border-collapse: collapse;
+    margin-right:10px;
 }
 
 .table-header {

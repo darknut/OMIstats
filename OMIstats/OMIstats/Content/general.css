@@ -34,6 +34,8 @@ a {
 .submenu {
     margin-top:20px;
     float:right;
+    display:flex;
+    flex-direction:column;
 }
 
 .mini-boton {

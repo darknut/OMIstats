@@ -88,6 +88,18 @@
 
 </div>
 
+<div class="submenu">
+    @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
+    {
+        OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+        if (omi.numero != Model.numero)
+        {
+            @Html.ActionLink(omi.numero + "ª OMI", "Index", "Olimpiada",
+                new { clave = omi.numero }, new { @class = "mini-boton" });
+        }
+    }
+</div>
+
 @if(ViewBag.admin || ViewBag.dia1[0] != null || ViewBag.dia2[0] != null)
 {
     <div class="datosOlimpiada problemasColumnas">
@@ -172,8 +184,8 @@
             </div>
         }
     </div>
-
-    <div class="clear">
-
-    </div>
 }
+
+<div class="clear">
+
+</div>

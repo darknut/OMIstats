@@ -413,5 +413,23 @@ namespace OMIstats.Models
 
             return errores.ToString();
         }
+
+        /// <summary>
+        /// Calcula los campos calculados de olimpiadas y problemas
+        /// </summary>
+        public void calcularNumeros()
+        {
+            estados = MiembroDelegacion.obtenerEstadosParticipantes(numero, tipoOlimpiada);
+            participantes = MiembroDelegacion.obtenerParticipantes(numero, tipoOlimpiada);
+            mediana = Resultados.obtenerPrimerBronce(numero, tipoOlimpiada);
+            int suma = Resultados.obtenerPuntosTotales(numero, tipoOlimpiada);
+
+            if (participantes > 0)
+                media = suma * 1f / participantes;
+
+            guardarDatos();
+
+            // -TODO- Agregar calcualr problemas
+        }
     }
 }

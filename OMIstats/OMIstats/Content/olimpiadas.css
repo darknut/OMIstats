@@ -80,15 +80,14 @@
 .problemasColumnas {
     display:flex;
     flex-direction:row;
-    width:100%;
+    width:80%;
 }
 
 .problemasColumnas > div {
-    width:50%;
+    width:40%;
 }
 
 .tablePadding {
-    margin-left:10px;
     margin-top:30px;
     margin-bottom:30px;
 }
@@ -119,7 +118,7 @@
 }
 
 .escuela-td {
-    width:100px;
+    width:90px;
 }
 
 .resultado-dia {

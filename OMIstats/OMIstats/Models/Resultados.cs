@@ -489,5 +489,51 @@ namespace OMIstats.Models
 
             return ((int)db.getTable().Rows[0][0]) == 0;
         }
+
+        /// <summary>
+        /// Regresa el número de puntos obtenidos por todos los competidores en la olimpiada
+        /// </summary>
+        /// <param name="omi">La OMI deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
+        /// <returns>La suma de puntos</returns>
+        public static int obtenerPuntosTotales(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select SUM(puntos) from Resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            return (int)db.getTable().Rows[0][0];
+        }
+
+        /// <summary>
+        /// Regresa el número de puntos obtenidos por el primer bronce de la olimpiada
+        /// </summary>
+        /// <param name="omi">La OMI deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
+        /// <returns>Los puntos del bronce</returns>
+        public static int obtenerPrimerBronce(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select top 1 puntos from Resultados where olimpiada =  ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and medalla = ");
+            query.Append((int)TipoMedalla.BRONCE);
+            query.Append(" order by puntos asc ");
+
+            db.EjecutarQuery(query.ToString());
+            if (db.getTable().Rows.Count == 0)
+                return 0;
+
+            return (int)db.getTable().Rows[0][0];
+        }
     }
 }

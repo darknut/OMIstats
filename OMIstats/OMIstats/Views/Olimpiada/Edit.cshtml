@@ -210,6 +210,14 @@ else
         </div>
     </form>
 }
-    <div class="clear">
+<div class="clear">
+</div>
 
+@if(Model.numero != OMIstats.Models.Olimpiada.TEMP_CLAVE)
+{
+    <br />
+    <a href="@Url.Content("/Olimpiada/Numeros?clave=" + Model.numero)" class="boton botonOMI">Calcular Números</a>
+
+    <div class="clear">
     </div>
+}
