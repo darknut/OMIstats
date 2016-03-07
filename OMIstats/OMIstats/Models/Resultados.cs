@@ -36,8 +36,8 @@ namespace OMIstats.Models
         public const string CLAVE_DESCONOCIDA = "UNK";
         public const string CLAVE_FALTANTE = "???";
 
-        private string omi;
-        private Olimpiada.TipoOlimpiada tipoOlimpiada;
+        public string omi;
+        public Olimpiada.TipoOlimpiada tipoOlimpiada;
         public int usuario;
         public string estado;
         public string clave;
@@ -52,6 +52,7 @@ namespace OMIstats.Models
 
         public Persona persona;
         public Institucion escuela;
+        public string nombreEstado;
 
         private bool eliminar;
 
@@ -93,6 +94,7 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow row, bool cargarObjetos)
         {
             usuario = (int)row["concursante"];
+            omi = row["olimpiada"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
             estado = row["estado"].ToString().Trim();
             dia1[0] = (int)row["puntosD1P1"];
@@ -122,6 +124,7 @@ namespace OMIstats.Models
                     escuela = Institucion.obtenerInstitucionConNombreCorto(
                         MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0].nombreEscuela);
                 }
+                nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
             }
         }
 
@@ -220,7 +223,6 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.omi = omi;
                 res.tipoOlimpiada = tipoOlimpiada;
                 res.llenarDatos(r, cargarObjetos);
 
@@ -534,6 +536,40 @@ namespace OMIstats.Models
                 return 0;
 
             return (int)db.getTable().Rows[0][0];
+        }
+
+        /// <summary>
+        /// Regresa las participaciones en olimpiadas del usuario mandado como parametro
+        /// </summary>
+        /// <param name="persona">La persona de la que se quieren los datos</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada que se solicita</param>
+        /// <returns>La lista de participaciones</returns>
+        public static List<Resultados> obtenerParticipacionesComoCompetidorPara(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            List<Resultados> lista = new List<Resultados>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from resultados ");
+            query.Append(" where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and concursante = ");
+            query.Append(persona);
+            query.Append(" order by olimpiada desc");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Resultados res = new Resultados();
+                res.tipoOlimpiada = tipoOlimpiada;
+                res.llenarDatos(r, cargarObjetos: true);
+
+                lista.Add(res);
+            }
+
+            return lista;
         }
     }
 }

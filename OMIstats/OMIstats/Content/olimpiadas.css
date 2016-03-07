@@ -92,14 +92,6 @@
     margin-bottom:30px;
 }
 
-.ioi-mini-imagen {
-    width:30px;
-}
-
-.ioi-mini-imagen > img {
-    width:25px;
-}
-
 .azul {
     color:blue;
 }
@@ -115,17 +107,4 @@
 .table-td {
 	font-size: 10pt;
     height: 40px;
-}
-
-.escuela-td {
-    width:90px;
-}
-
-.resultado-dia {
-    font-weight:bold;
-}
-
-.resultado-total {
-    font-weight:bold;
-    font-size: 11pt;
 }

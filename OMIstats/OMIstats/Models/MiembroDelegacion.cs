@@ -39,11 +39,9 @@ namespace OMIstats.Models
             CLAVE_DUPLICADA
         }
 
-        // Este objeto debe de ser contenido por un objeto olimpiada,
-        // por eso no cargamos un objeto olimpiada aqui
-
         public int claveUsuario;
         public string usuario;
+        public string olimpiada;
         public string nombreAsistente;
         public string fechaNacimiento;
         public string correo;
@@ -61,6 +59,7 @@ namespace OMIstats.Models
         public MiembroDelegacion()
         {
             usuario = "";
+            olimpiada = "";
             nombreAsistente = "";
             fechaNacimiento = "";
             correo = "";
@@ -241,7 +240,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave,");
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
@@ -568,7 +567,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.estado, md.tipo, md.clave,");
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave,");
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
