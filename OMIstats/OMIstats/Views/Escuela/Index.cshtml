@@ -14,22 +14,11 @@
 @section scripts
 {
     <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script> 
+    <script type="text/javascript" src="/Scripts/jquery.metadata.js"></script> 
     <script type="text/javascript" src="/js/sortMedallas.js"></script> 
     <script>
         $(function () {
-            agregaSorter();
-            $("#tablaAlumnos").tablesorter(
-                {
-                    headers: {
-                        0: {
-                            sorter: false
-                        },
-                        7: {
-                            sorter: 'medalla'
-                        }
-                    }
-
-                });
+            agregaSorter("tablaAlumnos");
         });
     </script>
 }
@@ -164,7 +153,7 @@
 {
     <h1 class="titulo subtitulo"> Alumnos competidores </h1>
 
-    <table class="table tablePadding tablaResultados" id="tablaAlumnos">
+    <table class="tablesorter table tablePadding tablaResultados" id="tablaAlumnos">
         <thead>
             <tr class="table-header">
                 <th></th>
@@ -174,7 +163,7 @@
                 <th class="bottom-border right-border table-header-clickable">Estado</th>
                 <th class="bottom-border right-border table-header-clickable">Clave</th>
                 <th class="bottom-border right-border table-header-clickable">Puntos</th>
-                <th class="bottom-border table-header-clickable">Medalla</th>
+                <th class="bottom-border table-header-clickable {sorter:'medalla'}">Medalla</th>
             </tr>
         </thead>
         <tbody>

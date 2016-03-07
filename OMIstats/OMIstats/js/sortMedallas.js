@@ -1,4 +1,4 @@
-﻿function agregaSorter() {
+﻿function agregaSorter(nombre) {
     $.tablesorter.addParser({
         id: 'medalla',
         is: function (s, table, cell, $cell) {
@@ -17,4 +17,6 @@
         parsed: false,
         type: 'numeric'
     });
+
+    $("#" + nombre).tablesorter();
 }
