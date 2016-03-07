@@ -108,3 +108,25 @@
 	font-size: 10pt;
     height: 40px;
 }
+
+
+.ioi-mini-imagen {
+    width:30px;
+}
+
+.ioi-mini-imagen > img {
+    width:25px;
+}
+
+.escuela-td {
+    width:90px;
+}
+
+.resultado-dia {
+    font-weight:bold;
+}
+
+.resultado-total {
+    font-weight:bold;
+    font-size: 11pt;
+}

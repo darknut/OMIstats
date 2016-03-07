@@ -5,6 +5,7 @@
 {
     <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/tablas.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/olimpiadas.css" type="text/css" rel="stylesheet" />
 }
 
 @{
@@ -248,6 +249,58 @@
                                     @datos.escuela.nombreCorto
                                 </a>
                             </span>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+
+    @if (ViewBag.asistencias.Count > 0)
+    {
+        if (ViewBag.participaciones.Count > 0)
+        {
+            <h1 class="titulo subtitulo"> Participaciones con diferente rol </h1>
+        }
+        else
+        {
+            <h1 class="titulo subtitulo"> Participaciones en olimpiadas</h1>
+        }
+
+        <table class="table tablePadding tablaResultados">
+            <thead>
+                <tr class="table-header">
+                    <th></th>
+                    <th class="bottom-border right-border">Olimpiada</th>
+                    <th class="bottom-border right-border">Estado</th>
+                    <th class="bottom-border">Rol</th>
+                </tr>
+            </thead>
+            @for (var l = 0; l < ViewBag.asistencias.Count; l++)
+            {
+                OMIstats.Models.MiembroDelegacion datos = ViewBag.asistencias[l];
+                <tr>
+                    <td class="ioi-mini-imagen">
+                    </td>
+                    <td class="table-td right-border">
+                        <a class="nombre" href="@Url.Content("/Olimpiada?clave=" + datos.olimpiada)">
+                            @(datos.olimpiada + "ª OMI")
+                        </a>
+                    </td>
+                    <td class="table-td right-border">
+                        <a class="nombre" href="@Url.Content("/Estados?clave=" + datos.estado)">
+                            @datos.nombreEstado
+                        </a>
+                    </td>
+                    <td class="table-td center">
+                        @if (datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER)
+                        {
+                            <span>DELEGADO Y LIDER</span>
+                        }
+                        else
+                        {
+                           @(datos.tipo.ToString())
                         }
                     </td>
                 </tr>

@@ -56,6 +56,8 @@ namespace OMIstats.Models
 
         private bool eliminar;
 
+        public string nombreEstado;
+
         public MiembroDelegacion()
         {
             usuario = "";
@@ -91,6 +93,8 @@ namespace OMIstats.Models
             }
 
             estado = row["estado"].ToString().Trim();
+            olimpiada = row["olimpiada"].ToString().Trim();
+            nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
             clave = row["clave"].ToString().Trim();
             tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
             nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
@@ -244,7 +248,7 @@ namespace OMIstats.Models
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
-            query.Append(" inner join Institucion as i on i.clave = md.institucion");
+            query.Append(" left outer join Institucion as i on i.clave = md.institucion");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and md.clase = ");
@@ -635,6 +639,46 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
             return (int)db.getTable().Rows[0][0];
+        }
+
+        /// <summary>
+        /// Regresa las participaciones del usuario mandado como parámetro que no son como competidor
+        /// </summary>
+        /// <param name="persona">La clave de la persona deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
+        /// <returns>La lista de participaciones</returns>
+        public static List<MiembroDelegacion> obtenerParticipaciones(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave,");
+            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" left outer join Institucion as i on i.clave = md.institucion");
+            query.Append(" where p.clave = ");
+            query.Append(persona);
+            query.Append(" and md.clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and md.tipo <> ");
+            query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(" order by md.año ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r, incluirTablasAjenas: true);
+
+                lista.Add(md);
+            }
+
+            return lista;
         }
     }
 }

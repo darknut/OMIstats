@@ -51,6 +51,7 @@ namespace OMIstats.Controllers
                     Persona p = getUsuario();
                     ViewBag.tienePeticiones = p.tienePeticiones();
                     ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, Olimpiada.TipoOlimpiada.OMI);
+                    ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, Olimpiada.TipoOlimpiada.OMI);
                     return View(p);
                 }
                 else
@@ -68,6 +69,7 @@ namespace OMIstats.Controllers
                     if (p.usuario == u.usuario)
                         ViewBag.tienePeticiones = p.tienePeticiones();
                     ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, Olimpiada.TipoOlimpiada.OMI);
+                    ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, Olimpiada.TipoOlimpiada.OMI);
                     return View(p);
                 }
                 else

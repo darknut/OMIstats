@@ -68,24 +68,3 @@
 .left-border{
     border-left: solid 4px #336699;
 }
-
-.ioi-mini-imagen {
-    width:30px;
-}
-
-.ioi-mini-imagen > img {
-    width:25px;
-}
-
-.escuela-td {
-    width:90px;
-}
-
-.resultado-dia {
-    font-weight:bold;
-}
-
-.resultado-total {
-    font-weight:bold;
-    font-size: 11pt;
-}
