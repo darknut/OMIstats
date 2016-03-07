@@ -259,6 +259,7 @@
     <Content Include="js\fechas.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\request.js" />
+    <Content Include="js\sortMedallas.js" />
     <Content Include="private\cambioPassword.html" />
     <Content Include="private\bienvenido.html" />
     <Content Include="private\firma.html" />
@@ -267,6 +268,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.metadata.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
