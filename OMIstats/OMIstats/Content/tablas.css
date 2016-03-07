@@ -18,6 +18,10 @@
     text-align: left;
 }
 
+.table-header-clickable {
+    cursor:pointer;
+}
+
 .table-header th {
     padding-right: 10px;
     padding-left: 5px;

@@ -11,6 +11,29 @@
     ViewBag.Title = "Datos de institución";
 }
 
+@section scripts
+{
+    <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script> 
+    <script type="text/javascript" src="/js/sortMedallas.js"></script> 
+    <script>
+        $(function () {
+            agregaSorter();
+            $("#tablaAlumnos").tablesorter(
+                {
+                    headers: {
+                        0: {
+                            sorter: false
+                        },
+                        7: {
+                            sorter: 'medalla'
+                        }
+                    }
+
+                });
+        });
+    </script>
+}
+
 <h2 class="titulo">Datos de institución</h2>
 
 <div class="sedes">
@@ -141,126 +164,127 @@
 {
     <h1 class="titulo subtitulo"> Alumnos competidores </h1>
 
-    <table class="table tablePadding tablaResultados">
+    <table class="table tablePadding tablaResultados" id="tablaAlumnos">
         <thead>
             <tr class="table-header">
                 <th></th>
-                <th class="bottom-border right-border">Olimpiada</th>
-                <th class="bottom-border right-border">Género</th>
-                <th class="bottom-border right-border">Concursante</th>
-                <th class="bottom-border right-border">Estado</th>
-                <th class="bottom-border right-border">Clave</th>
-                <th class="bottom-border right-border">Puntos</th>
-                <th class="bottom-border">Medalla</th>
+                <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+                <th class="bottom-border right-border table-header-clickable">Género</th>
+                <th class="bottom-border right-border table-header-clickable">Concursante</th>
+                <th class="bottom-border right-border table-header-clickable">Estado</th>
+                <th class="bottom-border right-border table-header-clickable">Clave</th>
+                <th class="bottom-border right-border table-header-clickable">Puntos</th>
+                <th class="bottom-border table-header-clickable">Medalla</th>
             </tr>
         </thead>
-        @for (var l = 0; l < ViewBag.participantes.Count; l++)
-        {
-            OMIstats.Models.Resultados datos = ViewBag.participantes[l];
-            OMIstats.Models.Olimpiada omi = OMIstats.Models.Olimpiada.obtenerOlimpiadaConClave(datos.omi, datos.tipoOlimpiada);
-            string claseCSS = "";
-            switch (datos.medalla)
+        <tbody>
+            @for (var l = 0; l < ViewBag.participantes.Count; l++)
             {
-                case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
-                    {
-                        claseCSS = "table-td-bronce";
-                        break;
-                    }
-                case OMIstats.Models.Resultados.TipoMedalla.PLATA:
-                    {
-                        claseCSS = "table-td-plata";
-                        break;
-                    }
-                case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
-                    {
-                        claseCSS = "table-td-oro";
-                        break;
-                    }
+                OMIstats.Models.Resultados datos = ViewBag.participantes[l];
+                OMIstats.Models.Olimpiada omi = OMIstats.Models.Olimpiada.obtenerOlimpiadaConClave(datos.omi, datos.tipoOlimpiada);
+                string claseCSS = "";
+                switch (datos.medalla)
+                {
+                    case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
+                        {
+                            claseCSS = "table-td-bronce";
+                            break;
+                        }
+                    case OMIstats.Models.Resultados.TipoMedalla.PLATA:
+                        {
+                            claseCSS = "table-td-plata";
+                            break;
+                        }
+                    case OMIstats.Models.Resultados.TipoMedalla.ORO:
+                    case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
+                    case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
+                    case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                        {
+                            claseCSS = "table-td-oro";
+                            break;
+                        }
+                }
+                bool mostrar = ViewBag.admin || omi.datosPublicos || datos.publico ||
+                    (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
+                        datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
+                        datos.usuario == ViewBag.claveUsuario;
+                <tr>
+                    <td class="ioi-mini-imagen">
+                        @if(datos.ioi == "A" || datos.ioi == "B")
+                        {
+                            <img src="/img/ioi.png" />
+                            <!-- -TODO- Agregar enlace a IOI -->
+                        }
+                    </td>
+                    <td class="@("table-td right-border " + claseCSS)">
+                        <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi)">
+                            @(datos.omi + "ª OMI")
+                        </a>
+                    </td>
+                    <td class="@("table-td center right-border " + claseCSS)">
+                        @if(datos.persona.genero == "M")
+                        {
+                            <span class="azul">H</span>
+                        }
+                        else
+                        {
+                            <span class="rosa">M</span>
+                        }
+                    </td>
+                    <td class="@("table-td break-word right-border " + claseCSS)">
+                        <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario)">
+                            @datos.persona.nombre
+                        </a>
+                    </td>
+                    <td class="@("table-td right-border " + claseCSS)">
+                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado)">
+                            @datos.nombreEstado
+                        </a>
+                    </td>
+                    <td class="@("table-td center right-border " + claseCSS)">
+                        @if (!datos.clave.StartsWith(OMIstats.Models.Resultados.CLAVE_FALTANTE))
+                        {
+                            <span>
+                                @datos.clave
+                            </span>
+                        }
+                    </td>
+                    <td class="@("table-td center right-border resultado-total " + claseCSS)">
+                        @if (mostrar)
+                        {
+                            @(datos.total)
+                        }
+                    </td>
+                    <td class="@("table-td center " + claseCSS)" medalla="@((int)datos.medalla)">
+                        @switch (datos.medalla)
+                        {
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
+                                {
+                                    <span>ORO (I)</span>
+                                    break;
+                                }
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
+                                {
+                                    <span>ORO (II)</span>
+                                    break;
+                                }
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                                {
+                                    <span>ORO (III)</span>
+                                    break;
+                                }
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO:
+                            case OMIstats.Models.Resultados.TipoMedalla.PLATA:
+                            case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
+                                {
+                                    <span>@datos.medalla.ToString()</span>
+                                    break;
+                                }
+                        }
+                    </td>
+                </tr>
             }
-            bool mostrar = ViewBag.admin || omi.datosPublicos || datos.publico ||
-                (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
-                    datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
-                    datos.usuario == ViewBag.claveUsuario;
-            <tr>
-                <td class="ioi-mini-imagen">
-                    @if(datos.ioi == "A" || datos.ioi == "B")
-                    {
-                        <img src="/img/ioi.png" />
-                        <!-- -TODO- Agregar enlace a IOI -->
-                    }
-                </td>
-                <td class="@("table-td right-border " + claseCSS)">
-                    <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi)">
-                        @(datos.omi + "ª OMI")
-                    </a>
-                </td>
-                <td class="@("table-td center right-border " + claseCSS)">
-                    @if(datos.persona.genero == "M")
-                    {
-                        <span class="azul">H</span>
-                    }
-                    else
-                    {
-                        <span class="rosa">M</span>
-                    }
-                </td>
-                <td class="@("table-td break-word right-border " + claseCSS)">
-                    <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario)">
-                        @datos.persona.nombre
-                    </a>
-                </td>
-                <td class="@("table-td right-border " + claseCSS)">
-                    <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado)">
-                        @datos.nombreEstado
-                    </a>
-                </td>
-                <td class="@("table-td center right-border " + claseCSS)">
-                    @if (!datos.clave.StartsWith(OMIstats.Models.Resultados.CLAVE_FALTANTE))
-                    {
-                        <span>
-                            @datos.clave
-                        </span>
-                    }
-                </td>
-                <td class="@("table-td center right-border resultado-total " + claseCSS)">
-                    @if (mostrar)
-                    {
-                        @(datos.total)
-                    }
-                </td>
-                <td class="@("table-td center " + claseCSS)">
-                    @switch (datos.medalla)
-                    {
-                        case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
-                            {
-                                <span>ORO (I)</span>
-                                break;
-                            }
-                        case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
-                            {
-                                <span>ORO (II)</span>
-                                break;
-                            }
-                        case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
-                            {
-                                <span>ORO (III)</span>
-                                break;
-                            }
-                        case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                        case OMIstats.Models.Resultados.TipoMedalla.PLATA:
-                        case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
-                            {
-                                <span>@datos.medalla.ToString()</span>
-                                break;
-                            }
-                    }
-                </td>
-            </tr>
-        }
-
+        </tbody>
     </table>
 }
 
