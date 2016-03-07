@@ -68,7 +68,7 @@
             <th class="bottom-border">Escuela</th>
         </tr>
     </thead>
-    @{var lugar = 1;}
+    @{var numero = 0; var lugar = 0; var ultimoPuntos = 0;}
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
         if (!ViewBag.resultados[l].clave.StartsWith(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA))
@@ -109,7 +109,17 @@
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
-                    @(lugar++)
+                    @if (ultimoPuntos == datos.total)
+                    {
+                        lugar++;
+                    }
+                    else
+                    {
+                        lugar++;
+                        numero = lugar;
+                        ultimoPuntos = datos.total;
+                    }
+                    @(numero)
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
