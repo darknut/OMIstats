@@ -665,7 +665,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and md.tipo <> ");
             query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
-            query.Append(" order by md.año ");
+            query.Append(" order by md.olimpiada ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();

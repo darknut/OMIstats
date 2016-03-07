@@ -571,5 +571,42 @@ namespace OMIstats.Models
 
             return lista;
         }
+
+        /// <summary>
+        /// Regresa los alumnos de la institucion mandada como parametro
+        /// </summary>
+        /// <param name="clave">La clave de la institución deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
+        /// <returns>La lista de alumnos</returns>
+        public static List<Resultados> obtenerAlumnosDeInstitucion(int clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            List<Resultados> lista = new List<Resultados>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select r.* from Resultados as r ");
+            query.Append(" inner join MiembroDelegacion as md on r.clave = md.clave ");
+            query.Append(" and md.olimpiada = r.olimpiada ");
+            query.Append(" and md.clase = r.clase ");
+            query.Append(" where r.clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and md.institucion = ");
+            query.Append(clave);
+            query.Append(" order by md.olimpiada asc, r.estado desc, r.clase asc");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Resultados res = new Resultados();
+                res.tipoOlimpiada = tipoOlimpiada;
+                res.llenarDatos(r, cargarObjetos: true);
+
+                lista.Add(res);
+            }
+
+            return lista;
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             ViewBag.sedes = i.obtenerOlimpiadasSede();
+            ViewBag.participantes = Resultados.obtenerAlumnosDeInstitucion(i.clave, Olimpiada.TipoOlimpiada.OMI);
             limpiarErroresViewBag();
 
             return View(i);
