@@ -773,7 +773,7 @@
 								);
                             }, 1);
                             // stop normal event by returning false
-                            return false;
+                            return true;
                         }
                         // cancel selection
                     }).mousedown(function () {

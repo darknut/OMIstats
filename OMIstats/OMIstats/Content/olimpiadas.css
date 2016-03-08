@@ -94,10 +94,12 @@
 
 .azul {
     color:blue;
+    font-weight:bold;
 }
 
 .rosa {
     color: #BA1393;
+    font-weight:bold;
 }
 
 .table-header {
