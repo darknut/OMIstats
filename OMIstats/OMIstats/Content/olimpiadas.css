@@ -111,7 +111,6 @@
     height: 40px;
 }
 
-
 .ioi-mini-imagen {
     width:30px;
 }
@@ -122,6 +121,10 @@
 
 .escuela-td {
     width:90px;
+}
+
+.nombre-td {
+    width:130px;
 }
 
 .resultado-dia {

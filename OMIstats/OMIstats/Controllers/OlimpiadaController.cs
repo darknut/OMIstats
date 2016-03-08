@@ -289,6 +289,9 @@ namespace OMIstats.Controllers
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
             ViewBag.claveUsuario = getUsuario().clave;
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.numerosDia1 = Models.Resultados.calcularNumeros(clave, Olimpiada.TipoOlimpiada.OMI, dia: 1, totalProblemas: ViewBag.dia1);
+            ViewBag.numerosDia2 = Models.Resultados.calcularNumeros(clave, Olimpiada.TipoOlimpiada.OMI, dia: 2, totalProblemas: ViewBag.dia2);
+            ViewBag.numerosTotal = Models.Resultados.calcularNumeros(clave, Olimpiada.TipoOlimpiada.OMI, totalProblemas: ViewBag.dia1 + ViewBag.dia2);
 
             return View(o);
         }

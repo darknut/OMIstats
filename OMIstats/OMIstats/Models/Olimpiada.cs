@@ -421,23 +421,35 @@ namespace OMIstats.Models
         {
             estados = MiembroDelegacion.obtenerEstadosParticipantes(numero, tipoOlimpiada);
             participantes = MiembroDelegacion.obtenerParticipantes(numero, tipoOlimpiada);
-            mediana = Resultados.obtenerPrimerBronce(numero, tipoOlimpiada);
-            int suma = Resultados.obtenerPuntosTotales(numero, tipoOlimpiada);
-
-            if (participantes > 0)
-                media = suma * 1f / participantes;
+            Problema total = Resultados.calcularNumeros(numero, tipoOlimpiada);
+            mediana = total.mediana;
+            media = total.media;
 
             guardarDatos();
 
             List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 1);
             foreach (Problema p in lista)
                 if (p != null)
-                    p.calcularNumeros();
+                {
+                    Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
+                    p.media = pp.media;
+                    p.mediana = pp.mediana;
+                    p.perfectos = pp.perfectos;
+                    p.ceros = pp.ceros;
+                    p.guardar();
+                }
 
             lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 2);
             foreach (Problema p in lista)
                 if (p != null)
-                    p.calcularNumeros();
+                {
+                    Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
+                    p.media = pp.media;
+                    p.mediana = pp.mediana;
+                    p.perfectos = pp.perfectos;
+                    p.ceros = pp.ceros;
+                    p.guardar();
+                }
         }
     }
 }

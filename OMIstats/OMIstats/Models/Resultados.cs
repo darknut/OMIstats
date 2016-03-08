@@ -493,52 +493,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Regresa el número de puntos obtenidos por todos los competidores en la olimpiada
-        /// </summary>
-        /// <param name="omi">La OMI deseada</param>
-        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
-        /// <returns>La suma de puntos</returns>
-        public static int obtenerPuntosTotales(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
-        {
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append(" select SUM(puntos) from Resultados where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
-            query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-
-            db.EjecutarQuery(query.ToString());
-            return (int)db.getTable().Rows[0][0];
-        }
-
-        /// <summary>
-        /// Regresa el número de puntos obtenidos por el primer bronce de la olimpiada
-        /// </summary>
-        /// <param name="omi">La OMI deseada</param>
-        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
-        /// <returns>Los puntos del bronce</returns>
-        public static int obtenerPrimerBronce(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
-        {
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append(" select top 1 puntos from Resultados where olimpiada =  ");
-            query.Append(Utilities.Cadenas.comillas(omi));
-            query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and medalla = ");
-            query.Append((int)TipoMedalla.BRONCE);
-            query.Append(" order by puntos asc ");
-
-            db.EjecutarQuery(query.ToString());
-            if (db.getTable().Rows.Count == 0)
-                return 0;
-
-            return (int)db.getTable().Rows[0][0];
-        }
-
-        /// <summary>
         /// Regresa las participaciones en olimpiadas del usuario mandado como parametro
         /// </summary>
         /// <param name="persona">La persona de la que se quieren los datos</param>
@@ -607,6 +561,87 @@ namespace OMIstats.Models
             }
 
             return lista;
+        }
+
+        /// <summary>
+        /// Calcula los números de una olimpiada terminada para el problema de instancia
+        /// NO se guarda en la base de datos
+        /// </summary>
+        /// <param name="olimpiada">La olimpiada de la que se solicitan los datos</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada que se solicita</param>
+        /// <param name="dia">El dia del problema</param>
+        /// <param name="numero">El numero del problema</param>
+        public static Problema calcularNumeros(string olimpiada, Olimpiada.TipoOlimpiada tipoOlimpiada, int dia = 0, int numero = 0, int totalProblemas = 0)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+            Problema p = new Problema();
+            string columna = "puntos";
+            DataTable table = null;
+            int total, suma, mitad, perfecto = 100;
+
+            if (dia > 0)
+            {
+                columna += "D" + dia;
+                if (numero > 0)
+                    columna += "P" + numero;
+            }
+
+            query.Append(" select count(");
+            query.Append(columna);
+            query.Append(") from Resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and ");
+            query.Append(columna);
+
+            db.EjecutarQuery(query.ToString() + " = 0");
+            p.ceros = (int)db.getTable().Rows[0][0];
+
+            if (totalProblemas > 0)
+                perfecto *= totalProblemas;
+            db.EjecutarQuery(query.ToString() + " = " + perfecto);
+            p.perfectos = (int)db.getTable().Rows[0][0];
+
+            query.Clear();
+            query.Append(" select sum(");
+            query.Append(columna);
+            query.Append(") from Resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            suma = (int)db.getTable().Rows[0][0];
+
+            query.Clear();
+            query.Append(" select ");
+            query.Append(columna);
+            query.Append(" from Resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" order by ");
+            query.Append(columna);
+            query.Append(" desc ");
+
+            db.EjecutarQuery(query.ToString());
+            table = db.getTable();
+            total = table.Rows.Count;
+
+            if (total > 0)
+            {
+                p.media = suma * 1f / total;
+                p.media = (float) Math.Round((Decimal)p.media, 2, MidpointRounding.AwayFromZero);
+                mitad = total / 2;
+                p.mediana = (int)table.Rows[mitad][0];
+
+                if (total % 2 == 0)
+                    p.mediana = (p.mediana + (int)table.Rows[mitad + 1][0]) / 2;
+            }
+
+            return p;
         }
     }
 }

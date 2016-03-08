@@ -45,7 +45,7 @@
 
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
 
-<table class="table tablePadding tablaResultados" id="tablaPuntos">
+<table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
             <th></th>
@@ -151,7 +151,7 @@
                         }
                     }
                 </td>
-                <td class="@("table-td break-word right-border " + claseCSS)">
+                <td class="@("table-td break-word right-border nombre-td " + claseCSS)">
                     @if (mostrar)
                     {
                         <span>
@@ -247,4 +247,162 @@
         }
     }
     </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td class="right-border top-border derecha pie pieTitulo" colspan="4">Media</td>
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia1; i++)
+                {
+                    <td class="center right-border top-border pie">
+                        @ViewBag.problemasDia1[i].media
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia top-border pie">
+                    @ViewBag.numerosDia1.media
+                </td>
+            }
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia2; i++)
+                {
+                    <td class="center right-border top-border pie">
+                        @ViewBag.problemasDia2[i].media
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia top-border pie">
+                    @ViewBag.numerosDia2.media
+                </td>
+            }
+            <td class="center resultado-total top-border pie">
+                @ViewBag.numerosTotal.media
+            </td>
+            <td class="top-border" colspan="2">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="right-border derecha pie pieTitulo" colspan="4">Mediana</td>
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia1; i++)
+                {
+                    <td class="center right-border pie">
+                        @ViewBag.problemasDia1[i].mediana
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia pie">
+                    @ViewBag.numerosDia1.mediana
+                </td>
+            }
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia2; i++)
+                {
+                    <td class="center right-border pie">
+                        @ViewBag.problemasDia2[i].mediana
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia pie">
+                    @ViewBag.numerosDia2.mediana
+                </td>
+            }
+            <td class="center resultado-total pie">
+                @ViewBag.numerosTotal.mediana
+            </td>
+            <td colspan="2">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="right-border derecha pie pieTitulo" colspan="4">Perfectos</td>
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia1; i++)
+                {
+                    <td class="center right-border pie">
+                        @ViewBag.problemasDia1[i].perfectos
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia pie">
+                    @ViewBag.numerosDia1.perfectos
+                </td>
+            }
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia2; i++)
+                {
+                    <td class="center right-border pie">
+                        @ViewBag.problemasDia2[i].perfectos
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia pie">
+                    @ViewBag.numerosDia2.perfectos
+                </td>
+            }
+            <td class="center resultado-total pie">
+                @ViewBag.numerosTotal.perfectos
+            </td>
+            <td colspan="2">
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="right-border derecha pie pieTitulo" colspan="4">Ceros</td>
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia1; i++)
+                {
+                    <td class="center right-border pie">
+                        @ViewBag.problemasDia1[i].ceros
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia pie">
+                    @ViewBag.numerosDia1.ceros
+                </td>
+            }
+            @if (ViewBag.mostrarIndividual)
+            {
+                for (var i = 0; i < ViewBag.dia2; i++)
+                {
+                    <td class="center right-border pie">
+                        @ViewBag.problemasDia2[i].ceros
+                    </td>
+                }
+            }
+            @if (ViewBag.mostrarDia)
+            {
+                <td class="center right-border resultado-dia pie">
+                    @ViewBag.numerosDia2.ceros
+                </td>
+            }
+            <td class="center resultado-total pie">
+                @ViewBag.numerosTotal.ceros
+            </td>
+            <td colspan="2">
+            </td>
+        </tr>
+    </tfoot>
 </table>
