@@ -8,6 +8,21 @@
     <link href="~/Content/olimpiadas.css" type="text/css" rel="stylesheet" />
 }
 
+@section scripts
+{
+    <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.metadata.js"></script>
+    <script type="text/javascript" src="/js/sortMedallas.js"></script>
+    <script>
+        $(function () {
+            agregaSorter("tablaCompetidor");
+        });
+        $(function () {
+            agregaSorter("tablaAsistente");
+        });
+    </script>
+}
+
 @{
     ViewBag.Title = Model.nombre;
 }
@@ -140,18 +155,19 @@
     {
         <h1 class="titulo subtitulo"> Participaciones como competidor </h1>
 
-        <table class="table tablePadding tablaResultados">
+        <table class="table tablePadding tablaResultados" id="tablaCompetidor">
             <thead>
                 <tr class="table-header">
                     <th></th>
-                    <th class="bottom-border right-border">Olimpiada</th>
-                    <th class="bottom-border right-border">Estado</th>
-                    <th class="bottom-border right-border">Clave</th>
-                    <th class="bottom-border right-border">Puntos</th>
-                    <th class="bottom-border right-border">Medalla</th>
-                    <th class="bottom-border">Escuela</th>
+                    <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+                    <th class="bottom-border right-border table-header-clickable">Estado</th>
+                    <th class="bottom-border right-border table-header-clickable">Clave</th>
+                    <th class="bottom-border right-border table-header-clickable">Puntos</th>
+                    <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+                    <th class="bottom-border table-header-clickable">Escuela</th>
                 </tr>
             </thead>
+            <tbody>
             @for (var l = 0; l < ViewBag.participaciones.Count; l++)
             {
                 OMIstats.Models.Resultados datos = ViewBag.participaciones[l];
@@ -214,7 +230,7 @@
                             @(datos.total)
                         }
                     </td>
-                    <td class="@("table-td center right-border " + claseCSS)">
+                    <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
                         @switch (datos.medalla)
                         {
                             case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
@@ -253,7 +269,7 @@
                     </td>
                 </tr>
             }
-
+            </tbody>
         </table>
     }
 
@@ -268,15 +284,16 @@
             <h1 class="titulo subtitulo"> Participaciones en olimpiadas</h1>
         }
 
-        <table class="table tablePadding tablaResultados">
+        <table class="table tablePadding tablaResultados" id="tablaAsistente">
             <thead>
                 <tr class="table-header">
                     <th></th>
-                    <th class="bottom-border right-border">Olimpiada</th>
-                    <th class="bottom-border right-border">Estado</th>
-                    <th class="bottom-border">Rol</th>
+                    <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+                    <th class="bottom-border right-border table-header-clickable">Estado</th>
+                    <th class="bottom-border table-header-clickable">Rol</th>
                 </tr>
             </thead>
+            <tbody>
             @for (var l = 0; l < ViewBag.asistencias.Count; l++)
             {
                 OMIstats.Models.MiembroDelegacion datos = ViewBag.asistencias[l];
@@ -305,6 +322,6 @@
                     </td>
                 </tr>
             }
-
+            </tbody>
         </table>
     }

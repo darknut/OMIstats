@@ -18,5 +18,7 @@
         type: 'numeric'
     });
 
-    $("#" + nombre).tablesorter();
+    $("#" + nombre).tablesorter(
+        { debug: true
+        });
 }
