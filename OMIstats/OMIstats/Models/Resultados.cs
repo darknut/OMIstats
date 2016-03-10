@@ -507,7 +507,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and concursante = ");
             query.Append(persona);
-            query.Append(" order by olimpiada desc");
+            query.Append(" order by olimpiada asc");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
