@@ -562,6 +562,41 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa los alumnos del estado mandado como parametro
+        /// </summary>
+        /// <param name="clave">La clave del estado deseado</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
+        /// <returns>La lista de alumnos</returns>
+        public static List<Resultados> obtenerAlumnosDeEstado(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            List<Resultados> lista = new List<Resultados>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from Resultados ");
+            query.Append(" where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and estado = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and clave not like 'UNK%' ");
+            query.Append(" order by medalla, concursante, olimpiada desc");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Resultados res = new Resultados();
+                res.tipoOlimpiada = tipoOlimpiada;
+                res.llenarDatos(r, cargarObjetos: true);
+
+                lista.Add(res);
+            }
+
+            return lista;
+        }
+
+        /// <summary>
         /// Calcula los números de una olimpiada terminada para el problema de instancia
         /// NO se guarda en la base de datos
         /// </summary>

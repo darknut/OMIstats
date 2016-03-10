@@ -19,7 +19,9 @@ namespace OMIstats.Controllers
             if (e == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            limpiarErroresViewBag();
             ViewBag.sedes = e.obtenerOlimpiadasSede();
+            ViewBag.participantes = Resultados.obtenerAlumnosDeEstado(clave, Olimpiada.TipoOlimpiada.OMI);
 
             return View(e);
         }
