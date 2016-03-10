@@ -161,13 +161,11 @@ namespace OMIstats.Models
 
             try
             {
+                medalla = TipoMedalla.NADA;
                 if (datos.Length > indice)
                 {
                     if (datos[indice].Trim().Length == 0)
-                    {
-                        medalla = TipoMedalla.NADA;
                         indice++;
-                    }
                     else
                         medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), datos[indice++].Trim().ToUpper());
                 }
@@ -546,7 +544,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and md.institucion = ");
             query.Append(clave);
-            query.Append(" order by md.olimpiada asc, r.estado desc, r.clase asc");
+            query.Append(" order by r.medalla, r.concursante, md.olimpiada desc");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
