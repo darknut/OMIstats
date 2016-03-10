@@ -30,6 +30,12 @@
     text-align: left;
 }
 
+.table-footer {
+	font-size: 10pt;
+    font-weight: bold;
+	color: #336699;
+}
+
 .table-header-clickable {
     cursor:pointer;
 }

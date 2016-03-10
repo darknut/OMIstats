@@ -250,7 +250,7 @@
     <tfoot>
         <tr>
             <td></td>
-            <td class="right-border top-border derecha pie pieTitulo" colspan="4">Media</td>
+            <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="4">Media</td>
             @if (ViewBag.mostrarIndividual)
             {
                 for (var i = 0; i < ViewBag.dia1; i++)
@@ -284,12 +284,13 @@
             <td class="center resultado-total top-border pie">
                 @ViewBag.numerosTotal.media
             </td>
-            <td class="top-border" colspan="2">
+            <td class="top-border table-footer center" colspan="2">
+                Estados participantes
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="right-border derecha pie pieTitulo" colspan="4">Mediana</td>
+            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">Mediana</td>
             @if (ViewBag.mostrarIndividual)
             {
                 for (var i = 0; i < ViewBag.dia1; i++)
@@ -323,12 +324,13 @@
             <td class="center resultado-total pie">
                 @ViewBag.numerosTotal.mediana
             </td>
-            <td colspan="2">
+             <td class="center" colspan="2">
+                @Model.estados
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="right-border derecha pie pieTitulo" colspan="4">Perfectos</td>
+            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">Perfectos</td>
             @if (ViewBag.mostrarIndividual)
             {
                 for (var i = 0; i < ViewBag.dia1; i++)
@@ -362,12 +364,13 @@
             <td class="center resultado-total pie">
                 @ViewBag.numerosTotal.perfectos
             </td>
-            <td colspan="2">
+             <td class="table-footer center" colspan="2">
+                Total competidores
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="right-border derecha pie pieTitulo" colspan="4">Ceros</td>
+            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">Ceros</td>
             @if (ViewBag.mostrarIndividual)
             {
                 for (var i = 0; i < ViewBag.dia1; i++)
@@ -401,7 +404,8 @@
             <td class="center resultado-total pie">
                 @ViewBag.numerosTotal.ceros
             </td>
-            <td colspan="2">
+             <td class="center" colspan="2">
+                @Model.participantes
             </td>
         </tr>
     </tfoot>
