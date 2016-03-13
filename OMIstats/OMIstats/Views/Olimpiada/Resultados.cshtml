@@ -85,7 +85,7 @@
         </tr>
     </thead>
     <tbody>
-    @{var numero = 0; var lugar = 0; var ultimoPuntos = 0;}
+    @{var numero = 0; var lugar = 0; float? ultimoPuntos = 0;}
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
         if (!ViewBag.resultados[l].clave.StartsWith(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA))

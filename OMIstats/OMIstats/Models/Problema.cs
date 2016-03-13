@@ -26,7 +26,7 @@ namespace OMIstats.Models
 
         public float media { get; set; }
 
-        public int mediana { get; set; }
+        public float mediana { get; set; }
 
         public int ceros { get; set; }
 
@@ -43,7 +43,7 @@ namespace OMIstats.Models
             media = float.Parse(datos["media"].ToString().Trim());
             perfectos = (int)datos["perfectos"];
             ceros = (int)datos["ceros"];
-            mediana = (int)datos["mediana"];
+            mediana = float.Parse(datos["mediana"].ToString());
         }
 
         /// <summary>

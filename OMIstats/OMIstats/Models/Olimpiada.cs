@@ -41,7 +41,7 @@ namespace OMIstats.Models
 
         public float media { get; set; }
 
-        public int mediana { get; set; }
+        public float mediana { get; set; }
 
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string video { get; set; }
@@ -121,7 +121,7 @@ namespace OMIstats.Models
             inicio = Utilities.Fechas.stringToDate(datos["inicio"].ToString().Trim());
             fin = Utilities.Fechas.stringToDate(datos["fin"].ToString().Trim());
             media = float.Parse(datos["media"].ToString().Trim());
-            mediana = (int)datos["mediana"];
+            mediana = float.Parse(datos["mediana"].ToString());
             video = datos["video"].ToString().Trim();
             poster = datos["poster"].ToString().Trim();
             estados = (int)datos["estados"];

@@ -41,11 +41,11 @@ namespace OMIstats.Models
         public int usuario;
         public string estado;
         public string clave;
-        public List<int> dia1;
-        public int totalDia1;
-        public List<int> dia2;
-        public int totalDia2;
-        public int total;
+        public List<float?> dia1;
+        public float? totalDia1;
+        public List<float?> dia2;
+        public float? totalDia2;
+        public float? total;
         public TipoMedalla medalla;
         public bool publico;
         public string ioi;
@@ -74,7 +74,7 @@ namespace OMIstats.Models
             persona = null;
             escuela = null;
 
-            dia1 = new List<int>();
+            dia1 = new List<float?>();
             dia1.Add(0);
             dia1.Add(0);
             dia1.Add(0);
@@ -82,7 +82,7 @@ namespace OMIstats.Models
             dia1.Add(0);
             dia1.Add(0);
 
-            dia2 = new List<int>();
+            dia2 = new List<float?>();
             dia2.Add(0);
             dia2.Add(0);
             dia2.Add(0);
@@ -97,21 +97,19 @@ namespace OMIstats.Models
             omi = row["olimpiada"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
             estado = row["estado"].ToString().Trim();
-            dia1[0] = (int)row["puntosD1P1"];
-            dia1[1] = (int)row["puntosD1P2"];
-            dia1[2] = (int)row["puntosD1P3"];
-            dia1[3] = (int)row["puntosD1P4"];
-            dia1[4] = (int)row["puntosD1P5"];
-            dia1[5] = (int)row["puntosD1P6"];
-            totalDia1 = (int)row["puntosD1"];
-            dia2[0] = (int)row["puntosD2P1"];
-            dia2[1] = (int)row["puntosD2P2"];
-            dia2[2] = (int)row["puntosD2P3"];
-            dia2[3] = (int)row["puntosD2P4"];
-            dia2[4] = (int)row["puntosD2P5"];
-            dia2[5] = (int)row["puntosD2P6"];
-            totalDia2 = (int)row["puntosD2"];
-            total = (int)row["puntos"];
+            for (int i = 0; i < 6; i++)
+                if (row["puntosD1P" + (i + 1)] == DBNull.Value)
+                    dia1[i] = null;
+                else
+                    dia1[i] = float.Parse(row["puntosD1P" + (i + 1)].ToString());
+            totalDia1 = float.Parse(row["puntosD1"].ToString());
+            for (int i = 0; i < 6; i++)
+                if (row["puntosD2P" + (i + 1)] == DBNull.Value)
+                    dia2[i] = null;
+                else
+                    dia2[i] = float.Parse(row["puntosD2P" + (i + 1)].ToString());
+            totalDia2 = float.Parse(row["puntosD2"].ToString());
+            total = float.Parse(row["puntos"].ToString());
             medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString().ToUpper());
             publico = (bool)row["publico"];
             ioi = row["ioi"].ToString().Trim();
@@ -140,19 +138,19 @@ namespace OMIstats.Models
                 for(int i = 0; i < problemasDia1; i++)
                 {
                     if (datos.Length > indice)
-                        dia1[i] = Int32.Parse(datos[indice++]);
+                        dia1[i] = float.Parse(datos[indice++]);
                 }
                 if (datos.Length > indice)
-                    totalDia1 = Int32.Parse(datos[indice++]);
+                    totalDia1 = float.Parse(datos[indice++]);
                 for (int i = 0; i < problemasDia2; i++)
                 {
                     if (datos.Length > indice)
-                        dia2[i] = Int32.Parse(datos[indice++]);
+                        dia2[i] = float.Parse(datos[indice++]);
                 }
                 if (datos.Length > indice)
-                    totalDia2 = Int32.Parse(datos[indice++]);
+                    totalDia2 = float.Parse(datos[indice++]);
                 if (datos.Length > indice)
-                    total = Int32.Parse(datos[indice++]);
+                    total = float.Parse(datos[indice++]);
             }
             catch (Exception)
             {
@@ -611,7 +609,8 @@ namespace OMIstats.Models
             Problema p = new Problema();
             string columna = "puntos";
             DataTable table = null;
-            int total, suma, mitad, perfecto = 100;
+            int total, mitad, perfecto = 100;
+            float suma;
 
             if (dia > 0)
             {
@@ -646,7 +645,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
-            suma = (int)db.getTable().Rows[0][0];
+            suma = float.Parse(db.getTable().Rows[0][0].ToString());
 
             query.Clear();
             query.Append(" select ");
@@ -665,10 +664,10 @@ namespace OMIstats.Models
 
             if (total > 0)
             {
-                p.media = suma * 1f / total;
+                p.media = suma / total;
                 p.media = (float) Math.Round((Decimal)p.media, 2, MidpointRounding.AwayFromZero);
                 mitad = total / 2;
-                p.mediana = (int)table.Rows[mitad][0];
+                p.mediana = float.Parse(table.Rows[mitad][0].ToString());
 
                 if (total % 2 == 0)
                     p.mediana = (p.mediana + (int)table.Rows[mitad + 1][0]) / 2;
