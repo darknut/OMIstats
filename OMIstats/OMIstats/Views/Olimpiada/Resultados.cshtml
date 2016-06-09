@@ -183,7 +183,7 @@
                     for (var i = 0; i < ViewBag.dia1; i++)
                     {
                         <td class="@("table-td center right-border " + claseCSS)">
-                            @datos.dia1[i]
+                            @(datos.dia1[i] == null ? OMIstats.Models.Resultados.NULL_POINTS : datos.dia1[i].ToString())
                         </td>
                     }
                 }
@@ -198,7 +198,7 @@
                     for (var i = 0; i < ViewBag.dia2; i++)
                     {
                          <td class="@("table-td center right-border " + claseCSS)">
-                            @datos.dia2[i]
+                            @(datos.dia2[i] == null ? OMIstats.Models.Resultados.NULL_POINTS : datos.dia2[i].ToString())
                         </td>
                     }
                 }

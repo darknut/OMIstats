@@ -35,6 +35,7 @@ namespace OMIstats.Models
 
         public const string CLAVE_DESCONOCIDA = "UNK";
         public const string CLAVE_FALTANTE = "???";
+        public const string NULL_POINTS = "-";
 
         public string omi;
         public Olimpiada.TipoOlimpiada tipoOlimpiada;
@@ -138,14 +139,26 @@ namespace OMIstats.Models
                 for(int i = 0; i < problemasDia1; i++)
                 {
                     if (datos.Length > indice)
-                        dia1[i] = float.Parse(datos[indice++]);
+                    {
+                        if (datos[indice].ToString().Trim() == "-")
+                            dia1[i] = null;
+                        else
+                            dia1[i] = float.Parse(datos[indice]);
+                    }
+                    indice++;
                 }
                 if (datos.Length > indice)
                     totalDia1 = float.Parse(datos[indice++]);
                 for (int i = 0; i < problemasDia2; i++)
                 {
                     if (datos.Length > indice)
-                        dia2[i] = float.Parse(datos[indice++]);
+                    {
+                        if (datos[indice].ToString().Trim() == "-")
+                            dia2[i] = null;
+                        else
+                            dia2[i] = float.Parse(datos[indice]);
+                        indice++;
+                    }
                 }
                 if (datos.Length > indice)
                     totalDia2 = float.Parse(datos[indice++]);
@@ -245,7 +258,7 @@ namespace OMIstats.Models
 
             for (int i = 0; i < problemasDia1; i++)
             {
-                s.Append(dia1[i]);
+                s.Append(dia1[i] == null ? NULL_POINTS : dia1[i].ToString());
                 s.Append(", ");
             }
 
@@ -254,7 +267,7 @@ namespace OMIstats.Models
 
             for (int i = 0; i < problemasDia2; i++)
             {
-                s.Append(dia2[i]);
+                s.Append(dia1[i] == null ? NULL_POINTS : dia1[i].ToString());
                 s.Append(", ");
             }
 
