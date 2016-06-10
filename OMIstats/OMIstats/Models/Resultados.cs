@@ -267,7 +267,7 @@ namespace OMIstats.Models
 
             for (int i = 0; i < problemasDia2; i++)
             {
-                s.Append(dia1[i] == null ? NULL_POINTS : dia1[i].ToString());
+                s.Append(dia2[i] == null ? NULL_POINTS : dia2[i].ToString());
                 s.Append(", ");
             }
 
@@ -683,7 +683,7 @@ namespace OMIstats.Models
                 p.mediana = float.Parse(table.Rows[mitad][0].ToString());
 
                 if (total % 2 == 0)
-                    p.mediana = (p.mediana + (int)table.Rows[mitad + 1][0]) / 2;
+                    p.mediana = (p.mediana + float.Parse(table.Rows[mitad + 1][0].ToString())) / 2;
             }
 
             return p;
