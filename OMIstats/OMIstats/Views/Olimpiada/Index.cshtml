@@ -116,6 +116,7 @@
             <ul>
                 @for(var i = 0; i < 6; i++)
                 {
+                    bool finished = false;
                     if(ViewBag.admin)
                     {
                         <li>
@@ -128,10 +129,14 @@
                                 else
                                 {
                                     <span>Agregar Problema @(i + 1)</span>
-                                    { break; }
+                                    { finished = true; }
                                 }
                             </a>
                         </li>
+                        if (finished)
+                        {
+                            break;
+                        }
                     }
                     else
                     {
@@ -153,6 +158,7 @@
                 <ul>
                     @for(var i = 0; i < 6; i++)
                     {
+                        bool finished = false;
                         if(ViewBag.admin)
                         {
                             <li>
@@ -165,10 +171,14 @@
                                     else
                                     {
                                         <span>Agregar Problema @(i + 1)</span>
-                                        { break; }
+                                        { finished = true; }
                                     }
                                 </a>
                             </li>
+                            if (finished)
+                            {
+                                break;
+                            }
                         }
                         else
                         {
