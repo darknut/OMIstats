@@ -74,7 +74,7 @@ namespace OMIstats.Models
             query.Append(dia);
             query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" order by numero asc ");
+            query.Append(" and numero <> 0 order by numero asc ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -86,6 +86,39 @@ namespace OMIstats.Models
                 p.llenarDatos(r);
 
                 problemas[p.numero - 1] = p;
+            }
+
+            return problemas;
+        }
+
+        /// <summary>
+        /// Regresa una lista con tres elementos y el metadata de los dias de la omi
+        /// </summary>
+        /// <param name="omi">La omi de los problemas</param>
+        /// <param name="tipoOlimpiada">El tipo olimpiada del que se requieren los datos</param>
+        /// <returns>La lista de problemas</returns>
+        public static List<Problema> obetnerMetaDatadeOMI(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            List<Problema> problemas = new List<Problema>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from problema where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and numero = 0 order by dia asc ");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            foreach (DataRow r in table.Rows)
+            {
+                Problema p = new Problema();
+                p.llenarDatos(r);
+
+                problemas.Add(p);
             }
 
             return problemas;

@@ -411,7 +411,39 @@ namespace OMIstats.Models
                 }
             }
 
+            precalcularValores();
+
             return errores.ToString();
+        }
+
+        private void precalcularValores()
+        {
+            Problema p;
+
+            // -TODO- Guardar esto en algun lugar en la base
+            int dia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
+            int dia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
+
+            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: dia1);
+            p.dia = 1;
+            p.numero = 0;
+            p.olimpiada = numero;
+            p.tipoOlimpiada = tipoOlimpiada;
+            p.guardar();
+
+            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: dia2);
+            p.dia = 2;
+            p.numero = 0;
+            p.olimpiada = numero;
+            p.tipoOlimpiada = tipoOlimpiada;
+            p.guardar();
+
+            p = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: dia1 + dia2);
+            p.dia = 0;
+            p.numero = 0;
+            p.olimpiada = numero;
+            p.tipoOlimpiada = tipoOlimpiada;
+            p.guardar();
         }
 
         /// <summary>
