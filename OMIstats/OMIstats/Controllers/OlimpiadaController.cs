@@ -278,13 +278,6 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
             ViewBag.resultados = Models.Resultados.cargarResultados(clave, Olimpiada.TipoOlimpiada.OMI, cargarObjetos: true);
-            ViewBag.dia1 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 1);
-            ViewBag.dia2 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 2);
-            ViewBag.mostrarDia = Models.Resultados.mostrarResultadosPorDia(clave, Olimpiada.TipoOlimpiada.OMI);
-            if (ViewBag.mostrarDia)
-                ViewBag.mostrarIndividual = Models.Resultados.mostrarResultadosIndividuales(clave, Olimpiada.TipoOlimpiada.OMI);
-            else
-                ViewBag.mostrarIndividual = false;
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
             ViewBag.claveUsuario = getUsuario().clave;

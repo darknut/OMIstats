@@ -74,6 +74,14 @@ namespace OMIstats.Models
 
         public string logo { get; set; }
 
+        public int problemasDia1 { get; set; }
+
+        public int problemasDia2 { get; set; }
+
+        public bool mostrarResultadosPorDia { get; set; }
+
+        public bool mostrarResultadosPorProblema { get; set; }
+
         private List<MiembroDelegacion> asistentes;
         private List<Resultados> resultados;
 
@@ -107,6 +115,10 @@ namespace OMIstats.Models
             logo = "";
             relacion = "";
             reporte = "";
+            problemasDia1 = 0;
+            problemasDia2 = 0;
+            mostrarResultadosPorDia = false;
+            mostrarResultadosPorProblema = false;
 
             asistentes = null;
         }
@@ -129,6 +141,10 @@ namespace OMIstats.Models
             datosPublicos = (bool)datos["datospublicos"];
             relacion = datos["relacion"].ToString().Trim();
             reporte = datos["reporte"].ToString().Trim();
+            problemasDia1 = (int)datos["problemasDia1"];
+            problemasDia2 = (int)datos["problemasDia2"];
+            mostrarResultadosPorDia = (bool)datos["mostrarResultadosPorDia"];
+            mostrarResultadosPorProblema = (bool)datos["mostrarResultadosPorProblema"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -288,6 +304,14 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(relacion));
             query.Append(", reporte = ");
             query.Append(Utilities.Cadenas.comillas(reporte));
+            query.Append(", problemasDia1 = ");
+            query.Append(problemasDia1);
+            query.Append(", problemasDia2 = ");
+            query.Append(problemasDia2);
+            query.Append(", mostrarResultadosPorDia = ");
+            query.Append(mostrarResultadosPorDia ? 1 : 0);
+            query.Append(", mostrarResultadosPorProblema = ");
+            query.Append(mostrarResultadosPorProblema ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
 
@@ -308,7 +332,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '') ");
+            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }
@@ -420,25 +444,31 @@ namespace OMIstats.Models
         {
             Problema p;
 
-            // -TODO- Guardar esto en algun lugar en la base
-            int dia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
-            int dia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
+            problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
+            problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
+            mostrarResultadosPorDia = Resultados.mostrarResultadosPorDia(numero, tipoOlimpiada);
+            if (mostrarResultadosPorDia)
+                mostrarResultadosPorProblema = Resultados.mostrarResultadosIndividuales(numero, tipoOlimpiada);
+            else
+                mostrarResultadosPorProblema = false;
 
-            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: dia1);
+            guardarDatos();
+
+            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
             p.dia = 1;
             p.numero = 0;
             p.olimpiada = numero;
             p.tipoOlimpiada = tipoOlimpiada;
             p.guardar();
 
-            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: dia2);
+            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: problemasDia2);
             p.dia = 2;
             p.numero = 0;
             p.olimpiada = numero;
             p.tipoOlimpiada = tipoOlimpiada;
             p.guardar();
 
-            p = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: dia1 + dia2);
+            p = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
             p.dia = 0;
             p.numero = 0;
             p.olimpiada = numero;
