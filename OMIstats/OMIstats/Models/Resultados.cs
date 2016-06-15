@@ -37,6 +37,7 @@ namespace OMIstats.Models
         public const string CLAVE_FALTANTE = "???";
         public const string NULL_POINTS = "-";
 
+        public int lugar;
         public string omi;
         public Olimpiada.TipoOlimpiada tipoOlimpiada;
         public int usuario;
@@ -53,6 +54,8 @@ namespace OMIstats.Models
 
         public Persona persona;
         public Institucion escuela;
+        public Institucion.NivelInstitucion nivelInstitucion;
+        public int añoEscolar;
         public string nombreEstado;
 
         private bool eliminar;
@@ -62,6 +65,7 @@ namespace OMIstats.Models
             omi = "";
             tipoOlimpiada = Olimpiada.TipoOlimpiada.NULL;
 
+            lugar = 0;
             usuario = 0;
             estado = "";
             clave = "";
@@ -74,6 +78,8 @@ namespace OMIstats.Models
 
             persona = null;
             escuela = null;
+            nivelInstitucion = Institucion.NivelInstitucion.NULL;
+            añoEscolar = 0;
 
             dia1 = new List<float?>();
             dia1.Add(0);
@@ -94,6 +100,7 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow row, bool cargarObjetos)
         {
+            lugar = (int)row["lugar"];
             usuario = (int)row["concursante"];
             omi = row["olimpiada"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
@@ -120,8 +127,10 @@ namespace OMIstats.Models
                 persona = Persona.obtenerPersonaConClave(usuario);
                 if (!clave.StartsWith(CLAVE_DESCONOCIDA))
                 {
-                    escuela = Institucion.obtenerInstitucionConNombreCorto(
-                        MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0].nombreEscuela);
+                    MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0];
+                    escuela = Institucion.obtenerInstitucionConNombreCorto(md.nombreEscuela);
+                    nivelInstitucion = md.nivelEscuela;
+                    añoEscolar = md.añoEscuela;
                 }
                 nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
             }
@@ -394,7 +403,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(res.clave));
             query.Append(", '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,");
             query.Append((int)TipoMedalla.NADA);
-            query.Append(", 0, '')");
+            query.Append(", 0, '', 0)");
 
             db.EjecutarQuery(query.ToString());
             query.Clear();
@@ -687,6 +696,26 @@ namespace OMIstats.Models
             }
 
             return p;
+        }
+
+        /// <summary>
+        /// Guarda el lugar de la linea en la base de datos
+        /// </summary>
+        public void guardarLugar()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update Resultados set lugar = ");
+            query.Append(lugar);
+            query.Append(" where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and clave = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+
+            db.EjecutarQuery(query.ToString());
         }
     }
 }

@@ -157,13 +157,16 @@
         <thead>
             <tr class="table-header">
                 <th></th>
+                <th class="bottom-border right-border table-header-clickable">Lugar</th>
                 <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
                 <th class="bottom-border right-border table-header-clickable">Género</th>
                 <th class="bottom-border right-border table-header-clickable">Concursante</th>
                 <th class="bottom-border right-border table-header-clickable">Estado</th>
                 <th class="bottom-border right-border table-header-clickable">Clave</th>
                 <th class="bottom-border right-border table-header-clickable">Puntos</th>
-                <th class="bottom-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+                <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+                <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
+                <th class="bottom-border table-header-clickable">Año escolar</th>
             </tr>
         </thead>
         <tbody>
@@ -205,6 +208,12 @@
                             <!-- -TODO- Agregar enlace a IOI -->
                         }
                     </td>
+                    <td class="@("table-td right-border center " + claseCSS)">
+                        @if (mostrar)
+                        {
+                            @(datos.lugar)
+                        }
+                    </td>
                     <td class="@("table-td right-border " + claseCSS)">
                         <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi)">
                             @(datos.omi + "ª OMI")
@@ -244,7 +253,7 @@
                             @(datos.total)
                         }
                     </td>
-                    <td class="@("table-td center " + claseCSS)" medalla="@((int)datos.medalla)">
+                    <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
                         @switch (datos.medalla)
                         {
                             case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
@@ -269,6 +278,18 @@
                                     <span>@datos.medalla.ToString()</span>
                                     break;
                                 }
+                        }
+                    </td>
+                    <td class="@("table-td right-border " + claseCSS)">
+                        @if (datos.nivelInstitucion != OMIstats.Models.Institucion.NivelInstitucion.NULL)
+                        {
+                            @(datos.nivelInstitucion.ToString())
+                        }
+                    </td>
+                    <td class="@("table-td center " + claseCSS)">
+                        @if (datos.añoEscolar != 0)
+                        {
+                            @(datos.añoEscolar + "º")
                         }
                     </td>
                 </tr>

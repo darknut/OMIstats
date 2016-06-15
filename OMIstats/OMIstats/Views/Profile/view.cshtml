@@ -159,12 +159,15 @@
             <thead>
                 <tr class="table-header">
                     <th></th>
+                    <th class="bottom-border right-border table-header-clickable">Lugar</th>
                     <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
                     <th class="bottom-border right-border table-header-clickable">Estado</th>
                     <th class="bottom-border right-border table-header-clickable">Clave</th>
                     <th class="bottom-border right-border table-header-clickable">Puntos</th>
                     <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
-                    <th class="bottom-border table-header-clickable">Escuela</th>
+                    <th class="bottom-border right-border table-header-clickable">Escuela</th>
+                    <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
+                    <th class="bottom-border table-header-clickable">Año escolar</th>
                 </tr>
             </thead>
             <tbody>
@@ -204,6 +207,12 @@
                         {
                             <img src="/img/ioi.png" />
                             <!-- -TODO- Agregar enlace a IOI -->
+                        }
+                    </td>
+                    <td class="@("table-td right-border center " + claseCSS)">
+                        @if (mostrar)
+                        {
+                            @(datos.lugar)
                         }
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
@@ -257,7 +266,7 @@
                                 }
                         }
                     </td>
-                    <td class="@("table-td break-word " + claseCSS)">
+                    <td class="@("table-td break-word right-border " + claseCSS)">
                         @if (datos.escuela != null)
                         {
                             <span>
@@ -265,6 +274,18 @@
                                     @datos.escuela.nombreCorto
                                 </a>
                             </span>
+                        }
+                    </td>
+                    <td class="@("table-td right-border " + claseCSS)">
+                        @if (datos.nivelInstitucion != OMIstats.Models.Institucion.NivelInstitucion.NULL)
+                        {
+                            @(datos.nivelInstitucion.ToString())
+                        }
+                    </td>
+                    <td class="@("table-td center " + claseCSS)">
+                        @if (datos.añoEscolar != 0)
+                        {
+                            @(datos.añoEscolar + "º")
                         }
                     </td>
                 </tr>

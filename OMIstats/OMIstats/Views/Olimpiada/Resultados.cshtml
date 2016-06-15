@@ -85,7 +85,6 @@
         </tr>
     </thead>
     <tbody>
-    @{var numero = 0; var lugar = 0; float? ultimoPuntos = 0;}
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
         if (!ViewBag.resultados[l].clave.StartsWith(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA))
@@ -126,17 +125,7 @@
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
-                    @if (ultimoPuntos == datos.total)
-                    {
-                        lugar++;
-                    }
-                    else
-                    {
-                        lugar++;
-                        numero = lugar;
-                        ultimoPuntos = datos.total;
-                    }
-                    @(numero)
+                    @(datos.lugar)
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)

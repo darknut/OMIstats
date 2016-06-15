@@ -369,8 +369,6 @@ namespace OMIstats.Models
                 resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
 
             StringBuilder tabla = new StringBuilder();
-            int problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
-            int problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
 
             foreach (Resultados resultado in resultados)
             {
@@ -420,8 +418,6 @@ namespace OMIstats.Models
             string[] lineas;
 
             lineas = tabla.Split('\n');
-            int problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
-            int problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
 
             foreach (string linea in lineas)
             {
@@ -440,6 +436,10 @@ namespace OMIstats.Models
             return errores.ToString();
         }
 
+        /// <summary>
+        /// Guarda valores en la base de datos que estan directamente relacionados
+        /// con los resultados y que no pueden escribirse a mano
+        /// </summary>
         private void precalcularValores()
         {
             Problema p;
@@ -474,6 +474,17 @@ namespace OMIstats.Models
             p.olimpiada = numero;
             p.tipoOlimpiada = tipoOlimpiada;
             p.guardar();
+
+            List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
+            int temp = 0;
+
+            for (int i = 0; i < resultados.Count; i++)
+            {
+                if (i == 0 || resultados[i - 1].total != resultados[i].total)
+                    temp = i;
+                resultados[i].lugar = temp + 1;
+                resultados[i].guardarLugar();
+            }
         }
 
         /// <summary>

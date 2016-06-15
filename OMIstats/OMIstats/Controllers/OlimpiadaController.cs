@@ -226,8 +226,8 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            ViewBag.dia1 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 1);
-            ViewBag.dia2 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 2);
+            ViewBag.dia1 = o.problemasDia1;
+            ViewBag.dia2 = o.problemasDia2;
             ViewBag.omi = clave;
             ViewBag.resultados = o.obtenerResultadosAdmin();
             limpiarErroresViewBag();
@@ -251,8 +251,8 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
             ViewBag.omi = clave;
-            ViewBag.dia1 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 1);
-            ViewBag.dia2 = Problema.obtenerCantidadDeProblemas(clave, Olimpiada.TipoOlimpiada.OMI, 2);
+            ViewBag.dia1 = o.problemasDia1;
+            ViewBag.dia2 = o.problemasDia2;
             string errores = o.guardarTablaResultados(tabla);
 
             if (errores.Length > 0)
