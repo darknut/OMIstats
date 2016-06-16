@@ -136,6 +136,7 @@
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\Institucion.cs" />
+    <Compile Include="Models\Medallero.cs" />
     <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="Models\Olimpiada.cs" />
     <Compile Include="Models\Peticion.cs" />
