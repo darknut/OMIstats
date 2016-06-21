@@ -31,14 +31,6 @@ namespace OMIstats.Models
 
         public int otros { get; set; }
 
-        public string orosTooltip { get; set; }
-
-        public string platasTooltip { get; set; }
-
-        public string broncesTooltip { get; set; }
-
-        public string otrosTooltip { get; set; }
-
         public Medallero()
         {
             tipoOlimpiada = Olimpiada.TipoOlimpiada.NULL;
@@ -103,20 +95,21 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" update medallero set oros = ");
-            query.Append(oros);
-            query.Append(", platas = ");
-            query.Append(platas);
-            query.Append(", bronces = ");
-            query.Append(bronces);
-            query.Append(", otros = ");
-            query.Append(otros);
-            query.Append(" where clase = ");
+            query.Append(" insert into medallero values( ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and tipo = ");
+            query.Append(", ");
             query.Append((int)tipoMedallero);
-            query.Append(" and clave = ");
+            query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(", ");
+            query.Append(oros);
+            query.Append(", ");
+            query.Append(platas);
+            query.Append(", ");
+            query.Append(bronces);
+            query.Append(", ");
+            query.Append(otros);
+            query.Append(")");
 
             return !db.EjecutarQuery(query.ToString()).error;
         }
@@ -124,73 +117,106 @@ namespace OMIstats.Models
         /// <summary>
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
-        /// <returns>Regresa si se calcularon o no</returns>
-        public bool calcularMedallas()
+        /// </param name="tipoOlimpiada">El tipo de olimpiada para el que se requieren los tipos</param>
+        public static void calcularMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada)
         {
-            if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == Olimpiada.TipoOlimpiada.NULL || clave == "")
-                return false;
+            if (tipoOlimpiada == Olimpiada.TipoOlimpiada.NULL)
+                return;
 
-            switch (tipoMedallero)
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" delete medallero where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            //Primero borramos todo lo que está en la base de datos
+            db.EjecutarQuery(query.ToString());
+
+            //Obtenermos todos los resultados
+            List<Resultados> resultados = Resultados.cargarResultados(null, tipoOlimpiada, cargarObjetos: true, incluirDesconocidos: false);
+
+            //Diccionarios para los diferentes tipos de medalleros
+            Dictionary<int, Medallero> personas = new Dictionary<int,Medallero>();
+            Dictionary<int, Medallero> instituciones = new Dictionary<int,Medallero>();
+            Dictionary<string, Medallero> estados = new Dictionary<string,Medallero>();
+
+            foreach(Resultados resultado in resultados)
             {
-                case TipoMedallero.PERSONA:
+                Medallero persona, institucion, estado;
+
+                if (!personas.TryGetValue(resultado.usuario, out persona))
+                {
+                    persona = new Medallero();
+                    persona.clave = resultado.usuario.ToString();
+                    persona.tipoOlimpiada = tipoOlimpiada;
+                    persona.tipoMedallero = TipoMedallero.PERSONA;
+                    personas.Add(resultado.usuario, persona);
+                }
+
+                if (resultado.escuela != null)
+                {
+                    if (!instituciones.TryGetValue(resultado.escuela.clave, out institucion))
                     {
-                        Utilities.Acceso db = new Utilities.Acceso();
-                        StringBuilder query = new StringBuilder();
-
-                        query.Append(" select medalla, olimpiada from resultados where concursante = ");
-                        query.Append(Utilities.Cadenas.comillas(clave));
-                        query.Append(" and clase = ");
-                        query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-                        query.Append(" order by medalla desc ");
-
-                        if (db.EjecutarQuery(query.ToString()).error)
-                            return false;
-
-                        DataTable table = db.getTable();
-
-                        foreach (DataRow r in table.Rows)
-                        {
-                            Resultados.TipoMedalla medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), r["medalla"].ToString().ToUpper());
-                            string olimpiada = r["olimpiada"].ToString().Trim();
-
-                            switch (medalla)
-                            {
-                                case Resultados.TipoMedalla.ORO_3:
-                                    oros++;
-                                    orosTooltip += olimpiada + "ª(III) ";
-                                    break;
-                                case Resultados.TipoMedalla.ORO_2:
-                                    oros++;
-                                    orosTooltip += olimpiada + "ª(II) ";
-                                    break;
-                                case Resultados.TipoMedalla.ORO_1:
-                                    oros++;
-                                    orosTooltip += olimpiada + "ª(I) ";
-                                    break;
-                                case Resultados.TipoMedalla.ORO:
-                                    oros++;
-                                    orosTooltip += olimpiada + "ª ";
-                                    break;
-                                case Resultados.TipoMedalla.PLATA:
-                                    platas++;
-                                    platasTooltip += olimpiada + "ª ";
-                                    break;
-                                case Resultados.TipoMedalla.BRONCE:
-                                    bronces++;
-                                    broncesTooltip += olimpiada + "ª ";
-                                    break;
-                                case default:
-                                    otros++;
-                                    otrosTooltip += olimpiada + "ª ";
-                                    break;
-                            }
-                        }
-
-                        break;
+                        institucion = new Medallero();
+                        institucion.clave = resultado.escuela.clave.ToString();
+                        institucion.tipoOlimpiada = tipoOlimpiada;
+                        institucion.tipoMedallero = TipoMedallero.INSTITUCION;
+                        instituciones.Add(resultado.escuela.clave, institucion);
                     }
+                }
+                else
+                {
+                    // Agregamos un dummy para evitar if's abajo
+                    institucion = new Medallero();
+                }
+
+                if (!estados.TryGetValue(resultado.estado, out estado))
+                {
+                    estado = new Medallero();
+                    estado.clave = resultado.estado;
+                    estado.tipoOlimpiada = tipoOlimpiada;
+                    estado.tipoMedallero = TipoMedallero.ESTADO;
+                    estados.Add(resultado.estado, estado);
+                }
+
+                switch (resultado.medalla)
+                {
+                    case Resultados.TipoMedalla.ORO_3:
+                    case Resultados.TipoMedalla.ORO_2:
+                    case Resultados.TipoMedalla.ORO_1:
+                    case Resultados.TipoMedalla.ORO:
+                        persona.oros++;
+                        estado.oros++;
+                        institucion.oros++;
+                        break;
+                    case Resultados.TipoMedalla.PLATA:
+                        persona.platas++;
+                        estado.platas++;
+                        institucion.platas++;
+                        break;
+                    case Resultados.TipoMedalla.BRONCE:
+                        persona.bronces++;
+                        estado.bronces++;
+                        institucion.bronces++;
+                        break;
+                    default:
+                        persona.otros++;
+                        estado.otros++;
+                        institucion.otros++;
+                        break;
+                }
             }
 
-            return true;
+            foreach (Medallero persona in personas.Values)
+                if (persona.clave != "0")
+                    persona.guardarDatos();
+
+            foreach (Medallero institucion in instituciones.Values)
+                if (institucion.clave != "0")
+                    institucion.guardarDatos();
+
+            foreach (Medallero estado in estados.Values)
+                estado.guardarDatos();
         }
     }
 }

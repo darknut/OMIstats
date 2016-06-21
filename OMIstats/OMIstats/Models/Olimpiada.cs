@@ -444,6 +444,7 @@ namespace OMIstats.Models
         {
             Problema p;
 
+            // Calculamos si hay resultados para mostrar por problema y lo guardamos en la base
             problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
             problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
             mostrarResultadosPorDia = Resultados.mostrarResultadosPorDia(numero, tipoOlimpiada);
@@ -454,6 +455,7 @@ namespace OMIstats.Models
 
             guardarDatos();
 
+            // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
             p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
             p.dia = 1;
             p.numero = 0;
@@ -475,6 +477,7 @@ namespace OMIstats.Models
             p.tipoOlimpiada = tipoOlimpiada;
             p.guardar();
 
+            // Calculamos el lugar de cada competidor y lo guardamos en la base
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
             int temp = 0;
 
@@ -485,6 +488,9 @@ namespace OMIstats.Models
                 resultados[i].lugar = temp + 1;
                 resultados[i].guardarLugar();
             }
+
+            // Calculamos el medallero y lo guardamos en la base
+            Medallero.calcularMedallas(tipoOlimpiada);
         }
 
         /// <summary>

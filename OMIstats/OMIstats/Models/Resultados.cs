@@ -218,21 +218,29 @@ namespace OMIstats.Models
         /// <param name="omi">La olimpiada en cuestión</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="cargarObjetos">Si los objetos deben de llenarse</param>
+        /// <param name="incluirDesconocidos">Si en la table debemos incluir usuarios que empiezan con clave desconocida</param>
         /// <returns>Una lista con los resultados</returns>
-        public static List<Resultados> cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
+        public static List<Resultados> cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false, bool incluirDesconocidos = true)
         {
             List<Resultados> lista = new List<Resultados>();
-            if (omi == null)
-                return null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from resultados ");
-            query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
-            query.Append(" and clase = ");
+            query.Append(" where clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            if (omi != null)
+            {
+                query.Append(" and olimpiada = ");
+                query.Append(Utilities.Cadenas.comillas(omi));
+            }
+            if (!incluirDesconocidos)
+            {
+                query.Append(" and clave not like '");
+                query.Append(CLAVE_DESCONOCIDA);
+                query.Append("%' ");
+            }
             query.Append(" order by puntos desc, clave asc");
 
             db.EjecutarQuery(query.ToString());
@@ -598,7 +606,9 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and estado = ");
             query.Append(Utilities.Cadenas.comillas(clave));
-            query.Append(" and clave not like 'UNK%' ");
+            query.Append(" and clave not like '");
+            query.Append(CLAVE_DESCONOCIDA);
+            query.Append("%' ");
             query.Append(" order by medalla, concursante, olimpiada desc");
 
             db.EjecutarQuery(query.ToString());
