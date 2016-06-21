@@ -140,6 +140,7 @@ namespace OMIstats.Models
             Dictionary<int, Medallero> instituciones = new Dictionary<int,Medallero>();
             Dictionary<string, Medallero> estados = new Dictionary<string,Medallero>();
 
+            // Recorremos todos los resultados agregando contadores
             foreach(Resultados resultado in resultados)
             {
                 Medallero persona, institucion, estado;
@@ -207,6 +208,7 @@ namespace OMIstats.Models
                 }
             }
 
+            // Guardamos los contadores en la base de datos
             foreach (Medallero persona in personas.Values)
                 if (persona.clave != "0")
                     persona.guardarDatos();
