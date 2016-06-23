@@ -47,9 +47,9 @@ namespace OMIstats.Models
             tipoOlimpiada = (Olimpiada.TipoOlimpiada)Enum.Parse(typeof(Olimpiada.TipoOlimpiada), datos["clase"].ToString().ToUpper());
             tipoMedallero = (TipoMedallero)Enum.Parse(typeof(TipoMedallero), datos["tipo"].ToString().ToUpper());
             clave = datos["clave"].ToString().Trim();
-            oros = (int)datos["oros"];
-            platas = (int)datos["platas"];
-            bronces = (int)datos["bronces"];
+            oros = (int)datos["oro"];
+            platas = (int)datos["plata"];
+            bronces = (int)datos["bronce"];
             otros = (int)datos["otros"];
         }
 
@@ -60,7 +60,7 @@ namespace OMIstats.Models
         /// <param name="tipoMedallero">Si es estado, persona, institucion o asesor</param>
         /// <param name="clave">La clave del estado/persona/institucion/asesor</param>
         /// <returns>Un objeto medallero con los datos deseados</returns>
-        public Medallero obtenerMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave)
+        public static Medallero obtenerMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();

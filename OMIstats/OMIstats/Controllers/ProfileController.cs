@@ -42,17 +42,15 @@ namespace OMIstats.Controllers
 
         public ActionResult view(string usuario)
         {
+            Persona p;
             limpiarErroresViewBag();
 
             if (String.IsNullOrEmpty(usuario))
             {
                 if (estaLoggeado())
                 {
-                    Persona p = getUsuario();
+                    p = getUsuario();
                     ViewBag.tienePeticiones = p.tienePeticiones();
-                    ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, Olimpiada.TipoOlimpiada.OMI);
-                    ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, Olimpiada.TipoOlimpiada.OMI);
-                    return View(p);
                 }
                 else
                 {
@@ -62,21 +60,23 @@ namespace OMIstats.Controllers
             }
             else
             {
-                Persona p = Persona.obtenerPersonaDeUsuario(usuario);
+                p = Persona.obtenerPersonaDeUsuario(usuario);
                 if (p != null)
                 {
                     Persona u = getUsuario();
                     if (p.usuario == u.usuario)
                         ViewBag.tienePeticiones = p.tienePeticiones();
-                    ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, Olimpiada.TipoOlimpiada.OMI);
-                    ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, Olimpiada.TipoOlimpiada.OMI);
-                    return View(p);
                 }
                 else
                 {
                     return RedirectTo(Pagina.ERROR, 404);
                 }
             }
+
+            ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.medallas = Medallero.obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, Medallero.TipoMedallero.PERSONA, p.clave.ToString());
+            return View(p);
         }
 
         //

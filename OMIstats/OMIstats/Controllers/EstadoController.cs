@@ -22,6 +22,7 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.sedes = e.obtenerOlimpiadasSede();
             ViewBag.participantes = Resultados.obtenerAlumnosDeEstado(clave, Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.medallas = Medallero.obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, Medallero.TipoMedallero.ESTADO, clave);
 
             return View(e);
         }

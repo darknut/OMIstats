@@ -1,4 +1,23 @@
-﻿.foto {
+﻿.medallero {
+    float:left;
+    margin-right: 10px;
+}
+
+.medallero img {
+    width: 10px;
+    margin-right: 5px;
+}
+
+.medalla {
+    margin-top: 7px;
+}
+
+.diploma {
+    border-top-style: solid;
+    border-top-width: thin;
+}
+
+.foto {
     float:left;
     max-width:100px;
 }
