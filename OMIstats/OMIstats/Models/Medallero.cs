@@ -78,7 +78,12 @@ namespace OMIstats.Models
             DataTable table = db.getTable();
 
             Medallero m = new Medallero();
-            m.llenarDatos(table.Rows[0]);
+            m.tipoMedallero = tipoMedallero;
+            m.tipoOlimpiada = tipoOlimpiada;
+            m.clave = clave;
+
+            if (table.Rows.Count > 0)
+                m.llenarDatos(table.Rows[0]);
 
             return m;
         }

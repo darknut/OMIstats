@@ -677,7 +677,10 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
-            suma = float.Parse(db.getTable().Rows[0][0].ToString());
+            string totalStr = db.getTable().Rows[0][0].ToString();
+            if (totalStr == "")
+                totalStr = "0";
+            suma = float.Parse(totalStr);
 
             query.Clear();
             query.Append(" select ");
