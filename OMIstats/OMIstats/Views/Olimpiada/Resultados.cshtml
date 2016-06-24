@@ -79,7 +79,10 @@
             {
                 <th class="bottom-border right-border table-header-clickable">D2</th>
             }
-            <th class="bottom-border right-border table-header-clickable">Total</th>
+            @if (Model.mostrarResultadosTotales)
+            {
+                <th class="bottom-border right-border table-header-clickable">Total</th>
+            }
             <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
             <th class="bottom-border table-header-clickable">Escuela</th>
         </tr>
@@ -197,9 +200,12 @@
                         @datos.totalDia2
                     </td>
                 }
-                <td class="@("table-td center right-border resultado-total " + claseCSS)">
-                    @datos.total
-                </td>
+                @if (Model.mostrarResultadosTotales)
+                {
+                    <td class="@("table-td center right-border resultado-total " + claseCSS)">
+                        @datos.total
+                    </td>
+                }
                 <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
                     @if( (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
                          datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL))
@@ -239,7 +245,12 @@
     <tfoot>
         <tr>
             <td></td>
-            <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="4">Media</td>
+            <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="4">
+                @if (Model.mostrarResultadosTotales)
+                {
+                    <span>Media</span>
+                }
+            </td>
             @if (Model.mostrarResultadosPorProblema)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
@@ -270,16 +281,24 @@
                     @ViewBag.numerosDia2.media
                 </td>
             }
-            <td class="center resultado-total top-border pie">
-                @ViewBag.numerosTotal.media
-            </td>
+            @if (Model.mostrarResultadosTotales)
+            {
+                <td class="center resultado-total top-border pie">
+                    @ViewBag.numerosTotal.media
+                </td>
+            }
             <td class="top-border table-footer center" colspan="2">
                 Estados participantes
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">Mediana</td>
+            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
+                @if (Model.mostrarResultadosTotales)
+                {
+                    <span>Mediana</span>
+                }
+            </td>
             @if (Model.mostrarResultadosPorProblema)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
@@ -310,16 +329,24 @@
                     @ViewBag.numerosDia2.mediana
                 </td>
             }
-            <td class="center resultado-total pie">
-                @ViewBag.numerosTotal.mediana
-            </td>
-             <td class="center" colspan="2">
+            @if (Model.mostrarResultadosTotales)
+            {
+                <td class="center resultado-total pie">
+                    @ViewBag.numerosTotal.mediana
+                </td>
+            }
+            <td class="center" colspan="2">
                 @Model.estados
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">Perfectos</td>
+            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
+                @if (Model.mostrarResultadosTotales)
+                {
+                    <span>Perfectos</span>
+                }
+            </td>
             @if (Model.mostrarResultadosPorProblema)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
@@ -350,16 +377,24 @@
                     @ViewBag.numerosDia2.perfectos
                 </td>
             }
-            <td class="center resultado-total pie">
-                @ViewBag.numerosTotal.perfectos
-            </td>
-             <td class="table-footer center" colspan="2">
+            @if (Model.mostrarResultadosTotales)
+            {
+                <td class="center resultado-total pie">
+                    @ViewBag.numerosTotal.perfectos
+                </td>
+            }
+            <td class="table-footer center" colspan="2">
                 Total competidores
             </td>
         </tr>
         <tr>
             <td></td>
-            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">Ceros</td>
+            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
+                @if (Model.mostrarResultadosTotales)
+                {
+                    <span>Ceros</span>
+                }
+            </td>
             @if (Model.mostrarResultadosPorProblema)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
@@ -390,10 +425,13 @@
                     @ViewBag.numerosDia2.ceros
                 </td>
             }
-            <td class="center resultado-total pie">
-                @ViewBag.numerosTotal.ceros
-            </td>
-             <td class="center" colspan="2">
+            @if (Model.mostrarResultadosTotales)
+            {
+                <td class="center resultado-total pie">
+                    @ViewBag.numerosTotal.ceros
+                </td>
+            }
+            <td class="center" colspan="2">
                 @Model.participantes
             </td>
         </tr>

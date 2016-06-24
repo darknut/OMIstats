@@ -82,6 +82,8 @@ namespace OMIstats.Models
 
         public bool mostrarResultadosPorProblema { get; set; }
 
+        public bool mostrarResultadosTotales { get; set; }
+
         private List<MiembroDelegacion> asistentes;
         private List<Resultados> resultados;
 
@@ -119,6 +121,7 @@ namespace OMIstats.Models
             problemasDia2 = 0;
             mostrarResultadosPorDia = false;
             mostrarResultadosPorProblema = false;
+            mostrarResultadosTotales = false;
 
             asistentes = null;
         }
@@ -145,6 +148,7 @@ namespace OMIstats.Models
             problemasDia2 = (int)datos["problemasDia2"];
             mostrarResultadosPorDia = (bool)datos["mostrarResultadosPorDia"];
             mostrarResultadosPorProblema = (bool)datos["mostrarResultadosPorProblema"];
+            mostrarResultadosTotales = (bool)datos["mostrarResultadosTotales"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -312,6 +316,8 @@ namespace OMIstats.Models
             query.Append(mostrarResultadosPorDia ? 1 : 0);
             query.Append(", mostrarResultadosPorProblema = ");
             query.Append(mostrarResultadosPorProblema ? 1 : 0);
+            query.Append(", mostrarResultadosTotales = ");
+            query.Append(mostrarResultadosTotales ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
 
@@ -332,7 +338,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0) ");
+            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1) ");
 
             db.EjecutarQuery(query.ToString());
         }
@@ -453,8 +459,6 @@ namespace OMIstats.Models
             else
                 mostrarResultadosPorProblema = false;
 
-            guardarDatos();
-
             // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
             p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
             p.dia = 1;
@@ -480,17 +484,26 @@ namespace OMIstats.Models
             // Calculamos el lugar de cada competidor y lo guardamos en la base
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
             int temp = 0;
+            float? puntosMaximos = 0;
 
             for (int i = 0; i < resultados.Count; i++)
             {
+                if (i == 0)
+                    puntosMaximos = resultados[i].total;
                 if (i == 0 || resultados[i - 1].total != resultados[i].total)
                     temp = i;
                 resultados[i].lugar = temp + 1;
                 resultados[i].guardarLugar();
             }
 
+            // Si el primer lugar tiene menos de 100 puntos, entonces no tenemos los puntos
+            mostrarResultadosTotales = puntosMaximos > 100;
+
             // Calculamos el medallero y lo guardamos en la base
             Medallero.calcularMedallas(tipoOlimpiada);
+
+            // Guardamos los datos en la base
+            guardarDatos();
         }
 
         /// <summary>
