@@ -12,13 +12,17 @@
 {
     <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.metadata.js"></script>
-    <script type="text/javascript" src="/js/sortMedallas.js"></script>
+    <script type="text/javascript" src="/js/sorters.js"></script>
     <script>
         $(function () {
-            agregaSorter("tablaCompetidor");
+            agregaSorterMedallas("tablaCompetidor");
+            agregaSorterOMI("tablaCompetidor");
+            cargaSorter("tablaCompetidor");
         });
         $(function () {
-            agregaSorter("tablaAsistente");
+            agregaSorterMedallas("tablaAsistente");
+            agregaSorterOMI("tablaAsistente");
+            cargaSorter("tablaAsistente");
         });
     </script>
 }

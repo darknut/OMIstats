@@ -15,10 +15,12 @@
 {
     <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script> 
     <script type="text/javascript" src="/Scripts/jquery.metadata.js"></script> 
-    <script type="text/javascript" src="/js/sortMedallas.js"></script> 
+    <script type="text/javascript" src="/js/sorters.js"></script>
     <script>
         $(function () {
-            agregaSorter("tablaAlumnos");
+            agregaSorterMedallas("tablaAlumnos");
+            agregaSorterOMI("tablaAlumnos");
+            cargaSorter("tablaAlumnos");
         });
     </script>
 }

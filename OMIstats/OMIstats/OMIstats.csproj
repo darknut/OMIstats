@@ -261,7 +261,7 @@
     <Content Include="js\fechas.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\request.js" />
-    <Content Include="js\sortMedallas.js" />
+    <Content Include="js\sorters.js" />
     <Content Include="private\cambioPassword.html" />
     <Content Include="private\bienvenido.html" />
     <Content Include="private\firma.html" />

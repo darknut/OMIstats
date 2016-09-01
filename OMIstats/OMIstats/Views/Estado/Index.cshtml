@@ -11,10 +11,12 @@
 {
     <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.metadata.js"></script>
-    <script type="text/javascript" src="/js/sortMedallas.js"></script>
+    <script type="text/javascript" src="/js/sorters.js"></script>
     <script>
         $(function () {
-            agregaSorter("tablaAlumnos");
+            agregaSorterMedallas("tablaAlumnos");
+            agregaSorterOMI("tablaAlumnos");
+            cargaSorter("tablaAlumnos");
         });
     </script>
 }
@@ -91,7 +93,7 @@
         <tr class="table-header">
             <th></th>
             <th class="bottom-border right-border table-header-clickable">Lugar</th>
-            <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+            <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
             <th class="bottom-border right-border table-header-clickable">Género</th>
             <th class="bottom-border right-border table-header-clickable">Concursante</th>
             <th class="bottom-border right-border table-header-clickable">Clave</th>
@@ -147,7 +149,7 @@
                         @(datos.lugar)
                     }
                 </td>
-                <td class="@("table-td right-border " + claseCSS)">
+                <td class="@("table-td right-border " + claseCSS)" omi="@(datos.omi)">
                     <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi)">
                         @(datos.omi + "ª OMI")
                     </a>

@@ -1,4 +1,4 @@
-﻿function agregaSorter(nombre) {
+﻿function agregaSorterMedallas(nombre) {
     $.tablesorter.addParser({
         id: 'medalla',
         is: function (s, table, cell, $cell) {
@@ -17,8 +17,25 @@
         parsed: false,
         type: 'numeric'
     });
+}
 
+function agregaSorterOMI(nombre) {
+    $.tablesorter.addParser({
+        id: 'omi',
+        is: function (s, table, cell, $cell) {
+            return false;
+        },
+        format: function (s, table, cell, cellIndex) {
+            var $cell = $(cell);
+            return parseInt($cell.attr('omi'));
+        },
+        parsed: false,
+        type: 'numeric'
+    });
+}
+
+function cargaSorter(nombre) {
     $("#" + nombre).tablesorter(
-        { debug: true
-        });
+    {
+    });
 }
