@@ -212,10 +212,10 @@
                             break;
                         }
                 }
-                bool mostrar = ViewBag.admin || omi.datosPublicos || datos.publico ||
+                bool mostrar = !omi.puntosDesconocidos && (ViewBag.admin || omi.datosPublicos || datos.publico ||
                     (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
                         datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
-                        datos.usuario == ViewBag.claveUsuario;
+                        datos.usuario == ViewBag.claveUsuario);
                 <tr>
                     <td class="ioi-mini-imagen">
                         @if(datos.ioi == "A" || datos.ioi == "B")

@@ -11,6 +11,7 @@ namespace OMIstats.Models
     public class Olimpiada
     {
         public const string TEMP_CLAVE = "TMP";
+        private const int PUNTOS_MINIMOS_CONOCIDOS = 100;
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
@@ -84,6 +85,8 @@ namespace OMIstats.Models
 
         public bool mostrarResultadosTotales { get; set; }
 
+        public bool puntosDesconocidos { get; set; }
+
         private List<MiembroDelegacion> asistentes;
         private List<Resultados> resultados;
 
@@ -142,6 +145,7 @@ namespace OMIstats.Models
             estados = (int)datos["estados"];
             participantes = (int)datos["participantes"];
             datosPublicos = (bool)datos["datospublicos"];
+            puntosDesconocidos = (bool)datos["puntosdesconocidos"];
             relacion = datos["relacion"].ToString().Trim();
             reporte = datos["reporte"].ToString().Trim();
             problemasDia1 = (int)datos["problemasDia1"];
@@ -304,6 +308,8 @@ namespace OMIstats.Models
             query.Append(participantes);
             query.Append(", datospublicos = ");
             query.Append(datosPublicos ? 1 : 0);
+            query.Append(", puntosdesconocidos = ");
+            query.Append(puntosDesconocidos ? 1 : 0);
             query.Append(", relacion = ");
             query.Append(Utilities.Cadenas.comillas(relacion));
             query.Append(", reporte = ");
@@ -494,6 +500,13 @@ namespace OMIstats.Models
                     temp = i;
                 resultados[i].lugar = temp + 1;
                 resultados[i].guardarLugar();
+
+                // Si alguno de los oros no tiene más de 100 puntos, quiere decir
+                // que no tenemos puntos para la olimpiada y que solo estan ahi para
+                // ordenar, por lo que en realidad no conocemos los puntos
+                if (resultados[i].medalla == Resultados.TipoMedalla.ORO &&
+                    resultados[i].total < PUNTOS_MINIMOS_CONOCIDOS)
+                    this.puntosDesconocidos = true;
             }
 
             // Si el primer lugar tiene menos de 100 puntos, entonces no tenemos los puntos
