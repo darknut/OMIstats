@@ -344,7 +344,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1) ");
+            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }
