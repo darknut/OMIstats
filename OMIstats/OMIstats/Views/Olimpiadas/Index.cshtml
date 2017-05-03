@@ -15,10 +15,10 @@
 <table class="table">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border">
+            <th class="bottom-border right-border anchoColumnaOMI">
 
             </th>
-            <th class="bottom-border right-border">
+            <th class="bottom-border right-border anchoColumnaNumero">
                 Año
             </th>
             <th class="bottom-border right-border">
@@ -27,19 +27,19 @@
             <th class="bottom-border right-border">
                 Fechas
             </th>
-            <th class="bottom-border right-border break-word">
+            <th class="bottom-border right-border break-word anchoColumnaEscuela">
                 Escuela Sede
             </th>
-            <th class="bottom-border right-border">
+            <th class="bottom-border right-border anchoColumnaNumero">
                 Competidores
             </th>
-            <th class="bottom-border right-border break-word">
+            <th class="bottom-border right-border break-word anchoColumnaNumero">
                 Estados participantes
             </th>
-            <th class="bottom-border right-border">
+            <th class="bottom-border right-border anchoColumnaNumero">
                 Media
             </th>
-            <th class="bottom-border">
+            <th class="bottom-border anchoColumnaNumero">
                 Mediana
             </th>
         </tr>
@@ -49,10 +49,10 @@
         if (item.numero != OMIstats.Models.Olimpiada.TEMP_CLAVE || ViewBag.admin)
         {
             <tr>
-                <td class="table-td center right-border">
+                <td class="table-td center right-border anchoColumnaOMI">
                    <a href ="@Url.Content("/Olimpiada?clave=" + item.numero)" >@Url.Content(item.numero + "ª OMI")</a>
                 </td>
-                <td class="table-td right-border center">
+                <td class="table-td right-border center anchoColumnaNumero">
                     @item.año
                 </td>
                 <td class="table-td right-border break-word">
@@ -61,28 +61,28 @@
                 <td class="table-td right-border break-word">
                     @item.friendlyDate
                 </td>
-                <td class="table-td right-border break padding-nombre-escuela">
+                <td class="table-td right-border break padding-nombre-escuela anchoColumnaEscuela">
                     <a href="@Url.Content("/Escuela?url=" + item.escuelaURL)" class="nombre"> @item.nombreEscuelaCompleto </a>
                 </td>
-                <td class="table-td right-border center">
+                <td class="table-td right-border center anchoColumnaNumero">
                     @if (item.participantes > 0)
                     {
                         @item.participantes
                     }
                 </td>
-                <td class="table-td right-border center">
+                <td class="table-td right-border center anchoColumnaNumero">
                     @if (item.estados > 0)
                     {
                         @item.estados
                     }
                 </td>
-                <td class="table-td right-border center">
+                <td class="table-td right-border center anchoColumnaNumero">
                     @if (item.media > 0)
                     {
                         @item.media
                     }
                 </td>
-                <td class="table-td center">
+                <td class="table-td center anchoColumnaNumero">
                     @if (item.mediana > 0)
                     {
                         @item.mediana

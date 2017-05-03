@@ -139,3 +139,15 @@
 .padding-nombre-escuela {
     padding-bottom:15px;
 }
+
+.anchoColumnaNumero {
+    width: 1%;
+}
+
+.anchoColumnaEscuela {
+    width: 25%;
+}
+
+.anchoColumnaOMI {
+    width: 8%;
+}
