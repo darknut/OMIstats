@@ -129,7 +129,10 @@
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
-                    @(datos.lugar)
+                    @if (!Model.puntosDesconocidos)
+                    {
+                        @(datos.lugar)
+                    }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
