@@ -135,6 +135,11 @@
                 (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
                     datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
                     datos.usuario == ViewBag.claveUsuario);
+
+            if (datos.clave.StartsWith(OMIstats.Models.Resultados.NOMBRE_FALTANTE))
+            {
+                continue;
+            }
             <tr>
                 <td class="ioi-mini-imagen">
                     @if(datos.ioi == "A" || datos.ioi == "B")

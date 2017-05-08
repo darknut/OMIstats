@@ -40,10 +40,6 @@ namespace OMIstats.Models
         [Required(ErrorMessage = "Campo requerido")]
         public DateTime fin { get; set; }
 
-        public float media { get; set; }
-
-        public float mediana { get; set; }
-
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string video { get; set; }
 
@@ -85,6 +81,29 @@ namespace OMIstats.Models
 
         public bool mostrarResultadosTotales { get; set; }
 
+        public bool puntosDesconocidos { get; set; }
+
+        public float media
+        {
+            get
+            {
+                if (datosGenerales != null)
+                    return datosGenerales.media;
+                return 0;
+            }
+        }
+
+        public float mediana
+        {
+            get
+            {
+                if (datosGenerales != null)
+                    return datosGenerales.mediana;
+                return 0;
+            }
+        }
+
+        private Problema datosGenerales;
         private List<MiembroDelegacion> asistentes;
         private List<Resultados> resultados;
 
@@ -104,8 +123,6 @@ namespace OMIstats.Models
             año = 0;
             inicio = new DateTime(1990, 1, 1);
             fin = new DateTime(1990, 1, 1);
-            media = 0;
-            mediana = 0;
             video = "";
             poster = "";
             estados = 0;
@@ -123,8 +140,10 @@ namespace OMIstats.Models
             mostrarResultadosPorDia = false;
             mostrarResultadosPorProblema = false;
             mostrarResultadosTotales = false;
+            puntosDesconocidos = false;
 
             asistentes = null;
+            datosGenerales = null;
         }
 
         private void llenarDatos(DataRow datos)
@@ -136,8 +155,6 @@ namespace OMIstats.Models
             año = float.Parse(datos["año"].ToString().Trim());
             inicio = Utilities.Fechas.stringToDate(datos["inicio"].ToString().Trim());
             fin = Utilities.Fechas.stringToDate(datos["fin"].ToString().Trim());
-            media = float.Parse(datos["media"].ToString().Trim());
-            mediana = float.Parse(datos["mediana"].ToString());
             video = datos["video"].ToString().Trim();
             poster = datos["poster"].ToString().Trim();
             estados = (int)datos["estados"];
@@ -150,6 +167,7 @@ namespace OMIstats.Models
             mostrarResultadosPorDia = (bool)datos["mostrarResultadosPorDia"];
             mostrarResultadosPorProblema = (bool)datos["mostrarResultadosPorProblema"];
             mostrarResultadosTotales = (bool)datos["mostrarResultadosTotales"];
+            puntosDesconocidos = (bool)datos["puntosDesconocidos"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -180,6 +198,8 @@ namespace OMIstats.Models
                 logo = numero + ".png";
             else
                 logo = "omi.png";
+
+            datosGenerales = Problema.obtenerProblema(numero, tipoOlimpiada, 0, 0);
         }
 
         /// <summary>
@@ -295,10 +315,6 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(video));
             query.Append(", poster = ");
             query.Append(Utilities.Cadenas.comillas(poster));
-            query.Append(", media = ");
-            query.Append(media);
-            query.Append(", mediana = ");
-            query.Append(mediana);
             query.Append(", estados = ");
             query.Append(estados);
             query.Append(", participantes = ");
@@ -319,6 +335,8 @@ namespace OMIstats.Models
             query.Append(mostrarResultadosPorProblema ? 1 : 0);
             query.Append(", mostrarResultadosTotales = ");
             query.Append(mostrarResultadosTotales ? 1 : 0);
+            query.Append(", puntosDesconocidos = ");
+            query.Append(puntosDesconocidos ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
 
@@ -339,7 +357,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', 0, 0, '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }
@@ -449,8 +467,6 @@ namespace OMIstats.Models
         /// </summary>
         private void precalcularValores()
         {
-            Problema p;
-
             // Calculamos si hay resultados para mostrar por problema y lo guardamos en la base
             problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
             problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
@@ -459,28 +475,6 @@ namespace OMIstats.Models
                 mostrarResultadosPorProblema = Resultados.mostrarResultadosIndividuales(numero, tipoOlimpiada);
             else
                 mostrarResultadosPorProblema = false;
-
-            // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
-            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
-            p.dia = 1;
-            p.numero = 0;
-            p.olimpiada = numero;
-            p.tipoOlimpiada = tipoOlimpiada;
-            p.guardar();
-
-            p = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: problemasDia2);
-            p.dia = 2;
-            p.numero = 0;
-            p.olimpiada = numero;
-            p.tipoOlimpiada = tipoOlimpiada;
-            p.guardar();
-
-            p = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
-            p.dia = 0;
-            p.numero = 0;
-            p.olimpiada = numero;
-            p.tipoOlimpiada = tipoOlimpiada;
-            p.guardar();
 
             // Calculamos el lugar de cada competidor y lo guardamos en la base
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
@@ -512,13 +506,23 @@ namespace OMIstats.Models
         /// </summary>
         public void calcularNumeros()
         {
+            Problema prob;
+
             estados = MiembroDelegacion.obtenerEstadosParticipantes(numero, tipoOlimpiada);
             participantes = MiembroDelegacion.obtenerParticipantes(numero, tipoOlimpiada);
-            Problema total = Resultados.calcularNumeros(numero, tipoOlimpiada);
-            mediana = total.mediana;
-            media = total.media;
 
-            guardarDatos();
+            problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
+            problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
+
+            // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
+            prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
+            prob.guardar();
+
+            prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: problemasDia2);
+            prob.guardar();
+
+            prob = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
+            prob.guardar();
 
             List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 1);
             foreach (Problema p in lista)

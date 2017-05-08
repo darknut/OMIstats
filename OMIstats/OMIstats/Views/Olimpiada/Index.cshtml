@@ -100,22 +100,28 @@
     }
 </div>
 
+ @if (ViewBag.admin) {
+    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=0&numero=0")">
+        <h1 class="titulo">General</h1>
+    </a>
+}
+
 @if(ViewBag.admin || ViewBag.dia1[0] != null || ViewBag.dia2[0] != null)
 {
     <div class="datosOlimpiada problemasColumnas">
 
         <div>
-            @if (ViewBag.dia2[0] == null)
-            {
-                <h1 class="titulo">Problemas</h1>
-            }
-            else
-            {
-                if (ViewBag.admin) {
-                    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0")">
-                        <h1 class="titulo">Día 1</h1>
-                    </a>
-                } else {
+            @if (ViewBag.admin) {
+                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0")">
+                    <h1 class="titulo">Día 1</h1>
+                </a>
+            } else {
+                if (ViewBag.dia2[0] == null)
+                {
+                    <h1 class="titulo">Problemas</h1>
+                }
+                else
+                {
                     <h1 class="titulo">Día 1</h1>
                 }
             }

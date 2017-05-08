@@ -135,7 +135,7 @@
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
-                    @if (mostrar)
+                    @if (mostrar && datos.persona != null)
                     {
                         if(datos.persona.genero == "M")
                         {
@@ -148,7 +148,7 @@
                     }
                 </td>
                 <td class="@("table-td break-word right-border nombre-td " + claseCSS)">
-                    @if (mostrar)
+                    @if (mostrar && datos.persona != null)
                     {
                         <span>
                             <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario)">
@@ -168,9 +168,12 @@
                         }
                         else
                         {
-                            <span>
-                                @datos.clave
-                            </span>
+                            if (datos.clave.StartsWith(OMIstats.Models.Resultados.NOMBRE_FALTANTE))
+                            {
+                                <span>@datos.clave.Substring(4)</span>
+                            } else {
+                                <span>@datos.clave</span>
+                            }
                         }
                     }
                 </td>
@@ -267,7 +270,9 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @ViewBag.numerosDia1.media
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia1.media
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosPorProblema)
@@ -282,7 +287,9 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @ViewBag.numerosDia2.media
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia2.media
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosTotales)
@@ -315,7 +322,9 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @ViewBag.numerosDia1.mediana
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia1.mediana
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosPorProblema)
@@ -330,7 +339,9 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @ViewBag.numerosDia2.mediana
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia2.mediana
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosTotales)
@@ -346,7 +357,7 @@
         <tr>
             <td></td>
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (Model.mostrarResultadosTotales)
+                @if (!Model.puntosDesconocidos && Model.mostrarResultadosTotales)
                 {
                     <span>Perfectos</span>
                 }
@@ -363,7 +374,9 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @ViewBag.numerosDia1.perfectos
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia1.perfectos
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosPorProblema)
@@ -378,13 +391,17 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @ViewBag.numerosDia2.perfectos
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia2.perfectos
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosTotales)
             {
                 <td class="center resultado-total pie">
-                    @ViewBag.numerosTotal.perfectos
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosTotal.perfectos
+                    }
                 </td>
             }
             <td class="table-footer center" colspan="2">
@@ -394,7 +411,7 @@
         <tr>
             <td></td>
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (Model.mostrarResultadosTotales)
+                @if (!Model.puntosDesconocidos && Model.mostrarResultadosTotales)
                 {
                     <span>Ceros</span>
                 }
@@ -411,7 +428,9 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @ViewBag.numerosDia1.ceros
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia1.ceros
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosPorProblema)
@@ -426,13 +445,17 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @ViewBag.numerosDia2.ceros
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosDia2.ceros
+                    }
                 </td>
             }
             @if (Model.mostrarResultadosTotales)
             {
                 <td class="center resultado-total pie">
-                    @ViewBag.numerosTotal.ceros
+                    @if (!Model.puntosDesconocidos) {
+                        @ViewBag.numerosTotal.ceros
+                    }
                 </td>
             }
             <td class="center" colspan="2">

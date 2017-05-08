@@ -13,7 +13,11 @@
 @if (Model.numero > 0) {
     <h1 class="titulo">Editar problema</h1>
 } else {
-    <h1 class="titulo">Números del día @Model.dia</h1>
+    if (Model.dia > 0) {
+        <h1 class="titulo">Números del día @Model.dia</h1>
+    } else {
+        <h1 class="titulo">Números generales de la olimpiada</h1>
+    }
 }
 
 <form name="editProblema" id="editProblema" action="/Problema/Edit" method="post" enctype="multipart/form-data">

@@ -33,8 +33,12 @@ namespace OMIstats.Models
             ESTADO_INEXISTENTE
         }
 
+        // Para usarse cuando se están inventando entradas para que los calculos por estado tengan sentido
         public const string CLAVE_DESCONOCIDA = "UNK";
+        // Para usarse cuando se tienen los datos de los usuarios, pero la clave es desconocida
         public const string CLAVE_FALTANTE = "???";
+        // Para usarse cuando se tiene la clave y los puntos, pero no el nombre del usuario
+        public const string NOMBRE_FALTANTE = "XXX";
         public const string NULL_POINTS = "-";
 
         public int lugar;
@@ -125,7 +129,7 @@ namespace OMIstats.Models
             if (cargarObjetos)
             {
                 persona = Persona.obtenerPersonaConClave(usuario);
-                if (!clave.StartsWith(CLAVE_DESCONOCIDA))
+                if (!(clave.StartsWith(CLAVE_DESCONOCIDA) || clave.StartsWith(NOMBRE_FALTANTE)))
                 {
                     MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0];
                     escuela = Institucion.obtenerInstitucionConNombreCorto(md.nombreEscuela);
@@ -384,14 +388,14 @@ namespace OMIstats.Models
 
             // Revisamos si hay mas de un usuario con esa clave
 
-            if (res.clave.StartsWith(CLAVE_DESCONOCIDA) || res.clave.StartsWith(CLAVE_FALTANTE))
+            if (res.clave.StartsWith(CLAVE_DESCONOCIDA) || res.clave.StartsWith(CLAVE_FALTANTE) || res.clave.StartsWith(NOMBRE_FALTANTE))
             {
                 Estado e = Estado.obtenerEstadoConClave(res.estado);
                 if (e == null)
                     return TipoError.ESTADO_INEXISTENTE;
             }
 
-            if (!res.clave.StartsWith(CLAVE_DESCONOCIDA))
+            if (!(res.clave.StartsWith(CLAVE_DESCONOCIDA) || res.clave.StartsWith(NOMBRE_FALTANTE)))
             {
                 List<MiembroDelegacion> lista = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, res.clave);
                 if (lista.Count == 0)
@@ -707,6 +711,11 @@ namespace OMIstats.Models
                 if (total % 2 == 0)
                     p.mediana = (p.mediana + float.Parse(table.Rows[mitad + 1][0].ToString())) / 2;
             }
+
+            p.dia = dia;
+            p.numero = numero;
+            p.olimpiada = olimpiada;
+            p.tipoOlimpiada = tipoOlimpiada;
 
             return p;
         }

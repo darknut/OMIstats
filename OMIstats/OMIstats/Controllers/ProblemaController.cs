@@ -35,7 +35,7 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            if (dia != 1 && dia != 2)
+            if (dia < 0 || dia > 2)
                 return RedirectTo(Pagina.ERROR, 401);
 
             if (numero < 0 || numero > 4)
@@ -59,7 +59,7 @@ namespace OMIstats.Controllers
             if (o == null || p.olimpiada == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            if (p.dia != 1 && p.dia != 2)
+            if (p.dia < 0 || p.dia > 2)
                 return RedirectTo(Pagina.ERROR, 401);
 
             if (p.numero < 0 || p.numero > 4)
