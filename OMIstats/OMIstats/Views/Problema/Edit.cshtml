@@ -10,26 +10,31 @@
     ViewBag.Title = "Editar problema";
 }
 
-<h1 class="titulo">Editar problema</h1>
+@if (Model.numero > 0) {
+    <h1 class="titulo">Editar problema</h1>
+} else {
+    <h1 class="titulo">Números del día @Model.dia</h1>
+}
 
 <form name="editProblema" id="editProblema" action="/Problema/Edit" method="post" enctype="multipart/form-data">
     <div class="datosFloat">
-        <div>
-            <div class="label">Nombre:</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.nombre)
-                @Html.ValidationMessageFor(model => model.nombre)
+        @if (Model.numero > 0) {
+            <div>
+                <div class="label">Nombre:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nombre)
+                    @Html.ValidationMessageFor(model => model.nombre)
+                </div>
             </div>
-        </div>
 
-        <div>
-            <div class="label">URL:</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.url)
-                @Html.ValidationMessageFor(model => model.url)
+            <div>
+                <div class="label">URL:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.url)
+                    @Html.ValidationMessageFor(model => model.url)
+                </div>
             </div>
-        </div>
-
+        }
         <div>
             <div class="label">Media:</div>
             <div class="input">
