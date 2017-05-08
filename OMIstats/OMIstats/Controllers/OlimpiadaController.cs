@@ -93,7 +93,8 @@ namespace OMIstats.Controllers
             ViewBag.clave = clave;
             ViewBag.poster = poster;
             omi.poster = poster;
-            omi.logo = o.logo;
+
+            omi.copiarDatosPrecalculados(o);
 
             if (!ModelState.IsValid)
                 return View(omi);

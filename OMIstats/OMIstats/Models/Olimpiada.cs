@@ -544,5 +544,19 @@ namespace OMIstats.Models
                     p.guardar();
                 }
         }
+
+        /// <summary>
+        /// Copia todos los datos precalculados del objeto old a este objeto
+        /// </summary>
+        /// <param name="old"></param>
+        public void copiarDatosPrecalculados(Olimpiada old)
+        {
+            this.logo = old.logo;
+            this.mostrarResultadosPorDia = old.mostrarResultadosPorDia;
+            this.mostrarResultadosPorProblema = old.mostrarResultadosPorProblema;
+            this.mostrarResultadosTotales = old.mostrarResultadosTotales;
+            this.problemasDia1 = old.problemasDia1;
+            this.problemasDia2 = old.problemasDia2;
+        }
     }
 }
