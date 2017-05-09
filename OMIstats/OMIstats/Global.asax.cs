@@ -33,7 +33,7 @@ namespace OMIstats
 
         public void Session_Start()
         {
-            Session["usuario"] = new Models.Persona();
+            Session["usuario"] = new Models.Persona(-1);
         }
     }
 }

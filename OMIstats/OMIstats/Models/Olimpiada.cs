@@ -476,10 +476,20 @@ namespace OMIstats.Models
             else
                 mostrarResultadosPorProblema = false;
 
+            // Se guardan los bosquejos del metadata de la omi y los dias
+            // Los cargamos de la base de datos en caso de ya existir.
+            Problema p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 0, 0);
+            p.guardar();
+            p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 1, 0);
+            p.guardar();
+            p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 2, 0);
+            p.guardar();
+
             // Calculamos el lugar de cada competidor y lo guardamos en la base
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
             int temp = 0;
             float? puntosMaximos = 0;
+            bool unkEnTabla = false;
 
             for (int i = 0; i < resultados.Count; i++)
             {
@@ -487,7 +497,14 @@ namespace OMIstats.Models
                     puntosMaximos = resultados[i].total;
                 if (i == 0 || resultados[i - 1].total != resultados[i].total)
                     temp = i;
-                resultados[i].lugar = temp + 1;
+
+                if (resultados[i].clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
+                    unkEnTabla = true;
+
+                if (unkEnTabla)
+                    resultados[i].lugar = 0;
+                else
+                    resultados[i].lugar = temp + 1;
                 resultados[i].guardarLugar();
             }
 

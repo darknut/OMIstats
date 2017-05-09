@@ -73,6 +73,11 @@ namespace OMIstats.Models
             PASSWORD_DIFERENTE
         }
 
+        public Persona(int clave): this()
+        {
+            this.clave = clave;
+        }
+
         public Persona()
         {
             clave = 0;
@@ -159,7 +164,7 @@ namespace OMIstats.Models
 
             Persona p = (Persona)obj;
 
-            return (p.clave != 0);
+            return (p.clave > 0);
         }
 
         /// <summary>

@@ -129,7 +129,7 @@
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
-                    @if (Model.mostrarResultadosTotales)
+                    @if (Model.mostrarResultadosTotales && datos.lugar > 0)
                     {
                         @(datos.lugar)
                     }

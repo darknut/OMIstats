@@ -59,7 +59,7 @@ namespace OMIstats.Controllers
             else
             {
                 //Log in fallido
-                setUsuario(new Persona());
+                setUsuario(new Persona(-1));
                 ViewBag.logInError = true;
                 return View(p);
             }
@@ -71,7 +71,7 @@ namespace OMIstats.Controllers
         public ActionResult Out()
         {
             Session.Clear();
-            setUsuario(new Persona());
+            setUsuario(new Persona(-1));
             return RedirectTo(Pagina.HOME);
         }
 

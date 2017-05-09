@@ -174,6 +174,7 @@ namespace OMIstats.Models
             if (table.Rows.Count == 0)
             {
                 p.olimpiada = omi;
+                p.tipoOlimpiada = tipoOlimpiada;
                 p.dia = dia;
                 p.numero = numero;
             }
