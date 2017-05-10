@@ -23,6 +23,8 @@ namespace OMIstats.Models
             INVITADO,
         }
 
+        public const string DELELIDER = "DELEGADO Y LIDER";
+
         public enum TipoError
         {
             OK,
@@ -75,6 +77,13 @@ namespace OMIstats.Models
             tipo = TipoAsistente.NULL;
 
             eliminar = false;
+        }
+
+        public string getTipoAsistenteString()
+        {
+            if (this.tipo == TipoAsistente.DELELIDER)
+                return DELELIDER;
+            return this.tipo.ToString();
         }
 
         private void llenarDatos(DataRow row, bool incluirTablasAjenas)

@@ -38,7 +38,7 @@ namespace OMIstats.Models
             sitio = "";
             delegado = null;
 
-            claveDelegado = -1;
+            claveDelegado = Persona.UsuarioNulo;
             usuarioDelegado = "";
             nombreDelegado = "";
         }

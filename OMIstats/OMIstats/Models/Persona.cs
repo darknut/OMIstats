@@ -13,6 +13,7 @@ namespace OMIstats.Models
     public class Persona
     {
         public const int TamañoUsuarioMaximo = 20;
+        public const int UsuarioNulo = -1;
 
         public int clave { get; set; }
 

@@ -186,39 +186,19 @@
             </tr>
         </thead>
         <tbody>
+            @{ OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario); }
             @for (var l = 0; l < ViewBag.participantes.Count; l++)
             {
                 OMIstats.Models.Resultados datos = ViewBag.participantes[l];
-                OMIstats.Models.Olimpiada omi = OMIstats.Models.Olimpiada.obtenerOlimpiadaConClave(datos.omi, datos.tipoOlimpiada);
-                string claseCSS = "";
-                switch (datos.medalla)
-                {
-                    case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
-                        {
-                            claseCSS = "table-td-bronce";
-                            break;
-                        }
-                    case OMIstats.Models.Resultados.TipoMedalla.PLATA:
-                        {
-                            claseCSS = "table-td-plata";
-                            break;
-                        }
-                    case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                    case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
-                    case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
-                    case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
-                        {
-                            claseCSS = "table-td-oro";
-                            break;
-                        }
-                }
-                bool mostrar = omi.mostrarResultadosTotales && (ViewBag.admin || omi.datosPublicos || datos.publico ||
-                    (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
-                        datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
-                        datos.usuario == ViewBag.claveUsuario);
+
+                tableManager.setCurrentResultados(datos);
+                tableManager.setCurrentOMI();
+                string claseCSS = tableManager.obtenerClaseCSS();
+
+                bool mostrar = tableManager.mostrarLinea();
                 <tr>
                     <td class="ioi-mini-imagen">
-                        @if(datos.ioi == "A" || datos.ioi == "B")
+                        @if(tableManager.mostrarLogoIOI())
                         {
                             <img src="/img/ioi.png" />
                             <!-- -TODO- Agregar enlace a IOI -->
@@ -256,7 +236,7 @@
                         </a>
                     </td>
                     <td class="@("table-td center right-border " + claseCSS)">
-                        @if (!datos.clave.StartsWith(OMIstats.Models.Resultados.CLAVE_FALTANTE))
+                        @if (!tableManager.faltaClave())
                         {
                             <span>
                                 @datos.clave
@@ -270,31 +250,7 @@
                         }
                     </td>
                     <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
-                        @switch (datos.medalla)
-                        {
-                            case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
-                                {
-                                    <span>ORO (I)</span>
-                                    break;
-                                }
-                            case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
-                                {
-                                    <span>ORO (II)</span>
-                                    break;
-                                }
-                            case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
-                                {
-                                    <span>ORO (III)</span>
-                                    break;
-                                }
-                            case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                            case OMIstats.Models.Resultados.TipoMedalla.PLATA:
-                            case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
-                                {
-                                    <span>@datos.medalla.ToString()</span>
-                                    break;
-                                }
-                        }
+                        @tableManager.medallaString()
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
                         @if (datos.nivelInstitucion != OMIstats.Models.Institucion.NivelInstitucion.NULL)

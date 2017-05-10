@@ -89,40 +89,22 @@
         </tr>
     </thead>
     <tbody>
+    @{
+        OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
+        tableManager.setCurrentOMI(Model);
+    }
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
-        if (!ViewBag.resultados[l].clave.StartsWith(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA))
+        OMIstats.Models.Resultados datos = ViewBag.resultados[l];
+        tableManager.setCurrentResultados(datos);
+
+        if (!tableManager.esClaveDesconocida())
         {
-            OMIstats.Models.Resultados datos = ViewBag.resultados[l];
-            string claseCSS = "";
-            switch (datos.medalla)
-            {
-                case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
-                    {
-                        claseCSS = "table-td-bronce";
-                        break;
-                    }
-                case OMIstats.Models.Resultados.TipoMedalla.PLATA:
-                    {
-                        claseCSS = "table-td-plata";
-                        break;
-                    }
-                case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
-                    {
-                        claseCSS = "table-td-oro";
-                        break;
-                    }
-            }
-            bool mostrar = ViewBag.admin || Model.datosPublicos || datos.publico ||
-                (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
-                 datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL) ||
-                 datos.usuario == ViewBag.claveUsuario;
+            string claseCSS = tableManager.obtenerClaseCSS();
+            bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
             <tr>
                 <td class="ioi-mini-imagen">
-                    @if(datos.ioi == "A" || datos.ioi == "B")
+                    @if(tableManager.mostrarLogoIOI())
                     {
                         <img src="/img/ioi.png" />
                         <!-- -TODO- Agregar enlace a IOI -->
@@ -160,7 +142,7 @@
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
-                        if (datos.clave.StartsWith(OMIstats.Models.Resultados.CLAVE_FALTANTE))
+                        if (tableManager.faltaClave())
                         {
                             <span>
                                 @datos.estado
@@ -168,7 +150,7 @@
                         }
                         else
                         {
-                            if (datos.clave.StartsWith(OMIstats.Models.Resultados.NOMBRE_FALTANTE))
+                            if (tableManager.faltaNombre())
                             {
                                 <span>@datos.clave.Substring(4)</span>
                             } else {
@@ -182,7 +164,7 @@
                     for (var i = 0; i < Model.problemasDia1; i++)
                     {
                         <td class="@("table-td center right-border " + claseCSS)">
-                            @(datos.dia1[i] == null ? OMIstats.Models.Resultados.NULL_POINTS : datos.dia1[i].ToString())
+                            @tableManager.puntosProblema(1, i)
                         </td>
                     }
                 }
@@ -197,7 +179,7 @@
                     for (var i = 0; i < Model.problemasDia2; i++)
                     {
                          <td class="@("table-td center right-border " + claseCSS)">
-                            @(datos.dia2[i] == null ? OMIstats.Models.Resultados.NULL_POINTS : datos.dia2[i].ToString())
+                            @tableManager.puntosProblema(2, i)
                         </td>
                     }
                 }
@@ -214,26 +196,7 @@
                     </td>
                 }
                 <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
-                    @if( (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA &&
-                         datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL))
-                    {
-                        <span>
-                            @if (datos.medalla == OMIstats.Models.Resultados.TipoMedalla.ORO_1 ||
-                                 datos.medalla == OMIstats.Models.Resultados.TipoMedalla.ORO_2 ||
-                                 datos.medalla == OMIstats.Models.Resultados.TipoMedalla.ORO_3)
-                            {
-                                <span>ORO</span>
-                            }
-                            else
-                            {
-                                if (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL &&
-                                    datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA)
-                                {
-                                    <span>@datos.medalla.ToString()</span>
-                                }
-                            }
-                        </span>
-                    }
+                    @tableManager.medallaString(mostrarPrimeros: false)
                 </td>
                 <td class="@("table-td break-word escuela-td " + claseCSS)">
                     @if (mostrar && datos.escuela != null)
