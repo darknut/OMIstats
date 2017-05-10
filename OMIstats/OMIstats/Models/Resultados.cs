@@ -102,7 +102,7 @@ namespace OMIstats.Models
             dia2.Add(0);
         }
 
-        private void llenarDatos(DataRow row, bool cargarObjetos)
+        private void llenarDatos(DataRow row, bool cargarObjetos, bool miembroDelegacionIncluido = false)
         {
             lugar = (int)row["lugar"];
             usuario = (int)row["concursante"];
@@ -131,10 +131,18 @@ namespace OMIstats.Models
                 persona = Persona.obtenerPersonaConClave(usuario);
                 if (!(clave.StartsWith(CLAVE_DESCONOCIDA) || clave.StartsWith(NOMBRE_FALTANTE)))
                 {
-                    MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0];
-                    escuela = Institucion.obtenerInstitucionConNombreCorto(md.nombreEscuela);
-                    nivelInstitucion = md.nivelEscuela;
-                    añoEscolar = md.añoEscuela;
+                    if (miembroDelegacionIncluido)
+                    {
+                        nivelInstitucion = (Institucion.NivelInstitucion)row["nivel"];
+                        añoEscolar = (int)row["año"];
+                    }
+                    else
+                    {
+                        MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0];
+                        escuela = Institucion.obtenerInstitucionConNombreCorto(md.nombreEscuela);
+                        nivelInstitucion = md.nivelEscuela;
+                        añoEscolar = md.añoEscuela;
+                    }
                 }
                 nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
             }
@@ -568,7 +576,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select r.* from Resultados as r ");
+            query.Append(" select r.*, md.institucion, md.nivel, md.año from Resultados as r ");
             query.Append(" inner join MiembroDelegacion as md on r.clave = md.clave ");
             query.Append(" and md.olimpiada = r.olimpiada ");
             query.Append(" and md.clase = r.clase ");
@@ -585,7 +593,7 @@ namespace OMIstats.Models
             {
                 Resultados res = new Resultados();
                 res.tipoOlimpiada = tipoOlimpiada;
-                res.llenarDatos(r, cargarObjetos: true);
+                res.llenarDatos(r, cargarObjetos: true, miembroDelegacionIncluido: true);
 
                 lista.Add(res);
             }
