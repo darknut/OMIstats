@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using OMIstats.Models;
-using OMIstats.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +16,29 @@ namespace OMIstats.Controllers
         protected const string ADMIN = "admin";
         public static string CAPTCHA_SECRET;
         public static string CAPTCHA_KEY;
+
+        protected enum Pagina
+        {
+            HOME,
+            LOGIN,
+            VIEW_PROFILE,
+            EDIT_PROFILE,
+            SAVED_PROFILE,
+            VIEW_REQUEST,
+            MANAGE_REQUEST,
+            ERROR,
+            ADMIN_CHANGE,
+            ADMIN_RESET_PASSWORD,
+            EDIT_ESTADO,
+            EDIT_OLIMPIADA,
+            OLIMPIADAS,
+            EDIT_ESCUELA,
+            SAVED_ESCUELA,
+            ATTENDEES_OMI,
+            PROBLEMA,
+            OLIMPIADA,
+            RESULTS_TABLE
+        }
 
         public BaseController()
         {
