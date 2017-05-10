@@ -78,76 +78,8 @@ namespace OMIstats.Controllers
 
         protected ActionResult RedirectTo(Pagina pagina, object opciones = null)
         {
-            switch(pagina)
-            {
-                case Pagina.VIEW_REQUEST:
-                    return RedirectToAction("view", "Request");
-                case Pagina.EDIT_ESTADO:
-                    if (opciones != null)
-                        return RedirectToAction("Edit", "Estado", new { estado = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.MANAGE_REQUEST:
-                    return RedirectToAction("Manage", "Request");
-                case Pagina.SAVED_PROFILE:
-                    return RedirectToAction("Saved", "Profile");
-                case Pagina.SAVED_ESCUELA:
-                    if (opciones == null)
-                        return RedirectTo(Pagina.ERROR, 404);
-                    return RedirectToAction("Saved", "Escuela", new { url = opciones.ToString() });
-                case Pagina.EDIT_PROFILE:
-                    return RedirectToAction("Edit", "Profile");
-                case Pagina.EDIT_OLIMPIADA:
-                    if (opciones != null)
-                        return RedirectToAction("Edit", "Olimpiada", new { clave = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.ATTENDEES_OMI:
-                    if (opciones != null)
-                        return RedirectToAction("Attendees", "Olimpiada", new { clave = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.RESULTS_TABLE:
-                    if (opciones != null)
-                        return RedirectToAction("ResultsTable", "Olimpiada", new { clave = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.EDIT_ESCUELA:
-                    if (opciones != null)
-                        return RedirectToAction("Edit", "Escuela", new { url = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.VIEW_PROFILE:
-                    if (opciones != null)
-                        return RedirectToAction("view", "Profile", new { usuario = opciones.ToString() });
-                    return RedirectToAction("view", "Profile");
-                case Pagina.LOGIN:
-                    return RedirectToAction("In", "Log");
-                case Pagina.ERROR:
-                    if (opciones != null)
-                        return RedirectToAction("Index", "Error", new { code = opciones.ToString() });
-                    return RedirectToAction("Index", "Error");
-                case Pagina.ADMIN_CHANGE:
-                    if (opciones != null)
-                        return RedirectToAction("Change", "Admin", new { usuario = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.ADMIN_RESET_PASSWORD:
-                    if (opciones != null)
-                        return RedirectToAction("ResetPassword", "Admin", new { usuario = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.OLIMPIADAS:
-                    return RedirectToAction("Index", "Olimpiadas");
-                case Pagina.PROBLEMA:
-                    if (opciones != null)
-                    {
-                        string[] param = opciones.ToString().Split(':');
-                        if (param.Length == 3)
-                            return RedirectToAction("Edit", "Problema", new { omi = param[0], dia = param[1], numero = param[2] });
-                    }
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.OLIMPIADA:
-                     if (opciones != null)
-                        return RedirectToAction("Index", "Olimpiada", new { clave = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.HOME:
-                default:
-                    return RedirectToAction("Index", "Home");
-            }
+            RedirectData data = Enlaces.RedirectTo(pagina, opciones);
+            return RedirectToAction(data.actionName, data.controllerName, data.routeValues);
         }
 
         protected bool revisaCaptcha()

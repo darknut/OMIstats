@@ -153,8 +153,8 @@ namespace OMIstats.Controllers
             // Validaciones foto
             if (file != null)
             {
-                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
-                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
+                Archivos.ResultadoImagen resultado = Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
+                if (resultado != Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return Edit();
@@ -205,7 +205,7 @@ namespace OMIstats.Controllers
 
             // Se guarda la imagen en disco
             if (file != null)
-                p.foto = Utilities.Archivos.guardaArchivo(file);
+                p.foto = Archivos.guardaArchivo(file);
 
             // Si el nombre es el mismo, no se actualiza
             if (p.nombre.Equals(current.nombre))
@@ -223,9 +223,9 @@ namespace OMIstats.Controllers
                     {
                         string oldFoto = p.foto;
                         p.foto =
-                            Utilities.Archivos.copiarArchivo(p.foto, Utilities.Archivos.FolderImagenes.TEMPORAL,
-                                                p.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
-                        Utilities.Archivos.eliminarArchivo(oldFoto, Utilities.Archivos.FolderImagenes.TEMPORAL);
+                            Archivos.copiarArchivo(p.foto, Archivos.FolderImagenes.TEMPORAL,
+                                                p.clave.ToString(), Archivos.FolderImagenes.USUARIOS);
+                        Archivos.eliminarArchivo(oldFoto, Archivos.FolderImagenes.TEMPORAL);
                         p.guardarDatos();
                     }
 

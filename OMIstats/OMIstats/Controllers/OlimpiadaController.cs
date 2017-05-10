@@ -115,8 +115,8 @@ namespace OMIstats.Controllers
 
             if (fileLogo != null)
             {
-                Utilities.Archivos.ResultadoImagen resultadoLogo = Utilities.Archivos.esImagenValida(fileLogo);
-                if (resultadoLogo != Utilities.Archivos.ResultadoImagen.VALIDA)
+                Archivos.ResultadoImagen resultadoLogo = Archivos.esImagenValida(fileLogo);
+                if (resultadoLogo != Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultadoLogo.ToString().ToLower();
                     return View(omi);
@@ -125,8 +125,8 @@ namespace OMIstats.Controllers
 
             if (filePoster != null)
             {
-                Utilities.Archivos.ResultadoImagen resultadoPoster = Utilities.Archivos.esImagenValida(filePoster, allowContainer: true);
-                if (resultadoPoster != Utilities.Archivos.ResultadoImagen.VALIDA)
+                Archivos.ResultadoImagen resultadoPoster = Archivos.esImagenValida(filePoster, allowContainer: true);
+                if (resultadoPoster != Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorInfo = resultadoPoster.ToString().ToLower();
                     return View(omi);
@@ -141,12 +141,12 @@ namespace OMIstats.Controllers
             }
 
             if (fileLogo != null)
-                Utilities.Archivos.guardaArchivo(fileLogo, omi.numero + ".png",
-                    Utilities.Archivos.FolderImagenes.OLIMPIADAS);
+                Archivos.guardaArchivo(fileLogo, omi.numero + ".png",
+                    Archivos.FolderImagenes.OLIMPIADAS);
 
             if (filePoster != null)
-                Utilities.Archivos.guardaArchivo(filePoster, filePoster.FileName,
-                    Utilities.Archivos.FolderImagenes.POSTERS);
+                Archivos.guardaArchivo(filePoster, filePoster.FileName,
+                    Archivos.FolderImagenes.POSTERS);
 
             ViewBag.guardado = true;
 

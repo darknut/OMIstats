@@ -101,8 +101,8 @@ namespace OMIstats.Controllers
             // Validaciones logo
             if (file != null)
             {
-                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file);
-                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
+                Archivos.ResultadoImagen resultado = Archivos.esImagenValida(file);
+                if (resultado != Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return View(estado);
@@ -117,7 +117,7 @@ namespace OMIstats.Controllers
                     estado.delegado = new Persona();
                     estado.delegado.nombre = estado.nombreDelegado;
                     estado.delegado.correo = estado.mailDelegado;
-                    estado.delegado.nuevoUsuario(Utilities.Archivos.FotoInicial.DOMI);
+                    estado.delegado.nuevoUsuario(Archivos.FotoInicial.DOMI);
 
                     Peticion pe = new Peticion();
                     pe.tipo = Peticion.TipoPeticion.USUARIO;
@@ -133,7 +133,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 500);
 
             if (file != null)
-                Utilities.Archivos.guardaArchivo(file, e.clave + ".png", Utilities.Archivos.FolderImagenes.ESTADOS);
+                Archivos.guardaArchivo(file, e.clave + ".png", Archivos.FolderImagenes.ESTADOS);
 
             ViewBag.guardado = true;
             return View(estado);
