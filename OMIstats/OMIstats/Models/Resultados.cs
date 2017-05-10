@@ -139,7 +139,7 @@ namespace OMIstats.Models
                     else
                     {
                         MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0];
-                        escuela = Institucion.obtenerInstitucionConNombreCorto(md.nombreEscuela);
+                        escuela = Institucion.obtenerInstitucionConClave(md.claveEscuela);
                         nivelInstitucion = md.nivelEscuela;
                         añoEscolar = md.añoEscuela;
                     }
