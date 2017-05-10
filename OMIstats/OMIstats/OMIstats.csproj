@@ -158,7 +158,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="utilities\Pagina.cs" />
     <Compile Include="utilities\Correo.cs" />
+    <Compile Include="utilities\Enlaces.cs" />
     <Compile Include="utilities\Fechas.cs" />
     <Compile Include="utilities\TableManager.cs" />
   </ItemGroup>
