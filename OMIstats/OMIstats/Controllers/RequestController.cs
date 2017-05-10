@@ -271,14 +271,14 @@ namespace OMIstats.Controllers
             // Validaciones imagen
             if (file != null)
             {
-                Archivos.ResultadoImagen resultado =
-                    Archivos.esImagenValida(file, Peticion.TamañoPeticionMaximo, allowContainer:true);
-                if (resultado != Archivos.ResultadoImagen.VALIDA)
+                Utilities.Archivos.ResultadoImagen resultado =
+                    Utilities.Archivos.esImagenValida(file, Peticion.TamañoPeticionMaximo, allowContainer:true);
+                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return View(p);
                 }
-                p.foto = Archivos.guardaArchivo(file);
+                p.foto = Utilities.Archivos.guardaArchivo(file);
             }
 
             Peticion pe = new Peticion();

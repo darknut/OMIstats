@@ -75,13 +75,13 @@ namespace OMIstats.Controllers
             // Validaciones logo
             if (file != null)
             {
-                Archivos.ResultadoImagen resultado = Archivos.esImagenValida(file);
-                if (resultado != Archivos.ResultadoImagen.VALIDA)
+                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file);
+                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return View(escuela);
                 }
-                escuela.logo = Archivos.guardaArchivo(file, Path.GetFileNameWithoutExtension(file.FileName) + ".png");
+                escuela.logo = Utilities.Archivos.guardaArchivo(file, Path.GetFileNameWithoutExtension(file.FileName) + ".png");
             }
 
             // Se guardan los datos
@@ -91,9 +91,9 @@ namespace OMIstats.Controllers
                 {
                     if (file != null)
                     {
-                        Archivos.copiarArchivo(escuela.logo, Archivos.FolderImagenes.TEMPORAL,
-                                        escuela.clave.ToString(), Archivos.FolderImagenes.ESCUELAS);
-                        Archivos.eliminarArchivo(escuela.logo, Archivos.FolderImagenes.TEMPORAL);
+                        Utilities.Archivos.copiarArchivo(escuela.logo, Utilities.Archivos.FolderImagenes.TEMPORAL,
+                                        escuela.clave.ToString(), Utilities.Archivos.FolderImagenes.ESCUELAS);
+                        Utilities.Archivos.eliminarArchivo(escuela.logo, Utilities.Archivos.FolderImagenes.TEMPORAL);
                     }
 
                     guardarParams(Pagina.SAVED_ESCUELA, OK);
