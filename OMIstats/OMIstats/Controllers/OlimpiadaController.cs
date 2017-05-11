@@ -293,6 +293,30 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Olimpiada/Resultados/
+
+        public ActionResult Delegacion(string clave, string estado)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+
+            if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            Estado e = Estado.obtenerEstadoConClave(estado);
+
+            if (e == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            ViewBag.olimpiada = o;
+            ViewBag.estado = e;
+            ViewBag.delegacion = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.COMPETIDOR);
+            ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.LIDER);
+            ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI);
+
+            return View();
+        }
+
+        //
         // GET: /Olimpiada/Numeros/
 
         public ActionResult Numeros(string clave)

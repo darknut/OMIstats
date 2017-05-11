@@ -87,15 +87,19 @@ namespace OMIstats.Models
             return this.tipo.ToString();
         }
 
-        private void llenarDatos(DataRow row, bool incluirTablasAjenas)
+        private void llenarDatos(DataRow row, bool incluirPersona = true, bool incluirEscuela = true)
         {
-            if (incluirTablasAjenas)
+            if (incluirPersona)
             {
                 usuario = row["usuario"].ToString().Trim();
                 nombreAsistente = row["nombre"].ToString().Trim();
                 fechaNacimiento = row["nacimiento"].ToString().Trim();
                 genero = row["genero"].ToString().Trim();
                 correo = row["correo"].ToString().Trim();
+            }
+
+            if (incluirEscuela)
+            {
                 nombreEscuela = row["nombreCorto"].ToString().Trim();
                 if (row["publica"] != DBNull.Value)
                     escuelaPublica = (bool)row["publica"];
@@ -272,7 +276,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 MiembroDelegacion md = new MiembroDelegacion();
-                md.llenarDatos(r, incluirTablasAjenas:true);
+                md.llenarDatos(r);
 
                 lista.Add(md);
             }
@@ -535,7 +539,7 @@ namespace OMIstats.Models
                 // El usuario existe, cargamos los datos y los actualizamos
 
                 MiembroDelegacion md_current = new MiembroDelegacion();
-                md_current.llenarDatos(table.Rows[0], incluirTablasAjenas: false);
+                md_current.llenarDatos(table.Rows[0], incluirPersona: false, incluirEscuela: false);
 
                 if (md_current.clave != md.clave)
                 {
@@ -597,7 +601,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 MiembroDelegacion md = new MiembroDelegacion();
-                md.llenarDatos(r, incluirTablasAjenas: false);
+                md.llenarDatos(r, incluirPersona: false, incluirEscuela: false);
 
                 lista.Add(md);
             }
@@ -680,7 +684,66 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 MiembroDelegacion md = new MiembroDelegacion();
-                md.llenarDatos(r, incluirTablasAjenas: true);
+                md.llenarDatos(r);
+
+                lista.Add(md);
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Obtiene la lista de miembros de una delegacion
+        /// </summary>
+        /// <returns></returns>
+        public static List<MiembroDelegacion> obtenerMiembrosDelegacion(string olimpiada, string estado, Olimpiada.TipoOlimpiada tipoOlimpiada, TipoAsistente tipo = TipoAsistente.NULL)
+        {
+            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from MiembroDelegacion as md ");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and md.clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and md.estado = ");
+            query.Append(Utilities.Cadenas.comillas(estado));
+
+            switch (tipo)
+            {
+                case TipoAsistente.COMPETIDOR:
+                    {
+                        query.Append(" and md.tipo = ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+                        break;
+                    }
+                case TipoAsistente.DELELIDER:
+                case TipoAsistente.LIDER:
+                case TipoAsistente.DELEGADO:
+                    {
+                        query.Append(" and (md.tipo = ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
+                        query.Append(" or md.tipo = ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
+                        query.Append(" or md.tipo = ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
+                        query.Append(")");
+                        break;
+                    }
+                case TipoAsistente.NULL:
+                    break;
+            }
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r, incluirEscuela: false);
 
                 lista.Add(md);
             }
