@@ -63,12 +63,12 @@ namespace OMIstats.Models
         /// <returns></returns>
         private static Dictionary<string, Estado> getEstados()
         {
-            Dictionary<string, Estado> estados = (Dictionary<string, Estado>)System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS];
+            Dictionary<string, Estado> estados = (Dictionary<string, Estado>)HttpContext.Current.Application[APPLICATION_ESTADOS];
 
             if (estados == null)
             {
                 estados = cargarEstados();
-                System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS] = estados;
+                HttpContext.Current.Application[APPLICATION_ESTADOS] = estados;
             }
 
             return estados;
@@ -132,7 +132,7 @@ namespace OMIstats.Models
         public bool guardar()
         {
             // Borramos la referencia en la aplicacion para que el siguiente query recargue los datos
-            System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS] = null;
+            HttpContext.Current.Application[APPLICATION_ESTADOS] = null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();

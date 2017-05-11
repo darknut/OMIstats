@@ -8,7 +8,6 @@ namespace OMIstats.Utilities
 {
     public class TableManager
     {
-        private Dictionary<string, Olimpiada> olimpiadas;
         private Olimpiada currentOMI;
         private bool admin;
         private int claveUsuario;
@@ -35,7 +34,6 @@ namespace OMIstats.Utilities
             else
                 this.claveUsuario = (int)claveUsuario;
 
-            olimpiadas = new Dictionary<string,Olimpiada>();
             currentOMI = null;
             currentResultados = null;
         }
@@ -45,21 +43,9 @@ namespace OMIstats.Utilities
             this.currentOMI = omi;
         }
 
-        public void setCurrentOMI(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
-        {
-            string key = clave + "-" + tipoOlimpiada;
-            olimpiadas.TryGetValue(key, out currentOMI);
-
-            if (currentOMI == null)
-            {
-                currentOMI = Olimpiada.obtenerOlimpiadaConClave(clave, tipoOlimpiada);
-                olimpiadas.Add(key, currentOMI);
-            }
-        }
-
         public void setCurrentOMI()
         {
-            setCurrentOMI(currentResultados.omi, currentResultados.tipoOlimpiada);
+            currentOMI = Olimpiada.obtenerOlimpiadaConClave(currentResultados.omi, currentResultados.tipoOlimpiada);
         }
 
         public void setCurrentResultados(Resultados datos)

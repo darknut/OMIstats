@@ -13,6 +13,8 @@ namespace OMIstats.Models
         public const string TEMP_CLAVE = "TMP";
         private const int PUNTOS_MINIMOS_CONOCIDOS = 100;
 
+        private const string APPLICATION_OMI = "OlimpiadasOMI";
+
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
         public string numero { get; set; }
@@ -146,6 +148,55 @@ namespace OMIstats.Models
             datosGenerales = null;
         }
 
+        private static void cargarOlimpiadas()
+        {
+            Dictionary<string, Olimpiada> listaOMI = new Dictionary<string, Olimpiada>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from olimpiada ");
+            query.Append(" order by año desc");
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Olimpiada o = new Olimpiada();
+                o.llenarDatos(r);
+
+                if (o.tipoOlimpiada == TipoOlimpiada.OMI)
+                    listaOMI.Add(o.numero, o);
+            }
+
+            HttpContext.Current.Application[APPLICATION_OMI] = listaOMI;
+        }
+
+        /// <summary>
+        /// Dado que las olimpiadas son pocas y a que se hacen muchas llamadas a la base para obtener estos objetos
+        /// los cargamos una vez por aplicacion y los dejamos ahi
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<string, Olimpiada> getOlimpiadas(TipoOlimpiada tipoOlimpiada)
+        {
+            Dictionary<string, Olimpiada> olimpiadas;
+            string application = "";
+
+            if (tipoOlimpiada == TipoOlimpiada.OMI)
+                application = APPLICATION_OMI;
+
+            olimpiadas = (Dictionary<string, Olimpiada>)HttpContext.Current.Application[application];
+
+            if (olimpiadas == null)
+            {
+                cargarOlimpiadas();
+                olimpiadas = (Dictionary<string, Olimpiada>)HttpContext.Current.Application[application];
+            }
+
+            return olimpiadas;
+        }
+
         private void llenarDatos(DataRow datos)
         {
             numero = datos["numero"].ToString().Trim();
@@ -209,28 +260,7 @@ namespace OMIstats.Models
         /// <returns></returns>
         public static List<Olimpiada> obtenerOlimpiadas(TipoOlimpiada tipoOlimpiada)
         {
-            List<Olimpiada> lista = new List<Olimpiada>();
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append(" select * from olimpiada where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" order by año desc");
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return lista;
-
-            DataTable table = db.getTable();
-
-            foreach (DataRow r in table.Rows)
-            {
-                Olimpiada o = new Olimpiada();
-                o.llenarDatos(r);
-
-                lista.Add(o);
-            }
-
-            return lista;
+            return getOlimpiadas(tipoOlimpiada).Values.ToList();
         }
 
         /// <summary>
@@ -241,25 +271,9 @@ namespace OMIstats.Models
         /// <returns>El objeto olimpiada</returns>
         public static Olimpiada obtenerOlimpiadaConClave(string clave, TipoOlimpiada tipoOlimpiada)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
+            Dictionary<string, Olimpiada> olimpiadas = getOlimpiadas(tipoOlimpiada);
 
-            query.Append(" select * from olimpiada where numero = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
-            query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return null;
-
-            DataTable table = db.getTable();
-            if (table.Rows.Count != 1)
-                return null;
-
-            Olimpiada o = new Olimpiada();
-            o.llenarDatos(table.Rows[0]);
-
-            return o;
+            return olimpiadas[clave];
         }
 
         /// <summary>
@@ -271,6 +285,9 @@ namespace OMIstats.Models
         /// referenciada no existe</remarks>
         public bool guardarDatos(string clave = null)
         {
+            // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
+            HttpContext.Current.Application[APPLICATION_OMI] = null;
+
             if (clave == null)
                 clave = numero;
 
@@ -349,6 +366,9 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada que se quiere crear</param>
         public static void nuevaOMI(TipoOlimpiada tipoOlimpiada)
         {
+            // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
+            HttpContext.Current.Application[APPLICATION_OMI] = null;
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
