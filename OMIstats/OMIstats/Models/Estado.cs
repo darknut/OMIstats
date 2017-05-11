@@ -10,6 +10,8 @@ namespace OMIstats.Models
 {
     public class Estado
     {
+        private const string APPLICATION_ESTADOS = "Estados";
+
         public string clave { get; set; }
         public string nombre { get; set; }
         public Persona delegado { get; set; }
@@ -31,6 +33,47 @@ namespace OMIstats.Models
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string mailDelegado { get; set; }
 
+        private static Dictionary<string, Estado> cargarEstados()
+        {
+            Dictionary<string, Estado> lista = new Dictionary<string, Estado>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from estado ");
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Estado e = new Estado();
+                e.llenarDatos(r);
+
+                lista.Add(e.clave, e);
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Dado que los estados son pocos y a que se hacen muchas llamadas a la base para obtener estos objetos
+        /// los cargamos una vez por aplicacion y los dejamos ahi
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<string, Estado> getEstados()
+        {
+            Dictionary<string, Estado> estados = (Dictionary<string, Estado>)System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS];
+
+            if (estados == null)
+            {
+                estados = cargarEstados();
+                System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS] = estados;
+            }
+
+            return estados;
+        }
+
         public Estado()
         {
             clave = "";
@@ -49,26 +92,7 @@ namespace OMIstats.Models
         /// <returns>La lista</returns>
         public static List<Estado> obtenerEstados()
         {
-            List<Estado> lista = new List<Estado>();
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append(" select * from estado ");
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return lista;
-
-            DataTable table = db.getTable();
-
-            foreach (DataRow r in table.Rows)
-            {
-                Estado e = new Estado();
-                e.llenarDatos(r);
-
-                lista.Add(e);
-            }
-
-            return lista;
+            return getEstados().Values.ToList();
         }
 
         private void llenarDatos(DataRow datos)
@@ -95,23 +119,9 @@ namespace OMIstats.Models
         /// <returns>El estado</returns>
         public static Estado obtenerEstadoConClave(string clave)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
+            Dictionary<string, Estado> estados = getEstados();
 
-            query.Append(" select * from estado where clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return null;
-
-            DataTable table = db.getTable();
-            if (table.Rows.Count != 1)
-                return null;
-
-            Estado e = new Estado();
-            e.llenarDatos(table.Rows[0]);
-
-            return e;
+            return estados[clave];
         }
 
         /// <summary>
@@ -121,6 +131,8 @@ namespace OMIstats.Models
         /// <returns>Si se guardaron satisfactoriamente los datos</returns>
         public bool guardar()
         {
+            System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS] = null;
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
