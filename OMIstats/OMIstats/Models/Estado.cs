@@ -131,6 +131,7 @@ namespace OMIstats.Models
         /// <returns>Si se guardaron satisfactoriamente los datos</returns>
         public bool guardar()
         {
+            // Borramos la referencia en la aplicacion para que el siguiente query recargue los datos
             System.Web.HttpContext.Current.Application[APPLICATION_ESTADOS] = null;
 
             Utilities.Acceso db = new Utilities.Acceso();
