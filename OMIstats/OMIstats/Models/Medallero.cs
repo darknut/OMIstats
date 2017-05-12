@@ -225,5 +225,42 @@ namespace OMIstats.Models
             foreach (Medallero estado in estados.Values)
                 estado.guardarDatos();
         }
+
+        /// <summary>
+        /// Obtiene las medallas de la delegación mandada como parámetro
+        /// </summary>
+        /// <param name="delegacion">La delegación de la cual se contaran las medallas</param>
+        /// <returns>Una lista con las medallas</returns>
+        public static Medallero contarMedallas(List<MiembroDelegacion> delegacion)
+        {
+            Medallero m = new Medallero();
+
+            foreach (MiembroDelegacion md in delegacion)
+            {
+                switch (md.medalla)
+                {
+                    case Resultados.TipoMedalla.ORO:
+                    case Resultados.TipoMedalla.ORO_1:
+                    case Resultados.TipoMedalla.ORO_2:
+                    case Resultados.TipoMedalla.ORO_3:
+                        {
+                            m.oros++;
+                            break;
+                        }
+                    case Resultados.TipoMedalla.PLATA:
+                        {
+                            m.platas++;
+                            break;
+                        }
+                    case Resultados.TipoMedalla.BRONCE:
+                        {
+                            m.bronces++;
+                            break;
+                        }
+                }
+            }
+
+            return m;
+        }
     }
 }

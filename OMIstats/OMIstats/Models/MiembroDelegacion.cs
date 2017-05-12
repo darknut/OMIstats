@@ -56,6 +56,10 @@ namespace OMIstats.Models
         public string clave;
         public string estado;
         public TipoAsistente tipo;
+        /// <summary>
+        /// Solo presente cuando se llama a traves de 'obtenerMiembrosDelegacion'
+        /// </summary>
+        public Resultados.TipoMedalla medalla;
 
         private bool eliminar;
 
@@ -76,6 +80,7 @@ namespace OMIstats.Models
             clave = "";
             estado = "";
             tipo = TipoAsistente.NULL;
+            medalla = Resultados.TipoMedalla.NULL;
 
             eliminar = false;
         }
@@ -737,6 +742,8 @@ namespace OMIstats.Models
                     break;
             }
 
+            query.Append(" order by md.clave ");
+
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
@@ -744,6 +751,9 @@ namespace OMIstats.Models
             {
                 MiembroDelegacion md = new MiembroDelegacion();
                 md.llenarDatos(r, incluirEscuela: false);
+
+                if (tipo == TipoAsistente.COMPETIDOR)
+                    md.medalla = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave).medalla;
 
                 lista.Add(md);
             }

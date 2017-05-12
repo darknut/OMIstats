@@ -121,7 +121,11 @@ namespace OMIstats.Models
         {
             Dictionary<string, Estado> estados = getEstados();
 
-            return estados[clave];
+            Estado e;
+
+            estados.TryGetValue(clave.Trim(), out e);
+
+            return e;
         }
 
         /// <summary>

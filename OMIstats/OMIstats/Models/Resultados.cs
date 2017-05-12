@@ -271,6 +271,36 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa los resultados de la persona mandada como parametro en la olimpiada particular
+        /// </summary>
+        /// <param name="omi">La olimpiada en cuestión</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="clave">La clave de la persona</param>
+        /// <returns>Los resultados pedidos</returns>
+        public static Resultados cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string clave)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from resultados ");
+            query.Append(" where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clave = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            Resultados res = new Resultados();
+            res.tipoOlimpiada = tipoOlimpiada;
+            res.llenarDatos(table.Rows[0], cargarObjetos: false);
+
+            return res;
+        }
+
+        /// <summary>
         /// Obtiene un string separado con comas, con todos los datos en el objeto
         /// </summary>
         /// <param name="problemasDia1">El número de problemas en el día 1</param>

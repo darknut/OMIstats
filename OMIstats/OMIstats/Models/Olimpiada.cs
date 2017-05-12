@@ -273,7 +273,11 @@ namespace OMIstats.Models
         {
             Dictionary<string, Olimpiada> olimpiadas = getOlimpiadas(tipoOlimpiada);
 
-            return olimpiadas[clave];
+            Olimpiada o = null;
+
+            olimpiadas.TryGetValue(clave.Trim(), out o);
+
+            return o;
         }
 
         /// <summary>

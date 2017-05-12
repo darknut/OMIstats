@@ -39,15 +39,6 @@
     height:100%;
 }
 
-.sedes {
-    margin-top:20px;
-    margin-left:10px;
-    margin-bottom:15px;
-    font-size:15pt;
-    font-weight:bold;
-    color:#336699;
-}
-
 .medallero {
     margin-left: 5px;
     display: flex;

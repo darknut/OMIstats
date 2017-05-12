@@ -1,0 +1,56 @@
+﻿@section AddToHead
+{
+    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = ViewBag.estado.nombre + " en la " + ViewBag.olimpiada.numero + "ª OMI";
+}
+
+<div>
+    <div class="logoEstadoFloat" >
+        <img src="@Url.Content("~/img/estados/" + ViewBag.estado.clave + ".png")"/>
+    </div>
+
+    <div class="datosEstado tituloEstado">
+        <div>
+            <h2 class="titulo">
+                <a href="@Url.Content("/Estado?clave=" + ViewBag.estado.clave)">@ViewBag.estado.nombre</a>
+                en la 
+                <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.olimpiada.numero)">@(ViewBag.olimpiada.numero + "ª OMI")</a>
+            </h2>
+            <div class="medallero">
+                <div class="medalla" title="Medallas de oro">
+                    <div><img src="~/img/oro.png"/></div>
+                    <div>@ViewBag.medallas.oros</div>
+                </div>
+                <div class="medalla" title="Medallas de plata">
+                    <div><img src="~/img/plata.png"/></div>
+                    <div>@ViewBag.medallas.platas</div>
+                </div>
+                <div class="medalla" title="Medallas de bronce">
+                    <div><img src="~/img/bronce.png"/></div>
+                    <div>@ViewBag.medallas.bronces</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<br />
+<br />
+
+<div class="subtitulo">Competidores</div>
+
+<div>
+
+    @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delegacion)
+    {
+        <p>@md.nombreAsistente</p>
+        <p>@md.clave</p>
+        <p>@md.medalla</p>
+    }
+    
+</div>

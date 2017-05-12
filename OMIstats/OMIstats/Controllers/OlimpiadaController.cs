@@ -312,6 +312,7 @@ namespace OMIstats.Controllers
             ViewBag.delegacion = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.COMPETIDOR);
             ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.LIDER);
             ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.medallas = Medallero.contarMedallas(ViewBag.delegacion);
 
             return View();
         }
