@@ -51,14 +51,21 @@
 
         @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delegacion)
         {
-            <div class="miembroDelegacion">
-                <div class="foto" >
+            <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.medalla)">
+                <div class="foto fotoFixedHeight">
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a>
-                    <p>@md.clave</p>
-                    <p>@md.medalla</p>
+                    <a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a>
+                    <div class="claveMiembro">
+                        @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
+                            @md.clave
+                        }
+                    </div>
+                    @if (md.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
+                    {
+                        <img class="medallaMiembro" src="@OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.medalla)"/>
+                    }
                 </div>
             </div>
         }

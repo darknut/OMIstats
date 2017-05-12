@@ -17,6 +17,10 @@ namespace OMIstats.Utilities
         private const string CLASE_PLATA = "table-td-plata";
         private const string CLASE_ORO = "table-td-oro";
 
+        private const string IMG_ORO = "/img/oro.png";
+        private const string IMG_PLATA = "/img/plata.png";
+        private const string IMG_BRONCE = "/img/bronce.png";
+
         private const string A = "A";
         private const string B = "B";
 
@@ -55,17 +59,22 @@ namespace OMIstats.Utilities
 
         public string obtenerClaseCSS()
         {
-            switch (currentResultados.medalla)
+            return obtenerClaseCSS(currentResultados.medalla);
+        }
+
+        public static string obtenerClaseCSS(Resultados.TipoMedalla medalla)
+        {
+            switch (medalla)
             {
                 case Resultados.TipoMedalla.BRONCE:
-                        return CLASE_BRONCE;
+                    return CLASE_BRONCE;
                 case Resultados.TipoMedalla.PLATA:
-                        return CLASE_PLATA;
+                    return CLASE_PLATA;
                 case OMIstats.Models.Resultados.TipoMedalla.ORO:
                 case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
                 case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
                 case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
-                        return CLASE_ORO;
+                    return CLASE_ORO;
             }
 
             return String.Empty;
@@ -87,12 +96,22 @@ namespace OMIstats.Utilities
 
         public bool faltaClave()
         {
-            return currentResultados.clave.StartsWith(Resultados.CLAVE_FALTANTE);
+            return faltaClave(currentResultados.clave);
+        }
+
+        public static bool faltaClave(string clave)
+        {
+            return clave.StartsWith(Resultados.CLAVE_FALTANTE);
         }
 
         public bool esClaveDesconocida()
         {
-            return currentResultados.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA);
+            return esClaveDesconocida(currentResultados.clave);
+        }
+
+        public static bool esClaveDesconocida(string clave)
+        {
+            return clave.StartsWith(Resultados.CLAVE_DESCONOCIDA);
         }
 
         public bool mostrarLogoIOI()
@@ -129,6 +148,23 @@ namespace OMIstats.Utilities
         private string puntos(List<float?> problemas, int i)
         {
             return problemas[i] == null ? Resultados.NULL_POINTS : problemas[i].ToString();
+        }
+
+        public static string obtenerImagenMedalla(Resultados.TipoMedalla medalla)
+        {
+            switch (medalla)
+            {
+                case Resultados.TipoMedalla.ORO:
+                case Resultados.TipoMedalla.ORO_1:
+                case Resultados.TipoMedalla.ORO_2:
+                case Resultados.TipoMedalla.ORO_3:
+                    return IMG_ORO;
+                case Resultados.TipoMedalla.PLATA:
+                    return IMG_PLATA;
+                case Resultados.TipoMedalla.BRONCE:
+                    return IMG_BRONCE;
+            }
+            return "";
         }
     }
 }
