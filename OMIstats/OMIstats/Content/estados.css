@@ -84,6 +84,12 @@
     padding-left: 115px;
 }
 
+.noOverflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .nombreMiembro {
     font-size: 16pt;
 }

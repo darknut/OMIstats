@@ -56,7 +56,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
                             @md.clave
@@ -80,4 +80,57 @@
     {
         <div class="subtitulo">El estado no participó en esta olimpiada</div>
     }
+}
+
+@if (ViewBag.lideres.Count > 0)
+{
+    <div class="subtitulo">Líderes</div>
+
+    <div class="tablaDelegacion">
+
+        @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.lideres)
+        {
+            <div class="miembroDelegacion">
+                <div class="foto fotoFixedHeight">
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                </div>
+                <div class="datosMiembro">
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a></div>
+                    <div class="claveMiembro">
+                        @md.getTipoAsistenteString()
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+}
+
+@if (ViewBag.otros.Count > 0)
+{
+    if(ViewBag.lideres.Count == 0 && ViewBag.delegacion.Count == 0)
+    {
+        <div class="subtitulo">Delegación</div>
+    } else {
+        <div class="subtitulo">Resto de la delegación</div>
+    }
+
+    <div class="tablaDelegacion">
+
+        @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.otros)
+        {
+            <div class="miembroDelegacion">
+                <div class="foto fotoFixedHeight">
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                </div>
+                <div class="datosMiembro">
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a></div>
+                    <div class="claveMiembro">
+                        @md.getTipoAsistenteString()
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
 }

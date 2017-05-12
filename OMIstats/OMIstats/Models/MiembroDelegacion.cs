@@ -24,6 +24,7 @@ namespace OMIstats.Models
         }
 
         public const string DELELIDER = "DELEGADO Y LIDER";
+        public const string COLO = "COMITÉ LOCAL";
 
         public enum TipoError
         {
@@ -94,6 +95,8 @@ namespace OMIstats.Models
         {
             if (this.tipo == TipoAsistente.DELELIDER)
                 return DELELIDER;
+            if (this.tipo == TipoAsistente.COLO)
+                return COLO;
             return this.tipo.ToString();
         }
 
@@ -744,7 +747,17 @@ namespace OMIstats.Models
                         break;
                     }
                 case TipoAsistente.NULL:
-                    break;
+                    {
+                        query.Append(" and md.tipo <> ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
+                        query.Append(" and md.tipo <> ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
+                        query.Append(" and md.tipo <> ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
+                        query.Append(" and md.tipo <> ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+                        break;
+                    }
             }
 
             query.Append(" order by md.clave ");
