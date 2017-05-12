@@ -238,9 +238,9 @@
                     <td class="@("table-td center right-border " + claseCSS)">
                         @if (!tableManager.faltaClave())
                         {
-                            <span>
+                            <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado)">
                                 @datos.clave
-                            </span>
+                            </a>
                         }
                     </td>
                     <td class="@("table-td center right-border resultado-total " + claseCSS)">

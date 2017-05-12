@@ -142,7 +142,8 @@
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
-                        if (tableManager.faltaClave())
+                        <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + datos.estado)">
+                        @if (tableManager.faltaClave())
                         {
                             <span>
                                 @datos.estado
@@ -157,6 +158,7 @@
                                 <span>@datos.clave</span>
                             }
                         }
+                        </a>
                     }
                 </td>
                 @if (Model.mostrarResultadosPorProblema)
