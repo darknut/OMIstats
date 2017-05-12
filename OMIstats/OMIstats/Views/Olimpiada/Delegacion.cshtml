@@ -42,15 +42,30 @@
 <br />
 <br />
 
-<div class="subtitulo">Competidores</div>
+@if(ViewBag.delegacion.Count > 0)
+{
+    <div class="subtitulo">Competidores</div>
 
-<div>
+    <div class="tablaDelegacion">
 
-    @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delegacion)
+        @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delegacion)
+        {
+            <div class="miembroDelegacion">
+                <p>@md.fotoUsuario</p>
+                <p>@md.nombreAsistente</p>
+                <p>@md.clave</p>
+                <p>@md.medalla</p>
+            </div>
+        }
+
+    </div>
+} else {
+    if (ViewBag.vinoAOlimpiada)
     {
-        <p>@md.nombreAsistente</p>
-        <p>@md.clave</p>
-        <p>@md.medalla</p>
+        <div class="subtitulo">No se tienen datos de la delegación</div>
     }
-    
-</div>
+    else
+    {
+        <div class="subtitulo">El estado no participó en esta olimpiada</div>
+    }
+}

@@ -183,5 +183,30 @@ namespace OMIstats.Models
 
             return list;
         }
+
+        /// <summary>
+        /// Revisa en la base de datos si el estado estuvo en la olimpiada mandada como parametro
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="olimpiada">La clave de la olimpiada</param>
+        /// <returns></returns>
+        public bool estadoVinoAOlimpiada(Olimpiada.TipoOlimpiada tipoOlimpiada, string olimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select COUNT(*) from Resultados where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and estado = ");
+            query.Append(Utilities.Cadenas.comillas(this.clave));
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            return ((int)table.Rows[0][0]) > 0;
+        }
     }
 }

@@ -314,6 +314,9 @@ namespace OMIstats.Controllers
             ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI);
             ViewBag.medallas = Medallero.contarMedallas(ViewBag.delegacion);
 
+            if (ViewBag.delegacion.Count == 0)
+                ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(Olimpiada.TipoOlimpiada.OMI, clave);
+
             return View();
         }
 

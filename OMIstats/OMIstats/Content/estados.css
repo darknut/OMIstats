@@ -58,3 +58,17 @@
     font-weight: bold;
     margin-right: 10px;
 }
+
+.tablaDelegacion {
+    border: solid 1px;
+    margin-left: 20px;
+    width: 1000px;
+    clear: both;
+    display: block;
+}
+
+.miembroDelegacion {
+    border: solid 1px;
+    width: 495px;
+    display: inline-block;
+}
