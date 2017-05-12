@@ -1,5 +1,6 @@
 ﻿@section AddToHead
 {
+    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
 }
 
@@ -51,10 +52,14 @@
         @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delegacion)
         {
             <div class="miembroDelegacion">
-                <p>@md.fotoUsuario</p>
-                <p>@md.nombreAsistente</p>
-                <p>@md.clave</p>
-                <p>@md.medalla</p>
+                <div class="foto" >
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                </div>
+                <div class="datosMiembro">
+                    <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a>
+                    <p>@md.clave</p>
+                    <p>@md.medalla</p>
+                </div>
             </div>
         }
 

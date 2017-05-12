@@ -675,7 +675,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave,");
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.institucion, ");
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");

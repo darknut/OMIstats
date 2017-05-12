@@ -69,6 +69,11 @@
 
 .miembroDelegacion {
     border: solid 1px;
-    width: 495px;
+    width: 460px;
     display: inline-block;
+    padding: 15px;
+}
+
+.datosMiembro {
+    padding-left: 115px;
 }
