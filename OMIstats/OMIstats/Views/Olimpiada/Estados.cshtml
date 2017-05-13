@@ -1,0 +1,97 @@
+﻿@model OMIstats.Models.Olimpiada
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="/Scripts/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/Scripts/jquery.metadata.js"></script>
+    <script type="text/javascript" src="/js/sorters.js"></script>
+    <script>
+        $(function () {
+            cargaSorter("tablaPuntos");
+        });
+    </script>
+}
+
+@{
+    ViewBag.Title = "Tabla de estados de la " + Model.numero + "ª OMI";
+}
+
+<h1 class="titulo">@ViewBag.Title</h1>
+
+<table class="table" id="tablaPuntos">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border table-header-clickable">Lugar</th>
+            <th class="bottom-border right-border table-header-clickable">Estado</th>
+            <th class="bottom-border right-border table-header-clickable">Oros</th>
+            <th class="bottom-border right-border table-header-clickable">Platas</th>
+            <th class="bottom-border right-border table-header-clickable">Bronces</th>
+            <th class="bottom-border right-border table-header-clickable">Total</th>
+            <th class="bottom-border table-header-clickable">Puntos</th>
+        </tr>
+    </thead>
+
+    @{
+    int lugar = 0;
+    int count = 0;
+    int totalOros = 0;
+    int totalPlatas = 0;
+    int totalBronces = 0;
+    int totalMedallas = 0;
+    float? totalPuntos = 0;
+    float? lastPuntos = 0;
+    }
+    @foreach (OMIstats.Models.Resultados res in ViewBag.estados)
+    {
+        count++;
+        if (lastPuntos != res.total)
+        {
+            lugar = count;
+        }
+        lastPuntos = res.total;
+        
+        List<OMIstats.Models.MiembroDelegacion> delegacion = OMIstats.Models.MiembroDelegacion.obtenerMiembrosDelegacion(Model.numero, res.estado, OMIstats.Models.Olimpiada.TipoOlimpiada.OMI, OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
+        OMIstats.Models.Medallero medallero = OMIstats.Models.Medallero.contarMedallas(delegacion);
+        
+        totalOros += medallero.oros;
+        totalPlatas += medallero.platas;
+        totalBronces += medallero.bronces;
+        totalMedallas += medallero.oros + medallero.platas + medallero.bronces;
+        
+        totalPuntos += res.total;
+        
+        OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(res.estado);
+        
+        <tr>
+            <td class="table-td center right-border ">@lugar</td>
+            <td class="table-td right-border ">
+                <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + estado.clave)">
+                    @estado.nombre
+                </a>
+                @if (estado.clave == Model.claveEstado)
+                {
+                    <a class="nombre" href="#sede">*</a>
+                }
+            </td>
+            <td class="table-td center right-border fondoOro">@medallero.oros</td>
+            <td class="table-td center right-border fondoPlata">@medallero.platas</td>
+            <td class="table-td center right-border fondoBronce">@medallero.bronces</td>
+            <td class="table-td center right-border ">@(medallero.oros + medallero.platas + medallero.bronces)</td>
+            <td class="table-td center">@res.total</td>
+        </tr>
+    }
+</table>
+
+<div>
+    *: Al estado sede solo se le cuentan sus mejores cuatro
+    competidores para esta tabla, para ver los detalles del
+    resto de la delegación, visite la página de la delegación.
+</div>

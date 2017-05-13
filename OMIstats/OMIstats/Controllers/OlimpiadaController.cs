@@ -293,7 +293,7 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Olimpiada/Resultados/
+        // GET: /Olimpiada/Delegacion/
 
         public ActionResult Delegacion(string clave, string estado)
         {
@@ -318,6 +318,21 @@ namespace OMIstats.Controllers
                 ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(Olimpiada.TipoOlimpiada.OMI, clave);
 
             return View();
+        }
+
+        //
+        // GET: /Olimpiada/Estados/
+
+        public ActionResult Estados(string clave)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+
+            if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            ViewBag.estados = Models.Resultados.obtenerTablaEstados(o.tipoOlimpiada, clave, o.claveEstado);
+
+            return View(o);
         }
 
         //

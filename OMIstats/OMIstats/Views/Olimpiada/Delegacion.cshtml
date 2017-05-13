@@ -15,11 +15,7 @@
 
     <div class="datosEstado tituloEstado">
         <div>
-            <h2 class="titulo">
-                <a href="@Url.Content("/Estado?clave=" + ViewBag.estado.clave)">@ViewBag.estado.nombre</a>
-                en la 
-                <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.olimpiada.numero)">@(ViewBag.olimpiada.numero + "ª OMI")</a>
-            </h2>
+            <h2 class="titulo">@ViewBag.Title</h2>
             <div class="medallero">
                 <div class="medalla" title="Medallas de oro">
                     <div><img src="~/img/oro.png"/></div>

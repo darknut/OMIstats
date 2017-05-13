@@ -55,15 +55,15 @@
     height: 74px;
 }
 
-.table-td-oro {
+.fondoOro {
 	background-image:url(../img/celdafondooro.png);
 }
 
-.table-td-plata {
+.fondoPlata {
 	background-image:url(../img/celdafondoplata.png);
 }
 
-.table-td-bronce {
+.fondoBronce {
 	background-image:url(../img/celdafondobronce.png);
 }
 

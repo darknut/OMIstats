@@ -13,9 +13,9 @@ namespace OMIstats.Utilities
         private int claveUsuario;
         private Resultados currentResultados;
 
-        private const string CLASE_BRONCE = "table-td-bronce";
-        private const string CLASE_PLATA = "table-td-plata";
-        private const string CLASE_ORO = "table-td-oro";
+        private const string CLASE_BRONCE = "fondoBronce";
+        private const string CLASE_PLATA = "fondoPlata";
+        private const string CLASE_ORO = "fondoOro";
 
         private const string IMG_ORO = "/img/oro.png";
         private const string IMG_PLATA = "/img/plata.png";

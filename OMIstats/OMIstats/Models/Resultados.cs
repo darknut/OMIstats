@@ -777,5 +777,40 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        /// <summary>
+        /// Obtiene la tabla de estados de la olimpiada mandada como parametro
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="olimpiada">La clave de la olimpiada</param>
+        /// <param name="estado">La clave del estado sede</param>
+        /// <returns>La tabla ordenada de estados</returns>
+        public static List<Resultados> obtenerTablaEstados(Olimpiada.TipoOlimpiada tipoOlimpiada, string olimpiada, string estado)
+        {
+            List<Resultados> lista = new List<Resultados>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select estado, sum(puntos) as puntos from Resultados where olimpiada =  ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" group by estado order by puntos desc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Resultados res = new Resultados();
+                res.estado = r["estado"].ToString().Trim();
+                res.total = float.Parse(r["puntos"].ToString());
+
+                lista.Add(res);
+            }
+
+            return lista;
+        }
     }
 }

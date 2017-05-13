@@ -323,6 +323,7 @@
     <Content Include="Views\Olimpiada\ResultsTable.cshtml" />
     <Content Include="Views\Olimpiada\Resultados.cshtml" />
     <Content Include="Views\Olimpiada\Delegacion.cshtml" />
+    <Content Include="Views\Olimpiada\Estados.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
