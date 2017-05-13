@@ -32,16 +32,21 @@
     <br />
     <br />
     <br />
-
-    @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
-    {
-        OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
-        if (omi.numero != Model.numero)
+    <div class="comboTitle">Olimpiadas:</div>
+    <select onChange="redirige('/Olimpiada/Resultados?clave=', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
         {
-            @Html.ActionLink(omi.numero + "ª OMI", "Resultados", "Olimpiada",
-                new { clave = omi.numero }, new { @class = "mini-boton" });
+            OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            if (omi.numero == Model.numero)
+            {
+                <option value="@omi.numero" selected="selected">@(omi.numero + "ª OMI " + omi.año)</option>
+            }
+            else
+            {
+                <option value="@omi.numero">@(omi.numero + "ª OMI " + omi.año)</option>
+            }
         }
-    }
+    </select>
 </div>
 
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
@@ -104,7 +109,7 @@
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
             <tr>
                 <td class="ioi-mini-imagen">
-                    @if(tableManager.mostrarLogoIOI())
+                    @if (tableManager.mostrarLogoIOI())
                     {
                         <img src="/img/ioi.png" />
                         <!-- -TODO- Agregar enlace a IOI -->
@@ -119,7 +124,7 @@
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar && datos.persona != null)
                     {
-                        if(datos.persona.genero == "M")
+                        if (datos.persona.genero == "M")
                         {
                            <span class="azul">H</span>
                         }
@@ -154,7 +159,9 @@
                             if (tableManager.faltaNombre())
                             {
                                 <span>@datos.clave.Substring(4)</span>
-                            } else {
+                            }
+                            else
+                            {
                                 <span>@datos.clave</span>
                             }
                         }
@@ -235,7 +242,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia1.media
                     }
                 </td>
@@ -252,7 +260,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia2.media
                     }
                 </td>
@@ -287,7 +296,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia1.mediana
                     }
                 </td>
@@ -304,7 +314,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia2.mediana
                     }
                 </td>
@@ -339,7 +350,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia1.perfectos
                     }
                 </td>
@@ -356,7 +368,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia2.perfectos
                     }
                 </td>
@@ -364,7 +377,8 @@
             @if (Model.mostrarResultadosTotales)
             {
                 <td class="center resultado-total pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosTotal.perfectos
                     }
                 </td>
@@ -393,7 +407,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia1.ceros
                     }
                 </td>
@@ -410,7 +425,8 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosDia2.ceros
                     }
                 </td>
@@ -418,7 +434,8 @@
             @if (Model.mostrarResultadosTotales)
             {
                 <td class="center resultado-total pie">
-                    @if (!Model.puntosDesconocidos) {
+                    @if (!Model.puntosDesconocidos)
+                    {
                         @ViewBag.numerosTotal.ceros
                     }
                 </td>

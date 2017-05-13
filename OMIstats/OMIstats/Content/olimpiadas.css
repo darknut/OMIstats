@@ -151,3 +151,14 @@
 .anchoColumnaOMI {
     width: 8%;
 }
+
+.comboTitle {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #555555;
+}
+
+.comboMargin {
+    margin-right: 10px;
+}

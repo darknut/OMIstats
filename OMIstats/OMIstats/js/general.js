@@ -15,3 +15,7 @@ function muestraLoadGifYSubmit(formId) {
     setVisible("loading", true);
     $("#" + formId).submit();
 }
+
+function redirige(pagina, parametro) {
+    window.location.href = pagina + parametro;
+}
