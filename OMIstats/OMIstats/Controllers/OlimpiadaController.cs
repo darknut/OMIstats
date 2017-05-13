@@ -307,17 +307,17 @@ namespace OMIstats.Controllers
             if (e == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            ViewBag.olimpiada = o;
             ViewBag.estado = e;
             ViewBag.delegacion = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.COMPETIDOR);
             ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.LIDER);
             ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI);
             ViewBag.medallas = Medallero.contarMedallas(ViewBag.delegacion);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             if (ViewBag.delegacion.Count == 0)
                 ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(Olimpiada.TipoOlimpiada.OMI, clave);
 
-            return View();
+            return View(o);
         }
 
         //

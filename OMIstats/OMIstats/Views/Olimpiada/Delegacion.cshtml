@@ -1,12 +1,33 @@
-﻿@section AddToHead
+﻿@model OMIstats.Models.Olimpiada
+
+@section AddToHead
 {
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
     <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
 }
 
 @{
-    ViewBag.Title = ViewBag.estado.nombre + " en la " + ViewBag.olimpiada.numero + "ª OMI";
+    ViewBag.Title = ViewBag.estado.nombre + " en la " + Model.numero + "ª OMI";
 }
+
+<div class="submenu">
+    <div class="comboTitle">Olimpiadas:</div>
+    <select onChange="redirige('/Olimpiada/Delegacion?estado=@ViewBag.estado.clave&clave=', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
+        {
+            OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            if (omi.numero == Model.numero)
+            {
+                <option value="@omi.numero" selected="selected">@(omi.numero + "ª OMI " + omi.año)</option>
+            }
+            else
+            {
+                <option value="@omi.numero">@(omi.numero + "ª OMI " + omi.año)</option>
+            }
+        }
+    </select>
+</div>
 
 <div>
     <div class="logoEstadoFloat" >
