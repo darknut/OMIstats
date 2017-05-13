@@ -331,6 +331,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             ViewBag.estados = Models.Resultados.obtenerTablaEstados(o.tipoOlimpiada, clave, o.claveEstado);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             return View(o);
         }

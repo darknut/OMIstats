@@ -90,3 +90,10 @@
 .left-border{
     border-left: solid 4px #336699;
 }
+
+.sede {
+    margin-top: 20px;
+    font-size: 8pt;
+    font-style: italic;
+    width: 500px;
+}

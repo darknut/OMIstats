@@ -24,6 +24,32 @@
     ViewBag.Title = "Tabla de estados de la " + Model.numero + "ª OMI";
 }
 
+<div class="submenu">
+    @Html.ActionLink("Datos", "Index", "Olimpiada",
+            new { clave = Model.numero }, new { @class = "mini-boton" })
+    @Html.ActionLink("Resultados", "Resultados", "Olimpiada",
+            new { clave = Model.numero }, new { @class = "mini-boton" })
+
+    <br />
+    <br />
+    <br />
+    <div class="comboTitle">Olimpiadas:</div>
+    <select onChange="redirige('/Olimpiada/Estados?clave=', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
+        {
+            OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            if (omi.numero == Model.numero)
+            {
+                <option value="@omi.numero" selected="selected">@(omi.numero + "ª OMI " + omi.año)</option>
+            }
+            else
+            {
+                <option value="@omi.numero">@(omi.numero + "ª OMI " + omi.año)</option>
+            }
+        }
+    </select>
+</div>
+
 <h1 class="titulo">@ViewBag.Title</h1>
 
 <table class="table" id="tablaPuntos">
@@ -78,7 +104,7 @@
                 </a>
                 @if (estado.clave == Model.claveEstado)
                 {
-                    <a class="nombre" href="#sede">*</a>
+                    <sup><a class="nombre" href="#sede">1</a></sup>
                 }
             </td>
             <td class="table-td center right-border fondoOro">@medallero.oros</td>
@@ -88,10 +114,33 @@
             <td class="table-td center">@res.total</td>
         </tr>
     }
+
+    <tfoot>
+        <tr>
+            <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="2">
+                Total:
+            </td>
+            <td class="center right-border resultado-dia top-border pie fondoOro">
+                @totalOros
+            </td>
+            <td class="center right-border resultado-dia top-border pie fondoPlata">
+                @totalPlatas
+            </td>
+            <td class="center right-border resultado-dia top-border pie fondoBronce">
+                @totalBronces
+            </td>
+            <td class="center right-border resultado-dia top-border pie table-td">
+                @totalMedallas
+            </td>
+            <td class="center resultado-dia top-border pie table-td">
+                @totalPuntos
+            </td>
+        </tr>
+    </tfoot>
 </table>
 
-<div>
-    *: Al estado sede solo se le cuentan sus mejores cuatro
+<div id="sede" class="sede">
+    [1]: Al estado sede solo se le cuentan sus mejores cuatro
     competidores para esta tabla, para ver los detalles del
-    resto de la delegación, visite la página de la delegación.
+    resto de la delegación, visite la <a href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
 </div>
