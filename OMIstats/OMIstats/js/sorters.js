@@ -1,4 +1,4 @@
-﻿function agregaSorterMedallas(nombre) {
+﻿function agregaSorterMedallas() {
     $.tablesorter.addParser({
         id: 'medalla',
         is: function (s, table, cell, $cell) {

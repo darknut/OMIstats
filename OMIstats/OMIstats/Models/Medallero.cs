@@ -257,8 +257,12 @@ namespace OMIstats.Models
                     {
                         Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
 
-                        // En las OMIs con puntos desconocidos, solo queremos sumar aquellos campos que se pusieron para contar los puntos y empiezan con UNK
-                        if (!o.puntosDesconocidos || resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
+                        // En las OMIs con puntos desconocidos, se guarda en los puntos del día 2, los puntos de los estados
+                        if (o.puntosDesconocidos)
+                        {
+                            estadoPorOlimpiada.otros += resultado.totalDia2;
+                        }
+                        else
                         {
                             estadoPorOlimpiada.tipoMedallero++;
                             estadoPorOlimpiada.otros += resultado.total;
