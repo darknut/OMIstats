@@ -75,26 +75,23 @@
     float? totalPuntos = 0;
     float? lastPuntos = 0;
     }
-    @foreach (OMIstats.Models.Resultados res in ViewBag.estados)
+    @foreach (OMIstats.Models.Medallero m in ViewBag.estados)
     {
         count++;
-        if (lastPuntos != res.total)
+        if (lastPuntos != m.otros)
         {
             lugar = count;
         }
-        lastPuntos = res.total;
+        lastPuntos = m.otros;
         
-        List<OMIstats.Models.MiembroDelegacion> delegacion = OMIstats.Models.MiembroDelegacion.obtenerMiembrosDelegacion(Model.numero, res.estado, OMIstats.Models.Olimpiada.TipoOlimpiada.OMI, OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
-        OMIstats.Models.Medallero medallero = OMIstats.Models.Medallero.contarMedallas(delegacion);
+        totalOros += m.oros;
+        totalPlatas += m.platas;
+        totalBronces += m.bronces;
+        totalMedallas += m.oros + m.platas + m.bronces;
         
-        totalOros += medallero.oros;
-        totalPlatas += medallero.platas;
-        totalBronces += medallero.bronces;
-        totalMedallas += medallero.oros + medallero.platas + medallero.bronces;
+        totalPuntos += m.otros;
         
-        totalPuntos += res.total;
-        
-        OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(res.estado);
+        OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(m.clave);
         
         <tr>
             <td class="table-td center right-border ">@lugar</td>
@@ -106,12 +103,16 @@
                 {
                     <sup><a class="nombre" href="#sede">1</a></sup>
                 }
+                @if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMI && estado.clave == "GTO")
+                {
+                    <sup><a class="nombre" href="#german">2</a></sup>
+                }
             </td>
-            <td class="table-td center right-border fondoOro">@medallero.oros</td>
-            <td class="table-td center right-border fondoPlata">@medallero.platas</td>
-            <td class="table-td center right-border fondoBronce">@medallero.bronces</td>
-            <td class="table-td center right-border ">@(medallero.oros + medallero.platas + medallero.bronces)</td>
-            <td class="table-td center">@res.total</td>
+            <td class="table-td center right-border fondoOro">@m.oros</td>
+            <td class="table-td center right-border fondoPlata">@m.platas</td>
+            <td class="table-td center right-border fondoBronce">@m.bronces</td>
+            <td class="table-td center right-border ">@(m.oros + m.platas + m.bronces)</td>
+            <td class="table-td center">@m.otros</td>
         </tr>
     }
 
@@ -144,3 +145,16 @@
     competidores para esta tabla, para ver los detalles del
     resto de la delegación, visite la <a href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
 </div>
+
+@if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+{
+    <div id="german" class="sede">
+        [2]: En la 12a OMI, se le otorgó una quinta medalla
+        al estado de Guanajuato por ser el primer chico de escuelas
+        primaria en quedar en el medallero. Esa fue la última vez que
+        se le permitió a un estado no sede ganar más de cuatro medallas.
+        Al igual que con los estados sede, solo los mejores cuatro competidores
+        se toman en cuenta, para más detalle, consulte la delegación
+        del estado de <a href="/Olimpiada/Delegacion?clave=12&estado=GTO">Guanajuato</a>.
+    </div>
+}

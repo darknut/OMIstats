@@ -99,13 +99,18 @@
     @{
         OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
         tableManager.setCurrentOMI(Model);
+        bool hayUNKs = false;
     }
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
         OMIstats.Models.Resultados datos = ViewBag.resultados[l];
         tableManager.setCurrentResultados(datos);
 
-        if (!tableManager.esClaveDesconocida())
+        if (tableManager.esClaveDesconocida())
+        {
+            hayUNKs = true;
+        }
+        else
         {
             string claseCSS = tableManager.obtenerClaseCSS();
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
@@ -244,7 +249,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia1.media
                     }
@@ -262,7 +267,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia2.media
                     }
@@ -298,7 +303,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia1.mediana
                     }
@@ -316,7 +321,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia2.mediana
                     }
@@ -335,7 +340,7 @@
         <tr>
             <td></td>
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (!Model.puntosDesconocidos && Model.mostrarResultadosTotales)
+                @if (!hayUNKs && Model.mostrarResultadosTotales)
                 {
                     <span>Perfectos</span>
                 }
@@ -352,7 +357,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia1.perfectos
                     }
@@ -370,7 +375,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia2.perfectos
                     }
@@ -379,7 +384,7 @@
             @if (Model.mostrarResultadosTotales)
             {
                 <td class="center resultado-total pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosTotal.perfectos
                     }
@@ -392,7 +397,7 @@
         <tr>
             <td></td>
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (!Model.puntosDesconocidos && Model.mostrarResultadosTotales)
+                @if (!hayUNKs && Model.mostrarResultadosTotales)
                 {
                     <span>Ceros</span>
                 }
@@ -409,7 +414,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia1.ceros
                     }
@@ -427,7 +432,7 @@
             @if (Model.mostrarResultadosPorDia)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosDia2.ceros
                     }
@@ -436,7 +441,7 @@
             @if (Model.mostrarResultadosTotales)
             {
                 <td class="center resultado-total pie">
-                    @if (!Model.puntosDesconocidos)
+                    @if (!hayUNKs)
                     {
                         @ViewBag.numerosTotal.ceros
                     }

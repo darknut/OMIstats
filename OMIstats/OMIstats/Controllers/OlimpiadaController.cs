@@ -330,7 +330,7 @@ namespace OMIstats.Controllers
             if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            ViewBag.estados = Models.Resultados.obtenerTablaEstados(o.tipoOlimpiada, clave, o.claveEstado);
+            ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave);
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             return View(o);
