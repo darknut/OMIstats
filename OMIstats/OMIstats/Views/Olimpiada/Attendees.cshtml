@@ -1,4 +1,5 @@
-﻿
+﻿@model OMIstats.Models.Olimpiada
+
 @{
     ViewBag.Title = "Actualizar asistentes";
 }
@@ -9,7 +10,7 @@
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
 }
 
-<h2 class="titulo">Asistentes de la @Url.Content(ViewBag.omi + "ª") OMI</h2>
+<h2 class="titulo">Asistentes de la @Url.Content(Model.numero + "ª") @Model.tipoOlimpiada</h2>
 
 @if (ViewBag.guardado)
 {
@@ -18,7 +19,7 @@
     </p>
 
     <p class="ejemplos">
-        <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.omi)">Volver al perfil de la Olimpiada</a>
+        <a href="@Url.Content("/Olimpiada?clave=" + Model.numero)">Volver al perfil de la Olimpiada</a>
     </p>
 }
 else
@@ -35,6 +36,20 @@ else
     }
     else
     {
+        <div class="submenu">
+            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+            {
+                <a class="boton" href="@Url.Content("/Olimpiada/Attendees?clave=" + Model.numero)">OMI</a>
+            }
+            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+            {
+                <a class="boton" href="@Url.Content("/Olimpiada/Attendees?tipo=omip&clave=" + Model.numero)">OMIP</a>
+            }
+            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+            {
+                <a class="boton" href="@Url.Content("/Olimpiada/Attendees?tipo=omis&clave=" + Model.numero)">OMIS</a>
+            }
+        </div>
 
         <p class="ejemplos">
             <span class="instrucciones">ORDEN:</span> <span class="opcional">(campos en italicas son opcionales)</span>
@@ -57,7 +72,8 @@ else
 
     <form name="asistentesOMI" id="asistentesOMI" action="/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
         <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.asistentes</textarea>
-        <input name="clave" id="clave" type="hidden" value="@ViewBag.omi" />
+        <input name="clave" id="clave" type="hidden" value="@Model.numero" />
+        <input name="tipo" id="tipo" type="hidden" value="@Model.tipoOlimpiada.ToString()" />
 
         <div class="ejemplos">
             <input type="button" onclick="muestraLoadGifYSubmit('asistentesOMI')" value="Enviar"/>

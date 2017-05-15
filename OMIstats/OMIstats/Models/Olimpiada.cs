@@ -14,6 +14,8 @@ namespace OMIstats.Models
         private const int PUNTOS_MINIMOS_CONOCIDOS = 100;
 
         private const string APPLICATION_OMI = "OlimpiadasOMI";
+        private const string APPLICATION_OMIS = "OlimpiadasOMIS";
+        private const string APPLICATION_OMIP = "OlimpiadasOMIP";
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
@@ -106,14 +108,14 @@ namespace OMIstats.Models
         }
 
         private Problema datosGenerales;
-        private List<MiembroDelegacion> asistentes;
-        private List<Resultados> resultados;
 
         public enum TipoOlimpiada
         {
             NULL,
             OMI,
-            IOI
+            IOI,
+            OMIP,
+            OMIS
         }
 
         public Olimpiada()
@@ -143,18 +145,37 @@ namespace OMIstats.Models
             mostrarResultadosPorProblema = false;
             mostrarResultadosTotales = false;
             puntosDesconocidos = false;
-
-            asistentes = null;
-            datosGenerales = null;
         }
 
-        private static void cargarOlimpiadas()
+        public static string obtenerApplicationString(TipoOlimpiada tipoOlimpiada)
         {
-            Dictionary<string, Olimpiada> listaOMI = new Dictionary<string, Olimpiada>();
+            switch (tipoOlimpiada)
+            {
+                case TipoOlimpiada.OMI:
+                    return APPLICATION_OMI;
+                case TipoOlimpiada.OMIP:
+                    return APPLICATION_OMIP;
+                case TipoOlimpiada.OMIS:
+                    return APPLICATION_OMIS;
+            }
+
+            return "";
+        }
+
+        private static Dictionary<string, Olimpiada> cargarOlimpiadas(TipoOlimpiada tipoOlimpiada)
+        {
+            Dictionary<string, Olimpiada> lista = new Dictionary<string, Olimpiada>();
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
+            TipoOlimpiada tipoQuery = tipoOlimpiada;
+            // Mientras las OMIS y OMIP se lleven acabo durante la OMI, no hace falta separarlas
+            if (tipoOlimpiada == TipoOlimpiada.OMIS || tipoOlimpiada == TipoOlimpiada.OMIP)
+                tipoQuery = TipoOlimpiada.OMI;
+
             query.Append(" select * from olimpiada ");
+            query.Append(" where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoQuery.ToString().ToLower()));
             query.Append(" order by año desc");
 
             db.EjecutarQuery(query.ToString());
@@ -165,12 +186,16 @@ namespace OMIstats.Models
             {
                 Olimpiada o = new Olimpiada();
                 o.llenarDatos(r);
+                // Reseteamos el tipo de olimpiada en caso de OMIS y OMIP
+                o.tipoOlimpiada = tipoOlimpiada;
 
-                if (o.tipoOlimpiada == TipoOlimpiada.OMI)
-                    listaOMI.Add(o.numero, o);
+                // Filtramos las OMIS y OMIP que solo empezaron en 2015
+                if (!(tipoOlimpiada == TipoOlimpiada.OMIP || tipoOlimpiada == TipoOlimpiada.OMIS) ||
+                    o.año >= 2015)
+                    lista.Add(o.numero, o);
             }
 
-            HttpContext.Current.Application[APPLICATION_OMI] = listaOMI;
+            return lista;
         }
 
         /// <summary>
@@ -181,17 +206,14 @@ namespace OMIstats.Models
         private static Dictionary<string, Olimpiada> getOlimpiadas(TipoOlimpiada tipoOlimpiada)
         {
             Dictionary<string, Olimpiada> olimpiadas;
-            string application = "";
-
-            if (tipoOlimpiada == TipoOlimpiada.OMI)
-                application = APPLICATION_OMI;
+            string application = obtenerApplicationString(tipoOlimpiada);
 
             olimpiadas = (Dictionary<string, Olimpiada>)HttpContext.Current.Application[application];
 
             if (olimpiadas == null)
             {
-                cargarOlimpiadas();
-                olimpiadas = (Dictionary<string, Olimpiada>)HttpContext.Current.Application[application];
+                olimpiadas = cargarOlimpiadas(tipoOlimpiada);
+                HttpContext.Current.Application[application] = olimpiadas;
             }
 
             return olimpiadas;
@@ -290,7 +312,7 @@ namespace OMIstats.Models
         public bool guardarDatos(string clave = null)
         {
             // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
-            HttpContext.Current.Application[APPLICATION_OMI] = null;
+            HttpContext.Current.Application[obtenerApplicationString(this.tipoOlimpiada)] = null;
 
             if (clave == null)
                 clave = numero;
@@ -371,7 +393,7 @@ namespace OMIstats.Models
         public static void nuevaOMI(TipoOlimpiada tipoOlimpiada)
         {
             // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
-            HttpContext.Current.Application[APPLICATION_OMI] = null;
+            HttpContext.Current.Application[obtenerApplicationString(tipoOlimpiada)] = null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -393,8 +415,7 @@ namespace OMIstats.Models
         /// <returns>La tabla tabulada con comas</returns>
         public string obtenerTablaAsistentes()
         {
-            if (asistentes == null)
-                asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada);
+            List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada);
 
             StringBuilder tabla = new StringBuilder();
 
@@ -414,8 +435,7 @@ namespace OMIstats.Models
         /// <returns>La tabla con los resultados</returns>
         public string obtenerResultadosAdmin()
         {
-            if (resultados == null)
-                resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
+            List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
 
             StringBuilder tabla = new StringBuilder();
 

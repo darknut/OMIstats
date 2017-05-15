@@ -110,28 +110,76 @@
 </div>
 
  @if (ViewBag.admin) {
-    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=0&numero=0")">
-        <h1 class="titulo">General</h1>
+    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=0&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
+        <h1 class="subtitulo">Numeros Generales</h1>
     </a>
 }
 
-@if(ViewBag.admin || ViewBag.dia1[0] != null || ViewBag.dia2[0] != null)
+@if (ViewBag.dia1Omis != null && ViewBag.dia1Omis[0] != null)
+{
+    <h1 class="subtitulo">
+        @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+        {
+            <a href="@Url.Content("/Olimpiada?tipo=omi&clave=" + Model.numero)">Problemas Generales</a>
+        }
+        else
+        {
+            <span>Problemas Generales</span>
+        }
+        |
+        @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+        {
+            <a href="@Url.Content("/Olimpiada?tipo=omis&clave=" + Model.numero)">Secundarias</a>
+        }
+        else
+        {
+            <span>Secundarias</span>
+        }
+        |
+        @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+        {
+            <a href="@Url.Content("/Olimpiada?tipo=omip&clave=" + Model.numero)">Primarias</a>
+        }
+        else
+        {
+            <span>Primarias</span>
+        }
+    </h1>
+}
+
+@{
+    List<OMIstats.Models.Problema> dia1 = ViewBag.dia1;
+    List<OMIstats.Models.Problema> dia2 = ViewBag.dia1;
+
+    if (Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+    {
+        dia1 = ViewBag.dia1Omip;
+        dia2 = ViewBag.dia2Omip;
+    }
+    if (Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+    {
+        dia1 = ViewBag.dia1Omis;
+        dia2 = ViewBag.dia2Omis;
+    }
+}
+
+@if(ViewBag.admin || dia1[0] != null || dia2[0] != null)
 {
     <div class="datosOlimpiada problemasColumnas">
 
         <div>
             @if (ViewBag.admin) {
-                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0")">
-                    <h1 class="titulo">Día 1</h1>
+                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
+                    <h1 class="subtitulo">Día 1</h1>
                 </a>
             } else {
-                if (ViewBag.dia2[0] == null)
+                if (dia2[0] == null)
                 {
-                    <h1 class="titulo">Problemas</h1>
+                    <h1 class="subtitulo">Problemas</h1>
                 }
                 else
                 {
-                    <h1 class="titulo">Día 1</h1>
+                    <h1 class="subtitulo">Día 1</h1>
                 }
             }
             <ul>
@@ -141,11 +189,11 @@
                     if(ViewBag.admin)
                     {
                         <li>
-                            <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=" + (i + 1))"
+                            <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada.ToString())"
                                 class="nombre">
-                                @if(ViewBag.dia1[i] != null)
+                                @if(dia1[i] != null)
                                 {
-                                    @ViewBag.dia1[i].nombre
+                                    @dia1[i].nombre
                                 }
                                 else
                                 {
@@ -161,10 +209,10 @@
                     }
                     else
                     {
-                        if (ViewBag.dia1[i] != null)
+                        if (dia1[i] != null)
                         {
                             <li>
-                                <a href="@ViewBag.dia1[i].url" class="nombre" target="_blank">@ViewBag.dia1[i].nombre</a>
+                                <a href="@dia1[i].url" class="nombre" target="_blank">@dia1[i].nombre</a>
                             </li>
                         }
                     }
@@ -172,15 +220,15 @@
             </ul>
         </div>
 
-        @if (ViewBag.admin || ViewBag.dia2[0] != null)
+        @if (ViewBag.admin || dia2[0] != null)
         {
             <div>
                 @if (ViewBag.admin) {
-                    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=0")">
-                        <h1 class="titulo">Día 2</h1>
+                    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=0&tipo=" + Model.tipoOlimpiada)">
+                        <h1 class="subtitulo">Día 2</h1>
                     </a>
                 } else {
-                    <h1 class="titulo">Día 2</h1>
+                    <h1 class="subtitulo">Día 2</h1>
                 }
                 <ul>
                     @for(var i = 0; i < 6; i++)
@@ -189,11 +237,11 @@
                         if(ViewBag.admin)
                         {
                             <li>
-                                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1))"
+                                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada)"
                                     class="nombre">
-                                    @if(ViewBag.dia2[i] != null)
+                                    @if(dia2[i] != null)
                                     {
-                                        @ViewBag.dia2[i].nombre
+                                        @dia2[i].nombre
                                     }
                                     else
                                     {
@@ -209,10 +257,10 @@
                         }
                         else
                         {
-                            if (ViewBag.dia2[i] != null)
+                            if (dia2[i] != null)
                             {
                                 <li>
-                                    <a href="@ViewBag.dia2[i].url" class="nombre" target="_blank">@ViewBag.dia2[i].nombre</a>
+                                    <a href="@dia2[i].url" class="nombre" target="_blank">@dia2[i].nombre</a>
                                 </li>
                             }
                         }

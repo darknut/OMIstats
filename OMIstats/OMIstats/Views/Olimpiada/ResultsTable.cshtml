@@ -1,4 +1,5 @@
-﻿
+﻿@model OMIstats.Models.Olimpiada
+
 @{
     ViewBag.Title = "Tabla de resultados";
 }
@@ -9,7 +10,7 @@
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
 }
 
-<h2 class="titulo">Tabla de resultados de la @Url.Content(ViewBag.omi + "ª") OMI</h2>
+<h2 class="titulo">Tabla de resultados de la @Url.Content(Model.numero + "ª") @Model.tipoOlimpiada</h2>
 
 @if (ViewBag.guardado)
 {
@@ -18,7 +19,7 @@
     </p>
 
     <p class="ejemplos">
-        <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.omi)">Volver al perfil de la Olimpiada</a>
+        <a href="@Url.Content("/Olimpiada?clave=" + Model.numero)">Volver al perfil de la Olimpiada</a>
     </p>
 }
 else
@@ -35,19 +36,33 @@ else
     }
     else
     {
-
+         <div class="submenu">
+            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+            {
+                <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?clave=" + Model.numero)">OMI</a>
+            }
+            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+            {
+                <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?tipo=omip&clave=" + Model.numero)">OMIP</a>
+            }
+            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+            {
+                <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?tipo=omis&clave=" + Model.numero)">OMIS</a>
+            }
+        </div>
+ 
         <p class="ejemplos">
             <span class="instrucciones">ORDEN:</span> <span class="opcional">(campos en italicas son opcionales)</span>
         </p>
 
         <p class="ejemplos">
             clave, estado (requerido solo para claves @(OMIstats.Models.Resultados.CLAVE_DESCONOCIDA) y @(OMIstats.Models.Resultados.CLAVE_FALTANTE)),
-            @for(var i = 1; i <= ViewBag.dia1; i++)
+            @for (var i = 1; i <= ViewBag.dia1; i++)
             {
                 @("problema" + i + "Dia1, ")
             }
             totalDia1,
-            @for(var i = 1; i <= ViewBag.dia2; i++)
+            @for (var i = 1; i <= ViewBag.dia2; i++)
             {
                 @("problema" + i + "Dia2, ")
             }
@@ -61,14 +76,14 @@ else
         <p class="ejemplos">
             MEX-1, ,
             @{var total1 = 0;}
-            @for(var i = 1; i <= ViewBag.dia1; i++)
+            @for (var i = 1; i <= ViewBag.dia1; i++)
             {
                 total1 += 100;
                 @("100, ")
             }
             @(total1),
             @{var total2 = 0;}
-            @for(var i = 1; i <= ViewBag.dia2; i++)
+            @for (var i = 1; i <= ViewBag.dia2; i++)
             {
                 total2 += 100;
                 @("100, ")
@@ -77,12 +92,12 @@ else
             @(total1 + total2), ORO_3, A
             <br />
             UNK-3, YUC,
-            @for(var i = 1; i <= ViewBag.dia1; i++)
+            @for (var i = 1; i <= ViewBag.dia1; i++)
             {
                 @("60, ")
             }
             0,
-            @for(var i = 1; i <= ViewBag.dia2; i++)
+            @for (var i = 1; i <= ViewBag.dia2; i++)
             {
                 @("40, ")
             }
@@ -96,7 +111,8 @@ else
 
     <form name="resultadosOMI" id="resultadosOMI" action="/Olimpiada/ResultsTable" method="post" enctype="multipart/form-data">
         <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.resultados</textarea>
-        <input name="clave" id="clave" type="hidden" value="@ViewBag.omi" />
+        <input name="clave" id="clave" type="hidden" value="@Model.numero" />
+        <input name="tipo" id="tipo" type="hidden" value="@Model.tipoOlimpiada.ToString()" />
 
         <div class="ejemplos">
             <input type="button" onclick="muestraLoadGifYSubmit('resultadosOMI')" value="Enviar"/>
