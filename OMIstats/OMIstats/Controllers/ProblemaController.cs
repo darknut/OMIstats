@@ -20,7 +20,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Problema/Edit/
 
-        public ActionResult Edit(string omi, int dia, int numero)
+        public ActionResult Edit(string omi, int dia, int numero, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -31,7 +31,7 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, Olimpiada.TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 401);
 
@@ -41,7 +41,7 @@ namespace OMIstats.Controllers
             if (numero < 0 || numero > 4)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Problema p = Problema.obtenerProblema(omi, Olimpiada.TipoOlimpiada.OMI, dia, numero);
+            Problema p = Problema.obtenerProblema(omi, tipo, dia, numero);
 
             return View(p);
         }
@@ -55,7 +55,10 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.HOME);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, Olimpiada.TipoOlimpiada.OMI);
+            if (p.tipoOlimpiada == null)
+                p.tipoOlimpiada = Olimpiada.TipoOlimpiada.OMI;
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
             if (o == null || p.olimpiada == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 401);
 
@@ -68,7 +71,6 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(p);
 
-            p.tipoOlimpiada = Olimpiada.TipoOlimpiada.OMI;
             p.guardar();
 
             return RedirectTo(Pagina.OLIMPIADA, p.olimpiada);
