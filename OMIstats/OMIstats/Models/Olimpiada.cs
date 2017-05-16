@@ -87,6 +87,8 @@ namespace OMIstats.Models
 
         public bool puntosDesconocidos { get; set; }
 
+        public bool alsoOmips { get; set; }
+
         public float media
         {
             get
@@ -145,6 +147,7 @@ namespace OMIstats.Models
             mostrarResultadosPorProblema = false;
             mostrarResultadosTotales = false;
             puntosDesconocidos = false;
+            alsoOmips = false;
         }
 
         public static string obtenerApplicationString(TipoOlimpiada tipoOlimpiada)
@@ -169,9 +172,6 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             TipoOlimpiada tipoQuery = tipoOlimpiada;
-            // Mientras las OMIS y OMIP se lleven acabo durante la OMI, no hace falta separarlas
-            if (tipoOlimpiada == TipoOlimpiada.OMIS || tipoOlimpiada == TipoOlimpiada.OMIP)
-                tipoQuery = TipoOlimpiada.OMI;
 
             query.Append(" select * from olimpiada ");
             query.Append(" where clase = ");
@@ -186,13 +186,8 @@ namespace OMIstats.Models
             {
                 Olimpiada o = new Olimpiada();
                 o.llenarDatos(r);
-                // Reseteamos el tipo de olimpiada en caso de OMIS y OMIP
-                o.tipoOlimpiada = tipoOlimpiada;
 
-                // Filtramos las OMIS y OMIP que solo empezaron en 2015
-                if (!(tipoOlimpiada == TipoOlimpiada.OMIP || tipoOlimpiada == TipoOlimpiada.OMIS) ||
-                    o.año >= 2015)
-                    lista.Add(o.numero, o);
+                lista.Add(o.numero, o);
             }
 
             return lista;
@@ -241,6 +236,7 @@ namespace OMIstats.Models
             mostrarResultadosPorProblema = (bool)datos["mostrarResultadosPorProblema"];
             mostrarResultadosTotales = (bool)datos["mostrarResultadosTotales"];
             puntosDesconocidos = (bool)datos["puntosDesconocidos"];
+            alsoOmips = (bool)datos["alsoOmips"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -380,10 +376,53 @@ namespace OMIstats.Models
             query.Append(mostrarResultadosTotales ? 1 : 0);
             query.Append(", puntosDesconocidos = ");
             query.Append(puntosDesconocidos ? 1 : 0);
+            query.Append(", alsoOmips = ");
+            query.Append(alsoOmips ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
-            return !db.EjecutarQuery(query.ToString()).error;
+            if (db.EjecutarQuery(query.ToString()).error)
+                return false;
+
+            // Si esta omi es tambien OMIPS, creamos tambien los objetos
+            if (tipoOlimpiada == TipoOlimpiada.OMI && this.alsoOmips)
+            {
+                this.actualizaOMIPS(TipoOlimpiada.OMIP);
+                this.actualizaOMIPS(TipoOlimpiada.OMIS);
+            }
+
+            return true;
+        }
+
+        private void actualizaOMIPS(TipoOlimpiada tipoOlimpiada)
+        {
+            Olimpiada omi = obtenerOlimpiadaConClave(this.numero, tipoOlimpiada);
+
+            if (omi == null)
+            {
+                nuevaOMI(tipoOlimpiada);
+                omi = obtenerOlimpiadaConClave(TEMP_CLAVE, tipoOlimpiada);
+            }
+
+            omi.numero = this.numero;
+            omi.año = this.año;
+            omi.claveEstado = this.claveEstado;
+            omi.ciudad = this.ciudad;
+            omi.inicio = this.inicio;
+            omi.fin = this.fin;
+            omi.datosPublicos = this.datosPublicos;
+            omi.puntosDesconocidos = this.puntosDesconocidos;
+            omi.alsoOmips = this.alsoOmips;
+            omi.claveEscuela = this.claveEscuela;
+            omi.relacion = this.relacion;
+            omi.video = this.video;
+            omi.reporte = this.reporte;
+            omi.logo = this.logo;
+            omi.poster = this.poster;
+
+            omi.guardarDatos(TEMP_CLAVE);
         }
 
         /// <summary>
@@ -403,7 +442,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }

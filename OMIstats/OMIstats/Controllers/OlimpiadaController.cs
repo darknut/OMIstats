@@ -60,7 +60,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Edit/
 
-        public ActionResult Edit(string clave)
+        public ActionResult Edit(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -71,7 +71,7 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
