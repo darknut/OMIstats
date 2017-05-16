@@ -120,29 +120,29 @@
     <h1 class="subtitulo">
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
         {
-            <a href="@Url.Content("/Olimpiada?tipo=omi&clave=" + Model.numero)">Problemas Generales</a>
+            <a href="@Url.Content("/Olimpiada?tipo=omi&clave=" + Model.numero + "#general")">Problemas Generales</a>
         }
         else
         {
-            <span>Problemas Generales</span>
+            <span id="general">Problemas Generales</span>
         }
         |
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
         {
-            <a href="@Url.Content("/Olimpiada?tipo=omis&clave=" + Model.numero)">Secundarias</a>
+            <a href="@Url.Content("/Olimpiada?tipo=omis&clave=" + Model.numero + "#secundarias")">Secundarias</a>
         }
         else
         {
-            <span>Secundarias</span>
+            <span id="secundarias">Secundarias</span>
         }
         |
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
         {
-            <a href="@Url.Content("/Olimpiada?tipo=omip&clave=" + Model.numero)">Primarias</a>
+            <a href="@Url.Content("/Olimpiada?tipo=omip&clave=" + Model.numero + "#primarias")">Primarias</a>
         }
         else
         {
-            <span>Primarias</span>
+            <span id="primarias">Primarias</span>
         }
     </h1>
 }
