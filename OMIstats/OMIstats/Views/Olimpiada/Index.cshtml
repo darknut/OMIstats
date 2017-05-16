@@ -115,7 +115,7 @@
     </a>
 }
 
-@if (ViewBag.dia1Omis != null && ViewBag.dia1Omis[0] != null)
+@if (Model.alsoOmips)
 {
     <h1 class="subtitulo">
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
@@ -150,19 +150,7 @@
 @{
     List<OMIstats.Models.Problema> dia1 = ViewBag.dia1;
     List<OMIstats.Models.Problema> dia2 = ViewBag.dia2;
-
-    if (Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
-    {
-        dia1 = ViewBag.dia1Omip;
-        dia2 = ViewBag.dia2Omip;
-    }
-    if (Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
-    {
-        dia1 = ViewBag.dia1Omis;
-        dia2 = ViewBag.dia2Omis;
-    }
 }
-
 @if(ViewBag.admin || dia1[0] != null || dia2[0] != null)
 {
     <div class="datosOlimpiada problemasColumnas">

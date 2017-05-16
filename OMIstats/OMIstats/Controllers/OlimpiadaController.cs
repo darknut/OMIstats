@@ -25,15 +25,10 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.clave = clave;
 
-            ViewBag.dia1 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 1);
-            ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMI, 2);
+            ViewBag.dia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
+            ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
 
-            ViewBag.dia1Omis = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMIS, 1);
-            ViewBag.dia2Omis = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMIS, 2);
-
-            ViewBag.dia1Omip = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMIP, 1);
-            ViewBag.dia2Omip = Problema.obtenerProblemasDeOMI(clave, Olimpiada.TipoOlimpiada.OMIP, 2);
-
+            // Mientras las OMIS y OMIPS sean en el mismo evento que la OMI, no tienen su propia vista
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             return View(o);
