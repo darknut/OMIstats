@@ -523,8 +523,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(clave));
             query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and ((puntosD1P1 + puntosD1P2 + puntosD1P3 + puntosD1P4 + puntosD1P5 + puntosD1P6) <> puntosD1 ");
-            query.Append(" or (puntosD2P1 + puntosD2P2 + puntosD2P3 + puntosD2P4 + puntosD2P5 + puntosD2P6) <> puntosD2)");
+            query.Append(" and (round(puntosD1P1 + puntosD1P2 + puntosD1P3 + puntosD1P4 + puntosD1P5 + puntosD1P6,0) <> round(puntosD1,0) ");
+            query.Append(" or round(puntosD2P1 + puntosD2P2 + puntosD2P3 + puntosD2P4 + puntosD2P5 + puntosD2P6,0) <> round(puntosD2,0))");
 
             db.EjecutarQuery(query.ToString());
 

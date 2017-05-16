@@ -559,6 +559,10 @@ namespace OMIstats.Models
             else
                 mostrarResultadosPorProblema = false;
 
+            // En caso de que solo haya un dia o solo hayamos metido un dia
+            if (problemasDia2 == 0)
+                mostrarResultadosPorDia = false;
+
             // Se guardan los bosquejos del metadata de la omi y los dias
             // Los cargamos de la base de datos en caso de ya existir.
             Problema p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 0, 0);

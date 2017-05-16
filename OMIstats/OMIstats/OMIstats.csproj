@@ -249,6 +249,7 @@
     <Content Include="img\ioi.png" />
     <Content Include="img\karel.bmp" />
     <Content Include="img\karelX.png" />
+    <Content Include="img\link.png" />
     <Content Include="img\logo.png" />
     <Content Include="img\mail.png" />
     <Content Include="img\omi.png" />
