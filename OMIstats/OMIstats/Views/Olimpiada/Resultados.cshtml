@@ -61,6 +61,35 @@ else
 
 <table class="table" id="tablaPuntos">
     <thead>
+        <tr>
+            <td colspan="5"></td>
+            @if (Model.mostrarResultadosPorProblema)
+            {
+                for (var i = 0; i < Model.problemasDia1; i++)
+                {
+                    <td class="enlaceProblema">
+                        <a href="@ViewBag.problemasDia1[i].url" target="_blank">
+                            <img src="~/img/link.png" />
+                        </a>
+                    </td>
+                }
+            }
+            @if (Model.mostrarResultadosPorDia)
+            {
+                <td></td>
+            }
+            @if (Model.mostrarResultadosPorProblema)
+            {
+                for (var i = 0; i < Model.problemasDia2; i++)
+                {
+                    <td class="enlaceProblema">
+                        <a href="@ViewBag.problemasDia2[i].url" target="_blank">
+                            <img src="~/img/link.png" />
+                        </a>
+                    </td>
+                }
+            }
+        </tr>
         <tr class="table-header">
             <th></th>
             <th class="bottom-border right-border table-header-clickable">Lugar</th>
@@ -71,9 +100,7 @@ else
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
-                    <th class="bottom-border right-border table-header-clickable">
-                        <a href="@ViewBag.problemasDia1[i].url" target="_blank"> @("P" + (i + 1))</a>
-                    </th>
+                    <th class="bottom-border right-border table-header-clickable">@("P" + (i + 1))</th>
                 }
             }
             @if (Model.mostrarResultadosPorDia)
@@ -84,9 +111,7 @@ else
             {
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
-                    <th class="bottom-border right-border table-header-clickable">
-                        <a href="@ViewBag.problemasDia2[i].url" target="_blank"> @("P" + (i + 1))</a>
-                    </th>
+                    <th class="bottom-border right-border table-header-clickable">@("P" + (i + 1))</th>
                 }
             }
             @if (Model.mostrarResultadosPorDia)

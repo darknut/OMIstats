@@ -97,3 +97,11 @@
     font-style: italic;
     width: 500px;
 }
+
+.enlaceProblema {
+    padding-left: 10px;
+}
+
+.enlaceProblema img {
+    width: 15px;
+}
