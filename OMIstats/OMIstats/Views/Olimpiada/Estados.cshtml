@@ -50,6 +50,13 @@
     </select>
 </div>
 
+@if (ViewBag.estados.Count == 0)
+{
+    <h1 class="subtitulo"> No se tienen resultados para esta olimpiada </h1>
+}
+else
+{
+
 <h1 class="titulo">@ViewBag.Title</h1>
 
 <table class="table" id="tablaPuntos">
@@ -146,7 +153,7 @@
     resto de la delegación, visite la <a href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
 </div>
 
-@if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
 {
     <div id="german" class="sede">
         [2]: En la 12a OMI, se le otorgó una quinta medalla
@@ -157,4 +164,5 @@
         se toman en cuenta, para más detalle, consulte la delegación
         del estado de <a href="/Olimpiada/Delegacion?clave=12&estado=GTO">Guanajuato</a>.
     </div>
+}
 }

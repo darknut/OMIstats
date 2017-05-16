@@ -285,9 +285,13 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
             List<Problema> metadata = Problema.obetnerMetaDatadeOMI(clave, Olimpiada.TipoOlimpiada.OMI);
-            ViewBag.numerosDia1 = metadata[1];
-            ViewBag.numerosDia2 = metadata[2];
-            ViewBag.numerosTotal = metadata[0];
+
+            if (metadata.Count > 0)
+            {
+                ViewBag.numerosDia1 = metadata[1];
+                ViewBag.numerosDia2 = metadata[2];
+                ViewBag.numerosTotal = metadata[0];
+            }
 
             return View(o);
         }

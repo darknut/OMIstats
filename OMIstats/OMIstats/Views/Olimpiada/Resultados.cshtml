@@ -51,6 +51,12 @@
     </select>
 </div>
 
+@if (ViewBag.resultados.Count == 0)
+{
+    <h1 class="subtitulo"> No se tienen resultados para esta olimpiada </h1>
+}
+else
+{
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
 
 <table class="table" id="tablaPuntos">
@@ -453,3 +459,4 @@
         </tr>
     </tfoot>
 </table>
+}
