@@ -284,6 +284,12 @@ namespace OMIstats.Controllers
             ViewBag.claveUsuario = getUsuario().clave;
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
 
+            if (o.alsoOmips)
+            {
+                ViewBag.omis = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMIS);
+                ViewBag.omip = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMIP);
+            }
+
             List<Problema> metadata = Problema.obetnerMetaDatadeOMI(clave, tipo);
 
             if (metadata.Count > 0)
