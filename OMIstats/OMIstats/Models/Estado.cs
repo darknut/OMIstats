@@ -167,6 +167,9 @@ namespace OMIstats.Models
 
             query.Append(" select numero from Olimpiada where estado = ");
             query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and clase = ");
+            // Mientras las OMIS y OMIPS no sean aparte, las sedes se cargan de OMIS
+            query.Append(Utilities.Cadenas.comillas(Olimpiada.TipoOlimpiada.OMI.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
 
