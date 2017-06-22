@@ -28,6 +28,7 @@ namespace OMIstats.Utilities
         private const string ORO_1 = "ORO (I)";
         private const string ORO_2 = "ORO (II)";
         private const string ORO_3 = "ORO (III)";
+        private const string NO_MEDALLA = "- - -";
 
         public TableManager(bool admin, int? claveUsuario)
         {
@@ -133,9 +134,9 @@ namespace OMIstats.Utilities
                 case OMIstats.Models.Resultados.TipoMedalla.PLATA:
                 case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
                     return currentResultados.medalla.ToString();
+                default:
+                    return NO_MEDALLA;
             }
-
-            return String.Empty;
         }
 
         public string puntosProblema(int dia, int problema)

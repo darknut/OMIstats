@@ -12,6 +12,7 @@ namespace OMIstats.Models
     {
         public const string TEMP_CLAVE = "TMP";
         private const int PUNTOS_MINIMOS_CONOCIDOS = 100;
+        private const int OMIS_SIN_OMIPS = 20;
 
         private const string APPLICATION_OMI = "OlimpiadasOMI";
         private const string APPLICATION_OMIS = "OlimpiadasOMIS";
@@ -89,6 +90,8 @@ namespace OMIstats.Models
 
         public bool alsoOmips { get; set; }
 
+        public string omisActualNumber { get; set; }
+
         public float media
         {
             get
@@ -148,6 +151,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = false;
             puntosDesconocidos = false;
             alsoOmips = false;
+            omisActualNumber = "";
         }
 
         public static string obtenerApplicationString(TipoOlimpiada tipoOlimpiada)
@@ -267,6 +271,10 @@ namespace OMIstats.Models
                 logo = numero + ".png";
             else
                 logo = "omi.png";
+
+            if (tipoOlimpiada == TipoOlimpiada.OMIP ||
+                tipoOlimpiada == TipoOlimpiada.OMIS)
+                omisActualNumber = (Int32.Parse(numero) - OMIS_SIN_OMIPS).ToString();
 
             datosGenerales = Problema.obtenerProblema(numero, tipoOlimpiada, 0, 0);
         }
