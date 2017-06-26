@@ -738,7 +738,7 @@ namespace OMIstats.Models
                 p.mediana = table.Rows[mitad][0] is DBNull ? 0 : float.Parse(table.Rows[mitad][0].ToString());
 
                 if (total % 2 == 0)
-                    p.mediana = (p.mediana + float.Parse(table.Rows[mitad + 1][0].ToString())) / 2;
+                    p.mediana = (p.mediana + (table.Rows[mitad + 1][0] is DBNull ? 0 : float.Parse(table.Rows[mitad + 1][0].ToString()))) / 2;
             }
 
             p.dia = dia;
