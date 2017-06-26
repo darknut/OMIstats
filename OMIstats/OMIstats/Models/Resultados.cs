@@ -686,9 +686,7 @@ namespace OMIstats.Models
                     columna += "P" + numero;
             }
 
-            query.Append(" select count(");
-            query.Append(columna);
-            query.Append(") from Resultados where olimpiada = ");
+            query.Append(" select count(*) from Resultados where olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
@@ -737,7 +735,7 @@ namespace OMIstats.Models
                 p.media = suma / total;
                 p.media = (float) Math.Round((Decimal)p.media, 2, MidpointRounding.AwayFromZero);
                 mitad = total / 2;
-                p.mediana = float.Parse(table.Rows[mitad][0].ToString());
+                p.mediana = table.Rows[mitad][0] is DBNull ? 0 : float.Parse(table.Rows[mitad][0].ToString());
 
                 if (total % 2 == 0)
                     p.mediana = (p.mediana + float.Parse(table.Rows[mitad + 1][0].ToString())) / 2;
