@@ -6,7 +6,7 @@ using System.Web;
 
 namespace OMIstats.Models
 {
-    public class Medallero
+    public class Medallero : IComparable<Medallero>
     {
         public enum TipoMedallero
         {
@@ -30,9 +30,20 @@ namespace OMIstats.Models
 
         public int bronces { get; set; }
 
-        public float? otros { get; set; }
+        public int otros { get; set; }
 
         public string omi { get; set; }
+
+        public float? puntos { get; set; }
+
+        public float? promedio { get; set; }
+
+        public int lugar { get; set; }
+
+        // Variables auxiliares para conteo
+
+        private bool hayUNKs;
+        private int count;
 
         public Medallero()
         {
@@ -43,8 +54,14 @@ namespace OMIstats.Models
             platas = 0;
             bronces = 0;
             otros = 0;
+            puntos = 0;
+            promedio = 0;
+            lugar = 0;
 
             omi = "";
+
+            hayUNKs = false;
+            count = 0;
         }
 
         private void llenarDatos(DataRow datos)
@@ -55,7 +72,10 @@ namespace OMIstats.Models
             oros = (int)datos["oro"];
             platas = (int)datos["plata"];
             bronces = (int)datos["bronce"];
-            otros = float.Parse(datos["otros"].ToString());
+            otros = (int)datos["otros"];
+            puntos = float.Parse(datos["puntos"].ToString());
+            promedio = float.Parse(datos["promedio"].ToString());
+            lugar = (int)datos["lugar"];
 
             omi = datos["omi"].ToString().Trim();
         }
@@ -123,6 +143,12 @@ namespace OMIstats.Models
             query.Append(otros);
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(", ");
+            query.Append(puntos);
+            query.Append(", ");
+            query.Append(promedio);
+            query.Append(", ");
+            query.Append(lugar);
             query.Append(")");
 
             return !db.EjecutarQuery(query.ToString()).error;
@@ -206,8 +232,11 @@ namespace OMIstats.Models
                     estadoPorOlimpiada.clave = estadoPorOlimpiadaClave;
                     estadoPorOlimpiada.tipoOlimpiada = tipoOlimpiada;
                     estadoPorOlimpiada.omi = resultado.omi;
-                    // Usaremos esta variable para contar cuantos competidores llevamos y asi solo contar los mejores 4
-                    estadoPorOlimpiada.tipoMedallero = TipoMedallero.NULL;
+                    estadoPorOlimpiada.tipoMedallero = TipoMedallero.ESTADO_POR_OMI;
+                    estadoPorOlimpiada.count = 0;
+                    estadoPorOlimpiada.puntos = 0;
+                    estadoPorOlimpiada.promedio = 0;
+                    estadoPorOlimpiada.hayUNKs = false;
                     estadosPorOlimpiada.Add(estadoPorOlimpiadaClave, estadoPorOlimpiada);
                 }
 
@@ -249,8 +278,11 @@ namespace OMIstats.Models
                         }
                 }
 
+                if (resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
+                    estadoPorOlimpiada.hayUNKs = true;
+
                 // No se han guardado mas de 4 lugares
-                if (((int)estadoPorOlimpiada.tipoMedallero) < 4)
+                if (estadoPorOlimpiada.count < 4)
                 {
                     // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
                     if (!resultado.clave.EndsWith("I"))
@@ -260,12 +292,12 @@ namespace OMIstats.Models
                         // En las OMIs con puntos desconocidos, se guarda en los puntos del día 2, los puntos de los estados
                         if (o.puntosDesconocidos)
                         {
-                            estadoPorOlimpiada.otros += resultado.totalDia2;
+                            estadoPorOlimpiada.puntos += resultado.totalDia2;
                         }
                         else
                         {
-                            estadoPorOlimpiada.tipoMedallero++;
-                            estadoPorOlimpiada.otros += resultado.total;
+                            estadoPorOlimpiada.count++;
+                            estadoPorOlimpiada.puntos += resultado.total;
                         }
                     }
                 }
@@ -283,8 +315,20 @@ namespace OMIstats.Models
             foreach (Medallero estado in estados.Values)
                 estado.guardarDatos();
 
-            foreach (Medallero estado in estadosPorOlimpiada.Values)
+            List<Medallero> sortedEstados = new List<Medallero>(estadosPorOlimpiada.Values);
+            sortedEstados.Sort();
+            string lastOMI = "";
+            int lugarActual = 0;
+
+            foreach (Medallero estado in sortedEstados)
             {
+                if (estado.omi != lastOMI)
+                {
+                    lastOMI = estado.omi;
+                    lugarActual = 0;
+                }
+                lugarActual++;
+
                 // Ajustamos los estados que tienen mas de cuatro medallas
                 if (estado.oros + estado.platas + estado.bronces > 4)
                 {
@@ -295,8 +339,11 @@ namespace OMIstats.Models
                     if (estado.oros + estado.platas + estado.bronces > 4)
                         estado.bronces = 4 - estado.oros - estado.platas;
                 }
-                // Antes de guardar, pones el tipo medallero que usamos para otra cosa arriba
-                estado.tipoMedallero = TipoMedallero.ESTADO_POR_OMI;
+
+                estado.lugar = lugarActual;
+                if (!estado.hayUNKs)
+                    estado.promedio = (float?) Math.Round((double)(estado.puntos / estado.count), 2);
+
                 estado.guardarDatos();
             }
         }
@@ -357,7 +404,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" order by otros desc ");
+            query.Append(" order by puntos desc ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -373,6 +420,13 @@ namespace OMIstats.Models
             }
 
             return lista;
+        }
+
+        public int CompareTo(Medallero obj)
+        {
+            if (this.omi == obj.omi)
+                return (int) Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
+            return this.omi.CompareTo(obj.omi);
         }
     }
 }

@@ -87,7 +87,8 @@ namespace OMIstats.Utilities
                     (this.admin || currentOMI.datosPublicos || currentResultados.publico ||
                      (currentResultados.medalla != Resultados.TipoMedalla.NADA &&
                       currentResultados.medalla != Resultados.TipoMedalla.NULL) ||
-                     currentResultados.usuario == this.claveUsuario);
+                     currentResultados.usuario == this.claveUsuario ||
+                     this.mostrarLogoIOI());
         }
 
         public bool faltaNombre()

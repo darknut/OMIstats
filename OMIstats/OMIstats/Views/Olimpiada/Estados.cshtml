@@ -68,40 +68,38 @@ else
             <th class="bottom-border right-border table-header-clickable">Platas&nbsp;</th>
             <th class="bottom-border right-border table-header-clickable">Bronces</th>
             <th class="bottom-border right-border table-header-clickable">Total&nbsp;&nbsp;</th>
-            <th class="bottom-border table-header-clickable">Puntos</th>
+            @if(ViewBag.estados[0].promedio == 0)
+            {
+                <th class="bottom-border table-header-clickable">Puntos</th>
+            }
+            else
+            {
+                <th class="bottom-border right-border table-header-clickable">Puntos</th>
+                <th class="bottom-border table-header-clickable">Promedio</th>
+            }
         </tr>
     </thead>
 
     @{
-    int lugar = 0;
-    int count = 0;
     int totalOros = 0;
     int totalPlatas = 0;
     int totalBronces = 0;
     int totalMedallas = 0;
     float? totalPuntos = 0;
-    float? lastPuntos = 0;
     }
     @foreach (OMIstats.Models.Medallero m in ViewBag.estados)
     {
-        count++;
-        if (lastPuntos != m.otros)
-        {
-            lugar = count;
-        }
-        lastPuntos = m.otros;
-        
         totalOros += m.oros;
         totalPlatas += m.platas;
         totalBronces += m.bronces;
         totalMedallas += m.oros + m.platas + m.bronces;
-        
-        totalPuntos += m.otros;
-        
+
+        totalPuntos += m.puntos;
+
         OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(m.clave);
         
         <tr>
-            <td class="table-td center right-border ">@lugar</td>
+            <td class="table-td center right-border ">@m.lugar</td>
             <td class="table-td right-border ">
                 <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + estado.clave)">
                     @estado.nombre
@@ -119,7 +117,15 @@ else
             <td class="table-td center right-border fondoPlata">@m.platas</td>
             <td class="table-td center right-border fondoBronce">@m.bronces</td>
             <td class="table-td center right-border ">@(m.oros + m.platas + m.bronces)</td>
-            <td class="table-td center">@m.otros</td>
+            @if(m.promedio == 0)
+            {
+                <td class="table-td center">@m.puntos</td>
+            }
+            else
+            {
+                <td class="table-td right-border center">@m.puntos</td>
+                <td class="table-td center">@m.promedio</td>
+            }
         </tr>
     }
 
@@ -140,9 +146,21 @@ else
             <td class="center right-border resultado-dia top-border pie table-td">
                 @totalMedallas
             </td>
-            <td class="center resultado-dia top-border pie table-td">
-                @totalPuntos
-            </td>
+            @if(ViewBag.estados[0].promedio == 0)
+            {
+                <td class="center resultado-dia top-border pie table-td">
+                    @totalPuntos
+                </td>
+            }
+            else
+            {
+                <td class="center right-border resultado-dia top-border pie table-td">
+                    @totalPuntos
+                </td>
+                <td class="center resultado-dia top-border pie table-td">
+                    @(totalPuntos / Model.participantes)
+                </td>
+            }
         </tr>
     </tfoot>
 </table>
