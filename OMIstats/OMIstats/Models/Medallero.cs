@@ -86,8 +86,9 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de la olimpiada de la que se requiere el medallero</param>
         /// <param name="tipoMedallero">Si es estado, persona, institucion o asesor</param>
         /// <param name="clave">La clave del estado/persona/institucion/asesor</param>
+        /// <param name="nullSiInexistente">Regresa null si no hay medallero y esta bandera es verdadera</param>
         /// <returns>Un objeto medallero con los datos deseados</returns>
-        public static Medallero obtenerMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave)
+        public static Medallero obtenerMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave, bool nullSiInexistente = false)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -111,6 +112,26 @@ namespace OMIstats.Models
 
             if (table.Rows.Count > 0)
                 m.llenarDatos(table.Rows[0]);
+            else if (nullSiInexistente)
+                return null;
+
+            return m;
+        }
+
+        /// <summary>
+        /// Obtiene todos los medalleros del tipo pedido
+        /// </summary>
+        /// <param name="tipoMedallero">Si es estado, persona, institucion o asesor</param>
+        /// <param name="clave">La clave del estado/persona/institucion/asesor</param>
+        /// <returns>Un objeto medalleros con los medalleros deseados</returns>
+        public static Medalleros obtenerMedalleros(TipoMedallero tipoMedallero, string clave)
+        {
+            Medalleros m = new Medalleros();
+
+            m.OMI = obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, tipoMedallero, clave, true);
+            m.IOI = obtenerMedallas(Olimpiada.TipoOlimpiada.IOI, tipoMedallero, clave, true);
+            m.OMIS = obtenerMedallas(Olimpiada.TipoOlimpiada.OMIS, tipoMedallero, clave, true);
+            m.OMIP = obtenerMedallas(Olimpiada.TipoOlimpiada.OMIP, tipoMedallero, clave, true);
 
             return m;
         }
@@ -427,6 +448,50 @@ namespace OMIstats.Models
             if (this.omi == obj.omi)
                 return (int) Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
             return this.omi.CompareTo(obj.omi);
+        }
+    }
+
+    public class Medalleros
+    {
+        public Medallero OMI;
+        public Medallero OMIS;
+        public Medallero OMIP;
+        public Medallero IOI;
+
+        public Medallero medalleroDeTipo(Olimpiada.TipoOlimpiada tipo)
+        {
+            switch (tipo)
+            {
+                case Olimpiada.TipoOlimpiada.OMI:
+                    return this.OMI;
+                case Olimpiada.TipoOlimpiada.OMIS:
+                    return this.OMIS;
+                case Olimpiada.TipoOlimpiada.OMIP:
+                    return this.OMIP;
+                case Olimpiada.TipoOlimpiada.IOI:
+                    return this.IOI;
+            }
+            return null;
+        }
+
+        public Olimpiada.TipoOlimpiada obtenerDefault(Olimpiada.TipoOlimpiada tipo)
+        {
+            if (medalleroDeTipo(tipo) != null)
+                return tipo;
+
+            if (this.OMI != null)
+                return Olimpiada.TipoOlimpiada.OMI;
+
+            if (this.IOI != null)
+                return Olimpiada.TipoOlimpiada.IOI;
+
+            if (this.OMIS != null)
+                return Olimpiada.TipoOlimpiada.OMIS;
+
+            if (this.OMIP != null)
+                return Olimpiada.TipoOlimpiada.OMIP;
+
+            return Olimpiada.TipoOlimpiada.NULL;
         }
     }
 }

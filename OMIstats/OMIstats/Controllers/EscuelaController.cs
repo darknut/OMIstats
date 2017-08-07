@@ -13,15 +13,19 @@ namespace OMIstats.Controllers
         //
         // GET: /Escuela/
 
-        public ActionResult Index(string url)
+        public ActionResult Index(string url, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
             Institucion i = Institucion.obtenerInstitucionConNombreURL(url);
             if (i == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            Medalleros m = Medallero.obtenerMedalleros(Medallero.TipoMedallero.INSTITUCION, i.clave.ToString());
+            tipo = m.obtenerDefault(tipo);
+
             ViewBag.sedes = i.obtenerOlimpiadasSede();
-            ViewBag.participantes = Resultados.obtenerAlumnosDeInstitucion(i.clave, Olimpiada.TipoOlimpiada.OMI);
-            ViewBag.medallas = Medallero.obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, Medallero.TipoMedallero.INSTITUCION, i.clave.ToString());
+            ViewBag.participantes = Resultados.obtenerAlumnosDeInstitucion(i.clave, tipo);
+            ViewBag.medallas = m.medalleroDeTipo(tipo);
+            ViewBag.medalleros = m;
             limpiarErroresViewBag();
 
             return View(i);
