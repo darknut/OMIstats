@@ -27,6 +27,34 @@
 
 <h2 class="titulo">Datos de institución</h2>
 
+<div class="submenu">
+    @{
+        OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
+        OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    }
+
+    @if (medalleros.OMI != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+    {
+        @Html.ActionLink("OMI", "Index", "Escuela",
+            new { url = Model.nombreURL, tipo = "omi" }, new { @class = "mini-boton" })
+    }
+    @if (medalleros.OMIS != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+    {
+        @Html.ActionLink("OMIS", "Index", "Escuela",
+            new { url = Model.nombreURL, tipo = "omis" }, new { @class = "mini-boton" })
+    }
+    @if (medalleros.OMIP != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+    {
+        @Html.ActionLink("OMIP", "Index", "Escuela",
+            new { url = Model.nombreURL, tipo = "omip" }, new { @class = "mini-boton" })
+    }
+    @if (medalleros.IOI != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.IOI)
+    {
+        @Html.ActionLink("IOI", "Index", "Escuela",
+            new { url = Model.nombreURL, tipo = "ioi" }, new { @class = "mini-boton" })
+    }
+</div>
+
 <div class="subtitulo">
     @if (ViewBag.sedes != null && ViewBag.sedes.Count > 0)
     {
@@ -71,6 +99,8 @@
                     "@Model.nombreCorto"
                 </div>
                 <div class="medallero">
+                    <img src="@("img/" + tipoOlimpiada.ToString() + ".png")" class="tipoOMI"/>
+                    <div class="separador">:</div>
                     <div class="medalla" title="Medallas de oro">
                         <div><img src="~/img/oro.png"/></div>
                         <div>@ViewBag.medallas.oros</div>
@@ -198,7 +228,7 @@
                 bool mostrar = tableManager.mostrarLinea();
                 <tr>
                     <td class="ioi-mini-imagen">
-                        @if(tableManager.mostrarLogoIOI())
+                        @if (tableManager.mostrarLogoIOI())
                         {
                             <img src="/img/ioi.png" />
                             <!-- -TODO- Agregar enlace a IOI -->
@@ -211,12 +241,12 @@
                         }
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi)">
+                        <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipoOlimpiada)">
                             @(datos.omi + "ª OMI")
                         </a>
                     </td>
                     <td class="@("table-td center right-border " + claseCSS)">
-                        @if(datos.persona.genero == "M")
+                        @if (datos.persona.genero == "M")
                         {
                             <span class="azul">H</span>
                         }
@@ -231,7 +261,7 @@
                         </a>
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado)">
+                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado + "&tipo=" + tipoOlimpiada)">
                             @datos.nombreEstado
                         </a>
                     </td>

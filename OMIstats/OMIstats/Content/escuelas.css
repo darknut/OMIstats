@@ -84,6 +84,17 @@
     margin-right: 10px;
 }
 
+.tipoOMI {
+    width: 50px !important;
+    margin-right: 0px !important;
+}
+
+.separador {
+    margin-right: 20px;
+    padding-bottom: 5px;
+    color: #336699;
+}
+
 .medalla {
     display: flex;
     flex: 0 0 auto;

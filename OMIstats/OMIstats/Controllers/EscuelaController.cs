@@ -26,6 +26,7 @@ namespace OMIstats.Controllers
             ViewBag.participantes = Resultados.obtenerAlumnosDeInstitucion(i.clave, tipo);
             ViewBag.medallas = m.medalleroDeTipo(tipo);
             ViewBag.medalleros = m;
+            ViewBag.tipo = tipo;
             limpiarErroresViewBag();
 
             return View(i);

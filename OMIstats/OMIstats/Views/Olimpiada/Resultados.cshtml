@@ -307,7 +307,7 @@ else
                     @if (mostrar && datos.escuela != null)
                     {
                         <span>
-                            <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL)">
+                            <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + Model.tipoOlimpiada)">
                                 @datos.escuela.nombreCorto
                             </a>
                         </span>
