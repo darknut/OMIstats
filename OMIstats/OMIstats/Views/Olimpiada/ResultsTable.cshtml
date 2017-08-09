@@ -37,17 +37,14 @@ else
     else
     {
          <div class="submenu">
-            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+            @foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
             {
-                <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?clave=" + Model.numero)">OMI</a>
-            }
-            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
-            {
-                <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?tipo=omip&clave=" + Model.numero)">OMIP</a>
-            }
-            @if (Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
-            {
-                <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?tipo=omis&clave=" + Model.numero)">OMIS</a>
+                if (tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.IOI && 
+                    tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.NULL &&
+                    Model.tipoOlimpiada != tipo)
+                {
+                    <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?tipo=" + tipo.ToString() + "&clave=" + Model.numero)">@(tipo.ToString())</a>
+                }
             }
         </div>
  

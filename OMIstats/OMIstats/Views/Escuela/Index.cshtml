@@ -33,25 +33,13 @@
         OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     }
 
-    @if (medalleros.OMI != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+    @foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
     {
-        @Html.ActionLink("OMI", "Index", "Escuela",
-            new { url = Model.nombreURL, tipo = "omi" }, new { @class = "mini-boton" })
-    }
-    @if (medalleros.OMIS != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
-    {
-        @Html.ActionLink("OMIS", "Index", "Escuela",
-            new { url = Model.nombreURL, tipo = "omis" }, new { @class = "mini-boton" })
-    }
-    @if (medalleros.OMIP != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
-    {
-        @Html.ActionLink("OMIP", "Index", "Escuela",
-            new { url = Model.nombreURL, tipo = "omip" }, new { @class = "mini-boton" })
-    }
-    @if (medalleros.IOI != null && tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.IOI)
-    {
-        @Html.ActionLink("IOI", "Index", "Escuela",
-            new { url = Model.nombreURL, tipo = "ioi" }, new { @class = "mini-boton" })
+        if (medalleros.medalleroDeTipo(tipo) != null && tipoOlimpiada != tipo)
+        {
+            @Html.ActionLink(tipo.ToString(), "Index", "Escuela",
+                new { url = Model.nombreURL, tipo = tipo.ToString() }, new { @class = "mini-boton" })
+        }
     }
 </div>
 
