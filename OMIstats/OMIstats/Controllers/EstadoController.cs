@@ -12,17 +12,22 @@ namespace OMIstats.Controllers
         //
         // GET: /Estado/
 
-        public ActionResult Index(string clave)
+        public ActionResult Index(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
             Estado e = Estado.obtenerEstadoConClave(clave);
 
             if (e == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            Medalleros m = Medallero.obtenerMedalleros(Medallero.TipoMedallero.ESTADO, e.clave);
+            tipo = m.obtenerDefault(tipo);
+
             limpiarErroresViewBag();
             ViewBag.sedes = e.obtenerOlimpiadasSede();
-            ViewBag.participantes = Resultados.obtenerAlumnosDeEstado(clave, Olimpiada.TipoOlimpiada.OMI);
-            ViewBag.medallas = Medallero.obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, Medallero.TipoMedallero.ESTADO, clave);
+            ViewBag.participantes = Resultados.obtenerAlumnosDeEstado(clave, tipo);
+            ViewBag.medallas = m.medalleroDeTipo(tipo);
+            ViewBag.medalleros = m;
+            ViewBag.tipo = tipo;
 
             return View(e);
         }

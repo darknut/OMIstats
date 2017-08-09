@@ -25,6 +25,22 @@
     ViewBag.Title = Model.nombre;
 }
 
+<div class="submenu">
+    @{
+        OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
+        OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    }
+
+    @foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
+    {
+        if (medalleros.medalleroDeTipo(tipo) != null && tipoOlimpiada != tipo)
+        {
+            @Html.ActionLink(tipo.ToString(), "Index", "Estado",
+                new { clave = Model.clave, tipo = tipo.ToString() }, new { @class = "mini-boton" })
+        }
+    }
+</div>
+
 <div class="subtitulo">
     @if (ViewBag.sedes != null && ViewBag.sedes.Count > 0)
     {
@@ -65,6 +81,8 @@
         <div>
             <h2 class="titulo">@Model.nombre</h2>
             <div class="medallero">
+                <img src="@("img/" + tipoOlimpiada.ToString() + ".png")" class="tipoOMI"/>
+                <div class="separador">:</div>
                 <div class="medalla" title="Medallas de oro">
                     <div><img src="~/img/oro.png"/></div>
                     <div>@ViewBag.medallas.oros</div>
@@ -174,7 +192,7 @@
                     @if (datos.escuela != null)
                     {
                         <span>
-                            <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL)">
+                            <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipoOlimpiada.ToString())">
                                 @datos.escuela.nombreCorto
                             </a>
                         </span>
