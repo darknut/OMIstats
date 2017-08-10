@@ -305,9 +305,12 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Delegacion/
 
-        public ActionResult Delegacion(string clave, string estado)
+        public ActionResult Delegacion(string clave, string estado, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+            if (tipo == Olimpiada.TipoOlimpiada.OMIS || tipo == Olimpiada.TipoOlimpiada.OMIP)
+                tipo = Olimpiada.TipoOlimpiada.OMI;
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
             if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
@@ -317,15 +320,23 @@ namespace OMIstats.Controllers
             if (e == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            ViewBag.estado = e;
-            ViewBag.delegacion = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.COMPETIDOR);
-            ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.LIDER);
-            ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMI);
-            ViewBag.medallas = Medallero.contarMedallas(ViewBag.delegacion);
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
+            Dictionary<Olimpiada.TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<Olimpiada.TipoOlimpiada, List<MiembroDelegacion>>();
+            delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+            if (tipo == Olimpiada.TipoOlimpiada.OMI && o.alsoOmips)
+            {
+                delegaciones.Add(Olimpiada.TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+                delegaciones.Add(Olimpiada.TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+            }
 
-            if (ViewBag.delegacion.Count == 0)
-                ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(Olimpiada.TipoOlimpiada.OMI, clave);
+            ViewBag.estado = e;
+            ViewBag.delegaciones = delegaciones;
+            ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.LIDER);
+            ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo);
+            ViewBag.medallas = Medallero.contarMedallas(delegaciones[tipo]);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
+
+            if (delegaciones[tipo].Count == 0)
+                ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(tipo, clave);
 
             return View(o);
         }

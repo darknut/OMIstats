@@ -60,13 +60,38 @@
 <br />
 <br />
 
-@if(ViewBag.delegacion.Count > 0)
+@{
+    Dictionary<OMIstats.Models.Olimpiada.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
+    Boolean hayDelegacion = false;
+}
+
+@foreach(OMIstats.Models.Olimpiada.TipoOlimpiada tipo in delegaciones.Keys)
 {
-    <div class="subtitulo">Competidores</div>
+    List<OMIstats.Models.MiembroDelegacion> delegacion = delegaciones[tipo];
+    if (delegacion.Count == 0)
+    {
+        continue;
+    }
+    hayDelegacion = true;
+    string titulo = "Competidores";
+    switch(tipo)
+    {
+        case OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS:
+            {
+                titulo = "Competidores de secundaria";
+                break;
+            }
+        case OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP:
+            {
+                titulo = "Competidores de primaria";
+                break;
+            }
+    }
+    <div class="subtitulo">@(titulo)</div>
 
     <div class="tablaDelegacion">
 
-        @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delegacion)
+        @foreach (OMIstats.Models.MiembroDelegacion md in delegacion)
         {
             <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.medalla)">
                 <div class="foto fotoFixedHeight">
@@ -88,7 +113,9 @@
         }
 
     </div>
-} else {
+}
+
+@if (!hayDelegacion) {
     if (ViewBag.vinoAOlimpiada)
     {
         <div class="subtitulo">No se tienen datos de la delegación</div>
@@ -125,7 +152,7 @@
 
 @if (ViewBag.otros.Count > 0)
 {
-    if(ViewBag.lideres.Count == 0 && ViewBag.delegacion.Count == 0)
+    if(ViewBag.lideres.Count == 0 && !hayDelegacion)
     {
         <div class="subtitulo">Delegación</div>
     } else {
