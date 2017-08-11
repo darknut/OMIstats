@@ -559,7 +559,21 @@ namespace OMIstats.Models
         /// <param name="persona">La persona de la que se quieren los datos</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada que se solicita</param>
         /// <returns>La lista de participaciones</returns>
-        public static List<Resultados> obtenerParticipacionesComoCompetidorPara(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static Dictionary<Olimpiada.TipoOlimpiada, List<Resultados>> obtenerParticipacionesComoCompetidorPara(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        {
+            Dictionary<Olimpiada.TipoOlimpiada, List<Resultados>> participaciones = new Dictionary<Olimpiada.TipoOlimpiada, List<Resultados>>();
+
+            participaciones.Add(tipoOlimpiada, obtenerParticipaciones(persona, tipoOlimpiada));
+            if (tipoOlimpiada == Olimpiada.TipoOlimpiada.OMI)
+            {
+                participaciones.Add(Olimpiada.TipoOlimpiada.OMIP, obtenerParticipaciones(persona, Olimpiada.TipoOlimpiada.OMIP));
+                participaciones.Add(Olimpiada.TipoOlimpiada.OMIS, obtenerParticipaciones(persona, Olimpiada.TipoOlimpiada.OMIS));
+            }
+
+            return participaciones;
+        }
+
+        private static List<Resultados> obtenerParticipaciones(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
         {
             List<Resultados> lista = new List<Resultados>();
             Utilities.Acceso db = new Utilities.Acceso();

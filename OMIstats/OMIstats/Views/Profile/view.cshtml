@@ -33,16 +33,6 @@
 
     <h1 class="titulo">Datos de usuario</h1>
 
-    <div class="medallero">
-        <div class="medalla" title="Medallas de oro"><img src="~/img/oro.png"/>@ViewBag.medallas.oros</div>
-        <div class="medalla" title="Medallas de plata"><img src="~/img/plata.png"/>@ViewBag.medallas.platas</div>
-        <div class="medalla" title="Medallas de bronce"><img src="~/img/bronce.png"/>@ViewBag.medallas.bronces</div>
-        @if(ViewBag.medallas.otros > 0)
-        {
-            <div class="medalla diploma" title="Participaciones sin medalla"><img src="~/img/diploma.png"/>@ViewBag.medallas.otros</div>
-        }
-    </div>
-
     <div class="foto" >
         <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
     </div>
@@ -165,9 +155,57 @@
         }
     </div>
 
-    @if (ViewBag.participaciones.Count > 0)
+    @{
+        OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+        Dictionary<OMIstats.Models.Olimpiada.TipoOlimpiada, List<OMIstats.Models.Resultados>> participaciones = ViewBag.participaciones;
+        OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
+        bool hayParticipaciones = false;
+    }
+
+    @foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
     {
-        <h1 class="titulo subtitulo"> Participaciones como competidor </h1>
+        List<OMIstats.Models.Resultados> participacion = null;
+        participaciones.TryGetValue(tipo, out participacion);
+        if (participacion == null || participacion.Count == 0)
+        {
+            continue;
+        }
+        hayParticipaciones = true;
+        OMIstats.Models.Medallero medallero = medalleros.medalleroDeTipo(tipo);
+
+        <h1 class="titulo subtitulo"> Participaciones como competidor
+            @if (tipo == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+            {
+                <span>de secundaria</span>
+            }
+            @if (tipo == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+            {
+                <span>de primaria</span>
+            }
+        </h1>
+
+        <div class="medallero">
+            <div class="separador"></div>
+            <div class="medalla" title="Medallas de oro">
+                <div><img src="~/img/oro.png"/></div>
+                <div>@(medallero.oros)</div>
+            </div>
+            <div class="medalla" title="Medallas de plata">
+                <div><img src="~/img/plata.png"/></div>
+                <div>@(medallero.platas)</div>
+            </div>
+            <div class="medalla" title="Medallas de bronce">
+                <div><img src="~/img/bronce.png"/></div>
+                <div>@(medallero.bronces)</div>
+            </div>
+            @if(medallero.otros > 0)
+            {
+                <div class="medalla diploma" title="Participaciones sin medalla">
+                    <div><img src="~/img/diploma.png"/></div>
+                    <div>@(medallero.otros)</div>
+                </div>
+            }
+        </div>
 
         <table class="table tablePadding" id="tablaCompetidor">
             <thead>
@@ -186,16 +224,16 @@
             </thead>
             <tbody>
             @{ OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario); }
-            @for (var l = 0; l < ViewBag.participaciones.Count; l++)
+            @for (var l = 0; l < participacion.Count; l++)
             {
-                OMIstats.Models.Resultados datos = ViewBag.participaciones[l];
+                OMIstats.Models.Resultados datos = participacion[l];
                 tableManager.setCurrentResultados(datos);
                 tableManager.setCurrentOMI();
                 string claseCSS = tableManager.obtenerClaseCSS();
                 bool mostrar = tableManager.mostrarLinea();
                 <tr>
                     <td class="ioi-mini-imagen">
-                        @if(tableManager.mostrarLogoIOI())
+                        @if (tableManager.mostrarLogoIOI())
                         {
                             <img src="/img/ioi.png" />
                             <!-- -TODO- Agregar enlace a IOI -->
@@ -264,7 +302,7 @@
 
     @if (ViewBag.asistencias.Count > 0)
     {
-        if (ViewBag.participaciones.Count > 0)
+        if (hayParticipaciones)
         {
             <h1 class="titulo subtitulo"> Participaciones con diferente rol </h1>
         }

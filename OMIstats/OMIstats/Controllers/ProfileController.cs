@@ -40,7 +40,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/view/
 
-        public ActionResult view(string usuario)
+        public ActionResult view(string usuario, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
             Persona p;
             limpiarErroresViewBag();
@@ -73,9 +73,15 @@ namespace OMIstats.Controllers
                 }
             }
 
-            ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, Olimpiada.TipoOlimpiada.OMI);
-            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, Olimpiada.TipoOlimpiada.OMI);
-            ViewBag.medallas = Medallero.obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, Medallero.TipoMedallero.PERSONA, p.clave.ToString());
+            if (tipo == Olimpiada.TipoOlimpiada.OMIS || tipo == Olimpiada.TipoOlimpiada.OMIP)
+                tipo = Olimpiada.TipoOlimpiada.OMI;
+
+            Medalleros medalleros = Medallero.obtenerMedalleros(Medallero.TipoMedallero.PERSONA, p.clave.ToString());
+
+            ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, tipo);
+            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, tipo);
+            ViewBag.medalleros = medalleros;
+            ViewBag.tipo = tipo;
             return View(p);
         }
 
