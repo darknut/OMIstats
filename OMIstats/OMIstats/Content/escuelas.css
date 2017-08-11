@@ -71,34 +71,3 @@
     flex-direction:row;
     flex:1 1 auto;
 }
-
-.medallero {
-    margin-left: 5px;
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-}
-
-.medallero img {
-    width: 15px;
-    margin-right: 10px;
-}
-
-.tipoOMI {
-    width: 50px !important;
-    margin-right: 0px !important;
-}
-
-.separador {
-    margin-right: 20px;
-    padding-bottom: 5px;
-    color: #336699;
-}
-
-.medalla {
-    display: flex;
-    flex: 0 0 auto;
-    font-size: 13pt;
-    font-weight: bold;
-    margin-right: 10px;
-}
