@@ -246,19 +246,19 @@
                         }
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi)">
+                        <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipo.ToString())">
                             @(datos.omi + "ª OMI")
                         </a>
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado)">
+                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado + "&tipo=" + tipo.ToString())">
                             @datos.nombreEstado
                         </a>
                     </td>
                     <td class="@("table-td center right-border " + claseCSS)">
                         @if (!tableManager.faltaClave())
                         {
-                            <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado)">
+                            <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipo.ToString())">
                                 @datos.clave
                             </a>
                         }
@@ -276,7 +276,7 @@
                         @if (datos.escuela != null)
                         {
                             <span>
-                                <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL)">
+                                <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipo.ToString())">
                                     @datos.escuela.nombreCorto
                                 </a>
                             </span>
@@ -328,17 +328,19 @@
                     <td class="ioi-mini-imagen">
                     </td>
                     <td class="table-td right-border">
-                        <a class="nombre" href="@Url.Content("/Olimpiada?clave=" + datos.olimpiada)">
+                        <a class="nombre" href="@Url.Content("/Olimpiada?clave=" + datos.olimpiada + "&tipo=" + tipoOlimpiada.ToString())">
                             @(datos.olimpiada + "ª OMI")
                         </a>
                     </td>
                     <td class="table-td right-border">
-                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado)">
+                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado + "&tipo=" + tipoOlimpiada.ToString())">
                             @datos.nombreEstado
                         </a>
                     </td>
                     <td class="table-td center">
-                        @datos.getTipoAsistenteString()
+                        <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.olimpiada + "&estado=" + datos.estado + "&tipo=" + tipoOlimpiada.ToString())">
+                            @datos.getTipoAsistenteString()
+                        </a>
                     </td>
                 </tr>
             }

@@ -226,7 +226,7 @@ else
                     @if (mostrar && datos.persona != null)
                     {
                         <span>
-                            <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario)">
+                            <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">
                                 @datos.persona.nombre
                             </a>
                         </span>

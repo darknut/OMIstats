@@ -29,6 +29,12 @@
     </select>
 </div>
 
+@{
+    Dictionary<OMIstats.Models.Olimpiada.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
+    Boolean hayDelegacion = false;
+    OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+}
+
 <div>
     <div class="logoEstadoFloat" >
         <img src="@Url.Content("~/img/estados/" + ViewBag.estado.clave + ".png")"/>
@@ -36,7 +42,13 @@
 
     <div class="datosEstado tituloEstado">
         <div>
-            <h2 class="titulo">@ViewBag.Title</h2>
+            <h2 class="titulo">
+                @Html.ActionLink((string) ViewBag.estado.nombre, "Index", "Estado",
+                    new { clave = ViewBag.estado.clave, tipo = tipoOlimpiada }, new { @class = "link" })
+                en la
+                @Html.ActionLink(Model.numero + "ª OMI", "Resultados", "Olimpiada",
+                   new { clave = Model.numero, tipo = tipoOlimpiada }, new { @class = "link" })
+            </h2>
             <div class="medallero">
                 <div class="medalla" title="Medallas de oro">
                     <div><img src="~/img/oro.png"/></div>
@@ -59,11 +71,6 @@
 
 <br />
 <br />
-
-@{
-    Dictionary<OMIstats.Models.Olimpiada.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
-    Boolean hayDelegacion = false;
-}
 
 @foreach(OMIstats.Models.Olimpiada.TipoOlimpiada tipo in delegaciones.Keys)
 {
@@ -98,7 +105,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
                             @md.clave
@@ -139,7 +146,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + md.usuario + "&tipo=" + tipoOlimpiada)">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @md.getTipoAsistenteString()
                     </div>
@@ -168,7 +175,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario)">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario+ md.usuario + "&tipo=" + tipoOlimpiada)">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @md.getTipoAsistenteString()
                     </div>

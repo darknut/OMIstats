@@ -185,7 +185,16 @@
 
 @if (ViewBag.participantes.Count > 0)
 {
-    <h1 class="titulo subtitulo"> Alumnos competidores </h1>
+    <h1 class="titulo subtitulo"> Alumnos competidores
+        @if (tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+        {
+            @("de secundaria")
+        }
+        @if (tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+        {
+            @("de primaria")
+        }
+    </h1>
 
     <table class="tablesorter table tablePadding tablaResultados" id="tablaAlumnos">
         <thead>
@@ -244,7 +253,7 @@
                         }
                     </td>
                     <td class="@("table-td break-word right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario)">
+                        <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + tipoOlimpiada)">
                             @datos.persona.nombre
                         </a>
                     </td>
@@ -256,7 +265,7 @@
                     <td class="@("table-td center right-border " + claseCSS)">
                         @if (!tableManager.faltaClave())
                         {
-                            <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado)">
+                            <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipoOlimpiada)">
                                 @datos.clave
                             </a>
                         }
