@@ -22,7 +22,9 @@
 }
 
 @{
-    ViewBag.Title = Model.numero + "ª " + Model.tipoOlimpiada.ToString();
+    ViewBag.Title = ((Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS ||
+                     Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP) ? 
+                     Model.omisActualNumber : Model.numero) + "ª " + Model.tipoOlimpiada.ToString();
 }
 
 <div class="submenu">

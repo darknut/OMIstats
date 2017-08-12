@@ -168,5 +168,20 @@ namespace OMIstats.Utilities
             }
             return "";
         }
+
+        public string enlaceOMI()
+        {
+            string enlace = "";
+            if (currentOMI.tipoOlimpiada == Olimpiada.TipoOlimpiada.OMIP ||
+                currentOMI.tipoOlimpiada == Olimpiada.TipoOlimpiada.OMIS)
+            {
+                enlace = currentOMI.omisActualNumber;
+            }
+            else
+            {
+                enlace = currentOMI.numero;
+            }
+            return enlace + "ª " + currentOMI.tipoOlimpiada.ToString();
+        }
     }
 }
