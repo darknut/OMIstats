@@ -345,15 +345,18 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Estados/
 
-        public ActionResult Estados(string clave)
+        public ActionResult Estados(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+            if (tipo != Olimpiada.TipoOlimpiada.OMI)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
             if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
 
             ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave);
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
 
             return View(o);
         }

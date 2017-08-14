@@ -59,6 +59,9 @@ else
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
+List<OMIstats.Models.Medallero> estados = ViewBag.estados;
+bool hayPromedio = estados[estados.Count - 1].promedio > 0;
+
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
@@ -68,7 +71,7 @@ else
             <th class="bottom-border right-border table-header-clickable">Platas&nbsp;</th>
             <th class="bottom-border right-border table-header-clickable">Bronces</th>
             <th class="bottom-border right-border table-header-clickable">Total&nbsp;&nbsp;</th>
-            @if(ViewBag.estados[0].promedio == 0)
+            @if(!hayPromedio)
             {
                 <th class="bottom-border table-header-clickable">Puntos</th>
             }
@@ -117,7 +120,7 @@ else
             <td class="table-td center right-border fondoPlata">@m.platas</td>
             <td class="table-td center right-border fondoBronce">@m.bronces</td>
             <td class="table-td center right-border ">@(m.oros + m.platas + m.bronces)</td>
-            @if(m.promedio == 0)
+            @if(!hayPromedio)
             {
                 <td class="table-td center">@m.puntos</td>
             }
@@ -146,7 +149,7 @@ else
             <td class="center right-border resultado-dia top-border pie table-td">
                 @totalMedallas
             </td>
-            @if(ViewBag.estados[0].promedio == 0)
+            @if(!hayPromedio)
             {
                 <td class="center resultado-dia top-border pie table-td">
                     @totalPuntos
