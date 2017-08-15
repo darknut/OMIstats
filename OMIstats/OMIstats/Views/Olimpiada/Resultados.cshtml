@@ -314,13 +314,17 @@ else
     <tfoot>
         <tr>
             <td></td>
+            @if (!Model.noMedallistasConocidos)
+            {
+                <td class="top-border"></td>
+            }
             <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (Model.mostrarResultadosTotales)
+                @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
                 {
                     <span>Media</span>
                 }
             </td>
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
@@ -329,7 +333,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia top-border pie">
                     @if (!hayUNKs)
@@ -338,7 +342,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
@@ -347,7 +351,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia top-border pie">
                     @if (!hayUNKs)
@@ -356,7 +360,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosTotales)
+            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total top-border pie">
                     @ViewBag.numerosTotal.media
@@ -368,13 +372,17 @@ else
         </tr>
         <tr>
             <td></td>
+            @if (!Model.noMedallistasConocidos)
+            {
+                <td></td>
+            }
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (Model.mostrarResultadosTotales)
+                @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
                 {
                     <span>Mediana</span>
                 }
             </td>
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
@@ -383,7 +391,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
                     @if (!hayUNKs)
@@ -392,7 +400,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
@@ -401,7 +409,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
                     @if (!hayUNKs)
@@ -410,7 +418,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosTotales)
+            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total pie">
                     @ViewBag.numerosTotal.mediana
@@ -422,13 +430,17 @@ else
         </tr>
         <tr>
             <td></td>
+            @if (!Model.noMedallistasConocidos)
+            {
+                <td></td>
+            }
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (!hayUNKs && Model.mostrarResultadosTotales)
+                @if (!hayUNKs && Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
                 {
                     <span>Perfectos</span>
                 }
             </td>
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
@@ -437,7 +449,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
                     @if (!hayUNKs)
@@ -446,7 +458,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
@@ -455,7 +467,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
                     @if (!hayUNKs)
@@ -464,7 +476,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosTotales)
+            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total pie">
                     @if (!hayUNKs)
@@ -479,13 +491,17 @@ else
         </tr>
         <tr>
             <td></td>
+            @if (!Model.noMedallistasConocidos)
+            {
+                <td></td>
+            }
             <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (!hayUNKs && Model.mostrarResultadosTotales)
+                @if (!hayUNKs && Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
                 {
                     <span>Ceros</span>
                 }
             </td>
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
@@ -494,7 +510,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
                     @if (!hayUNKs)
@@ -503,7 +519,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosPorProblema)
+            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
             {
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
@@ -512,7 +528,7 @@ else
                     </td>
                 }
             }
-            @if (Model.mostrarResultadosPorDia)
+            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
                     @if (!hayUNKs)
@@ -521,7 +537,7 @@ else
                     }
                 </td>
             }
-            @if (Model.mostrarResultadosTotales)
+            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total pie">
                     @if (!hayUNKs)
