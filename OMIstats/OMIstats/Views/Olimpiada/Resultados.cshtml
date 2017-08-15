@@ -22,9 +22,10 @@
 }
 
 @{
-    ViewBag.Title = ((Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS ||
-                     Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP) ? 
-                     Model.omisActualNumber : Model.numero) + "ª " + Model.tipoOlimpiada.ToString();
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(false, null);
+    tableManager.setCurrentOMI(Model);
+
+    ViewBag.Title = tableManager.enlaceOMI();
 }
 
 <div class="submenu">
@@ -180,7 +181,7 @@ else
     </thead>
     <tbody>
     @{
-            OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
+            tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
             tableManager.setCurrentOMI(Model);
             bool hayUNKs = false;
     }
