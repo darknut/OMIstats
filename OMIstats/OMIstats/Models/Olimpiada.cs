@@ -90,6 +90,8 @@ namespace OMIstats.Models
 
         public bool alsoOmips { get; set; }
 
+        public bool noMedallistasConocidos { get; set; }
+
         public string omisActualNumber { get; set; }
 
         public float media
@@ -151,6 +153,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = false;
             puntosDesconocidos = false;
             alsoOmips = false;
+            noMedallistasConocidos = false;
             omisActualNumber = "";
         }
 
@@ -241,6 +244,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = (bool)datos["mostrarResultadosTotales"];
             puntosDesconocidos = (bool)datos["puntosDesconocidos"];
             alsoOmips = (bool)datos["alsoOmips"];
+            noMedallistasConocidos = (bool)datos["noMedallistasConocidos"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -386,6 +390,8 @@ namespace OMIstats.Models
             query.Append(puntosDesconocidos ? 1 : 0);
             query.Append(", alsoOmips = ");
             query.Append(alsoOmips ? 1 : 0);
+            query.Append(", noMedallistasConocidos = ");
+            query.Append(noMedallistasConocidos ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
             query.Append(" and clase = ");
@@ -450,7 +456,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1) ");
 
             db.EjecutarQuery(query.ToString());
         }

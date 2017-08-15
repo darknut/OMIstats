@@ -128,6 +128,13 @@ else
                 </div>
 
                 <div>
+                    <div class="label">¿No medallistas conocidos?:</div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.noMedallistasConocidos)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">Escuela sede:</div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.nombreEscuela)

@@ -61,6 +61,7 @@ else
 
 List<OMIstats.Models.Medallero> estados = ViewBag.estados;
 bool hayPromedio = estados[estados.Count - 1].promedio > 0;
+bool hayPuntos = estados[0].puntos > 0;
 
 <table class="table" id="tablaPuntos">
     <thead>
@@ -70,14 +71,13 @@ bool hayPromedio = estados[estados.Count - 1].promedio > 0;
             <th class="bottom-border right-border table-header-clickable">Oros&nbsp;&nbsp;&nbsp;</th>
             <th class="bottom-border right-border table-header-clickable">Platas&nbsp;</th>
             <th class="bottom-border right-border table-header-clickable">Bronces</th>
-            <th class="bottom-border right-border table-header-clickable">Total&nbsp;&nbsp;</th>
-            @if(!hayPromedio)
+            <th class="@("bottom-border table-header-clickable " + (hayPuntos ? "right-border" : ""))">Total&nbsp;&nbsp;</th>
+            @if (hayPuntos)
             {
-                <th class="bottom-border table-header-clickable">Puntos</th>
+                <th class="@("bottom-border table-header-clickable " + (hayPromedio ? "right-border" : ""))">Puntos</th>
             }
-            else
+            @if(hayPromedio)
             {
-                <th class="bottom-border right-border table-header-clickable">Puntos</th>
                 <th class="bottom-border table-header-clickable">Promedio</th>
             }
         </tr>
@@ -119,14 +119,13 @@ bool hayPromedio = estados[estados.Count - 1].promedio > 0;
             <td class="table-td center right-border fondoOro">@m.oros</td>
             <td class="table-td center right-border fondoPlata">@m.platas</td>
             <td class="table-td center right-border fondoBronce">@m.bronces</td>
-            <td class="table-td center right-border ">@(m.oros + m.platas + m.bronces)</td>
-            @if(!hayPromedio)
+            <td class="@("table-td center " + (hayPuntos ? "right-border" : ""))">@(m.oros + m.platas + m.bronces)</td>
+            @if(hayPuntos)
             {
-                <td class="table-td center">@m.puntos</td>
+                <td class="@("table-td center " + (hayPromedio ? "right-border" : ""))">@m.puntos</td>
             }
-            else
+            @if(hayPromedio)
             {
-                <td class="table-td right-border center">@m.puntos</td>
                 <td class="table-td center">@m.promedio</td>
             }
         </tr>
@@ -146,20 +145,17 @@ bool hayPromedio = estados[estados.Count - 1].promedio > 0;
             <td class="center right-border resultado-dia top-border pie fondoBronce">
                 @totalBronces
             </td>
-            <td class="center right-border resultado-dia top-border pie table-td">
+            <td class="@("center resultado-dia top-border pie table-td " + (hayPuntos ? "right-border" : ""))">
                 @totalMedallas
             </td>
-            @if(!hayPromedio)
+            @if(hayPuntos)
             {
-                <td class="center resultado-dia top-border pie table-td">
+                <td class="@("center resultado-dia top-border pie table-td " + (hayPromedio ? "right-border" : ""))">
                     @totalPuntos
                 </td>
             }
-            else
+            @if (hayPromedio)
             {
-                <td class="center right-border resultado-dia top-border pie table-td">
-                    @totalPuntos
-                </td>
                 <td class="center resultado-dia top-border pie table-td">
                     @(totalPuntos / Model.participantes)
                 </td>
