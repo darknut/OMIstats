@@ -41,34 +41,40 @@
     }
 </div>
 
+@{
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    List<OMIstats.Models.Olimpiada> sedes = ViewBag.sedes;
+}
+
 <div class="subtitulo">
-    @if (ViewBag.sedes != null && ViewBag.sedes.Count > 0)
+    @if (sedes != null && sedes.Count > 0)
     {
         <span>Sede de la:</span>
-        for (int i = 0; i < ViewBag.sedes.Count; i++)
+        for (int i = 0; i < sedes.Count; i++)
         {
-            if(i == ViewBag.sedes.Count - 1 && i != 0)
+            OMIstats.Models.Olimpiada sede = sedes[i];
+            tableManager.setCurrentOMI(sede);
+            if(i == sedes.Count - 1 && i != 0)
             {
                 <span> y </span>
             }
-            if(i == ViewBag.sedes.Count - 1)
+            if(i == sedes.Count - 1)
             {
                 <span>
-                    <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
-                        @Url.Content(ViewBag.sedes[i].numero + "ª")
+                    <a href="@Url.Content("/Olimpiada?clave=" + sede.numero)" class="nombre">
+                        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true))
                     </a>
                 </span>
             }
             else
             {
                 <span>
-                    <a href="@Url.Content("/Olimpiada?clave=" + ViewBag.sedes[i].numero)" class="nombre">
-                        @Url.Content(ViewBag.sedes[i].numero + "ª")
+                    <a href="@Url.Content("/Olimpiada?clave=" + sede.numero)" class="nombre">
+                        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true))
                     </a>,
                 </span>
             }
         }
-        <span>&nbsp;OMI</span>
     }
 </div>
 
@@ -132,7 +138,7 @@
         </tr>
     </thead>
     <tbody>
-        @{ OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario); }
+        @{ tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario); }
         @for (var l = 0; l < ViewBag.participantes.Count; l++)
         {
             OMIstats.Models.Resultados datos = ViewBag.participantes[l];

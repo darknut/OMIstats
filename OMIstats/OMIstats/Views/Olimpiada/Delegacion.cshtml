@@ -8,7 +8,9 @@
 }
 
 @{
-    ViewBag.Title = ViewBag.estado.nombre + " en la " + Model.numero + "ª OMI";
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    tableManager.setCurrentOMI(Model);
+    ViewBag.Title = ViewBag.estado.nombre + " en la " + tableManager.enlaceOMI(nombreCompleto: true);
 }
 
 <div class="submenu">
@@ -17,13 +19,14 @@
         @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
         {
             OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            tableManager.setCurrentOMI(omi);
             if (omi.numero == Model.numero)
             {
-                <option value="@omi.numero" selected="selected">@(omi.numero + "ª OMI " + omi.año)</option>
+                <option value="@omi.numero" selected="selected">@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
             else
             {
-                <option value="@omi.numero">@(omi.numero + "ª OMI " + omi.año)</option>
+                <option value="@omi.numero">@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
         }
     </select>
@@ -33,6 +36,7 @@
     Dictionary<OMIstats.Models.Olimpiada.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
     Boolean hayDelegacion = false;
     OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    tableManager.setCurrentOMI(Model);
 }
 
 <div>
@@ -46,7 +50,7 @@
                 @Html.ActionLink((string) ViewBag.estado.nombre, "Index", "Estado",
                     new { clave = ViewBag.estado.clave, tipo = tipoOlimpiada }, new { @class = "link" })
                 en la
-                @Html.ActionLink(Model.numero + "ª OMI", "Resultados", "Olimpiada",
+                @Html.ActionLink(tableManager.enlaceOMI(nombreCompleto: true), "Resultados", "Olimpiada",
                    new { clave = Model.numero, tipo = tipoOlimpiada }, new { @class = "link" })
             </h2>
             <div class="medallero">

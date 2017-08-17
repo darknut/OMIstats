@@ -22,10 +22,10 @@
 }
 
 @{
-    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(false, null);
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);
 
-    ViewBag.Title = tableManager.enlaceOMI();
+    ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
 }
 
 <div class="submenu">
@@ -57,13 +57,14 @@
         @for (int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
         {
             OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            tableManager.setCurrentOMI(omi);
             if (omi.numero == Model.numero)
             {
-                <option value="@omi.numero" selected="selected">@(omi.numero + "ª OMI " + omi.año)</option>
+                <option value="@omi.numero" selected="selected">@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
             else
             {
-                <option value="@omi.numero">@(omi.numero + "ª OMI " + omi.año)</option>
+                <option value="@omi.numero">@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
         }
     </select>
@@ -75,13 +76,14 @@
             @for (int i = ViewBag.omis.Count - 1; i >= 0; i--)
             {
                 OMIstats.Models.Olimpiada omi = ViewBag.omis[i];
+                tableManager.setCurrentOMI(omi);
                 if (omi.numero == Model.numero)
                 {
-                    <option value="@omi.numero" selected="selected">@(omi.omisActualNumber + "ª OMIS " + omi.año)</option>
+                    <option value="@omi.numero" selected="selected">@(tableManager.enlaceOMI() + " " + omi.año)</option>
                 }
                 else
                 {
-                    <option value="@omi.numero">@(omi.omisActualNumber + "ª OMIS " + omi.año)</option>
+                    <option value="@omi.numero">@(tableManager.enlaceOMI() + " " + omi.año)</option>
                 }
             }
         </select>
@@ -91,13 +93,14 @@
             @for (int i = ViewBag.omip.Count - 1; i >= 0; i--)
             {
                 OMIstats.Models.Olimpiada omi = ViewBag.omip[i];
+                tableManager.setCurrentOMI(omi);
                 if (omi.numero == Model.numero)
                 {
-                    <option value="@omi.numero" selected="selected">@(omi.omisActualNumber + "ª OMIP " + omi.año)</option>
+                    <option value="@omi.numero" selected="selected">@(tableManager.enlaceOMI() + " " + omi.año)</option>
                 }
                 else
                 {
-                    <option value="@omi.numero">@(omi.omisActualNumber + "ª OMIP " + omi.año)</option>
+                    <option value="@omi.numero">@(tableManager.enlaceOMI() + " " + omi.año)</option>
                 }
             }
         </select>

@@ -303,6 +303,7 @@
 
     @if (ViewBag.asistencias.Count > 0)
     {
+        OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
         if (hayParticipaciones)
         {
             <h1 class="titulo subtitulo"> Participaciones con diferente rol </h1>
@@ -325,12 +326,13 @@
             @for (var l = 0; l < ViewBag.asistencias.Count; l++)
             {
                 OMIstats.Models.MiembroDelegacion datos = ViewBag.asistencias[l];
+                tableManager.setCurrentOMI(OMIstats.Models.Olimpiada.obtenerOlimpiadaConClave(datos.olimpiada, tipoOlimpiada));
                 <tr>
                     <td class="ioi-mini-imagen">
                     </td>
                     <td class="table-td right-border">
                         <a class="nombre" href="@Url.Content("/Olimpiada?clave=" + datos.olimpiada + "&tipo=" + tipoOlimpiada.ToString())">
-                            @(datos.olimpiada + "ª OMI")
+                            @(tableManager.enlaceOMI())
                         </a>
                     </td>
                     <td class="table-td right-border">

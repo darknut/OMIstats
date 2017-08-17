@@ -30,6 +30,10 @@ namespace OMIstats.Utilities
         private const string ORO_3 = "ORO (III)";
         private const string NO_MEDALLA = "- - -";
 
+        public TableManager(): this(false, null)
+        {
+        }
+
         public TableManager(bool admin, int? claveUsuario)
         {
             this.admin = admin;
@@ -169,8 +173,16 @@ namespace OMIstats.Utilities
             return "";
         }
 
-        public string enlaceOMI()
+        public string enlaceOMI(bool nombreCompleto = false)
         {
+            if (currentOMI.numero.EndsWith("b"))
+            {
+                if (nombreCompleto)
+                    return "OMI Intermedia";
+                else
+                    return "OMII";
+            }
+
             string enlace = "";
             if (currentOMI.tipoOlimpiada == Olimpiada.TipoOlimpiada.OMIP ||
                 currentOMI.tipoOlimpiada == Olimpiada.TipoOlimpiada.OMIS)

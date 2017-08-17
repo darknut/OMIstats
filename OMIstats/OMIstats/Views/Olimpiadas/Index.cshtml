@@ -44,13 +44,17 @@
             </th>
         </tr>
     </thead>
+    @{
+        OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    }
     @foreach (var item in Model)
     {
         if (item.numero != OMIstats.Models.Olimpiada.TEMP_CLAVE || ViewBag.admin)
         {
+            tableManager.setCurrentOMI(item);
             <tr>
                 <td class="table-td center right-border anchoColumnaOMI">
-                   <a href ="@Url.Content("/Olimpiada?clave=" + item.numero)" >@Url.Content(item.numero + "ª OMI")</a>
+                   <a href ="@Url.Content("/Olimpiada?clave=" + item.numero)" >@(tableManager.enlaceOMI())</a>
                 </td>
                 <td class="table-td right-border center anchoColumnaNumero">
                     @item.año

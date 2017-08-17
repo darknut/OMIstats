@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Tabla de resultados";
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    tableManager.setCurrentOMI(Model);
 }
 
 @section AddToHead
@@ -10,7 +12,7 @@
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
 }
 
-<h2 class="titulo">Tabla de resultados de la @Url.Content(Model.numero + "ª") @Model.tipoOlimpiada</h2>
+<h2 class="titulo">Tabla de resultados de la @tableManager.enlaceOMI(nombreCompleto: true)</h2>
 
 @if (ViewBag.guardado)
 {
