@@ -64,6 +64,11 @@ namespace OMIstats.Models
             count = 0;
         }
 
+        public Medallero(Olimpiada.TipoOlimpiada tipo): this()
+        {
+            tipoOlimpiada = tipo;
+        }
+
         private void llenarDatos(DataRow datos)
         {
             tipoOlimpiada = (Olimpiada.TipoOlimpiada)Enum.Parse(typeof(Olimpiada.TipoOlimpiada), datos["clase"].ToString().ToUpper());
@@ -507,7 +512,7 @@ namespace OMIstats.Models
             if (this.OMIP != null)
                 return Olimpiada.TipoOlimpiada.OMIP;
 
-            return Olimpiada.TipoOlimpiada.NULL;
+            return Olimpiada.TipoOlimpiada.OMI;
         }
     }
 }

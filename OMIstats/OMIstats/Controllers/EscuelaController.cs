@@ -21,10 +21,13 @@ namespace OMIstats.Controllers
 
             Medalleros m = Medallero.obtenerMedalleros(Medallero.TipoMedallero.INSTITUCION, i.clave.ToString());
             tipo = m.obtenerDefault(tipo);
+            Medallero medallero = m.medalleroDeTipo(tipo);
+            if (medallero == null)
+                medallero = new Medallero(tipo);
 
             ViewBag.sedes = i.obtenerOlimpiadasSede();
             ViewBag.participantes = Resultados.obtenerAlumnosDeInstitucion(i.clave, tipo);
-            ViewBag.medallas = m.medalleroDeTipo(tipo);
+            ViewBag.medallas = medallero;
             ViewBag.medalleros = m;
             ViewBag.tipo = tipo;
             limpiarErroresViewBag();

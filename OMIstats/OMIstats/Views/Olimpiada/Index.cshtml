@@ -26,7 +26,7 @@
         <img src="@Url.Content("..\\img\\omi\\" + Model.logo)"/>
     </div>
     <h2 class="titulo tituloOMI">
-        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true) + ": " + @Model.ciudad + ", ")
+        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true) + ": " + (Model.claveEstado == "MDF" ? "" : @Model.ciudad + ", "))
         <a href="@Url.Content("/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
         @Model.año
     </h2>

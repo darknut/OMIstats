@@ -142,6 +142,8 @@ namespace OMIstats.Utilities
                     nombre = Guid.NewGuid().ToString() + extension;
                 } while (File.Exists(Path.Combine(lugarEnDisco, nombre)));
 
+            if (!Directory.Exists(lugarEnDisco))
+                Directory.CreateDirectory(lugarEnDisco);
             archivo.SaveAs(Path.Combine(lugarEnDisco, nombre));
 
             return nombre;
