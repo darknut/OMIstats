@@ -57,6 +57,20 @@ namespace OMIstats.Utilities
             currentOMI = Olimpiada.obtenerOlimpiadaConClave(currentResultados.omi, currentResultados.tipoOlimpiada);
         }
 
+        public string getIOIStatsLinkForPerson()
+        {
+            int IOI = 1988;
+            try
+            {
+                IOI += int.Parse(currentOMI.relacion);
+            } catch (Exception)
+            {
+                return "";
+            }
+
+            return "http://stats.ioinformatics.org/delegations/MEX/" + IOI;
+        }
+
         public void setCurrentResultados(Resultados datos)
         {
             this.currentResultados = datos;

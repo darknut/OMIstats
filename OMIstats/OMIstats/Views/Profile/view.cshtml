@@ -236,8 +236,9 @@
                     <td class="ioi-mini-imagen">
                         @if (tableManager.mostrarLogoIOI())
                         {
-                            <img src="/img/ioi.png" />
-                            <!-- -TODO- Agregar enlace a IOI -->
+                            <a href="@tableManager.getIOIStatsLinkForPerson()" target="_blank">
+                                <img src="/img/ioi.png" />
+                            </a>
                         }
                     </td>
                     <td class="@("table-td right-border center " + claseCSS)">
