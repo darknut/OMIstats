@@ -109,7 +109,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
                             @md.clave
@@ -150,7 +150,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + md.usuario + "&tipo=" + tipoOlimpiada)">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @md.getTipoAsistenteString()
                     </div>
@@ -179,7 +179,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario+ md.usuario + "&tipo=" + tipoOlimpiada)">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @md.getTipoAsistenteString()
                     </div>
