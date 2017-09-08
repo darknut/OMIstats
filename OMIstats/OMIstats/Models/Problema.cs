@@ -10,6 +10,11 @@ namespace OMIstats.Models
 {
     public class Problema
     {
+        private static string ICON_OMEGAUP = "/img/omega.png";
+        private static string ICON_PDF = "/img/pdf.png";
+        private static string ICON_KAREL = "/img/karelotitlan.png";
+        private static string ICON_OTRO = "/img/link.png";
+
         public string olimpiada { get; set; }
 
         public Olimpiada.TipoOlimpiada tipoOlimpiada { get; set; }
@@ -31,6 +36,18 @@ namespace OMIstats.Models
         public int ceros { get; set; }
 
         public int perfectos { get; set; }
+
+        public string getURLIcon()
+        {
+            if (url.Contains("omegaup"))
+                return ICON_OMEGAUP;
+            if (url.Contains("pdf"))
+                return ICON_PDF;
+            if (url.Contains("karelotitlan"))
+                return ICON_KAREL;
+
+            return ICON_OTRO;
+        }
 
         private void llenarDatos(DataRow datos)
         {

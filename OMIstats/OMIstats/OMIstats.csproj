@@ -248,12 +248,15 @@
     <Content Include="img\homepage.png" />
     <Content Include="img\ioi.png" />
     <Content Include="img\karel.bmp" />
+    <Content Include="img\karelotitlan.png" />
     <Content Include="img\karelX.png" />
     <Content Include="img\link.png" />
     <Content Include="img\logo.png" />
     <Content Include="img\mail.png" />
+    <Content Include="img\omega.png" />
     <Content Include="img\omi.png" />
     <Content Include="img\oro.png" />
+    <Content Include="img\pdf.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
     <Content Include="js\admin.js" />
