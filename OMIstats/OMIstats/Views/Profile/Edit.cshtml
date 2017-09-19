@@ -55,6 +55,7 @@
                 <div class="label">Usuario:</div>
                 <div class="input">
                     @Html.TextBoxFor(model => model.usuario)
+                    @Html.ValidationMessageFor(model => model.usuario)
                     <input type="button" onclick="checarUsuario()" value="Revisar disponibilidad" />
                     <img class="textoRojo" id='loadingUser' src="~/img/ajax-loader.gif" />
                     <br />
@@ -63,6 +64,7 @@
                     <div id="number" class="textoRojo">Escribe un nombre de usuario que no empiece con un número</div>
                     <div id="alfanumeric" class="textoRojo">Solo se permiten caracteres alfanumericos</div>
                     <div id="size" class="textoRojo">El nombre de usuario debe de estar entre 1 y 20 caracteres</div>
+                    <div id="vacio" class="textoRojo">Escribe un nombre de usuario</div>
                 </div>
             </div>
             <div id="enlaceCambiarPassword" class="label">
@@ -155,7 +157,9 @@
                 </div>
             </div>
 
-            @if(!Model.admin)
+            <input id="clave" name="clave" type="hidden" value="@Model.clave" />
+
+            @if(!ViewBag.usuario.admin)
             {
                 <div>
                     <div>

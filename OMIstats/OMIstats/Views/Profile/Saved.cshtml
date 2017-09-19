@@ -29,4 +29,12 @@ else if (@ViewBag.value == "error")
 
 <br />
 
-@Html.ActionLink("Regresar a tu perfil", "view", "Profile")
+@if (ViewBag.redirectUser == null)
+{
+    @Html.ActionLink("Regresar a tu perfil", "view", "Profile")
+}
+else
+{
+    @Html.ActionLink("Regresar al perfil", "view", "Profile",
+        new { usuario = ViewBag.redirectUser }, null)
+}

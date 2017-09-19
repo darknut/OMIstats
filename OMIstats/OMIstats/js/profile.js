@@ -12,7 +12,7 @@ function mostrarPassword()
     setVisible("cambiarPassword", true);
 }
 
-var arrayErroresUsuario = ["disponible", "taken", "number", "alfanumeric", "size"];
+var arrayErroresUsuario = ["disponible", "taken", "number", "alfanumeric", "size", "vacio"];
 
 function setErrorUsuario(elem)
 {

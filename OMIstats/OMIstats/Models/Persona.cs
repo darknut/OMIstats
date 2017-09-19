@@ -63,7 +63,8 @@ namespace OMIstats.Models
             TAKEN,
             SIZE,
             ERROR,
-            USER_NOT_FOUND
+            USER_NOT_FOUND,
+            VACIO
         }
 
         public enum ErrorPassword
@@ -304,7 +305,7 @@ namespace OMIstats.Models
         public static DisponibilidadUsuario revisarNombreUsuarioDisponible(Persona p, string usuario)
         {
             if (p == null || usuario == null)
-                return DisponibilidadUsuario.ERROR;
+                return DisponibilidadUsuario.VACIO;
 
             usuario = usuario.Trim().ToLower();
 

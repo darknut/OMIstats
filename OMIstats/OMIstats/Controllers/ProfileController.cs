@@ -88,7 +88,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/Saved/
 
-        public ActionResult Saved()
+        public ActionResult Saved(string usuario = null)
         {
             string value = (string) obtenerParams(Pagina.SAVED_PROFILE);
             limpiarParams(Pagina.SAVED_PROFILE);
@@ -97,6 +97,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             ViewBag.value = value;
+            ViewBag.redirectUser = usuario;
             return View();
         }
 
@@ -117,7 +118,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/Edit/
 
-        public ActionResult Edit()
+        public ActionResult Edit(string usuario = null)
         {
             if (!estaLoggeado())
             {
@@ -125,10 +126,17 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.LOGIN);
             }
 
+            Persona p;
+
+            if (usuario != null && esAdmin())
+                p = Persona.obtenerPersonaDeUsuario(usuario);
+            else
+                p = getUsuario();
+
             limpiarErroresViewBag();
             ponFechasEnViewBag();
 
-            return View(getUsuario());
+            return View(p);
         }
 
         //
@@ -142,18 +150,25 @@ namespace OMIstats.Controllers
             if (!String.IsNullOrEmpty(p.password))
                 ViewBag.passwordModificado = true;
 
+            Persona current = getUsuario();
+
+            if (p.clave != current.clave)
+            {
+                if (!esAdmin())
+                    return RedirectTo(Pagina.ERROR, 403);
+                current = Persona.obtenerPersonaConClave(p.clave);
+            }
+
             if (!ModelState.IsValid)
-                return Edit();
+                return Edit(current.usuario);
 
             limpiarErroresViewBag();
 
             if (!esAdmin() && !revisaCaptcha())
             {
                 ViewBag.errorCaptcha = true;
-                return Edit();
+                return Edit(current.usuario);
             }
-
-            Persona current = getUsuario();
 
             // Validaciones foto
             if (file != null)
@@ -162,7 +177,7 @@ namespace OMIstats.Controllers
                 if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
-                    return Edit();
+                    return Edit(current.usuario);
                 }
             }
 
@@ -170,8 +185,15 @@ namespace OMIstats.Controllers
             Persona.DisponibilidadUsuario respUsuario = Persona.revisarNombreUsuarioDisponible(current, p.usuario);
             if (respUsuario != Persona.DisponibilidadUsuario.DISPONIBLE)
             {
-                ViewBag.errorUsuario = respUsuario.ToString().ToLower();
-                return Edit();
+                if (respUsuario == Persona.DisponibilidadUsuario.VACIO && esAdmin())
+                {
+                    p.usuario = p.clave.ToString();
+                }
+                else
+                {
+                    ViewBag.errorUsuario = respUsuario.ToString().ToLower();
+                    return Edit(current.usuario);
+                }
             }
 
             // Validaciones password
@@ -187,7 +209,7 @@ namespace OMIstats.Controllers
                 if (errorPassword != Persona.ErrorPassword.OK)
                 {
                     ViewBag.errorPassword = errorPassword.ToString().ToLower();
-                    return Edit();
+                    return Edit(current.usuario);
                 }
 
                 p.password = password2;
@@ -235,7 +257,7 @@ namespace OMIstats.Controllers
                     }
 
                     guardarParams(Pagina.SAVED_PROFILE, OK);
-                    return RedirectTo(Pagina.SAVED_PROFILE);
+                    return RedirectTo(Pagina.SAVED_PROFILE, current.usuario);
                 }
 
                 if (file != null || p.nombre.Length > 0)

@@ -96,11 +96,12 @@
 
         @if (@ViewBag.usuario != null)
         {
-            if (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave))
+            if (ViewBag.usuario.admin || (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave)))
             {
                 <div>
                     @Html.ActionLink("Actualizar datos", "Edit", "Profile",
-                                     null, new { @class = "botonPerfil" })
+                                ViewBag.usuario.admin ? new { usuario = Model.usuario } : null,
+                                new { @class = "botonPerfil" })
                 </div>
                 <br />
             }
