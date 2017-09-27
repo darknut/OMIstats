@@ -1,6 +1,6 @@
 ﻿.foto {
     float:left;
-    max-width:100px;
+    max-width:150px;
 }
 
 .foto img {
@@ -8,7 +8,7 @@
 	border-bottom-right-radius: 15px;
 	margin-right: 2px;
 	margin-bottom: 8px;
-    max-width:100px;
+    max-width:150px;
     max-height:300px;
 }
 
