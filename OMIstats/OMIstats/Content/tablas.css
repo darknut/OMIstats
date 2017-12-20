@@ -55,6 +55,10 @@
     height: 74px;
 }
 
+.clave-width {
+    min-width: 45px;
+}
+
 .fondoOro {
 	background-image:url(../img/celdafondooro.png);
 }
