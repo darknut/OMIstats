@@ -588,24 +588,24 @@ namespace OMIstats.Models
 
             // Calculamos el lugar de cada competidor y lo guardamos en la base
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
-            int temp = 0;
-            float? puntosMaximos = 0;
+            int competidores = 0;
+            int lugar = 0;
+            float? puntosMaximos = resultados.Count > 0 ? resultados[0].total : 0;
             bool unkEnTabla = false;
 
             for (int i = 0; i < resultados.Count; i++)
             {
-                if (i == 0)
-                    puntosMaximos = resultados[i].total;
-                if (i == 0 || resultados[i - 1].total != resultados[i].total)
-                    temp = i;
-
+                resultados[i].lugar = 0;
                 if (resultados[i].clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
                     unkEnTabla = true;
-
-                if (unkEnTabla)
-                    resultados[i].lugar = 0;
                 else
-                    resultados[i].lugar = temp + 1;
+                    if (!(unkEnTabla && resultados[i].medalla == Resultados.TipoMedalla.NADA))
+                    {
+                        competidores++;
+                        if (i == 0 || resultados[i - 1].total != resultados[i].total)
+                            lugar = competidores;
+                        resultados[i].lugar = lugar;
+                    }
                 resultados[i].guardarLugar();
             }
 
