@@ -50,11 +50,6 @@ namespace OMIstats.Models
 
         public int ioiID { get; set; }
 
-        /// <summary>
-        /// Solo de entrada, no se obtiene de la base de datos
-        /// </summary>
-        public string password { get; set; }
-
         public enum DisponibilidadUsuario
         {
             DISPONIBLE = 0,
@@ -65,14 +60,6 @@ namespace OMIstats.Models
             ERROR,
             USER_NOT_FOUND,
             VACIO
-        }
-
-        public enum ErrorPassword
-        {
-            OK = 0,
-            PASSWORD_INVALIDO,
-            PASSWORD_VACIO,
-            PASSWORD_DIFERENTE
         }
 
         public Persona(int clave): this()
@@ -94,39 +81,6 @@ namespace OMIstats.Models
             genero = "M";
             foto = "";
             ioiID = 0;
-            password = "";
-        }
-
-        /// <summary>
-        /// Usando los datos en las variables de instancia
-        /// se intenta hacer log in, si los datos de acceso son correctos
-        /// el resto de los datos en la instancia se llena
-        /// </summary>
-        /// <returns>Si el login fue exitoso</returns>
-        public bool logIn(bool datosCompletos = true)
-        {
-            if (String.IsNullOrEmpty(usuario) || String.IsNullOrEmpty(password))
-                return false;
-
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append("select * from persona where usuario = ");
-            query.Append(Utilities.Cadenas.comillas(usuario.ToLower()));
-            query.Append(" and password = HASHBYTES(\'SHA1\', ");
-            query.Append(Utilities.Cadenas.comillas(password));
-            query.Append(")");
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return false;
-
-            DataTable table = db.getTable();
-            if (table.Rows.Count != 1)
-                return false;
-
-            llenarDatos(table.Rows[0], completo:datosCompletos);
-
-            return true;
         }
 
         /// <summary>
@@ -140,7 +94,6 @@ namespace OMIstats.Models
             clave = (int) datos["clave"];
             nombre = datos["nombre"].ToString().Trim();
             usuario = datos["usuario"].ToString().Trim();
-            password = "";
 
             if (completo)
             {
@@ -340,23 +293,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Verifica que el nuevo password sea válido
-        /// </summary>
-        public ErrorPassword verificaPasswords(string password1, string password2)
-        {
-            if (!logIn(datosCompletos: false))
-                return ErrorPassword.PASSWORD_INVALIDO;
-
-            if (String.IsNullOrEmpty(password1))
-                return ErrorPassword.PASSWORD_VACIO;
-
-            if (!password1.Equals(password2))
-                return ErrorPassword.PASSWORD_DIFERENTE;
-
-            return ErrorPassword.OK;
-        }
-
-        /// <summary>
         /// Guarda los datos en la base de datos
         /// </summary>
         /// <param name="generarPeticiones">Si nombre y foto deben de guardarse
@@ -407,13 +343,6 @@ namespace OMIstats.Models
             query.Append(" usuario = ");
             query.Append(Utilities.Cadenas.comillas(usuario));
             query.Append(",");
-
-            if (!String.IsNullOrEmpty(password))
-            {
-                query.Append(" [password] = HASHBYTES(\'SHA1\', ");
-                query.Append(Utilities.Cadenas.comillas(password));
-                query.Append("),");
-            }
 
             query.Append(" [admin] = ");
             query.Append(admin ? "1" : "0");
