@@ -141,7 +141,7 @@ namespace OMIstats.Controllers
                         return RedirectToAction("view", "Profile", new { usuario = opciones.ToString() });
                     return RedirectToAction("view", "Profile");
                 case Pagina.LOGIN:
-                    return RedirectToAction("In", "Log");
+                    return RedirectToAction("Index", "Home"); // -TODO- aqui se llama a la pagina de la OMI
                 case Pagina.ERROR:
                     if (opciones != null)
                         return RedirectToAction("Index", "Error", new { code = opciones.ToString() });

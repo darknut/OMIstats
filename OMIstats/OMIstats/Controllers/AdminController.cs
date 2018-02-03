@@ -58,13 +58,6 @@ namespace OMIstats.Controllers
             Persona cambiar = Persona.obtenerPersonaDeUsuario(p.usuario);
             Persona admin = Persona.obtenerPersonaConClave(getUsuario().clave);
 
-            admin.password = p.password;
-            if (!admin.logIn())
-            {
-                ViewBag.logInError = true;
-                return View(cambiar);
-            }
-
             cambiar.admin = !cambiar.admin;
             cambiar.guardarDatos();
 

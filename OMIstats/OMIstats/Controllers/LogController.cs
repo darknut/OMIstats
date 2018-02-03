@@ -20,30 +20,16 @@ namespace OMIstats.Controllers
         //
         // GET: /Log/In/
 
-        public ActionResult In()
+        public ActionResult In(string GUID)
         {
-            if (estaLoggeado())
+            // -TODO- Entrypoint para la OMI
+            if (GUID == null)
                 return RedirectTo(Pagina.HOME);
 
-            Persona p = new Persona();
-            limpiarErroresViewBag();
-            return View(p);
-        }
-
-        //
-        // POST: /Log/In/
-
-        [HttpPost]
-        public ActionResult In(Persona p)
-        {
-            if (p == null)
-                return RedirectTo(Pagina.HOME);
-
-            if (p.logIn())
+            if (GUID != null /* LOG IN EXITOSO */)
             {
                 //Log in exitoso
-                setUsuario(p);
-                ViewBag.logInError = false;
+                //setUsuario(p);
 
                 Object t = obtenerParams(Pagina.LOGIN);
                 limpiarParams(Pagina.LOGIN);
@@ -52,16 +38,9 @@ namespace OMIstats.Controllers
                     KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;
                     return RedirectTo(redireccion.Key, redireccion.Value);
                 }
+            }
 
-                return RedirectTo(Pagina.HOME);
-            }
-            else
-            {
-                //Log in fallido
-                setUsuario(new Persona(Persona.UsuarioNulo));
-                ViewBag.logInError = true;
-                return View(p);
-            }
+            return RedirectTo(Pagina.HOME);
         }
 
         //

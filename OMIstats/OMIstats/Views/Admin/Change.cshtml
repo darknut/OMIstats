@@ -65,14 +65,6 @@ else
         @using (@Html.BeginForm(null, null, FormMethod.Post, new { name = "changeForm", id = "changeForm" }))
         {
             <input type="hidden" name="usuario" value="@Model.usuario" />
-            <div> Contraseña: </div>
-            <div> @Html.PasswordFor(model => model.password)</div>
-
-            <br />
-
-            <div>@Html.Label("Contraseña incorrecta",
-            new { style = "display:" + (ViewBag.logInError ? "inline;" : "none;"),
-                  @class = "errorTextoRojo" }) </div>
 
             <p>
                 <input type="button" onclick="muestraLoadGifYSubmit('changeForm')" value="Cambiar"/>
