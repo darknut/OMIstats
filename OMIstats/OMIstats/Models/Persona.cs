@@ -246,53 +246,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Revisa en la base de datos si el nombre de usuario está disponible y si es un nombre válido
-        /// </summary>
-        /// <remarks>Este campo se valida a mano porque se valida en una llamada AJAX</remarks>
-        /// <returns>
-        /// ok: el nombre esta disponible
-        /// number: el nombre empieza con numero y es invalido
-        /// alfanumeric: el nombre no es alfanumerico
-        /// taken: el nombre no esta disponible
-        /// </returns>
-        public static DisponibilidadUsuario revisarNombreUsuarioDisponible(Persona p, string usuario)
-        {
-            if (p == null || usuario == null)
-                return DisponibilidadUsuario.VACIO;
-
-            usuario = usuario.Trim().ToLower();
-
-            if (usuario.Length == 0 || usuario.Length > TamañoUsuarioMaximo)
-                return DisponibilidadUsuario.SIZE;
-
-            if (Regex.IsMatch(usuario, "^\\d"))
-                return DisponibilidadUsuario.NUMBER;
-
-            if (p.usuario.Equals(usuario))
-                return DisponibilidadUsuario.DISPONIBLE;
-
-            if (!Regex.IsMatch(usuario, "^[a-zA-Z0-9]*$"))
-                return DisponibilidadUsuario.ALFANUMERIC;
-
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append(" select * from Persona ");
-            query.Append(" where usuario = ");
-            query.Append(Utilities.Cadenas.comillas(usuario));
-            query.Append(" and clave <> ");
-            query.Append(p.clave);
-
-            db.EjecutarQuery(query.ToString());
-
-            DataTable table = db.getTable();
-            if (table.Rows.Count == 0)
-                return DisponibilidadUsuario.DISPONIBLE;
-
-            return DisponibilidadUsuario.TAKEN;
-        }
-
-        /// <summary>
         /// Guarda los datos en la base de datos
         /// </summary>
         /// <param name="generarPeticiones">Si nombre y foto deben de guardarse

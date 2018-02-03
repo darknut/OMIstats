@@ -51,60 +51,6 @@
                     }
                 </div>
             </div>
-            <div class="userDiv">
-                <div class="label">Usuario:</div>
-                <div class="input">
-                    @Html.TextBoxFor(model => model.usuario)
-                    @Html.ValidationMessageFor(model => model.usuario)
-                    <input type="button" onclick="checarUsuario()" value="Revisar disponibilidad" />
-                    <img class="textoRojo" id='loadingUser' src="~/img/ajax-loader.gif" />
-                    <br />
-                    <div id="disponible" class="textoVerde">El nombre de usuario está disponible</div>
-                    <div id="taken" class="textoRojo">El nombre de usuario no está disponible</div>
-                    <div id="number" class="textoRojo">Escribe un nombre de usuario que no empiece con un número</div>
-                    <div id="alfanumeric" class="textoRojo">Solo se permiten caracteres alfanumericos</div>
-                    <div id="size" class="textoRojo">El nombre de usuario debe de estar entre 1 y 20 caracteres</div>
-                    <div id="vacio" class="textoRojo">Escribe un nombre de usuario</div>
-                </div>
-            </div>
-            <div id="enlaceCambiarPassword" class="label">
-                <a href="javascript:mostrarPassword()"> Cambiar contraseña </a>
-            </div>
-            <div id="cambiarPassword" class="oculto">
-                <div>
-                    <div class="label">Contraseña actual:</div>
-                    <div class="input">
-                        @Html.PasswordFor(model => model.password, new {
-                            @class = ViewBag.errorPassword == "password_invalido" ? "input-validation-error" : "" })
-                        @if (ViewBag.errorPassword == "password_invalido")
-                        {
-                            <div class="errorTextoRojo">La contraseña es incorrecta</div>
-                        }
-                    </div>
-                </div>
-                <div>
-                    <div class="label">Contraseña nueva:</div>
-                    <div class="input">
-                        <input type="password" id="password2" name="password2"
-                             class="@(ViewBag.errorPassword == "password_vacio" ? "input-validation-error" : "")" />
-                        @if (ViewBag.errorPassword == "password_vacio")
-                        {
-                            <div class="errorTextoRojo">Escribe una contraseña nueva</div>
-                        }
-                    </div>
-                </div>
-                <div>
-                    <div class="label">Repetir contraseña:</div>
-                    <div class="input">
-                        <input type="password" id="password3" name="password3"
-                            class="@(ViewBag.errorPassword == "password_diferente" ? "input-validation-error" : "")" />
-                        @if (ViewBag.errorPassword == "password_diferente")
-                        {
-                            <div class="errorTextoRojo">Las contraseñas no coinciden</div>
-                        }
-                    </div>
-                </div>
-            </div>
             <div>
                 <div class="label">Nombre:</div>
                 <div class="input">

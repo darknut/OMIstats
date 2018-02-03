@@ -102,20 +102,6 @@ namespace OMIstats.Controllers
         }
 
         //
-        // POST: /Profile/Check/
-
-        [HttpPost]
-        public JsonResult Check(string usuario)
-        {
-            if (!estaLoggeado())
-                return Json(ERROR);
-
-            string respuesta = Persona.revisarNombreUsuarioDisponible(getUsuario(), usuario).ToString().ToLower();
-
-            return Json(respuesta);
-        }
-
-        //
         // GET: /Profile/Edit/
 
         public ActionResult Edit(string usuario = null)
@@ -146,9 +132,6 @@ namespace OMIstats.Controllers
         {
             if (!estaLoggeado() || p == null)
                 return RedirectTo(Pagina.HOME);
-
-            if (!String.IsNullOrEmpty(p.password))
-                ViewBag.passwordModificado = true;
 
             Persona current = getUsuario();
 
@@ -181,44 +164,6 @@ namespace OMIstats.Controllers
                 }
             }
 
-            // Validaciones nombre usuario
-            Persona.DisponibilidadUsuario respUsuario = Persona.revisarNombreUsuarioDisponible(current, p.usuario);
-            if (respUsuario != Persona.DisponibilidadUsuario.DISPONIBLE)
-            {
-                if (respUsuario == Persona.DisponibilidadUsuario.VACIO && esAdmin())
-                {
-                    p.usuario = p.clave.ToString();
-                }
-                else
-                {
-                    ViewBag.errorUsuario = respUsuario.ToString().ToLower();
-                    return Edit(current.usuario);
-                }
-            }
-
-            // Validaciones password
-            if (!String.IsNullOrEmpty(p.password) ||
-                !String.IsNullOrEmpty(password2) ||
-                !String.IsNullOrEmpty(password3))
-            {
-                Persona temp = new Persona();
-                temp.usuario = current.usuario;
-                temp.password = p.password;
-
-                Persona.ErrorPassword errorPassword = temp.verificaPasswords(password2, password3);
-                if (errorPassword != Persona.ErrorPassword.OK)
-                {
-                    ViewBag.errorPassword = errorPassword.ToString().ToLower();
-                    return Edit(current.usuario);
-                }
-
-                p.password = password2;
-            }
-            else
-            {
-                p.password = "";
-            }
-
             // Validacion genero
             if (String.IsNullOrEmpty(p.genero) || p.genero.Equals("M"))
                 p.genero = "M";
@@ -229,6 +174,7 @@ namespace OMIstats.Controllers
             p.admin = current.admin;
             p.clave = current.clave;
             p.ioiID = current.ioiID;
+            p.usuario = current.usuario;
 
             // Se guarda la imagen en disco
             if (file != null)
