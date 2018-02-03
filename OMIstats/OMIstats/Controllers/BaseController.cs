@@ -150,8 +150,6 @@ namespace OMIstats.Controllers
                     if (opciones != null)
                         return RedirectToAction("Change", "Admin", new { usuario = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.OLIMPIADAS:
-                    return RedirectToAction("Index", "Olimpiadas");
                 case Pagina.PROBLEMA:
                     if (opciones != null)
                     {
@@ -165,8 +163,9 @@ namespace OMIstats.Controllers
                         return RedirectToAction("Index", "Olimpiada", new { clave = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.HOME:
+                case Pagina.OLIMPIADAS:
                 default:
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Olimpiadas");
             }
         }
 
