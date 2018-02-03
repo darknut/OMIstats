@@ -82,15 +82,6 @@
 
     <div class="botones">
 
-        @if ((@ViewBag.usuario == null || @ViewBag.usuario.clave == 0) && Regex.IsMatch(Model.usuario, @"^\d+$"))
-        {
-            <div>
-                @Html.ActionLink("Reclamar usuario", "Claim", "Request",
-                                 new { usuario = Model.usuario }, new { @class = "botonPerfil" })
-            </div>
-            <br />
-        }
-
         @if (@ViewBag.usuario != null)
         {
             if (ViewBag.usuario.admin || (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave)))
@@ -107,12 +98,6 @@
             {
                 if (@ViewBag.usuario.clave != Model.clave)
                 {
-                    <div>
-                        @Html.ActionLink("Asignar cuenta", "Claim", "Request",
-                                         new { usuario = Model.usuario }, new { @class = "botonPerfil" })
-                    </div>
-                    <br />
-
                     <div>
                         <a href='@Url.Content("/Admin/Change?usuario=" + Model.usuario)' class="botonPerfil">
                             @if (Model.admin)
