@@ -44,7 +44,6 @@ namespace OMIstats.Controllers
                 //Log in exitoso
                 setUsuario(p);
                 ViewBag.logInError = false;
-                Peticion.borraPeticionesPassword(p);
 
                 Object t = obtenerParams(Pagina.LOGIN);
                 limpiarParams(Pagina.LOGIN);

@@ -114,9 +114,7 @@ namespace OMIstats.Controllers
                 if(getUsuario().clave != pe.usuario.clave)
                     return Json(ERROR);
 
-                if (pe.subtipo == Peticion.TipoPeticion.PASSWORD ||
-                    pe.subtipo == Peticion.TipoPeticion.ACCESO ||
-                    pe.subtipo == Peticion.TipoPeticion.BIENVENIDO)
+                if (pe.subtipo == Peticion.TipoPeticion.ACCESO)
                     return Json(ERROR);
             }
 

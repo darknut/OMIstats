@@ -39,13 +39,6 @@ namespace OMIstats.Utilities
             ESCUELAS
         }
 
-        public enum ArchivosHTML
-        {
-            PASSWORD,
-            BIENVENIDO,
-            FIRMA
-        }
-
         public enum FotoInicial
         {
             KAREL,
