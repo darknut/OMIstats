@@ -21,6 +21,12 @@ namespace OMIstats.Utilities
             public string descripcion = "";
         }
 
+        public enum BaseDeDatos
+        {
+            OMIStats,
+            OMI
+        }
+
         /// <summary>
         /// Regresa la tabla obtenida despues de ejecutar un query
         /// </summary>
@@ -32,12 +38,12 @@ namespace OMIstats.Utilities
             return dataset.Tables[0];
         }
 
-        private Estatus Conectar()
+        private Estatus Conectar(BaseDeDatos db)
         {
             Estatus resultado = new Estatus();
             try
             {
-                conexion.ConnectionString = CADENA_CONEXION;
+                conexion.ConnectionString = db == BaseDeDatos.OMIStats ? CADENA_CONEXION : CADENA_CONEXION_OMI;
                 conexion.Open();
             }
             catch(Exception e)
@@ -71,9 +77,9 @@ namespace OMIstats.Utilities
         /// Si el query es un select, llamar a getTable devolvera la tabla consultada
         /// </summary>
         /// <param name="query"></param>
-        public Estatus EjecutarQuery(string query)
+        public Estatus EjecutarQuery(string query, BaseDeDatos db = BaseDeDatos.OMIStats)
         {
-            Estatus resultado = Conectar();
+            Estatus resultado = Conectar(db);
             if (resultado.error)
                 return resultado;
 
