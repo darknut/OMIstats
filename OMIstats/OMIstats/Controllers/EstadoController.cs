@@ -125,7 +125,6 @@ namespace OMIstats.Controllers
 
                     Peticion pe = new Peticion();
                     pe.tipo = Peticion.TipoPeticion.USUARIO;
-                    pe.subtipo = Peticion.TipoPeticion.BIENVENIDO;
                     pe.usuario = estado.delegado;
                 }
             }

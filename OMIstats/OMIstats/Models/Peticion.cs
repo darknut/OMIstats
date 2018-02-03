@@ -271,12 +271,6 @@ namespace OMIstats.Models
                 if (!usuario.guardarDatos())
                     return false;
             }
-            else if (tipo == TipoPeticion.GENERAL)
-            {
-                if (!Utilities.Correo.enviarRespuestaPeiticionGeneral(
-                    datos2, datos3, usuario.correo, subtipo))
-                    return false;
-            }
 
             if (!eliminarPeticion())
                 return false;

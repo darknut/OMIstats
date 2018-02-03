@@ -282,7 +282,6 @@ namespace OMIstats.Controllers
             pe.tipo = Peticion.TipoPeticion.USUARIO;
             if (esAdmin())
             {
-                pe.subtipo = Peticion.TipoPeticion.BIENVENIDO;
                 pe.usuario = temp;
             }
             else

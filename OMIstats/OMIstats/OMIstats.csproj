@@ -124,7 +124,6 @@
     <Compile Include="Controllers\EscuelaController.cs" />
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OlimpiadaController.cs" />
     <Compile Include="Controllers\OlimpiadasController.cs" />
     <Compile Include="Controllers\ProblemaController.cs" />
@@ -158,8 +157,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="utilities\Correo.cs" />
     <Compile Include="utilities\Fechas.cs" />
+    <Compile Include="utilities\Server.cs" />
     <Compile Include="utilities\TableManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -267,9 +266,6 @@
     <Content Include="js\profile.js" />
     <Content Include="js\request.js" />
     <Content Include="js\sorters.js" />
-    <Content Include="private\cambioPassword.html" />
-    <Content Include="private\bienvenido.html" />
-    <Content Include="private\firma.html" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -299,17 +295,13 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Log\In.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Profile\view.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Profile\Saved.cshtml" />
     <Content Include="Views\Request\view.cshtml" />
     <Content Include="Views\Request\Manage.cshtml" />
     <Content Include="Views\Admin\Change.cshtml" />
-    <Content Include="Views\Log\Recover.cshtml" />
     <Content Include="Views\Request\Access.cshtml" />
-    <Content Include="Views\Admin\ResetPassword.cshtml" />
     <Content Include="Views\Request\Claim.cshtml" />
     <Content Include="Views\Request\General.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
@@ -336,6 +328,8 @@
     <Folder Include="img\posters\" />
     <Folder Include="img\temp\" />
     <Folder Include="img\user\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Log\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -55,7 +55,7 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.HOME);
 
-            if (p.tipoOlimpiada == null)
+            if (p.tipoOlimpiada == Olimpiada.TipoOlimpiada.NULL)
                 p.tipoOlimpiada = Olimpiada.TipoOlimpiada.OMI;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
