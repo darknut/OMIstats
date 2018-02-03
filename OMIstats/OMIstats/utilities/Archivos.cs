@@ -18,10 +18,6 @@ namespace OMIstats.Utilities
         public const string FOLDER_POSTERS = "~/img/posters";
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
 
-        public const string HTML_PASSWORD = "~/private/cambioPassword.html";
-        public const string HTML_BIENVENIDO = "~/private/bienvenido.html";
-        public const string HTML_FIRMA = "~/private/firma.html";
-
         public const string FOTO_KAREL = "\\img\\karel.bmp";
         public const string FOTO_DOMI = "\\img\\domi.gif";
         public const string FOTO_OMI = "\\img\\omi.png";
@@ -175,26 +171,6 @@ namespace OMIstats.Utilities
                 Path.Combine(lugarDestino, nombreDestino), overwrite:true);
 
             return Path.Combine(pathRelativo(folderDestino), nombreDestino);
-        }
-
-        public static string leerArchivoHTML(ArchivosHTML archivo)
-        {
-            string a = "";
-            switch (archivo)
-            {
-                case ArchivosHTML.PASSWORD:
-                    a = HTML_PASSWORD;
-                    break;
-                case ArchivosHTML.BIENVENIDO:
-                    a = HTML_BIENVENIDO;
-                    break;
-                case ArchivosHTML.FIRMA:
-                    a = HTML_FIRMA;
-                    break;
-            }
-            a = HttpContext.Current.Server.MapPath(a);
-
-            return File.ReadAllText(a);
         }
 
         public static string obtenerFotoInicial(FotoInicial foto)

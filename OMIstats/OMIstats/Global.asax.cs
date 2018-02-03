@@ -25,8 +25,6 @@ namespace OMIstats
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Utilities.Acceso.CADENA_CONEXION = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
-            Utilities.Correo.CORREO = ConfigurationManager.AppSettings.Get("correo");
-            Utilities.Correo.PASSWORD = ConfigurationManager.AppSettings.Get("password");
             Controllers.BaseController.CAPTCHA_SECRET = ConfigurationManager.AppSettings.Get("captchaSecret");
             Controllers.BaseController.CAPTCHA_KEY = ConfigurationManager.AppSettings.Get("captchaKey");
         }
