@@ -21,7 +21,6 @@
     <div class="headerPagina">
     <div class="menu">
 
-        <a class="boton" href="http://www.olimpiadadeinformatica.org.mx/">Página principal</a>
         <a class="boton" href="/Estados">Estados</a>
         <a class="boton" href="/Olimpiadas">Olimpiadas</a>
         @if (ViewBag.usuario != null && ViewBag.usuario.admin)
@@ -49,9 +48,8 @@
             }
             else
             {
-                <div>
-                    <a href="-TODO- enlazar a la pagina de la OMI">Iniciar sesión</a>
-                </div>
+                <div>@Html.ActionLink("Iniciar sesión", "In", "Log")</div>
+                <!-- -TODO- enlazar a la pagina de la OMI -->
             }
         </div>
     </div>
