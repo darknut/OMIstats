@@ -14,7 +14,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectTo(Pagina.LOGIN);
+            return Redirect(Utilities.Server.direccionOMI());
         }
 
         //
@@ -24,7 +24,10 @@ namespace OMIstats.Controllers
         {
             // -TODO- Entrypoint para la OMI
             if (GUID == null)
+            {
+                //setUsuario(Persona.obtenerPersonaConClave(1000));
                 return RedirectTo(Pagina.HOME);
+            }
 
             if (GUID != null /* LOG IN EXITOSO */)
             {

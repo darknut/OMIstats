@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace OMIstats.utilities
+namespace OMIstats.Utilities
 {
     public class Server
     {
+        private static string DIRECCION_OMI = "http://www.olimpiadadeinformatica.org.mx/OMI/Ingreso/Login.aspx?redirect=";
+
+        public static string direccionOMI()
+        {
+            return DIRECCION_OMI + direccionServer();
+        }
+
         public static string direccionServer()
         {
             HttpRequest request = HttpContext.Current.Request;

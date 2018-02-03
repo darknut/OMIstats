@@ -10,6 +10,7 @@ namespace OMIstats.Utilities
     public class Acceso
     {
         public static string CADENA_CONEXION;
+        public static string CADENA_CONEXION_OMI;
         private SqlConnection conexion = new SqlConnection();
         private SqlDataAdapter adapter = new SqlDataAdapter();
         private DataSet dataset = new DataSet();
