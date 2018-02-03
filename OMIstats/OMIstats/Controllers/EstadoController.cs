@@ -127,7 +127,6 @@ namespace OMIstats.Controllers
                     pe.tipo = Peticion.TipoPeticion.USUARIO;
                     pe.subtipo = Peticion.TipoPeticion.BIENVENIDO;
                     pe.usuario = estado.delegado;
-                    // pe.guardarPeticion(); -TODO- Descomentar esta linea para enviar correo de bienvenida
                 }
             }
             else

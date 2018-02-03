@@ -31,8 +31,6 @@ namespace OMIstats.Models
             USUARIO,
             NOMBRE,
             FOTO,
-            PASSWORD,
-            BIENVENIDO,
             ACCESO,
             GENERAL,
             DUDA,
@@ -61,8 +59,7 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
-            if (tipo == TipoPeticion.USUARIO &&
-                (subtipo == TipoPeticion.PASSWORD || subtipo == TipoPeticion.BIENVENIDO))
+            if (tipo == TipoPeticion.USUARIO)
                 datos1 = Guid.NewGuid().ToString();
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -93,14 +90,6 @@ namespace OMIstats.Models
             if (table.Rows.Count != 1)
                 return false;
             clave = (int)table.Rows[0][0];
-
-            if (usuario != null && tipo == TipoPeticion.USUARIO)
-            {
-                if (subtipo == TipoPeticion.PASSWORD)
-                    return Utilities.Correo.enviarPeticionPassword(clave, datos1, usuario.correo);
-                if (subtipo == TipoPeticion.BIENVENIDO)
-                    return Utilities.Correo.enviarPeticionBienvenido(clave, datos1, usuario.correo);
-            }
 
             return true;
         }
@@ -252,28 +241,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Elimina las peticiones 'ocultas' del usuario
-        /// Estas son las de peticion de acceso o de cambio de password
-        /// Deben de borrarse cuando al usuario se le da un nuevo password
-        /// </summary>
-        private bool eliminarPeticionesPassword()
-        {
-            List<Peticion> peticiones = obtenerPeticionesDeUsuario(usuario);
-
-            foreach (Peticion p in peticiones)
-            {
-                if (p.tipo == TipoPeticion.USUARIO &&
-                    (p.subtipo == TipoPeticion.PASSWORD ||
-                     p.subtipo == TipoPeticion.BIENVENIDO ||
-                     p.subtipo == TipoPeticion.ACCESO))
-                    if (!p.eliminarPeticion())
-                        return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Acepta la peticion y actualiza las tablas correspondientes
         /// </summary>
         public bool aceptarPeticion()
@@ -291,19 +258,11 @@ namespace OMIstats.Models
                         Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
                                             usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
 
-                if (subtipo == TipoPeticion.PASSWORD || subtipo == TipoPeticion.BIENVENIDO)
-                {
-                    usuario.password = System.Web.Security.Membership.GeneratePassword(8, 3);
-                    if (!eliminarPeticionesPassword())
-                        return false;
-                }
-
                 if (subtipo == TipoPeticion.ACCESO)
                 {
                     usuario.correo = datos2;
                     Peticion pe = new Peticion();
                     pe.tipo = TipoPeticion.USUARIO;
-                    pe.subtipo = TipoPeticion.BIENVENIDO;
                     pe.usuario = usuario;
                     if (!pe.guardarPeticion())
                         return false;
@@ -323,22 +282,6 @@ namespace OMIstats.Models
                 return false;
 
             return true;
-        }
-
-        /// <summary>
-        /// Cuando un usuario hace log in, borramos todas las peticiones de
-        /// cambio de password que hay de su usuario
-        /// </summary>
-        public static void borraPeticionesPassword(Persona usuario)
-        {
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append("delete peticion where tipo = 'usuario'");
-            query.Append(" and (subtipo = 'password' or subtipo = 'bienvenido') and usuario =  ");
-            query.Append(usuario.clave);
-
-            db.EjecutarQuery(query.ToString());
         }
     }
 }

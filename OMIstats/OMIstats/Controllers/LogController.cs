@@ -74,59 +74,5 @@ namespace OMIstats.Controllers
             setUsuario(new Persona(Persona.UsuarioNulo));
             return RedirectTo(Pagina.HOME);
         }
-
-        //
-        // GET: /Log/Recover/
-
-        public ActionResult Recover()
-        {
-            if(estaLoggeado())
-                return RedirectTo(Pagina.HOME);
-
-            limpiarErroresViewBag();
-            return View(new Persona());
-        }
-
-        //
-        // POST: /Log/Recover/
-
-        [HttpPost]
-        public ActionResult Recover(Persona p)
-        {
-            if (estaLoggeado() || p == null)
-                return RedirectTo(Pagina.HOME);
-
-            limpiarErroresViewBag();
-            if (!revisaCaptcha())
-            {
-                ViewBag.errorCaptcha = true;
-                return View(p);
-            }
-
-            p = Persona.obtenerPersonaDeUsuario(p.usuario);
-
-            if (p == null)
-            {
-                ViewBag.logInError = true;
-                return View(new Persona());
-            }
-
-            if (String.IsNullOrEmpty(p.correo))
-            {
-                ViewBag.faltante = true;
-                return View(new Persona());
-            }
-
-            Peticion pe = new Peticion();
-            pe.tipo = Peticion.TipoPeticion.USUARIO;
-            pe.subtipo = Peticion.TipoPeticion.PASSWORD;
-            pe.usuario = p;
-            if (pe.guardarPeticion())
-                ViewBag.guardado = true;
-            else
-                ViewBag.errorMail = ERROR;
-
-            return View(new Persona());
-        }
     }
 }
