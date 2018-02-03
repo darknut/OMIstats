@@ -31,7 +31,6 @@ namespace OMIstats.Models
             USUARIO,
             NOMBRE,
             FOTO,
-            ACCESO,
             GENERAL,
             DUDA,
             QUEJA,
@@ -58,9 +57,6 @@ namespace OMIstats.Models
         {
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
-
-            if (tipo == TipoPeticion.USUARIO)
-                datos1 = Guid.NewGuid().ToString();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -129,7 +125,6 @@ namespace OMIstats.Models
 
         /// <summary>
         /// Obtiene las primeras 30 peticiones de la base de datos
-        /// Ignora las peticiones de cambio de password
         /// </summary>
         public static List<Peticion> obtenerPeticiones()
         {
@@ -137,7 +132,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select top 30 * from peticion where subtipo <> 'password' and subtipo <> 'bienvenido'");
+            query.Append(" select top 30 * from peticion ");
             query.Append(" order by tipo, subtipo, usuario ");
 
             if (db.EjecutarQuery(query.ToString()).error)
@@ -158,7 +153,6 @@ namespace OMIstats.Models
 
         /// <summary>
         /// Regresa el total de de peticiones en la base de datos
-        /// Ignora las peticiones de cambio de password
         /// </summary>
         public static int cuentaPeticiones()
         {
@@ -166,7 +160,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select count(*) from peticion where subtipo <> 'password' and subtipo <> 'bienvenido'");
+            query.Append(" select count(*) from peticion ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return 0;
@@ -233,8 +227,7 @@ namespace OMIstats.Models
             if (db.EjecutarQuery(query.ToString()).error)
                 return false;
 
-            if (tipo == TipoPeticion.USUARIO &&
-                (subtipo == TipoPeticion.FOTO || subtipo == TipoPeticion.ACCESO))
+            if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.FOTO)
                 Utilities.Archivos.eliminarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
 
             return true;
@@ -257,16 +250,6 @@ namespace OMIstats.Models
                     usuario.foto =
                         Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
                                             usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
-
-                if (subtipo == TipoPeticion.ACCESO)
-                {
-                    usuario.correo = datos2;
-                    Peticion pe = new Peticion();
-                    pe.tipo = TipoPeticion.USUARIO;
-                    pe.usuario = usuario;
-                    if (!pe.guardarPeticion())
-                        return false;
-                }
 
                 if (!usuario.guardarDatos())
                     return false;
