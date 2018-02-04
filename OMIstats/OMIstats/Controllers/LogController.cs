@@ -14,7 +14,10 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return Redirect(Utilities.Server.direccionOMI());
+            //-TODO- descomentar esta linea y quitar el mocking de abajo
+            //return Redirect(Utilities.Server.direccionOMI());
+            string guid = Models.Usuario.MockUserLoggedIn(1);
+            return In(guid);
         }
 
         //
