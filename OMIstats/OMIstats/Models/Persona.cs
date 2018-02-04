@@ -86,7 +86,6 @@ namespace OMIstats.Models
         /// <summary>
         /// Llena los datos de una persona de la fila mandada como parametro
         /// </summary>
-        /// <param name="persona">El objeto donde se guardaran los datos</param>
         /// <param name="datos">La fila con el origen de los datos</param>
         /// <param name="completo">Si es true, saca todos los datos de la fila, de ser false, solo nombre, usuario y clave</param>
         private void llenarDatos(DataRow datos, bool completo = true)

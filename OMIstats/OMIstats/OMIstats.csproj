@@ -319,6 +319,7 @@
     <Content Include="Views\Olimpiada\Resultados.cshtml" />
     <Content Include="Views\Olimpiada\Delegacion.cshtml" />
     <Content Include="Views\Olimpiada\Estados.cshtml" />
+    <Content Include="Views\Log\In.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -328,7 +329,6 @@
     <Folder Include="img\temp\" />
     <Folder Include="img\user\" />
     <Folder Include="Views\Home\" />
-    <Folder Include="Views\Log\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

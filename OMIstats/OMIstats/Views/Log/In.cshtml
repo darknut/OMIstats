@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Iniciar sesión";
+}
+
+<h1 class="titulo">Iniciar sesión</h1>
+
+@if (ViewBag.GUIDerror)
+{
+    <p class="textoRojo">La dirección que usaste ya no es válida, intenta @Html.ActionLink("iniciando sesión", "Index", "Log") otra vez.</p>
+}

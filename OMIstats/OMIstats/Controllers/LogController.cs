@@ -25,15 +25,21 @@ namespace OMIstats.Controllers
 
         public ActionResult In(string GUID)
         {
-            // -TODO- Entrypoint para la OMI
-            if (GUID == null)
-            {
-                //setUsuario(Persona.obtenerPersonaConClave(1000));
+            if (GUID == null || GUID.Equals(string.Empty))
                 return RedirectTo(Pagina.HOME);
-            }
 
-            if (GUID != null /* LOG IN EXITOSO */)
+            ViewBag.GUIDerror = false;
+
+            if (GUID != null)
             {
+                Usuario usuario = Usuario.obtenerUsuarioConGUID(GUID);
+
+                if (usuario == null)
+                {
+                    ViewBag.GUIDerror = true;
+                    return View();
+                }
+
                 //Log in exitoso
                 //setUsuario(p);
 
@@ -57,6 +63,8 @@ namespace OMIstats.Controllers
             Session.Clear();
             setUsuario(new Persona(Persona.UsuarioNulo));
             return RedirectTo(Pagina.HOME);
+
+            //-TODO- redirigir a log out de la OMI
         }
     }
 }
