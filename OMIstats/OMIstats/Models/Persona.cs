@@ -50,18 +50,6 @@ namespace OMIstats.Models
 
         public int ioiID { get; set; }
 
-        public enum DisponibilidadUsuario
-        {
-            DISPONIBLE = 0,
-            NUMBER,
-            ALFANUMERIC,
-            TAKEN,
-            SIZE,
-            ERROR,
-            USER_NOT_FOUND,
-            VACIO
-        }
-
         public Persona(int clave): this()
         {
             this.clave = clave;
@@ -377,7 +365,7 @@ namespace OMIstats.Models
             if (table.Rows.Count != 1)
                 return;
             clave = (int)table.Rows[0][0];
-            usuario = clave.ToString();
+            usuario = "_" + clave.ToString();
             foto = Utilities.Archivos.obtenerFotoInicial(fotoInicial);
 
             guardarDatos();
@@ -397,6 +385,27 @@ namespace OMIstats.Models
             query.Append(" (select delegado from Estado where delegado is not null))");
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        /// <summary>
+        /// A partir de la persona obtenida de la base de datos de la OMI, hacemos la mejor aproximacion
+        /// para obtener el objeto deseado
+        /// </summary>
+        /// <param name="usuario">El usuario obtenido de la base de la OMI</param>
+        /// <returns>La persona correspondiente en nuestra base</returns>
+        public static Persona obtenerPersonaDeUsuario(Usuario usuario)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            // Primero revisamos los CURP
+
+            if (usuario.CURP != null && !usuario.CURP.Equals(String.Empty))
+            {
+                query.Append("");
+            }
+
+            return null;
         }
     }
 }

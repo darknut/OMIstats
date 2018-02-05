@@ -12,7 +12,7 @@ namespace OMIstats.Models
     /// </summary>
     public class Usuario
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string Email { get; set; }
 
@@ -37,7 +37,7 @@ namespace OMIstats.Models
         /// <param name="datos">La fila con el origen de los datos</param>
         private void llenarDatos(DataRow datos)
         {
-            Id = (int)datos["Id"];
+            Id = (long)datos["Id"];
             Email = datos["Email"].ToString().Trim();
             Foto = datos["Foto"].ToString().Trim();
             Nombre = datos["Nombre"].ToString().Trim();
@@ -70,6 +70,21 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString(), Utilities.Acceso.BaseDeDatos.OMI);
             return guid;
+        }
+
+        /// <summary>
+        /// Borra el GUID del usuario en la base de datos
+        /// </summary>
+        public void borrarGUID()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update [Usuarios.Usuarios] set GUID = ''");
+            query.Append(" where Id = ");
+            query.Append(Id);
+
+            db.EjecutarQuery(query.ToString(), Utilities.Acceso.BaseDeDatos.OMI);
         }
 
         /// <summary>

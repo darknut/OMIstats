@@ -40,15 +40,23 @@ namespace OMIstats.Controllers
                     return View();
                 }
 
-                //Log in exitoso
-                //setUsuario(p);
+                // Primero revisamos si el usuario ya está enlazado
 
-                Object t = obtenerParams(Pagina.LOGIN);
-                limpiarParams(Pagina.LOGIN);
-                if (t != null)
+                Persona persona = Persona.obtenerPersonaDeUsuario(usuario.Id.ToString());
+
+                if (persona != null)
                 {
-                    KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;
-                    return RedirectTo(redireccion.Key, redireccion.Value);
+                    // Log in exitoso
+                    setUsuario(persona);
+                    usuario.borrarGUID();
+
+                    Object t = obtenerParams(Pagina.LOGIN);
+                    limpiarParams(Pagina.LOGIN);
+                    if (t != null)
+                    {
+                        KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;
+                        return RedirectTo(redireccion.Key, redireccion.Value);
+                    }
                 }
             }
 
