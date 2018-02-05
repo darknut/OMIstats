@@ -307,7 +307,7 @@ namespace OMIstats.Models
             query.Append(",");
 
             query.Append(" CURP = ");
-            query.Append(Utilities.Cadenas.comillas(CURP));
+            query.Append(Utilities.Cadenas.comillas(CURP.Trim().ToUpper()));
             query.Append(",");
 
             if (!String.IsNullOrEmpty(foto))
@@ -424,6 +424,41 @@ namespace OMIstats.Models
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Busca una persona con el curp mandado como parámetro
+        /// </summary>
+        /// <param name="CURP">El curp de la persona deseada</param>
+        /// <returns></returns>
+        public static Persona obtenerPersonaConCURP(string CURP)
+        {
+            if (CURP == null)
+                return null;
+
+            CURP = CURP.Trim().ToUpper();
+
+            if (CURP.Length == 0)
+                return null;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where CURP = ");
+            query.Append(Utilities.Cadenas.comillas(CURP));
+            query.Append(")");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Persona p = new Persona();
+            p.llenarDatos(table.Rows[0]);
+
+            return p;
         }
     }
 }

@@ -422,8 +422,14 @@ namespace OMIstats.Models
             if (md.usuario.Length == 0)
             {
                 // El usuario se desconoce, hay que buscarlo
+                // Primero buscamos por CURP
+                p = Persona.obtenerPersonaConCURP(md.CURP);
 
-                p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
+                if (p == null)
+                {
+                    // No se encontró con curp, aproximamos por nombre
+                    p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
+                }
 
                 // El usuario es nuevo, lo creamos
 
