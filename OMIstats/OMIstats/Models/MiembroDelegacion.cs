@@ -43,6 +43,24 @@ namespace OMIstats.Models
             CLAVE_DUPLICADA
         }
 
+        private enum Campos
+        {
+            USUARIO = 0,
+            NOMBRE,
+            ESTADO,
+            TIPO_ASISTENTE,
+            CLAVE,
+            FECHA_NACIMIENTO,
+            GENERO,
+            CORREO,
+            CURP,
+            NOMBRE_ESCUELA,
+            NIVEL_ESCUELA,
+            AÑO_ESCUELA,
+            PUBLICA,
+            ELIMINAR
+        }
+
         public int claveUsuario;
         public int claveEscuela;
         public string usuario;
@@ -50,6 +68,7 @@ namespace OMIstats.Models
         public string nombreAsistente;
         public string fechaNacimiento;
         public string correo;
+        public string CURP;
         public string genero;
         public string nombreEscuela;
         public bool escuelaPublica;
@@ -110,6 +129,7 @@ namespace OMIstats.Models
                 fechaNacimiento = row["nacimiento"].ToString().Trim();
                 genero = row["genero"].ToString().Trim();
                 correo = row["correo"].ToString().Trim();
+                CURP = row["CURP"].ToString().Trim();
             }
 
             if (incluirEscuela)
@@ -132,29 +152,29 @@ namespace OMIstats.Models
 
         private TipoError obtenerCampos(string []datos)
         {
-            if (datos.Length > 0)
-                usuario = datos[0].Trim();
-            if (datos.Length > 1)
-                nombreAsistente = datos[1].Trim();
-            if (datos.Length > 2)
-                estado = datos[2].Trim();
+            if (datos.Length > (int)Campos.USUARIO)
+                usuario = datos[(int)Campos.USUARIO].Trim();
+            if (datos.Length > (int)Campos.NOMBRE)
+                nombreAsistente = datos[(int)Campos.NOMBRE].Trim();
+            if (datos.Length > (int)Campos.ESTADO)
+                estado = datos[(int)Campos.ESTADO].Trim();
             try
             {
-                if (datos.Length > 3)
-                    tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[3].Trim().ToUpper());
+                if (datos.Length > (int)Campos.TIPO_ASISTENTE)
+                    tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
             }
             catch (Exception)
             {
                 return TipoError.TIPO_ASISTENTE;
             }
-            if (datos.Length > 4)
-                clave = datos[4].Trim();
-            if (datos.Length > 5)
-                fechaNacimiento = datos[5].Trim();
+            if (datos.Length > (int)Campos.CLAVE)
+                clave = datos[(int)Campos.CLAVE].Trim();
+            if (datos.Length > (int)Campos.FECHA_NACIMIENTO)
+                fechaNacimiento = datos[(int)Campos.FECHA_NACIMIENTO].Trim();
             try
             {
-                if (datos.Length > 6)
-                    genero = datos[6].Trim().ToCharArray()[0].ToString().ToUpper();
+                if (datos.Length > (int)Campos.GENERO)
+                    genero = datos[(int)Campos.GENERO].Trim().ToCharArray()[0].ToString().ToUpper();
                 if (genero != "M" && genero != "F")
                     return TipoError.GENERO;
             }
@@ -162,18 +182,20 @@ namespace OMIstats.Models
             {
                 return TipoError.GENERO;
             }
-            if (datos.Length > 7)
-                correo = datos[7].Trim();
-            if (datos.Length > 8)
-                nombreEscuela = datos[8].Trim();
+            if (datos.Length > (int)Campos.CORREO)
+                correo = datos[(int)Campos.CORREO].Trim();
+            if (datos.Length > (int)Campos.CURP)
+                CURP = datos[(int)Campos.CURP].Trim();
+            if (datos.Length > (int)Campos.NOMBRE_ESCUELA)
+                nombreEscuela = datos[(int)Campos.NOMBRE_ESCUELA].Trim();
             try
             {
-                if (datos.Length > 9)
+                if (datos.Length > (int)Campos.NIVEL_ESCUELA)
                 {
-                    if (datos[9].Trim().Length == 0)
+                    if (datos[(int)Campos.NIVEL_ESCUELA].Trim().Length == 0)
                         nivelEscuela = Institucion.NivelInstitucion.NULL;
                     else
-                        nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[9].Trim().ToUpper());
+                        nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
                 }
             }
             catch (Exception)
@@ -182,12 +204,12 @@ namespace OMIstats.Models
             }
             try
             {
-                if (datos.Length > 10)
+                if (datos.Length > (int)Campos.AÑO_ESCUELA)
                 {
-                    if (datos[10].Trim().Length == 0)
+                    if (datos[(int)Campos.AÑO_ESCUELA].Trim().Length == 0)
                         añoEscuela = 0;
                     else
-                        añoEscuela = Int32.Parse(datos[10]);
+                        añoEscuela = Int32.Parse(datos[(int)Campos.AÑO_ESCUELA]);
                 }
                 if (añoEscuela < 0 || añoEscuela > 6)
                     return TipoError.AñO_ESCUELA;
@@ -195,10 +217,10 @@ namespace OMIstats.Models
             {
                 return TipoError.AñO_ESCUELA;
             }
-            if (datos.Length > 11)
-                escuelaPublica = datos[11].Trim().Equals("publica", StringComparison.InvariantCultureIgnoreCase);
-            if (datos.Length > 12)
-                eliminar = datos[12].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
+            if (datos.Length > (int)Campos.PUBLICA)
+                escuelaPublica = datos[(int)Campos.PUBLICA].Trim().Equals("publica", StringComparison.InvariantCultureIgnoreCase);
+            if (datos.Length > (int)Campos.ELIMINAR)
+                eliminar = datos[(int)Campos.ELIMINAR].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
 
             return TipoError.OK;
         }
@@ -274,7 +296,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave,");
-            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, p.CURP, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona, md.institucion from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
@@ -322,6 +344,8 @@ namespace OMIstats.Models
             s.Append(genero);
             s.Append(", ");
             s.Append(correo);
+            s.Append(", ");
+            s.Append(CURP);
             s.Append(", ");
             s.Append(nombreEscuela);
             s.Append(", ");
@@ -444,6 +468,7 @@ namespace OMIstats.Models
             }
 
             p.genero = md.genero;
+            p.CURP = md.CURP;
 
             if (md.correo.Length > 0)
             {
@@ -680,7 +705,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.institucion, ");
-            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, p.curp, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
