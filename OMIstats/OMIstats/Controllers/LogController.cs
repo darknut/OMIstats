@@ -41,7 +41,6 @@ namespace OMIstats.Controllers
                 }
 
                 // Primero revisamos si el usuario ya está enlazado
-
                 Persona persona = Persona.obtenerPersonaDeUsuario(usuario.Id.ToString());
 
                 if (persona != null)
@@ -57,7 +56,11 @@ namespace OMIstats.Controllers
                         KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;
                         return RedirectTo(redireccion.Key, redireccion.Value);
                     }
+                    return RedirectTo(Pagina.VIEW_PROFILE);
                 }
+
+                // Obtenemos el mejor match del usuario de la base de datos
+                persona = Persona.obtenerPersonaDeUsuario(usuario);
             }
 
             return RedirectTo(Pagina.HOME);

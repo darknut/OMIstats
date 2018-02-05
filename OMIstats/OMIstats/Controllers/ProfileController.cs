@@ -175,6 +175,7 @@ namespace OMIstats.Controllers
             p.clave = current.clave;
             p.ioiID = current.ioiID;
             p.usuario = current.usuario;
+            p.CURP = current.CURP;
 
             // Se guarda la imagen en disco
             if (file != null)

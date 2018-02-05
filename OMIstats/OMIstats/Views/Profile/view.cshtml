@@ -76,6 +76,11 @@
             {
                 <a href='@Url.Content("http://www.twitter.com/" + @Model.twitter)' target="_blank"><img src="~/img/twitter.png" alt="twitter"/></a>
             }
+
+            @if (Model.omegaup.Length > 0)
+            {
+                <a href='@Url.Content("https://omegaup.com/profile/" + @Model.omegaup)' target="_blank"><img class="omegaIcon" src="~/img/omega.png" alt="omegaup"/></a>
+            }
         </div>
 
     </div>

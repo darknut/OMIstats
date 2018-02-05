@@ -102,6 +102,13 @@
                     @Html.ValidationMessageFor(model => model.twitter)
                 </div>
             </div>
+            <div>
+                <div class="label">OmegaUp:</div>
+                <div class="input">
+                    https://omegaup.com/profile/@Html.TextBoxFor(model => model.omegaup, new { @class = "inputOmegaUp" })
+                    @Html.ValidationMessageFor(model => model.omegaup)
+                </div>
+            </div>
 
             <input id="clave" name="clave" type="hidden" value="@Model.clave" />
 

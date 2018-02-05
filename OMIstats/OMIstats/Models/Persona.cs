@@ -32,6 +32,10 @@ namespace OMIstats.Models
         [MaxLength(15, ErrorMessage = "El tamaño máximo es de 15 caracteres")]
         public string twitter { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+        public string omegaup { get; set; }
+
         [RegularExpression(@"^(https?:\/\/)?((([\w-]+)\.){1,})([\/\w\.-]+)(\?[\/\w\.-=%&]*)?$", ErrorMessage = "Escribe una URL válida")]
         [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
         public string sitio { get; set; }
@@ -49,6 +53,8 @@ namespace OMIstats.Models
         public string foto { get; set; }
 
         public int ioiID { get; set; }
+
+        public string CURP { get; set; }
 
         public Persona(int clave): this()
         {
@@ -69,6 +75,8 @@ namespace OMIstats.Models
             genero = "M";
             foto = "";
             ioiID = 0;
+            CURP = "";
+            omegaup = "";
         }
 
         /// <summary>
@@ -93,6 +101,8 @@ namespace OMIstats.Models
                 genero = datos["genero"].ToString();
                 foto = datos["foto"].ToString().Trim();
                 ioiID = (int) datos["ioiID"];
+                CURP = datos["CURP"].ToString().Trim();
+                omegaup = datos["omegaup"].ToString().Trim();
             }
         }
 
@@ -292,6 +302,14 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(genero));
             query.Append(",");
 
+            query.Append(" omegaup = ");
+            query.Append(Utilities.Cadenas.comillas(omegaup));
+            query.Append(",");
+
+            query.Append(" CURP = ");
+            query.Append(Utilities.Cadenas.comillas(CURP));
+            query.Append(",");
+
             if (!String.IsNullOrEmpty(foto))
             {
                 if (generarPeticiones)
@@ -402,7 +420,7 @@ namespace OMIstats.Models
 
             if (usuario.CURP != null && !usuario.CURP.Equals(String.Empty))
             {
-                query.Append("");
+                query.Append(" select * from persona where CURP ");
             }
 
             return null;
