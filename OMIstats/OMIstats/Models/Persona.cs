@@ -148,8 +148,11 @@ namespace OMIstats.Models
 
         /// <summary>
         /// Regresa el objeto persona asociado con el nombre mandado como parámetro
+        /// <param name="nombre">El nombre a aproximar</param>
+        /// <param name="ignorarUsuarios">verdadero si queremos ignorar personas que ya hayan
+        /// sido asignados un usuario</param>
         /// </summary>
-        public static Persona obtenerPersonaConNombre(string nombre)
+        public static Persona obtenerPersonaConNombre(string nombre, bool ignorarUsuarios = false)
         {
             if (String.IsNullOrEmpty(nombre))
                 return null;
@@ -160,6 +163,8 @@ namespace OMIstats.Models
             query.Append("select * from persona where nombreHash = HASHBYTES(\'SHA1\', ");
             query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
             query.Append(")");
+            if (ignorarUsuarios)
+                query.Append(" and LEFT(usuario, 1) = '_' ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -413,25 +418,30 @@ namespace OMIstats.Models
         /// <returns>La persona correspondiente en nuestra base</returns>
         public static Persona obtenerPersonaDeUsuario(Usuario usuario)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
             // Primero revisamos los CURP
+            Persona p = Persona.obtenerPersonaConCURP(usuario.CURP, ignorarUsuarios: true);
+            if (p != null)
+                return p;
 
-            if (usuario.CURP != null && !usuario.CURP.Equals(String.Empty))
-            {
-                query.Append(" select * from persona where CURP ");
-            }
+            // No se encontró el CURP, buscamos ahora por correo
+            p = Persona.obtenerPersonaConCorreo(usuario.Email, ignorarUsuarios: true);
+            if (p != null)
+                return p;
 
-            return null;
+            // Finalmente intentamos aproximar el nombre
+            p = Persona.obtenerPersonaConNombre(usuario.Nombre, ignorarUsuarios: true);
+
+            return p;
         }
 
         /// <summary>
         /// Busca una persona con el curp mandado como parámetro
         /// </summary>
         /// <param name="CURP">El curp de la persona deseada</param>
+        /// <param name="ignorarUsuarios">verdadero cuando no queremos recibir resultados de
+        /// personas que ya tienen asignado un usuario</param>
         /// <returns></returns>
-        public static Persona obtenerPersonaConCURP(string CURP)
+        public static Persona obtenerPersonaConCURP(string CURP, bool ignorarUsuarios = false)
         {
             if (CURP == null)
                 return null;
@@ -446,7 +456,46 @@ namespace OMIstats.Models
 
             query.Append("select * from persona where CURP = ");
             query.Append(Utilities.Cadenas.comillas(CURP));
-            query.Append(")");
+            if (ignorarUsuarios)
+                query.Append(" and LEFT(usuario, 1) = '_' ");
+
+            if (db.EjecutarQuery(query.ToString()).error)
+                return null;
+
+            DataTable table = db.getTable();
+            if (table.Rows.Count != 1)
+                return null;
+
+            Persona p = new Persona();
+            p.llenarDatos(table.Rows[0]);
+
+            return p;
+        }
+
+        /// <summary>
+        /// Busca una persona con el correo mandado como parámetro
+        /// </summary>
+        /// <param name="correo">El correode la persona deseada</param>
+        /// <param name="ignorarUsuarios">verdadero cuando no queremos recibir resultados de
+        /// personas que ya tienen asignado un usuario</param>
+        /// <returns></returns>
+        public static Persona obtenerPersonaConCorreo(string correo, bool ignorarUsuarios = false)
+        {
+            if (correo == null)
+                return null;
+
+            correo = correo.Trim().ToLower();
+
+            if (correo.Length == 0)
+                return null;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where correo = ");
+            query.Append(Utilities.Cadenas.comillas(correo));
+            if (ignorarUsuarios)
+                query.Append(" and LEFT(usuario, 1) = '_' ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
