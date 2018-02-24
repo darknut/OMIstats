@@ -1,4 +1,6 @@
-﻿@{
+﻿@model OMIstats.Models.Usuario
+
+@{
     ViewBag.Title = "Iniciar sesión";
 }
 
@@ -6,7 +8,7 @@
 
 @if (ViewBag.GUIDerror)
 {
-    <p>La dirección que usaste ya no es válida, intenta @Html.ActionLink("iniciando sesión", "Index", "Log") otra vez.</p>
+    <p class="textoGrande">La dirección que usaste ya no es válida, intenta @Html.ActionLink("iniciando sesión", "Index", "Log") otra vez.</p>
 }
 
 @if (ViewBag.NoMatch)
@@ -22,7 +24,10 @@
                 Búscate en las tablas de resultados o en la delegación que deberías estar.
                 <ul>
                     <li class="espaciado">
-                        Si no te encuentras, danos tus datos y nosotros te agregamos.
+                        Si no te encuentras,
+                        @Html.ActionLink("danos tus datos","LogIn","Request", new {
+                            nombre = Model.Nombre, correo = Model.Email, tipo = OMIstats.Models.Peticion.TipoPeticion.NO_ESTOY }, null)
+                        y nosotros te agregamos.
                     </li>
                 </ul>
             </li>
@@ -33,10 +38,16 @@
                 tienen que estar deletreados de la misma forma.
                 <ul>
                     <li class="espaciado">
-                        Si no hay ningún error, avísanos para revisar qué es lo que está mal con tus datos.
+                        Si no hay ningún error,
+                         @Html.ActionLink("avísanos","LogIn","Request", new {
+                            nombre = Model.Nombre, correo = Model.Email, tipo = OMIstats.Models.Peticion.TipoPeticion.NO_ERROR }, null)
+                        para revisar qué es lo que está mal con tus datos.
                     </li>
                     <li class="espaciado">
-                        Si hay un error en las tablas de resultados o delegación, háznoslo saber y los actualizamos.
+                        Si hay un error en las tablas de resultados o delegación,
+                         @Html.ActionLink("háznoslo saber","LogIn","Request", new {
+                            nombre = Model.Nombre, correo = Model.Email, tipo = OMIstats.Models.Peticion.TipoPeticion.ERROR }, null)
+                        y los actualizamos.
                     </li>
                 </ul>
             </li>

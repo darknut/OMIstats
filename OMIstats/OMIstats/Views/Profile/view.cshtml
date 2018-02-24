@@ -116,6 +116,12 @@
                         </a>
                     </div>
                     <br />
+                    <div>
+                        <a href='@Url.Content("/Admin/Unlink?usuario=" + Model.usuario)' class="botonPerfil">
+                            Deslinkear usuario
+                        </a>
+                    </div>
+                    <br />
                 }
             }
         }
@@ -181,7 +187,7 @@
                 <div><img src="~/img/bronce.png"/></div>
                 <div>@(medallero.bronces)</div>
             </div>
-            @if(medallero.otros > 0)
+            @if (medallero.otros > 0)
             {
                 <div class="medalla" title="Participaciones sin medalla">
                     <div><img src="~/img/diploma.png"/></div>

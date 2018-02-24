@@ -36,7 +36,8 @@ namespace OMIstats.Controllers
             ATTENDEES_OMI,
             PROBLEMA,
             OLIMPIADA,
-            RESULTS_TABLE
+            RESULTS_TABLE,
+            ADMIN_UNLINK
         }
 
         public BaseController()
@@ -141,7 +142,7 @@ namespace OMIstats.Controllers
                         return RedirectToAction("view", "Profile", new { usuario = opciones.ToString() });
                     return RedirectToAction("view", "Profile");
                 case Pagina.LOGIN:
-                    return Redirect(Utilities.Server.direccionOMI());
+                    return RedirectToAction("Index", "Log");
                 case Pagina.ERROR:
                     if (opciones != null)
                         return RedirectToAction("Index", "Error", new { code = opciones.ToString() });
@@ -149,6 +150,10 @@ namespace OMIstats.Controllers
                 case Pagina.ADMIN_CHANGE:
                     if (opciones != null)
                         return RedirectToAction("Change", "Admin", new { usuario = opciones.ToString() });
+                    return RedirectTo(Pagina.ERROR, 404);
+                case Pagina.ADMIN_UNLINK:
+                    if (opciones != null)
+                        return RedirectToAction("Unlink", "Admin", new { usuario = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.PROBLEMA:
                     if (opciones != null)

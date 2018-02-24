@@ -19,6 +19,68 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Request/LogIn/
+
+        public ActionResult LogIn(string nombre, string correo, Peticion.TipoPeticion tipo)
+        {
+            Peticion pe = new Peticion();
+
+            pe.subtipo = tipo;
+            pe.datos1 = nombre;
+            pe.datos2 = correo;
+
+            limpiarErroresViewBag();
+
+            return View(pe);
+        }
+
+        //
+        // POST: /Request/LogIn/
+
+        [HttpPost]
+        public ActionResult LogIn(Peticion pe)
+        {
+            limpiarErroresViewBag();
+
+            if (pe.datos1 == null || pe.datos1.Trim().Length == 0)
+            {
+                ViewBag.errorUsuario = ERROR;
+                return View(pe);
+            }
+
+            if (pe.datos2 == null || !Regex.IsMatch(pe.datos2, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"))
+            {
+                ViewBag.errorMail = ERROR;
+                return View(pe);
+            }
+
+            if (pe.datos3 == null || pe.datos3.Trim().Length == 0)
+            {
+                ViewBag.errorInfo = ERROR;
+                return View(pe);
+            }
+
+            if (!revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return View(pe);
+            }
+
+            if (pe.subtipo != Peticion.TipoPeticion.ERROR &&
+                pe.subtipo != Peticion.TipoPeticion.NO_ERROR &&
+                pe.subtipo != Peticion.TipoPeticion.NO_ESTOY)
+                return RedirectTo(Pagina.ERROR);
+
+            pe.tipo = Peticion.TipoPeticion.LOGIN;
+
+            if (!pe.guardarPeticion())
+                return RedirectTo(Pagina.ERROR);
+
+            ViewBag.guardado = true;
+            return View(pe);
+        }
+
+        //
         // GET: /Request/General/
 
         public ActionResult General()

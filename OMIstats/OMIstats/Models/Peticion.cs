@@ -36,7 +36,11 @@ namespace OMIstats.Models
             QUEJA,
             SUGERENCIA,
             PREGUNTA,
-            COMENTARIO
+            COMENTARIO,
+            LOGIN,
+            NO_ERROR,
+            NO_ESTOY,
+            ERROR
         }
 
         public Peticion()

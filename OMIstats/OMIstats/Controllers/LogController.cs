@@ -16,7 +16,7 @@ namespace OMIstats.Controllers
         {
             //-TODO- descomentar esta linea y quitar el mocking de abajo
             //return Redirect(Utilities.Server.direccionOMI());
-            string guid = Models.Usuario.MockUserLoggedIn(3);
+            string guid = Models.Usuario.MockUserLoggedIn(1);
             return RedirectToAction("In", "Log", new { GUID = guid });
         }
 
@@ -68,7 +68,7 @@ namespace OMIstats.Controllers
                     // No hay match, la persona no existe
                     ViewBag.NoMatch = true;
                     usuario.borrarGUID();
-                    return View();
+                    return View(usuario);
                 }
             }
 

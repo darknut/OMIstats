@@ -1,0 +1,98 @@
+﻿@model OMIstats.Models.Peticion
+
+@{
+    ViewBag.Title = "Petición de acceso";
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+}
+
+@section Scripts {
+    <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
+}
+
+<h2 class="titulo">Petición de acceso</h2>
+
+@if (ViewBag.guardado)
+{
+    <div>
+        Tu petición se guardó satisfactoriamente. Un administrador la revisará y te contestará de ser
+        necesario.
+    </div>
+}
+else
+{
+    using (@Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.subtipo)
+ 
+        <div>
+            <div class="label"> Nombre: </div>
+            <div class="input"> @Html.EditorFor(model => model.datos1)
+                @if (ViewBag.errorUsuario.Length != 0)
+                {
+                    <div class="errorTextoRojo">Escribe tu nombre</div>
+                }
+            </div>
+        </div>
+
+        <div>
+            <div class="label"> Correo: </div>
+            <div class="input"> @Html.EditorFor(model => model.datos2)
+                @if (ViewBag.errorMail.Length != 0)
+                {
+                    <div class="errorTextoRojo">Escribe un correo electrónico válido</div>
+                }
+            </div>
+        </div>
+
+        <div>
+            <div class="biglabel">
+            @if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.NO_ESTOY)
+            {
+                <span>
+                    Infórmanos en qué olimpiada participaste, para cuál estado y con qué rol:
+                </span>
+            }
+            @if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.NO_ERROR)
+            {
+                <span>
+                    Mándanos la página del perfil el cual crees que te pertenece:
+                </span>
+            }
+            @if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.ERROR)
+            {
+                <span>
+                    Mándanos la página del perfil que crees que te pertenece, así
+                    como los datos que debemos de actualizar en este perfil:
+                </span>
+            }
+            </div>
+            <br />
+            <div class="biginput"> @Html.TextAreaFor(model => model.datos3)
+                @if (ViewBag.errorInfo.Length != 0)
+                {
+                    <div class="errorTextoRojo">Tu petición debe de ser de menos de 300 caracteres</div>
+                }
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+            </div>
+            @if (ViewBag.errorCaptcha == true)
+            {
+                <div>
+                    <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                </div>
+            }
+        </div>
+
+        <div class="label">
+            <input type="submit" value="Mandar petición" />
+        </div>
+    }
+}

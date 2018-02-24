@@ -79,5 +79,35 @@ namespace OMIstats.Controllers
 
             return RedirectTo(Pagina.MANAGE_REQUEST);
         }
+
+        //
+        // GET: /Admin/Unlink/
+
+        public ActionResult Unlink(string usuario)
+        {
+            if (!estaLoggeado())
+            {
+                guardarParams(Pagina.LOGIN, Pagina.ADMIN_UNLINK, usuario);
+                return RedirectTo(Pagina.LOGIN);
+            }
+
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Persona p = Persona.obtenerPersonaDeUsuario(usuario);
+            if (p == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            Persona u = getUsuario();
+            if (u.usuario == p.usuario)
+                return RedirectTo(Pagina.ERROR, 401);
+
+            p.usuario = "_" + p.clave;
+            p.guardarDatos();
+
+            limpiarErroresViewBag();
+
+            return RedirectTo(Pagina.VIEW_PROFILE, p.usuario);
+        }
     }
 }

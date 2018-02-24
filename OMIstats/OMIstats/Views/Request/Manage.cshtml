@@ -79,7 +79,7 @@ else
                     </div>
                     <a href="javascript:aprobar(@item.clave)">Responder</a>
                 }
-                else
+                else if (item.tipo != Peticion.TipoPeticion.LOGIN)
                 {
                     <a href="javascript:aprobar(@item.clave)">Aprobar</a>
                 }
@@ -100,7 +100,7 @@ else
                     </td>
                     <td>
                         @Html.ActionLink(item.usuario.nombre, "view", "Profile",
-                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target="_blank" })
+                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
                     </td>
                     <td>
                         <span class="negritas">Nuevo nombre:</span>
@@ -115,7 +115,7 @@ else
                     </td>
                     <td>
                         @Html.ActionLink(item.usuario.nombre, "view", "Profile",
-                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target="_blank" })
+                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
                     </td>
                     <td>
                         <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Nueva foto</a>
@@ -129,6 +129,19 @@ else
                 </td>
                 <td>
                     @item.datos1
+                </td>
+                <td>
+                    @item.datos3
+                </td>
+            }
+            else if (item.tipo == Peticion.TipoPeticion.LOGIN)
+            {
+                <td class="negritas">
+                    @item.tipo :
+                    @item.subtipo
+                </td>
+                <td>
+                    <a href="mailto:@item.datos2">@item.datos1</a>
                 </td>
                 <td>
                     @item.datos3
