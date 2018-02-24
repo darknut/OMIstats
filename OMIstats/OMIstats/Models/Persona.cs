@@ -423,13 +423,13 @@ namespace OMIstats.Models
             if (p != null)
                 return p;
 
-            // No se encontró el CURP, buscamos ahora por correo
-            p = Persona.obtenerPersonaConCorreo(usuario.Email, ignorarUsuarios: true);
+            // Ahora intentamos aproximar el nombre
+            p = Persona.obtenerPersonaConNombre(usuario.Nombre, ignorarUsuarios: true);
             if (p != null)
                 return p;
 
-            // Finalmente intentamos aproximar el nombre
-            p = Persona.obtenerPersonaConNombre(usuario.Nombre, ignorarUsuarios: true);
+            // Como último recurso, buscamos por correo
+            p = Persona.obtenerPersonaConCorreo(usuario.Email, ignorarUsuarios: true);
 
             return p;
         }
@@ -501,7 +501,7 @@ namespace OMIstats.Models
                 return null;
 
             DataTable table = db.getTable();
-            if (table.Rows.Count != 1)
+            if (table.Rows.Count == 0)
                 return null;
 
             Persona p = new Persona();

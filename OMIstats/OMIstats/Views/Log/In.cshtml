@@ -6,5 +6,40 @@
 
 @if (ViewBag.GUIDerror)
 {
-    <p class="textoRojo">La dirección que usaste ya no es válida, intenta @Html.ActionLink("iniciando sesión", "Index", "Log") otra vez.</p>
+    <p>La dirección que usaste ya no es válida, intenta @Html.ActionLink("iniciando sesión", "Index", "Log") otra vez.</p>
+}
+
+@if (ViewBag.NoMatch)
+{
+    <div class="textoGrande">
+        <p class="errorTextoRojo">No se encontró un usuario en el sistema que corresponda con la cuenta con la que iniciaste sesión.</p>
+    
+        <p>Si estás seguro que has participado en una <b>olimpiada nacional</b> como competidor, líder, delegado, asesor, invitado, 
+            comité o con algún otro rol (sin importar si fue en primaria, secundaria o preparatoria), puedes hacer lo siguiente:</p>
+    
+        <ol>
+            <li> <!-- -TODO- Agregar enlace a la búsqueda de usuarios -->
+                Búscate en las tablas de resultados o en la delegación que deberías estar.
+                <ul>
+                    <li class="espaciado">
+                        Si no te encuentras, danos tus datos y nosotros te agregamos.
+                    </li>
+                </ul>
+            </li>
+            <li class="espaciado">
+                Si sí te encuentras, verifica que los datos en las tablas de resultados
+                (o en la lista de la delegación) sean <b>los mismos</b>
+                a los que tienes en tu perfil. Basta con que tu nombre o tu correo sean iguales, pero
+                tienen que estar deletreados de la misma forma.
+                <ul>
+                    <li class="espaciado">
+                        Si no hay ningún error, avísanos para revisar qué es lo que está mal con tus datos.
+                    </li>
+                    <li class="espaciado">
+                        Si hay un error en las tablas de resultados o delegación, háznoslo saber y los actualizamos.
+                    </li>
+                </ul>
+            </li>
+        </ol>
+    </div>
 }

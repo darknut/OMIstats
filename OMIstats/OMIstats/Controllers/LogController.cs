@@ -16,8 +16,8 @@ namespace OMIstats.Controllers
         {
             //-TODO- descomentar esta linea y quitar el mocking de abajo
             //return Redirect(Utilities.Server.direccionOMI());
-            string guid = Models.Usuario.MockUserLoggedIn(1);
-            return In(guid);
+            string guid = Models.Usuario.MockUserLoggedIn(3);
+            return RedirectToAction("In", "Log", new { GUID = guid });
         }
 
         //
@@ -29,6 +29,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             ViewBag.GUIDerror = false;
+            ViewBag.NoMatch = false;
 
             if (GUID != null)
             {
@@ -61,6 +62,14 @@ namespace OMIstats.Controllers
 
                 // Obtenemos el mejor match del usuario de la base de datos
                 persona = Persona.obtenerPersonaDeUsuario(usuario);
+
+                if (persona == null)
+                {
+                    // No hay match, la persona no existe
+                    ViewBag.NoMatch = true;
+                    usuario.borrarGUID();
+                    return View();
+                }
             }
 
             return RedirectTo(Pagina.HOME);

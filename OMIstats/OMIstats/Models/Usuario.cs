@@ -40,7 +40,7 @@ namespace OMIstats.Models
             Id = (long)datos["Id"];
             Email = datos["Email"].ToString().Trim();
             Foto = datos["Foto"].ToString().Trim();
-            Nombre = datos["Nombre"].ToString().Trim();
+            Nombre = datos["NombreCompleto"].ToString().Trim();
 
             try
             {

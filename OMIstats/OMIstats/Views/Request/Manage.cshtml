@@ -121,38 +121,6 @@ else
                         <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Nueva foto</a>
                     </td>
                 }
-
-                if (item.subtipo == Peticion.TipoPeticion.ACCESO)
-                {
-                    <td class="negritas">
-                        Acceso
-                    </td>
-                    <td>
-                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
-                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target="_blank" })
-                    </td>
-                    <td>
-                        @if (!Char.IsDigit(@item.usuario.usuario[0]))
-                        {
-                            <span class="negritas errorTextoRojo">Precaución:</span>
-                            <span>Usuario ya ha sido reclamado</span>
-                            <br />
-                        }
-                        @if (!String.IsNullOrEmpty(@item.datos1))
-                        {
-                            <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Diploma</a>
-                            <br />
-                        }
-                        <span class="negritas">Correo:</span>
-                        @Html.DisplayFor(modelItem => item.datos2)
-                        <br />
-                        @if (!String.IsNullOrEmpty(@item.datos3))
-                        {
-                            <span class="negritas">Información:</span>
-                            @Html.DisplayFor(modelItem => item.datos3)
-                        }
-                    </td>
-                }
             }
             else if (item.tipo == Peticion.TipoPeticion.GENERAL)
             {

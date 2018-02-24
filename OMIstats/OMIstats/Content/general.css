@@ -166,3 +166,11 @@ a {
     font-weight: bold;
     margin-right: 10px;
 }
+
+.textoGrande {
+    font-size: 15pt;
+}
+
+.espaciado {
+    padding-top: 5px;
+}
