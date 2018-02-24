@@ -1,0 +1,97 @@
+﻿@model OMIstats.Models.Peticion
+
+@{
+    ViewBag.Title = "Petición de usuario";
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+}
+
+@section Scripts {
+    <script src='https://www.google.com/recaptcha/api.js?hl=es-419' ></script>
+}
+
+<h2 class="titulo">Petición de usuario</h2>
+
+@if (ViewBag.guardado)
+{
+    <div>
+        Tu petición se guardó satisfactoriamente. Un administrador la revisará y te contestará de ser
+        necesario.
+    </div>
+}
+else
+{
+    if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.NO_SOY_YO)
+    {
+        <p>
+            Si enlazaste tu cuenta por error a este perfil y no eres tú,
+            da clic en el botón 'Mandar petición'.
+        </p>
+        <p>
+            Adicionalmente, puedes
+            proporcionar el perfil correcto:
+        </p>
+    }
+
+    if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.INCOMPLETO)
+    {
+        <p>
+            Si tu perfil está incompleto, proporciónanos aquí la lista
+            de participaciones que no están listadas en tu perfil:
+        </p>
+    }
+ 
+    if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.DUPLICADO)
+    {
+        <p>
+            En ocasiones es posible que por error en los nombres, haya dos
+            perfiles para la misma persona.
+        </p>
+        <p>
+            Proporciónanos el enlace al
+            pefil duplicado y nos encargaremos de combinarlos:
+        </p>
+    }
+ 
+    if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.PUNTOS)
+    {
+        <p>
+            Si recuerdas tus puntos en las olimpiadas y no están listados en tu
+            perfil,
+        <br />
+            puedes escribirlos aquí y los pondremos en la tabla
+            correspondiente:
+        </p>
+    }
+
+    using (@Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.subtipo)
+
+        <div class="biginput"> @Html.TextAreaFor(model => model.datos3)
+            @if (ViewBag.errorInfo.Length != 0)
+            {
+                <div class="errorTextoRojo">Tu petición debe de ser de menos de 300 caracteres</div>
+            }
+        </div>
+
+        <div>
+            <div>
+                <div class="g-recaptcha label" data-sitekey="@ViewBag.captchaKey"></div>
+            </div>
+            @if (ViewBag.errorCaptcha == true)
+            {
+                <div>
+                    <div class="errorTextoRojo biglabel">Verifica que no eres un robot</div>
+                </div>
+            }
+        </div>
+
+        <div class="label">
+            <input type="submit" value="Mandar petición" />
+        </div>
+    }
+}

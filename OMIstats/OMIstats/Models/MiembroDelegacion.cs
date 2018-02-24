@@ -713,6 +713,7 @@ namespace OMIstats.Models
             query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.institucion, ");
             query.Append(" p.nacimiento, p.genero, p.correo, p.curp, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
+            query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
             query.Append(" where p.clave = ");
@@ -721,7 +722,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and md.tipo <> ");
             query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
-            query.Append(" order by md.olimpiada ");
+            query.Append(" order by o.año asc ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();

@@ -27,6 +27,8 @@ function agregaSorterOMI(nombre) {
         },
         format: function (s, table, cell, cellIndex) {
             var $cell = $(cell);
+            if ($cell.attr('omi') == '8b')
+                return 8.5;
             return parseInt($cell.attr('omi'));
         },
         parsed: false,

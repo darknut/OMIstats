@@ -579,12 +579,13 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from resultados ");
-            query.Append(" where clase = ");
+            query.Append(" select r.* from resultados  as r ");
+            query.Append(" inner join Olimpiada as o on o.numero = r.olimpiada and o.clase = r.clase ");
+            query.Append(" where r.clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and concursante = ");
+            query.Append(" and r.concursante = ");
             query.Append(persona);
-            query.Append(" order by olimpiada asc");
+            query.Append(" order by o.año asc");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();

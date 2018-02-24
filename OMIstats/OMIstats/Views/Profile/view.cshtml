@@ -148,16 +148,27 @@
 
     @if (ViewBag.tienePeticiones)
     {
-        <div style="clear:both">
+        <div style="clear:both" class="errorTextoRojo">
             Tienes peticiones que los administradores aún no han respondido, si quieres verlas, da clic <a href="/Request/view">aquí</a>.
         </div>
+        <br />
     }
 
     <div style="clear:both">
         @if (ViewBag.usuario != null && ViewBag.usuario.clave == Model.clave && !ViewBag.usuario.admin)
         {
-            <!-- -TODO- Enlace -->
-            <span>Si tuviste participaciones que no están listadas en nuestra página, mándanos un correo con los datos faltantes.</span>
+            <div>
+                @Html.ActionLink("¿No eres tú?", "user", "Request",
+                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.NO_SOY_YO }, null) |
+                @Html.ActionLink("¿Perfil incompleto?", "user", "Request",
+                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.INCOMPLETO }, null) |
+                @Html.ActionLink("¿Perfil duplicado?", "user", "Request",
+                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.DUPLICADO }, null)
+                <br />
+                @Html.ActionLink("¿Te sabes tus puntos y nosotros no?", "user", "Request",
+                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.PUNTOS }, null) |
+                @Html.ActionLink("Contáctanos", "General", "Request")
+            </div>
         }
     </div>
 
@@ -219,7 +230,7 @@
                 <tr class="table-header">
                     <th></th>
                     <th class="bottom-border right-border table-header-clickable">Lugar</th>
-                    <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+                    <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
                     <th class="bottom-border right-border table-header-clickable">Estado</th>
                     <th class="bottom-border right-border table-header-clickable">Clave</th>
                     <th class="bottom-border right-border table-header-clickable">Puntos</th>
@@ -253,7 +264,7 @@
                             @(datos.lugar)
                         }
                     </td>
-                    <td class="@("table-td right-border " + claseCSS)">
+                    <td class="@("table-td right-border " + claseCSS)" omi="@(datos.omi)">
                         <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipo.ToString())">
                             @tableManager.enlaceOMI()
                         </a>
@@ -324,7 +335,7 @@
             <thead>
                 <tr class="table-header">
                     <th></th>
-                    <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+                    <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
                     <th class="bottom-border right-border table-header-clickable">Estado</th>
                     <th class="bottom-border table-header-clickable">Rol</th>
                 </tr>
@@ -337,7 +348,7 @@
                 <tr>
                     <td class="ioi-mini-imagen">
                     </td>
-                    <td class="table-td right-border">
+                    <td class="table-td right-border" omi="@(datos.olimpiada)">
                         <a class="nombre" href="@Url.Content("/Olimpiada?clave=" + datos.olimpiada + "&tipo=" + tipoOlimpiada.ToString())">
                             @(tableManager.enlaceOMI())
                         </a>

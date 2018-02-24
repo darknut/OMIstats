@@ -19,6 +19,22 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Request/user/
+
+        public ActionResult user(Peticion.TipoPeticion tipo)
+        {
+            if (!estaLoggeado())
+                return RedirectTo(Pagina.HOME);
+
+            Peticion pe = new Peticion();
+            pe.subtipo = tipo;
+
+            limpiarErroresViewBag();
+
+            return View(pe);
+        }
+
+        //
         // GET: /Request/LogIn/
 
         public ActionResult LogIn(string nombre, string correo, Peticion.TipoPeticion tipo)

@@ -321,6 +321,7 @@
     <Content Include="Views\Olimpiada\Estados.cshtml" />
     <Content Include="Views\Log\In.cshtml" />
     <Content Include="Views\Request\LogIn.cshtml" />
+    <Content Include="Views\Request\user.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

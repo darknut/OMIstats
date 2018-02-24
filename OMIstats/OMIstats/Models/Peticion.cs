@@ -41,7 +41,11 @@ namespace OMIstats.Models
             NO_ERROR,
             NO_ESTOY,
             ERROR,
-            BAD_LINK
+            BAD_LINK,
+            INCOMPLETO,
+            DUPLICADO,
+            NO_SOY_YO,
+            PUNTOS
         }
 
         public Peticion()
