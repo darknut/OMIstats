@@ -31,6 +31,24 @@
     ViewBag.Title = Model.nombre;
 }
 
+    @{
+    string GUID = ViewBag.GUID;
+    if (GUID.Length > 0)
+    {
+        <p class="errorTextoRojo textoGrande">
+            Este es el perfil que creemos te pertenece. ¿Es este tu perfil de usuario?
+        </p>
+        @Html.ActionLink("Sí", "In", "Log", new { GUID = GUID, force = true }, new { @class="botonPerfil" })
+        <span>&nbsp;</span>
+        @Html.ActionLink("No", "Login", "Request", new { nombre = Model.nombre, correo = Model.correo,
+                tipo = OMIstats.Models.Peticion.TipoPeticion.BAD_LINK }, new { @class="botonPerfil", target="_blank" })
+        <br />
+        <br />
+        <br />
+    }
+    }
+
+
     <h1 class="titulo">Datos de usuario</h1>
 
     <div class="foto" >

@@ -40,7 +40,8 @@ namespace OMIstats.Models
             LOGIN,
             NO_ERROR,
             NO_ESTOY,
-            ERROR
+            ERROR,
+            BAD_LINK
         }
 
         public Peticion()

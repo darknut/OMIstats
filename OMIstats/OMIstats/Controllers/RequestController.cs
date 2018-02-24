@@ -68,7 +68,8 @@ namespace OMIstats.Controllers
 
             if (pe.subtipo != Peticion.TipoPeticion.ERROR &&
                 pe.subtipo != Peticion.TipoPeticion.NO_ERROR &&
-                pe.subtipo != Peticion.TipoPeticion.NO_ESTOY)
+                pe.subtipo != Peticion.TipoPeticion.NO_ESTOY &&
+                pe.subtipo != Peticion.TipoPeticion.BAD_LINK)
                 return RedirectTo(Pagina.ERROR);
 
             pe.tipo = Peticion.TipoPeticion.LOGIN;

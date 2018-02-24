@@ -16,8 +16,6 @@ namespace OMIstats.Models
 
         public string Email { get; set; }
 
-        public string Foto { get; set; }
-
         public string Nombre { get; set; }
 
         public string CURP { get; set; }
@@ -26,7 +24,6 @@ namespace OMIstats.Models
         {
             Id = 0;
             Email = "";
-            Foto = "";
             Nombre = "";
             CURP = "";
         }
@@ -39,7 +36,6 @@ namespace OMIstats.Models
         {
             Id = (long)datos["Id"];
             Email = datos["Email"].ToString().Trim();
-            Foto = datos["Foto"].ToString().Trim();
             Nombre = datos["NombreCompleto"].ToString().Trim();
 
             try

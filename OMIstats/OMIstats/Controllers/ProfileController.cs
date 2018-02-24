@@ -73,6 +73,14 @@ namespace OMIstats.Controllers
                 }
             }
 
+            // Estas variables de sesión tienen algo cuando se inicia sesión por primera vez y
+            // se va a hacer el enlace de cuentas
+            ViewBag.GUID = "";
+            if (Session[GUID_STRING] != null && Session[GUID_USER].ToString() == p.clave.ToString())
+                ViewBag.GUID = Session[GUID_STRING];
+            Session[GUID_STRING] = null;
+            Session[GUID_USER] = null;
+
             if (tipo == Olimpiada.TipoOlimpiada.OMIS || tipo == Olimpiada.TipoOlimpiada.OMIP)
                 tipo = Olimpiada.TipoOlimpiada.OMI;
 

@@ -14,6 +14,8 @@ namespace OMIstats.Controllers
         protected const string ERROR = "error";
         protected const string OK = "ok";
         protected const string ADMIN = "admin";
+        protected const string GUID_STRING = "GUID";
+        protected const string GUID_USER = "GUID_user";
         public static string CAPTCHA_SECRET;
         public static string CAPTCHA_KEY;
 

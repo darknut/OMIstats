@@ -24,6 +24,16 @@
 }
 else
 {
+    if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.BAD_LINK)
+    {
+        <p>
+            Lamentamos que no hayamos encontrado el perfil que te pertenece.
+        </p>
+        <p>
+            Para poder asignarte el perfil correcto, por favor mándanos tus datos.
+        </p>
+    }
+
     using (@Html.BeginForm())
     {
         @Html.HiddenFor(model => model.subtipo)
@@ -67,6 +77,15 @@ else
                 <span>
                     Mándanos la página del perfil que crees que te pertenece, así
                     como los datos que debemos de actualizar en este perfil:
+                </span>
+            }
+            @if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.BAD_LINK)
+            {
+                <span>
+                    Mándanos el perfil incorrecto que se te proporcionó y si tienes
+                    la dirección del perfil correcto, también inclúyela aquí. Si no
+                    la tienes, dinos en qué olimpiada participaste, así como tu rol
+                    y a qué estado representaste.
                 </span>
             }
             </div>

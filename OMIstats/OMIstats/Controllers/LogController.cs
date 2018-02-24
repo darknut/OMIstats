@@ -16,14 +16,14 @@ namespace OMIstats.Controllers
         {
             //-TODO- descomentar esta linea y quitar el mocking de abajo
             //return Redirect(Utilities.Server.direccionOMI());
-            string guid = Models.Usuario.MockUserLoggedIn(1);
+            string guid = Models.Usuario.MockUserLoggedIn(2);
             return RedirectToAction("In", "Log", new { GUID = guid });
         }
 
         //
         // GET: /Log/In/
 
-        public ActionResult In(string GUID)
+        public ActionResult In(string GUID, bool force = false)
         {
             if (GUID == null || GUID.Equals(string.Empty))
                 return RedirectTo(Pagina.HOME);
@@ -70,6 +70,22 @@ namespace OMIstats.Controllers
                     usuario.borrarGUID();
                     return View(usuario);
                 }
+
+                // Si el parámetro force viene incluido, simplemente guardamos los datos
+                if (force)
+                {
+                    usuario.borrarGUID();
+                    persona.usuario = usuario.Id.ToString();
+                    persona.guardarDatos();
+                    setUsuario(persona);
+                }
+                else
+                {
+                    Session[GUID_STRING] = GUID;
+                    Session[GUID_USER] = persona.clave.ToString();
+                }
+
+                return RedirectTo(Pagina.VIEW_PROFILE, persona.usuario);
             }
 
             return RedirectTo(Pagina.HOME);
