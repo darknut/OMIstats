@@ -70,12 +70,12 @@ else
             clase = "impar";
         }
         counter++;
-        <tr id='@Url.Content("row" + @item.clave)' class="@clase">
+        <tr id='@("row" + @item.clave)' class="@clase">
             <td>
                 @if (item.tipo == Peticion.TipoPeticion.GENERAL)
                 {
                     <div class="biginput">
-                        <textarea cols="20" id="@Url.Content("correoRespuesta" + @item.clave)" rows="2"></textarea>
+                        <textarea cols="20" id="@("correoRespuesta" + @item.clave)" rows="2"></textarea>
                     </div>
                     <a href="javascript:aprobar(@item.clave)">Responder</a>
                 }
@@ -85,10 +85,10 @@ else
                 }
                 <a class="errorTextoRojo" href="javascript:eliminar(@item.clave)">Eliminar</a>
                 <br />
-                <div id='@Url.Content("error" + @item.clave)' class="textoRojo">
+                <div id='@("error" + @item.clave)' class="textoRojo">
                     Hubo un error, recarga la página e intenta de nuevo.
                 </div>
-                <img class="textoRojo" id='@Url.Content("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
+                <img class="textoRojo" id='@("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
             </td>
 
             @if (item.tipo == Peticion.TipoPeticion.USUARIO)
@@ -117,7 +117,7 @@ else
                         new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
                     </td>
                     <td>
-                        <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Nueva foto</a>
+                        <a href='@Url.Content("~/img/temp/" + @item.datos1)' target="_blank" class="negritas">Nueva foto</a>
                     </td>
                 }
                 else

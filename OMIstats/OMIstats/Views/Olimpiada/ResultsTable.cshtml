@@ -21,7 +21,7 @@
     </p>
 
     <p class="ejemplos">
-        <a href="@Url.Content("/Olimpiada?clave=" + Model.numero)">Volver al perfil de la Olimpiada</a>
+        <a href="@Url.Content("~/Olimpiada?clave=" + Model.numero)">Volver al perfil de la Olimpiada</a>
     </p>
 }
 else
@@ -45,7 +45,7 @@ else
                     tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.NULL &&
                     Model.tipoOlimpiada != tipo)
                 {
-                    <a class="boton" href="@Url.Content("/Olimpiada/ResultsTable?tipo=" + tipo.ToString() + "&clave=" + Model.numero)">@(tipo.ToString())</a>
+                    <a class="boton" href="@Url.Content("~/Olimpiada/ResultsTable?tipo=" + tipo.ToString() + "&clave=" + Model.numero)">@(tipo.ToString())</a>
                 }
             }
         </div>

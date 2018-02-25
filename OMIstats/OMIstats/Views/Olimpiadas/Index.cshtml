@@ -54,7 +54,7 @@
             tableManager.setCurrentOMI(item);
             <tr>
                 <td class="table-td center right-border anchoColumnaOMI">
-                   <a href ="@Url.Content("/Olimpiada?clave=" + item.numero)" >@(tableManager.enlaceOMI())</a>
+                   <a href ="@Url.Content("~/Olimpiada?clave=" + item.numero)" >@(tableManager.enlaceOMI())</a>
                 </td>
                 <td class="table-td right-border center anchoColumnaNumero">
                     @item.año
@@ -64,13 +64,13 @@
                     {
                         @(item.ciudad + ", ")
                     }
-                    <a href ="@Url.Content("/Estado?clave=" + item.claveEstado)" class="nombre">@item.nombreEstado </a>
+                    <a href ="@Url.Content("~/Estado?clave=" + item.claveEstado)" class="nombre">@item.nombreEstado </a>
                 </td>
                 <td class="table-td right-border break-word">
                     @item.friendlyDate
                 </td>
                 <td class="table-td right-border break padding-nombre-escuela anchoColumnaEscuela">
-                    <a href="@Url.Content("/Escuela?url=" + item.escuelaURL)" class="nombre"> @item.nombreEscuelaCompleto </a>
+                    <a href="@Url.Content("~/Escuela?url=" + item.escuelaURL)" class="nombre"> @item.nombreEscuelaCompleto </a>
                 </td>
                 <td class="table-td right-border center anchoColumnaNumero">
                     @if (item.participantes > 0)

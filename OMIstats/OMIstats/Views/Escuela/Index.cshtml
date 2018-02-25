@@ -63,16 +63,16 @@
             if(i == sedes.Count - 1)
             {
                 <span>
-                    <a href="@Url.Content("/Olimpiada?clave=" + sede.numero)" class="nombre">
-                        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true))
+                    <a href="@Url.Content("~/Olimpiada?clave=" + sede.numero)" class="nombre">
+                        @Url.Content("~/" + tableManager.enlaceOMI(nombreCompleto: true))
                     </a>
                 </span>
             }
             else
             {
                 <span>
-                    <a href="@Url.Content("/Olimpiada?clave=" + sede.numero)" class="nombre">
-                        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true))
+                    <a href="@Url.Content("~/Olimpiada?clave=" + sede.numero)" class="nombre">
+                        @Url.Content("~/" + tableManager.enlaceOMI(nombreCompleto: true))
                     </a>,
                 </span>
             }
@@ -93,7 +93,7 @@
                     "@Model.nombreCorto"
                 </div>
                 <div class="medallero">
-                    <img src="@("img/" + tipoOlimpiada.ToString() + ".png")" class="tipoOMI"/>
+                    <img src="@Url.Content("~/img/" + tipoOlimpiada.ToString() + ".png")" class="tipoOMI"/>
                     <div class="separador">:</div>
                     <div class="medalla" title="Medallas de oro">
                         <div><img src="~/img/oro.png"/></div>
@@ -179,7 +179,7 @@
             @if (ViewBag.admin)
             {
                 <div class="botonEscuela">
-                    <a href="@Url.Content("/Escuela/Edit?url=" + Model.nombreURL)" class="botonPerfil">Actualizar</a>
+                    <a href="@Url.Content("~/Escuela/Edit?url=" + Model.nombreURL)" class="botonPerfil">Actualizar</a>
                 </div>
             }
         </div>
@@ -234,7 +234,7 @@
                         @if (tableManager.mostrarLogoIOI())
                         {
                             <a href="@Url.Content("http://stats.ioinformatics.org/people/" + datos.persona.ioiID)" target="_blank">
-                                <img src="/img/ioi.png" />
+                                <img src="~/img/ioi.png" />
                             </a>
                         }
                     </td>
@@ -245,7 +245,7 @@
                         }
                     </td>
                     <td class="@("table-td right-border " + claseCSS)" omi="@(datos.omi)">
-                        <a class="nombre" href="@Url.Content("/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipoOlimpiada)">
+                        <a class="nombre" href="@Url.Content("~/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipoOlimpiada)">
                             @tableManager.enlaceOMI()
                         </a>
                     </td>
@@ -260,19 +260,19 @@
                         }
                     </td>
                     <td class="@("table-td break-word right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + tipoOlimpiada)">
+                        <a class="nombre" href="@Url.Content("~/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + tipoOlimpiada)">
                             @datos.persona.nombre
                         </a>
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("/Estado?clave=" + datos.estado + "&tipo=" + tipoOlimpiada)">
+                        <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipoOlimpiada)">
                             @datos.nombreEstado
                         </a>
                     </td>
                     <td class="@("table-td center right-border " + claseCSS)">
                         @if (!tableManager.faltaClave())
                         {
-                            <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipoOlimpiada)">
+                            <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipoOlimpiada)">
                                 @datos.clave
                             </a>
                         }

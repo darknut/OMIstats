@@ -23,19 +23,19 @@
 
 <div class="OMItituloFlexBox">
     <div class="logoOMI">
-        <img src="@Url.Content("..\\img\\omi\\" + Model.logo)"/>
+        <img src="@Url.Content("~/img/omi/" + Model.logo)"/>
     </div>
     <h2 class="titulo tituloOMI">
-        @Url.Content(tableManager.enlaceOMI(nombreCompleto: true) + ": " + (Model.claveEstado == "MDF" ? "" : @Model.ciudad + ", "))
-        <a href="@Url.Content("/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
+        @(tableManager.enlaceOMI(nombreCompleto: true) + ": " + (Model.claveEstado == "MDF" ? "" : @Model.ciudad + ", "))
+        <a href="@Url.Content("~/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
         @Model.año
     </h2>
     @if (ViewBag.admin)
     {
         <div class="adminButtons">
-            <a href="@Url.Content("/Olimpiada/Edit?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Actualizar</a>
-            <a href="@Url.Content("/Olimpiada/Attendees?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Asistentes</a>
-            <a href="@Url.Content("/Olimpiada/ResultsTable?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Resultados</a>
+            <a href="@Url.Content("~/Olimpiada/Edit?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Actualizar</a>
+            <a href="@Url.Content("~/Olimpiada/Attendees?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Asistentes</a>
+            <a href="@Url.Content("~/Olimpiada/ResultsTable?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Resultados</a>
         </div>
     }
 </div>
@@ -54,7 +54,7 @@
         {
             <div>
                 <div class="biglabel">
-                    Escuela sede: <a href="@Url.Content("/Escuela?url=" + Model.escuelaURL)" class="nombre"> @Model.nombreEscuelaCompleto </a>
+                    Escuela sede: <a href="@Url.Content("~/Escuela?url=" + Model.escuelaURL)" class="nombre"> @Model.nombreEscuelaCompleto </a>
                 </div>
             </div>
         }
@@ -113,7 +113,7 @@
 </div>
 
  @if (ViewBag.admin) {
-    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=0&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
+    <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=0&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
         <h1 class="subtitulo">Numeros Generales</h1>
     </a>
 }
@@ -123,7 +123,7 @@
     <h1 class="subtitulo">
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
         {
-            <a href="@Url.Content("/Olimpiada?tipo=omi&clave=" + Model.numero + "#general")">Problemas Generales</a>
+            <a href="@Url.Content("~/Olimpiada?tipo=omi&clave=" + Model.numero + "#general")">Problemas Generales</a>
         }
         else
         {
@@ -132,7 +132,7 @@
         |
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
         {
-            <a href="@Url.Content("/Olimpiada?tipo=omis&clave=" + Model.numero + "#secundarias")">Secundarias</a>
+            <a href="@Url.Content("~/Olimpiada?tipo=omis&clave=" + Model.numero + "#secundarias")">Secundarias</a>
         }
         else
         {
@@ -141,7 +141,7 @@
         |
         @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
         {
-            <a href="@Url.Content("/Olimpiada?tipo=omip&clave=" + Model.numero + "#primarias")">Primarias</a>
+            <a href="@Url.Content("~/Olimpiada?tipo=omip&clave=" + Model.numero + "#primarias")">Primarias</a>
         }
         else
         {
@@ -160,7 +160,7 @@
 
         <div>
             @if (ViewBag.admin) {
-                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
+                <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
                     <h1 class="subtitulo">Día 1</h1>
                 </a>
             } else {
@@ -180,7 +180,7 @@
                     if(ViewBag.admin)
                     {
                         <li>
-                            <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada.ToString())"
+                            <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada.ToString())"
                                 class="nombre">
                                 @if(dia1[i] != null)
                                 {
@@ -203,7 +203,7 @@
                         if (dia1[i] != null)
                         {
                             <li>
-                                <img class="enlaceProblema" src="@dia1[i].getURLIcon()"/>
+                                <img class="enlaceProblema" src="@Url.Content("~/" + dia1[i].getURLIcon())"/>
                                 <a href="@dia1[i].url" class="nombre" target="_blank">@dia1[i].nombre</a>
                             </li>
                         }
@@ -216,7 +216,7 @@
         {
             <div>
                 @if (ViewBag.admin) {
-                    <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=0&tipo=" + Model.tipoOlimpiada)">
+                    <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=0&tipo=" + Model.tipoOlimpiada)">
                         <h1 class="subtitulo">Día 2</h1>
                     </a>
                 } else {
@@ -229,7 +229,7 @@
                         if(ViewBag.admin)
                         {
                             <li>
-                                <a href="@Url.Content("/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada)"
+                                <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada)"
                                     class="nombre">
                                     @if(dia2[i] != null)
                                     {
@@ -252,7 +252,7 @@
                             if (dia2[i] != null)
                             {
                                 <li>
-                                    <img class="enlaceProblema" src="@dia2[i].getURLIcon()"/>
+                                    <img class="enlaceProblema" src="@Url.Content("~/" + dia2[i].getURLIcon())"/>
                                     <a href="@dia2[i].url" class="nombre" target="_blank">@dia2[i].nombre</a>
                                 </li>
                             }

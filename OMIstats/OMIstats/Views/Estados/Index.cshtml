@@ -36,21 +36,21 @@
     {
         <tr>
             <td class="table-td center right-border">
-                <img src="@Url.Content("img\\estados\\" + item.clave + ".png")" class="logoEstado"/>
+                <img src="@Url.Content("~/img/estados/" + item.clave + ".png")" class="logoEstado"/>
             </td>
             <td class="table-td right-border">
                 @item.clave
             </td>
             <td class="table-td right-border">
-                <a href ="@Url.Content("/Estado?clave=" + item.clave)" class="nombre">@item.nombre</a>
+                <a href ="@Url.Content("~/Estado?clave=" + item.clave)" class="nombre">@item.nombre</a>
                 @if (ViewBag.usuario.admin || (item.claveDelegado != 0 && ViewBag.usuario.clave == item.claveDelegado))
                 {
                     <br />
-                    <a href="@Url.Content("/Estado/Edit?estado=" + item.clave)">Actualizar datos</a>
+                    <a href="@Url.Content("~/Estado/Edit?estado=" + item.clave)">Actualizar datos</a>
                 }
             </td>
             <td class="table-td right-border">
-                <a href="@Url.Content("/Profile/view?usuario=" + item.usuarioDelegado)" class="nombre">@item.nombreDelegado</a>
+                <a href="@Url.Content("~/Profile/view?usuario=" + item.usuarioDelegado)" class="nombre">@item.nombreDelegado</a>
                 <br />
                 <a href="@Url.Content("mailto:" + item.mailDelegado)" target="_blank" >@item.mailDelegado</a>
             </td>

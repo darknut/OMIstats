@@ -106,10 +106,10 @@
         {
             <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.medalla)">
                 <div class="foto fotoFixedHeight">
-                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                    <img src='@Url.Content("~/" + md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
                             @md.clave
@@ -117,7 +117,7 @@
                     </div>
                     @if (md.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
                     {
-                        <img class="medallaMiembro" src="@OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.medalla)"/>
+                        <img class="medallaMiembro" src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.medalla))"/>
                     }
                 </div>
             </div>
@@ -147,10 +147,10 @@
         {
             <div class="miembroDelegacion">
                 <div class="foto fotoFixedHeight">
-                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                    <img src='@Url.Content("~/" + md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @md.getTipoAsistenteString()
                     </div>
@@ -176,10 +176,10 @@
         {
             <div class="miembroDelegacion">
                 <div class="foto fotoFixedHeight">
-                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                    <img src='@Url.Content("~/" + md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
+                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
                     <div class="claveMiembro">
                         @md.getTipoAsistenteString()
                     </div>

@@ -19,7 +19,7 @@
         Los cambios se guardaron satisfactoriamente.
     </p>
     <p>
-        <a href="@Url.Content("/Olimpiada?clave=" + Model.numero)">Ver Olimpiada</a>
+        <a href="@Url.Content("~/Olimpiada?clave=" + Model.numero)">Ver Olimpiada</a>
     </p>
 
 }
@@ -28,7 +28,7 @@ else
    <form name="editOlimpiada" id="editOlimpiada" action="/Olimpiada/Edit" method="post" enctype="multipart/form-data">
         <div>
             <div class="logoOMI">
-                <img src="@Url.Content("..\\img\\omi\\" + Model.logo)"/>
+                <img src="@Url.Content("~/img/omi/" + Model.logo)"/>
             </div>
 
             <div class="clear"></div>
@@ -221,7 +221,7 @@ else
     if (Model.numero != OMIstats.Models.Olimpiada.TEMP_CLAVE)
     {
         <br />
-        <a href="@Url.Content("/Olimpiada/Numeros?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Calcular Números</a>
+        <a href="@Url.Content("~/Olimpiada/Numeros?clave=" + Model.numero + "&tipo=" + Model.tipoOlimpiada.ToString())" class="boton botonOMI">Calcular Números</a>
 
         <div class="clear">
         </div>

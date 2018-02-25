@@ -206,7 +206,7 @@ else
                     @if (tableManager.mostrarLogoIOI())
                     {
                         <a href="@Url.Content("http://stats.ioinformatics.org/people/" + datos.persona.ioiID)" target="_blank">
-                            <img src="/img/ioi.png" />
+                            <img src="~/img/ioi.png" />
                         </a>
                     }
                 </td>
@@ -233,7 +233,7 @@ else
                     @if (mostrar && datos.persona != null)
                     {
                         <span>
-                            <a class="nombre" href="@Url.Content("/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">
+                            <a class="nombre" href="@Url.Content("~/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">
                                 @datos.persona.nombre
                             </a>
                         </span>
@@ -242,7 +242,7 @@ else
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (mostrar)
                     {
-                        <a class="nombre" href="@Url.Content("/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + datos.estado)">
+                        <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + datos.estado)">
                         @if (tableManager.faltaClave())
                         {
                             <span>
@@ -306,7 +306,7 @@ else
                     @if (mostrar && datos.escuela != null)
                     {
                         <span>
-                            <a class="nombre" href="@Url.Content("/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + Model.tipoOlimpiada)">
+                            <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + Model.tipoOlimpiada)">
                                 @datos.escuela.nombreCorto
                             </a>
                         </span>
