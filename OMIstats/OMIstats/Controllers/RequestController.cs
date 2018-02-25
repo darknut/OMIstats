@@ -35,6 +35,46 @@ namespace OMIstats.Controllers
         }
 
         //
+        // POST: /Request/user/
+
+        [HttpPost]
+        public ActionResult user(Peticion pe)
+        {
+            limpiarErroresViewBag();
+
+            if (!estaLoggeado())
+                return RedirectTo(Pagina.ERROR);
+
+            if (pe.subtipo != Peticion.TipoPeticion.NO_SOY_YO &&
+                (pe.datos3 == null || pe.datos3.Trim().Length == 0))
+            {
+                ViewBag.errorInfo = ERROR;
+                return View(pe);
+            }
+
+            if (!revisaCaptcha())
+            {
+                ViewBag.errorCaptcha = true;
+                return View(pe);
+            }
+
+            if (pe.subtipo != Peticion.TipoPeticion.NO_SOY_YO &&
+                pe.subtipo != Peticion.TipoPeticion.INCOMPLETO &&
+                pe.subtipo != Peticion.TipoPeticion.DUPLICADO &&
+                pe.subtipo != Peticion.TipoPeticion.PUNTOS)
+                return RedirectTo(Pagina.ERROR);
+
+            pe.usuario = getUsuario();
+            pe.tipo = Peticion.TipoPeticion.USUARIO;
+
+            if (!pe.guardarPeticion())
+                return RedirectTo(Pagina.ERROR);
+
+            ViewBag.guardado = true;
+            return View(pe);
+        }
+
+        //
         // GET: /Request/LogIn/
 
         public ActionResult LogIn(string nombre, string correo, Peticion.TipoPeticion tipo)

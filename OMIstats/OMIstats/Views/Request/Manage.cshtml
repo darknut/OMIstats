@@ -79,7 +79,7 @@ else
                     </div>
                     <a href="javascript:aprobar(@item.clave)">Responder</a>
                 }
-                else if (item.tipo != Peticion.TipoPeticion.LOGIN)
+                else if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.FOTO)
                 {
                     <a href="javascript:aprobar(@item.clave)">Aprobar</a>
                 }
@@ -107,8 +107,7 @@ else
                         @Html.DisplayFor(modelItem => item.datos1)
                     </td>
                 }
-
-                if (item.subtipo == Peticion.TipoPeticion.FOTO)
+                else if (item.subtipo == Peticion.TipoPeticion.FOTO)
                 {
                     <td class="negritas">
                         Cambio de foto
@@ -119,6 +118,19 @@ else
                     </td>
                     <td>
                         <a href='@Url.Content("/img/temp/" + @item.datos1)' target="_blank" class="negritas">Nueva foto</a>
+                    </td>
+                }
+                else
+                {
+                    <td class="negritas">
+                        @item.subtipo
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
+                        new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
+                    </td>
+                    <td>
+                        @item.datos3
                     </td>
                 }
             }
@@ -137,8 +149,23 @@ else
             else if (item.tipo == Peticion.TipoPeticion.LOGIN)
             {
                 <td class="negritas">
-                    @item.tipo :
-                    @item.subtipo
+                    Log in:
+                    @if (item.subtipo == Peticion.TipoPeticion.NO_ESTOY)
+                    {
+                        <span>Usuario no está en el sistema</span>
+                    }
+                    @if (item.subtipo == Peticion.TipoPeticion.NO_ERROR)
+                    {
+                        <span>Sistema no hizo match</span>
+                    }
+                    @if (item.subtipo == Peticion.TipoPeticion.ERROR)
+                    {
+                        <span>Error en los datos de usuario</span>
+                    }
+                    @if (item.subtipo == Peticion.TipoPeticion.BAD_LINK)
+                    {
+                        <span>Sistema hizo match incorrecto</span>
+                    }
                 </td>
                 <td>
                     <a href="mailto:@item.datos2">@item.datos1</a>

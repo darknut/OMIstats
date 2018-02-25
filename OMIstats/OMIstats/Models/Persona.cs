@@ -358,14 +358,7 @@ namespace OMIstats.Models
         public bool tienePeticiones()
         {
             List<Peticion> peticiones = Peticion.obtenerPeticionesDeUsuario(this);
-
-            foreach (Peticion p in peticiones)
-                if (p.tipo == Peticion.TipoPeticion.USUARIO &&
-                    (p.subtipo == Peticion.TipoPeticion.FOTO ||
-                     p.subtipo == Peticion.TipoPeticion.NOMBRE))
-                    return true;
-
-            return false;
+            return peticiones.Count > 0;
         }
 
         /// <summary>

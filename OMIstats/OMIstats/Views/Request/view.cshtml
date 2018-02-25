@@ -26,32 +26,44 @@
 <div>Aqui puedes ver las peticiones que has hecho y que necesitan ser aprobadas por un administrador. Puedes eliminarlas si así lo deseas</div>
 
 @{
-    int cambioNombre = -1;
-    int cambioFoto = -1;
-    int i = 0;
+    List<OMIstats.Models.Peticion> nombre = new List<OMIstats.Models.Peticion>();
+    List<OMIstats.Models.Peticion> foto = new List<OMIstats.Models.Peticion>();
+    List<OMIstats.Models.Peticion> otras = new List<OMIstats.Models.Peticion>();
 }
 
 @foreach (var item in Model)
 {
-    if (item.tipo == Peticion.TipoPeticion.USUARIO && item.subtipo == Peticion.TipoPeticion.NOMBRE && cambioNombre == -1)
+    if (item.tipo == Peticion.TipoPeticion.USUARIO)
     {
-        cambioNombre = i;
+        switch (item.subtipo)
+        {
+            case Peticion.TipoPeticion.NOMBRE:
+                {
+                    nombre.Add(item);
+                    break;
+                }
+            case Peticion.TipoPeticion.FOTO:
+                {
+                    foto.Add(item);
+                    break;
+                }
+            default:
+                {
+                    otras.Add(item);
+                    break;
+                }
+        }
     }
-    if (item.tipo == Peticion.TipoPeticion.USUARIO && item.subtipo == Peticion.TipoPeticion.FOTO && cambioFoto == -1)
-    {
-        cambioFoto = i;
-    }
-    i++;
 }
 
 
-@if (cambioNombre == -1 && cambioFoto == -1)
+@if (nombre.Count == 0 && foto.Count == 0 && otras.Count == 0)
 {
     <div class="clean">No tienes ninguna petición</div>
 }
 else
 {
-    if (cambioNombre != -1)
+    if (nombre.Count > 0)
     {
         
     <h3>Cambio de nombre</h3>
@@ -64,36 +76,29 @@ else
             <th></th>
         </tr>
 
-        @for (int j = cambioNombre; j < Model.Count; j++)
+        @foreach(var item in nombre)
         {
-            <tr id='@Url.Content("row" + @Model[j].clave)'>
-                @if (Model[j].tipo == Peticion.TipoPeticion.USUARIO && Model[j].subtipo == Peticion.TipoPeticion.NOMBRE)
-                {
-                    <td class="tdNombre">
-                       @ViewBag.usuario.nombre
-                    </td>
-                    <td class="tdNombre">
-                       @Html.DisplayFor(model => Model[j].datos1)
-                    </td>
-                    <td>
-                       <a href="javascript:eliminar(@Model[j].clave)">Eliminar</a>
-                       <img class="textoRojo" id='@Url.Content("loading" + @Model[j].clave)' src="~/img/ajax-loader.gif" />
-                       <div id='@Url.Content("error" + @Model[j].clave)' class="textoRojo">
-                        Hubo un error. Inténtalo más tarde.
-                       </div>
-                    </td>
-                }
-                else
-                {
-                    break;
-                }
+            <tr id='@Url.Content("row" + item.clave)'>
+                <td class="tdNombre">
+                    @ViewBag.usuario.nombre
+                </td>
+                <td class="tdNombre">
+                    @Html.DisplayFor(model => item.datos1)
+                </td>
+                <td>
+                    <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                    <img class="textoRojo" id='@Url.Content("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
+                    <div id='@Url.Content("error" + @item.clave)' class="textoRojo">
+                    Hubo un error. Inténtalo más tarde.
+                    </div>
+                </td>
             </tr>
         }
 
     </table>
     }
-    
-    if (cambioFoto != -1)
+
+    if (foto.Count > 0)
     {
         
     <h3>Cambio de foto</h3>
@@ -106,32 +111,63 @@ else
             <th></th>
         </tr>
 
-        @for (int j = cambioFoto; j < Model.Count; j++)
+        @foreach (var item in foto)
         {
-            <tr id='@Url.Content("row" + @Model[j].clave)'>
-                @if (Model[j].tipo == Peticion.TipoPeticion.USUARIO && Model[j].subtipo == Peticion.TipoPeticion.FOTO)
-                {
-                    <td class="tdFoto">
-                       <img src='@Url.Content(ViewBag.usuario.foto)' alt="foto"/>
-                    </td>
-                    <td class="tdFoto">
-                       <img src='@Url.Content(Path.Combine("/img/temp", Model[j].datos1))' alt="foto"/>
-                    </td>
-                    <td>
-                       <a href="javascript:eliminar(@Model[j].clave)">Eliminar</a>
-                       <img class="textoRojo" id='@Url.Content("loading" + @Model[j].clave)' src="~/img/ajax-loader.gif" />
-                       <div id='@Url.Content("error" + @Model[j].clave)' class="textoRojo">
-                        Hubo un error. Inténtalo más tarde.
-                       </div>
-                    </td>
-                }
-                else
-                {
-                    break;
-                }
+            <tr id='@Url.Content("row" + @item.clave)'>
+                <td class="tdFoto">
+                    <img src='@Url.Content(ViewBag.usuario.foto)' alt="foto"/>
+                </td>
+                <td class="tdFoto">
+                    <img src='@Url.Content(Path.Combine("/img/temp", item.datos1))' alt="foto"/>
+                </td>
+                <td>
+                    <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                    <img class="textoRojo" id='@Url.Content("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
+                    <div id='@Url.Content("error" + @item.clave)' class="textoRojo">
+                    Hubo un error. Inténtalo más tarde.
+                    </div>
+                </td>
+            </tr>
+        }
+
+    </table>
+    }
+
+    if (otras.Count > 0)
+    {
+
+    <h3>Peticiones de perfil</h3>
+
+    <table>
+
+        <tr>
+            <th>Tipo de petición</th>
+            <th>Mensaje</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in otras)
+        {
+            <tr id='@Url.Content("row" + @item.clave)'>
+                <td class="tdNombre">
+                    @(item.subtipo.ToString().Replace("_", " "))
+                </td>
+                <td class="tdNombre">
+                    @(item.datos3)
+                </td>
+                <td>
+                    <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                    <img class="textoRojo" id='@Url.Content("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
+                    <div id='@Url.Content("error" + @item.clave)' class="textoRojo">
+                    Hubo un error. Inténtalo más tarde.
+                    </div>
+                </td>
             </tr>
         }
 
     </table>
     }
 }
+
+<br />
+@Html.ActionLink("Regresar a tu perfil", "view", "Profile")
