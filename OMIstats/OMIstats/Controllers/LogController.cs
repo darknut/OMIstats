@@ -14,10 +14,10 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            //-TODO- descomentar esta linea y quitar el mocking de abajo
-            //return Redirect(Utilities.Server.direccionOMI());
-            string guid = Models.Usuario.MockUserLoggedIn(2);
-            return RedirectToAction("In", "Log", new { GUID = guid });
+            return Redirect(Utilities.Server.direccionOMI());
+            // Código para hacer mock
+            //string guid = Models.Usuario.MockUserLoggedIn(2);
+            //return RedirectToAction("In", "Log", new { GUID = guid });
         }
 
         //
@@ -99,8 +99,6 @@ namespace OMIstats.Controllers
             Session.Clear();
             setUsuario(new Persona(Persona.UsuarioNulo));
             return RedirectTo(Pagina.HOME);
-
-            //-TODO- redirigir a log out de la OMI
         }
     }
 }
