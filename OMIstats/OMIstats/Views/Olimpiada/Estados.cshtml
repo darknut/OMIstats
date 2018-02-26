@@ -36,7 +36,7 @@
     <br />
     <br />
     <div class="comboTitle">Olimpiadas:</div>
-    <select onChange="redirige('/Olimpiada/Estados?clave=', this.options[this.selectedIndex].value)" class="comboMargin">
+    <select onChange="redirige('@Url.Content("~/Olimpiada/Estados?clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
         @for(int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
         {
             OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
