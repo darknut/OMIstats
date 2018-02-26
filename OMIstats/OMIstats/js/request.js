@@ -14,11 +14,11 @@
         setVisible("error" + fila, true);
 }
 
-function eliminar(fila)
+function eliminar(fila, base)
 {
     setVisible("loading" + fila, true);
 
-    llamadaAjax("~/Request/Delete",
+    llamadaAjax(base + "Request/Delete",
             { clave: fila },
             function (data) { ocultaFila(data, fila); },
             function (data) { ocultaFila("error", fila); });

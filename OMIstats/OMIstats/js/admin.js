@@ -1,4 +1,4 @@
-﻿function aprobar(fila)
+﻿function aprobar(fila, base)
 {
     setVisible("loading" + fila, true);
 
@@ -8,7 +8,7 @@
     if (control != null)
         mensaje = control.value;
 
-    llamadaAjax("~/Request/Aprove",
+    llamadaAjax(base + "Request/Aprove",
         { clave: fila, mensaje: mensaje },
         function (data) { ocultaFila(data, fila); },
         function (data) { ocultaFila("error", fila); });

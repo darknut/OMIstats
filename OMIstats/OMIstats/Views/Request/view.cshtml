@@ -86,7 +86,7 @@ else
                     @Html.DisplayFor(model => item.datos1)
                 </td>
                 <td>
-                    <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                    <a href="javascript:eliminar(@item.clave, '@Url.Content("~")')">Eliminar</a>
                     <img class="textoRojo" id='@("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
                     <div id='@("error" + @item.clave)' class="textoRojo">
                     Hubo un error. Inténtalo más tarde.
@@ -121,7 +121,7 @@ else
                     <img src='@Url.Content("~/img/temp/" + item.datos1)' alt="foto"/>
                 </td>
                 <td>
-                    <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                    <a href="javascript:eliminar(@item.clave, '@Url.Content("~")')">Eliminar</a>
                     <img class="textoRojo" id='@("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
                     <div id='@("error" + @item.clave)' class="textoRojo">
                     Hubo un error. Inténtalo más tarde.
@@ -156,7 +156,7 @@ else
                     @(item.datos3)
                 </td>
                 <td>
-                    <a href="javascript:eliminar(@item.clave)">Eliminar</a>
+                    <a href="javascript:eliminar(@item.clave, '@Url.Content("~")')">Eliminar</a>
                     <img class="textoRojo" id='@("loading" + @item.clave)' src="~/img/ajax-loader.gif" />
                     <div id='@("error" + @item.clave)' class="textoRojo">
                     Hubo un error. Inténtalo más tarde.

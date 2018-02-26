@@ -77,13 +77,13 @@ else
                     <div class="biginput">
                         <textarea cols="20" id="@("correoRespuesta" + @item.clave)" rows="2"></textarea>
                     </div>
-                    <a href="javascript:aprobar(@item.clave)">Responder</a>
+                    <a href="javascript:aprobar(@item.clave, '@Url.Content("~")')">Responder</a>
                 }
                 else if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.FOTO)
                 {
-                    <a href="javascript:aprobar(@item.clave)">Aprobar</a>
+                    <a href="javascript:aprobar(@item.clave, '@Url.Content("~")')">Aprobar</a>
                 }
-                <a class="errorTextoRojo" href="javascript:eliminar(@item.clave)">Eliminar</a>
+                <a class="errorTextoRojo" href="javascript:eliminar(@item.clave, '@Url.Content("~")')">Eliminar</a>
                 <br />
                 <div id='@("error" + @item.clave)' class="textoRojo">
                     Hubo un error, recarga la página e intenta de nuevo.
