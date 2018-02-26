@@ -219,7 +219,7 @@
                     <td class="ioi-mini-imagen">
                         @if (tableManager.mostrarLogoIOI())
                         {
-                            <a href="@Url.Content("http://stats.ioinformatics.org/people/" + datos.persona.ioiID)" target="_blank">
+                            <a href="@tableManager.getIOIStatsLink(datos.persona.ioiID)" target="_blank">
                                 <img src="~/img/ioi.png" />
                             </a>
                         }

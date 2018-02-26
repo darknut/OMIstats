@@ -33,6 +33,7 @@
 
     @{
     string GUID = ViewBag.GUID;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     if (GUID.Length > 0)
     {
         <p class="errorTextoRojo textoGrande">
@@ -72,7 +73,7 @@
 
             @if (Model.ioiID != 0)
             {
-                <a href='@Url.Content("http://stats.ioinformatics.org/people/" + @Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;"/></a>
+                <a href='@tableManager.getIOIStatsLink(Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;"/></a>
             }
 
             @if (Model.sitio.Length > 0)

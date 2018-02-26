@@ -57,6 +57,11 @@ namespace OMIstats.Utilities
             currentOMI = Olimpiada.obtenerOlimpiadaConClave(currentResultados.omi, currentResultados.tipoOlimpiada);
         }
 
+        public string getIOIStatsLink(int id)
+        {
+            return "http://stats.ioinformatics.org/people/" + id;
+        }
+
         public string getIOIStatsLinkForPerson()
         {
             int IOI = 1988;
