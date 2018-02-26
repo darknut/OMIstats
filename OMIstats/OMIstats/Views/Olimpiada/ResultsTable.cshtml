@@ -108,7 +108,7 @@ else
         </p>
     }
 
-    <form name="resultadosOMI" id="resultadosOMI" action="/Olimpiada/ResultsTable" method="post" enctype="multipart/form-data">
+    <form name="resultadosOMI" id="resultadosOMI" action="~/Olimpiada/ResultsTable" method="post" enctype="multipart/form-data">
         <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.resultados</textarea>
         <input name="clave" id="clave" type="hidden" value="@Model.numero" />
         <input name="tipo" id="tipo" type="hidden" value="@Model.tipoOlimpiada.ToString()" />

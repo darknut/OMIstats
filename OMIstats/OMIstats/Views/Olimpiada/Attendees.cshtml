@@ -69,7 +69,7 @@ else
         </p>
     }
 
-    <form name="asistentesOMI" id="asistentesOMI" action="/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
+    <form name="asistentesOMI" id="asistentesOMI" action="~/Olimpiada/Attendees" method="post" enctype="multipart/form-data">
         <textarea name="tabla" id="tabla" class="tablaAsistentes">@ViewBag.asistentes</textarea>
         <input name="clave" id="clave" type="hidden" value="@Model.numero" />
         <input name="tipo" id="tipo" type="hidden" value="@Model.tipoOlimpiada.ToString()" />
