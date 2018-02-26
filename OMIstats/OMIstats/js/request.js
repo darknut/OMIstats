@@ -18,7 +18,7 @@ function eliminar(fila)
 {
     setVisible("loading" + fila, true);
 
-    llamadaAjax("/Request/Delete",
+    llamadaAjax("~/Request/Delete",
             { clave: fila },
             function (data) { ocultaFila(data, fila); },
             function (data) { ocultaFila("error", fila); });
