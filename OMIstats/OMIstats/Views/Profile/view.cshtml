@@ -33,7 +33,7 @@
 
     @{
     string GUID = ViewBag.GUID;
-    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
     if (GUID.Length > 0)
     {
         <p class="errorTextoRojo textoGrande">
@@ -242,7 +242,6 @@
                 </tr>
             </thead>
             <tbody>
-            @{ OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario); }
             @for (var l = 0; l < participacion.Count; l++)
             {
                 OMIstats.Models.Resultados datos = participacion[l];
@@ -322,7 +321,6 @@
 
     @if (ViewBag.asistencias.Count > 0)
     {
-        OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
         if (hayParticipaciones)
         {
             <h1 class="titulo subtitulo"> Participaciones con diferente rol </h1>
