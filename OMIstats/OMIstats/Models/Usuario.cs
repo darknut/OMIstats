@@ -20,12 +20,19 @@ namespace OMIstats.Models
 
         public string CURP { get; set; }
 
+        public static bool PRODUCTION;
+
         public Usuario()
         {
             Id = 0;
             Email = "";
             Nombre = "";
             CURP = "";
+        }
+
+        private static string tableName(string table)
+        {
+            return (PRODUCTION ? "" : "[") + table + (PRODUCTION ? "" : "]");
         }
 
         /// <summary>
@@ -59,7 +66,9 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             string guid = Guid.NewGuid().ToString();
 
-            query.Append(" update [Usuarios.Usuarios] set GUID = ");
+            query.Append(" update ");
+            query.Append(tableName("Usuarios.Usuarios"));
+            query.Append(" set GUID = ");
             query.Append(Utilities.Cadenas.comillas(guid));
             query.Append(" where Id = ");
             query.Append(userId);
@@ -76,7 +85,9 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" update [Usuarios.Usuarios] set GUID = ''");
+            query.Append(" update ");
+            query.Append(tableName("Usuarios.Usuarios"));
+            query.Append(" set GUID = ''");
             query.Append(" where Id = ");
             query.Append(Id);
 
@@ -94,7 +105,9 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Usuario usuario = new Usuario();
 
-            query.Append(" select * from [Usuarios.Usuarios] where GUID = ");
+            query.Append(" select * from ");
+            query.Append(tableName("Usuarios.Usuarios"));
+            query.Append(" where GUID = ");
             query.Append(Utilities.Cadenas.comillas(guid));
 
             db.EjecutarQuery(query.ToString(), Utilities.Acceso.BaseDeDatos.OMI);

@@ -115,7 +115,7 @@ else
         {
             <tr id='@("row" + @item.clave)'>
                 <td class="tdFoto">
-                    <img src='@Url.Content("~/" + ViewBag.usuario.foto)' alt="foto"/>
+                    <img src='@Url.Content(ViewBag.usuario.foto)' alt="foto"/>
                 </td>
                 <td class="tdFoto">
                     <img src='@Url.Content("~/img/temp/" + item.datos1)' alt="foto"/>

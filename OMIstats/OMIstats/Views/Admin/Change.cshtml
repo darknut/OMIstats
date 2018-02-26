@@ -25,7 +25,7 @@
 <h2 class="titulo">@titulo a</h2>
 
 <div class="foto" >
-    <img src='@Url.Content("~/" + @Model.foto)' alt="@Model.nombre"/>
+    <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
 </div>
 
 <div class="datosParticipante">

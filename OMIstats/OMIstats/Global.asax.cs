@@ -26,6 +26,7 @@ namespace OMIstats
 
             Utilities.Acceso.CADENA_CONEXION = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
             Utilities.Acceso.CADENA_CONEXION_OMI = ConfigurationManager.ConnectionStrings["conexionOMI"].ConnectionString;
+            Models.Usuario.PRODUCTION = ConfigurationManager.AppSettings.Get("Production") == "true";
             Controllers.BaseController.CAPTCHA_SECRET = ConfigurationManager.AppSettings.Get("captchaSecret");
             Controllers.BaseController.CAPTCHA_KEY = ConfigurationManager.AppSettings.Get("captchaKey");
         }

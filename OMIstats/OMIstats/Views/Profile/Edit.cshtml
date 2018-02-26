@@ -32,7 +32,7 @@
 <form name="editProfile" id="editProfile" action="/Profile/Edit" method="post" enctype="multipart/form-data">
     <div>
         <div class="foto">
-            <img src='@Url.Content("~/" + @Model.foto)' alt="@Model.nombre"/>
+            <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
         </div>
 
         <div class="datosParticipante">

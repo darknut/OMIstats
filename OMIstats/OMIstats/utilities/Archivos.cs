@@ -18,11 +18,9 @@ namespace OMIstats.Utilities
         public const string FOLDER_POSTERS = "~/img/posters";
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
 
-        public const string FOLDER_FOTOS_OMI = "D:\\portal omi\\App_Data\\Usuarios_Fotos\\";
-
-        public const string FOTO_KAREL = "\\img\\karel.bmp";
-        public const string FOTO_DOMI = "\\img\\domi.gif";
-        public const string FOTO_OMI = "\\img\\omi.png";
+        public const string FOTO_KAREL = "~/img/karel.bmp";
+        public const string FOTO_DOMI = "~/img/domi.gif";
+        public const string FOTO_OMI = "~/img/omi.png";
 
         public enum ResultadoImagen
         {

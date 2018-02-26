@@ -106,7 +106,7 @@
         {
             <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.medalla)">
                 <div class="foto fotoFixedHeight">
-                    <img src='@Url.Content("~/" + md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
                     <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
@@ -147,7 +147,7 @@
         {
             <div class="miembroDelegacion">
                 <div class="foto fotoFixedHeight">
-                    <img src='@Url.Content("~/" + md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
                     <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
@@ -176,7 +176,7 @@
         {
             <div class="miembroDelegacion">
                 <div class="foto fotoFixedHeight">
-                    <img src='@Url.Content("~/" + md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
                     <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
