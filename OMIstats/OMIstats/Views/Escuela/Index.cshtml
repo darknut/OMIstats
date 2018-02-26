@@ -60,22 +60,8 @@
             {
                 <span> y </span>
             }
-            if(i == sedes.Count - 1)
-            {
-                <span>
-                    <a href="@Url.Content("~/Olimpiada?clave=" + sede.numero)" class="nombre">
-                        @Url.Content("~/" + tableManager.enlaceOMI(nombreCompleto: true))
-                    </a>
-                </span>
-            }
-            else
-            {
-                <span>
-                    <a href="@Url.Content("~/Olimpiada?clave=" + sede.numero)" class="nombre">
-                        @Url.Content("~/" + tableManager.enlaceOMI(nombreCompleto: true))
-                    </a>,
-                </span>
-            }
+            <span><a href="@Url.Content("~/Olimpiada?clave=" + sede.numero)" class="nombre">
+            @(tableManager.enlaceOMI(nombreCompleto: true))</a></span>@(i < sedes.Count - 2 ? "," : "")
         }
     }
 </div>
