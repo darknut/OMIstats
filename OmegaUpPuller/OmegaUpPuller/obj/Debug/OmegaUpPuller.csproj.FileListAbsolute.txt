@@ -1,6 +1,0 @@
-D:\Escritorio\Programas\Personales\WebSites\OMIstats\OmegaUpPuller\OmegaUpPuller\bin\Debug\OmegaUpPuller.exe.config
-D:\Escritorio\Programas\Personales\WebSites\OMIstats\OmegaUpPuller\OmegaUpPuller\bin\Debug\OmegaUpPuller.exe
-D:\Escritorio\Programas\Personales\WebSites\OMIstats\OmegaUpPuller\OmegaUpPuller\bin\Debug\OmegaUpPuller.pdb
-D:\Escritorio\Programas\Personales\WebSites\OMIstats\OmegaUpPuller\OmegaUpPuller\obj\Debug\OmegaUpPuller.csprojResolveAssemblyReference.cache
-D:\Escritorio\Programas\Personales\WebSites\OMIstats\OmegaUpPuller\OmegaUpPuller\obj\Debug\OmegaUpPuller.exe
-D:\Escritorio\Programas\Personales\WebSites\OMIstats\OmegaUpPuller\OmegaUpPuller\obj\Debug\OmegaUpPuller.pdb
