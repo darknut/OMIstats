@@ -39,10 +39,10 @@ else
     else
     {
         <div class="submenu">
-            @foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
+            @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
             {
-                if (tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.IOI && 
-                    tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.NULL &&
+                if (tipo != OMIstats.Models.TipoOlimpiada.IOI && 
+                    tipo != OMIstats.Models.TipoOlimpiada.NULL &&
                     Model.tipoOlimpiada != tipo)
                 {
                     <a class="boton" href="@Url.Content("~/Olimpiada/Attendees?tipo=" + tipo.ToString() + "&clave=" + Model.numero)">@(tipo.ToString())</a>

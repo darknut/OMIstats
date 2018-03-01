@@ -38,10 +38,10 @@
     <br />
     @if (Model.alsoOmips)
     {
-        foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
+        foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
         {
-            if (tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.IOI && 
-                tipo != OMIstats.Models.Olimpiada.TipoOlimpiada.NULL &&
+            if (tipo != OMIstats.Models.TipoOlimpiada.IOI && 
+                tipo != OMIstats.Models.TipoOlimpiada.NULL &&
                 Model.tipoOlimpiada != tipo)
             {
                 @Html.ActionLink(tipo.ToString(), "Resultados", "Olimpiada",

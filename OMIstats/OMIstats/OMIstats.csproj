@@ -187,6 +187,7 @@
     <Compile Include="Models\Peticion.cs" />
     <Compile Include="Models\Problema.cs" />
     <Compile Include="Models\Resultados.cs" />
+    <Compile Include="Models\TipoOlimpiada.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="utilities\Acceso.cs" />
     <Compile Include="utilities\Archivos.cs" />

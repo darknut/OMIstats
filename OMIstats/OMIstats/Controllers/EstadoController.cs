@@ -12,7 +12,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Estado/
 
-        public ActionResult Index(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Index(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             Estado e = Estado.obtenerEstadoConClave(clave);
 

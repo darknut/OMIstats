@@ -114,7 +114,7 @@ bool hayPuntos = estados[0].puntos > 0;
                 {
                     <sup><a class="nombre" href="#sede">1</a></sup>
                 }
-                @if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMI && estado.clave == "GTO")
+                @if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI && estado.clave == "GTO")
                 {
                     <sup><a class="nombre" href="#german">2</a></sup>
                 }
@@ -173,7 +173,7 @@ bool hayPuntos = estados[0].puntos > 0;
     resto de la delegación, visite la <a href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
 </div>
 
-if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
 {
     <div id="german" class="sede">
         [2]: En la 12a OMI, se le otorgó una quinta medalla

@@ -28,10 +28,10 @@
 <div class="submenu">
     @{
         OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
-        OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+        OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     }
 
-    @foreach (OMIstats.Models.Olimpiada.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.Olimpiada.TipoOlimpiada)))
+    @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
     {
         if (medalleros.medalleroDeTipo(tipo) != null && tipoOlimpiada != tipo)
         {
@@ -98,11 +98,11 @@
 </div>
 
 <h1 class="titulo subtitulo"> Alumnos competidores
-    @if (tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+    @if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIS)
     {
         @("de secundaria")
     }
-    @if (tipoOlimpiada == OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+    @if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIP)
     {
         @("de primaria")
     }

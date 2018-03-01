@@ -43,7 +43,7 @@ namespace OMIstats.Models
 
         public int lugar;
         public string omi;
-        public Olimpiada.TipoOlimpiada tipoOlimpiada;
+        public TipoOlimpiada tipoOlimpiada;
         public int usuario;
         public string estado;
         public string clave;
@@ -67,7 +67,7 @@ namespace OMIstats.Models
         public Resultados()
         {
             omi = "";
-            tipoOlimpiada = Olimpiada.TipoOlimpiada.NULL;
+            tipoOlimpiada = TipoOlimpiada.NULL;
 
             lugar = 0;
             usuario = 0;
@@ -231,7 +231,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="cargarObjetos">Si los objetos deben de llenarse</param>
         /// <returns>Una lista con los resultados</returns>
-        public static List<Resultados> cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
+        public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
         {
             List<Resultados> lista = new List<Resultados>();
 
@@ -270,7 +270,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="clave">La clave de la persona</param>
         /// <returns>Los resultados pedidos</returns>
-        public static Resultados cargarResultados(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string clave)
+        public static Resultados cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -340,7 +340,7 @@ namespace OMIstats.Models
         /// <param name="omi">La omi de los resultados</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="clave">La clave a borrar</param>
-        public static void eliminarResultado(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string clave)
+        public static void eliminarResultado(string omi, TipoOlimpiada tipoOlimpiada, string clave)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -363,7 +363,7 @@ namespace OMIstats.Models
         /// <param name="claveOriginal">La clave original</param>
         /// <param name="claveNueva">La nueva clave</param>
         /// <rereturns>Si se cambio exitosamente la clave</rereturns>
-        public static bool cambiarClave(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string claveOriginal, string claveNueva)
+        public static bool cambiarClave(string omi, TipoOlimpiada tipoOlimpiada, string claveOriginal, string claveNueva)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -391,7 +391,7 @@ namespace OMIstats.Models
         /// <param name="problemasDia2">El número de problemas a desplegar el día 2</param>
         /// <param name="linea">Los datos tabulados por comas</param>
         /// <returns>Si hubo un error, lo devuelve</returns>
-        public static TipoError guardarLineaAdmin(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, int problemasDia1, int problemasDia2, string linea)
+        public static TipoError guardarLineaAdmin(string omi, TipoOlimpiada tipoOlimpiada, int problemasDia1, int problemasDia2, string linea)
         {
             if (linea.Trim().Length == 0)
                 return TipoError.OK;
@@ -514,7 +514,7 @@ namespace OMIstats.Models
         /// <param name="clave">La clave de la olimpiada</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <returns>Si se deben desplegar los resultados o no</returns>
-        public static bool mostrarResultadosIndividuales(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static bool mostrarResultadosIndividuales(string clave, TipoOlimpiada tipoOlimpiada)
         {
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -537,7 +537,7 @@ namespace OMIstats.Models
         /// <param name="clave">La clave de la olimpiada</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <returns>Si se deben desplegar los resultados o no</returns>
-        public static bool mostrarResultadosPorDia(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static bool mostrarResultadosPorDia(string clave, TipoOlimpiada tipoOlimpiada)
         {
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -559,21 +559,21 @@ namespace OMIstats.Models
         /// <param name="persona">La persona de la que se quieren los datos</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada que se solicita</param>
         /// <returns>La lista de participaciones</returns>
-        public static Dictionary<Olimpiada.TipoOlimpiada, List<Resultados>> obtenerParticipacionesComoCompetidorPara(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static Dictionary<TipoOlimpiada, List<Resultados>> obtenerParticipacionesComoCompetidorPara(int persona, TipoOlimpiada tipoOlimpiada)
         {
-            Dictionary<Olimpiada.TipoOlimpiada, List<Resultados>> participaciones = new Dictionary<Olimpiada.TipoOlimpiada, List<Resultados>>();
+            Dictionary<TipoOlimpiada, List<Resultados>> participaciones = new Dictionary<TipoOlimpiada, List<Resultados>>();
 
             participaciones.Add(tipoOlimpiada, obtenerParticipaciones(persona, tipoOlimpiada));
-            if (tipoOlimpiada == Olimpiada.TipoOlimpiada.OMI)
+            if (tipoOlimpiada == TipoOlimpiada.OMI)
             {
-                participaciones.Add(Olimpiada.TipoOlimpiada.OMIP, obtenerParticipaciones(persona, Olimpiada.TipoOlimpiada.OMIP));
-                participaciones.Add(Olimpiada.TipoOlimpiada.OMIS, obtenerParticipaciones(persona, Olimpiada.TipoOlimpiada.OMIS));
+                participaciones.Add(TipoOlimpiada.OMIP, obtenerParticipaciones(persona, TipoOlimpiada.OMIP));
+                participaciones.Add(TipoOlimpiada.OMIS, obtenerParticipaciones(persona, TipoOlimpiada.OMIS));
             }
 
             return participaciones;
         }
 
-        private static List<Resultados> obtenerParticipaciones(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        private static List<Resultados> obtenerParticipaciones(int persona, TipoOlimpiada tipoOlimpiada)
         {
             List<Resultados> lista = new List<Resultados>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -608,7 +608,7 @@ namespace OMIstats.Models
         /// <param name="clave">La clave de la institución deseada</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
         /// <returns>La lista de alumnos</returns>
-        public static List<Resultados> obtenerAlumnosDeInstitucion(int clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static List<Resultados> obtenerAlumnosDeInstitucion(int clave, TipoOlimpiada tipoOlimpiada)
         {
             List<Resultados> lista = new List<Resultados>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -645,7 +645,7 @@ namespace OMIstats.Models
         /// <param name="clave">La clave del estado deseado</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
         /// <returns>La lista de alumnos</returns>
-        public static List<Resultados> obtenerAlumnosDeEstado(string clave, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static List<Resultados> obtenerAlumnosDeEstado(string clave, TipoOlimpiada tipoOlimpiada)
         {
             List<Resultados> lista = new List<Resultados>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -684,7 +684,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada que se solicita</param>
         /// <param name="dia">El dia del problema</param>
         /// <param name="numero">El numero del problema</param>
-        public static Problema calcularNumeros(string olimpiada, Olimpiada.TipoOlimpiada tipoOlimpiada, int dia = 0, int numero = 0, int totalProblemas = 0)
+        public static Problema calcularNumeros(string olimpiada, TipoOlimpiada tipoOlimpiada, int dia = 0, int numero = 0, int totalProblemas = 0)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();

@@ -13,7 +13,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Escuela/
 
-        public ActionResult Index(string url, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Index(string url, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             Institucion i = Institucion.obtenerInstitucionConNombreURL(url);
             if (i == null)

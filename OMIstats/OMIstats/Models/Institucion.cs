@@ -346,7 +346,7 @@ namespace OMIstats.Models
             query.Append(clave);
             query.Append(" and clase = ");
             // Mientras las OMIS y OMIPS no sean aparte, las sedes se cargan de OMIS
-            query.Append(Utilities.Cadenas.comillas(Olimpiada.TipoOlimpiada.OMI.ToString().ToLower()));
+            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
 
@@ -357,7 +357,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 string numero = r[0].ToString();
-                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero, Olimpiada.TipoOlimpiada.OMI);
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero, TipoOlimpiada.OMI);
                 list.Add(o);
             }
 

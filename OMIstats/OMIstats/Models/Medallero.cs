@@ -18,7 +18,7 @@ namespace OMIstats.Models
             ESTADO_POR_OMI
         }
 
-        public Olimpiada.TipoOlimpiada tipoOlimpiada { get; set; }
+        public TipoOlimpiada tipoOlimpiada { get; set; }
 
         public TipoMedallero tipoMedallero { get; set; }
 
@@ -47,7 +47,7 @@ namespace OMIstats.Models
 
         public Medallero()
         {
-            tipoOlimpiada = Olimpiada.TipoOlimpiada.NULL;
+            tipoOlimpiada = TipoOlimpiada.NULL;
             tipoMedallero = TipoMedallero.NULL;
             clave = "";
             oros = 0;
@@ -64,14 +64,14 @@ namespace OMIstats.Models
             count = 0;
         }
 
-        public Medallero(Olimpiada.TipoOlimpiada tipo): this()
+        public Medallero(TipoOlimpiada tipo): this()
         {
             tipoOlimpiada = tipo;
         }
 
         private void llenarDatos(DataRow datos)
         {
-            tipoOlimpiada = (Olimpiada.TipoOlimpiada)Enum.Parse(typeof(Olimpiada.TipoOlimpiada), datos["clase"].ToString().ToUpper());
+            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), datos["clase"].ToString().ToUpper());
             tipoMedallero = (TipoMedallero)Enum.Parse(typeof(TipoMedallero), datos["tipo"].ToString().ToUpper());
             clave = datos["clave"].ToString().Trim();
             oros = (int)datos["oro"];
@@ -93,7 +93,7 @@ namespace OMIstats.Models
         /// <param name="clave">La clave del estado/persona/institucion/asesor</param>
         /// <param name="nullSiInexistente">Regresa null si no hay medallero y esta bandera es verdadera</param>
         /// <returns>Un objeto medallero con los datos deseados</returns>
-        public static Medallero obtenerMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave, bool nullSiInexistente = false)
+        public static Medallero obtenerMedallas(TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave, bool nullSiInexistente = false)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -133,10 +133,10 @@ namespace OMIstats.Models
         {
             Medalleros m = new Medalleros();
 
-            m.OMI = obtenerMedallas(Olimpiada.TipoOlimpiada.OMI, tipoMedallero, clave, true);
-            m.IOI = obtenerMedallas(Olimpiada.TipoOlimpiada.IOI, tipoMedallero, clave, true);
-            m.OMIS = obtenerMedallas(Olimpiada.TipoOlimpiada.OMIS, tipoMedallero, clave, true);
-            m.OMIP = obtenerMedallas(Olimpiada.TipoOlimpiada.OMIP, tipoMedallero, clave, true);
+            m.OMI = obtenerMedallas(TipoOlimpiada.OMI, tipoMedallero, clave, true);
+            m.IOI = obtenerMedallas(TipoOlimpiada.IOI, tipoMedallero, clave, true);
+            m.OMIS = obtenerMedallas(TipoOlimpiada.OMIS, tipoMedallero, clave, true);
+            m.OMIP = obtenerMedallas(TipoOlimpiada.OMIP, tipoMedallero, clave, true);
 
             return m;
         }
@@ -147,7 +147,7 @@ namespace OMIstats.Models
         /// <returns>Regresa si se guardo o no</returns>
         public bool guardarDatos()
         {
-            if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == Olimpiada.TipoOlimpiada.NULL || clave == "")
+            if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -184,9 +184,9 @@ namespace OMIstats.Models
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
         /// </param name="tipoOlimpiada">El tipo de olimpiada para el que se requieren los tipos</param>
-        public static void calcularMedallas(Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada)
         {
-            if (tipoOlimpiada == Olimpiada.TipoOlimpiada.NULL)
+            if (tipoOlimpiada == TipoOlimpiada.NULL)
                 return;
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -421,7 +421,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="olimpiada">La clave de la olimpiada</param>
         /// <returns>La tabla ordenada de estados</returns>
-        public static List<Medallero> obtenerTablaEstados(Olimpiada.TipoOlimpiada tipoOlimpiada, string olimpiada)
+        public static List<Medallero> obtenerTablaEstados(TipoOlimpiada tipoOlimpiada, string olimpiada)
         {
             List<Medallero> lista = new List<Medallero>();
 
@@ -479,40 +479,40 @@ namespace OMIstats.Models
         public Medallero OMIP;
         public Medallero IOI;
 
-        public Medallero medalleroDeTipo(Olimpiada.TipoOlimpiada tipo)
+        public Medallero medalleroDeTipo(TipoOlimpiada tipo)
         {
             switch (tipo)
             {
-                case Olimpiada.TipoOlimpiada.OMI:
+                case TipoOlimpiada.OMI:
                     return this.OMI;
-                case Olimpiada.TipoOlimpiada.OMIS:
+                case TipoOlimpiada.OMIS:
                     return this.OMIS;
-                case Olimpiada.TipoOlimpiada.OMIP:
+                case TipoOlimpiada.OMIP:
                     return this.OMIP;
-                case Olimpiada.TipoOlimpiada.IOI:
+                case TipoOlimpiada.IOI:
                     return this.IOI;
             }
             return null;
         }
 
-        public Olimpiada.TipoOlimpiada obtenerDefault(Olimpiada.TipoOlimpiada tipo)
+        public TipoOlimpiada obtenerDefault(TipoOlimpiada tipo)
         {
             if (medalleroDeTipo(tipo) != null)
                 return tipo;
 
             if (this.OMI != null)
-                return Olimpiada.TipoOlimpiada.OMI;
+                return TipoOlimpiada.OMI;
 
             if (this.IOI != null)
-                return Olimpiada.TipoOlimpiada.IOI;
+                return TipoOlimpiada.IOI;
 
             if (this.OMIS != null)
-                return Olimpiada.TipoOlimpiada.OMIS;
+                return TipoOlimpiada.OMIS;
 
             if (this.OMIP != null)
-                return Olimpiada.TipoOlimpiada.OMIP;
+                return TipoOlimpiada.OMIP;
 
-            return Olimpiada.TipoOlimpiada.OMI;
+            return TipoOlimpiada.OMI;
         }
     }
 }

@@ -286,7 +286,7 @@ namespace OMIstats.Models
         /// <param name="omi">La omi de la que se necesitan los asistentes</param>
         /// <param name="tipoOlimpiada">El tipo de la olimpiada de la que se requieren asistentes</param>
         /// <returns>Una lista con los asistentes de la OMI</returns>
-        public static List<MiembroDelegacion> cargarAsistentesOMI(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static List<MiembroDelegacion> cargarAsistentesOMI(string omi, TipoOlimpiada tipoOlimpiada)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
             if (omi == null)
@@ -365,7 +365,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada a los que los datos pertenecen</param>
         /// <param name="linea">Los datos tabulados por comas</param>
         /// <returns>Si hubo un error, lo devuelve</returns>
-        public static TipoError guardarLineaAdmin(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string linea)
+        public static TipoError guardarLineaAdmin(string omi, TipoOlimpiada tipoOlimpiada, string linea)
         {
             if (linea.Trim().Length == 0)
                 return TipoError.OK;
@@ -625,7 +625,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="clave">La clave buscada</param>
         /// <returns>La lista de miembros con la clave buscada</returns>
-        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, string clave)
+        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, TipoOlimpiada tipoOlimpiada, string clave)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -660,7 +660,7 @@ namespace OMIstats.Models
         /// <param name="omi">La OMI deseada</param>
         /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
         /// <returns>Cuantos estados participaron</returns>
-        public static int obtenerEstadosParticipantes(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static int obtenerEstadosParticipantes(string omi, TipoOlimpiada tipoOlimpiada)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -681,7 +681,7 @@ namespace OMIstats.Models
         /// <param name="omi">La OMI deseada</param>
         /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
         /// <returns>Cuantos competidores participaron</returns>
-        public static int obtenerParticipantes(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static int obtenerParticipantes(string omi, TipoOlimpiada tipoOlimpiada)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -703,7 +703,7 @@ namespace OMIstats.Models
         /// <param name="persona">La clave de la persona deseada</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
         /// <returns>La lista de participaciones</returns>
-        public static List<MiembroDelegacion> obtenerParticipaciones(int persona, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static List<MiembroDelegacion> obtenerParticipaciones(int persona, TipoOlimpiada tipoOlimpiada)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
@@ -742,7 +742,7 @@ namespace OMIstats.Models
         /// Obtiene la lista de miembros de una delegacion
         /// </summary>
         /// <returns></returns>
-        public static List<MiembroDelegacion> obtenerMiembrosDelegacion(string olimpiada, string estado, Olimpiada.TipoOlimpiada tipoOlimpiada, TipoAsistente tipo = TipoAsistente.NULL)
+        public static List<MiembroDelegacion> obtenerMiembrosDelegacion(string olimpiada, string estado, TipoOlimpiada tipoOlimpiada, TipoAsistente tipo = TipoAsistente.NULL)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 

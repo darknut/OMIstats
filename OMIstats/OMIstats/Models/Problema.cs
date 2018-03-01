@@ -17,7 +17,7 @@ namespace OMIstats.Models
 
         public string olimpiada { get; set; }
 
-        public Olimpiada.TipoOlimpiada tipoOlimpiada { get; set; }
+        public TipoOlimpiada tipoOlimpiada { get; set; }
 
         public int dia { get; set; }
 
@@ -52,7 +52,7 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow datos)
         {
             olimpiada = datos["olimpiada"].ToString().Trim();
-            tipoOlimpiada = (Olimpiada.TipoOlimpiada)Enum.Parse(typeof(Olimpiada.TipoOlimpiada), datos["clase"].ToString().ToUpper());
+            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), datos["clase"].ToString().ToUpper());
             dia = (int)datos["dia"];
             numero = (int)datos["numero"];
             nombre = datos["nombre"].ToString().Trim();
@@ -72,7 +72,7 @@ namespace OMIstats.Models
         /// <returns>La lista de problemas</returns>
         /// <remarks>Siempre se regresara un arreglo con 6 elementos,
         /// de haber menos problemas, el resto de los elmentos tendrá null</remarks>
-        public static List<Problema> obtenerProblemasDeOMI(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, int dia)
+        public static List<Problema> obtenerProblemasDeOMI(string omi, TipoOlimpiada tipoOlimpiada, int dia)
         {
             List<Problema> problemas = new List<Problema>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -114,7 +114,7 @@ namespace OMIstats.Models
         /// <param name="omi">La omi de los problemas</param>
         /// <param name="tipoOlimpiada">El tipo olimpiada del que se requieren los datos</param>
         /// <returns>La lista de problemas</returns>
-        public static List<Problema> obetnerMetaDatadeOMI(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada)
+        public static List<Problema> obetnerMetaDatadeOMI(string omi, TipoOlimpiada tipoOlimpiada)
         {
             List<Problema> problemas = new List<Problema>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -148,7 +148,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="dia">El dia de los problemas</param>
         /// <returns>Un número entre 0 y 6 con los problemas de la OMI</returns>
-        public static int obtenerCantidadDeProblemas(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, int dia)
+        public static int obtenerCantidadDeProblemas(string omi, TipoOlimpiada tipoOlimpiada, int dia)
         {
             List<Problema> lista = obtenerProblemasDeOMI(omi, tipoOlimpiada, dia);
             int i = 0;
@@ -169,7 +169,7 @@ namespace OMIstats.Models
         /// <param name="dia">El día del problema</param>
         /// <param name="numero">El numero del problema</param>
         /// <returns>El objeto problema</returns>
-        public static Problema obtenerProblema(string omi, Olimpiada.TipoOlimpiada tipoOlimpiada, int dia, int numero)
+        public static Problema obtenerProblema(string omi, TipoOlimpiada tipoOlimpiada, int dia, int numero)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();

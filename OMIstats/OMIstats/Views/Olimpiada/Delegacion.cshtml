@@ -33,9 +33,9 @@
 </div>
 
 @{
-    Dictionary<OMIstats.Models.Olimpiada.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
+    Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
     Boolean hayDelegacion = false;
-    OMIstats.Models.Olimpiada.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     tableManager.setCurrentOMI(Model);
 }
 
@@ -76,7 +76,7 @@
 <br />
 <br />
 
-@foreach(OMIstats.Models.Olimpiada.TipoOlimpiada tipo in delegaciones.Keys)
+@foreach(OMIstats.Models.TipoOlimpiada tipo in delegaciones.Keys)
 {
     List<OMIstats.Models.MiembroDelegacion> delegacion = delegaciones[tipo];
     if (delegacion.Count == 0)
@@ -87,12 +87,12 @@
     string titulo = "Competidores";
     switch(tipo)
     {
-        case OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS:
+        case OMIstats.Models.TipoOlimpiada.OMIS:
             {
                 titulo = "Competidores de secundaria";
                 break;
             }
-        case OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP:
+        case OMIstats.Models.TipoOlimpiada.OMIP:
             {
                 titulo = "Competidores de primaria";
                 break;

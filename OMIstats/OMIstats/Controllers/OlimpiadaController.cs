@@ -12,7 +12,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/
 
-        public ActionResult Index(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Index(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (clave == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.EDIT_OLIMPIADA, clave);
@@ -29,7 +29,7 @@ namespace OMIstats.Controllers
             ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
 
             // Mientras las OMIS y OMIPS sean en el mismo evento que la OMI, no tienen su propia vista
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 
             return View(o);
         }
@@ -48,14 +48,14 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Olimpiada.nuevaOMI(Olimpiada.TipoOlimpiada.OMI);
+            Olimpiada.nuevaOMI(TipoOlimpiada.OMI);
             return RedirectTo(Pagina.EDIT_OLIMPIADA, Olimpiada.TEMP_CLAVE);
         }
 
         //
         // GET: /Olimpiada/Edit/
 
-        public ActionResult Edit(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Edit(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -87,7 +87,7 @@ namespace OMIstats.Controllers
             if (!esAdmin() || omi == null)
                 return RedirectTo(Pagina.HOME);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, Olimpiada.TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, TipoOlimpiada.OMI);
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
@@ -157,7 +157,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Attendees/
 
-        public ActionResult Attendees(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Attendees(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -183,7 +183,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/Attendees/
 
         [HttpPost]
-        public ActionResult Attendees(string tabla, string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Attendees(string tabla, string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!esAdmin() || tabla == null || clave == null)
                 return RedirectTo(Pagina.HOME);
@@ -212,7 +212,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/ResultsTable/
 
-        public ActionResult ResultsTable(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult ResultsTable(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -240,7 +240,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/ResultsTable/
 
         [HttpPost]
-        public ActionResult ResultsTable(string tabla, string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult ResultsTable(string tabla, string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!esAdmin() || tabla == null || clave == null)
                 return RedirectTo(Pagina.HOME);
@@ -270,7 +270,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Resultados/
 
-        public ActionResult Resultados(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Resultados(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
@@ -282,12 +282,12 @@ namespace OMIstats.Controllers
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
             ViewBag.claveUsuario = getUsuario().clave;
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMI);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 
             if (o.alsoOmips)
             {
-                ViewBag.omis = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMIS);
-                ViewBag.omip = Olimpiada.obtenerOlimpiadas(Olimpiada.TipoOlimpiada.OMIP);
+                ViewBag.omis = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMIS);
+                ViewBag.omip = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMIP);
             }
 
             List<Problema> metadata = Problema.obetnerMetaDatadeOMI(clave, tipo);
@@ -305,10 +305,10 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Delegacion/
 
-        public ActionResult Delegacion(string clave, string estado, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Delegacion(string clave, string estado, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
-            if (tipo == Olimpiada.TipoOlimpiada.OMIS || tipo == Olimpiada.TipoOlimpiada.OMIP)
-                tipo = Olimpiada.TipoOlimpiada.OMI;
+            if (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMIP)
+                tipo = TipoOlimpiada.OMI;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
@@ -320,12 +320,12 @@ namespace OMIstats.Controllers
             if (e == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            Dictionary<Olimpiada.TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<Olimpiada.TipoOlimpiada, List<MiembroDelegacion>>();
+            Dictionary<TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<TipoOlimpiada, List<MiembroDelegacion>>();
             delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR));
-            if (tipo == Olimpiada.TipoOlimpiada.OMI && o.alsoOmips)
+            if (tipo == TipoOlimpiada.OMI && o.alsoOmips)
             {
-                delegaciones.Add(Olimpiada.TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR));
-                delegaciones.Add(Olimpiada.TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, Olimpiada.TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+                delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+                delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR));
             }
 
             ViewBag.estado = e;
@@ -345,9 +345,9 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Estados/
 
-        public ActionResult Estados(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Estados(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
-            if (tipo != Olimpiada.TipoOlimpiada.OMI)
+            if (tipo != TipoOlimpiada.OMI)
                 return RedirectTo(Pagina.ERROR, 404);
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
@@ -364,7 +364,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Numeros/
 
-        public ActionResult Numeros(string clave, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Numeros(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!esAdmin() || clave == null)
                 return RedirectTo(Pagina.HOME);

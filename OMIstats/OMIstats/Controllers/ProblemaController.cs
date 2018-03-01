@@ -20,7 +20,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Problema/Edit/
 
-        public ActionResult Edit(string omi, int dia, int numero, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult Edit(string omi, int dia, int numero, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -55,8 +55,8 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.HOME);
 
-            if (p.tipoOlimpiada == Olimpiada.TipoOlimpiada.NULL)
-                p.tipoOlimpiada = Olimpiada.TipoOlimpiada.OMI;
+            if (p.tipoOlimpiada == TipoOlimpiada.NULL)
+                p.tipoOlimpiada = TipoOlimpiada.OMI;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
             if (o == null || p.olimpiada == Olimpiada.TEMP_CLAVE)

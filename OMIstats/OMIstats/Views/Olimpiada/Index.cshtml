@@ -121,7 +121,7 @@
 @if (Model.alsoOmips)
 {
     <h1 class="subtitulo">
-        @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMI)
+        @if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMI)
         {
             <a href="@Url.Content("~/Olimpiada?tipo=omi&clave=" + Model.numero + "#general")">Problemas Generales</a>
         }
@@ -130,7 +130,7 @@
             <span id="general">Problemas Generales</span>
         }
         |
-        @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIS)
+        @if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIS)
         {
             <a href="@Url.Content("~/Olimpiada?tipo=omis&clave=" + Model.numero + "#secundarias")">Secundarias</a>
         }
@@ -139,7 +139,7 @@
             <span id="secundarias">Secundarias</span>
         }
         |
-        @if(Model.tipoOlimpiada != OMIstats.Models.Olimpiada.TipoOlimpiada.OMIP)
+        @if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIP)
         {
             <a href="@Url.Content("~/Olimpiada?tipo=omip&clave=" + Model.numero + "#primarias")">Primarias</a>
         }

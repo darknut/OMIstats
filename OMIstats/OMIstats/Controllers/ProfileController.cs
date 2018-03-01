@@ -40,7 +40,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/view/
 
-        public ActionResult view(string usuario, Olimpiada.TipoOlimpiada tipo = Olimpiada.TipoOlimpiada.OMI)
+        public ActionResult view(string usuario, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             Persona p;
             limpiarErroresViewBag();
@@ -81,8 +81,8 @@ namespace OMIstats.Controllers
             Session[GUID_STRING] = null;
             Session[GUID_USER] = null;
 
-            if (tipo == Olimpiada.TipoOlimpiada.OMIS || tipo == Olimpiada.TipoOlimpiada.OMIP)
-                tipo = Olimpiada.TipoOlimpiada.OMI;
+            if (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMIP)
+                tipo = TipoOlimpiada.OMI;
 
             Medalleros medalleros = Medallero.obtenerMedalleros(Medallero.TipoMedallero.PERSONA, p.clave.ToString());
 

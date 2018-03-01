@@ -203,8 +203,8 @@ namespace OMIstats.Utilities
             }
 
             string enlace = "";
-            if (currentOMI.tipoOlimpiada == Olimpiada.TipoOlimpiada.OMIP ||
-                currentOMI.tipoOlimpiada == Olimpiada.TipoOlimpiada.OMIS)
+            if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIP ||
+                currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS)
             {
                 enlace = currentOMI.omisActualNumber;
             }
