@@ -116,15 +116,6 @@ namespace OMIstats.Models
 
         private Problema datosGenerales;
 
-        public enum TipoOlimpiada
-        {
-            NULL,
-            OMI,
-            IOI,
-            OMIP,
-            OMIS
-        }
-
         public Olimpiada()
         {
             numero = "";

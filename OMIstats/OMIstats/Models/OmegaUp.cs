@@ -10,5 +10,17 @@ namespace OMIstats.Models
     /// </summary>
     public class OmegaUp
     {
+        public enum Instruccion
+        {
+            POLL,
+            KILL,
+            STATUS
+        }
+
+        public Instruccion tipo { get; set; }
+
+        public string olimpiada { get; set; }
+
+        public string clase { get; set; }
     }
 }
