@@ -11,6 +11,8 @@ namespace OmegaUpPuller
 {
     class Program
     {
+        private static int MAX_SLEEP = 60;
+
         private void setup()
         {
             Acceso.CADENA_CONEXION = ConfigurationManager.AppSettings["conexion"];
@@ -38,6 +40,14 @@ namespace OmegaUpPuller
             return instruccion;
         }
 
+        /// <summary>
+        /// Regresa verdadero si el poll fue exitoso
+        /// </summary>
+        private bool poll(OmegaUp instruccion)
+        {
+            return true;
+        }
+
         private void Run()
         {
             this.setup();
@@ -46,6 +56,59 @@ namespace OmegaUpPuller
                 return;
 
             OmegaUp status = setStatus();
+            Console.WriteLine("STARTING...");
+
+            while (true)
+            {
+                List<OmegaUp> instrucciones = OmegaUp.obtenerInstrucciones();
+                int sleep = MAX_SLEEP;
+                int polls = 0;
+                string errors = "";
+
+                foreach (var instruccion in instrucciones)
+                {
+                    switch (instruccion.instruccion)
+                    {
+                        case OmegaUp.Instruccion.KILL:
+                            {
+                                Console.WriteLine("EXITING...");
+                                instruccion.borrar();
+                                status.borrar();
+                                return;
+                            }
+                        case OmegaUp.Instruccion.POLL:
+                            {
+                                Console.WriteLine("-----------------");
+                                Console.WriteLine("-Polling started-");
+                                Console.WriteLine("-----------------");
+                                polls++;
+                                bool success = this.poll(instruccion);
+                                if (!success)
+                                    errors += instruccion.clave + ",";
+                                sleep = sleep < instruccion.ping ? sleep : instruccion.ping;
+                                break;
+                            }
+                    }
+                }
+
+                if (polls == 0)
+                {
+                    Console.WriteLine("Nothing to do, exiting...");
+                    status.borrar();
+                    return;
+                }
+
+                status.errors = errors;
+                if (errors.Length > 0)
+                    status.status = OmegaUp.Status.ERROR;
+                else
+                    status.status = OmegaUp.Status.ALIVE;
+
+                status.guardar();
+
+                Console.WriteLine("Sleeping for " + sleep + " seconds.");
+                System.Threading.Thread.Sleep(sleep * 1000);
+            }
         }
 
         static void Main(string[] args)

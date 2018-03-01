@@ -71,6 +71,19 @@ namespace OMIstats.Models
             }
         }
 
+        public string errors
+        {
+            get
+            {
+                return prefijo;
+            }
+
+            set
+            {
+                prefijo = value;
+            }
+        }
+
         public OmegaUp()
         {
             clave = 0;
@@ -181,6 +194,27 @@ namespace OMIstats.Models
             query.Append(",");
             query.Append(dia);
             query.Append(")");
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        public void borrar()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("delete OmegaUp where clave = ");
+            query.Append(clave);
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        public static void borrarTodo()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("delete OmegaUp");
 
             db.EjecutarQuery(query.ToString());
         }
