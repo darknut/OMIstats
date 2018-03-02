@@ -23,7 +23,7 @@ namespace OMIstats.Models
         public enum Status
         {
             NULL,
-            ALIVE,
+            OK,
             ERROR
         }
 
@@ -45,44 +45,9 @@ namespace OMIstats.Models
 
         public string prefijo { get; set; }
 
-        public Status status
-        {
-            get
-            {
-                return (Status)Enum.Parse(typeof(Status), concurso);
-            }
+        public Status status { get; set; }
 
-            set
-            {
-                concurso = value.ToString();
-            }
-        }
-
-        public DateTime timestamp
-        {
-            get
-            {
-                return DateTime.Parse(token);
-            }
-
-            set
-            {
-                token = value.ToString();
-            }
-        }
-
-        public string errors
-        {
-            get
-            {
-                return prefijo;
-            }
-
-            set
-            {
-                prefijo = value;
-            }
-        }
+        public DateTime timestamp { get; set; }
 
         public OmegaUp()
         {
@@ -95,6 +60,8 @@ namespace OMIstats.Models
             concurso = "";
             token = "";
             prefijo = "";
+            status = Status.NULL;
+            timestamp = DateTime.UtcNow;
         }
 
         private void llenarDatos(DataRow r)
@@ -108,6 +75,8 @@ namespace OMIstats.Models
             concurso = r["concurso"].ToString().Trim();
             token = r["token"].ToString().Trim();
             prefijo = r["prefijo"].ToString().Trim();
+            status = (Status)Enum.Parse(typeof(Status), r["status"].ToString().ToUpper());
+            timestamp = DateTime.Parse(r["timestamp"].ToString().Trim());
         }
 
         public static List<OmegaUp> obtenerInstrucciones(Instruccion i = Instruccion.NULL)
@@ -144,7 +113,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            if (instruccion == Instruccion.STATUS)
+            if (status != Status.OK)
                 this.timestamp = DateTime.UtcNow;
 
             query.Append(" update omegaup set tipo = ");
@@ -163,6 +132,10 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(prefijo));
             query.Append(", dia = ");
             query.Append(dia);
+            query.Append(", status = ");
+            query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
+            query.Append(", timestamp = ");
+            query.Append(Utilities.Cadenas.comillas(timestamp.ToString()));
             query.Append(" where clave = ");
             query.Append(clave);
 
@@ -174,10 +147,11 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            if (instruccion == Instruccion.STATUS)
+            if (status != Status.OK)
                 this.timestamp = DateTime.UtcNow;
 
-            query.Append(" insert into OmegaUp (tipo, olimpiada, clase, ping, concurso, token, prefijo, dia) values (");
+            query.Append(" insert into OmegaUp (tipo, olimpiada, clase, ping, concurso, ");
+            query.Append(" token, prefijo, dia, status, timestamp) values (");
             query.Append(Utilities.Cadenas.comillas(instruccion.ToString().ToLower()));
             query.Append(",");
             query.Append(Utilities.Cadenas.comillas(olimpiada));
@@ -193,6 +167,10 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(prefijo));
             query.Append(",");
             query.Append(dia);
+            query.Append(",");
+            query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
+            query.Append(",");
+            query.Append(Utilities.Cadenas.comillas(timestamp.ToString()));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
