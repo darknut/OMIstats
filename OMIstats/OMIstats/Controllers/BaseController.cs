@@ -39,7 +39,8 @@ namespace OMIstats.Controllers
             PROBLEMA,
             OLIMPIADA,
             RESULTS_TABLE,
-            ADMIN_UNLINK
+            ADMIN_UNLINK,
+            ADMIN_SCOREBOARD
         }
 
         public BaseController()
@@ -157,6 +158,8 @@ namespace OMIstats.Controllers
                     if (opciones != null)
                         return RedirectToAction("Unlink", "Admin", new { usuario = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
+                case Pagina.ADMIN_SCOREBOARD:
+                    return RedirectToAction("Scoreboard", "Admin");
                 case Pagina.PROBLEMA:
                     if (opciones != null)
                     {

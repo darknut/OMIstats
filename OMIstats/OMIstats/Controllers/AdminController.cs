@@ -18,6 +18,23 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/Scoreboard/
+
+        public ActionResult Scoreboard()
+        {
+            if (!estaLoggeado())
+            {
+                guardarParams(Pagina.LOGIN, Pagina.ADMIN_SCOREBOARD);
+                return RedirectTo(Pagina.LOGIN);
+            }
+
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            return View();
+        }
+
+        //
         // GET: /Admin/Change/
 
         public ActionResult Change(string usuario)

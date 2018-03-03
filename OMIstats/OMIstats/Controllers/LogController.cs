@@ -14,10 +14,10 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return Redirect(Utilities.Server.direccionOMI());
+            //return Redirect(Utilities.Server.direccionOMI());
             // Código para hacer mock
-            //string guid = Models.Usuario.MockUserLoggedIn(2);
-            //return RedirectToAction("In", "Log", new { GUID = guid });
+            string guid = Models.Usuario.MockUserLoggedIn(1);
+            return RedirectToAction("In", "Log", new { GUID = guid });
         }
 
         //
