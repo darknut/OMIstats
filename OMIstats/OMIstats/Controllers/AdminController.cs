@@ -38,6 +38,21 @@ namespace OMIstats.Controllers
         }
 
         //
+        // Post: /Admin/Scoreboard/
+
+        [HttpPost]
+        public ActionResult Scoreboard(OmegaUp poll)
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            poll.instruccion = OmegaUp.Instruccion.POLL;
+            poll.guardarNuevo();
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
         // GET: /Admin/StartScoreboard/
 
         public ActionResult StartScoreboard()
