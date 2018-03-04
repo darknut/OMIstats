@@ -16,6 +16,7 @@ namespace OMIstats.Models
     {
         private static string SCOREBOARD_DIRECTORY_STRING = "scoreboardDirectory";
         private static string SCOREBOARD_EXE_STRING = "scoreboardExe";
+        private static int SLEEP_TIME = 2000;
 
         public enum Instruccion
         {
@@ -91,6 +92,10 @@ namespace OMIstats.Models
             psi.WorkingDirectory = directorio;
             psi.FileName = exe;
             Process.Start(psi);
+
+            // Esperamos un par de segundos a que el proceso empiece y darle tiempo a la página
+            // a que lo registre
+            System.Threading.Thread.Sleep(SLEEP_TIME);
         }
 
         private void llenarDatos(DataRow r)
