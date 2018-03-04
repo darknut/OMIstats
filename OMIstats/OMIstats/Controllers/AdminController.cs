@@ -66,14 +66,32 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Admin/BorrarScoreboard/
+        // GET: /Admin/KillScoreboard/
 
-        public ActionResult BorrarScoreboard()
+        public ActionResult KillScoreboard()
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            OmegaUp.borrarTodo();
+            OmegaUp o = new OmegaUp();
+            o.instruccion = OmegaUp.Instruccion.KILL;
+            o.guardarNuevo();
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
+        // GET: /Admin/BorrarScoreboard/
+
+        public ActionResult BorrarScoreboard(int clave = 0)
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            if (clave == 0)
+                OmegaUp.borrarTodo();
+            else
+                OmegaUp.borrarConClave(clave);
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }

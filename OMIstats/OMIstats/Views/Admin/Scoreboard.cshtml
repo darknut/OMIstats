@@ -5,6 +5,7 @@
     <link href="~/Content/admin.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
 }
 
 @{
@@ -17,6 +18,7 @@
     {
         status = ViewBag.status[0];
     }
+    int counter = 0;
 }
 
 <h2 class="titulo">Scoreboard Management</h2>
@@ -35,6 +37,7 @@
             <div class="online">
                 ONLINE
             </div>
+            <a href="@Url.Content("~/Admin/KillScoreboard")" class="kill-button">MATAR</a>
         } else {
             <div class="not-started">
                 ERROR!
@@ -50,24 +53,72 @@
 {
     <div class="no-polls">--- No hay polls activos ---</div>
 } else {
-    <table>
+    <table border="1">
         <thead>
             <tr>
-                <td>Olimpiada</td>
-                <td>Tipo</td>
-                <td>Día</td>
-                <td>Concurso</td>
-                <td>Token</td>
-                <td>Prefijo</td>
-                <td>Ping</td>
-                <td>Status</td>
-                <td>Timestamp</td>
-                <td></td>
+                <th>Olimpiada</th>
+                <th>Tipo</th>
+                <th>Día</th>
+                <th>Concurso</th>
+                <th>Token</th>
+                <th>Prefijo</th>
+                <th>Ping</th>
+                <th>Status</th>
+                <th>Última actualización</th>
+                <th></th>
             </tr>
         </thead>
+        @foreach (var item in polls)
+        {
+            string clase;
+            if (counter % 2 == 0)
+            {
+                clase = "par";
+            }
+            else
+            {
+                clase = "impar";
+            }
+            counter++;
+            <tr class="@clase">
+                <td>@item.olimpiada</td>
+                <td>@item.tipoOlimpiada</td>
+                <td>@item.dia</td>
+                <td>@item.concurso</td>
+                <td>@item.token</td>
+                <td>@item.prefijo</td>
+                <td>@item.ping</td>
+                <td>
+                    @if (item.status == OMIstats.Models.OmegaUp.Status.NULL)
+                    {
+                        <span class="errorTextoRojo">NOT YET UPDATED</span>
+                    } else {
+                        if (item.status == OMIstats.Models.OmegaUp.Status.ERROR)
+                        {
+                            <span class="errorTextoRojo">ERROR</span>
+                        } else {
+                            <span class="verde">ONLINE</span>
+                        }
+                    }
+                </td>
+                <td>
+                    @if (item.status != OMIstats.Models.OmegaUp.Status.NULL)
+                    {
+                        DateTime tiempo = new DateTime(DateTime.UtcNow.Ticks - item.timestamp.Ticks);
+                        <span>Hace @(tiempo.Minute + ":" + tiempo.Second) minutos</span>
+                    }
+                </td>
+                <td>
+                    <a class="errorTextoRojo" href="@Url.Content("~/Admin/BorrarScoreboard?clave=" + item.clave)">Eliminar</a>
+                </td>
+            </tr>
+        }
     </table>
-    <a href="@Url.Content("~/Admin/BorrarScoreboard")" class="boton botonOMI">Borrar Todo</a>
 }
+
+<br />
+<br />
+<a href="@Url.Content("~/Admin/BorrarScoreboard")" class="boton botonOMI">Borrar Todo</a>
 
 <h3 class="subtitulo">Agregar poll:</h3>
 
