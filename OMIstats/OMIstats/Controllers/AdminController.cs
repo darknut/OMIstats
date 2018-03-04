@@ -38,6 +38,19 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/StartScoreboard/
+
+        public ActionResult StartScoreboard()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            OmegaUp.StartScoreboard();
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
         // GET: /Admin/Change/
 
         public ActionResult Change(string usuario)

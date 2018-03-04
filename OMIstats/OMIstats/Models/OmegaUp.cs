@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -12,6 +14,9 @@ namespace OMIstats.Models
     /// </summary>
     public class OmegaUp
     {
+        private static string SCOREBOARD_DIRECTORY_STRING = "scoreboardDirectory";
+        private static string SCOREBOARD_EXE_STRING = "scoreboardExe";
+
         public enum Instruccion
         {
             NULL,
@@ -62,6 +67,30 @@ namespace OMIstats.Models
             prefijo = "";
             status = Status.NULL;
             timestamp = DateTime.UtcNow;
+        }
+
+        public static void StartScoreboard()
+        {
+            // Primero matamos todos los status que estén en un estado de error
+            List<OmegaUp> status = OmegaUp.obtenerInstrucciones(Instruccion.STATUS);
+
+            foreach (OmegaUp s in status)
+            {
+                if (s.status != Status.OK)
+                    s.borrar();
+                else
+                    // Si encontramos un OK, no iniciamos nada pues ya hay un proceso corriendo
+                    return;
+            }
+
+            // Obtenemos la dirección del exe
+            string directorio = ConfigurationManager.AppSettings.Get(SCOREBOARD_DIRECTORY_STRING);
+            string exe = ConfigurationManager.AppSettings.Get(SCOREBOARD_EXE_STRING);
+
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.WorkingDirectory = directorio;
+            psi.FileName = exe;
+            Process.Start(psi);
         }
 
         private void llenarDatos(DataRow r)
