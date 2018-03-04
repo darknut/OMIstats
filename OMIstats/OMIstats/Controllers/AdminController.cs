@@ -66,6 +66,19 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/BorrarScoreboard/
+
+        public ActionResult BorrarScoreboard()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            OmegaUp.borrarTodo();
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
         // GET: /Admin/Change/
 
         public ActionResult Change(string usuario)
