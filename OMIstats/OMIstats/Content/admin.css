@@ -3,3 +3,32 @@
     font-weight:bold;
     font-size:20px;
 }
+
+.status {
+    font-weight: bold;
+    font-size: 20px;
+    display: inline;
+}
+
+.not-started {
+    font-weight: bold;
+    font-size: 20px;
+    color: red;
+    display: inline;
+    padding-left: 20px;
+}
+
+.online {
+    font-weight: bold;
+    font-size: 20px;
+    color: green;
+    display: inline;
+    padding-left: 20px;
+}
+
+.start-button {
+    padding-left: 40px;
+    font-weight: bold;
+    font-size: 20px;
+    color: green;
+}

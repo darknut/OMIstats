@@ -31,6 +31,9 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
+            ViewBag.status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
+            ViewBag.polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
+
             return View();
         }
 

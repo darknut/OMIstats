@@ -76,7 +76,13 @@ namespace OMIstats.Models
             token = r["token"].ToString().Trim();
             prefijo = r["prefijo"].ToString().Trim();
             status = (Status)Enum.Parse(typeof(Status), r["status"].ToString().ToUpper());
-            timestamp = DateTime.Parse(r["timestamp"].ToString().Trim());
+            try
+            {
+                timestamp = DateTime.Parse(r["timestamp"].ToString().Trim());
+            }
+            catch (Exception)
+            {
+            }
         }
 
         public static List<OmegaUp> obtenerInstrucciones(Instruccion i = Instruccion.NULL)

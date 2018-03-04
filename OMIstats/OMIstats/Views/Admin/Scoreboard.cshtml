@@ -1,7 +1,41 @@
-﻿@model OMIstats.Models.OmegaUp
+﻿@section AddToHead
+{
+    <link href="~/Content/admin.css" type="text/css" rel="stylesheet" />
+}
 
 @{
     ViewBag.Title = "Scoreboard Management";
+
+    OMIstats.Models.OmegaUp status = null;
+    List<OMIstats.Models.OmegaUp> polls = ViewBag.polls;
+
+    if (ViewBag.status.Count > 0)
+    {
+        status = ViewBag.status[0];
+    }
 }
 
 <h2 class="titulo">Scoreboard Management</h2>
+
+<div>
+    <div class="status">STATUS: </div>
+    @if (status == null)
+    {
+        <div class="not-started">
+            NOT STARTED
+        </div>
+        <a href="@Url.Content("~/Admin/StartScoreboard")" class="start-button">START</a>
+    } else {
+        if (status.status == OMIstats.Models.OmegaUp.Status.OK)
+        {
+            <div class="online">
+                ONLINE
+            </div>
+        } else {
+            <div class="not-started">
+                ERROR!
+            </div>
+            <a href="@Url.Content("~/Admin/StartScoreboard")" class="start-button">RE-START</a>
+        }
+    }
+</div>
