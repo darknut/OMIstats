@@ -53,6 +53,9 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
+            // Actualizando la fecha de la ultima vez que se actualizó la instrucción
+            instruccion.status = OmegaUp.Status.OK;
+            instruccion.guardar();
         }
 
         private void Run()

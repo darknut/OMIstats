@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Script.Serialization;
+using OMIstats.Models;
+
+namespace OmegaUpPuller.WebRequest
+{
+    class Request
+    {
+        private static string OMEGAUP_API = "https://omegaup.com/api/contest/scoreboard?contest_alias={0}&token={1}";
+        private static int MAX_INTENTOS = 3;
+
+        /// <summary>
+        /// Regresa si funcionó o no la actualización
+        /// </summary>
+        public static bool Call(OmegaUp pull, int intentos = 0)
+        {
+            string api = String.Format(OMEGAUP_API, pull.concurso, pull.token);
+
+            HttpWebRequest request = (HttpWebRequest)System.Net.WebRequest.Create(api);
+            request.Method = "GET";
+            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
+            request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                string content = string.Empty;
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader sr = new StreamReader(stream))
+                    {
+                        content = sr.ReadToEnd();
+                    }
+                }
+
+                var JSONObj = new JavaScriptSerializer().Deserialize<object>(content);
+            }
+            catch (Exception)
+            {
+                if (intentos >= MAX_INTENTOS)
+                {
+                    Console.WriteLine("Falló la llamada a: " + api + "\nGiving up...");
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine("Falló la llamada a: " + api + "\nIntentando otra vez... ");
+                    return Call(pull, intentos + 1);
+                }
+            }
+
+            return true;
+        }
+    }
+}

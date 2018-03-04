@@ -153,7 +153,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            if (status != Status.OK)
+            if (status == Status.OK)
                 this.timestamp = DateTime.UtcNow;
 
             query.Append(" update omegaup set tipo = ");
@@ -187,7 +187,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            if (status != Status.OK)
+            if (status == Status.OK)
                 this.timestamp = DateTime.UtcNow;
 
             query.Append(" insert into OmegaUp (tipo, olimpiada, clase, ping, concurso, ");
