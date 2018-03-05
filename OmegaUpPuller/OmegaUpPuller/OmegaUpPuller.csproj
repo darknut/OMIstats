@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OMIStats\Models\Mock.cs" />
+    <Compile Include="OMIStats\Utilities\Mock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\OMIStats\OMIStats\utilities\Acceso.cs">
@@ -51,11 +53,20 @@
     <Compile Include="..\..\OMIStats\OMIStats\utilities\Cadenas.cs">
       <Link>OMIStats\Utilities\Cadenas.cs</Link>
     </Compile>
+	<Compile Include="..\..\OMIStats\OMIStats\utilities\Fechas.cs">
+      <Link>OMIStats\Utilities\Fechas.cs</Link>
+    </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\OmegaUp.cs">
       <Link>OMIStats\Models\OmegaUp.cs</Link>
     </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\TipoOlimpiada.cs">
       <Link>OMIStats\Models\TipoOlimpiada.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\Resultados.cs">
+      <Link>OMIStats\Models\Resultados.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\MiembroDelegacion.cs">
+      <Link>OMIStats\Models\MiembroDelegacion.cs</Link>
     </Compile>
     <Compile Include="WebRequest\Request.cs" />
   </ItemGroup>
