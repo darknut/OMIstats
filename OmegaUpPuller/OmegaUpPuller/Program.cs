@@ -53,8 +53,11 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
-            // Actualizando la fecha de la ultima vez que se actualizó la instrucción
-            instruccion.status = OmegaUp.Status.OK;
+            if (WebRequest.Request.Instance.Call(instruccion))
+                instruccion.status = OmegaUp.Status.OK;
+            else
+                instruccion.status = OmegaUp.Status.ERROR;
+
             instruccion.guardar();
         }
 
@@ -82,16 +85,16 @@ namespace OmegaUpPuller
                         {
                             case OmegaUp.Instruccion.KILL:
                                 {
-                                    Console.WriteLine("EXITING...");
+                                    Console.WriteLine("Instrucción KILL encontrada.\nEXITING...");
                                     instruccion.borrar();
                                     status.borrar();
                                     return;
                                 }
                             case OmegaUp.Instruccion.POLL:
                                 {
-                                    Console.WriteLine("-----------------");
-                                    Console.WriteLine("-Polling started-");
-                                    Console.WriteLine("-----------------");
+                                    Console.WriteLine("-------------------");
+                                    Console.WriteLine("- Polling started -");
+                                    Console.WriteLine("-------------------");
                                     polls++;
                                     this.poll(instruccion);
                                     sleep = sleep < instruccion.ping ? sleep : instruccion.ping;
