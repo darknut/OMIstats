@@ -107,7 +107,7 @@ namespace OmegaUpPuller.WebRequest
                 {
                     string usuario = (string)persona[USERNAME_STRING];
 
-                    if (usuario.Length <= pull.prefijo.Length)
+                    if (usuario.IndexOf(pull.prefijo) != 0)
                         continue;
 
                     usuario = usuario.Substring(pull.prefijo.Length);
