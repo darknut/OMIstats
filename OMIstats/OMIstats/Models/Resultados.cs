@@ -209,13 +209,25 @@ namespace OMIstats.Models
 
             if (datos.Length > indice)
             {
-                ioi = datos[indice++].Trim();
+                ioi = datos[indice].Trim();
                 if (ioi.Length > 0)
                 {
                     ioi = ioi.Substring(0, 1);
                     if (ioi != "A" && ioi != "B")
-                        return TipoError.EQUIPO_IOI_INCORRECTO;
+                    {
+                        ioi = "";
+                        // Este campo también puede contener el lugar del competidor cuando está en vivo el scoreboard
+                        try
+                        {
+                            lugar = int.Parse(datos[indice].Trim());
+                        }
+                        catch (Exception)
+                        {
+                            return TipoError.EQUIPO_IOI_INCORRECTO;
+                        }
+                    }
                 }
+                indice++;
             }
 
             if (datos.Length > indice)
@@ -496,6 +508,11 @@ namespace OMIstats.Models
             query.Append((int)res.medalla);
             query.Append(", ioi = ");
             query.Append(Utilities.Cadenas.comillas(res.ioi));
+            if (res.lugar > 0)
+            {
+                query.Append(", lugar = ");
+                query.Append(res.lugar);
+            }
             query.Append(" where olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and clase = ");
