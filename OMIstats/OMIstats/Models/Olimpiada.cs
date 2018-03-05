@@ -473,26 +473,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Regresa la tabla de puntos en formato tabulado, con el número de problemas
-        /// mandado como parámetro
-        /// </summary>
-        /// <returns>La tabla con los resultados</returns>
-        public string obtenerResultadosAdmin()
-        {
-            List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
-
-            StringBuilder tabla = new StringBuilder();
-
-            foreach (Resultados resultado in resultados)
-            {
-                tabla.Append(resultado.obtenerLineaAdmin(problemasDia1, problemasDia2));
-                tabla.Append("\n");
-            }
-
-            return tabla.ToString();
-        }
-
-        /// <summary>
         /// Guarda en la base de datos la tabla de asistentes
         /// </summary>
         /// <param name="tabla">La nueva tabla de asistentes, un asistente por renglon
@@ -520,40 +500,10 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Guarda en la base de datos la tabla de resultados
-        /// </summary>
-        /// <param name="tabla">La nueva tabla de resultados, un competidor por renglon
-        /// y tabulada con comas</param>
-        /// <returns>Los registros que ocasionaron error</returns>
-        public string guardarTablaResultados(string tabla)
-        {
-            StringBuilder errores = new StringBuilder();
-            string[] lineas;
-
-            lineas = tabla.Split('\n');
-
-            foreach (string linea in lineas)
-            {
-                Resultados.TipoError error = Resultados.guardarLineaAdmin(numero, tipoOlimpiada, problemasDia1, problemasDia2, linea.Trim());
-                if (error != Resultados.TipoError.OK)
-                {
-                    errores.Append(linea.Trim());
-                    errores.Append(": ");
-                    errores.Append(error.ToString());
-                    errores.Append("\n");
-                }
-            }
-
-            precalcularValores();
-
-            return errores.ToString();
-        }
-
-        /// <summary>
         /// Guarda valores en la base de datos que estan directamente relacionados
         /// con los resultados y que no pueden escribirse a mano
         /// </summary>
-        private void precalcularValores()
+        public void precalcularValores()
         {
             // Calculamos si hay resultados para mostrar por problema y lo guardamos en la base
             problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);

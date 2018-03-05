@@ -230,7 +230,7 @@ namespace OMIstats.Controllers
 
             ViewBag.dia1 = o.problemasDia1;
             ViewBag.dia2 = o.problemasDia2;
-            ViewBag.resultados = o.obtenerResultadosAdmin();
+            ViewBag.resultados = Models.Resultados.obtenerResultadosAdmin(clave, tipo, o.problemasDia1, o.problemasDia2);
             limpiarErroresViewBag();
 
             return View(o);
@@ -254,7 +254,8 @@ namespace OMIstats.Controllers
             ViewBag.omi = clave;
             ViewBag.dia1 = o.problemasDia1;
             ViewBag.dia2 = o.problemasDia2;
-            string errores = o.guardarTablaResultados(tabla);
+            string errores = Models.Resultados.guardarTablaResultados(tabla, clave, tipo, o.problemasDia1, o.problemasDia2);
+            o.precalcularValores();
 
             if (errores.Length > 0)
             {
