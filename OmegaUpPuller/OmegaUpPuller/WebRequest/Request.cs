@@ -7,12 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using OMIstats.Models;
+using System.Collections;
 
 namespace OmegaUpPuller.WebRequest
 {
     class Request
     {
         private static string OMEGAUP_API = "https://omegaup.com/api/contest/scoreboard?contest_alias={0}&token={1}";
+        private static string PROBLEMAS_STRING = "problems";
+        private static string RANKING_STRING = "ranking";
+        private static string USERNAME_STRING = "username";
+        private static string POINTS_STRING = "points";
         private static int MAX_INTENTOS = 3;
 
         private static Request _instance = null;
@@ -28,17 +33,24 @@ namespace OmegaUpPuller.WebRequest
 
         private Request()
         {
-            scoreboard = new Dictionary<string, Scoreboard>();
+            scoreboards = new Dictionary<string, Scoreboard>();
         }
 
-        private Dictionary<string, Scoreboard> scoreboard;
+        private Dictionary<string, Scoreboard> scoreboards;
+
+        private string getClaveScoreBoard(OmegaUp pull)
+        {
+            return pull.tipoOlimpiada.ToString() + "_" + pull.olimpiada;
+        }
 
         /// <summary>
         /// Regresa si funcionó o no la actualización
         /// </summary>
         public bool Call(OmegaUp pull, int intentos = 0)
         {
+            // Primero hacemos el request a OmegaUp
             string api = String.Format(OMEGAUP_API, pull.concurso, pull.token);
+            Dictionary<string, object> resultados;
 
             HttpWebRequest request = (HttpWebRequest)System.Net.WebRequest.Create(api);
             request.Method = "GET";
@@ -59,7 +71,7 @@ namespace OmegaUpPuller.WebRequest
                     }
                 }
 
-                var JSONObj = new JavaScriptSerializer().Deserialize<object>(content);
+                resultados = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(content);
                 Console.WriteLine("Se obtuvieron los resultados correctamente.\nSe procede a guardarlos en la base de datos...");
             }
             catch (Exception)
@@ -74,6 +86,63 @@ namespace OmegaUpPuller.WebRequest
                     Console.WriteLine("Falló la llamada a: " + api + "\nIntentando otra vez... ");
                     return Call(pull, intentos + 1);
                 }
+            }
+
+            // Luego parseamos los datos del json
+            Scoreboard scoreboard;
+            try
+            {
+                // Sacamos el número de problemas del response de OmegaUp
+                ArrayList problemas = (ArrayList)resultados[PROBLEMAS_STRING];
+
+                if (!scoreboards.TryGetValue(getClaveScoreBoard(pull), out scoreboard))
+                {
+                    scoreboard = new Scoreboard(pull.olimpiada, pull.tipoOlimpiada, pull.dia, problemas.Count);
+                    scoreboards.Add(getClaveScoreBoard(pull), scoreboard);
+                }
+
+                ArrayList ranking = (ArrayList)resultados[RANKING_STRING];
+
+                foreach (Dictionary<string, object> persona in ranking)
+                {
+                    string usuario = (string)persona[USERNAME_STRING];
+
+                    if (usuario.Length <= pull.prefijo.Length)
+                        continue;
+
+                    usuario = usuario.Substring(pull.prefijo.Length);
+
+                    decimal[] puntos = new decimal[problemas.Count];
+                    ArrayList resultadosUsuario = (ArrayList)persona[PROBLEMAS_STRING];
+                    int i = 0;
+
+                    foreach (Dictionary<string, object> problema in resultadosUsuario)
+                    {
+                        if (problema[POINTS_STRING] is int)
+                            puntos[i++] = (int)problema[POINTS_STRING];
+                        else
+                            puntos[i++] = (decimal)problema[POINTS_STRING];
+                    }
+
+                    scoreboard.actualiza(usuario, puntos);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Falló algo cuando se parseaba el json de OmegaUp: " + e.StackTrace);
+                return false;
+            }
+
+            // Finalmente, ordenamos y guardamos en la base de datos
+            try
+            {
+                scoreboard.ordena();
+                scoreboard.guarda();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Falló algo cuando se guardaba en la base de datos: " + e.StackTrace);
+                return false;
             }
 
             return true;

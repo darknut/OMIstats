@@ -21,10 +21,63 @@ namespace OmegaUpPuller.WebRequest
             this.tipoOlimpiada = tipoOlimpiada;
             this.dia = dia;
             this.problemas = problemas;
+
+            inicializaResultados();
         }
 
-        public void actualiza(string clave, float[] resultados)
+        private void inicializaResultados()
         {
+            resultados = new Dictionary<string, Resultados>();
+            List<Resultados> r = Resultados.cargarResultados(olimpiada, tipoOlimpiada, cargarObjetos: false);
+            foreach (var resultado in r)
+            {
+                resultados.Add(resultado.clave, resultado);
+            }
+        }
+
+        public void actualiza(string clave, decimal[] resultados)
+        {
+            Resultados res;
+            if (!this.resultados.TryGetValue(clave, out res))
+            {
+                List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosConClave(this.olimpiada, this.tipoOlimpiada, clave);
+                if (miembros.Count != 1)
+                {
+                    this.resultados.Add(clave, null);
+                    return;
+                }
+
+                res = new Resultados();
+                res.tipoOlimpiada = this.tipoOlimpiada;
+                res.omi = this.olimpiada;
+                res.usuario = miembros[0].claveUsuario;
+                res.clave = clave;
+                res.publico = true;
+                this.resultados.Add(clave, res);
+            }
+
+            if (res == null)
+                return;
+
+            List<float?> arreglo;
+            if (dia == 1)
+                arreglo = res.dia1;
+            else
+                arreglo = res.dia2;
+
+            float? total = 0;
+            for (int i = 0; i < this.problemas; i++)
+            {
+                arreglo[i] = (float?)resultados[i];
+                total += arreglo[i];
+            }
+
+            if (dia == 1)
+                res.totalDia1 = total;
+            else
+                res.totalDia2 = total;
+
+            res.total = res.totalDia1 + res.totalDia2;
         }
 
         public void ordena()
