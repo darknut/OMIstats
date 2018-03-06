@@ -408,11 +408,7 @@ namespace OMIstats.Models
             if (linea.Trim().Length == 0)
                 return TipoError.OK;
 
-            StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
             Resultados res = new Resultados();
-            MiembroDelegacion m = null;
-
             string[] datos = linea.Split(',');
 
             // Casteamos los datos del string a variables
@@ -429,18 +425,35 @@ namespace OMIstats.Models
                 return TipoError.OK;
             }
 
+            // Ya se validaron los campos, ahora se guarda el objeto en la base
+
+            res.omi = omi;
+            res.tipoOlimpiada = tipoOlimpiada;
+
+            return res.guardar();
+        }
+
+        /// <summary>
+        /// Guarda los datos del objeto en la base de datos
+        /// </summary>
+        public TipoError guardar()
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+            MiembroDelegacion m = null;
+
             // Revisamos si hay mas de un usuario con esa clave
 
-            if (res.clave.StartsWith(CLAVE_DESCONOCIDA) || res.clave.StartsWith(CLAVE_FALTANTE) || res.clave.StartsWith(NOMBRE_FALTANTE))
+            if (this.clave.StartsWith(CLAVE_DESCONOCIDA) || this.clave.StartsWith(CLAVE_FALTANTE) || this.clave.StartsWith(NOMBRE_FALTANTE))
             {
-                Estado e = Estado.obtenerEstadoConClave(res.estado);
+                Estado e = Estado.obtenerEstadoConClave(this.estado);
                 if (e == null)
                     return TipoError.ESTADO_INEXISTENTE;
             }
 
-            if (!(res.clave.StartsWith(CLAVE_DESCONOCIDA) || res.clave.StartsWith(NOMBRE_FALTANTE)))
+            if (!(this.clave.StartsWith(CLAVE_DESCONOCIDA) || this.clave.StartsWith(NOMBRE_FALTANTE)))
             {
-                List<MiembroDelegacion> lista = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, res.clave);
+                List<MiembroDelegacion> lista = MiembroDelegacion.obtenerMiembrosConClave(this.omi, this.tipoOlimpiada, this.clave);
                 if (lista.Count == 0)
                     return TipoError.CLAVE_INEXISTENTE;
                 if (lista.Count != 1)
@@ -451,11 +464,11 @@ namespace OMIstats.Models
             // Ya tenemos todos los datos necesarios, hacemos un insert con las claves
 
             query.Append("insert into Resultados values(");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Utilities.Cadenas.comillas(this.omi));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Utilities.Cadenas.comillas(this.tipoOlimpiada.ToString().ToLower()));
             query.Append(", 0, ");
-            query.Append(Utilities.Cadenas.comillas(res.clave));
+            query.Append(Utilities.Cadenas.comillas(this.clave));
             query.Append(", '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,");
             query.Append((int)TipoMedalla.NADA);
             query.Append(", 0, '', 0)");
@@ -473,52 +486,52 @@ namespace OMIstats.Models
                 query.Append(", ");
             }
             query.Append(" estado = ");
-            query.Append(Utilities.Cadenas.comillas(m == null ? res.estado : m.estado));
+            query.Append(Utilities.Cadenas.comillas(m == null ? this.estado : m.estado));
             query.Append(", puntosD1P1 = ");
-            query.Append(res.dia1[0] == null ? "null" : res.dia1[0].ToString());
+            query.Append(this.dia1[0] == null ? "null" : this.dia1[0].ToString());
             query.Append(", puntosD1P2 = ");
-            query.Append(res.dia1[1] == null ? "null" : res.dia1[1].ToString());
+            query.Append(this.dia1[1] == null ? "null" : this.dia1[1].ToString());
             query.Append(", puntosD1P3 = ");
-            query.Append(res.dia1[2] == null ? "null" : res.dia1[2].ToString());
+            query.Append(this.dia1[2] == null ? "null" : this.dia1[2].ToString());
             query.Append(", puntosD1P4 = ");
-            query.Append(res.dia1[3] == null ? "null" : res.dia1[3].ToString());
+            query.Append(this.dia1[3] == null ? "null" : this.dia1[3].ToString());
             query.Append(", puntosD1P5 = ");
-            query.Append(res.dia1[4] == null ? "null" : res.dia1[4].ToString());
+            query.Append(this.dia1[4] == null ? "null" : this.dia1[4].ToString());
             query.Append(", puntosD1P6 = ");
-            query.Append(res.dia1[5] == null ? "null" : res.dia1[5].ToString());
+            query.Append(this.dia1[5] == null ? "null" : this.dia1[5].ToString());
             query.Append(", puntosD1 = ");
-            query.Append(res.totalDia1 == null ? "null" : res.totalDia1.ToString());
+            query.Append(this.totalDia1 == null ? "null" : this.totalDia1.ToString());
             query.Append(", puntosD2P1 = ");
-            query.Append(res.dia2[0] == null ? "null" : res.dia2[0].ToString());
+            query.Append(this.dia2[0] == null ? "null" : this.dia2[0].ToString());
             query.Append(", puntosD2P2 = ");
-            query.Append(res.dia2[1] == null ? "null" : res.dia2[1].ToString());
+            query.Append(this.dia2[1] == null ? "null" : this.dia2[1].ToString());
             query.Append(", puntosD2P3 = ");
-            query.Append(res.dia2[2] == null ? "null" : res.dia2[2].ToString());
+            query.Append(this.dia2[2] == null ? "null" : this.dia2[2].ToString());
             query.Append(", puntosD2P4 = ");
-            query.Append(res.dia2[3] == null ? "null" : res.dia2[3].ToString());
+            query.Append(this.dia2[3] == null ? "null" : this.dia2[3].ToString());
             query.Append(", puntosD2P5 = ");
-            query.Append(res.dia2[4] == null ? "null" : res.dia2[4].ToString());
+            query.Append(this.dia2[4] == null ? "null" : this.dia2[4].ToString());
             query.Append(", puntosD2P6 = ");
-            query.Append(res.dia2[5] == null ? "null" : res.dia2[5].ToString());
+            query.Append(this.dia2[5] == null ? "null" : this.dia2[5].ToString());
             query.Append(", puntosD2 = ");
-            query.Append(res.totalDia2 == null ? "null" : res.totalDia2.ToString());
+            query.Append(this.totalDia2 == null ? "null" : this.totalDia2.ToString());
             query.Append(", puntos = ");
-            query.Append(res.total == null ? "null" : res.total.ToString());
+            query.Append(this.total == null ? "null" : this.total.ToString());
             query.Append(", medalla = ");
-            query.Append((int)res.medalla);
+            query.Append((int)this.medalla);
             query.Append(", ioi = ");
-            query.Append(Utilities.Cadenas.comillas(res.ioi));
-            if (res.lugar > 0)
+            query.Append(Utilities.Cadenas.comillas(this.ioi));
+            if (this.lugar > 0)
             {
                 query.Append(", lugar = ");
-                query.Append(res.lugar);
+                query.Append(this.lugar);
             }
             query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Utilities.Cadenas.comillas(this.omi));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Utilities.Cadenas.comillas(this.tipoOlimpiada.ToString().ToLower()));
             query.Append(" and clave = ");
-            query.Append(Utilities.Cadenas.comillas(res.clave));
+            query.Append(Utilities.Cadenas.comillas(this.clave));
 
             db.EjecutarQuery(query.ToString());
 

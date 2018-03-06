@@ -170,8 +170,8 @@ namespace OmegaUpPuller.WebRequest
                 r.lugar = lugar;
                 lastPoints = currentPoints;
 
-                // Si no hay puntos, no hay medallas (solo en OMI)
-                if (currentPoints == 0 && tipoOlimpiada == TipoOlimpiada.OMI)
+                // Si no hay puntos, no hay medallas
+                if (currentPoints == 0)
                 {
                     r.medalla = Resultados.TipoMedalla.NADA;
                 }
@@ -184,7 +184,8 @@ namespace OmegaUpPuller.WebRequest
                     r.medalla = medallas[premioActual];
                 }
 
-                // Guardar
+                // Finalmente guardamos la linea en la base de datos
+                r.guardar();
             }
         }
     }
