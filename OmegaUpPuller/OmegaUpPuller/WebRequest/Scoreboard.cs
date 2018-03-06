@@ -16,6 +16,15 @@ namespace OmegaUpPuller.WebRequest
         private int problemas;
         private int concursantes;
 
+        private static Resultados.TipoMedalla[] medallas = new Resultados.TipoMedalla[] {
+                Resultados.TipoMedalla.ORO,
+                Resultados.TipoMedalla.PLATA,
+                Resultados.TipoMedalla.BRONCE,
+                Resultados.TipoMedalla.NADA
+            };
+
+        private int[] cortes;
+
         public Scoreboard(string olimpiada, TipoOlimpiada tipoOlimpiada, int dia, int problemas)
         {
             this.olimpiada = olimpiada;
@@ -104,13 +113,79 @@ namespace OmegaUpPuller.WebRequest
 
         public void ordena()
         {
+            // Ordenamos los resutlados
             List<Resultados> list = this.resultados.Values.ToList();
-
             list.Sort(compara);
-        }
 
-        public void guarda()
-        {
+            // Si no hemos calculado los cortes, o el numero de concursantes cambió,
+            // calculamos los cortes
+            if (this.cortes == null || this.cortes[3] <= this.concursantes)
+            {
+                if (this.tipoOlimpiada == TipoOlimpiada.OMI)
+                {
+                    // Para las OMI se siguen las reglas de los doceavos
+                    this.cortes = new int[] {
+                        (int) Math.Ceiling(this.concursantes / 12.0),
+                        (int) Math.Ceiling(this.concursantes / 4.0),
+                        (int) Math.Ceiling(this.concursantes / 2.0),
+                        this.concursantes + 1
+                    };
+                }
+                else
+                {
+                    // Para OMIP y OMIS, se siguen las reglas de los tercios
+                    this.cortes = new int[] {
+                        (int) Math.Ceiling(this.concursantes / 3.0),
+                        (int) Math.Ceiling(this.concursantes / 1.5),
+                        this.concursantes + 1,
+                        this.concursantes + 1
+                    };
+                }
+            }
+
+            int lugar = 0;
+            int lastPoints = -1;
+            int empatados = 0;
+            int premioActual = 0;
+
+            // Asignamos lugares y medallas
+            for (int counter = 1; counter <= list.Count; counter++)
+            {
+                Resultados r = list[counter - 1];
+                if (r == null)
+                    break;
+
+                // Se acordó que para el calculo de medallas, los puntos se iban a redondear
+                int currentPoints = (int) Math.Round((decimal)r.total, 0);
+                if (currentPoints == lastPoints)
+                {
+                    empatados++;
+                }
+                else
+                {
+                    lugar = counter;
+                    empatados = 0;
+                }
+
+                r.lugar = lugar;
+                lastPoints = currentPoints;
+
+                // Si no hay puntos, no hay medallas (solo en OMI)
+                if (currentPoints == 0 && tipoOlimpiada == TipoOlimpiada.OMI)
+                {
+                    r.medalla = Resultados.TipoMedalla.NADA;
+                }
+                else
+                {
+                    // Se verifica si hay que cambiar de premio
+                    if (this.cortes[premioActual] < counter && empatados == 0)
+                        premioActual++;
+
+                    r.medalla = medallas[premioActual];
+                }
+
+                // Guardar
+            }
         }
     }
 }

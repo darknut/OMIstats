@@ -147,7 +147,6 @@ namespace OmegaUpPuller.WebRequest
             try
             {
                 scoreboard.ordena();
-                scoreboard.guarda();
             }
             catch (Exception e)
             {
