@@ -14,6 +14,7 @@ namespace OmegaUpPuller.WebRequest
         private string olimpiada;
         private int dia;
         private int problemas;
+        private int concursantes;
 
         public Scoreboard(string olimpiada, TipoOlimpiada tipoOlimpiada, int dia, int problemas)
         {
@@ -21,6 +22,7 @@ namespace OmegaUpPuller.WebRequest
             this.tipoOlimpiada = tipoOlimpiada;
             this.dia = dia;
             this.problemas = problemas;
+            this.concursantes = 0;
 
             inicializaResultados();
         }
@@ -53,6 +55,7 @@ namespace OmegaUpPuller.WebRequest
                 res.usuario = miembros[0].claveUsuario;
                 res.clave = clave;
                 res.publico = true;
+                concursantes++;
                 this.resultados.Add(clave, res);
             }
 
@@ -82,8 +85,28 @@ namespace OmegaUpPuller.WebRequest
             res.total = res.totalDia1 + res.totalDia2;
         }
 
+        public static int compara(Resultados x, Resultados y)
+        {
+            float x1 = 0, y1 = 0;
+
+            if (x == null)
+                x1 = -1;
+            else
+                x1 = (float)x.total;
+
+            if (y == null)
+                y1 = -1;
+            else
+                y1 = (float) y.total;
+
+            return y1.CompareTo(x1);
+        }
+
         public void ordena()
         {
+            List<Resultados> list = this.resultados.Values.ToList();
+
+            list.Sort(compara);
         }
 
         public void guarda()
