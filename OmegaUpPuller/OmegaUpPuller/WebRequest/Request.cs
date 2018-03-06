@@ -18,6 +18,7 @@ namespace OmegaUpPuller.WebRequest
         private static string RANKING_STRING = "ranking";
         private static string USERNAME_STRING = "username";
         private static string POINTS_STRING = "points";
+        private static string RUNS_STRING = "runs";
         private static int MAX_INTENTOS = 3;
 
         private static Request _instance = null;
@@ -112,16 +113,25 @@ namespace OmegaUpPuller.WebRequest
 
                     usuario = usuario.Substring(pull.prefijo.Length);
 
-                    decimal[] puntos = new decimal[problemas.Count];
+                    decimal?[] puntos = new decimal?[problemas.Count];
                     ArrayList resultadosUsuario = (ArrayList)persona[PROBLEMAS_STRING];
                     int i = 0;
 
                     foreach (Dictionary<string, object> problema in resultadosUsuario)
                     {
                         if (problema[POINTS_STRING] is int)
-                            puntos[i++] = (int)problema[POINTS_STRING];
+                            puntos[i] = (int)problema[POINTS_STRING];
                         else
-                            puntos[i++] = (decimal)problema[POINTS_STRING];
+                            puntos[i] = (decimal)problema[POINTS_STRING];
+
+                        if (puntos[i] == 0)
+                        {
+                            int tries = (int)problema[RUNS_STRING];
+                            if (tries == 0)
+                                puntos[i] = null;
+                        }
+
+                        i++;
                     }
 
                     scoreboard.actualiza(usuario, puntos);

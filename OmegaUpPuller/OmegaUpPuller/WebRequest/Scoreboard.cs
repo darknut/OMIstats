@@ -35,7 +35,7 @@ namespace OmegaUpPuller.WebRequest
             }
         }
 
-        public void actualiza(string clave, decimal[] resultados)
+        public void actualiza(string clave, decimal?[] resultados)
         {
             Resultados res;
             if (!this.resultados.TryGetValue(clave, out res))
@@ -69,7 +69,9 @@ namespace OmegaUpPuller.WebRequest
             for (int i = 0; i < this.problemas; i++)
             {
                 arreglo[i] = (float?)resultados[i];
-                total += arreglo[i];
+
+                if(arreglo[i] != null)
+                    total += arreglo[i];
             }
 
             if (dia == 1)
