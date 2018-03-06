@@ -800,53 +800,5 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
-
-        /// <summary>
-        /// Regresa la tabla de puntos en formato tabulado, con el número de problemas
-        /// mandado como parámetro
-        /// </summary>
-        /// <returns>La tabla con los resultados</returns>
-        public static string obtenerResultadosAdmin(string numero, TipoOlimpiada tipoOlimpiada, int problemasDia1, int problemasDia2)
-        {
-            List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
-
-            StringBuilder tabla = new StringBuilder();
-
-            foreach (Resultados resultado in resultados)
-            {
-                tabla.Append(resultado.obtenerLineaAdmin(problemasDia1, problemasDia2));
-                tabla.Append("\n");
-            }
-
-            return tabla.ToString();
-        }
-
-        /// <summary>
-        /// Guarda en la base de datos la tabla de resultados
-        /// </summary>
-        /// <param name="tabla">La nueva tabla de resultados, un competidor por renglon
-        /// y tabulada con comas</param>
-        /// <returns>Los registros que ocasionaron error</returns>
-        public static string guardarTablaResultados(string tabla, string numero, TipoOlimpiada tipoOlimpiada, int problemasDia1, int problemasDia2)
-        {
-            StringBuilder errores = new StringBuilder();
-            string[] lineas;
-
-            lineas = tabla.Split('\n');
-
-            foreach (string linea in lineas)
-            {
-                Resultados.TipoError error = Resultados.guardarLineaAdmin(numero, tipoOlimpiada, problemasDia1, problemasDia2, linea.Trim());
-                if (error != Resultados.TipoError.OK)
-                {
-                    errores.Append(linea.Trim());
-                    errores.Append(": ");
-                    errores.Append(error.ToString());
-                    errores.Append("\n");
-                }
-            }
-
-            return errores.ToString();
-        }
     }
 }
