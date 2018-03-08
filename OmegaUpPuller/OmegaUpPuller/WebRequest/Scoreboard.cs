@@ -181,7 +181,7 @@ namespace OmegaUpPuller.WebRequest
                 else
                 {
                     // Se verifica si hay que cambiar de premio
-                    if (this.cortes[premioActual] < counter && empatados == 0)
+                    while (this.cortes[premioActual] < counter && empatados == 0)
                         premioActual++;
 
                     r.medalla = medallas[premioActual];

@@ -71,7 +71,17 @@ namespace OmegaUpPuller.WebRequest
                     else
                     {
                         if (r.Next(10) < 2)
-                            problema[POINTS_STRING] = r.Next(11) * 10;
+                        {
+                            int newPoints = r.Next(101);
+                            if ((int)problema[POINTS_STRING] < newPoints)
+                                problema[POINTS_STRING] = newPoints;
+                            else
+                            {
+                                if (r.Next(10) < 4)
+                                    problema[POINTS_STRING] = newPoints;
+                            }
+                            problema[RUNS_STRING] = (int)problema[RUNS_STRING] + 1;
+                        }
                     }
                 }
             }
@@ -87,7 +97,7 @@ namespace OmegaUpPuller.WebRequest
             if (mock)
             {
                 Console.WriteLine("Estamos haciendo mock... presiona ENTER para continuar");
-                Console.Read();
+                Console.ReadLine();
 
                 if (mockScoreboard == null)
                 {
@@ -98,6 +108,8 @@ namespace OmegaUpPuller.WebRequest
                 {
                     cambiaValoresMock(pull);
                 }
+
+                resultados = mockScoreboard;
             }
             else
             {
