@@ -341,7 +341,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
                     {
                         @ViewBag.numerosDia1.media
                     }
@@ -359,7 +359,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia top-border pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
                     {
                         @ViewBag.numerosDia2.media
                     }
@@ -368,7 +368,10 @@ else
             @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total top-border pie">
-                    @ViewBag.numerosTotal.media
+                    @if (ViewBag.numerosTotal != null)
+                    {
+                        @ViewBag.numerosTotal.media
+                    }
                 </td>
             }
             <td class="top-border table-footer center" colspan="2">
@@ -399,7 +402,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
                     {
                         @ViewBag.numerosDia1.mediana
                     }
@@ -417,7 +420,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
                     {
                         @ViewBag.numerosDia2.mediana
                     }
@@ -426,7 +429,10 @@ else
             @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total pie">
-                    @ViewBag.numerosTotal.mediana
+                    @if (ViewBag.numerosTotal != null)
+                    {
+                        @ViewBag.numerosTotal.mediana
+                    }
                 </td>
             }
             <td class="center" colspan="2">
@@ -457,7 +463,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
                     {
                         @ViewBag.numerosDia1.perfectos
                     }
@@ -475,7 +481,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
                     {
                         @ViewBag.numerosDia2.perfectos
                     }
@@ -484,7 +490,7 @@ else
             @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosTotal != null)
                     {
                         @ViewBag.numerosTotal.perfectos
                     }
@@ -518,7 +524,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
                     {
                         @ViewBag.numerosDia1.ceros
                     }
@@ -536,7 +542,7 @@ else
             @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
             {
                 <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
                     {
                         @ViewBag.numerosDia2.ceros
                     }
@@ -545,7 +551,7 @@ else
             @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
             {
                 <td class="center resultado-total pie">
-                    @if (!hayUNKs)
+                    @if (!hayUNKs && ViewBag.numerosTotal != null)
                     {
                         @ViewBag.numerosTotal.ceros
                     }
