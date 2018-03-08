@@ -302,6 +302,14 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Borra la referencia en la aplicación para poder recargar olimpiadas
+        /// </summary>
+        public static void resetOMIs(TipoOlimpiada tipoOlimpiada)
+        {
+            HttpContext.Current.Application[obtenerApplicationString(tipoOlimpiada)] = null;
+        }
+
+        /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
         /// <param name="clave">La nueva clave para el objeto</param>
@@ -311,7 +319,7 @@ namespace OMIstats.Models
         public bool guardarDatos(string clave = null)
         {
             // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
-            HttpContext.Current.Application[obtenerApplicationString(this.tipoOlimpiada)] = null;
+            resetOMIs(this.tipoOlimpiada);
 
             if (clave == null)
                 clave = numero;
@@ -437,7 +445,7 @@ namespace OMIstats.Models
         public static void nuevaOMI(TipoOlimpiada tipoOlimpiada)
         {
             // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
-            HttpContext.Current.Application[obtenerApplicationString(tipoOlimpiada)] = null;
+            resetOMIs(tipoOlimpiada);
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();

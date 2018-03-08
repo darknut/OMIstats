@@ -46,6 +46,7 @@ namespace OmegaUpPuller.WebRequest
             {
                 resultados.Add(resultado.clave, resultado);
             }
+            this.concursantes = resultados.Count;
         }
 
         public void actualiza(string clave, decimal?[] resultados)

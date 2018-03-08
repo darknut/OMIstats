@@ -97,6 +97,21 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/ResetOMI/
+
+        public ActionResult ResetOMI()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Olimpiada.resetOMIs(TipoOlimpiada.OMI);
+            Olimpiada.resetOMIs(TipoOlimpiada.OMIS);
+            Olimpiada.resetOMIs(TipoOlimpiada.OMIP);
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
         // GET: /Admin/Change/
 
         public ActionResult Change(string usuario)
