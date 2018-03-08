@@ -34,6 +34,7 @@ namespace OmegaUpPuller.WebRequest
         }
 
         private Dictionary<string, Scoreboard> scoreboards;
+        private Dictionary<string, object> mockScoreboard;
 
         private string getClaveScoreBoard(OmegaUp pull)
         {
@@ -41,11 +42,67 @@ namespace OmegaUpPuller.WebRequest
         }
 
         /// <summary>
+        /// Función para ayudar a testear OmegaUp
+        /// </summary>
+        private void cambiaValoresMock(OmegaUp pull, bool inicializa = false)
+        {
+            ArrayList problemas = (ArrayList)mockScoreboard[PROBLEMAS_STRING];
+            ArrayList ranking = (ArrayList)mockScoreboard[RANKING_STRING];
+            Random r = new Random();
+
+            foreach (Dictionary<string, object> persona in ranking)
+            {
+                string usuario = (string)persona[USERNAME_STRING];
+
+                if (usuario.IndexOf(pull.prefijo) != 0)
+                    continue;
+
+                usuario = usuario.Substring(pull.prefijo.Length);
+
+                ArrayList resultadosUsuario = (ArrayList)persona[PROBLEMAS_STRING];
+
+                foreach (Dictionary<string, object> problema in resultadosUsuario)
+                {
+                    if (inicializa)
+                    {
+                        problema[RUNS_STRING] = 0;
+                        problema[POINTS_STRING] = 0;
+                    }
+                    else
+                    {
+                        if (r.Next(10) < 2)
+                            problema[POINTS_STRING] = r.Next(11) * 10;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Regresa true si se tuvo éxito o falso si no
         /// </summary>
-        public bool Update(OmegaUp pull)
+        public bool Update(OmegaUp pull, bool mock = false)
         {
-            Dictionary<string, object> resultados = Request.Call(pull);
+            Dictionary<string, object> resultados = null;
+
+            if (mock)
+            {
+                Console.WriteLine("Estamos haciendo mock... presiona ENTER para continuar");
+                Console.Read();
+
+                if (mockScoreboard == null)
+                {
+                    mockScoreboard = Request.Call(pull);
+                    cambiaValoresMock(pull, true);
+                }
+                else
+                {
+                    cambiaValoresMock(pull);
+                }
+            }
+            else
+            {
+                resultados = Request.Call(pull);
+            }
 
             // Luego parseamos los datos del json
             Scoreboard scoreboard;
