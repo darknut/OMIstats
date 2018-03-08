@@ -68,6 +68,7 @@
     <Compile Include="..\..\OMIStats\OMIStats\Models\MiembroDelegacion.cs">
       <Link>OMIStats\Models\MiembroDelegacion.cs</Link>
     </Compile>
+    <Compile Include="WebRequest\ScoreboardManager.cs" />
     <Compile Include="WebRequest\Request.cs" />
     <Compile Include="WebRequest\Scoreboard.cs" />
   </ItemGroup>

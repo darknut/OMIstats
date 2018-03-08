@@ -53,7 +53,7 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
-            if (WebRequest.Request.Instance.Call(instruccion))
+            if (WebRequest.ScoreboardManager.Instance.Update(instruccion))
                 instruccion.status = OmegaUp.Status.OK;
             else
                 instruccion.status = OmegaUp.Status.ERROR;
