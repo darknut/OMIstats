@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OMIStats\Models\Mock.cs" />
+    <Compile Include="OMIStats\Models\Olimpiada.cs" />
     <Compile Include="OMIStats\Utilities\Mock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

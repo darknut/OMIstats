@@ -34,6 +34,8 @@ namespace OmegaUpPuller.WebRequest
             this.concursantes = 0;
 
             inicializaResultados();
+
+            Olimpiada.guardaProblemas(olimpiada, tipoOlimpiada, problemas, dia);
         }
 
         private void inicializaResultados()

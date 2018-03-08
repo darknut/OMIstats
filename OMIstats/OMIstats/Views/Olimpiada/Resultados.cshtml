@@ -26,6 +26,8 @@
     tableManager.setCurrentOMI(Model);
 
     ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
+    List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
+    List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
 }
 
 <div class="submenu">
@@ -124,9 +126,12 @@ else
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="enlaceProblema">
-                        <a href="@ViewBag.problemasDia1[i].url" target="_blank">
-                            <img src="~/img/link.png" />
-                        </a>
+                        @if (problemasDia1[i] != null)
+                        {
+                            <a href="@problemasDia1[i].url" target="_blank">
+                                <img src="~/img/link.png" />
+                            </a>
+                        }
                     </td>
                 }
             }
@@ -139,9 +144,12 @@ else
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="enlaceProblema">
-                        <a href="@ViewBag.problemasDia2[i].url" target="_blank">
-                            <img src="~/img/link.png" />
-                        </a>
+                        @if(problemasDia2[i] != null)
+                        {
+                            <a href="@problemasDia2[i].url" target="_blank">
+                                <img src="~/img/link.png" />
+                            </a>
+                        }
                     </td>
                 }
             }
@@ -334,7 +342,10 @@ else
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border top-border pie">
-                        @ViewBag.problemasDia1[i].media
+                        @if(problemasDia1[i] != null)
+                        {
+                            @ViewBag.problemasDia1[i].media
+                        }
                     </td>
                 }
             }
@@ -352,7 +363,10 @@ else
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border top-border pie">
-                        @ViewBag.problemasDia2[i].media
+                        @if(problemasDia2[i] != null)
+                        {
+                            @ViewBag.problemasDia2[i].media
+                        }
                     </td>
                 }
             }
@@ -395,7 +409,10 @@ else
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border pie">
-                        @ViewBag.problemasDia1[i].mediana
+                        @if(problemasDia1[i] != null)
+                        {
+                            @ViewBag.problemasDia1[i].mediana
+                        }
                     </td>
                 }
             }
@@ -413,7 +430,10 @@ else
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border pie">
-                        @ViewBag.problemasDia2[i].mediana
+                        @if(problemasDia2[i] != null)
+                        {
+                            @ViewBag.problemasDia2[i].mediana
+                        }
                     </td>
                 }
             }
@@ -456,7 +476,10 @@ else
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border pie">
-                        @ViewBag.problemasDia1[i].perfectos
+                        @if(problemasDia1[i] != null)
+                        {
+                            @ViewBag.problemasDia1[i].perfectos
+                        }
                     </td>
                 }
             }
@@ -474,7 +497,10 @@ else
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border pie">
-                        @ViewBag.problemasDia2[i].perfectos
+                        @if(problemasDia2[i] != null)
+                        {
+                            @ViewBag.problemasDia2[i].perfectos
+                        }
                     </td>
                 }
             }
@@ -517,7 +543,10 @@ else
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border pie">
-                        @ViewBag.problemasDia1[i].ceros
+                        @if(problemasDia1[i] != null)
+                        {
+                            @ViewBag.problemasDia1[i].ceros
+                        }
                     </td>
                 }
             }
@@ -535,7 +564,10 @@ else
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border pie">
-                        @ViewBag.problemasDia2[i].ceros
+                        @if(problemasDia2[i] != null)
+                        {
+                            @ViewBag.problemasDia2[i].ceros
+                        }
                     </td>
                 }
             }
