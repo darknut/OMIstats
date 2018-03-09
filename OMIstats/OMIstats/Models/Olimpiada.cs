@@ -418,6 +418,7 @@ namespace OMIstats.Models
             {
                 nuevaOMI(tipoOlimpiada);
                 omi = obtenerOlimpiadaConClave(TEMP_CLAVE, tipoOlimpiada);
+                clave = TEMP_CLAVE;
             }
 
             omi.numero = this.numero;
