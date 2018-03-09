@@ -267,8 +267,9 @@ namespace OMIstats.Models
             else
                 logo = "omi.png";
 
-            if (tipoOlimpiada == TipoOlimpiada.OMIP ||
-                tipoOlimpiada == TipoOlimpiada.OMIS)
+            if (numero != TEMP_CLAVE &&
+                (tipoOlimpiada == TipoOlimpiada.OMIP ||
+                tipoOlimpiada == TipoOlimpiada.OMIS))
                 omisActualNumber = (Int32.Parse(numero) - OMIS_SIN_OMIPS).ToString();
 
             datosGenerales = Problema.obtenerProblema(numero, tipoOlimpiada, 0, 0);
@@ -318,9 +319,6 @@ namespace OMIstats.Models
         /// referenciada no existe</remarks>
         public bool guardarDatos(string clave = null)
         {
-            // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
-            resetOMIs(this.tipoOlimpiada);
-
             if (clave == null)
                 clave = numero;
 
@@ -402,14 +400,17 @@ namespace OMIstats.Models
             // Si esta omi es tambien OMIPS, creamos tambien los objetos
             if (tipoOlimpiada == TipoOlimpiada.OMI && this.alsoOmips)
             {
-                this.actualizaOMIPS(TipoOlimpiada.OMIP);
-                this.actualizaOMIPS(TipoOlimpiada.OMIS);
+                this.actualizaOMIPS(TipoOlimpiada.OMIP, clave);
+                this.actualizaOMIPS(TipoOlimpiada.OMIS, clave);
             }
+
+            // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
+            resetOMIs(this.tipoOlimpiada);
 
             return true;
         }
 
-        private void actualizaOMIPS(TipoOlimpiada tipoOlimpiada)
+        private void actualizaOMIPS(TipoOlimpiada tipoOlimpiada, string clave)
         {
             Olimpiada omi = obtenerOlimpiadaConClave(this.numero, tipoOlimpiada);
 
@@ -435,7 +436,7 @@ namespace OMIstats.Models
             omi.logo = this.logo;
             omi.poster = this.poster;
 
-            omi.guardarDatos(TEMP_CLAVE);
+            omi.guardarDatos(clave);
         }
 
         /// <summary>
