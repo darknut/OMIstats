@@ -12,6 +12,8 @@ namespace OmegaUpPuller
     class Program
     {
         private static int MAX_SLEEP = 60;
+        private static bool IS_MOCKING = false;
+        private const string MOCKING_STRING = "mock";
 
         private void setup()
         {
@@ -53,7 +55,7 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
-            if (WebRequest.ScoreboardManager.Instance.Update(instruccion))
+            if (WebRequest.ScoreboardManager.Instance.Update(instruccion, IS_MOCKING))
                 instruccion.status = OmegaUp.Status.OK;
             else
                 instruccion.status = OmegaUp.Status.ERROR;
@@ -126,6 +128,9 @@ namespace OmegaUpPuller
 
         static void Main(string[] args)
         {
+            if (args.Length == 1 && args[0] == MOCKING_STRING)
+                Program.IS_MOCKING = true;
+
             new Program().Run();
         }
     }
