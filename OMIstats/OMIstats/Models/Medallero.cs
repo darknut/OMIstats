@@ -43,7 +43,7 @@ namespace OMIstats.Models
         // Variables auxiliares para conteo
 
         private bool hayUNKs;
-        private int count;
+        public int count;
 
         public Medallero()
         {
@@ -176,6 +176,41 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(lugar);
             query.Append(")");
+
+            return !db.EjecutarQuery(query.ToString()).error;
+        }
+
+        /// <summary>
+        /// Actualiza el medallero en la base de datos
+        /// </summary>
+        public bool actualizar()
+        {
+            if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
+                return false;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update medallero set oro = ");
+            query.Append(oros);
+            query.Append(", plata = ");
+            query.Append(platas);
+            query.Append(", bronce = ");
+            query.Append(bronces);
+            query.Append(", otros = ");
+            query.Append(otros);
+            query.Append(", puntos = ");
+            query.Append(puntos);
+            query.Append(", promedio = ");
+            query.Append(promedio);
+            query.Append(", lugar = ");
+            query.Append(lugar);
+            query.Append(" where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and tipo = ");
+            query.Append((int)tipoMedallero);
+            query.Append(" and clave = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
 
             return !db.EjecutarQuery(query.ToString()).error;
         }
@@ -450,6 +485,30 @@ namespace OMIstats.Models
             }
 
             return lista;
+        }
+
+        public static bool hayPromedio(List<Medallero> lista)
+        {
+            for (int i = lista.Count - 1; i >= 0; i--)
+            {
+                if ((int)Math.Round((double)lista[i].promedio) == 0 &&
+                    (lista[i].puntos > 0 || lista[i].bronces > 0 ||
+                    lista[i].platas > 0 || lista[i].oros > 0))
+                    return false;
+            }
+            return true;
+        }
+
+        public static bool hayPuntos(List<Medallero> lista)
+        {
+            for (int i = 0; i < lista.Count; i++)
+            {
+                if ((int)Math.Round((double)lista[i].puntos) == 0 &&
+                    (lista[i].bronces > 0 ||
+                    lista[i].platas > 0 || lista[i].oros > 0))
+                    return false;
+            }
+            return true;
         }
 
         public int CompareTo(Medallero obj)

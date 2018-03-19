@@ -63,8 +63,8 @@ else
 <h1 class="titulo">@ViewBag.Title</h1>
 
 List<OMIstats.Models.Medallero> estados = ViewBag.estados;
-bool hayPromedio = estados[estados.Count - 1].promedio > 0;
-bool hayPuntos = estados[0].puntos > 0;
+bool hayPromedio = ViewBag.hayPromedio;
+bool hayPuntos = ViewBag.hayPuntos;
 
 <table class="table" id="tablaPuntos">
     <thead>
@@ -160,7 +160,10 @@ bool hayPuntos = estados[0].puntos > 0;
             @if (hayPromedio)
             {
                 <td class="center resultado-dia top-border pie table-td">
-                    @(totalPuntos / Model.participantes)
+                    @if (Model.participantes > 0)
+                    {
+                        @(totalPuntos / Model.participantes)
+                    }
                 </td>
             }
         </tr>

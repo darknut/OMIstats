@@ -357,6 +357,8 @@ namespace OMIstats.Controllers
 
             ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave);
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
+            ViewBag.hayPromedio = Medallero.hayPromedio(ViewBag.estados);
+            ViewBag.hayPuntos = Medallero.hayPuntos(ViewBag.estados);
 
             return View(o);
         }

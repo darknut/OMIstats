@@ -15,6 +15,7 @@ namespace OmegaUpPuller.WebRequest
         private int dia;
         private int problemas;
         private int concursantes;
+        private Dictionary<string, Medallero> medalleroEstados = null;
 
         private static Resultados.TipoMedalla[] medallas = new Resultados.TipoMedalla[] {
                 Resultados.TipoMedalla.ORO,
@@ -35,6 +36,8 @@ namespace OmegaUpPuller.WebRequest
 
             inicializaResultados();
 
+            medalleroEstados = new Dictionary<string, Medallero>();
+
             Olimpiada.guardaProblemas(olimpiada, tipoOlimpiada, problemas, dia);
         }
 
@@ -47,6 +50,38 @@ namespace OmegaUpPuller.WebRequest
                 resultados.Add(resultado.clave, resultado);
             }
             this.concursantes = resultados.Count;
+        }
+
+        private void reseteaMedalleroEstados()
+        {
+            if (tipoOlimpiada != TipoOlimpiada.OMI)
+                return;
+
+            foreach (Medallero m in medalleroEstados.Values)
+            {
+                m.oros = 0;
+                m.platas = 0;
+                m.bronces = 0;
+                m.otros = 0;
+                m.puntos = 0;
+                m.promedio = 0;
+                m.lugar = 0;
+                m.count = 0;
+            }
+        }
+
+        private Medallero agregaEstado(string estado)
+        {
+            Medallero m = new Medallero();
+            m.tipoOlimpiada = this.tipoOlimpiada;
+            m.tipoMedallero = Medallero.TipoMedallero.ESTADO_POR_OMI;
+            m.clave = estado + "_" + this.olimpiada;
+            m.omi = this.olimpiada;
+
+            medalleroEstados.Add(estado, m);
+            m.guardarDatos();
+
+            return m;
         }
 
         public void actualiza(string clave, decimal?[] resultados)
@@ -67,6 +102,7 @@ namespace OmegaUpPuller.WebRequest
                 res.usuario = miembros[0].claveUsuario;
                 res.clave = clave;
                 res.publico = true;
+                res.estado = miembros[0].estado;
                 concursantes++;
                 this.resultados.Add(clave, res);
             }
@@ -150,6 +186,7 @@ namespace OmegaUpPuller.WebRequest
             int lastPoints = -1;
             int empatados = 0;
             int premioActual = 0;
+            this.reseteaMedalleroEstados();
 
             // Asignamos lugares y medallas
             for (int counter = 1; counter <= list.Count; counter++)
@@ -187,8 +224,83 @@ namespace OmegaUpPuller.WebRequest
                     r.medalla = medallas[premioActual];
                 }
 
+
+                // Para las OMI también calculamos los estados
+                if (tipoOlimpiada == TipoOlimpiada.OMI)
+                {
+                    Medallero m;
+                    if (!medalleroEstados.TryGetValue(r.estado, out m))
+                        m = this.agregaEstado(r.estado);
+
+                    m.count++;
+
+                    if (m.count <= 4)
+                        m.puntos += r.total;
+
+                    switch (r.medalla)
+                    {
+                        case Resultados.TipoMedalla.ORO:
+                            {
+                                m.oros++;
+                                break;
+                            }
+                        case Resultados.TipoMedalla.PLATA:
+                            {
+                                m.platas++;
+                                break;
+                            }
+                        case Resultados.TipoMedalla.BRONCE:
+                            {
+                                m.bronces++;
+                                break;
+                            }
+                    }
+                }
+
                 // Finalmente guardamos la linea en la base de datos
                 r.guardar();
+            }
+
+            if (tipoOlimpiada != TipoOlimpiada.OMI)
+                return;
+
+            // Ordenamos también el medallero de los estados (solo para OMI's)
+            List<Medallero> sortedEstados = new List<Medallero>(medalleroEstados.Values);
+            Medallero ultimoEstado = null;
+            sortedEstados.Sort();
+            lugar = 0;
+
+            for (int i = 0; i < sortedEstados.Count; i++)
+            {
+                Medallero estado = sortedEstados[i];
+                lugar++;
+
+                // Ajustamos los estados que tienen mas de cuatro medallas
+                if (estado.oros + estado.platas + estado.bronces > 4)
+                {
+                    if (estado.oros > 4)
+                        estado.oros = 4;
+                    if (estado.oros + estado.platas > 4)
+                        estado.platas = 4 - estado.oros;
+                    if (estado.oros + estado.platas + estado.bronces > 4)
+                        estado.bronces = 4 - estado.oros - estado.platas;
+                }
+
+                estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+
+                // Revisamos si hay empates entre estados
+                if (ultimoEstado == null ||
+                    ultimoEstado.oros != estado.oros ||
+                    ultimoEstado.platas != estado.platas ||
+                    ultimoEstado.bronces != estado.bronces ||
+                    (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
+                    estado.lugar = lugar;
+                else
+                    estado.lugar = ultimoEstado.lugar;
+
+                ultimoEstado = estado;
+
+                estado.actualizar();
             }
         }
     }

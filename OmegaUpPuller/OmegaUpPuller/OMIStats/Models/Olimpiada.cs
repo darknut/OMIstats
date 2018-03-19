@@ -8,6 +8,9 @@ namespace OMIstats.Models
 {
     public class Olimpiada
     {
+        public bool noMedallistasConocidos;
+        public bool puntosDesconocidos;
+
         public static void guardaProblemas(string olimpiada, TipoOlimpiada tipoOlimpiada, int problemas, int dia)
         {
             Utilities.Acceso db = new Utilities.Acceso();
@@ -29,6 +32,11 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public static Olimpiada obtenerOlimpiadaConClave(string clave, TipoOlimpiada tipo)
+        {
+            throw new InvalidOperationException("obtenerOlimpiadaConClave no permitido en este contexto");
         }
     }
 }
