@@ -19,9 +19,6 @@
                 
             </th>
             <th class="bottom-border right-border">
-                Clave
-            </th>
-            <th class="bottom-border right-border">
                 Estado
             </th>
             <th class="bottom-border right-border">
@@ -37,9 +34,6 @@
         <tr>
             <td class="table-td center right-border">
                 <img src="@Url.Content("~/img/estados/" + item.clave + ".png")" class="logoEstado"/>
-            </td>
-            <td class="table-td right-border">
-                @item.clave
             </td>
             <td class="table-td right-border">
                 <a href ="@Url.Content("~/Estado?clave=" + item.clave)" class="nombre">@item.nombre</a>
