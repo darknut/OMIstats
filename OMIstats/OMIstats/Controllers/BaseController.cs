@@ -40,7 +40,8 @@ namespace OMIstats.Controllers
             OLIMPIADA,
             RESULTS_TABLE,
             ADMIN_UNLINK,
-            ADMIN_SCOREBOARD
+            ADMIN_SCOREBOARD,
+            ADMIN_LOGS
         }
 
         public BaseController()
@@ -160,6 +161,8 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.ADMIN_SCOREBOARD:
                     return RedirectToAction("Scoreboard", "Admin");
+                case Pagina.ADMIN_LOGS:
+                    return RedirectToAction("Logs", "Admin");
                 case Pagina.PROBLEMA:
                     if (opciones != null)
                     {

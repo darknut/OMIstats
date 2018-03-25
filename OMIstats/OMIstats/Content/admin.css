@@ -46,3 +46,10 @@
     font-style: italic;
     font-size: 18px;
 }
+
+.logs {
+    width: 95%;
+    height: 500px;
+    background-color: black;
+    color: white;
+}

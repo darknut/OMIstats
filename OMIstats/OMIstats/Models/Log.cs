@@ -74,6 +74,9 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
+            if (count == 0)
+                count = DEFAULT_LOG_COUNT;
+
             query.Append(" select top ");
             query.Append(count);
             query.Append(" * from Log ");
@@ -114,6 +117,16 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(log));
             query.Append(")");
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        public static void clear()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" delete log ");
 
             db.EjecutarQuery(query.ToString());
         }

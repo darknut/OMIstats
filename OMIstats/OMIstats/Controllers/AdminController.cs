@@ -112,6 +112,39 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/Logs/
+
+        public ActionResult Logs(int count = 0, Log.TipoLog tipo = Log.TipoLog.NULL)
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            string logs = "";
+
+            foreach (Log l in Log.get(count, tipo))
+                logs += l.timestamp + "\t" + l.tipo + "\t" + l.log + "\n";
+
+            ViewBag.logs = logs;
+            ViewBag.count = count;
+            ViewBag.tipo = tipo;
+
+            return View();
+        }
+
+        //
+        // GET: /Admin/ClearLogs/
+
+        public ActionResult ClearLogs()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Log.clear();
+
+            return RedirectTo(Pagina.ADMIN_LOGS); ;
+        }
+
+        //
         // GET: /Admin/Change/
 
         public ActionResult Change(string usuario)

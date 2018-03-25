@@ -20,3 +20,14 @@ function calculaTotal()
     document.getElementById("quedan").innerHTML = quedan;
     document.getElementById("total").innerHTML = total;
 }
+
+function logs(base)
+{
+    var count = document.getElementById("count").value;
+    if (count == "")
+        count = 0;
+    var tipoSelect = document.getElementById("tipo");
+    var tipo = tipoSelect.options[tipoSelect.selectedIndex].value;
+
+    window.location = base + "Admin/Logs?count=" + count + "&tipo=" + tipo;
+}

@@ -1,0 +1,45 @@
+﻿@section AddToHead
+{
+    <link href="~/Content/admin.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
+    <script src="~/js/admin.js"></script>
+}
+
+@{
+    ViewBag.Title = "Logs";
+    string logs = ViewBag.logs;
+    OMIstats.Models.Log.TipoLog tipo = ViewBag.tipo;
+    int count = ViewBag.count;
+}
+
+<h2 class="titulo">Logs</h2>
+
+<div>
+    <div>
+        <div class="label"> Lineas: </div>
+        <div class="input">
+            <input id="count" name="count" type="text" value="@(count == 0 ? "" : count.ToString())" class="smallInput" />
+        </div>
+    </div>
+    <div>
+        <div class="label"> Filtro: </div>
+        <div class="input">
+            <select id="tipo" name="tipo">
+                <option value="NULL">Ninguno</option>
+                <option value="OMEGAUP">OmegaUp</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="label"></div>
+        <div class="input"><input type="button" value="Consultar" onclick="logs('@Url.Content("~")')"/></div>
+    </div>
+</div>
+
+<br />
+
+<textarea class="logs" readonly>@(logs)</textarea>
+
+<a href="@Url.Content("~/Admin/ClearLogs")" class="boton botonOMI">Clear Logs</a>
