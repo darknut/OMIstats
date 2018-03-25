@@ -9,8 +9,8 @@ namespace OMIstats.Models
 {
     public class Log
     {
-        private static const int MAX_LOG_LEN = 200;
-        private static const int DEFAULT_LOG_COUNT = 50;
+        private const int MAX_LOG_LEN = 200;
+        private const int DEFAULT_LOG_COUNT = 50;
 
         public int clave { get; set; }
 
@@ -56,12 +56,16 @@ namespace OMIstats.Models
             if (String.IsNullOrEmpty(log))
                 return;
 
-            var lines = Enumerable.Range(0, log.Length / MAX_LOG_LEN)
-                        .Select(i => log.Substring(i * MAX_LOG_LEN, MAX_LOG_LEN));
-
-            foreach (var line in lines)
+            for (int i = 0; i < log.Length; i += MAX_LOG_LEN)
             {
-                new Log(tipo, line).guardar();
+                string str;
+
+                if ((i + MAX_LOG_LEN) >= log.Length)
+                    str = log.Substring(i);
+                else
+                    str = log.Substring(i, MAX_LOG_LEN);
+
+                new Log(tipo, str).guardar();
             }
         }
 
