@@ -119,8 +119,10 @@ namespace OmegaUpPuller
                     System.Threading.Thread.Sleep(sleep * 1000);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.add(Log.TipoLog.OMEGAUP, "Excepción en el ciclo normal de ejecución del Puller:");
+                Log.add(Log.TipoLog.OMEGAUP, e.ToString());
                 status.status = OmegaUp.Status.ERROR;
                 status.guardar();
             }

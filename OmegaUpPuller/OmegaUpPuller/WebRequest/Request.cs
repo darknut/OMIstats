@@ -47,12 +47,13 @@ namespace OmegaUpPuller.WebRequest
                 Log.add(Log.TipoLog.OMEGAUP, "Se obtuvieron los resultados correctamente, se procede a guardarlos en la base de datos...");
                 return resultados = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(content);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Log.add(Log.TipoLog.OMEGAUP, "Falló la llamada a: " + api);
                 if (intentos >= MAX_INTENTOS)
                 {
-                    Log.add(Log.TipoLog.OMEGAUP, "Giving up...");
+                    Log.add(Log.TipoLog.OMEGAUP, "Giving up... Callstack:");
+                    Log.add(Log.TipoLog.OMEGAUP, e.ToString());
                     return null;
                 }
                 else

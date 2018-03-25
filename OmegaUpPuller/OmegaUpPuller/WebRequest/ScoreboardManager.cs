@@ -167,7 +167,8 @@ namespace OmegaUpPuller.WebRequest
             }
             catch (Exception e)
             {
-                Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se parseaba el json de OmegaUp: " + e.StackTrace);
+                Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se parseaba el json de OmegaUp: ");
+                Log.add(Log.TipoLog.OMEGAUP, e.ToString());
                 return false;
             }
 
@@ -179,7 +180,8 @@ namespace OmegaUpPuller.WebRequest
             }
             catch (Exception e)
             {
-                Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se guardaba en la base de datos: " + e.StackTrace);
+                Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se guardaba en la base de datos: ");
+                Log.add(Log.TipoLog.OMEGAUP, e.ToString());
                 return false;
             }
 
