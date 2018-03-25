@@ -131,6 +131,7 @@ namespace OmegaUpPuller.WebRequest
 
                 ArrayList ranking = (ArrayList)resultados[RANKING_STRING];
 
+                Log.add(Log.TipoLog.OMEGAUP, "Guardando los resultados en la base");
                 foreach (Dictionary<string, object> persona in ranking)
                 {
                     string usuario = (string)persona[USERNAME_STRING];
@@ -166,21 +167,23 @@ namespace OmegaUpPuller.WebRequest
             }
             catch (Exception e)
             {
-                Console.WriteLine("Falló algo cuando se parseaba el json de OmegaUp: " + e.StackTrace);
+                Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se parseaba el json de OmegaUp: " + e.StackTrace);
                 return false;
             }
 
             // Finalmente, ordenamos y guardamos en la base de datos
             try
             {
+                Log.add(Log.TipoLog.OMEGAUP, "Ordenando los resultados");
                 scoreboard.ordena();
             }
             catch (Exception e)
             {
-                Console.WriteLine("Falló algo cuando se guardaba en la base de datos: " + e.StackTrace);
+                Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se guardaba en la base de datos: " + e.StackTrace);
                 return false;
             }
 
+            Log.add(Log.TipoLog.OMEGAUP, "Scoreboard actualizado con éxito");
             return true;
         }
     }

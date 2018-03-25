@@ -71,7 +71,7 @@ namespace OmegaUpPuller
                 return;
 
             OmegaUp status = setStatus();
-            Console.WriteLine("STARTING...");
+            Log.add(Log.TipoLog.OMEGAUP, "STARTING...");
 
             try
             {
@@ -87,16 +87,16 @@ namespace OmegaUpPuller
                         {
                             case OmegaUp.Instruccion.KILL:
                                 {
-                                    Console.WriteLine("Instrucción KILL encontrada.\nEXITING...");
+                                    Log.add(Log.TipoLog.OMEGAUP, "Instrucción KILL encontrada, saliendo...");
                                     instruccion.borrar();
                                     status.borrar();
                                     return;
                                 }
                             case OmegaUp.Instruccion.POLL:
                                 {
-                                    Console.WriteLine("-------------------");
-                                    Console.WriteLine("- Polling started -");
-                                    Console.WriteLine("-------------------");
+                                    Log.add(Log.TipoLog.OMEGAUP, "-------------------");
+                                    Log.add(Log.TipoLog.OMEGAUP, "- Polling started -");
+                                    Log.add(Log.TipoLog.OMEGAUP, "-------------------");
                                     polls++;
                                     this.poll(instruccion);
                                     sleep = sleep < instruccion.ping ? sleep : instruccion.ping;
@@ -107,7 +107,7 @@ namespace OmegaUpPuller
 
                     if (polls == 0)
                     {
-                        Console.WriteLine("Nothing to do, exiting...");
+                        Log.add(Log.TipoLog.OMEGAUP, "Nothing to do, exiting...");
                         status.borrar();
                         return;
                     }
@@ -115,7 +115,7 @@ namespace OmegaUpPuller
                     // Guardamos el status para actualizar el timestamp
                     status.guardar();
 
-                    Console.WriteLine("Sleeping for " + sleep + " seconds.");
+                    Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + sleep + " seconds.");
                     System.Threading.Thread.Sleep(sleep * 1000);
                 }
             }
@@ -130,6 +130,7 @@ namespace OmegaUpPuller
         {
             if (args.Length == 1 && args[0] == MOCKING_STRING)
                 Program.IS_MOCKING = true;
+            Log.ToConsole = Program.IS_MOCKING;
 
             new Program().Run();
         }

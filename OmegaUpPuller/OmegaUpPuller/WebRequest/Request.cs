@@ -32,7 +32,7 @@ namespace OmegaUpPuller.WebRequest
 
             try
             {
-                Console.WriteLine("Consultando el scoreboard en OmegaUp para " + pull.tipoOlimpiada.ToString() + " " + pull.olimpiada);
+                Log.add(Log.TipoLog.OMEGAUP, "Consultando el scoreboard en OmegaUp para " + pull.tipoOlimpiada.ToString() + " " + pull.olimpiada);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                 string content = string.Empty;
@@ -44,19 +44,20 @@ namespace OmegaUpPuller.WebRequest
                     }
                 }
 
-                Console.WriteLine("Se obtuvieron los resultados correctamente.\nSe procede a guardarlos en la base de datos...");
+                Log.add(Log.TipoLog.OMEGAUP, "Se obtuvieron los resultados correctamente, se procede a guardarlos en la base de datos...");
                 return resultados = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(content);
             }
             catch (Exception)
             {
+                Log.add(Log.TipoLog.OMEGAUP, "Falló la llamada a: " + api);
                 if (intentos >= MAX_INTENTOS)
                 {
-                    Console.WriteLine("Falló la llamada a: " + api + "\nGiving up...");
+                    Log.add(Log.TipoLog.OMEGAUP, "Giving up...");
                     return null;
                 }
                 else
                 {
-                    Console.WriteLine("Falló la llamada a: " + api + "\nIntentando otra vez... ");
+                    Log.add(Log.TipoLog.OMEGAUP, "Intentando otra vez... ");
                     return Call(pull, intentos + 1);
                 }
             }

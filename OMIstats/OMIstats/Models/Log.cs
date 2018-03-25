@@ -20,6 +20,8 @@ namespace OMIstats.Models
 
         public TipoLog tipo { get; set; }
 
+        public static bool ToConsole = false;
+
         public Log() { }
 
         private Log(TipoLog tipo, string log)
@@ -45,6 +47,12 @@ namespace OMIstats.Models
 
         public static void add(TipoLog tipo, string log)
         {
+            if (ToConsole)
+            {
+                Console.WriteLine(log);
+                return;
+            }
+
             if (String.IsNullOrEmpty(log))
                 return;
 

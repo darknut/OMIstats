@@ -60,6 +60,9 @@
     <Compile Include="..\..\OMIStats\OMIStats\Models\OmegaUp.cs">
       <Link>OMIStats\Models\OmegaUp.cs</Link>
     </Compile>
+	<Compile Include="..\..\OMIStats\OMIStats\Models\Log.cs">
+      <Link>OMIStats\Models\Log.cs</Link>
+    </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\TipoOlimpiada.cs">
       <Link>OMIStats\Models\TipoOlimpiada.cs</Link>
     </Compile>
