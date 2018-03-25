@@ -162,7 +162,7 @@ bool hayPuntos = ViewBag.hayPuntos;
                 <td class="center resultado-dia top-border pie table-td">
                     @if (Model.participantes > 0)
                     {
-                        @(totalPuntos / Model.participantes)
+                        @(Math.Round((decimal)totalPuntos / Model.participantes, 2))
                     }
                 </td>
             }
