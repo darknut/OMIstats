@@ -114,7 +114,7 @@ namespace OMIstats.Models
             status = (Status)Enum.Parse(typeof(Status), r["status"].ToString().ToUpper());
             try
             {
-                timestamp = DateTime.Parse(r["timestamp"].ToString().Trim());
+                timestamp = new DateTime(long.Parse(r["timestamp"].ToString()));
             }
             catch (Exception)
             {
@@ -177,7 +177,7 @@ namespace OMIstats.Models
             query.Append(", status = ");
             query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
             query.Append(", timestamp = ");
-            query.Append(Utilities.Cadenas.comillas(timestamp.ToString()));
+            query.Append(Utilities.Cadenas.comillas(timestamp.Ticks.ToString()));
             query.Append(" where clave = ");
             query.Append(clave);
 
@@ -212,7 +212,7 @@ namespace OMIstats.Models
             query.Append(",");
             query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(timestamp.ToString()));
+            query.Append(Utilities.Cadenas.comillas(timestamp.Ticks.ToString()));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
