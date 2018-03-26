@@ -120,7 +120,7 @@ namespace OMIstats.Models
         private List<Resultados> _cachedResults = null;
         private DateTime lastUpdate;
 
-        private List<Resultados> consultaResultados()
+        public List<Resultados> obtenerResultados()
         {
             return Resultados.cargarResultados(this.numero, this.tipoOlimpiada, cargarObjetos: true);
         }
@@ -133,7 +133,7 @@ namespace OMIstats.Models
                 {
                     if (this._cachedResults == null)
                     {
-                        this._cachedResults = this.consultaResultados();
+                        this._cachedResults = this.obtenerResultados();
                         return this._cachedResults;
                     }
 
@@ -149,7 +149,7 @@ namespace OMIstats.Models
                         return this._cachedResults;
 
                     this.lastUpdate = ou.timestamp;
-                    this._cachedResults = this.consultaResultados();
+                    this._cachedResults = this.obtenerResultados();
 
                     return this._cachedResults;
                 }
@@ -158,7 +158,7 @@ namespace OMIstats.Models
                     Log.add(Log.TipoLog.SCOREBOARD, "Excepción tratando de cachear resultados para " + this.tipoOlimpiada + " " + this.numero);
                     Log.add(Log.TipoLog.SCOREBOARD, e.ToString());
 
-                    return this.consultaResultados();
+                    return this.obtenerResultados();
                 }
             }
         }

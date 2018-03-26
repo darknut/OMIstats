@@ -288,7 +288,14 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             limpiarErroresViewBag();
-            ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
+
+            ViewBag.liveResults = o.liveResults;
+            ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
+            if (o.liveResults)
+                ViewBag.resultados = o.cachedResults;
+            else
+                ViewBag.resultados = o.obtenerResultados();
+
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
             ViewBag.claveUsuario = getUsuario().clave;
