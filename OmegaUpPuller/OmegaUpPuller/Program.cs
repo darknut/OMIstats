@@ -11,7 +11,7 @@ namespace OmegaUpPuller
 {
     class Program
     {
-        private static int MAX_SLEEP = 60;
+        private static int MAX_SLEEP = 300;
         private static bool IS_MOCKING = false;
         private const string MOCKING_STRING = "mock";
 
