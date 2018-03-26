@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Configuration;
 using OMIstats.Utilities;
 using OMIstats.Models;
+using System.Globalization;
+using System.Threading;
 
 namespace OmegaUpPuller
 {
@@ -133,6 +135,10 @@ namespace OmegaUpPuller
             if (args.Length == 1 && args[0] == MOCKING_STRING)
                 Program.IS_MOCKING = true;
             Log.ToConsole = Program.IS_MOCKING;
+
+            CultureInfo culture = new CultureInfo("es-MX");
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
 
             new Program().Run();
         }
