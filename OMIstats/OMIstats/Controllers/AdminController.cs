@@ -31,8 +31,12 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            ViewBag.status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
+            List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
             ViewBag.polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
+            ViewBag.status = status;
+
+            if (status.Count == 0)
+                OmegaUp.RunnerStarted = false;
 
             return View();
         }
@@ -49,6 +53,9 @@ namespace OMIstats.Controllers
             poll.instruccion = OmegaUp.Instruccion.POLL;
             poll.guardarNuevo();
 
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(poll.olimpiada, poll.tipoOlimpiada);
+            o.liveResults = true;
+
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
 
@@ -61,6 +68,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 401);
 
             OmegaUp.StartScoreboard();
+            OmegaUp.RunnerStarted = true;
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
@@ -89,9 +97,15 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 401);
 
             if (clave == 0)
+            {
                 OmegaUp.borrarTodo();
+                Olimpiada.scoreboardsSettled();
+                OmegaUp.RunnerStarted = false;
+            }
             else
+            {
                 OmegaUp.borrarConClave(clave);
+            }
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }

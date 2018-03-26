@@ -94,6 +94,8 @@ namespace OMIstats.Models
 
         public string omisActualNumber { get; set; }
 
+        public bool liveResults { get; set; }
+
         public float media
         {
             get
@@ -146,6 +148,23 @@ namespace OMIstats.Models
             alsoOmips = false;
             noMedallistasConocidos = false;
             omisActualNumber = "";
+
+            liveResults = false;
+        }
+
+        private static void scoreboardSettled(TipoOlimpiada tipo)
+        {
+            Dictionary<string, Olimpiada> olimpiadas = getOlimpiadas(tipo);
+            foreach (Olimpiada o in olimpiadas.Values)
+                o.liveResults = false;
+            resetOMIs(tipo);
+        }
+
+        public static void scoreboardsSettled()
+        {
+            scoreboardSettled(TipoOlimpiada.OMI);
+            scoreboardSettled(TipoOlimpiada.OMIS);
+            scoreboardSettled(TipoOlimpiada.OMIP);
         }
 
         public static string obtenerApplicationString(TipoOlimpiada tipoOlimpiada)

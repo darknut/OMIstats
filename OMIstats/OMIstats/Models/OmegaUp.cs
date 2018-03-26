@@ -55,6 +55,8 @@ namespace OMIstats.Models
 
         public DateTime timestamp { get; set; }
 
+        public static bool RunnerStarted = false;
+
         public OmegaUp()
         {
             clave = 0;
