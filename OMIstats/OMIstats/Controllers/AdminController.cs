@@ -99,12 +99,38 @@ namespace OMIstats.Controllers
             if (clave == 0)
             {
                 OmegaUp.borrarTodo();
-                Olimpiada.scoreboardsSettled();
+                Olimpiada.resetOMIs(TipoOlimpiada.OMI);
+                Olimpiada.resetOMIs(TipoOlimpiada.OMIS);
+                Olimpiada.resetOMIs(TipoOlimpiada.OMIP);
                 OmegaUp.RunnerStarted = false;
             }
             else
             {
+                OmegaUp om = OmegaUp.obtenerConClave(clave);
                 OmegaUp.borrarConClave(clave);
+
+                if (om.instruccion == OmegaUp.Instruccion.POLL)
+                {
+                    List<OmegaUp> polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
+                    bool masPollsParaOMI = false;
+
+                    foreach (OmegaUp p in polls)
+                    {
+                        if (p.olimpiada == om.olimpiada && p.tipoOlimpiada == om.tipoOlimpiada)
+                        {
+                            masPollsParaOMI = true;
+                            break;
+                        }
+                    }
+
+                    if (!masPollsParaOMI)
+                    {
+                        Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(om.olimpiada, om.tipoOlimpiada);
+                        o.liveResults = false;
+                    }
+                }
+                else if (om.instruccion == OmegaUp.Instruccion.KILL)
+                    OmegaUp.RunnerStarted = false;
             }
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
@@ -121,6 +147,14 @@ namespace OMIstats.Controllers
             Olimpiada.resetOMIs(TipoOlimpiada.OMI);
             Olimpiada.resetOMIs(TipoOlimpiada.OMIS);
             Olimpiada.resetOMIs(TipoOlimpiada.OMIP);
+
+            List<OmegaUp> polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
+
+            foreach (OmegaUp p in polls)
+            {
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
+                o.liveResults = true;
+            }
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }

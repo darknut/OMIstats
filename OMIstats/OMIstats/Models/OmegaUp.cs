@@ -249,5 +249,26 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        public static OmegaUp obtenerConClave(int clave)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from OmegaUp where clave = ");
+            query.Append(clave);
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+                return null;
+
+            OmegaUp o = new OmegaUp();
+            o.llenarDatos(table.Rows[0]);
+
+            return o;
+        }
     }
 }

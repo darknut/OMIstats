@@ -152,21 +152,6 @@ namespace OMIstats.Models
             liveResults = false;
         }
 
-        private static void scoreboardSettled(TipoOlimpiada tipo)
-        {
-            Dictionary<string, Olimpiada> olimpiadas = getOlimpiadas(tipo);
-            foreach (Olimpiada o in olimpiadas.Values)
-                o.liveResults = false;
-            resetOMIs(tipo);
-        }
-
-        public static void scoreboardsSettled()
-        {
-            scoreboardSettled(TipoOlimpiada.OMI);
-            scoreboardSettled(TipoOlimpiada.OMIS);
-            scoreboardSettled(TipoOlimpiada.OMIP);
-        }
-
         public static string obtenerApplicationString(TipoOlimpiada tipoOlimpiada)
         {
             switch (tipoOlimpiada)
