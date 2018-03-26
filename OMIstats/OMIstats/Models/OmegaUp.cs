@@ -276,7 +276,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from OmegaUp where instruccion = ");
+            query.Append(" select * from OmegaUp where tipo = ");
             query.Append(Utilities.Cadenas.comillas(Instruccion.POLL.ToString().ToLower()));
             query.Append(" and olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(olimpiada));

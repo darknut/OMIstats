@@ -134,6 +134,7 @@ namespace OMIstats.Models
                     if (this._cachedResults == null)
                     {
                         this._cachedResults = this.obtenerResultados();
+                        this.lastUpdate = DateTime.UtcNow;
                         return this._cachedResults;
                     }
 
@@ -145,7 +146,7 @@ namespace OMIstats.Models
                         return this._cachedResults;
                     }
 
-                    if (ou.timestamp.CompareTo(lastUpdate) == 0)
+                    if (ou.timestamp.CompareTo(lastUpdate) <= 0)
                         return this._cachedResults;
 
                     this.lastUpdate = ou.timestamp;
