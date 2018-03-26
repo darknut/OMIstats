@@ -117,6 +117,51 @@ namespace OMIstats.Models
         }
 
         private Problema datosGenerales;
+        private List<Resultados> _cachedResults = null;
+        private DateTime lastUpdate;
+
+        private List<Resultados> consultaResultados()
+        {
+            return Resultados.cargarResultados(this.numero, this.tipoOlimpiada, cargarObjetos: true);
+        }
+
+        public List<Resultados> cachedResults
+        {
+            get
+            {
+                try
+                {
+                    if (this._cachedResults == null)
+                    {
+                        this._cachedResults = this.consultaResultados();
+                        return this._cachedResults;
+                    }
+
+                    OmegaUp ou = OmegaUp.obtenerParaOMI(this.numero, this.tipoOlimpiada);
+
+                    if (ou == null)
+                    {
+                        this.liveResults = false;
+                        return this._cachedResults;
+                    }
+
+                    if (ou.timestamp.CompareTo(lastUpdate) == 0)
+                        return this._cachedResults;
+
+                    this.lastUpdate = ou.timestamp;
+                    this._cachedResults = this.consultaResultados();
+
+                    return this._cachedResults;
+                }
+                catch (Exception e)
+                {
+                    Log.add(Log.TipoLog.SCOREBOARD, "Excepción tratando de cachear resultados para " + this.tipoOlimpiada + " " + this.numero);
+                    Log.add(Log.TipoLog.SCOREBOARD, e.ToString());
+
+                    return this.consultaResultados();
+                }
+            }
+        }
 
         public Olimpiada()
         {

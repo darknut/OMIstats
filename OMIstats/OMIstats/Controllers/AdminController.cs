@@ -111,19 +111,9 @@ namespace OMIstats.Controllers
 
                 if (om.instruccion == OmegaUp.Instruccion.POLL)
                 {
-                    List<OmegaUp> polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
-                    bool masPollsParaOMI = false;
+                    OmegaUp om2 = OmegaUp.obtenerParaOMI(om.olimpiada, om.tipoOlimpiada);
 
-                    foreach (OmegaUp p in polls)
-                    {
-                        if (p.olimpiada == om.olimpiada && p.tipoOlimpiada == om.tipoOlimpiada)
-                        {
-                            masPollsParaOMI = true;
-                            break;
-                        }
-                    }
-
-                    if (!masPollsParaOMI)
+                    if (om2 == null)
                     {
                         Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(om.olimpiada, om.tipoOlimpiada);
                         o.liveResults = false;
