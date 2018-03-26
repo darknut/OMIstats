@@ -196,6 +196,9 @@ namespace OMIstats.Controllers
             // Se guardan los datos
             if (p.guardarDatos(generarPeticiones:!esAdmin()))
             {
+                if (!esAdmin())
+                    Log.add(Log.TipoLog.USUARIO, "Usuario actualizó sus datos");
+
                 // Se modificaron los datos del usuario, tenemos que recargarlos en la variable de sesion
                 recargarDatos();
 

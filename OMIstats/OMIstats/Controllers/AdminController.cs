@@ -183,12 +183,14 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
 
             Persona cambiar = Persona.obtenerPersonaDeUsuario(p.usuario);
-            Persona admin = Persona.obtenerPersonaConClave(getUsuario().clave);
+            Persona admin = getUsuario();
 
             cambiar.admin = !cambiar.admin;
             cambiar.guardarDatos();
 
             ViewBag.guardado = true;
+
+            Log.add(Log.TipoLog.ADMIN, "Admin " + admin.nombre + (cambiar.admin ? " volvió " : " quitó privilegios de " ) + "admin al usuario " + cambiar.nombre);
 
             return View(cambiar);
         }

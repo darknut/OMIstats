@@ -71,6 +71,13 @@ namespace OMIstats.Controllers
 
         protected void setUsuario(Persona p)
         {
+            if (p.clave != Persona.UsuarioNulo)
+            {
+                if (p.admin)
+                    Log.add(Log.TipoLog.ADMIN, "Admin inició sesión: " + p.nombre);
+                else
+                    Log.add(Log.TipoLog.USUARIO, "Usuario inició sesión: " + p.clave);
+            }
             Session["usuario"] = p;
         }
 

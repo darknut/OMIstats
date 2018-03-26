@@ -14,10 +14,10 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return Redirect(Utilities.Server.direccionOMI());
+            //return Redirect(Utilities.Server.direccionOMI());
             // Código para hacer mock
-            //string guid = Models.Usuario.MockUserLoggedIn(2);
-            //return RedirectToAction("In", "Log", new { GUID = guid });
+            string guid = Models.Usuario.MockUserLoggedIn(1);
+            return RedirectToAction("In", "Log", new { GUID = guid });
         }
 
         //
@@ -77,6 +77,7 @@ namespace OMIstats.Controllers
                     usuario.borrarGUID();
                     persona.usuario = usuario.Id.ToString();
                     persona.guardarDatos();
+                    Log.add(Log.TipoLog.USUARIO, "Usuario linkeó su cuenta");
                     setUsuario(persona);
                 }
                 else

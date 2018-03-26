@@ -49,6 +49,9 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 401);
 
             Olimpiada.nuevaOMI(TipoOlimpiada.OMI);
+
+            Log.add(Log.TipoLog.ADMIN, "Nueva olimpiada creada por admin " + getUsuario().nombre);
+
             return RedirectTo(Pagina.EDIT_OLIMPIADA, Olimpiada.TEMP_CLAVE);
         }
 
@@ -150,6 +153,7 @@ namespace OMIstats.Controllers
                     Utilities.Archivos.FolderImagenes.POSTERS);
 
             ViewBag.guardado = true;
+            Log.add(Log.TipoLog.ADMIN, o.tipoOlimpiada + " " + o.año + " actualizada por admin " + getUsuario().nombre);
 
             return View(omi);
         }
@@ -204,7 +208,10 @@ namespace OMIstats.Controllers
                 ViewBag.asistentes = errores;
             }
             else
+            {
                 ViewBag.guardado = true;
+                Log.add(Log.TipoLog.ADMIN, "Participantes de " + o.tipoOlimpiada + " " + o.año + " actualizados por admin " + getUsuario().nombre);
+            }
 
             return View(o);
         }
@@ -262,7 +269,10 @@ namespace OMIstats.Controllers
                 ViewBag.resultados = errores;
             }
             else
+            {
                 ViewBag.guardado = true;
+                Log.add(Log.TipoLog.ADMIN, "Resultados de " + o.tipoOlimpiada + " " + o.año + " actualizados por admin " + getUsuario().nombre);
+            }
 
             return View(o);
         }

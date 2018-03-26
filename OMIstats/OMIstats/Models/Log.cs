@@ -34,7 +34,10 @@ namespace OMIstats.Models
         public enum TipoLog
         {
             NULL,
-            OMEGAUP
+            OMEGAUP,
+            USUARIO,
+            ADMIN,
+            SCOREBOARD
         }
 
         private void llenarDatos(DataRow r)
@@ -47,25 +50,32 @@ namespace OMIstats.Models
 
         public static void add(TipoLog tipo, string log)
         {
-            if (ToConsole)
+            try
             {
-                Console.WriteLine(log);
-                return;
+                if (ToConsole)
+                {
+                    Console.WriteLine(log);
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(log))
+                    return;
+
+                for (int i = 0; i < log.Length; i += MAX_LOG_LEN)
+                {
+                    string str;
+
+                    if ((i + MAX_LOG_LEN) >= log.Length)
+                        str = log.Substring(i);
+                    else
+                        str = log.Substring(i, MAX_LOG_LEN);
+
+                    new Log(tipo, str).guardar();
+                }
             }
-
-            if (String.IsNullOrEmpty(log))
-                return;
-
-            for (int i = 0; i < log.Length; i += MAX_LOG_LEN)
+            catch (Exception)
             {
-                string str;
-
-                if ((i + MAX_LOG_LEN) >= log.Length)
-                    str = log.Substring(i);
-                else
-                    str = log.Substring(i, MAX_LOG_LEN);
-
-                new Log(tipo, str).guardar();
+                // No queremos que al guardar los logs se genere una excepción
             }
         }
 
