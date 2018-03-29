@@ -28,6 +28,9 @@
     ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
     List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
     List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
+    bool isLive = ViewBag.liveResults;
+    bool isRunnerLive = false;
+    long lastUpdate = 0;
 }
 
 <div class="submenu">
@@ -118,6 +121,19 @@
 else
 {
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
+
+if (isLive)
+{
+    isRunnerLive = ViewBag.RunnerStarted;
+    lastUpdate = ViewBag.lastUpdate;
+    <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
+
+    if (isRunnerLive)
+    {
+        <div class="last-update">El servidor se actualizó hace <span id="lastServerUpdate">@(lastUpdate)</span> minutos.</div>
+        <div class="last-update">Esta página se actualizó con el servidor hace <span id="lastPageUpdate">0</span> minutos.</div>
+    }
+}
 
 <table class="table" id="tablaPuntos">
     <thead>
@@ -326,6 +342,8 @@ else
         }
     }
     </tbody>
+    @if(!isLive)
+    {
     <tfoot>
         <tr>
             <td></td>
@@ -596,5 +614,6 @@ else
             </td>
         </tr>
     </tfoot>
+    }
 </table>
 }

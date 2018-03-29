@@ -292,9 +292,18 @@ namespace OMIstats.Controllers
             ViewBag.liveResults = o.liveResults;
             ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
             if (o.liveResults)
+            {
                 ViewBag.resultados = o.cachedResults;
+                OmegaUp ou = OmegaUp.obtenerParaOMI(o.numero, o.tipoOlimpiada);
+                if (ou == null)
+                    ViewBag.liveResults = false;
+                else
+                    ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
+            }
             else
+            {
                 ViewBag.resultados = o.obtenerResultados();
+            }
 
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
@@ -345,6 +354,7 @@ namespace OMIstats.Controllers
                 delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR));
             }
 
+            ViewBag.liveResults = o.liveResults;
             ViewBag.estado = e;
             ViewBag.delegaciones = delegaciones;
             ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.LIDER);
@@ -372,6 +382,7 @@ namespace OMIstats.Controllers
             if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            ViewBag.liveResults = o.liveResults;
             ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave);
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             ViewBag.hayPromedio = Medallero.hayPromedio(ViewBag.estados);

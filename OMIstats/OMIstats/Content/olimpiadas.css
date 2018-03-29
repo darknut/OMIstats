@@ -168,3 +168,18 @@
     height: 15px;
     width: 15px;
 }
+
+.live-results {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: red;
+    font-weight: bold;
+    font-size: 14pt;
+}
+
+.last-update {
+    padding-left: 20px;
+    padding-bottom: 5px;
+    color: green;
+    font-size: 13pt;
+}

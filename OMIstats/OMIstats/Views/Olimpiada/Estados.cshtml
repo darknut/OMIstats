@@ -24,6 +24,7 @@
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);
     ViewBag.Title = "Tabla de estados de la " + tableManager.enlaceOMI(nombreCompleto: true);
+    bool isLive = ViewBag.liveResults;
 }
 
 <div class="submenu">
@@ -65,6 +66,11 @@ else
 List<OMIstats.Models.Medallero> estados = ViewBag.estados;
 bool hayPromedio = ViewBag.hayPromedio;
 bool hayPuntos = ViewBag.hayPuntos;
+
+if (isLive)
+{
+    <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
+}
 
 <table class="table" id="tablaPuntos">
     <thead>
@@ -133,7 +139,8 @@ bool hayPuntos = ViewBag.hayPuntos;
             }
         </tr>
     }
-
+    @if(!isLive)
+    {
     <tfoot>
         <tr>
             <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="2">
@@ -168,6 +175,7 @@ bool hayPuntos = ViewBag.hayPuntos;
             }
         </tr>
     </tfoot>
+    }
 </table>
 
 <div id="sede" class="sede">

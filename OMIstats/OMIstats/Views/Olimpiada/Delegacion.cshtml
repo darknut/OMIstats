@@ -2,7 +2,7 @@
 
 @section AddToHead
 {
-    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link href="~/Content/olimpiadas.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
 }
@@ -11,6 +11,7 @@
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);
     ViewBag.Title = ViewBag.estado.nombre + " en la " + tableManager.enlaceOMI(nombreCompleto: true);
+    bool isLive = ViewBag.liveResults;
 }
 
 <div class="submenu">
@@ -75,6 +76,11 @@
 
 <br />
 <br />
+
+@if (isLive)
+{
+    <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
+}
 
 @foreach(OMIstats.Models.TipoOlimpiada tipo in delegaciones.Keys)
 {

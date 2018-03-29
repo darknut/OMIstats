@@ -146,6 +146,9 @@ namespace OMIstats.Controllers
                 o.liveResults = true;
             }
 
+            List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
+            OmegaUp.RunnerStarted = (status.Count > 0);
+
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
 
