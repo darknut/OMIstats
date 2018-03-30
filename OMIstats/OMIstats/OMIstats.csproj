@@ -178,6 +178,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\Institucion.cs" />
     <Compile Include="Models\Log.cs" />

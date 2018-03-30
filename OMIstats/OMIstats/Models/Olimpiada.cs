@@ -117,15 +117,15 @@ namespace OMIstats.Models
         }
 
         private Problema datosGenerales;
-        private List<Resultados> _cachedResults = null;
+        private List<CachedResult> _cachedResults = null;
         private DateTime lastUpdate;
 
-        public List<Resultados> obtenerResultados()
+        private List<CachedResult> obtenerResultados()
         {
-            return Resultados.cargarResultados(this.numero, this.tipoOlimpiada, cargarObjetos: true);
+            return CachedResult.cargarResultados(this.numero, this.tipoOlimpiada, 0, problemasDia1);
         }
 
-        public List<Resultados> cachedResults
+        public List<CachedResult> cachedResults
         {
             get
             {

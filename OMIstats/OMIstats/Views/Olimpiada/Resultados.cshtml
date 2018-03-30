@@ -4,11 +4,13 @@
     bool isLive = ViewBag.liveResults;
     bool isRunnerLive = false;
     long lastUpdate = 0;
+    int dia = 0;
 
     if (isLive)
     {
         isRunnerLive = ViewBag.RunnerStarted;
         lastUpdate = ViewBag.lastUpdate;
+        dia = ViewBag.dia;
     }
 }
 

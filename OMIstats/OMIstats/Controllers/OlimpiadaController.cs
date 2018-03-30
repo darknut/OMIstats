@@ -291,18 +291,19 @@ namespace OMIstats.Controllers
 
             ViewBag.liveResults = o.liveResults;
             ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
+            ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
             if (o.liveResults)
             {
-                ViewBag.resultados = o.cachedResults;
                 OmegaUp ou = OmegaUp.obtenerParaOMI(o.numero, o.tipoOlimpiada);
-                if (ou == null)
+                if (ou == null || ViewBag.resultados.Count == 0)
+                {
                     ViewBag.liveResults = false;
+                }
                 else
+                {
                     ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
-            }
-            else
-            {
-                ViewBag.resultados = o.obtenerResultados();
+                    ViewBag.dia = ou.dia;
+                }
             }
 
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
@@ -333,9 +334,19 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult ResultadosAjax(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
-            string respuesta = "TEST";
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
-            return Json(respuesta);
+            if (o == null)
+                return Json(ERROR);
+
+            OmegaUp ou = OmegaUp.obtenerParaOMI(clave, tipo);
+
+            if (ou == null)
+                return Json(ERROR);
+
+            List<CachedResult> resultados = o.cachedResults;
+
+            return Json(resultados);
         }
 
         //
