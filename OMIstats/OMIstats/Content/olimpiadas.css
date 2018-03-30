@@ -183,3 +183,10 @@
     color: green;
     font-size: 13pt;
 }
+
+.finished {
+    padding: 20px;
+    color: green;
+    font-weight: bold;
+    font-size: 14pt;
+}

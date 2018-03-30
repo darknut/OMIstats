@@ -64,7 +64,16 @@ function handleError() {
     clearInterval(intervalHandler);
     document.getElementById("updateContainer").style.display = "none";
     document.getElementById("liveResults").style.display = "none";
-    document.getElementById("errorUpdateContainer").style.display = "inline";
+    document.getElementById("errorUpdateContainer").style.display = "block";
+}
+
+function finishContest() {
+    clearInterval(intervalHandler);
+    document.getElementById("liveResults").style.display = "block";
+    document.getElementById("updateContainer").style.display = "none";
+    document.getElementById("errorUpdateContainer").style.display = "none";
+
+    document.getElementById("finished").style.display = "block";
 }
 
 function update() {
@@ -80,6 +89,23 @@ function handleAjax(ajax) {
             {
                 setTimes(ajax.secondsSinceUpdate, 0);
                 updatePoints(ajax.resultados);
+                break;
+            }
+        case "NOT_CHANGED":
+            {
+                setTimes(lastServerUpdate, 0);
+                break;
+            }
+        case "FINISHED":
+            {
+                updatePoints(ajax.resultados);
+                finishContest();
+                break;
+            }
+        case "ERROR":
+            {
+                updatePoints(ajax.resultados);
+                handleError();
                 break;
             }
     }
