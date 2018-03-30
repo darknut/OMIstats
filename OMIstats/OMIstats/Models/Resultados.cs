@@ -122,7 +122,7 @@ namespace OMIstats.Models
                     dia2[i] = float.Parse(row["puntosD2P" + (i + 1)].ToString());
             totalDia2 = float.Parse(row["puntosD2"].ToString());
             total = float.Parse(row["puntos"].ToString());
-            medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString().ToUpper());
+            medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), row["medalla"].ToString());
             publico = (bool)row["publico"];
             ioi = row["ioi"].ToString().Trim();
 

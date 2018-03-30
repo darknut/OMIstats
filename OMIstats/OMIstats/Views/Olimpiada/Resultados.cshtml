@@ -252,7 +252,7 @@ else
         {
             string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
-            <tr>
+            <tr id="@(isRunnerLive ? datos.clave : "")">
                 <td class="ioi-mini-imagen">
                     @if (tableManager.mostrarLogoIOI())
                     {

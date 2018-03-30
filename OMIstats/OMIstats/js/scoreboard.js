@@ -55,7 +55,7 @@ function updateTimes() {
 function callServer() {
     llamadaAjax(ajaxUrl,
         { clave: omi, tipo: tipo, ticks: ticks },
-        function (data) { actualizaPuntos(data); },
+        function (data) { handleAjax(data); },
         function (data) {  });
 }
 
@@ -66,7 +66,63 @@ function update() {
     }
 }
 
-function actualizaPuntos(data) {
-    console.log(data);
-    setTimes(lastServerUpdate, 0);
+function handleAjax(ajax) {
+    switch (ajax.status) {
+        case "UPDATED":
+            {
+                setTimes(ajax.secondsSinceUpdate, 0);
+                updatePoints(ajax.resultados);
+                break;
+            }
+    }
+}
+
+function updatePoints(results) {
+    results.forEach(function (result) {
+        var renglon = document.getElementById(result.clave).getElementsByTagName("td");
+        var css = "";
+
+        switch (result.medalla) {
+            case "ORO":
+                css += "fondoOro";
+                break;
+            case "PLATA":
+                css += "fondoPlata";
+                break;
+            case "BRONCE":
+                css += "fondoBronce";
+                break;
+        }
+
+        for (var i = 1; i < renglon.length; i++) {
+            renglon[i].classList.remove("fondoOro");
+            renglon[i].classList.remove("fondoPlata");
+            renglon[i].classList.remove("fondoBronce");
+
+            if (css.length > 0)
+                renglon[i].classList.add(css);
+        }
+
+        renglon[1].innerHTML = result.lugar;
+
+        var indiceProblemas = 5;
+        if (dia == 2)
+            indiceProblemas += problemas + 1;
+
+        for (var i = 0; i < problemas; i++) {
+            renglon[indiceProblemas + i].innerHTML = (result.puntos[i] == null ? "-" : result.puntos[i]);
+        }
+
+        var ultimos = indiceProblemas + problemas;
+        renglon[ultimos].innerHTML = result.totalDia;
+
+        if (dia == 2) {
+            renglon[++ultimos].innerHTML = result.total;
+        }
+
+        var medalla = "- - -";
+        if (result.medalla != "NADA")
+            medalla = result.medalla;
+        renglon[++ultimos].innerHTML = medalla;
+    });
 }

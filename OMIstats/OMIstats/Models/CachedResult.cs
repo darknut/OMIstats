@@ -11,7 +11,6 @@ namespace OMIstats.Models
     {
         public int lugar;
         public string clave;
-        public int problemas;
         public List<float?> puntos;
         public float totalDia;
         public float total;
@@ -30,7 +29,7 @@ namespace OMIstats.Models
                     puntos.Add(float.Parse(row["puntosD" + dia + "P" + i].ToString()));
             totalDia = float.Parse(row["puntosD" + dia].ToString());
             total = float.Parse(row["puntos"].ToString());
-            medalla = row["medalla"].ToString().ToUpper();
+            medalla = Enum.Parse(typeof(Resultados.TipoMedalla), row["medalla"].ToString()).ToString();
         }
 
         /// <summary>
