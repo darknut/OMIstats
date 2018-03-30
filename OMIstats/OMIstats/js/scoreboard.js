@@ -6,6 +6,7 @@ var tipo;
 var dia;
 var problemas;
 var ticks;
+var intervalHandler;
 
 function setTimes(server, page) {
     lastServerUpdate = server;
@@ -23,7 +24,7 @@ function setUpAjax(url, olimpiada, tipoOlimpiada, d, p, t) {
 }
 
 function startTimer() {
-    setInterval(update, 1000);
+    intervalHandler = setInterval(update, 1000);
 }
 
 function timeToText(element, seconds) {
@@ -56,7 +57,14 @@ function callServer() {
     llamadaAjax(ajaxUrl,
         { clave: omi, tipo: tipo, ticks: ticks },
         function (data) { handleAjax(data); },
-        function (data) {  });
+        function (data) { handleError(); });
+}
+
+function handleError() {
+    clearInterval(intervalHandler);
+    document.getElementById("updateContainer").style.display = "none";
+    document.getElementById("liveResults").style.display = "none";
+    document.getElementById("errorUpdateContainer").style.display = "inline";
 }
 
 function update() {

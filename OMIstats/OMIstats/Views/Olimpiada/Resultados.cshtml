@@ -151,12 +151,17 @@ else
 
     if (isLive)
     {
-    <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
+    <div id="liveResults" class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
 
         if (isRunnerLive)
         {
-            <div class="last-update">El servidor se actualizó hace <span id="lastServerUpdate"></span>.</div>
-            <div class="last-update">Esta página se actualizó con el servidor hace <span id="lastPageUpdate"></span>.</div>
+            <div id="updateContainer">
+                <div class="last-update">El servidor se actualizó hace <span id="lastServerUpdate"></span>.</div>
+                <div class="last-update">Esta página se actualizó con el servidor hace <span id="lastPageUpdate"></span>.</div>
+            </div>
+            <div id="errorUpdateContainer" style="display:none" class="live-results">
+                Hubo un error al intentar conectarse con el servidor
+            </div>
         }
     }
 
