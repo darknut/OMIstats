@@ -76,11 +76,12 @@ namespace OMIstats.Models
             UPDATED,
             NOT_CHANGED,
             FINISHED,
+            ERROR
         }
 
         public List<CachedResult> resultados;
         public int secondsSinceUpdate;
         public int timeToFinish;
-        public int status;
+        public string status;
     }
 }

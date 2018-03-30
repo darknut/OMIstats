@@ -341,14 +341,42 @@ namespace OMIstats.Controllers
             if (o == null)
                 return Json(ERROR);
 
-            OmegaUp ou = OmegaUp.obtenerParaOMI(clave, tipo);
+            OmegaUp ou;
+            List<CachedResult> resultados = o.getCachedResults(out ou);
+
+            AjaxResponse ajax = new AjaxResponse();
 
             if (ou == null)
-                return Json(ERROR);
+            {
+                ajax.resultados = resultados;
+                ajax.secondsSinceUpdate = 0;
+                ajax.status = AjaxResponse.Status.ERROR.ToString();
 
-            List<CachedResult> resultados = o.cachedResults;
+                return Json(ajax);
+            }
 
-            return Json(resultados);
+            if (!OmegaUp.RunnerStarted)
+            {
+                ajax.resultados = resultados;
+                ajax.secondsSinceUpdate = 0;
+                ajax.status = AjaxResponse.Status.FINISHED.ToString();
+
+                return Json(ajax);
+            }
+
+            if (ou.timestamp.Ticks == ticks)
+            {
+                ajax.status = AjaxResponse.Status.NOT_CHANGED.ToString();
+                ajax.resultados = null;
+            }
+            else
+            {
+                ajax.status = AjaxResponse.Status.UPDATED.ToString();
+                ajax.resultados = resultados;
+                ajax.secondsSinceUpdate = (int)Math.Round((decimal)(DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond);
+            }
+
+            return Json(ajax);
         }
 
         //
