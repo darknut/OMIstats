@@ -1,10 +1,15 @@
 ﻿var lastServerUpdate = 0;
 var lastUpdateWithServer = 0;
+var ajaxUrl;
 
 function setTimes(server, page) {
     lastServerUpdate = server;
     lastUpdateWithServer = page;
     updateTimes();
+}
+
+function setUpAjax(url) {
+    ajaxUrl = url;
 }
 
 function startTimer() {
@@ -33,11 +38,8 @@ function timeToText(element, seconds) {
 }
 
 function updateTimes() {
-    lastServerUpdate++;
-    lastUpdateWithServer++
-
-    timeToText(document.getElementById("lastServerUpdate"), lastServerUpdate);
-    timeToText(document.getElementById("lastPageUpdate"), lastUpdateWithServer);
+    timeToText(document.getElementById("lastServerUpdate"), ++lastServerUpdate);
+    timeToText(document.getElementById("lastPageUpdate"), ++lastUpdateWithServer);
 }
 
 function update() {

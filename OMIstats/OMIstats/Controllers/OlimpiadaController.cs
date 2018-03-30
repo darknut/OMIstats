@@ -328,6 +328,16 @@ namespace OMIstats.Controllers
             return View(o);
         }
 
+        // POST: /Olimpiada/ResultadosAjax/
+
+        [HttpPost]
+        public JsonResult ResultadosAjax(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        {
+            string respuesta = "TEST";
+
+            return Json(respuesta);
+        }
+
         //
         // GET: /Olimpiada/Delegacion/
 
