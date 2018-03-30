@@ -53,5 +53,6 @@ namespace OMIstats.Models
         public int secondsSinceUpdate;
         public int timeToFinish;
         public string status;
+        public string ticks;
     }
 }

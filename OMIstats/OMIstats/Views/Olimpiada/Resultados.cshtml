@@ -43,8 +43,8 @@
         <script type="text/javascript" src="~/js/scoreboard.js"></script>
         <script>
             $(function () {
-                setTimes(@(lastUpdate), 0);
-                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), @(ticks));
+                setTimes(@(lastUpdate));
+                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), "@(ticks)");
                 startTimer();
             });
         </script>
@@ -156,8 +156,7 @@ else
         if (isRunnerLive)
         {
             <div id="updateContainer">
-                <div class="last-update">El servidor se actualizó hace <span id="lastServerUpdate"></span>.</div>
-                <div class="last-update">Esta página se actualizó con el servidor hace <span id="lastPageUpdate"></span>.</div>
+                <div class="last-update">Actualizado hace <span id="lastServerUpdate"></span>.</div>
             </div>
             <div id="errorUpdateContainer" style="display:none" class="live-results">
                 Hubo un error al intentar conectarse con el servidor

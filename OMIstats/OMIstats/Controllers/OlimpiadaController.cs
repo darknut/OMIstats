@@ -351,6 +351,7 @@ namespace OMIstats.Controllers
 
             OmegaUp ou = o.calculateCachedResults();
             AjaxResponse ajax = new AjaxResponse();
+            ajax.ticks = "0";
 
             if (ou == null)
             {
@@ -377,6 +378,7 @@ namespace OMIstats.Controllers
             }
             else
             {
+                ajax.ticks = ou.timestamp.Ticks.ToString();
                 ajax.status = AjaxResponse.Status.UPDATED.ToString();
                 ajax.resultados = o.cachedResults;
                 ajax.secondsSinceUpdate = (int)Math.Round((decimal)(DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond);

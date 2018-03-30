@@ -1,5 +1,4 @@
 ﻿var lastServerUpdate = 0;
-var lastUpdateWithServer = 0;
 var ajaxUrl;
 var omi;
 var tipo;
@@ -7,10 +6,11 @@ var dia;
 var problemas;
 var ticks;
 var intervalHandler;
+var lastPing = 0;
 
-function setTimes(server, page) {
+function setTimes(server) {
     lastServerUpdate = server;
-    lastUpdateWithServer = page;
+    lastPing = 0;
     updateTimes();
 }
 
@@ -49,8 +49,8 @@ function timeToText(element, seconds) {
 }
 
 function updateTimes() {
+    lastPing++;
     timeToText(document.getElementById("lastServerUpdate"), ++lastServerUpdate);
-    timeToText(document.getElementById("lastPageUpdate"), ++lastUpdateWithServer);
 }
 
 function callServer() {
@@ -78,8 +78,9 @@ function finishContest() {
 
 function update() {
     updateTimes();
-    if (lastUpdateWithServer > 60) {
+    if (lastPing > 20) {
         callServer();
+        lastPing = 0;
     }
 }
 
@@ -87,13 +88,13 @@ function handleAjax(ajax) {
     switch (ajax.status) {
         case "UPDATED":
             {
-                setTimes(ajax.secondsSinceUpdate, 0);
+                ticks = ajax.ticks;
+                setTimes(ajax.secondsSinceUpdate);
                 updatePoints(ajax.resultados);
                 break;
             }
         case "NOT_CHANGED":
             {
-                setTimes(lastServerUpdate, 0);
                 break;
             }
         case "FINISHED":
