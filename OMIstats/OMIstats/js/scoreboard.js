@@ -8,6 +8,10 @@ var ticks;
 var intervalHandler;
 var lastPing = 0;
 
+function setVisibility(id, status) {
+    document.getElementById(id).style.display = status;
+}
+
 function setTimes(server) {
     lastServerUpdate = server;
     lastPing = 0;
@@ -61,19 +65,32 @@ function callServer() {
 }
 
 function handleError() {
-    clearInterval(intervalHandler);
-    document.getElementById("updateContainer").style.display = "none";
-    document.getElementById("liveResults").style.display = "none";
-    document.getElementById("errorUpdateContainer").style.display = "block";
+    if (intervalHandler != -1) {
+        clearInterval(intervalHandler);
+        intervalHandler = -1;
+    }
+
+    setVisibility("updateContainer", "none");
+    setVisibility("liveResults", "none");
+    setVisibility("errorUpdateContainer", "block");
+
+    setVisibility("retryLink", "inline");
+    setVisibility("loading", "none");
+}
+
+function unhideElements() {
+    setVisibility("updateContainer", "block");
+    setVisibility("liveResults", "block");
+    setVisibility("errorUpdateContainer", "none");
 }
 
 function finishContest() {
     clearInterval(intervalHandler);
-    document.getElementById("liveResults").style.display = "block";
-    document.getElementById("updateContainer").style.display = "none";
-    document.getElementById("errorUpdateContainer").style.display = "none";
+    setVisibility("liveResults", "block");
+    setVisibility("updateContainer", "none");
+    setVisibility("errorUpdateContainer", "none");
 
-    document.getElementById("finished").style.display = "block";
+    setVisibility("finished", "block");
 }
 
 function update() {
@@ -85,6 +102,11 @@ function update() {
 }
 
 function handleAjax(ajax) {
+    if (intervalHandler == -1) {
+        startTimer();
+        unhideElements();
+    }
+
     switch (ajax.status) {
         case "UPDATED":
             {
@@ -160,4 +182,10 @@ function updatePoints(results) {
             medalla = result.medalla;
         renglon[++ultimos].innerHTML = medalla;
     });
+}
+
+function retryAjax() {
+    setVisibility("retryLink", "none");
+    setVisibility("loading", "inline");
+    callServer();
 }
