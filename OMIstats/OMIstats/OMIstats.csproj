@@ -313,6 +313,7 @@
     <Content Include="js\fechas.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\request.js" />
+    <Content Include="js\scoreboard.js" />
     <Content Include="js\sorters.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />

@@ -1,5 +1,17 @@
 ﻿@model OMIstats.Models.Olimpiada
 
+@{
+    bool isLive = ViewBag.liveResults;
+    bool isRunnerLive = false;
+    long lastUpdate = 0;
+
+    if (isLive)
+    {
+        isRunnerLive = ViewBag.RunnerStarted;
+        lastUpdate = ViewBag.lastUpdate;
+    }
+}
+
 @section AddToHead
 {
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
@@ -19,6 +31,16 @@
             cargaSorter("tablaPuntos");
         });
     </script>
+    @if(isRunnerLive)
+    {
+        <script type="text/javascript" src="~/js/scoreboard.js"></script>
+        <script>
+            $(function () {
+                setTimes(@(lastUpdate), 0);
+                startTimer();
+            });
+        </script>
+    }
 }
 
 @{
@@ -28,9 +50,6 @@
     ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
     List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
     List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
-    bool isLive = ViewBag.liveResults;
-    bool isRunnerLive = false;
-    long lastUpdate = 0;
 }
 
 <div class="submenu">
@@ -45,7 +64,7 @@
     {
         foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
         {
-            if (tipo != OMIstats.Models.TipoOlimpiada.IOI && 
+            if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
                 tipo != OMIstats.Models.TipoOlimpiada.NULL &&
                 Model.tipoOlimpiada != tipo)
             {
@@ -122,18 +141,16 @@ else
 {
 <h1 class="titulo"> Tabla de resultados de la @ViewBag.Title </h1>
 
-if (isLive)
-{
-    isRunnerLive = ViewBag.RunnerStarted;
-    lastUpdate = ViewBag.lastUpdate;
+    if (isLive)
+    {
     <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
 
-    if (isRunnerLive)
-    {
-        <div class="last-update">El servidor se actualizó hace <span id="lastServerUpdate">@(lastUpdate)</span> minutos.</div>
-        <div class="last-update">Esta página se actualizó con el servidor hace <span id="lastPageUpdate">0</span> minutos.</div>
+        if (isRunnerLive)
+        {
+            <div class="last-update">El servidor se actualizó hace <span id="lastServerUpdate"></span>.</div>
+            <div class="last-update">Esta página se actualizó con el servidor hace <span id="lastPageUpdate"></span>.</div>
+        }
     }
-}
 
 <table class="table" id="tablaPuntos">
     <thead>
@@ -162,7 +179,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="enlaceProblema">
-                        @if(problemasDia2[i] != null)
+                        @if (problemasDia2[i] != null)
                         {
                             <a href="@problemasDia2[i].url" target="_blank">
                                 <img src="~/img/link.png" />
@@ -342,7 +359,7 @@ if (isLive)
         }
     }
     </tbody>
-    @if(!isLive)
+    @if (!isLive)
     {
     <tfoot>
         <tr>
@@ -362,7 +379,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border top-border pie">
-                        @if(problemasDia1[i] != null)
+                        @if (problemasDia1[i] != null)
                         {
                             @ViewBag.problemasDia1[i].media
                         }
@@ -383,7 +400,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border top-border pie">
-                        @if(problemasDia2[i] != null)
+                        @if (problemasDia2[i] != null)
                         {
                             @ViewBag.problemasDia2[i].media
                         }
@@ -429,7 +446,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border pie">
-                        @if(problemasDia1[i] != null)
+                        @if (problemasDia1[i] != null)
                         {
                             @ViewBag.problemasDia1[i].mediana
                         }
@@ -450,7 +467,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border pie">
-                        @if(problemasDia2[i] != null)
+                        @if (problemasDia2[i] != null)
                         {
                             @ViewBag.problemasDia2[i].mediana
                         }
@@ -496,7 +513,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border pie">
-                        @if(problemasDia1[i] != null)
+                        @if (problemasDia1[i] != null)
                         {
                             @ViewBag.problemasDia1[i].perfectos
                         }
@@ -517,7 +534,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border pie">
-                        @if(problemasDia2[i] != null)
+                        @if (problemasDia2[i] != null)
                         {
                             @ViewBag.problemasDia2[i].perfectos
                         }
@@ -563,7 +580,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
                     <td class="center right-border pie">
-                        @if(problemasDia1[i] != null)
+                        @if (problemasDia1[i] != null)
                         {
                             @ViewBag.problemasDia1[i].ceros
                         }
@@ -584,7 +601,7 @@ if (isLive)
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
                     <td class="center right-border pie">
-                        @if(problemasDia2[i] != null)
+                        @if (problemasDia2[i] != null)
                         {
                             @ViewBag.problemasDia2[i].ceros
                         }
