@@ -16,6 +16,7 @@ namespace OMIstats.Utilities
         private const string CLASE_BRONCE = "fondoBronce";
         private const string CLASE_PLATA = "fondoPlata";
         private const string CLASE_ORO = "fondoOro";
+        private const string CLASE_PENDIENTE = "fondoPendiente";
 
         private const string IMG_ORO = "/img/oro.png";
         private const string IMG_PLATA = "/img/plata.png";
@@ -29,6 +30,7 @@ namespace OMIstats.Utilities
         private const string ORO_2 = "ORO (II)";
         private const string ORO_3 = "ORO (III)";
         private const string NO_MEDALLA = "- - -";
+        private const string PENDIENTE = "PENDIENTE";
 
         public TableManager(): this(false, null)
         {
@@ -81,8 +83,10 @@ namespace OMIstats.Utilities
             this.currentResultados = datos;
         }
 
-        public string obtenerClaseCSS()
+        public string obtenerClaseCSS(bool mostrarPendientes = true)
         {
+            if (currentOMI.liveResults && mostrarPendientes)
+                return CLASE_PENDIENTE;
             return obtenerClaseCSS(currentResultados.medalla);
         }
 
@@ -144,8 +148,11 @@ namespace OMIstats.Utilities
             return currentResultados.ioi == A || currentResultados.ioi == B;
         }
 
-        public string medallaString(bool mostrarPrimeros = true)
+        public string medallaString(bool mostrarPrimeros = true, bool mostrarPendientes = true)
         {
+            if (currentOMI.liveResults && mostrarPendientes)
+                return PENDIENTE;
+
             switch (currentResultados.medalla)
             {
                 case Resultados.TipoMedalla.ORO_1:

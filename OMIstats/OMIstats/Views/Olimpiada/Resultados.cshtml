@@ -225,7 +225,7 @@ if (isLive)
         }
         else
         {
-            string claseCSS = tableManager.obtenerClaseCSS();
+            string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
             <tr>
                 <td class="ioi-mini-imagen">
@@ -326,7 +326,7 @@ if (isLive)
                     </td>
                 }
                 <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
-                    @tableManager.medallaString(mostrarPrimeros: false)
+                    @tableManager.medallaString(mostrarPrimeros: false, mostrarPendientes: false)
                 </td>
                 <td class="@("table-td break-word escuela-td " + claseCSS)">
                     @if (mostrar && datos.escuela != null)

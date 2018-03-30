@@ -71,6 +71,10 @@
 	background-image:url(../img/celdafondobronce.png);
 }
 
+.fondoPendiente {
+    background-image:url(../img/celdapendiente.png);
+}
+
 .border {
     border: solid 4px #336699;
 }
