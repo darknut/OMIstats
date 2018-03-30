@@ -3,6 +3,9 @@ var lastUpdateWithServer = 0;
 var ajaxUrl;
 var omi;
 var tipo;
+var dia;
+var problemas;
+var ticks;
 
 function setTimes(server, page) {
     lastServerUpdate = server;
@@ -10,10 +13,13 @@ function setTimes(server, page) {
     updateTimes();
 }
 
-function setUpAjax(url, olimpiada, tipoOlimpiada) {
+function setUpAjax(url, olimpiada, tipoOlimpiada, d, p, t) {
     ajaxUrl = url;
     omi = olimpiada;
     tipo = tipoOlimpiada;
+    dia = d;
+    problemas = p;
+    ticks = t;
 }
 
 function startTimer() {
@@ -48,7 +54,7 @@ function updateTimes() {
 
 function callServer() {
     llamadaAjax(ajaxUrl,
-        { clave: omi, tipo: tipo },
+        { clave: omi, tipo: tipo, ticks: ticks },
         function (data) { actualizaPuntos(data); },
         function (data) {  });
 }

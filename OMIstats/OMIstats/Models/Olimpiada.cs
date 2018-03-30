@@ -122,7 +122,7 @@ namespace OMIstats.Models
 
         private List<CachedResult> obtenerResultados()
         {
-            return CachedResult.cargarResultados(this.numero, this.tipoOlimpiada, 0, problemasDia1);
+            return CachedResult.cargarResultados(this.numero, this.tipoOlimpiada, 1, problemasDia1);
         }
 
         public List<CachedResult> cachedResults

@@ -303,6 +303,8 @@ namespace OMIstats.Controllers
                 {
                     ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
                     ViewBag.dia = ou.dia;
+                    ViewBag.ticks = ou.timestamp.Ticks;
+                    ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
                 }
             }
 
@@ -332,7 +334,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/ResultadosAjax/
 
         [HttpPost]
-        public JsonResult ResultadosAjax(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public JsonResult ResultadosAjax(string clave, TipoOlimpiada tipo, long ticks)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
