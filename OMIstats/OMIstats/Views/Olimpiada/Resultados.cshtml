@@ -33,11 +33,12 @@
     </script>
     @if(isRunnerLive)
     {
+        <script type="text/javascript" src="~/js/formas.js"></script>
         <script type="text/javascript" src="~/js/scoreboard.js"></script>
         <script>
             $(function () {
                 setTimes(@(lastUpdate), 0);
-                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax?clave" + "@(Model.numero)" + "&tipo=" + "@(Model.tipoOlimpiada.ToString())");
+                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())");
                 startTimer();
             });
         </script>
