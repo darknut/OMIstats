@@ -108,4 +108,12 @@ namespace OMIstats.Models
         public string olimpiada;
         public TipoOlimpiada tipoOlimpiada;
     }
+
+    public class CachedResult
+    {
+        public void llenarDatos(Resultados r, int dia, int problemas)
+        {
+            throw new InvalidOperationException("llenarDatos no permitido en este contexto");
+        }
+    }
 }

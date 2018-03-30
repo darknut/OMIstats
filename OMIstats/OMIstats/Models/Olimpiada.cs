@@ -117,47 +117,49 @@ namespace OMIstats.Models
         }
 
         private Problema datosGenerales;
-        private List<CachedResult> cachedResults = null;
+
+        public List<CachedResult> cachedResults = null;
+        public List<Resultados> resultados = null;
         private DateTime lastUpdate;
 
-        private List<CachedResult> obtenerResultados()
+        private void cacheResults(int dia)
         {
-            return CachedResult.cargarResultados(this.numero, this.tipoOlimpiada, 1, problemasDia1);
+            resultados = Resultados.cargarResultados(this.numero, this.tipoOlimpiada, dia,
+                dia == 1 ? this.problemasDia1 : this.problemasDia2, out cachedResults);
         }
 
-        public List<CachedResult> getCachedResults(out OmegaUp poll)
+        public OmegaUp calculateCachedResults()
         {
             try
             {
-                poll = OmegaUp.obtenerParaOMI(this.numero, this.tipoOlimpiada);
-                if (this.cachedResults == null)
-                {
-                    this.cachedResults = this.obtenerResultados();
-                    this.lastUpdate = poll.timestamp;
-                    return this.cachedResults;
-                }
-
+                OmegaUp poll = OmegaUp.obtenerParaOMI(this.numero, this.tipoOlimpiada);
                 if (poll == null)
                 {
                     this.liveResults = false;
-                    return this.cachedResults;
+                    return poll;
+                }
+
+                if (this.cachedResults == null || resultados == null)
+                {
+                    cacheResults(poll.dia);
+                    this.lastUpdate = poll.timestamp;
+                    return poll;
                 }
 
                 if (poll.timestamp.CompareTo(lastUpdate) <= 0)
-                    return this.cachedResults;
+                    return poll;
 
                 this.lastUpdate = poll.timestamp;
-                this.cachedResults = this.obtenerResultados();
+                cacheResults(poll.dia);
 
-                return this.cachedResults;
+                return poll;
             }
             catch (Exception e)
             {
                 Log.add(Log.TipoLog.SCOREBOARD, "Excepción tratando de cachear resultados para " + this.tipoOlimpiada + " " + this.numero);
                 Log.add(Log.TipoLog.SCOREBOARD, e.ToString());
-                poll = null;
 
-                return this.obtenerResultados();
+                return null;
             }
         }
 

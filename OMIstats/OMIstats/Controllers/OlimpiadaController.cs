@@ -289,23 +289,31 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
 
-            ViewBag.liveResults = o.liveResults;
-            ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
-            ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
+            ViewBag.liveResults = false;
             if (o.liveResults)
             {
-                OmegaUp ou = OmegaUp.obtenerParaOMI(o.numero, o.tipoOlimpiada);
-                if (ou == null || ViewBag.resultados.Count == 0)
+                OmegaUp ou = o.calculateCachedResults();
+                if (ou == null)
                 {
-                    ViewBag.liveResults = false;
+                    ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
                 }
                 else
                 {
-                    ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
-                    ViewBag.dia = ou.dia;
-                    ViewBag.ticks = ou.timestamp.Ticks;
-                    ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
+                    ViewBag.resultados = o.resultados;
+                    if (o.resultados.Count > 0)
+                    {
+                        ViewBag.liveResults = true;
+                        ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
+                        ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
+                        ViewBag.dia = ou.dia;
+                        ViewBag.ticks = ou.timestamp.Ticks;
+                        ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
+                    }
                 }
+            }
+            else
+            {
+                ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
             }
 
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
@@ -341,14 +349,12 @@ namespace OMIstats.Controllers
             if (o == null)
                 return Json(ERROR);
 
-            OmegaUp ou;
-            List<CachedResult> resultados = o.getCachedResults(out ou);
-
+            OmegaUp ou = o.calculateCachedResults();
             AjaxResponse ajax = new AjaxResponse();
 
             if (ou == null)
             {
-                ajax.resultados = resultados;
+                ajax.resultados = o.cachedResults;
                 ajax.secondsSinceUpdate = 0;
                 ajax.status = AjaxResponse.Status.ERROR.ToString();
 
@@ -357,7 +363,7 @@ namespace OMIstats.Controllers
 
             if (!OmegaUp.RunnerStarted)
             {
-                ajax.resultados = resultados;
+                ajax.resultados = o.cachedResults;
                 ajax.secondsSinceUpdate = 0;
                 ajax.status = AjaxResponse.Status.FINISHED.ToString();
 
@@ -372,7 +378,7 @@ namespace OMIstats.Controllers
             else
             {
                 ajax.status = AjaxResponse.Status.UPDATED.ToString();
-                ajax.resultados = resultados;
+                ajax.resultados = o.cachedResults;
                 ajax.secondsSinceUpdate = (int)Math.Round((decimal)(DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond);
             }
 

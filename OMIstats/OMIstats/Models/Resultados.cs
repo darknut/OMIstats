@@ -236,16 +236,10 @@ namespace OMIstats.Models
             return TipoError.OK;
         }
 
-        /// <summary>
-        /// Regresa los resultados de la olimpiada mandada como parametro
-        /// </summary>
-        /// <param name="omi">La olimpiada en cuestión</param>
-        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
-        /// <param name="cargarObjetos">Si los objetos deben de llenarse</param>
-        /// <returns>Una lista con los resultados</returns>
-        public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
+        private static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos, bool cargarCache, int dia, int problemas, out List<CachedResult> cached)
         {
             List<Resultados> lista = new List<Resultados>();
+            cached = null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -263,6 +257,9 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
+            if (cargarCache)
+                cached = new List<CachedResult>();
+
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
@@ -270,9 +267,45 @@ namespace OMIstats.Models
                 res.llenarDatos(r, cargarObjetos);
 
                 lista.Add(res);
+
+                if (cargarCache)
+                {
+                    CachedResult cr = new CachedResult();
+                    cr.llenarDatos(res, dia, problemas);
+                    cached.Add(cr);
+                }
             }
 
             return lista;
+        }
+
+        /// <summary>
+        /// Regresa los resultados de la olimpiada mandada como parametro
+        /// </summary>
+        /// <param name="omi">La olimpiada en cuestión</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="cargarObjetos">Si los objetos deben de llenarse</param>
+        /// <returns>Una lista con los resultados</returns>
+        public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
+        {
+            List<CachedResult> cache;
+            return cargarResultados(omi, tipoOlimpiada, cargarObjetos, false, 0, 0, out cache);
+        }
+
+        /// <summary>
+        /// Regresa los resultados de la olimpiada mandada como parametro así como
+        /// los resultados para mandar por ajax
+        /// </summary>
+        /// <param name="omi">La olimpiada en cuestión</param>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="dia">El día del examen</param>
+        /// <param name="problemas">Cuántos problemas hay en el día</param>
+        /// <param name="cached">La lista por referencia donde se guardarán los
+        /// resultados ajax</param>
+        /// <returns>La lista con los resultados</returns>
+        public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, int dia, int problemas, out List<CachedResult> cached)
+        {
+            return cargarResultados(omi, tipoOlimpiada, true, true, dia, problemas, out cached);
         }
 
         /// <summary>
