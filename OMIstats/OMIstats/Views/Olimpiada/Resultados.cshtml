@@ -6,7 +6,7 @@
     long lastUpdate = 0;
     int dia = 0;
     int problemasPorDia = 0;
-    int ticks = 0;
+    long ticks = 0;
 
     if (isLive)
     {
@@ -44,7 +44,7 @@
         <script>
             $(function () {
                 setTimes(@(lastUpdate), 0);
-                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", dia, problemasPorDia, ticks);
+                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), @(ticks));
                 startTimer();
             });
         </script>
