@@ -261,11 +261,19 @@ else
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
             <tr id="@(isRunnerLive ? datos.clave : "")">
                 <td class="ioi-mini-imagen">
-                    @if (tableManager.mostrarLogoIOI())
+                    @if (isLive && isRunnerLive)
                     {
+                        <img class="up" src="@Url.Content("~/img/up.png")" style="display:none"/>
+                        <img class="down" src="@Url.Content("~/img/down.png")" style="display:none"/>
+                    }
+                    else
+                    {
+                        if (tableManager.mostrarLogoIOI())
+                        {
                         <a href="@tableManager.getIOIStatsLink(datos.persona.ioiID)" target="_blank">
                             <img src="~/img/ioi.png" />
                         </a>
+                        }
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">

@@ -160,6 +160,7 @@ function updatePoints(results) {
                 renglon[i].classList.add(css);
         }
 
+        var lugarAnterior = parseInt(renglon[1].innerHTML);
         renglon[1].innerHTML = result.lugar;
 
         var indiceProblemas = 5;
@@ -181,6 +182,18 @@ function updatePoints(results) {
         if (result.medalla != "NADA")
             medalla = result.medalla;
         renglon[++ultimos].innerHTML = medalla;
+        renglon[ultimos].setAttribute("medalla", result.lugar);
+
+        var upImg = renglon[0].getElementsByClassName("up")[0];
+        var downImg = renglon[0].getElementsByClassName("down")[0];
+
+        upImg.style.display = "none";
+        downImg.style.display = "none";
+
+        if (lugarAnterior < result.lugar)
+            downImg.style.display = "inline";
+        if (lugarAnterior > result.lugar)
+            upImg.style.display = "inline";
     });
 
     $("#tablaPuntos").trigger("update");

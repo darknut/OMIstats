@@ -289,9 +289,12 @@
     <Content Include="img\celdafondobronce.png" />
     <Content Include="img\celdafondooro.png" />
     <Content Include="img\celdafondoplata.png" />
+    <Content Include="img\celdapendiente.png" />
     <Content Include="img\circulo.png" />
     <Content Include="img\diploma.png" />
+    <Content Include="img\docx.png" />
     <Content Include="img\domi.gif" />
+    <Content Include="img\down.png" />
     <Content Include="img\facebook.png" />
     <Content Include="img\homepage.png" />
     <Content Include="img\ioi.png" />
@@ -303,10 +306,13 @@
     <Content Include="img\mail.png" />
     <Content Include="img\omega.png" />
     <Content Include="img\omi.png" />
+    <Content Include="img\omip.png" />
+    <Content Include="img\omis.png" />
     <Content Include="img\oro.png" />
     <Content Include="img\pdf.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\twitter.png" />
+    <Content Include="img\up.png" />
     <Content Include="js\admin.js" />
     <Content Include="js\estados.js" />
     <Content Include="js\formas.js" />
