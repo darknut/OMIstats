@@ -172,10 +172,12 @@ function updatePoints(results) {
         }
 
         var ultimos = indiceProblemas + problemas;
+        var totalAnterior = parseInt(renglon[ultimos].innerHTML);
         renglon[ultimos].innerHTML = result.totalDia;
 
         if (dia == 2) {
-            renglon[++ultimos].innerHTML = result.total;
+            totalAnterior = parseInt(renglon[++ultimos].innerHTML);
+            renglon[ultimos].innerHTML = result.total;
         }
 
         var medalla = "- - -";
@@ -190,10 +192,13 @@ function updatePoints(results) {
         upImg.style.display = "none";
         downImg.style.display = "none";
 
-        if (lugarAnterior < result.lugar)
-            downImg.style.display = "inline";
-        if (lugarAnterior > result.lugar)
-            upImg.style.display = "inline";
+        if (totalAnterior > 0 || result.total > 0) {
+            if (lugarAnterior > result.lugar ||
+                totalAnterior == 0)
+                upImg.style.display = "inline";
+            else if (lugarAnterior < result.lugar)
+                downImg.style.display = "inline";
+        }
     });
 
     $("#tablaPuntos").trigger("update");
