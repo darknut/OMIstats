@@ -182,6 +182,11 @@ function updatePoints(results) {
             medalla = result.medalla;
         renglon[++ultimos].innerHTML = medalla;
     });
+
+    $("#tablaPuntos").trigger("update");
+    setTimeout(function() {
+        $("#tablaPuntos").trigger("sorton", [[[1, 0]]]);
+    }, 0);
 }
 
 function retryAjax() {
