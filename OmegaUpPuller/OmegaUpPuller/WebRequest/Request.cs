@@ -15,6 +15,7 @@ namespace OmegaUpPuller.WebRequest
     {
         private static string OMEGAUP_API = "https://omegaup.com/api/contest/scoreboard?contest_alias={0}&token={1}";
         private static int MAX_INTENTOS = 3;
+        private static int RETRY_SLEEP = 20;
 
         /// <summary>
         /// Regresa el diccionario si tuvo éxito o null si hubo algún error
@@ -58,7 +59,8 @@ namespace OmegaUpPuller.WebRequest
                 }
                 else
                 {
-                    Log.add(Log.TipoLog.OMEGAUP, "Intentando otra vez... ");
+                    Log.add(Log.TipoLog.OMEGAUP, "Durmiendo " + RETRY_SLEEP + " segundos e intentando otra vez... ");
+                    System.Threading.Thread.Sleep(RETRY_SLEEP * 1000);
                     return Call(pull, intentos + 1);
                 }
             }

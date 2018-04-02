@@ -116,6 +116,10 @@ namespace OmegaUpPuller.WebRequest
                 resultados = Request.Call(pull);
             }
 
+            // Si recibimos null, hubo un error llamando a OmegaUp
+            if (resultados == null)
+                return false;
+
             // Luego parseamos los datos del json
             Scoreboard scoreboard;
             try

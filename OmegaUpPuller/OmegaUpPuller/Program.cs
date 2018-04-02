@@ -13,14 +13,8 @@ namespace OmegaUpPuller
 {
     class Program
     {
-        private static int MAX_SLEEP = 300;
         private static bool IS_MOCKING = false;
         private const string MOCKING_STRING = "mock";
-
-        private void setup()
-        {
-            Acceso.CADENA_CONEXION = ConfigurationManager.AppSettings["conexion"];
-        }
 
         private bool hayOtroActivo()
         {
@@ -67,8 +61,6 @@ namespace OmegaUpPuller
 
         private void Run()
         {
-            this.setup();
-
             if (this.hayOtroActivo())
                 return;
 
@@ -80,7 +72,6 @@ namespace OmegaUpPuller
                 while (true)
                 {
                     List<OmegaUp> instrucciones = OmegaUp.obtenerInstrucciones();
-                    int sleep = MAX_SLEEP;
                     int polls = 0;
 
                     foreach (var instruccion in instrucciones)
@@ -101,7 +92,9 @@ namespace OmegaUpPuller
                                     Log.add(Log.TipoLog.OMEGAUP, "-------------------");
                                     polls++;
                                     this.poll(instruccion);
-                                    sleep = sleep < instruccion.ping ? sleep : instruccion.ping;
+
+                                    Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + instruccion.ping + " seconds.");
+                                    System.Threading.Thread.Sleep(instruccion.ping * 1000);
                                     break;
                                 }
                         }
@@ -116,9 +109,6 @@ namespace OmegaUpPuller
 
                     // Guardamos el status para actualizar el timestamp
                     status.guardar();
-
-                    Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + sleep + " seconds.");
-                    System.Threading.Thread.Sleep(sleep * 1000);
                 }
             }
             catch (Exception e)
@@ -139,6 +129,8 @@ namespace OmegaUpPuller
             CultureInfo culture = new CultureInfo("es-MX");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
+
+            Acceso.CADENA_CONEXION = ConfigurationManager.AppSettings["conexion"];
 
             new Program().Run();
         }
