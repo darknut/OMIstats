@@ -97,11 +97,11 @@ namespace OmegaUpPuller.WebRequest
 
             if (mock)
             {
-                Console.WriteLine("Estamos haciendo mock... presiona ENTER para continuar");
-                Console.ReadLine();
-
                 if (mockScoreboard == null)
                 {
+                    Console.WriteLine("Estamos haciendo mock... presiona ENTER para comenzar");
+                    Console.ReadLine();
+
                     mockScoreboard = Request.Call(pull);
                     cambiaValoresMock(pull, true);
                 }
@@ -190,7 +190,25 @@ namespace OmegaUpPuller.WebRequest
                 return false;
             }
 
-            pull.setSecondsToFinish((long) resultados[FINISH_TIME]);
+            if (mock)
+            {
+                Console.WriteLine("Mete los segundos que queden de examen (5 horas = 18000; 0 para terminar)");
+                try
+                {
+                    int seconds = Convert.ToInt32(Console.ReadLine());
+                    if (seconds < 0)
+                        seconds = 0;
+                    pull.setSecondsToFinish(seconds);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            else
+            {
+                pull.setSecondsToFinish((long)resultados[FINISH_TIME]);
+            }
+
             Log.add(Log.TipoLog.OMEGAUP, "Scoreboard actualizado con éxito");
             return true;
         }
