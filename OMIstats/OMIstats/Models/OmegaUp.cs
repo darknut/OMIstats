@@ -17,6 +17,7 @@ namespace OMIstats.Models
         private static string SCOREBOARD_DIRECTORY_STRING = "scoreboardDirectory";
         private static string SCOREBOARD_EXE_STRING = "scoreboardExe";
         private static int SLEEP_TIME = 2000;
+        private static int STANDARD_SECONDS = 18000;
 
         public enum Instruccion
         {
@@ -30,7 +31,8 @@ namespace OMIstats.Models
         {
             NULL,
             OK,
-            ERROR
+            ERROR,
+            DONE
         }
 
         public int clave { get; set; }
@@ -55,6 +57,8 @@ namespace OMIstats.Models
 
         public DateTime timestamp { get; set; }
 
+        public int secondsToFinish { get; set; }
+
         public static bool RunnerStarted = false;
 
         public OmegaUp()
@@ -70,6 +74,7 @@ namespace OMIstats.Models
             prefijo = "";
             status = Status.NULL;
             timestamp = DateTime.UtcNow;
+            secondsToFinish = 0;
         }
 
         public static void StartScoreboard()
@@ -112,6 +117,7 @@ namespace OMIstats.Models
             token = r["token"].ToString().Trim();
             prefijo = r["prefijo"].ToString().Trim();
             status = (Status)Enum.Parse(typeof(Status), r["status"].ToString().ToUpper());
+            secondsToFinish = (int)r["secondsToFinish"];
             try
             {
                 timestamp = new DateTime(long.Parse(r["timestamp"].ToString()));
@@ -178,6 +184,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
             query.Append(", timestamp = ");
             query.Append(Utilities.Cadenas.comillas(timestamp.Ticks.ToString()));
+            query.Append(", secondsToFinish = ");
+            query.Append(secondsToFinish);
             query.Append(" where clave = ");
             query.Append(clave);
 
@@ -191,9 +199,11 @@ namespace OMIstats.Models
 
             if (status == Status.OK)
                 this.timestamp = DateTime.UtcNow;
+            if (instruccion == Instruccion.POLL)
+                secondsToFinish = STANDARD_SECONDS;
 
             query.Append(" insert into OmegaUp (tipo, olimpiada, clase, ping, concurso, ");
-            query.Append(" token, prefijo, dia, status, timestamp) values (");
+            query.Append(" token, prefijo, dia, status, timestamp, secondsToFinish) values (");
             query.Append(Utilities.Cadenas.comillas(instruccion.ToString().ToLower()));
             query.Append(",");
             query.Append(Utilities.Cadenas.comillas(olimpiada));
@@ -213,6 +223,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
             query.Append(",");
             query.Append(Utilities.Cadenas.comillas(timestamp.Ticks.ToString()));
+            query.Append(",");
+            query.Append(secondsToFinish);
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
