@@ -127,7 +127,6 @@ function handleAjax(ajax) {
             }
         case "ERROR":
             {
-                updatePoints(ajax.resultados);
                 handleError();
                 break;
             }
