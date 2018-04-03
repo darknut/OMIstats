@@ -79,9 +79,14 @@ namespace OMIstats.Utilities
                    fecha.Year.ToString();
         }
 
-        public static DateTime FromUnixTime(long seconds)
+        public static DateTime fromUnixTime(long seconds)
         {
             return UNIX_TIME.AddSeconds(seconds);
+        }
+
+        public static long secondsSinceUnixTime()
+        {
+            return (int) Math.Round((DateTime.UtcNow - UNIX_TIME).TotalSeconds);
         }
     }
 }

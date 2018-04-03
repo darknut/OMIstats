@@ -323,7 +323,7 @@ namespace OMIstats.Models
 
         public void setSecondsToFinish(long seconds)
         {
-            DateTime finishTime = Utilities.Fechas.FromUnixTime(seconds);
+            DateTime finishTime = Utilities.Fechas.fromUnixTime(seconds);
             DateTime now = DateTime.UtcNow;
 
             if (now >= finishTime)
