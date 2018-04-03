@@ -337,5 +337,20 @@ namespace OMIstats.Models
                 this.secondsToFinish = (int) Math.Round(diff.TotalSeconds);
             }
         }
+
+        public int getRemainingContestTime()
+        {
+            int delta = (int)Math.Round((DateTime.UtcNow - this.timestamp).TotalSeconds);
+            int faltante = this.secondsToFinish - delta;
+
+            if (faltante <= 0)
+            {
+                faltante = 0;
+                this.secondsToFinish = 0;
+                this.status = Status.DONE;
+            }
+
+            return faltante;
+        }
     }
 }
