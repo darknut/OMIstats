@@ -15,6 +15,7 @@ namespace OmegaUpPuller.WebRequest
         private static string USERNAME_STRING = "username";
         private static string POINTS_STRING = "points";
         private static string RUNS_STRING = "runs";
+        private static string FINISH_TIME = "finish_time";
 
         private static ScoreboardManager _instance = null;
 
@@ -189,6 +190,7 @@ namespace OmegaUpPuller.WebRequest
                 return false;
             }
 
+            pull.setSecondsToFinish((long) resultados[FINISH_TIME]);
             Log.add(Log.TipoLog.OMEGAUP, "Scoreboard actualizado con éxito");
             return true;
         }

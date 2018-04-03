@@ -320,5 +320,22 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        public void setSecondsToFinish(long seconds)
+        {
+            DateTime finishTime = Utilities.Fechas.FromUnixTime(seconds);
+            DateTime now = DateTime.UtcNow;
+
+            if (now >= finishTime)
+            {
+                this.secondsToFinish = 0;
+                this.status = Status.DONE;
+            }
+            else
+            {
+                TimeSpan diff = finishTime - now;
+                this.secondsToFinish = (int) Math.Round(diff.TotalSeconds);
+            }
+        }
     }
 }

@@ -7,6 +7,8 @@ namespace OMIstats.Utilities
 {
     public class Fechas
     {
+        private static readonly DateTime UNIX_TIME = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
         public static string friendlyString(DateTime fecha)
         {
             string s = fecha.Day + " de ";
@@ -75,6 +77,11 @@ namespace OMIstats.Utilities
             return fecha.Day.ToString("00") + "/" +
                    fecha.Month.ToString("00") + "/" +
                    fecha.Year.ToString();
+        }
+
+        public static DateTime FromUnixTime(long seconds)
+        {
+            return UNIX_TIME.AddSeconds(seconds);
         }
     }
 }
