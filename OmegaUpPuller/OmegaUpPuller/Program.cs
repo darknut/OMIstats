@@ -51,10 +51,14 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
-            if (WebRequest.ScoreboardManager.Instance.Update(instruccion, IS_MOCKING))
-                instruccion.status = OmegaUp.Status.OK;
-            else
-                instruccion.status = OmegaUp.Status.ERROR;
+            bool success = WebRequest.ScoreboardManager.Instance.Update(instruccion, IS_MOCKING);
+            if (instruccion.status != OmegaUp.Status.DONE)
+            {
+                if (success)
+                    instruccion.status = OmegaUp.Status.OK;
+                else
+                    instruccion.status = OmegaUp.Status.ERROR;
+            }
 
             instruccion.guardar();
         }
@@ -93,8 +97,11 @@ namespace OmegaUpPuller
                                     polls++;
                                     this.poll(instruccion);
 
-                                    Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + instruccion.ping + " seconds.");
-                                    System.Threading.Thread.Sleep(instruccion.ping * 1000);
+                                    if (!IS_MOCKING)
+                                    {
+                                        Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + instruccion.ping + " seconds.");
+                                        System.Threading.Thread.Sleep(instruccion.ping * 1000);
+                                    }
                                     break;
                                 }
                         }
