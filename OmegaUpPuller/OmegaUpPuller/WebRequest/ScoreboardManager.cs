@@ -198,7 +198,7 @@ namespace OmegaUpPuller.WebRequest
                     int seconds = Convert.ToInt32(Console.ReadLine());
                     if (seconds < 0)
                         seconds = 0;
-                    pull.setSecondsToFinish(seconds);
+                    pull.setSecondsToFinish(OMIstats.Utilities.Fechas.secondsSinceUnixTime() + seconds);
                 }
                 catch (Exception)
                 {
@@ -206,7 +206,7 @@ namespace OmegaUpPuller.WebRequest
             }
             else
             {
-                pull.setSecondsToFinish((long)resultados[FINISH_TIME]);
+                pull.setSecondsToFinish((int)resultados[FINISH_TIME]);
             }
 
             Log.add(Log.TipoLog.OMEGAUP, "Scoreboard actualizado con éxito");

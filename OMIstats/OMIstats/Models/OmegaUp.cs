@@ -32,7 +32,6 @@ namespace OMIstats.Models
             NULL,
             OK,
             ERROR,
-            DONE
         }
 
         public int clave { get; set; }
@@ -329,7 +328,6 @@ namespace OMIstats.Models
             if (now >= finishTime)
             {
                 this.secondsToFinish = 0;
-                this.status = Status.DONE;
             }
             else
             {
@@ -347,7 +345,6 @@ namespace OMIstats.Models
             {
                 faltante = 0;
                 this.secondsToFinish = 0;
-                this.status = Status.DONE;
             }
 
             return faltante;

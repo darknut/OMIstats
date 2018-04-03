@@ -51,14 +51,10 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
-            bool success = WebRequest.ScoreboardManager.Instance.Update(instruccion, IS_MOCKING);
-            if (instruccion.status != OmegaUp.Status.DONE)
-            {
-                if (success)
-                    instruccion.status = OmegaUp.Status.OK;
-                else
-                    instruccion.status = OmegaUp.Status.ERROR;
-            }
+            if (WebRequest.ScoreboardManager.Instance.Update(instruccion, IS_MOCKING))
+                instruccion.status = OmegaUp.Status.OK;
+            else
+                instruccion.status = OmegaUp.Status.ERROR;
 
             instruccion.guardar();
         }
