@@ -131,6 +131,7 @@ namespace OmegaUpPuller
             Thread.CurrentThread.CurrentUICulture = culture;
 
             Acceso.CADENA_CONEXION = ConfigurationManager.AppSettings["conexion"];
+            OmegaUp.startTimestampsForPolls();
 
             new Program().Run();
         }

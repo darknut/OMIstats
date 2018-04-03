@@ -306,11 +306,8 @@ namespace OMIstats.Controllers
                         ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
                         ViewBag.dia = ou.dia;
                         ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
-                        ViewBag.lastUpdate = 0;
+                        ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
                         ViewBag.ticks = ou.timestamp.Ticks;
-
-                        if (ou.status != OmegaUp.Status.NULL)
-                            ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
                     }
                 }
             }

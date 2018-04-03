@@ -307,5 +307,18 @@ namespace OMIstats.Models
 
             return o;
         }
+
+        public static void startTimestampsForPolls()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update OmegaUp set timestamp = ");
+            query.Append(Utilities.Cadenas.comillas(DateTime.UtcNow.Ticks.ToString()));
+            query.Append(" where tipo = ");
+            query.Append(Utilities.Cadenas.comillas(Instruccion.POLL.ToString()));
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 }
