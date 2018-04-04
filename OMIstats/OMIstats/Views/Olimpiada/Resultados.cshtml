@@ -7,6 +7,9 @@
     int dia = 0;
     int problemasPorDia = 0;
     long ticks = 0;
+    int remainingSeconds = 0;
+    string scoreboardName = "";
+    string scoreboardToken = "";
 
     if (isLive)
     {
@@ -15,6 +18,9 @@
         dia = ViewBag.dia;
         problemasPorDia = ViewBag.problemasPorDia;
         ticks = ViewBag.ticks;
+        remainingSeconds = ViewBag.remainingSeconds;
+        scoreboardName = ViewBag.scoreboardName;
+        scoreboardToken = ViewBag.scoreboardToken;
     }
 }
 
@@ -43,8 +49,8 @@
         <script type="text/javascript" src="~/js/scoreboard.js"></script>
         <script>
             $(function () {
+                setUpScoreboard("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), "@(ticks)", @(remainingSeconds));
                 setTimes(@(lastUpdate));
-                setUpAjax("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), "@(ticks)");
                 startTimer();
             });
         </script>
@@ -161,8 +167,13 @@ else
             <div id="errorUpdateContainer" style="display:none" class="live-results">
                 Hubo un error al intentar conectarse con el servidor <a href="javascript:retryAjax()" id="retryLink">Reintentar</a><img id="loading" src="~/img/ajax-loader.gif" style="display:none"/>
             </div>
-            <div id="finished" class="finished" style="display:none">
-                El concurso ha terminado
+            <div class="omega-up-link">
+                <a id="finished" class="finished" style="display:none" href="@(string.Format("https://omegaup.com/arena/{0}/scoreboard/{1}", scoreboardName, scoreboardToken))" target="_blank">
+                    El concurso ha terminado
+                </a>
+                <a id="counter-container" class="counter-container" href="@(string.Format("https://omegaup.com/arena/{0}/scoreboard/{1}", scoreboardName, scoreboardToken))" target="_blank">
+                    El examen termina en: <span id="counter" class="counter">05:00:00</span>
+                </a>
             </div>
         }
     }

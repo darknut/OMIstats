@@ -308,6 +308,9 @@ namespace OMIstats.Controllers
                         ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
                         ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
                         ViewBag.ticks = ou.timestamp.Ticks;
+                        ViewBag.scoreboardName = ou.concurso;
+                        ViewBag.scoreboardToken = ou.token;
+                        ViewBag.remainingSeconds = ou.getRemainingContestTime();
                     }
                 }
             }
@@ -362,7 +365,9 @@ namespace OMIstats.Controllers
                 return Json(ajax);
             }
 
-            if (!OmegaUp.RunnerStarted)
+            ajax.timeToFinish = ou.getRemainingContestTime();
+
+            if (!OmegaUp.RunnerStarted || ajax.timeToFinish == 0)
             {
                 ajax.resultados = o.cachedResults;
                 ajax.secondsSinceUpdate = 0;

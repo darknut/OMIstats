@@ -185,8 +185,27 @@
 }
 
 .finished {
-    padding: 20px;
     color: green;
     font-weight: bold;
     font-size: 14pt;
+    text-decoration: none;
+}
+
+.finished:hover {
+    text-decoration: underline;
+}
+
+.omega-up-link {
+    padding: 20px;
+    display: inline-block;
+}
+
+.counter-container {
+    font-size: 14pt;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.counter-container:hover {
+    text-decoration: underline;
 }

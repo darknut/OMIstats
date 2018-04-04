@@ -7,6 +7,7 @@ var problemas;
 var ticks;
 var intervalHandler;
 var lastPing = 0;
+var remainingSeconds = 0;
 
 function setVisibility(id, status) {
     document.getElementById(id).style.display = status;
@@ -18,13 +19,14 @@ function setTimes(server) {
     updateTimes();
 }
 
-function setUpAjax(url, olimpiada, tipoOlimpiada, d, p, t) {
+function setUpScoreboard(url, olimpiada, tipoOlimpiada, d, p, t, remSeconds) {
     ajaxUrl = url;
     omi = olimpiada;
     tipo = tipoOlimpiada;
     dia = d;
     problemas = p;
     ticks = t;
+    remainingSeconds = remSeconds;
 }
 
 function startTimer() {
@@ -52,8 +54,33 @@ function timeToText(element, seconds) {
     element.innerHTML = text;
 }
 
+function setCounter() {
+    var seconds = remainingSeconds;
+    var hours = Math.floor(seconds / 3600);
+    seconds = seconds - (hours * 3600);
+    var minutes = Math.floor(seconds / 60);
+    seconds = seconds - (minutes * 60);
+
+    if (hours < 10)
+        hours = "0" + hours;
+    if (minutes < 10)
+        minutes = "0" + minutes;
+    if (seconds < 10)
+        seconds = "0" + seconds;
+
+    var counter = document.getElementById("counter");
+    counter.innerHTML = hours + ":" + minutes + ":" + seconds;
+}
+
 function updateTimes() {
     lastPing++;
+
+    if (remainingSeconds > 0) {
+        remainingSeconds--;
+        setCounter();
+    } else if (remainingSeconds == 0)
+        finishContest();
+
     timeToText(document.getElementById("lastServerUpdate"), ++lastServerUpdate);
 }
 
@@ -73,6 +100,7 @@ function handleError() {
     setVisibility("updateContainer", "none");
     setVisibility("liveResults", "none");
     setVisibility("errorUpdateContainer", "block");
+    setVisibility("counter-container", "none");
 
     setVisibility("retryLink", "inline");
     setVisibility("loading", "none");
@@ -82,14 +110,18 @@ function unhideElements() {
     setVisibility("updateContainer", "block");
     setVisibility("liveResults", "block");
     setVisibility("errorUpdateContainer", "none");
+    setVisibility("counter-container", "block");
 }
 
 function finishContest() {
     clearInterval(intervalHandler);
+    intervalHandler = -1;
+
     setVisibility("liveResults", "block");
     setVisibility("updateContainer", "none");
     setVisibility("errorUpdateContainer", "none");
 
+    setVisibility("counter-container", "none");
     setVisibility("finished", "block");
 }
 
@@ -113,10 +145,12 @@ function handleAjax(ajax) {
                 ticks = ajax.ticks;
                 setTimes(ajax.secondsSinceUpdate);
                 updatePoints(ajax.resultados);
+                remainingSeconds = ajax.timeToFinish;
                 break;
             }
         case "NOT_CHANGED":
             {
+                remainingSeconds = ajax.timeToFinish;
                 break;
             }
         case "FINISHED":
