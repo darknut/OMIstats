@@ -54,5 +54,13 @@ namespace OMIstats.Models
         public int timeToFinish;
         public string status;
         public string ticks;
+
+        public AjaxResponse()
+        {
+            this.resultados = null;
+            this.secondsSinceUpdate = 0;
+            this.timeToFinish = 0;
+            this.ticks = "0";
+        }
     }
 }

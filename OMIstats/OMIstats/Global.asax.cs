@@ -31,40 +31,39 @@ namespace OMIstats
             Controllers.BaseController.CAPTCHA_KEY = ConfigurationManager.AppSettings.Get("captchaKey");
 
             Application["users"] = 0;
+            Application["scoreboard"] = 0;
         }
 
         public void Session_Start()
         {
             Session["usuario"] = new Models.Persona(Models.Persona.UsuarioNulo);
 
-            try
-            {
-                int users = (int) Application["users"];
-                users++;
-                Application["users"] = users;
+            Application.Lock();
+            int users = (int) Application["users"];
+            users++;
+            Application["users"] = users;
+            Application.UnLock();
 
+            if (users < 10 || users % 10 == 0)
                 Models.Log.add(Models.Log.TipoLog.USUARIO, "Usuarios en línea: " + users);
-            }
-            catch (Exception e)
-            {
-                Models.Log.add(Models.Log.TipoLog.USUARIO, "Error al incrementar el número de usuarios");
-                Models.Log.add(Models.Log.TipoLog.USUARIO, e.ToString());
-            }
         }
 
         public void Session_End()
         {
-            try
+            Application.Lock();
+
+            int users = (int)Application["users"];
+            users--;
+            Application["users"] = users;
+
+            if (Session["scoreboard"] != null)
             {
-                int users = (int)Application["users"];
+                users = (int)Application["scoreboard"];
                 users--;
-                Application["users"] = users;
+                Application["scoreboard"] = users;
             }
-            catch (Exception e)
-            {
-                Models.Log.add(Models.Log.TipoLog.USUARIO, "Error al decrementar el número de usuarios");
-                Models.Log.add(Models.Log.TipoLog.USUARIO, e.ToString());
-            }
+
+            Application.UnLock();
         }
     }
 }

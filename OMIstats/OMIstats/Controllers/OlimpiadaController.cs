@@ -302,6 +302,8 @@ namespace OMIstats.Controllers
                     ViewBag.resultados = o.resultados;
                     if (o.resultados.Count > 0)
                     {
+                        scoreboardTelemetry();
+
                         ViewBag.liveResults = true;
                         ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
                         ViewBag.dia = ou.dia;
@@ -354,23 +356,18 @@ namespace OMIstats.Controllers
 
             OmegaUp ou = o.calculateCachedResults();
             AjaxResponse ajax = new AjaxResponse();
-            ajax.ticks = "0";
 
-            if (ou == null)
+            if (ou == null || !OmegaUp.RunnerStarted)
             {
-                ajax.resultados = null;
-                ajax.secondsSinceUpdate = 0;
                 ajax.status = AjaxResponse.Status.ERROR.ToString();
-
                 return Json(ajax);
             }
 
             ajax.timeToFinish = ou.getRemainingContestTime();
 
-            if (!OmegaUp.RunnerStarted || ajax.timeToFinish == 0)
+            if (ajax.timeToFinish == 0)
             {
                 ajax.resultados = o.cachedResults;
-                ajax.secondsSinceUpdate = 0;
                 ajax.status = AjaxResponse.Status.FINISHED.ToString();
 
                 return Json(ajax);
@@ -379,7 +376,6 @@ namespace OMIstats.Controllers
             if (ou.timestamp.Ticks == ticks)
             {
                 ajax.status = AjaxResponse.Status.NOT_CHANGED.ToString();
-                ajax.resultados = null;
             }
             else
             {
@@ -471,6 +467,22 @@ namespace OMIstats.Controllers
             o.calcularNumeros();
 
             return RedirectTo(Pagina.OLIMPIADA, clave);
+        }
+
+        private void scoreboardTelemetry()
+        {
+            if (Session["scoreboard"] == null)
+            {
+                Session["scoreboard"] = 1;
+
+                System.Web.HttpContext.Current.Application.Lock();
+                int users = (int)System.Web.HttpContext.Current.Application["scoreboard"];
+                users++;
+                System.Web.HttpContext.Current.Application["scoreboard"] = users;
+                System.Web.HttpContext.Current.Application.UnLock();
+
+                Models.Log.add(Models.Log.TipoLog.SCOREBOARD, "Usuarios viendo el scoreboard: " + users);
+            }
         }
     }
 }
