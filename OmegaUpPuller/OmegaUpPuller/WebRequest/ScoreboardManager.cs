@@ -35,7 +35,7 @@ namespace OmegaUpPuller.WebRequest
         }
 
         private Dictionary<string, Scoreboard> scoreboards;
-        private Dictionary<string, object> mockScoreboard;
+        private Dictionary<string, Dictionary<string, object>> mockScoreboards;
 
         private string getClaveScoreBoard(OmegaUp pull)
         {
@@ -45,7 +45,7 @@ namespace OmegaUpPuller.WebRequest
         /// <summary>
         /// Función para ayudar a testear OmegaUp
         /// </summary>
-        private void cambiaValoresMock(OmegaUp pull, bool inicializa = false)
+        private void cambiaValoresMock(OmegaUp pull, Dictionary<string, object> mockScoreboard, bool inicializa = false)
         {
             ArrayList problemas = (ArrayList)mockScoreboard[PROBLEMAS_STRING];
             ArrayList ranking = (ArrayList)mockScoreboard[RANKING_STRING];
@@ -97,17 +97,23 @@ namespace OmegaUpPuller.WebRequest
 
             if (mock)
             {
+                if (mockScoreboards == null)
+                    mockScoreboards = new Dictionary<string, Dictionary<string, object>>();
+                Dictionary<string, object> mockScoreboard = null;
+                mockScoreboards.TryGetValue(pull.tipoOlimpiada.ToString(), out mockScoreboard);
+
                 if (mockScoreboard == null)
                 {
                     Console.WriteLine("Estamos haciendo mock... presiona ENTER para comenzar");
                     Console.ReadLine();
 
                     mockScoreboard = Request.Call(pull);
-                    cambiaValoresMock(pull, true);
+                    cambiaValoresMock(pull, mockScoreboard, true);
+                    mockScoreboards.Add(pull.tipoOlimpiada.ToString(), mockScoreboard);
                 }
                 else
                 {
-                    cambiaValoresMock(pull);
+                    cambiaValoresMock(pull, mockScoreboard);
                 }
 
                 resultados = mockScoreboard;
