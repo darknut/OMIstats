@@ -32,7 +32,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 401);
 
             List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
-            ViewBag.polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
+            ViewBag.polls = OmegaUp.obtenerInstrucciones();
             ViewBag.status = status;
 
             if (status.Count == 0)

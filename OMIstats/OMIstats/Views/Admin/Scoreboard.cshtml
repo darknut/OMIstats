@@ -82,27 +82,48 @@
             counter++;
             <tr class="@clase">
                 <td>@item.olimpiada</td>
-                <td>@item.tipoOlimpiada</td>
-                <td>@item.dia</td>
+                <td>
+                    @if(item.instruccion == OMIstats.Models.OmegaUp.Instruccion.POLL)
+                    {
+                        @(item.tipoOlimpiada)
+                    } else
+                    {
+                        <span class="errorTextoRojo">@(item.instruccion)</span>
+                    }
+                </td>
+                <td>
+                    @if(item.instruccion == OMIstats.Models.OmegaUp.Instruccion.POLL)
+                    {
+                        @(item.dia)
+                    }
+                </td>
                 <td>@item.concurso</td>
                 <td>@item.token</td>
                 <td>@item.prefijo</td>
-                <td>@item.ping</td>
                 <td>
-                    @if (item.status == OMIstats.Models.OmegaUp.Status.NULL)
+                    @if(item.instruccion == OMIstats.Models.OmegaUp.Instruccion.POLL)
                     {
-                        <span class="errorTextoRojo">NOT YET UPDATED</span>
-                    } else {
-                        if (item.status == OMIstats.Models.OmegaUp.Status.ERROR)
+                        @(item.ping)
+                    }
+                </td>
+                <td>
+                    @if(item.instruccion != OMIstats.Models.OmegaUp.Instruccion.KILL)
+                    {
+                        if (item.status == OMIstats.Models.OmegaUp.Status.NULL)
                         {
-                            <span class="errorTextoRojo">ERROR</span>
+                            <span class="errorTextoRojo">NOT YET UPDATED</span>
                         } else {
-                            <span class="verde">ONLINE</span>
+                            if (item.status == OMIstats.Models.OmegaUp.Status.ERROR)
+                            {
+                                <span class="errorTextoRojo">ERROR</span>
+                            } else {
+                                <span class="verde">ONLINE</span>
+                            }
                         }
                     }
                 </td>
                 <td>
-                    @if (item.status != OMIstats.Models.OmegaUp.Status.NULL)
+                    @if(item.instruccion != OMIstats.Models.OmegaUp.Instruccion.KILL && item.status != OMIstats.Models.OmegaUp.Status.NULL)
                     {
                         DateTime tiempo = new DateTime(DateTime.UtcNow.Ticks - item.timestamp.Ticks);
                         <span>Hace @(tiempo.ToString("mm:ss")) minutos</span>
@@ -119,7 +140,7 @@
 <br />
 <br />
 <a href="@Url.Content("~/Admin/BorrarScoreboard")" class="boton botonOMI">Borrar Todo</a>
-<a href="@Url.Content("~/Admin/ResetOMI")" class="boton botonOMI">Reset OMI</a>
+<a href="@Url.Content("~/Admin/ResetOMI")" class="boton botonOMI">Reset</a>
 <a href="@Url.Content("~/Admin/Logs?tipo=OMEGAUP")" class="boton botonOMI">Logs</a>
 
 <h3 class="subtitulo">Agregar poll:</h3>
