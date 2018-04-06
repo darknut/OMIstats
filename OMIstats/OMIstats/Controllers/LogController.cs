@@ -52,7 +52,10 @@ namespace OMIstats.Controllers
 
                     Object t = obtenerParams(Pagina.LOGIN);
                     limpiarParams(Pagina.LOGIN);
-                    if (t != null)
+
+                    if (t is Pagina)
+                        return RedirectTo((Pagina)t);
+                    if (t is KeyValuePair<Pagina, string>)
                     {
                         KeyValuePair<Pagina, string> redireccion = (KeyValuePair<Pagina, string>)t;
                         return RedirectTo(redireccion.Key, redireccion.Value);
