@@ -303,6 +303,7 @@ namespace OMIstats.Controllers
                     if (o.resultados.Count > 0)
                     {
                         scoreboardTelemetry();
+                        o.shouldReload(ou.dia);
 
                         ViewBag.liveResults = true;
                         ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
@@ -347,7 +348,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/ResultadosAjax/
 
         [HttpPost]
-        public JsonResult ResultadosAjax(string clave, TipoOlimpiada tipo, long ticks)
+        public JsonResult ResultadosAjax(string clave, TipoOlimpiada tipo, long ticks, bool retry)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
@@ -369,6 +370,17 @@ namespace OMIstats.Controllers
             {
                 ajax.resultados = o.cachedResults;
                 ajax.status = AjaxResponse.Status.FINISHED.ToString();
+
+                return Json(ajax);
+            }
+
+            // Retry es verdadero cuando le mandamos 0 problemas al cliente
+            // en ese caso, es probable que necesitemos recagar los objetos
+            // olimpiada de la base de datos
+            if (retry)
+            {
+                ajax.retry = o.shouldReload(ou.dia);
+                ajax.status = AjaxResponse.Status.NOT_CHANGED.ToString();
 
                 return Json(ajax);
             }

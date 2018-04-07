@@ -54,6 +54,7 @@ namespace OMIstats.Models
         public int timeToFinish;
         public string status;
         public string ticks;
+        public bool retry;
 
         public AjaxResponse()
         {
@@ -61,6 +62,7 @@ namespace OMIstats.Models
             this.secondsSinceUpdate = 0;
             this.timeToFinish = 0;
             this.ticks = "0";
+            this.retry = false;
         }
     }
 }

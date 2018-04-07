@@ -86,7 +86,7 @@ function updateTimes() {
 
 function callServer() {
     llamadaAjax(ajaxUrl,
-        { clave: omi, tipo: tipo, ticks: ticks },
+        { clave: omi, tipo: tipo, ticks: ticks, retry: problemas == 0 },
         function (data) { handleAjax(data); },
         function (data) { handleError(); });
 }
@@ -134,6 +134,11 @@ function update() {
 }
 
 function handleAjax(ajax) {
+    if (ajax.retry) {
+        location.reload();
+        return;
+    }
+
     if (intervalHandler == -1) {
         startTimer();
         unhideElements();

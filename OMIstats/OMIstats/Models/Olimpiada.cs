@@ -729,5 +729,60 @@ namespace OMIstats.Models
             this.problemasDia1 = old.problemasDia1;
             this.problemasDia2 = old.problemasDia2;
         }
+
+        /// <summary>
+        /// Para ser llamado durante un concurso en vivo, para verificar si los
+        /// objetos olimpiada deben de ser recargados de la base de datos
+        /// </summary>
+        /// <param name="dia">El día del concurso</param>
+        /// <returns>True si el cliente debe de recargar</returns>
+        public bool shouldReload(int dia)
+        {
+            // Primero vemos si el objeto ya tiene los datos correctos
+            if (dia == 1)
+            {
+                if (problemasDia1 > 0)
+                    return true;
+            }
+            else
+            {
+                if (problemasDia2 > 0)
+                    return true;
+            }
+
+            // Revisamos directamente en la base si el runner y actulizó los problemas
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select problemasDia");
+            query.Append(dia);
+            query.Append(" from olimpiada where numero = ");
+            query.Append(Utilities.Cadenas.comillas(this.numero));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(this.tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+
+            // Si el campo problemasDiaX fue actualizado, reseteamos las OMI
+            // y le pedimos al cliente que recargue
+            int problemas = (int)db.getTable().Rows[0][0];
+            if (problemas > 0)
+            {
+                if (dia == 1)
+                {
+                    problemasDia1 = problemas;
+                }
+                else
+                {
+                    problemasDia2 = problemas;
+                    mostrarResultadosPorDia = true;
+                }
+                mostrarResultadosPorProblema = true;
+                mostrarResultadosTotales = true;
+                return true;
+            }
+
+            return false;
+        }
     }
 }
