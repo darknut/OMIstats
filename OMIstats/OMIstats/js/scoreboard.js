@@ -177,6 +177,11 @@ function updatePoints(results) {
         var renglon = document.getElementById(result.clave).getElementsByTagName("td");
         var css = "";
 
+        if (!renglon) {
+            location.reload();
+            return;
+        }
+
         switch (result.medalla) {
             case "ORO":
                 css += "fondoOro";
