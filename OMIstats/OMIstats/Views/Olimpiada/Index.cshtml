@@ -96,14 +96,7 @@
         {
             OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
             tableManager.setCurrentOMI(omi);
-            if (omi.numero == Model.numero)
-            {
-                <option value="@omi.numero" selected="selected">@(tableManager.enlaceOMI() + " " + omi.año)</option>
-            }
-            else
-            {
-                <option value="@omi.numero">@(tableManager.enlaceOMI() + " " + omi.año)</option>
-            }
+            <option value="@omi.numero" @(omi.numero == Model.numero ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
         }
     </select>
 </div>
