@@ -302,7 +302,6 @@ namespace OMIstats.Controllers
                     ViewBag.resultados = o.resultados;
                     if (o.resultados.Count > 0)
                     {
-                        scoreboardTelemetry();
                         o.shouldReload(ou.dia);
 
                         ViewBag.liveResults = true;
@@ -479,22 +478,6 @@ namespace OMIstats.Controllers
             o.calcularNumeros();
 
             return RedirectTo(Pagina.OLIMPIADA, clave);
-        }
-
-        private void scoreboardTelemetry()
-        {
-            if (Session["scoreboard"] == null)
-            {
-                Session["scoreboard"] = 1;
-
-                System.Web.HttpContext.Current.Application.Lock();
-                int users = (int)System.Web.HttpContext.Current.Application["scoreboard"];
-                users++;
-                System.Web.HttpContext.Current.Application["scoreboard"] = users;
-                System.Web.HttpContext.Current.Application.UnLock();
-
-                Models.Log.add(Models.Log.TipoLog.SCOREBOARD, "Usuarios viendo el scoreboard: " + users);
-            }
         }
     }
 }

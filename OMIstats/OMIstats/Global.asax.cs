@@ -29,41 +29,11 @@ namespace OMIstats
             Models.Usuario.PRODUCTION = ConfigurationManager.AppSettings.Get("Production") == "true";
             Controllers.BaseController.CAPTCHA_SECRET = ConfigurationManager.AppSettings.Get("captchaSecret");
             Controllers.BaseController.CAPTCHA_KEY = ConfigurationManager.AppSettings.Get("captchaKey");
-
-            Application["users"] = 0;
-            Application["scoreboard"] = 0;
         }
 
         public void Session_Start()
         {
             Session["usuario"] = new Models.Persona(Models.Persona.UsuarioNulo);
-
-            Application.Lock();
-            int users = (int) Application["users"];
-            users++;
-            Application["users"] = users;
-            Application.UnLock();
-
-            if (users < 10 || users % 10 == 0)
-                Models.Log.add(Models.Log.TipoLog.USUARIO, "Usuarios en línea: " + users);
-        }
-
-        public void Session_End()
-        {
-            Application.Lock();
-
-            int users = (int)Application["users"];
-            users--;
-            Application["users"] = users;
-
-            if (Session["scoreboard"] != null)
-            {
-                users = (int)Application["scoreboard"];
-                users--;
-                Application["scoreboard"] = users;
-            }
-
-            Application.UnLock();
         }
     }
 }
