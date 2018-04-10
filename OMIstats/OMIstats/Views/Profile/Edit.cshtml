@@ -110,6 +110,16 @@
                 </div>
             </div>
 
+            @if(ViewBag.usuario.admin)
+            {
+                <div>
+                    <div class="label">IOI ID:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.ioiID, new { @class = "smallInput" })
+                    </div>
+                </div>
+            }
+
             <input id="clave" name="clave" type="hidden" value="@Model.clave" />
 
             @if(!ViewBag.usuario.admin)

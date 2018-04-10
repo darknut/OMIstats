@@ -181,7 +181,8 @@ namespace OMIstats.Controllers
             // Se copian los datos que no se pueden modificar
             p.admin = current.admin;
             p.clave = current.clave;
-            p.ioiID = current.ioiID;
+            if (!esAdmin())
+                p.ioiID = current.ioiID;
             p.usuario = current.usuario;
             p.CURP = current.CURP;
 
