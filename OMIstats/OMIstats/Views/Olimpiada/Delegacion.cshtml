@@ -24,6 +24,15 @@
             <option value="@omi.numero" @(omi.numero == Model.numero ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
         }
     </select>
+
+    <div class="comboTitle">Estados:</div>
+    <select onChange="redirige('@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=")', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for (int i = 0; i < ViewBag.estados.Count; i++)
+        {
+            OMIstats.Models.Estado estado = ViewBag.estados[i];
+            <option value="@estado.clave" @(estado.clave == ViewBag.estado.clave ? "selected" : "")>@(estado.nombre)</option>
+        }
+    </select>
 </div>
 
 @{
