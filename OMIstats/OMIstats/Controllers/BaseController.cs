@@ -48,6 +48,7 @@ namespace OMIstats.Controllers
         {
             // Se usa System.Web en vez de Session porque a tiempo de construcción, Session aún no esta populada
             Persona usuario = (Persona) System.Web.HttpContext.Current.Session["usuario"];
+            ViewBag.production = System.Web.HttpContext.Current.Application["production"];
             if (usuario != null)
                 usuario.recargarDatos();
             ViewBag.usuario = usuario;
