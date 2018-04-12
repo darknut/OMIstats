@@ -291,6 +291,7 @@
     <Content Include="img\celdafondoplata.png" />
     <Content Include="img\celdapendiente.png" />
     <Content Include="img\circulo.png" />
+    <Content Include="img\cpp.png" />
     <Content Include="img\diploma.png" />
     <Content Include="img\docx.png" />
     <Content Include="img\domi.gif" />
@@ -310,6 +311,7 @@
     <Content Include="img\omis.png" />
     <Content Include="img\oro.png" />
     <Content Include="img\pdf.png" />
+    <Content Include="img\pdf_large.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\rar.png" />
     <Content Include="img\twitter.png" />

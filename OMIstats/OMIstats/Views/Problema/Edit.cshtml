@@ -89,6 +89,14 @@
             </div>
         </div>
 
+        <div>
+            <div class="label">Código:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.codigo)
+                @Html.ValidationMessageFor(model => model.codigo)
+            </div>
+        </div>
+
         @Html.HiddenFor(model => model.olimpiada)
         @Html.HiddenFor(model => model.dia)
         @Html.HiddenFor(model => model.numero)
