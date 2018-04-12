@@ -71,6 +71,14 @@
             </div>
         </div>
 
+        <div>
+            <div class="label">Casos:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.casos)
+                @Html.ValidationMessageFor(model => model.casos)
+            </div>
+        </div>
+
         @Html.HiddenFor(model => model.olimpiada)
         @Html.HiddenFor(model => model.dia)
         @Html.HiddenFor(model => model.numero)

@@ -28,6 +28,8 @@ namespace OMIstats.Controllers
             ViewBag.dia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
             ViewBag.dia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
 
+            ViewBag.metadata = Problema.obetnerMetaDatadeOMI(clave, tipo);
+
             // Mientras las OMIS y OMIPS sean en el mismo evento que la OMI, no tienen su propia vista
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 

@@ -110,6 +110,7 @@
 @{
     List<OMIstats.Models.Problema> dia1 = ViewBag.dia1;
     List<OMIstats.Models.Problema> dia2 = ViewBag.dia2;
+    List<OMIstats.Models.Problema> metadata = ViewBag.metadata;
 }
 
 @if (Model.alsoOmips && (dia1[0] != null || dia2[0] != null))
@@ -154,14 +155,20 @@
                     <h1 class="subtitulo">Día 1</h1>
                 </a>
             } else {
-                if (dia2[0] == null)
+                <h1 class="subtitulo">
+                @if (dia2[0] == null)
                 {
-                    <h1 class="subtitulo">Problemas</h1>
+                    @("Problemas")
                 }
                 else
                 {
-                    <h1 class="subtitulo">Día 1</h1>
+                    @("Día 1")
                 }
+                @if (metadata.Count > 0 && metadata[1].casos.Length > 0)
+                {
+                     <a href="@metadata[1].casos"><img src="~/img/rar.png" /></a>
+                }
+                </h1>
             }
             <ul>
                 @for(var i = 0; i < 6; i++)
@@ -195,6 +202,10 @@
                             <li>
                                 <img class="enlaceProblema" src="@Url.Content("~/" + dia1[i].getURLIcon())"/>
                                 <a href="@dia1[i].url" class="nombre" target="_blank">@dia1[i].nombre</a>
+                                @if(dia1[i].casos.Length > 0)
+                                {
+                                    <a href="@dia1[i].casos"><img src="~/img/rar.png" /></a>
+                                }
                             </li>
                         }
                     }
@@ -210,7 +221,12 @@
                         <h1 class="subtitulo">Día 2</h1>
                     </a>
                 } else {
-                    <h1 class="subtitulo">Día 2</h1>
+                    <h1 class="subtitulo">Día 2
+                    @if (metadata.Count > 0 && metadata[2].casos.Length > 0)
+                    {
+                         <a href="@metadata[2].casos"><img src="~/img/rar.png" /></a>
+                    }
+                    </h1>
                 }
                 <ul>
                     @for(var i = 0; i < 6; i++)
@@ -244,6 +260,10 @@
                                 <li>
                                     <img class="enlaceProblema" src="@Url.Content("~/" + dia2[i].getURLIcon())"/>
                                     <a href="@dia2[i].url" class="nombre" target="_blank">@dia2[i].nombre</a>
+                                    @if(dia2[i].casos.Length > 0)
+                                    {
+                                        <a href="@dia2[i].casos"><img src="~/img/rar.png" /></a>
+                                    }
                                 </li>
                             }
                         }

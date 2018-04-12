@@ -29,6 +29,9 @@ namespace OMIstats.Models
         [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
         public string url { get; set; }
 
+        [MaxLength(150, ErrorMessage = "El tamaño máximo es de 150 caracteres")]
+        public string casos { get; set; }
+
         public float media { get; set; }
 
         public float mediana { get; set; }
@@ -61,6 +64,7 @@ namespace OMIstats.Models
             perfectos = (int)datos["perfectos"];
             ceros = (int)datos["ceros"];
             mediana = float.Parse(datos["mediana"].ToString());
+            casos = datos["casos"].ToString().Trim();
         }
 
         /// <summary>
@@ -219,7 +223,7 @@ namespace OMIstats.Models
             query.Append(dia);
             query.Append(", ");
             query.Append(numero);
-            query.Append(", '', '', 0.0, 0, 0, 0)");
+            query.Append(", '', '', 0.0, 0, 0, 0, '')");
 
             db.EjecutarQuery(query.ToString());
 
@@ -229,6 +233,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(nombre));
             query.Append(", url = ");
             query.Append(Utilities.Cadenas.comillas(url));
+            query.Append(", casos = ");
+            query.Append(Utilities.Cadenas.comillas(casos));
             query.Append(", media = ");
             query.Append(media);
             query.Append(", mediana = ");
