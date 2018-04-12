@@ -39,6 +39,16 @@
                 </div>
             </div>
         }
+        else
+        {
+            <div>
+                <div class="label">Scoreboard:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.url)
+                    @Html.ValidationMessageFor(model => model.url)
+                </div>
+            </div>
+        }
         <div>
             <div class="label">Media:</div>
             <div class="input">
