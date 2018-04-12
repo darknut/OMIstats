@@ -169,7 +169,7 @@ else
                         @if (problemasDia1[i] != null)
                         {
                             <a href="@problemasDia1[i].url" target="_blank">
-                                <img src="~/img/link.png" />
+                                <img src="~/img/link.png" title="@problemasDia1[i].nombre" />
                             </a>
                         }
                     </td>
@@ -187,7 +187,7 @@ else
                         @if (problemasDia2[i] != null)
                         {
                             <a href="@problemasDia2[i].url" target="_blank">
-                                <img src="~/img/link.png" />
+                                <img src="~/img/link.png" title="@problemasDia2[i].nombre" />
                             </a>
                         }
                     </td>
@@ -204,7 +204,12 @@ else
             {
                 for (var i = 0; i < Model.problemasDia1; i++)
                 {
-                    <th class="bottom-border right-border table-header-clickable">@("P" + (i + 1))</th>
+                    string title = "";
+                    if (problemasDia1[i] != null)
+                    {
+                        title = problemasDia1[i].nombre;
+                    }
+                    <th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
                 }
             }
             @if (Model.mostrarResultadosPorDia)
@@ -215,7 +220,12 @@ else
             {
                 for (var i = 0; i < Model.problemasDia2; i++)
                 {
-                    <th class="bottom-border right-border table-header-clickable">@("P" + (i + 1))</th>
+                    string title = "";
+                    if (problemasDia2[i] != null)
+                    {
+                        title = problemasDia2[i].nombre;
+                    }
+                    <th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
                 }
             }
             @if (Model.mostrarResultadosPorDia)
