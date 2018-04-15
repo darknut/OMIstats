@@ -784,5 +784,16 @@ namespace OMIstats.Models
 
             return false;
         }
+
+        public static Olimpiada obtenerMasReciente()
+        {
+            List<Olimpiada> omis = obtenerOlimpiadas(TipoOlimpiada.OMI);
+
+            for (int i = 0; i < omis.Count; i++)
+                if (omis[i].inicio <= DateTime.Now)
+                    return omis[i];
+
+            return omis[0];
+        }
     }
 }

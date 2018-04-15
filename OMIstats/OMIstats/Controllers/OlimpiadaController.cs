@@ -282,9 +282,20 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Resultados/
 
-        public ActionResult Resultados(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult Resultados(string clave = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
+            Olimpiada o = null;
+
+            if (clave == null)
+            {
+                o = Olimpiada.obtenerMasReciente();
+                clave = o.numero;
+                tipo = o.tipoOlimpiada;
+            }
+            else
+            {
+                o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
+            }
 
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
