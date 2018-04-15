@@ -156,41 +156,44 @@
 @if(ViewBag.admin || dia1[0] != null || dia2[0] != null)
 {
     <div class="datosOlimpiada problemasColumnas">
-
+    @{List<OMIstats.Models.Problema> dia = dia1;}
+    @for (int d = 1; d <= 2; d++)
+    {
+        if (ViewBag.admin || dia[0] != null)
+        {
         <div>
             @if (ViewBag.admin) {
-                <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
-                    <h1 class="subtitulo">Día 1</h1>
+                <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=" + d + "&numero=0&tipo=" + Model.tipoOlimpiada.ToString())">
+                    <h1 class="subtitulo">Día @d</h1>
                 </a>
             } else {
                 string title = "";
-                <h1 class="subtitulo">
-                @if (dia2[0] == null)
+                if (d == 1 && dia2[0] == null)
                 {
                     title = "Problemas";
                 }
                 else
                 {
-                    title = "Día 1";
+                    title = "Día " + d;
                 }
-                @if (metadata.Count > 0 && metadata[1].url.Length > 0)
+                <h1 class="subtitulo">
+                @if (metadata.Count > 0 && metadata[d].url.Length > 0)
                 {
-                    <a href="@metadata[1].url" target="_blank">@title</a>
+                    <a href="@metadata[d].url" target="_blank">@title</a>
                 }
                 else
                 {
                     @title
                 }
-
                 @if (metadata.Count > 0)
                 {
-                    if (metadata[1].casos.Length > 0)
+                    if (metadata[d].casos.Length > 0)
                     {
-                    <a href="@metadata[1].casos"><img src="~/img/rar.png" /></a>
+                    <a href="@metadata[d].casos"><img src="~/img/rar.png" /></a>
                     }
-                    if (metadata[1].codigo.Length > 0)
+                    if (metadata[d].codigo.Length > 0)
                     {
-                    <a href="@metadata[1].codigo"><img src="~/img/cpp.png" /></a>
+                    <a href="@metadata[d].codigo"><img src="~/img/cpp.png" /></a>
                     }
                 }
                 </h1>
@@ -202,17 +205,16 @@
                     if(ViewBag.admin)
                     {
                         <li>
-                            <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=1&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada.ToString())"
-                                class="nombre">
-                                @if(dia1[i] != null)
-                                {
-                                    @dia1[i].nombre
-                                }
-                                else
-                                {
-                                    <span>Agregar Problema @(i + 1)</span>
-                                    { finished = true; }
-                                }
+                            <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=" + d + "&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada)" class="nombre">
+                            @if(dia[i] != null)
+                            {
+                                @dia[i].nombre
+                            }
+                            else
+                            {
+                                <span>Agregar Problema @(i + 1)</span>
+                                { finished = true; }
+                            }
                             </a>
                         </li>
                         if (finished)
@@ -222,18 +224,18 @@
                     }
                     else
                     {
-                        if (dia1[i] != null)
+                        if (dia[i] != null)
                         {
                             <li>
-                                <img class="enlaceProblema" src="@Url.Content("~/" + dia1[i].getURLIcon())"/>
-                                <a href="@dia1[i].url" class="nombre" target="_blank">@dia1[i].nombre</a>
-                                @if(dia1[i].casos.Length > 0)
+                                <img class="enlaceProblema" src="@Url.Content("~/" + dia[i].getURLIcon())"/>
+                                <a href="@dia[i].url" class="nombre" target="_blank">@dia[i].nombre</a>
+                                @if(dia[i].casos.Length > 0)
                                 {
-                                    <a href="@dia1[i].casos"><img src="~/img/rar.png" /></a>
+                                    <a href="@dia[i].casos"><img src="~/img/rar.png" /></a>
                                 }
-                                @if(dia1[i].codigo.Length > 0)
+                                @if(dia[i].codigo.Length > 0)
                                 {
-                                    <a href="@dia1[i].codigo" target="_blank"><img src="~/img/cpp.png" /></a>
+                                    <a href="@dia[i].codigo" target="_blank"><img src="~/img/cpp.png" /></a>
                                 }
                             </li>
                         }
@@ -241,84 +243,9 @@
                 }
             </ul>
         </div>
-
-        @if (ViewBag.admin || dia2[0] != null)
-        {
-            <div>
-                @if (ViewBag.admin) {
-                    <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=0&tipo=" + Model.tipoOlimpiada)">
-                        <h1 class="subtitulo">Día 2</h1>
-                    </a>
-                } else {
-                    <h1 class="subtitulo">
-                    @if (metadata.Count > 0 && metadata[2].url.Length > 0)
-                    {
-                        <a href="@metadata[2].url" target="_blank">@("Día 2")</a>
-                    }
-                    else
-                    {
-                        @("Día 2")
-                    }
-                    @if (metadata.Count > 0)
-                    {
-                        if (metadata[2].casos.Length > 0)
-                        {
-                        <a href="@metadata[2].casos"><img src="~/img/rar.png" /></a>
-                        }
-                        if (metadata[2].codigo.Length > 0)
-                        {
-                        <a href="@metadata[2].codigo"><img src="~/img/cpp.png" /></a>
-                        }
-                    }
-                    </h1>
-                }
-                <ul>
-                    @for(var i = 0; i < 6; i++)
-                    {
-                        bool finished = false;
-                        if(ViewBag.admin)
-                        {
-                            <li>
-                                <a href="@Url.Content("~/Problema/Edit?omi=" + Model.numero + "&dia=2&numero=" + (i + 1) + "&tipo=" + Model.tipoOlimpiada)"
-                                    class="nombre">
-                                    @if(dia2[i] != null)
-                                    {
-                                        @dia2[i].nombre
-                                    }
-                                    else
-                                    {
-                                        <span>Agregar Problema @(i + 1)</span>
-                                        { finished = true; }
-                                    }
-                                </a>
-                            </li>
-                            if (finished)
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            if (dia2[i] != null)
-                            {
-                                <li>
-                                    <img class="enlaceProblema" src="@Url.Content("~/" + dia2[i].getURLIcon())"/>
-                                    <a href="@dia2[i].url" class="nombre" target="_blank">@dia2[i].nombre</a>
-                                    @if(dia2[i].casos.Length > 0)
-                                    {
-                                        <a href="@dia2[i].casos"><img src="~/img/rar.png" /></a>
-                                    }
-                                    @if(dia2[i].codigo.Length > 0)
-                                    {
-                                        <a href="@dia2[i].codigo" target="_blank"><img src="~/img/cpp.png" /></a>
-                                    }
-                                </li>
-                            }
-                        }
-                    }
-                </ul>
-            </div>
+        dia = dia2;
         }
+    }
     </div>
 }
 
