@@ -112,7 +112,7 @@
 
         @foreach (OMIstats.Models.MiembroDelegacion md in delegacion)
         {
-            <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.medalla)">
+            <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.resultados.medalla)">
                 <div class="foto fotoFixedHeight">
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
@@ -123,9 +123,9 @@
                             @md.clave
                         }
                     </div>
-                    @if (md.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
+                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
                     {
-                        <img class="medallaMiembro" src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.medalla))"/>
+                        <img class="medallaMiembro" src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.resultados.medalla))"/>
                     }
                 </div>
             </div>

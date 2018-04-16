@@ -424,7 +424,7 @@ namespace OMIstats.Models
 
             foreach (MiembroDelegacion md in delegacion)
             {
-                switch (md.medalla)
+                switch (md.resultados.medalla)
                 {
                     case Resultados.TipoMedalla.ORO:
                     case Resultados.TipoMedalla.ORO_1:

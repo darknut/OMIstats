@@ -81,7 +81,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Solo presente cuando se llama a traves de 'obtenerMiembrosDelegacion'
         /// </summary>
-        public Resultados.TipoMedalla medalla;
+        public Resultados resultados;
         /// <summary>
         /// Solo presente cuando se llama a traves de 'obtenerMiembrosDelegacion'
         /// </summary>
@@ -106,7 +106,7 @@ namespace OMIstats.Models
             clave = "";
             estado = "";
             tipo = TipoAsistente.NULL;
-            medalla = Resultados.TipoMedalla.NULL;
+            resultados = null;
 
             eliminar = false;
         }
@@ -804,7 +804,7 @@ namespace OMIstats.Models
                 md.llenarDatos(r, incluirEscuela: false);
 
                 if (tipo == TipoAsistente.COMPETIDOR)
-                    md.medalla = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave).medalla;
+                    md.resultados = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave);
 
                 md.fotoUsuario = r["foto"].ToString().Trim();
 
