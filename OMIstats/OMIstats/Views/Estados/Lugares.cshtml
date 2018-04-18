@@ -68,7 +68,7 @@
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
                 string clase = medallero != null && medallero.lugar <= 3 ? "top-estado" : "";
                 clase += i > ultimoValido ? " right-border" : "";
-                <td class="table-td center hide-when-clone @(clase)" style="min-width:75px; ">
+                <td class="table-td center hide-when-clone @(clase)">
                     @if (medallero != null)
                     {
                         @(medallero.lugar)
