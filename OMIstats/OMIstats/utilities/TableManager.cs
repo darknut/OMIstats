@@ -199,9 +199,12 @@ namespace OMIstats.Utilities
             return "";
         }
 
-        public string enlaceOMI(bool nombreCompleto = false)
+        public string enlaceOMI(bool nombreCompleto = false, string olimpiada = null)
         {
-            if (currentOMI.numero.EndsWith("b"))
+            if (olimpiada == null)
+                olimpiada = currentOMI.numero;
+
+            if (olimpiada.EndsWith("b"))
             {
                 if (nombreCompleto)
                     return "OMI Intermedia";
@@ -210,16 +213,17 @@ namespace OMIstats.Utilities
             }
 
             string enlace = "";
-            if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIP ||
-                currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS)
+            if (currentOMI != null &&
+                (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIP ||
+                 currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS))
             {
                 enlace = currentOMI.omisActualNumber;
             }
             else
             {
-                enlace = currentOMI.numero;
+                enlace = olimpiada;
             }
-            return enlace + "ª " + currentOMI.tipoOlimpiada.ToString();
+            return enlace + "ª " + (currentOMI != null ? currentOMI.tipoOlimpiada.ToString() : "OMI");
         }
     }
 }

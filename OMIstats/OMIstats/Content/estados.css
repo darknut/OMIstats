@@ -96,3 +96,11 @@
 .fondoOro {
     background-color: #FEFEEB;
 }
+
+.headerEstado a {
+    text-decoration: none;
+}
+
+.headerEstado a:hover {
+    text-decoration: underline;
+}

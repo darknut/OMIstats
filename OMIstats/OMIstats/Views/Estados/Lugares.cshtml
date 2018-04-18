@@ -1,0 +1,68 @@
+﻿@model List<OMIstats.Models.Estado>
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/estados.css" type="text/css"/>
+}
+
+@{
+    ViewBag.Title = "Lugares de los estados por olimpiada";
+    List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
+    Dictionary<string, Dictionary<string, OMIstats.Models.Medallero>> estados = ViewBag.estados;
+    bool[] cabeceras = ViewBag.cabeceras;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+}
+
+<div class="submenu">
+    @Html.ActionLink("Delegados", "Index", "Estados", null, new { @class = "mini-boton" })
+</div>
+
+<h1 class="titulo">@ViewBag.Title</h1>
+
+<table class="table" id="tablaPuntos">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">Estado</th>
+            @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
+            {
+                if (cabeceras[i])
+                {
+                <th class="bottom-border center headerEstado @(i > 0 ? "right-border" : "")">
+                    @Html.ActionLink(tableManager.enlaceOMI(olimpiada: olimpiadas[i].numero), "Estados", "Olimpiada",
+                        new { clave = olimpiadas[i].numero }, null)
+                </th>
+                }
+            }
+        </tr>
+    </thead>
+    @foreach (OMIstats.Models.Estado e in Model)
+    {
+    <tr>
+        <td class="table-td right-border ">
+            <a class="nombre" href="@Url.Content("~/Estado?clave=" + e.clave)">@e.nombre</a>
+        </td>
+        @{Dictionary<string, OMIstats.Models.Medallero> medalleros = estados[e.clave];}
+        @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
+        {
+            if (cabeceras[i])
+            {
+            <td class="table-td center @(i > 0 ? "right-border" : "")">
+                @{OMIstats.Models.Medallero medallero;}
+                @if (medalleros.TryGetValue(olimpiadas[i].numero, out medallero))
+                {
+                    @(medallero.lugar)
+                }
+                else
+                {
+                <span title="No participó">NP</span>
+                }
+            </td>
+            }
+        }
+    </tr>
+    }
+</table>

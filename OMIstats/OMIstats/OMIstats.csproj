@@ -382,6 +382,7 @@
     <Content Include="Views\Request\user.cshtml" />
     <Content Include="Views\Admin\Scoreboard.cshtml" />
     <Content Include="Views\Admin\Logs.cshtml" />
+    <Content Include="Views\Estados\Lugares.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

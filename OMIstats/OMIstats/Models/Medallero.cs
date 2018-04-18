@@ -487,6 +487,64 @@ namespace OMIstats.Models
             return lista;
         }
 
+        /// <summary>
+        /// Obtiene la tabla de estados generales, similar a las que se ve en wikipedia
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="cabeceras">Un arreglo donde cada elemento
+        /// inidica si la olimpiada tiene resultados para cualquier estado</param>
+        /// <returns>El diccionario de los estados</returns>
+        public static Dictionary<string, Dictionary<string, Medallero>> obtenerTablaEstadosGeneral(TipoOlimpiada tipoOlimpiada, out bool[] cabeceras)
+        {
+            Dictionary<string, Dictionary<string, Medallero>> estados = new Dictionary<string, Dictionary<string, Medallero>>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from Medallero where tipo = ");
+            query.Append((int)TipoMedallero.ESTADO_POR_OMI);
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            // Un hashset para poder construir el arreglo de cabeceras
+            HashSet<string> olimpiadasConResultados = new HashSet<string>();
+
+            foreach (DataRow r in table.Rows)
+            {
+                // Obtengo los datos de la tabla a un objeto medallero
+                Medallero m = new Medallero();
+                m.llenarDatos(r);
+                string estado = m.clave.Substring(0, 3);
+
+                // Obtengo el medallero del estado
+                Dictionary<string, Medallero> medallero;
+                if (!estados.TryGetValue(estado, out medallero))
+                {
+                    medallero = new Dictionary<string, Medallero>();
+                    estados.Add(estado, medallero);
+                }
+
+                // Agrego el medallero con la olimpiada
+                medallero.Add(m.omi, m);
+
+                // Ponemos que la olimpiada tiene resultados en el hashset
+                if (!olimpiadasConResultados.Contains(m.omi))
+                    olimpiadasConResultados.Add(m.omi);
+            }
+
+            // Construimos el arreglo de cabeceras
+            List<Olimpiada> olimpiadas = Olimpiada.obtenerOlimpiadas(tipoOlimpiada);
+            cabeceras = new bool[olimpiadas.Count];
+
+            for (int i = 0; i < olimpiadas.Count; i++)
+                cabeceras[i] = olimpiadasConResultados.Contains(olimpiadas[i].numero);
+
+            return estados;
+        }
+
         public static bool hayPromedio(List<Medallero> lista)
         {
             for (int i = lista.Count - 1; i >= 0; i--)

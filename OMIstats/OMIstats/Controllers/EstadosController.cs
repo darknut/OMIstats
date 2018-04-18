@@ -16,5 +16,18 @@ namespace OMIstats.Controllers
         {
             return View(Estado.obtenerEstados());
         }
+
+        //
+        // GET: /Estados/Lugares/
+
+        public ActionResult Lugares()
+        {
+            bool[] cabeceras;
+
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            ViewBag.estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI, out cabeceras);
+            ViewBag.cabeceras = cabeceras;
+            return View(Estado.obtenerEstados());
+        }
     }
 }
