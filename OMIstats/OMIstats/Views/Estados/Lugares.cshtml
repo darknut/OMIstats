@@ -12,9 +12,9 @@
 @section scripts
 {
     <script type="text/javascript">
-        setTimeout(function() {
+        setTimeout(function () {
             jQuery(document).ready(function () {
-                jQuery(".table").clone(true).appendTo('#scrollable-wrapper').addClass('clone');
+                jQuery(".table").clone(true).appendTo('#clone-wrapper').addClass('clone');
             });
         }, 0);
     </script>
@@ -35,17 +35,17 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
-<div class="scrollable-wrapper" id="scrollable-wrapper">
+<div class="clone-wrapper" id="clone-wrapper">
 <div class="table-wrapper">
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border fixed-side">Estado</th>
+            <th class="bottom-border right-border white-background header-min-height">Estado</th>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
                 {
-                <th class="bottom-border center headerEstado @(i > ultimoValido ? "right-border" : "")">
+                <th class="bottom-border center headerEstado header-min-height hide-when-clone @(i > ultimoValido ? "right-border" : "")">
                     @Html.ActionLink(tableManager.enlaceOMI(olimpiada: olimpiadas[i].numero), "Estados", "Olimpiada",
                         new { clave = olimpiadas[i].numero }, null)
                 </th>
@@ -56,7 +56,7 @@
     @foreach (OMIstats.Models.Estado e in Model)
     {
     <tr>
-        <td class="table-td right-border fixed-side">
+        <td class="table-td right-border">
             <a class="nombre" href="@Url.Content("~/Estado?clave=" + e.clave)">@e.nombre</a>
         </td>
         @{Dictionary<string, OMIstats.Models.Medallero> medalleros = estados[e.clave];}
@@ -68,7 +68,7 @@
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
                 string clase = medallero != null && medallero.lugar <= 3 ? "top-estado" : "";
                 clase += i > ultimoValido ? " right-border" : "";
-                <td class="table-td center @(clase)">
+                <td class="table-td center hide-when-clone @(clase)" style="min-width:75px; ">
                     @if (medallero != null)
                     {
                         @(medallero.lugar)
@@ -84,14 +84,14 @@
     }
     <tfoot>
         <tr>
-            <td class="right-border top-border pie pieTitulo table-footer fixed-side white-background">
+            <td class="right-border top-border pie pieTitulo table-footer white-background">
                 Total Estados
             </td>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
                 {
-                <td class="center resultado-dia top-border pie @(i > ultimoValido ? "right-border" : "")">@olimpiadas[i].estados</td>
+                <td class="center resultado-dia top-border pie hide-when-clone @(i > ultimoValido ? "right-border" : "")">@olimpiadas[i].estados</td>
                 }
             }
         </tr>
