@@ -15,7 +15,6 @@
     Dictionary<string, Dictionary<string, OMIstats.Models.Medallero>> estados = ViewBag.estados;
     bool[] cabeceras = ViewBag.cabeceras;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
-    int ultimoValido = ViewBag.ultimoValido;
 }
 
 <div class="submenu">
@@ -45,7 +44,7 @@
     <tfoot>
         <tr>
             <td class="right-border top-border pie pieTitulo table-footer white-background first-column-placeholder">
-                Total Estados
+                Total Medallas
             </td>
         </tr>
     </tfoot>
@@ -58,12 +57,13 @@
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
                 {
-                <th class="bottom-border center headerEstado header-min-height @(i > ultimoValido ? "right-border" : "")" colspan="3">
+                <th class="bottom-border center headerEstado header-min-height right-border" colspan="3">
                     @Html.ActionLink(tableManager.enlaceOMI(olimpiada: olimpiadas[i].numero), "Estados", "Olimpiada",
                         new { clave = olimpiadas[i].numero }, null)
                 </th>
                 }
             }
+            <th class="bottom-border center headerEstado header-min-height" colspan="3">Total</th>
         </tr>
         <tr class="table-header">
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
@@ -72,9 +72,12 @@
                 {
                 <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Oros">O</th>
                 <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Platas">P</th>
-                <th class="bottom-border center headerEstado header-min-height hide-when-clone @(i > ultimoValido ? "right-border" : "")" title="Bronces">B</th>
+                <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Bronces">B</th>
                 }
             }
+            <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Oros">O</th>
+            <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Platas">P</th>
+            <th class="bottom-border center headerEstado header-min-height hide-when-clone" title="Bronces">B</th>
         </tr>
     </thead>
     @foreach (OMIstats.Models.Estado e in Model)
@@ -88,20 +91,23 @@
             {
                 OMIstats.Models.Medallero medallero;
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
-                string clase = medallero != null && medallero.lugar <= 3 ? "top-estado" : "";
-                clase += i > ultimoValido ? " right-border" : "";
-                <td class="table-td center @(clase)">
-                    @if (medallero != null)
-                    {
-                        @(medallero.lugar)
-                    }
-                    else
-                    {
-                    <span title="No participó">-</span>
-                    }
-                </td>
+                if (medallero != null)
+                {
+                <td class="table-td center fondoOro">@medallero.oros</td>
+                <td class="table-td center fondoPlata">@medallero.platas</td>
+                <td class="table-td center fondoBronce right-border">@medallero.bronces</td>
+                }
+                else
+                {
+                <td class="table-td center" title="No participó">-</td>
+                <td class="table-td center" title="No participó">-</td>
+                <td class="table-td center right-border" title="No participó">-</td>
+                }
             }
         }
+        <td class="table-td center resultado-dia fondoOro">25</td>
+        <td class="table-td center resultado-dia fondoPlata"></td>
+        <td class="table-td center resultado-dia fondoBronce"></td>
     </tr>
     }
     <tfoot>
@@ -111,9 +117,14 @@
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
                 {
-                <td class="center resultado-dia top-border pie @(i > ultimoValido ? "right-border" : "")">@olimpiadas[i].estados</td>
+                <td class="center resultado-dia top-border pie fondoOro"></td>
+                <td class="center resultado-dia top-border pie fondoPlata"></td>
+                <td class="center resultado-dia top-border pie right-border fondoBronce"></td>
                 }
             }
+            <td class="top-border"></td>
+            <td class="top-border"></td>
+            <td class="top-border"></td>
         </tr>
     </tfoot>
 </table>

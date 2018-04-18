@@ -51,13 +51,6 @@ namespace OMIstats.Controllers
             ViewBag.estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI, out cabeceras);
             ViewBag.cabeceras = cabeceras;
 
-            int ultimoValido = 0;
-            for (int i = cabeceras.Length - 1; i >= 0; i--)
-                if (cabeceras[i] && olimpiadas[i].estados > 0)
-                    ultimoValido = i;
-
-            ViewBag.ultimoValido = ultimoValido;
-
             return View(Estado.obtenerEstados());
         }
     }
