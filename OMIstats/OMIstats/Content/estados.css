@@ -140,3 +140,20 @@
     min-height: 40px;
     min-width: 110px;
 }
+
+.empty-first-column-placeholder {
+    min-height: 40px;
+    min-width: 114px;
+}
+
+.double-decker-placeholder {
+    height: 86px;
+    min-height: 86px;
+    min-width: 110px;
+}
+
+.empty-double-decker-placeholder {
+    height: 86px;
+    min-height: 86px;
+    min-width: 114px;
+}
