@@ -9,6 +9,17 @@
     <link rel="stylesheet" href="~/Content/estados.css" type="text/css"/>
 }
 
+@section scripts
+{
+    <script type="text/javascript">
+        setTimeout(function() {
+            jQuery(document).ready(function () {
+                jQuery(".table").clone(true).appendTo('#scrollable-wrapper').addClass('clone');
+            });
+        }, 0);
+    </script>
+}
+
 @{
     ViewBag.Title = "Lugares de los estados por olimpiada";
     List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
@@ -24,10 +35,12 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
+<div class="scrollable-wrapper" id="scrollable-wrapper">
+<div class="table-wrapper">
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border">Estado</th>
+            <th class="bottom-border right-border fixed-side">Estado</th>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
@@ -43,7 +56,7 @@
     @foreach (OMIstats.Models.Estado e in Model)
     {
     <tr>
-        <td class="table-td right-border ">
+        <td class="table-td right-border fixed-side">
             <a class="nombre" href="@Url.Content("~/Estado?clave=" + e.clave)">@e.nombre</a>
         </td>
         @{Dictionary<string, OMIstats.Models.Medallero> medalleros = estados[e.clave];}
@@ -71,7 +84,7 @@
     }
     <tfoot>
         <tr>
-            <td class="right-border top-border pie pieTitulo table-footer">
+            <td class="right-border top-border pie pieTitulo table-footer fixed-side white-background">
                 Total Estados
             </td>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
@@ -84,3 +97,5 @@
         </tr>
     </tfoot>
 </table>
+</div>
+</div>

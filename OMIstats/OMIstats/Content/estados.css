@@ -109,3 +109,47 @@
     font-weight: bold;
     font-size: 11pt;
 }
+
+.scrollable-wrapper {
+    position:relative;
+	max-width:600px;
+	margin:auto;
+	overflow:hidden;
+}
+
+.table-wrapper {
+    width:100%;
+	overflow:auto;
+}
+
+.scrollable-wrapper table {
+	width:100%;
+	margin:auto;
+	border-collapse:separate;
+	border-spacing:0;
+}
+
+.clone {
+	position:absolute;
+	top:0;
+	left:0;
+	pointer-events:none;
+}
+.clone th, .clone td {
+	visibility:hidden
+}
+
+.clone tbody th {
+	visibility:visible;
+}
+.clone .fixed-side {
+	visibility:visible;
+}
+
+.clone thead, .clone tfoot {
+    background:transparent;
+}
+
+.white-background {
+    background-color: white;
+}
