@@ -122,20 +122,10 @@
     overflow: auto;
 }
 
-.scrollable-wrapper table {
-    width: 100%;
-    margin: auto;
-}
-
-.clone {
+.floating-column {
     position: absolute;
     top: 0;
     left: 0;
-}
-
-.clone .hide-when-clone {
-    visibility: hidden;
-    border: none;
 }
 
 .white-background {
@@ -144,4 +134,9 @@
 
 .header-min-height {
     height: 35px;
+}
+
+.first-column-placeholder {
+    min-height: 40px;
+    min-width: 110px;
 }
