@@ -15,6 +15,7 @@
     Dictionary<string, Dictionary<string, OMIstats.Models.Medallero>> estados = ViewBag.estados;
     bool[] cabeceras = ViewBag.cabeceras;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    int ultimoValido = ViewBag.ultimoValido;
 }
 
 <div class="submenu">
@@ -31,7 +32,7 @@
             {
                 if (cabeceras[i])
                 {
-                <th class="bottom-border center headerEstado @(i > 0 ? "right-border" : "")">
+                <th class="bottom-border center headerEstado @(i > ultimoValido ? "right-border" : "")">
                     @Html.ActionLink(tableManager.enlaceOMI(olimpiada: olimpiadas[i].numero), "Estados", "Olimpiada",
                         new { clave = olimpiadas[i].numero }, null)
                 </th>
@@ -53,7 +54,7 @@
                 OMIstats.Models.Medallero medallero;
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
                 string clase = medallero != null && medallero.lugar <= 3 ? "top-estado" : "";
-                clase += i > 0 ? " right-border" : "";
+                clase += i > ultimoValido ? " right-border" : "";
                 <td class="table-td center @(clase)">
                     @if (medallero != null)
                     {
@@ -61,11 +62,30 @@
                     }
                     else
                     {
-                    <span title="No participó">NP</span>
+                    <span title="No participó">-</span>
                     }
                 </td>
             }
         }
     </tr>
     }
+    <tfoot>
+        <tr>
+            <td class="right-border top-border pie pieTitulo table-footer">
+                Total Estados
+            </td>
+            @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
+            {
+                if (cabeceras[i])
+                {
+                <td class="center resultado-dia top-border pie @(i > ultimoValido ? "right-border" : "")">
+                    @if (olimpiadas[i].estados > 0)
+                    {
+                        @olimpiadas[i].estados
+                    }
+                </td>
+                }
+            }
+        </tr>
+    </tfoot>
 </table>
