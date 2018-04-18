@@ -23,14 +23,15 @@ namespace OMIstats.Controllers
         public ActionResult Lugares()
         {
             bool[] cabeceras;
+            List<Olimpiada> olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            ViewBag.olimpiadas = olimpiadas;
             ViewBag.estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI, out cabeceras);
             ViewBag.cabeceras = cabeceras;
 
             int ultimoValido = 0;
             for (int i = cabeceras.Length - 1; i >= 0; i--)
-                if (cabeceras[i])
+                if (cabeceras[i] && olimpiadas[i].estados > 0)
                     ultimoValido = i;
 
             ViewBag.ultimoValido = ultimoValido;
