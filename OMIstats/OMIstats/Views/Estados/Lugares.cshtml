@@ -50,17 +50,20 @@
         {
             if (cabeceras[i])
             {
-            <td class="table-td center @(i > 0 ? "right-border" : "")">
-                @{OMIstats.Models.Medallero medallero;}
-                @if (medalleros.TryGetValue(olimpiadas[i].numero, out medallero))
-                {
-                    @(medallero.lugar)
-                }
-                else
-                {
-                <span title="No participó">NP</span>
-                }
-            </td>
+                OMIstats.Models.Medallero medallero;
+                medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
+                string clase = medallero != null && medallero.lugar <= 3 ? "top-estado" : "";
+                clase += i > 0 ? " right-border" : "";
+                <td class="table-td center @(clase)">
+                    @if (medallero != null)
+                    {
+                        @(medallero.lugar)
+                    }
+                    else
+                    {
+                    <span title="No participó">NP</span>
+                    }
+                </td>
             }
         }
     </tr>
