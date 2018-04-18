@@ -21,7 +21,7 @@
 }
 
 @{
-    ViewBag.Title = "Lugares de los estados por olimpiada";
+    ViewBag.Title = "Medallas de los estados por olimpiada";
     List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
     Dictionary<string, Dictionary<string, OMIstats.Models.Medallero>> estados = ViewBag.estados;
     bool[] cabeceras = ViewBag.cabeceras;
@@ -32,7 +32,7 @@
 <div class="submenu">
     @Html.ActionLink("Delegados", "Index", "Estados", null, new { @class = "mini-boton" })
     <br />
-    @Html.ActionLink("Medallas", "Medallas", "Estados", null, new { @class = "mini-boton" })
+    @Html.ActionLink("Lugares", "Lugares", "Estados", null, new { @class = "mini-boton" })
 </div>
 
 <h1 class="titulo">@ViewBag.Title</h1>
@@ -42,15 +42,26 @@
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border white-background header-min-height">Estado</th>
+            <th class="bottom-border right-border white-background header-min-height" rowspan="2">Estado</th>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
                 {
-                <th class="bottom-border center headerEstado header-min-height hide-when-clone @(i > ultimoValido ? "right-border" : "")">
+                <th class="bottom-border center headerEstado header-min-height hide-when-clone @(i > ultimoValido ? "right-border" : "")" colspan="3">
                     @Html.ActionLink(tableManager.enlaceOMI(olimpiada: olimpiadas[i].numero), "Estados", "Olimpiada",
                         new { clave = olimpiadas[i].numero }, null)
                 </th>
+                }
+            }
+        </tr>
+        <tr class="table-header">
+            @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
+            {
+                if (cabeceras[i] && olimpiadas[i].estados > 0)
+                {
+                <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Oros">O</th>
+                <th class="bottom-border center headerEstado header-min-height hide-when-clone right-border" title="Platas">P</th>
+                <th class="bottom-border center headerEstado header-min-height hide-when-clone @(i > ultimoValido ? "right-border" : "")" title="Bronces">B</th>
                 }
             }
         </tr>
