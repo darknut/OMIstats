@@ -52,7 +52,7 @@
 <table class="table">
     <thead>
         <tr class="table-header">
-            <th class="empty-double-decker-placeholder" rowspan="2"></th>
+            <th class="bottom-border right-border white-background header-min-height double-decker-placeholder" rowspan="2">Estado</th>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
@@ -83,7 +83,7 @@
     @foreach (OMIstats.Models.Estado e in Model)
     {
     <tr>
-        <td class="empty-first-column-placeholder"></td>
+        <td class="table-td right-border first-column-placeholder">@e.nombre</td>
         @{Dictionary<string, OMIstats.Models.Medallero> medalleros = estados[e.clave];}
         @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
         {
@@ -112,7 +112,7 @@
     }
     <tfoot>
         <tr>
-            <td class="empty-first-column-placeholder"></td>
+            <td class="right-border top-border pie pieTitulo table-footer white-background first-column-placeholder">Total Medallas</td>
             @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
             {
                 if (cabeceras[i] && olimpiadas[i].estados > 0)
