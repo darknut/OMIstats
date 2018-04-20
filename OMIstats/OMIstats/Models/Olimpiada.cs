@@ -675,7 +675,7 @@ namespace OMIstats.Models
         {
             Problema prob;
 
-            estados = MiembroDelegacion.obtenerEstadosParticipantes(numero, tipoOlimpiada);
+            estados = Resultados.obtenerEstadosParticipantes(numero, tipoOlimpiada);
             participantes = MiembroDelegacion.obtenerParticipantes(numero, tipoOlimpiada);
 
             problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);

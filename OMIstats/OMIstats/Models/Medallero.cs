@@ -599,17 +599,21 @@ namespace OMIstats.Models
         {
             if (this.omi == obj.omi)
             {
-                if (obj.puntos == this.puntos)
+                if (obj.promedio == this.promedio)
                 {
-                    if (this.oros == obj.oros)
+                    if (obj.puntos == this.puntos)
                     {
-                        if (this.platas == obj.platas)
-                            return obj.bronces - this.bronces;
-                        return obj.platas - this.platas;
+                        if (this.oros == obj.oros)
+                        {
+                            if (this.platas == obj.platas)
+                                return obj.bronces - this.bronces;
+                            return obj.platas - this.platas;
+                        }
+                        return obj.oros - this.oros;
                     }
-                    return obj.oros - this.oros;
+                    return (int)Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
                 }
-                return (int)Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
+                return (int)Math.Round((double)((obj.promedio * 100) - (this.promedio * 100)), 0);
             }
             return this.omi.CompareTo(obj.omi);
         }

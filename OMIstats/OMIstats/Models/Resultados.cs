@@ -846,5 +846,26 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        /// <summary>
+        /// Regresa el número de estados participantes en la Olimpiada mandada como parámetro
+        /// </summary>
+        /// <param name="omi">La OMI deseada</param>
+        /// <param name="tipoOlimpiada">El tipo de Olimpiada</param>
+        /// <returns>Cuantos estados participaron</returns>
+        public static int obtenerEstadosParticipantes(string omi, TipoOlimpiada tipoOlimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select count(distinct(Estado)) from Resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+
+            return (int)db.getTable().Rows[0][0];
+        }
     }
 }
