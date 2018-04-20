@@ -369,25 +369,59 @@ namespace OMIstats.Models
             }
 
             // Guardamos los contadores en la base de datos
+            // Primero las personas
             foreach (Medallero persona in personas.Values)
                 if (persona.clave != "0")
                     persona.guardarDatos();
 
+            // Después las instituciones
             foreach (Medallero institucion in instituciones.Values)
                 if (institucion.clave != "0")
                     institucion.guardarDatos();
 
+            // Los estados (general)
             foreach (Medallero estado in estados.Values)
                 estado.guardarDatos();
 
+            // Finalmente, para los estados por olimpiada, hay que hacer un par de cosas
             List<Medallero> sortedEstados = new List<Medallero>(estadosPorOlimpiada.Values);
+            string lastOMI = sortedEstados[0].omi;
+            bool invalido = false;
+            int firstEstadoInOmi = 0;
+            // Los necesitamos ordenados primero por olimpiada
             sortedEstados.Sort();
-            string lastOMI = "";
+            // Necesitamos reordenarlos por promedio
+            for (int i = 0; i < sortedEstados.Count; i++)
+            {
+                Medallero estado = sortedEstados[i];
+                if (estado.omi != lastOMI)
+                {
+                    // Si algún estado en la olimpiada tiene un
+                    // promedio invalido, ningún promedio es valido
+                    if (invalido)
+                    {
+                        for (int j = firstEstadoInOmi; j < i; j++)
+                            sortedEstados[j].promedio = 0;
+                    }
+                    firstEstadoInOmi = i;
+                    invalido = false;
+                    lastOMI = estado.omi;
+                }
+
+                if (!estado.hayUNKs && estado.count > 0)
+                    estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+                invalido |= estado.promedioEsInvalido();
+            }
+            sortedEstados.Sort();
+
+            lastOMI = "";
             int lugarActual = 0;
             Medallero ultimoEstado = null;
 
+            // Vamos por cada estado para asignarles el lugar
             foreach (Medallero estado in sortedEstados)
             {
+                // Estamos recibiendo los estados de todas las olimpiadas
                 if (estado.omi != lastOMI)
                 {
                     lastOMI = estado.omi;
@@ -396,6 +430,7 @@ namespace OMIstats.Models
                 }
 
                 lugarActual++;
+
                 // Revisamos si hay empates entre estados
                 if (ultimoEstado == null ||
                     ultimoEstado.oros != estado.oros ||
@@ -407,9 +442,6 @@ namespace OMIstats.Models
                     estado.lugar = ultimoEstado.lugar;
 
                 ultimoEstado = estado;
-
-                if (!estado.hayUNKs && estado.count > 0)
-                    estado.promedio = (float?) Math.Round((double)(estado.puntos / estado.count), 2);
 
                 estado.guardarDatos();
             }
@@ -571,13 +603,18 @@ namespace OMIstats.Models
             return estados;
         }
 
+        private bool promedioEsInvalido()
+        {
+            return (int)Math.Round((double)promedio) == 0 &&
+                    (puntos > 0 || bronces > 0 ||
+                    platas > 0 || oros > 0);
+        }
+
         public static bool hayPromedio(List<Medallero> lista)
         {
             for (int i = lista.Count - 1; i >= 0; i--)
             {
-                if ((int)Math.Round((double)lista[i].promedio) == 0 &&
-                    (lista[i].puntos > 0 || lista[i].bronces > 0 ||
-                    lista[i].platas > 0 || lista[i].oros > 0))
+                if (lista[i].promedioEsInvalido())
                     return false;
             }
             return true;
