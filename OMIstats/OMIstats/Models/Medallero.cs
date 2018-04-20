@@ -394,17 +394,6 @@ namespace OMIstats.Models
                 }
                 lugarActual++;
 
-                // Ajustamos los estados que tienen mas de cuatro medallas
-                if (estado.oros + estado.platas + estado.bronces > 4)
-                {
-                    if (estado.oros > 4)
-                        estado.oros = 4;
-                    if (estado.oros + estado.platas > 4)
-                        estado.platas = 4 - estado.oros;
-                    if (estado.oros + estado.platas + estado.bronces > 4)
-                        estado.bronces = 4 - estado.oros - estado.platas;
-                }
-
                 estado.lugar = lugarActual;
                 if (!estado.hayUNKs && estado.count > 0)
                     estado.promedio = (float?) Math.Round((double)(estado.puntos / estado.count), 2);
@@ -414,40 +403,20 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Obtiene las medallas de la delegación mandada como parámetro
+        /// Ajusta las medallas del medallero actual para que no haya más de
+        /// 4 medallas en total
         /// </summary>
-        /// <param name="delegacion">La delegación de la cual se contaran las medallas</param>
-        /// <returns>Una lista con las medallas</returns>
-        public static Medallero contarMedallas(List<MiembroDelegacion> delegacion)
+        public void ajustarMedallas()
         {
-            Medallero m = new Medallero();
-
-            foreach (MiembroDelegacion md in delegacion)
+            if (this.oros + this.platas + this.bronces > 4)
             {
-                switch (md.resultados.medalla)
-                {
-                    case Resultados.TipoMedalla.ORO:
-                    case Resultados.TipoMedalla.ORO_1:
-                    case Resultados.TipoMedalla.ORO_2:
-                    case Resultados.TipoMedalla.ORO_3:
-                        {
-                            m.oros++;
-                            break;
-                        }
-                    case Resultados.TipoMedalla.PLATA:
-                        {
-                            m.platas++;
-                            break;
-                        }
-                    case Resultados.TipoMedalla.BRONCE:
-                        {
-                            m.bronces++;
-                            break;
-                        }
-                }
+                if (this.oros > 4)
+                    this.oros = 4;
+                if (this.oros + this.platas > 4)
+                    this.platas = 4 - this.oros;
+                if (this.oros + this.platas + this.bronces > 4)
+                    this.bronces = 4 - this.oros - this.platas;
             }
-
-            return m;
         }
 
         /// <summary>
@@ -480,6 +449,8 @@ namespace OMIstats.Models
                 m.llenarDatos(r);
                 // Después de esto solo nos importa la clave del estado, así que nos deshacemos del resto
                 m.clave = m.clave.Substring(0, 3);
+                // Solo quiero 4 medallas por estado en este caso
+                m.ajustarMedallas();
 
                 lista.Add(m);
             }

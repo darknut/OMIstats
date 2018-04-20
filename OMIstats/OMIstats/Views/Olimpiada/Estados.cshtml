@@ -54,7 +54,12 @@
 else
 {
 
-<h1 class="titulo">@ViewBag.Title</h1>
+<h1 class="titulo">@ViewBag.Title
+@if (Model.numero.Equals("8b"))
+{
+    <sup><a class="nombre" href="#omii">1</a></sup>
+}
+</h1>
 
 List<OMIstats.Models.Medallero> estados = ViewBag.estados;
 bool hayPromedio = ViewBag.hayPromedio;
@@ -171,22 +176,34 @@ if (isLive)
     }
 </table>
 
+if (Model.numero.Equals("8b"))
+{
+<div id="omii" class="sede">
+    [1]: Durante la OMI Intermedia, no hubo reestricción sobre el número de competidores por delegación,
+    tampoco hubo reestricción sobre el número de medallas. Para esta tabla, sólo se cuentas las mejores
+    4, de forma similar a como se hace en el resto de las olimpiadas.
+</div>
+}
+else
+{
 <div id="sede" class="sede">
     [1]: Al estado sede solo se le cuentan sus mejores cuatro
     competidores para esta tabla, para ver los detalles del
     resto de la delegación, visite la <a href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
+    El total de medallas entregadas en esta tabla también es afectado por esta regla.
 </div>
+}
 
 if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
 {
-    <div id="german" class="sede">
-        [2]: En la 12a OMI, se le otorgó una quinta medalla
-        al estado de Guanajuato por ser el primer chico de escuelas
-        primaria en quedar en el medallero. Esa fue la última vez que
-        se le permitió a un estado no sede ganar más de cuatro medallas.
-        Al igual que con los estados sede, solo los mejores cuatro competidores
-        se toman en cuenta, para más detalle, consulte la delegación
-        del estado de <a href="~/Olimpiada/Delegacion?clave=12&estado=GTO">Guanajuato</a>.
-    </div>
+<div id="german" class="sede">
+    [2]: En la 12a OMI, se le otorgó una quinta medalla
+    al estado de Guanajuato por ser el primer chico de escuelas
+    primaria en quedar en el medallero. Esa fue la última vez que
+    se le permitió a un estado no sede ganar más de cuatro medallas.
+    Al igual que con los estados sede, solo los mejores cuatro competidores
+    se toman en cuenta, para más detalle, consulte la delegación
+    del estado de <a href="~/Olimpiada/Delegacion?clave=12&estado=GTO">Guanajuato</a>.
+</div>
 }
 }
