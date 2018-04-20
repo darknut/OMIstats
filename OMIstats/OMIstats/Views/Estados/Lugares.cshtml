@@ -79,7 +79,7 @@
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
                 string clase = medallero != null && medallero.lugar <= 3 ? "top-estado" : "";
                 clase += i > ultimoValido ? " right-border" : "";
-                <td class="table-td center @(clase)">
+                <td class="table-td center mini-cell @(clase)">
                     @if (medallero != null)
                     {
                         @(medallero.lugar)

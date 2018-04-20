@@ -137,8 +137,9 @@
 }
 
 .first-column-placeholder {
-    min-height: 40px;
+    min-height: 25px;
     min-width: 110px;
+    height: 25px;
 }
 
 .double-decker-placeholder {
@@ -149,4 +150,9 @@
 
 .medalla-img-titulo {
     height: 20px;
+}
+
+.mini-cell {
+    min-height: 25px;
+    height: 25px;
 }

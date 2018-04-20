@@ -93,21 +93,21 @@
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
                 if (medallero != null)
                 {
-                <td class="table-td center fondoOro">@medallero.oros</td>
-                <td class="table-td center fondoPlata">@medallero.platas</td>
-                <td class="table-td center fondoBronce right-border">@medallero.bronces</td>
+                <td class="table-td center mini-cell fondoOro">@medallero.oros</td>
+                <td class="table-td center mini-cell fondoPlata">@medallero.platas</td>
+                <td class="table-td center mini-cell fondoBronce right-border">@medallero.bronces</td>
                 }
                 else
                 {
-                <td class="table-td center" title="No participó">-</td>
-                <td class="table-td center" title="No participó">-</td>
-                <td class="table-td center right-border" title="No participó">-</td>
+                <td class="table-td center mini-cell" title="No participó">-</td>
+                <td class="table-td center mini-cell" title="No participó">-</td>
+                <td class="table-td center mini-cell right-border" title="No participó">-</td>
                 }
             }
         }
-        <td class="table-td center resultado-dia fondoOro"></td>
-        <td class="table-td center resultado-dia fondoPlata"></td>
-        <td class="table-td center resultado-dia fondoBronce"></td>
+        <td class="table-td center resultado-dia mini-cell fondoOro"></td>
+        <td class="table-td center resultado-dia mini-cell fondoPlata"></td>
+        <td class="table-td center resultado-dia mini-cell fondoBronce"></td>
     </tr>
     }
     <tfoot>
