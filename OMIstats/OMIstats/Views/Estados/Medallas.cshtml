@@ -41,13 +41,6 @@
         </td>
     </tr>
     }
-    <tfoot>
-        <tr>
-            <td class="right-border top-border pie pieTitulo table-footer white-background first-column-placeholder">
-                Total Medallas
-            </td>
-        </tr>
-    </tfoot>
 </table>
 <table class="table">
     <thead>
@@ -110,23 +103,6 @@
         <td class="table-td center resultado-dia mini-cell fondoBronce"></td>
     </tr>
     }
-    <tfoot>
-        <tr>
-            <td class="right-border top-border pie pieTitulo table-footer white-background first-column-placeholder">Total Medallas</td>
-            @for (int i = cabeceras.Length - 1; i >= 0 ; i--)
-            {
-                if (cabeceras[i] && olimpiadas[i].estados > 0)
-                {
-                <td class="center resultado-dia top-border pie fondoOro"></td>
-                <td class="center resultado-dia top-border pie fondoPlata"></td>
-                <td class="center resultado-dia top-border pie right-border fondoBronce"></td>
-                }
-            }
-            <td class="top-border"></td>
-            <td class="top-border"></td>
-            <td class="top-border"></td>
-        </tr>
-    </tfoot>
 </table>
 </div>
 </div>
