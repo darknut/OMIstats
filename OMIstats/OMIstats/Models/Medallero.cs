@@ -384,6 +384,7 @@ namespace OMIstats.Models
             sortedEstados.Sort();
             string lastOMI = "";
             int lugarActual = 0;
+            Medallero ultimoEstado = null;
 
             foreach (Medallero estado in sortedEstados)
             {
@@ -391,10 +392,22 @@ namespace OMIstats.Models
                 {
                     lastOMI = estado.omi;
                     lugarActual = 0;
+                    ultimoEstado = null;
                 }
-                lugarActual++;
 
-                estado.lugar = lugarActual;
+                lugarActual++;
+                // Revisamos si hay empates entre estados
+                if (ultimoEstado == null ||
+                    ultimoEstado.oros != estado.oros ||
+                    ultimoEstado.platas != estado.platas ||
+                    ultimoEstado.bronces != estado.bronces ||
+                    (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
+                    estado.lugar = lugarActual;
+                else
+                    estado.lugar = ultimoEstado.lugar;
+
+                ultimoEstado = estado;
+
                 if (!estado.hayUNKs && estado.count > 0)
                     estado.promedio = (float?) Math.Round((double)(estado.puntos / estado.count), 2);
 

@@ -275,17 +275,6 @@ namespace OmegaUpPuller.WebRequest
                 Medallero estado = sortedEstados[i];
                 lugar++;
 
-                // Ajustamos los estados que tienen mas de cuatro medallas
-                if (estado.oros + estado.platas + estado.bronces > 4)
-                {
-                    if (estado.oros > 4)
-                        estado.oros = 4;
-                    if (estado.oros + estado.platas > 4)
-                        estado.platas = 4 - estado.oros;
-                    if (estado.oros + estado.platas + estado.bronces > 4)
-                        estado.bronces = 4 - estado.oros - estado.platas;
-                }
-
                 estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
 
                 // Revisamos si hay empates entre estados
