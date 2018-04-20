@@ -478,8 +478,11 @@ namespace OMIstats.Controllers
             if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            Medallero medalleroGeneral;
+
             ViewBag.liveResults = o.liveResults;
-            ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave);
+            ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave, out medalleroGeneral);
+            ViewBag.medalleroGeneral = medalleroGeneral;
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             ViewBag.hayPromedio = Medallero.hayPromedio(ViewBag.estados);
             ViewBag.hayPuntos = Medallero.hayPuntos(ViewBag.estados);

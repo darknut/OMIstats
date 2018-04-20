@@ -424,8 +424,10 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="olimpiada">La clave de la olimpiada</param>
+        /// <param name="medalleroGeneral">El medallero donde se cuentan todas las medallas sin
+        /// quitar los extra de la sede</param>
         /// <returns>La tabla ordenada de estados</returns>
-        public static List<Medallero> obtenerTablaEstados(TipoOlimpiada tipoOlimpiada, string olimpiada)
+        public static List<Medallero> obtenerTablaEstados(TipoOlimpiada tipoOlimpiada, string olimpiada, out Medallero medalleroGeneral)
         {
             List<Medallero> lista = new List<Medallero>();
 
@@ -443,12 +445,18 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
+            medalleroGeneral = new Medallero();
             foreach (DataRow r in table.Rows)
             {
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
                 // Después de esto solo nos importa la clave del estado, así que nos deshacemos del resto
                 m.clave = m.clave.Substring(0, 3);
+
+                medalleroGeneral.oros += m.oros;
+                medalleroGeneral.platas += m.platas;
+                medalleroGeneral.bronces += m.bronces;
+
                 // Solo quiero 4 medallas por estado en este caso
                 m.ajustarMedallas();
 

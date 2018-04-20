@@ -25,6 +25,7 @@
     tableManager.setCurrentOMI(Model);
     ViewBag.Title = "Tabla de estados de la " + tableManager.enlaceOMI(nombreCompleto: true);
     bool isLive = ViewBag.liveResults;
+    OMIstats.Models.Medallero medalleroGeneral = ViewBag.medalleroGeneral;
 }
 
 <div class="submenu">
@@ -91,19 +92,10 @@ if (isLive)
     </thead>
 
     @{
-    int totalOros = 0;
-    int totalPlatas = 0;
-    int totalBronces = 0;
-    int totalMedallas = 0;
     float? totalPuntos = 0;
     }
     @foreach (OMIstats.Models.Medallero m in ViewBag.estados)
     {
-        totalOros += m.oros;
-        totalPlatas += m.platas;
-        totalBronces += m.bronces;
-        totalMedallas += m.oros + m.platas + m.bronces;
-
         totalPuntos += m.puntos;
 
         OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(m.clave);
@@ -145,16 +137,16 @@ if (isLive)
                 Total:
             </td>
             <td class="center right-border resultado-dia top-border pie fondoOro">
-                @totalOros
+                @medalleroGeneral.oros
             </td>
             <td class="center right-border resultado-dia top-border pie fondoPlata">
-                @totalPlatas
+                @medalleroGeneral.platas
             </td>
             <td class="center right-border resultado-dia top-border pie fondoBronce">
-                @totalBronces
+                @medalleroGeneral.bronces
             </td>
             <td class="@("center resultado-dia top-border pie table-td " + (hayPuntos ? "right-border" : ""))">
-                @totalMedallas
+                @(medalleroGeneral.oros + medalleroGeneral.platas + medalleroGeneral.bronces)
             </td>
             @if(hayPuntos)
             {
@@ -190,7 +182,7 @@ else
     [1]: Al estado sede solo se le cuentan sus mejores cuatro
     competidores para esta tabla, para ver los detalles del
     resto de la delegación, visite la <a href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
-    El total de medallas entregadas en esta tabla también es afectado por esta regla.
+    El total de medallas entregadas en esta tabla <b>NO</b> es afectado por esta regla.
 </div>
 }
 
