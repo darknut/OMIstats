@@ -545,6 +545,40 @@ namespace OMIstats.Models
             return estados;
         }
 
+        /// <summary>
+        /// Obtiene la tabla de estados generales
+        /// Similar a obtenerMedallero de estados, pero incluye todos los estados
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <returns>El diccionario de los estados</returns>
+        public static Dictionary<string, Medallero> obtenerTablaEstadosGeneral(TipoOlimpiada tipoOlimpiada)
+        {
+            Dictionary<string, Medallero> estados = new Dictionary<string, Medallero>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from Medallero where tipo = ");
+            query.Append((int)TipoMedallero.ESTADO);
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                // Obtengo los datos de la tabla a un objeto medallero
+                Medallero m = new Medallero();
+                m.llenarDatos(r);
+
+                // Agrego el medallero con la olimpiada
+                estados.Add(m.clave, m);
+            }
+
+            return estados;
+        }
+
         public static bool hayPromedio(List<Medallero> lista)
         {
             for (int i = lista.Count - 1; i >= 0; i--)

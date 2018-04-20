@@ -50,6 +50,7 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = olimpiadas;
             ViewBag.estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI, out cabeceras);
             ViewBag.cabeceras = cabeceras;
+            ViewBag.totales = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI);
 
             return View(Estado.obtenerEstados());
         }
