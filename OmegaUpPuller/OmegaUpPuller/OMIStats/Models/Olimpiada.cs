@@ -10,6 +10,7 @@ namespace OMIstats.Models
     {
         public bool noMedallistasConocidos;
         public bool puntosDesconocidos;
+        public string numero;
 
         public static void guardaProblemas(string olimpiada, TipoOlimpiada tipoOlimpiada, int problemas, int dia)
         {
@@ -37,6 +38,11 @@ namespace OMIstats.Models
         public static Olimpiada obtenerOlimpiadaConClave(string clave, TipoOlimpiada tipo)
         {
             throw new InvalidOperationException("obtenerOlimpiadaConClave no permitido en este contexto");
+        }
+
+        public static List<Olimpiada> obtenerOlimpiadas(TipoOlimpiada tipoOlimpiada)
+        {
+            throw new InvalidOperationException("obtenerOlimpiadas no permitido en este contexto");
         }
     }
 }
