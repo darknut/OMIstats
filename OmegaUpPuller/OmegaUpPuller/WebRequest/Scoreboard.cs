@@ -261,21 +261,29 @@ namespace OmegaUpPuller.WebRequest
                 r.guardar();
             }
 
+            // Para OMIPS ya terminamos los cálculos
             if (tipoOlimpiada != TipoOlimpiada.OMI)
                 return;
 
-            // Ordenamos también el medallero de los estados (solo para OMI's)
+            // Ordenamos también el medallero de los estados
             List<Medallero> sortedEstados = new List<Medallero>(medalleroEstados.Values);
+
+            // Primero calculamos los promedios
+            foreach(Medallero estado in sortedEstados)
+            {
+                estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+            }
+
+            // Luego ordenamos
             Medallero ultimoEstado = null;
             sortedEstados.Sort();
             lugar = 0;
 
+            // Finalmente, asignamos lugares
             for (int i = 0; i < sortedEstados.Count; i++)
             {
                 Medallero estado = sortedEstados[i];
                 lugar++;
-
-                estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
 
                 // Revisamos si hay empates entre estados
                 if (ultimoEstado == null ||
