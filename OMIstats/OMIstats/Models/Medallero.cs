@@ -599,7 +599,7 @@ namespace OMIstats.Models
         {
             if (this.omi == obj.omi)
             {
-                if (obj.puntos == this.puntos && obj.puntos == 0)
+                if (obj.puntos == this.puntos)
                 {
                     if (this.oros == obj.oros)
                     {
