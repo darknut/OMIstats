@@ -93,9 +93,9 @@
                 medalleros.TryGetValue(olimpiadas[i].numero, out medallero);
                 if (medallero != null)
                 {
-                <td class="table-td center mini-cell fondoOro">@medallero.oros</td>
-                <td class="table-td center mini-cell fondoPlata">@medallero.platas</td>
-                <td class="table-td center mini-cell fondoBronce right-border">@medallero.bronces</td>
+                <td class="table-td center mini-cell fondoOro" title="@e.nombre">@medallero.oros</td>
+                <td class="table-td center mini-cell fondoPlata" title="@e.nombre">@medallero.platas</td>
+                <td class="table-td center mini-cell fondoBronce right-border" title="@e.nombre">@medallero.bronces</td>
                 }
                 else
                 {
