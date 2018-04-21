@@ -683,7 +683,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
         /// <returns>La lista de participaciones</returns>
         public static List<MiembroDelegacion> obtenerParticipaciones(int persona)
-        {
+        {  // -TODO- Cuando agregue IOI, hay que revisitar este método
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
             Utilities.Acceso db = new Utilities.Acceso();
