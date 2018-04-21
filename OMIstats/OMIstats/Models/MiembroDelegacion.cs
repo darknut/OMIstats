@@ -682,7 +682,7 @@ namespace OMIstats.Models
         /// <param name="persona">La clave de la persona deseada</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada solicitado</param>
         /// <returns>La lista de participaciones</returns>
-        public static List<MiembroDelegacion> obtenerParticipaciones(int persona, TipoOlimpiada tipoOlimpiada)
+        public static List<MiembroDelegacion> obtenerParticipaciones(int persona)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
@@ -697,8 +697,6 @@ namespace OMIstats.Models
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
             query.Append(" where p.clave = ");
             query.Append(persona);
-            query.Append(" and md.clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and md.tipo <> ");
             query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
             query.Append(" order by o.año asc ");

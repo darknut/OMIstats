@@ -99,7 +99,7 @@ namespace OMIstats.Controllers
             Medalleros medalleros = Medallero.obtenerMedalleros(Medallero.TipoMedallero.PERSONA, p.clave.ToString());
 
             ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, tipo);
-            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, tipo);
+            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave);
             ViewBag.medalleros = medalleros;
             ViewBag.tipo = tipo;
             return View(p);
