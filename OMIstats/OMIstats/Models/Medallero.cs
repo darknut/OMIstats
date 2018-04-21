@@ -655,13 +655,18 @@ namespace OMIstats.Models
             return true;
         }
 
+        public bool puntosSonInvalidos()
+        {
+            return (int)Math.Round((double)puntos) == 0 &&
+                    (bronces > 0 ||
+                    platas > 0 || oros > 0);
+        }
+
         public static bool hayPuntos(List<Medallero> lista)
         {
             for (int i = 0; i < lista.Count; i++)
             {
-                if ((int)Math.Round((double)lista[i].puntos) == 0 &&
-                    (lista[i].bronces > 0 ||
-                    lista[i].platas > 0 || lista[i].oros > 0))
+                if (lista[i].puntosSonInvalidos())
                     return false;
             }
             return true;

@@ -77,7 +77,12 @@
             <td class="table-td center right-border fondoOro">@m.oros</td>
             <td class="table-td center right-border fondoPlata">@m.platas</td>
             <td class="table-td center right-border fondoBronce">@m.bronces</td>
-            <td class="table-td center right-border ">@m.puntos</td>
+            <td class="table-td center right-border ">
+                @if (!m.puntosSonInvalidos())
+                {
+                    <span>@m.puntos</span>
+                }
+            </td>
             <td class="table-td center">
                 @if (!m.promedioEsInvalido())
                 {
