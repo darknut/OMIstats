@@ -14,6 +14,16 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
+            List<Medallero> estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI).Values.ToList();
+            estados.Sort();
+            return View(estados);
+        }
+
+        //
+        // GET: /Estados/Delegados
+
+        public ActionResult Delegados()
+        {
             return View(Estado.obtenerEstados());
         }
 

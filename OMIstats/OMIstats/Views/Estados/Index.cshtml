@@ -1,61 +1,63 @@
-﻿@model List<OMIstats.Models.Estado>
+﻿@model List<OMIstats.Models.Medallero>
 
 @section AddToHead
 {
-    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
-    <link href="~/Content/tablas.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/estados.css" type="text/css"/>
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
+    <script type="text/javascript" src="~/js/sorters.js"></script>
+    <script>
+        $(function () {
+            cargaSorter("tablaPuntos");
+        });
+    </script>
 }
 
 @{
-    ViewBag.Title = "Estados";
+    ViewBag.Title = "Tabla de estados generales";
 }
 
 <div class="submenu">
+    @Html.ActionLink("Detalle Medallas", "Medallas", "Estados", null, new { @class = "mini-boton" })
     @Html.ActionLink("Lugares", "Lugares", "Estados", null, new { @class = "mini-boton" })
-    @Html.ActionLink("Medallas", "Medallas", "Estados", null, new { @class = "mini-boton" })
+    <br />
+    @Html.ActionLink("Delegados", "Delegados", "Estados", null, new { @class = "mini-boton" })
 </div>
 
-<h1 class="titulo">Estados</h1>
+<h1 class="titulo">@ViewBag.Title</h1>
 
-<table class="table">
+<table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border">
-                
-            </th>
-            <th class="bottom-border right-border">
-                Estado
-            </th>
-            <th class="bottom-border right-border">
-                Delegado
-            </th>
-            <th class="bottom-border">
-                Sitio web
-            </th>
+            <th class="bottom-border right-border table-header-clickable">Lugar</th>
+            <th class="bottom-border right-border table-header-clickable">Estado</th>
+            <th class="bottom-border right-border table-header-clickable">Oros&nbsp;&nbsp;&nbsp;</th>
+            <th class="bottom-border right-border table-header-clickable">Platas&nbsp;</th>
+            <th class="bottom-border table-header-clickable">Bronces</th>
         </tr>
     </thead>
-    @foreach (var item in Model)
+
+    @{int lugar = 0;}
+    @foreach (OMIstats.Models.Medallero m in Model)
     {
+        lugar++;
+        OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(m.clave);
         <tr>
-            <td class="table-td center right-border">
-                <img src="@Url.Content("~/img/estados/" + item.clave + ".png")" class="logoEstado"/>
+            <td class="table-td right-border mini-cell center">@lugar</td>
+            <td class="table-td right-border mini-cell">
+                @Html.ActionLink(estado.nombre, "Index", "Estado", new { clave = estado.clave }, new { @class = "nombre" })
             </td>
-            <td class="table-td right-border">
-                <a href ="@Url.Content("~/Estado?clave=" + item.clave)" class="nombre">@item.nombre</a>
-                @if (ViewBag.usuario.admin || (item.claveDelegado != 0 && ViewBag.usuario.clave == item.claveDelegado))
-                {
-                    <br />
-                    <a href="@Url.Content("~/Estado/Edit?estado=" + item.clave)">Actualizar datos</a>
-                }
-            </td>
-            <td class="table-td right-border">
-                <a href="@Url.Content("~/Profile/view?usuario=" + item.usuarioDelegado)" class="nombre">@item.nombreDelegado</a>
-                <br />
-                <a href="@Url.Content("mailto:" + item.mailDelegado)" target="_blank" >@item.mailDelegado</a>
-            </td>
-            <td class="table-td">
-                <a href ="@item.sitio" target="_blank">@item.sitio</a>
-            </td>
+            <td class="table-td center right-border fondoOro mini-cell">@m.oros</td>
+            <td class="table-td center right-border fondoPlata mini-cell">@m.platas</td>
+            <td class="table-td center fondoBronce mini-cell">@m.bronces</td>
         </tr>
     }
 </table>

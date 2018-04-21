@@ -1,0 +1,62 @@
+﻿@model List<OMIstats.Models.Estado>
+
+@section AddToHead
+{
+    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/tablas.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = "Estados";
+}
+
+<div class="submenu">
+    @Html.ActionLink("General", "Index", "Estados", null, new { @class = "mini-boton" })
+    @Html.ActionLink("Detalle Medallas", "Medallas", "Estados", null, new { @class = "mini-boton" })
+    @Html.ActionLink("Lugares", "Lugares", "Estados", null, new { @class = "mini-boton" })
+</div>
+
+<h1 class="titulo">Estados</h1>
+
+<table class="table">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">
+                Logo o Escudo
+            </th>
+            <th class="bottom-border right-border">
+                Estado
+            </th>
+            <th class="bottom-border right-border">
+                Delegado
+            </th>
+            <th class="bottom-border">
+                Sitio web
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="table-td center right-border">
+                <img src="@Url.Content("~/img/estados/" + item.clave + ".png")" class="logoEstado"/>
+            </td>
+            <td class="table-td right-border">
+                <a href ="@Url.Content("~/Estado?clave=" + item.clave)" class="nombre">@item.nombre</a>
+                @if (ViewBag.usuario.admin || (item.claveDelegado != 0 && ViewBag.usuario.clave == item.claveDelegado))
+                {
+                    <br />
+                    <a href="@Url.Content("~/Estado/Edit?estado=" + item.clave)">Actualizar datos</a>
+                }
+            </td>
+            <td class="table-td right-border">
+                <a href="@Url.Content("~/Profile/view?usuario=" + item.usuarioDelegado)" class="nombre">@item.nombreDelegado</a>
+                <br />
+                <a href="@Url.Content("mailto:" + item.mailDelegado)" target="_blank" >@item.mailDelegado</a>
+            </td>
+            <td class="table-td">
+                <a href ="@item.sitio" target="_blank">@item.sitio</a>
+            </td>
+        </tr>
+    }
+</table>
