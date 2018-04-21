@@ -40,10 +40,20 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/view/
 
-        public ActionResult view(string usuario, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult view(string usuario = null, string clave = null, TipoOlimpiada tipo = TipoOlimpiada.OMI, string omi = null)
         {
             Persona p;
             limpiarErroresViewBag();
+
+            if (usuario == null && clave != null)
+            {
+                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave);
+                if (md.Count == 0)
+                    return RedirectTo(Pagina.ERROR, 404);
+                if (md.Count > 1)
+                    return RedirectTo(Pagina.DELEGACION, omi + ":" + md[0].estado );
+                usuario = Persona.obtenerPersonaConClave(md[0].claveUsuario).usuario;
+            }
 
             if (String.IsNullOrEmpty(usuario))
             {

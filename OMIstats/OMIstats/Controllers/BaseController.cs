@@ -41,7 +41,8 @@ namespace OMIstats.Controllers
             RESULTS_TABLE,
             ADMIN_UNLINK,
             ADMIN_SCOREBOARD,
-            ADMIN_LOGS
+            ADMIN_LOGS,
+            DELEGACION
         }
 
         public BaseController()
@@ -171,6 +172,13 @@ namespace OMIstats.Controllers
                     return RedirectToAction("Scoreboard", "Admin");
                 case Pagina.ADMIN_LOGS:
                     return RedirectToAction("Logs", "Admin");
+                case Pagina.DELEGACION:
+                    {
+                        string[] param = opciones.ToString().Split(':');
+                        if (param.Length == 2)
+                            return RedirectToAction("Delegacion", "Olimpiada", new { clave = param[0], estado = param[1] });
+                    }
+                    return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.PROBLEMA:
                     if (opciones != null)
                     {
