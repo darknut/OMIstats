@@ -42,7 +42,7 @@ namespace OMIstats.Controllers
 
         public ActionResult view(string usuario = null, string clave = null, TipoOlimpiada tipo = TipoOlimpiada.OMI, string omi = null)
         {
-            Persona p;
+            Persona p = null;
             limpiarErroresViewBag();
 
             if (usuario == null && clave != null)
@@ -52,7 +52,8 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.ERROR, 404);
                 if (md.Count > 1)
                     return RedirectTo(Pagina.DELEGACION, omi + ":" + md[0].estado );
-                usuario = Persona.obtenerPersonaConClave(md[0].claveUsuario).usuario;
+                p = Persona.obtenerPersonaConClave(md[0].claveUsuario);
+                usuario = p.usuario;
             }
 
             if (String.IsNullOrEmpty(usuario))
@@ -70,7 +71,8 @@ namespace OMIstats.Controllers
             }
             else
             {
-                p = Persona.obtenerPersonaDeUsuario(usuario);
+                if (p == null)
+                    p = Persona.obtenerPersonaDeUsuario(usuario);
                 if (p != null)
                 {
                     Persona u = getUsuario();
