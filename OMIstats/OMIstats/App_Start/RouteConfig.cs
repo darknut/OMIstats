@@ -24,6 +24,12 @@ namespace OMIstats
                 url: "Profile/{tipo}/{omi}/{clave}",
                 defaults: new { controller = "Profile", action = "view", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Escuelas",
+                url: "Escuela/{tipo}/{omi}/{clave}",
+                defaults: new { controller = "Escuela", action = "Index", id = UrlParameter.Optional }
+            );
         }
     }
 }
