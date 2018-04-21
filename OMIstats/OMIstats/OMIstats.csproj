@@ -385,6 +385,7 @@
     <Content Include="Views\Estados\Lugares.cshtml" />
     <Content Include="Views\Estados\Medallas.cshtml" />
     <Content Include="Views\Estados\Delegados.cshtml" />
+    <Content Include="Views\Estado\Desempeño.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

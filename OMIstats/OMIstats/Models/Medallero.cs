@@ -603,7 +603,42 @@ namespace OMIstats.Models
             return estados;
         }
 
-        private bool promedioEsInvalido()
+        /// <summary>
+        /// Obtiene los medalleros por olimpiada de un solo estado
+        /// </summary>
+        /// <param name="estado">El estado del cual se requieren los datos</param>
+        /// <returns>La diccionario de los estados</returns>
+        public static Dictionary<string, Medallero> obtenerDesempeñoEstado(string estado)
+        {
+            Dictionary<string, Medallero> estados = new Dictionary<string, Medallero>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from Medallero where tipo = ");
+            query.Append((int)TipoMedallero.ESTADO_POR_OMI);
+            query.Append(" and left(clave,3) = ");
+            query.Append(Utilities.Cadenas.comillas(estado));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                // Obtengo los datos de la tabla a un objeto medallero
+                Medallero m = new Medallero();
+                m.llenarDatos(r);
+
+                // Agrego el medallero con la olimpiada
+                estados.Add(m.omi, m);
+            }
+
+            return estados;
+        }
+
+        public bool promedioEsInvalido()
         {
             return (int)Math.Round((double)promedio) == 0 &&
                     (puntos > 0 || bronces > 0 ||

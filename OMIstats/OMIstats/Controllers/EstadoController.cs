@@ -28,6 +28,25 @@ namespace OMIstats.Controllers
             ViewBag.medallas = m.medalleroDeTipo(tipo);
             ViewBag.medalleros = m;
             ViewBag.tipo = tipo;
+            ViewBag.estados = Estado.obtenerEstados();
+
+            return View(e);
+        }
+
+        //
+        // GET: /Estado/Desempeño/
+
+        public ActionResult Desempeño(string clave)
+        {
+            Estado e = Estado.obtenerEstadoConClave(clave);
+
+            if (e == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            ViewBag.medalleros = Medallero.obtenerMedalleros(Medallero.TipoMedallero.ESTADO, e.clave);
+            ViewBag.resultados = Medallero.obtenerDesempeñoEstado(clave);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            ViewBag.estados = Estado.obtenerEstados();
 
             return View(e);
         }

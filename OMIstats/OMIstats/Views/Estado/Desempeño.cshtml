@@ -1,0 +1,111 @@
+﻿@model OMIstats.Models.Estado
+
+@section AddToHead
+{
+    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/tablas.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/olimpiadas.css" type="text/css" rel="stylesheet" />
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
+    <script type="text/javascript" src="~/js/sorters.js"></script>
+    <script>
+        $(function () {
+            cargaSorter("tablaPuntos");
+        });
+    </script>
+}
+
+@{
+    ViewBag.Title = "Desempeño de " + Model.nombre + " a través de los años";
+    OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
+    List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
+    Dictionary<string, OMIstats.Models.Medallero> resultados = ViewBag.resultados;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    OMIstats.Models.Medallero medalleroGeneral = medalleros.OMI;
+}
+
+<div class="submenu">
+    @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
+    {
+        if (medalleros.medalleroDeTipo(tipo) != null)
+        {
+            @Html.ActionLink("Resultados " + tipo.ToString(), "Index", "Estado",
+                new { clave = Model.clave, tipo = tipo.ToString() }, new { @class = "mini-boton" })
+        }
+    }
+    <div class="comboTitle">Estados:</div>
+    <select onChange="redirige('@Url.Content("~/Estado/Desempeño?clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for (int i = 0; i < ViewBag.estados.Count; i++)
+        {
+            OMIstats.Models.Estado estado = ViewBag.estados[i];
+            <option value="@estado.clave" @(estado.clave == Model.clave ? "selected" : "")>@(estado.nombre)</option>
+        }
+    </select>
+</div>
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+<table class="table" id="tablaPuntos">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border table-header-clickable">Olimpiada</th>
+            <th class="bottom-border right-border table-header-clickable">Lugar</th>
+            <th class="bottom-border right-border table-header-clickable">Oros&nbsp;&nbsp;&nbsp;</th>
+            <th class="bottom-border right-border table-header-clickable">Platas&nbsp;</th>
+            <th class="bottom-border right-border table-header-clickable">Bronces</th>
+            <th class="bottom-border right-border table-header-clickable">Puntos<sup>1</sup></th>
+            <th class="bottom-border table-header-clickable">Promedio<sup>1</sup></th>
+        </tr>
+    </thead>
+
+    @for (int i = olimpiadas.Count - 1; i >= 0; i--)
+    {
+        OMIstats.Models.Olimpiada o = olimpiadas[i];
+        tableManager.setCurrentOMI(o);
+        OMIstats.Models.Medallero m;
+        if (resultados.TryGetValue(o.numero, out m))
+        {
+        <tr>
+            <td class="table-td center right-border ">
+                @Html.ActionLink(tableManager.enlaceOMI(), "Estados", "Olimpiada", new { clave = o.numero }, new { @class = "nombre" })
+            </td>
+            <td class="table-td center right-border ">@m.lugar</td>
+            <td class="table-td center right-border fondoOro">@m.oros</td>
+            <td class="table-td center right-border fondoPlata">@m.platas</td>
+            <td class="table-td center right-border fondoBronce">@m.bronces</td>
+            <td class="table-td center right-border ">@m.puntos</td>
+            <td class="table-td center">
+                @if (!m.promedioEsInvalido())
+                {
+                    <span>@m.promedio</span>
+                }
+            </td>
+        </tr>
+        }
+    }
+     <tfoot>
+        <tr>
+            <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="2">
+                Total:
+            </td>
+            <td class="center right-border resultado-dia top-border pie fondoOro">
+                @medalleroGeneral.oros
+            </td>
+            <td class="center right-border resultado-dia top-border pie fondoPlata">
+                @medalleroGeneral.platas
+            </td>
+            <td class="center right-border resultado-dia top-border pie fondoBronce">
+                @medalleroGeneral.bronces
+            </td>
+            <td class="top-border pie pieTitulo table-footer" colspan="2"></td>
+        </tr>
+    </tfoot>
+</table>
+
+<div id="top4" class="sede">
+    [1]: Solo se toman en cuenta los mejores cuatro alumnos de cada delegación.
+</div>

@@ -30,7 +30,8 @@
         OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
         OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     }
-
+    @Html.ActionLink("Desempeño", "Desempeño", "Estado", new { clave = Model.clave }, new { @class = "mini-boton" })
+    <br />
     @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
     {
         if (medalleros.medalleroDeTipo(tipo) != null && tipoOlimpiada != tipo)
@@ -39,6 +40,14 @@
                 new { clave = Model.clave, tipo = tipo.ToString() }, new { @class = "mini-boton" })
         }
     }
+    <div class="comboTitle">Estados:</div>
+    <select onChange="redirige('@Url.Content("~/Estado?tipo=" + tipoOlimpiada + "&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for (int i = 0; i < ViewBag.estados.Count; i++)
+        {
+            OMIstats.Models.Estado estado = ViewBag.estados[i];
+            <option value="@estado.clave" @(estado.clave == Model.clave ? "selected" : "")>@(estado.nombre)</option>
+        }
+    </select>
 </div>
 
 @{
