@@ -16,7 +16,13 @@ namespace OMIstats
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Olimpiadas", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Olimpiada", action = "Resultados", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                name: "Profile",
+                url: "Profile/{tipo}/{omi}/{clave}",
+                defaults: new { controller = "Profile", action = "view", id = UrlParameter.Optional }
             );
         }
     }
