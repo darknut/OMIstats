@@ -13,9 +13,20 @@ namespace OMIstats.Controllers
         //
         // GET: /Escuela/
 
-        public ActionResult Index(string url, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult Index(string url = null, string clave = null, string omi = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
-            Institucion i = Institucion.obtenerInstitucionConNombreURL(url);
+            Institucion i = null;
+            if (url == null && clave != null)
+            {
+                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave);
+                if (md.Count == 0)
+                    return RedirectTo(Pagina.ERROR, 404);
+                i = Institucion.obtenerInstitucionConClave(md[0].claveEscuela);
+                url = i.nombreURL;
+            }
+
+            if (i == null)
+                i = Institucion.obtenerInstitucionConNombreURL(url);
             if (i == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
