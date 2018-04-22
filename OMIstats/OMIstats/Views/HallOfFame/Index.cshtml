@@ -12,7 +12,20 @@
     int cabeceras = ViewBag.cabeceras;
     bool todos = ViewBag.todos;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    string filtro = ViewBag.filtro;
 }
+
+<div class="submenu">
+    <div class="comboTitle">Filtrar estado:</div>
+    <select onChange="redirige('@Url.Content("~/HallOfFame?filtrar=")', this.options[this.selectedIndex].value)" class="comboMargin">
+        <option value="">- - -</option>
+        @for (int i = 0; i < ViewBag.estados.Count; i++)
+        {
+            OMIstats.Models.Estado estado = ViewBag.estados[i];
+            <option value="@estado.clave" @(estado.clave == filtro ? "selected" : "")>@(estado.nombre)</option>
+        }
+    </select>
+</div>
 
 <h2 class="titulo">@ViewBag.Title</h2>
 
@@ -35,6 +48,18 @@ else
 }
 
 <br />
+
+@if (filtro != null)
+{
+    OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(filtro);
+    <div>
+        Estamos filtrando al estado de @Html.ActionLink(estado.nombre, "Index", "Estado", new { clave = filtro }, new { @clase = "nombre" })
+    </div>
+    <br />
+}
+
+@if (Model.Count > 0)
+{
 
 <table class="table">
     <thead>
@@ -111,3 +136,10 @@ else
         </tr>
     }
 </table>
+}
+else
+{
+    <div class="subtitulo">
+        Este estado no cuenta con multimedallistas
+    </div>
+}

@@ -23,8 +23,11 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="cabeceras">El número de cabeceras que tendrá la tabla</param>
+        /// <param name="excluirNoOros">true si solamente debemos incluir aquellos
+        /// medallistas con al menos 1 oro</param>
+        /// <param name="estado">Si debemos filtrar a cierto estado en particular</param>
         /// <returns>La lista de competidores con múltiples medallas</returns>
-        public static List<HallOfFamer> obtenerMultimedallistas(out int cabeceras, TipoOlimpiada tipoOlimpiada = TipoOlimpiada.OMI, bool excluirNoOros = true)
+        public static List<HallOfFamer> obtenerMultimedallistas(out int cabeceras, TipoOlimpiada tipoOlimpiada = TipoOlimpiada.OMI, bool excluirNoOros = true, string estado = null)
         {
             List<HallOfFamer> medallistas = new List<HallOfFamer>();
 
@@ -50,6 +53,12 @@ namespace OMIstats.Models
             {
                 HallOfFamer hof = new HallOfFamer();
                 hof.llenarDatos(int.Parse(r["clave"].ToString()));
+
+                if (estado != null)
+                {
+                    if (!hof.estados.Contains(estado))
+                        continue;
+                }
 
                 lugar++;
                 if (lastHof == null || lastHof.oros != hof.oros ||
