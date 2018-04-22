@@ -169,6 +169,7 @@
     <Compile Include="Controllers\EscuelaController.cs" />
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
+    <Compile Include="Controllers\HallOfFameController.cs" />
     <Compile Include="Controllers\OlimpiadaController.cs" />
     <Compile Include="Controllers\OlimpiadasController.cs" />
     <Compile Include="Controllers\ProblemaController.cs" />
@@ -386,6 +387,7 @@
     <Content Include="Views\Estados\Medallas.cshtml" />
     <Content Include="Views\Estados\Delegados.cshtml" />
     <Content Include="Views\Estado\Desempeño.cshtml" />
+    <Content Include="Views\HallOfFame\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
