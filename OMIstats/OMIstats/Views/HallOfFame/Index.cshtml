@@ -1,10 +1,99 @@
-﻿@section AddToHead
+﻿@model List<OMIstats.Models.HallOfFamer>
+
+@section AddToHead
 {
     <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
 }
 
 @{
     ViewBag.Title = "Multimedallistas";
+    int cabeceras = ViewBag.cabeceras;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
 }
 
 <h2 class="titulo">@ViewBag.Title</h2>
+
+<div>
+    En esta página se muestran los competidores que en olimpiadas nacionales
+    han obtenido al menos dos medallas y una de ellas de oro.
+</div>
+
+<br />
+
+<table class="table">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">Lugar</th>
+            <th class="bottom-border right-border">Nombre</th>
+            <th class="bottom-border right-border">Estado(s)</th>
+            <th class="bottom-border center" colspan="@cabeceras">Años</th>
+        </tr>
+    </thead>
+
+    @foreach (OMIstats.Models.HallOfFamer hof in Model)
+    {
+        <tr>
+            <td class="table-td center right-border ">@hof.lugar</td>
+            <td class="table-td right-border ">
+                @Html.ActionLink(hof.persona.nombre, "view", "Profile", new { usuario = hof.persona.usuario }, new { @class = "nombre" })
+            </td>
+            <td class="table-td right-border ">
+                @{int count = 0; }
+                @foreach (string claveEstado in hof.estados)
+                {
+                    if (count > 0)
+                    {
+                        <span>/</span>
+                    }
+                    count++;
+                    OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(claveEstado);
+                    @(Html.ActionLink(estado.nombre, "Index", "Estado", new { clave = claveEstado }, new { @class = "nombre" }))
+                }
+            </td>
+            @for (int i = 0; i < cabeceras; i++)
+            {
+                string clase = "mini-padding ";
+                if (i + 1 < cabeceras)
+                {
+                    clase += "right-border ";
+                }
+                if (i < hof.medallas.Count)
+                {
+                    OMIstats.Models.Resultados.TipoMedalla medalla = hof.medallas[i].Value;
+                    OMIstats.Models.Olimpiada o = hof.medallas[i].Key;
+                    tableManager.setCurrentOMI(o);
+                    clase += OMIstats.Utilities.TableManager.obtenerClaseCSS(medalla);
+                    string nombre = tableManager.enlaceOMI();
+                    switch(medalla)
+                        {
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
+                                {
+                                    nombre += " (I)";
+                                    break;
+                                }
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
+                                {
+                                    nombre += " (II)";
+                                    break;
+                                }
+                            case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                                {
+                                    nombre += " (III)";
+                                    break;
+                                }
+                        }
+                    <td class="@clase center">
+                        @Html.ActionLink(nombre, "Resultados", "Olimpiada",
+                            new { clave = o.numero, tipo = o.tipoOlimpiada }, new { @class = "nombre"})
+                    </td>
+                }
+                else
+                {
+                    <td class="@clase table-td "></td>
+                }
+            }
+        </tr>
+    }
+</table>

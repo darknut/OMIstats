@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OMIstats.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,8 +14,11 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return View();
-        }
+            int cabeceras;
+            List<HallOfFamer> medallistas = HallOfFamer.obtenerMultimedallistas(out cabeceras);
 
+            ViewBag.cabeceras = cabeceras;
+            return View(medallistas);
+        }
     }
 }

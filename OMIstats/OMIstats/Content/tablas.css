@@ -113,3 +113,8 @@
 .enlaceProblema img {
     width: 15px;
 }
+
+.mini-padding {
+    padding-left: 8px;
+    padding-right: 8px;
+}

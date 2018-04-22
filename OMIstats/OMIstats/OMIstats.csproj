@@ -181,6 +181,7 @@
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Models\Estado.cs" />
+    <Compile Include="Models\HallOfFamer.cs" />
     <Compile Include="Models\Institucion.cs" />
     <Compile Include="Models\Log.cs" />
     <Compile Include="Models\Medallero.cs" />
