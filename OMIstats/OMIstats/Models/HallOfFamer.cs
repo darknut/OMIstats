@@ -24,7 +24,7 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="cabeceras">El número de cabeceras que tendrá la tabla</param>
         /// <returns>La lista de competidores con múltiples medallas</returns>
-        public static List<HallOfFamer> obtenerMultimedallistas(out int cabeceras, TipoOlimpiada tipoOlimpiada = TipoOlimpiada.OMI)
+        public static List<HallOfFamer> obtenerMultimedallistas(out int cabeceras, TipoOlimpiada tipoOlimpiada = TipoOlimpiada.OMI, bool excluirNoOros = true)
         {
             List<HallOfFamer> medallistas = new List<HallOfFamer>();
 
@@ -33,7 +33,10 @@ namespace OMIstats.Models
 
             query.Append(" select clave from Medallero where tipo = ");
             query.Append((int)Medallero.TipoMedallero.PERSONA);
-            query.Append(" and oro > 0 and (oro + plata + bronce) > 1 and clase = ");
+            query.Append(" and ");
+            if (excluirNoOros)
+                query.Append(" oro > 0 and ");
+            query.Append(" (oro + plata + bronce) > 1 and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by oro desc, plata desc, bronce desc");
 

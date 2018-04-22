@@ -12,12 +12,13 @@ namespace OMIstats.Controllers
         //
         // GET: /HallOfFame/
 
-        public ActionResult Index()
+        public ActionResult Index(bool todos = false)
         {
             int cabeceras;
-            List<HallOfFamer> medallistas = HallOfFamer.obtenerMultimedallistas(out cabeceras);
+            List<HallOfFamer> medallistas = HallOfFamer.obtenerMultimedallistas(out cabeceras, excluirNoOros: !todos);
 
             ViewBag.cabeceras = cabeceras;
+            ViewBag.todos = todos;
             return View(medallistas);
         }
     }

@@ -10,15 +10,29 @@
 @{
     ViewBag.Title = "Multimedallistas";
     int cabeceras = ViewBag.cabeceras;
+    bool todos = ViewBag.todos;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
 }
 
 <h2 class="titulo">@ViewBag.Title</h2>
 
+@if (todos)
+{
+<div>
+En esta página se muestran los competidores que en olimpiadas nacionales
+han obtenido al menos dos medallas.
+</div>
+}
+else
+{
 <div>
     En esta página se muestran los competidores que en olimpiadas nacionales
     han obtenido al menos dos medallas y una de ellas de oro.
+    <br />
+    Para incluir a todos los multimedallistas, da clic
+    @Html.ActionLink("aquí.", "Index", "HallOfFame", new { todos = true }, null)
 </div>
+}
 
 <br />
 
