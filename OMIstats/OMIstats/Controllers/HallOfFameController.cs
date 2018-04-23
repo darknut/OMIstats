@@ -37,5 +37,14 @@ namespace OMIstats.Controllers
             ViewBag.filtro = filtrar;
             return View(medallistas);
         }
+
+        //
+        // GET: /HallOfFame/Top3
+
+        public ActionResult Top3()
+        {
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            return View(HallOfFamer.obtenerTop3(TipoOlimpiada.OMI));
+        }
     }
 }

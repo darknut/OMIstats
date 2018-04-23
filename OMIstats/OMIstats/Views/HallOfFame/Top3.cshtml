@@ -1,0 +1,61 @@
+﻿@model Dictionary<string, List<KeyValuePair<OMIstats.Models.Persona, OMIstats.Models.Resultados.TipoMedalla>>>
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
+}
+
+@{
+    ViewBag.Title = "Top 3";
+    List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+}
+
+<div class="submenu">
+     @Html.ActionLink("Multimedallistas", "Index", "HallOfFame",
+            null, new { @class = "mini-boton" })
+</div>
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+<table class="table">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">Año</th>
+            <th class="bottom-border right-border">Olimpiada</th>
+            <th class="bottom-border center" colspan="3">Primeros lugares</th>
+        </tr>
+    </thead>
+
+    @foreach (OMIstats.Models.Olimpiada o in olimpiadas)
+    {
+        List<KeyValuePair<OMIstats.Models.Persona, OMIstats.Models.Resultados.TipoMedalla>> personas;
+        if (Model.TryGetValue(o.numero, out personas))
+        {
+            tableManager.setCurrentOMI(o);
+        <tr>
+            <td class="table-td center right-border">@o.año</td>
+            <td class="table-td right-border ">
+                @Html.ActionLink(tableManager.enlaceOMI(), "Resultados", "Olimpiada",
+                    new { clave = o.numero, tipo = o.tipoOlimpiada }, new { @class = "nombre" })
+            </td>
+            @{int nPersona = 0;}
+            @foreach(KeyValuePair<OMIstats.Models.Persona, OMIstats.Models.Resultados.TipoMedalla> par in personas)
+            {
+                nPersona++;
+                string clase = OMIstats.Utilities.TableManager.obtenerClaseCSS(par.Value, top3: true);
+                if (nPersona < 3)
+                {
+                    clase += " right-border";
+                }
+                <td class="@clase mini-padding">
+                    @Html.ActionLink(par.Key.nombre, "view", "Profile", new { usuario = par.Key.usuario },
+                        new { @class = "nombre"})
+                </td>
+            }
+        </tr>
+        }
+    }
+</table>

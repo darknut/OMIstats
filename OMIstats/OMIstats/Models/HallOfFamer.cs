@@ -118,5 +118,52 @@ namespace OMIstats.Models
                     oros++;
             }
         }
+
+        /// <summary>
+        /// Regresa el Top 3 de todas las olimpiadas
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <returns>La lista de top 3 de todas las olimpiadas</returns>
+        public static Dictionary<string, List<KeyValuePair<Persona, Resultados.TipoMedalla>>> obtenerTop3(TipoOlimpiada tipoOlimpiada)
+        {
+            Dictionary<string, List<KeyValuePair<Persona, Resultados.TipoMedalla>>> top3 = new Dictionary<string, List<KeyValuePair<Persona, Resultados.TipoMedalla>>>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select olimpiada, concursante, medalla from resultados where clase =  ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and (medalla = ");
+            query.Append((int)Resultados.TipoMedalla.ORO_1);
+            query.Append(" or medalla = ");
+            query.Append((int)Resultados.TipoMedalla.ORO_2);
+            query.Append(" or medalla = ");
+            query.Append((int)Resultados.TipoMedalla.ORO_3);
+            query.Append(") order by olimpiada, medalla asc");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            List<KeyValuePair<Persona, Resultados.TipoMedalla>> ganadores = null;
+            string lastOMI = null;
+            foreach (DataRow r in table.Rows)
+            {
+                string olimpiada = r["olimpiada"].ToString();
+                int concursante = (int)r["concursante"];
+                Resultados.TipoMedalla medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), r["medalla"].ToString());
+
+                if (lastOMI == null || lastOMI != olimpiada)
+                {
+                    ganadores = new List<KeyValuePair<Persona, Resultados.TipoMedalla>>();
+                    top3.Add(olimpiada.Trim(), ganadores);
+                    lastOMI = olimpiada;
+                }
+
+                Persona persona = Persona.obtenerPersonaConClave(concursante);
+                ganadores.Add(new KeyValuePair<Persona, Resultados.TipoMedalla>(persona, medalla));
+            }
+
+            return top3;
+        }
     }
 }

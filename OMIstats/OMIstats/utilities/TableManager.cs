@@ -90,7 +90,7 @@ namespace OMIstats.Utilities
             return obtenerClaseCSS(currentResultados.medalla);
         }
 
-        public static string obtenerClaseCSS(Resultados.TipoMedalla medalla)
+        public static string obtenerClaseCSS(Resultados.TipoMedalla medalla, bool top3 = false)
         {
             switch (medalla)
             {
@@ -100,8 +100,14 @@ namespace OMIstats.Utilities
                     return CLASE_PLATA;
                 case OMIstats.Models.Resultados.TipoMedalla.ORO:
                 case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
+                    return CLASE_ORO;
                 case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
+                    if (top3)
+                        return CLASE_PLATA;
+                    return CLASE_ORO;
                 case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                    if (top3)
+                        return CLASE_BRONCE;
                     return CLASE_ORO;
             }
 

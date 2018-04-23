@@ -16,6 +16,8 @@
 }
 
 <div class="submenu">
+     @Html.ActionLink("Top 3", "Top3", "HallOfFame",
+            null, new { @class = "mini-boton" })
     <div class="comboTitle">Filtrar estado:</div>
     <select onChange="redirige('@Url.Content("~/HallOfFame?filtrar=")', this.options[this.selectedIndex].value)" class="comboMargin">
         <option value="">- - -</option>
@@ -47,6 +49,7 @@ else
 </div>
 }
 
+<br />
 <br />
 
 @if (filtro != null)

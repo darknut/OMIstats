@@ -389,6 +389,7 @@
     <Content Include="Views\Estados\Delegados.cshtml" />
     <Content Include="Views\Estado\Desempeño.cshtml" />
     <Content Include="Views\HallOfFame\Index.cshtml" />
+    <Content Include="Views\HallOfFame\Top3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
