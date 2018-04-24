@@ -36,14 +36,22 @@
         </tr>
     </thead>
 
-    @{int lugar = 0;}
+    @{int lugar = 0;
+      int currentLugar = 0;
+      OMIstats.Models.Medallero ultimoMedallero = null;}
     @foreach (KeyValuePair<OMIstats.Models.Institucion, OMIstats.Models.Medallero> par in Model)
     {
         lugar++;
         OMIstats.Models.Institucion e = par.Key;
         OMIstats.Models.Medallero m = par.Value;
+        if (ultimoMedallero == null || ultimoMedallero.oros != m.oros ||
+            ultimoMedallero.platas != m.platas || ultimoMedallero.bronces != m.bronces)
+        {
+            currentLugar = lugar;
+        }
+        ultimoMedallero = m;
         <tr>
-            <td class="table-td right-border mini-cell center">@lugar</td>
+            <td class="table-td right-border mini-cell center">@currentLugar</td>
             <td class="table-td right-border mini-cell">
                 @Html.ActionLink(e.nombre, "Index", "Escuela", new { url = e.nombreURL, tipo = tipoOlimpiada },
                     new { @class = "nombre" })
