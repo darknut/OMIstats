@@ -180,6 +180,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Models\CachedResult.cs" />
+    <Compile Include="Controllers\EscuelasController.cs" />
     <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\HallOfFamer.cs" />
     <Compile Include="Models\Institucion.cs" />
@@ -390,6 +391,7 @@
     <Content Include="Views\Estado\Desempeño.cshtml" />
     <Content Include="Views\HallOfFame\Index.cshtml" />
     <Content Include="Views\HallOfFame\Top3.cshtml" />
+    <Content Include="Views\Escuelas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -205,6 +205,39 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Obtiene la lista de las mejores escuelas con medallas
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <returns>La lista de instituciones</returns>
+        public static List<KeyValuePair<Institucion, Medallero>> obtenerMejoresEscuelas(TipoOlimpiada tipoOlimpiada)
+        {
+            List<KeyValuePair<Institucion, Medallero>> escuelas = new List<KeyValuePair<Institucion, Medallero>>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from Medallero where tipo = ");
+            query.Append((int) Medallero.TipoMedallero.INSTITUCION);
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and oro > 1 order by oro desc, plata desc, bronce desc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Medallero m = new Medallero();
+                m.llenarDatos(r);
+                Institucion i = Institucion.obtenerInstitucionConClave(int.Parse(m.clave));
+
+                escuelas.Add(new KeyValuePair<Institucion,Medallero>(i, m));
+            }
+
+            return escuelas;
+        }
+
+        /// <summary>
         /// Guarda los datos en este objeto a la base de datos
         /// </summary>
         private bool guardarDatos()

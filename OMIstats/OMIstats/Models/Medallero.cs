@@ -69,7 +69,7 @@ namespace OMIstats.Models
             tipoOlimpiada = tipo;
         }
 
-        private void llenarDatos(DataRow datos)
+        public void llenarDatos(DataRow datos)
         {
             tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), datos["clase"].ToString().ToUpper());
             tipoMedallero = (TipoMedallero)Enum.Parse(typeof(TipoMedallero), datos["tipo"].ToString().ToUpper());
