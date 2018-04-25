@@ -173,6 +173,7 @@
     <Compile Include="Controllers\OlimpiadaController.cs" />
     <Compile Include="Controllers\OlimpiadasController.cs" />
     <Compile Include="Controllers\ProblemaController.cs" />
+    <Compile Include="Controllers\ProblemasController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -392,6 +393,7 @@
     <Content Include="Views\HallOfFame\Index.cshtml" />
     <Content Include="Views\HallOfFame\Top3.cshtml" />
     <Content Include="Views\Escuelas\Index.cshtml" />
+    <Content Include="Views\Problemas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

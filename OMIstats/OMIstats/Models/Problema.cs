@@ -211,6 +211,44 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa todos los problemas del tipo de olimpiada
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <returns>El diccionario de problemas, la llave es la olimpiada</returns>
+        public static Dictionary<string, List<Problema>> obtenerProblemas(TipoOlimpiada tipoOlimpiada)
+        {
+            Dictionary<string, List<Problema>> problemas = new Dictionary<string, List<Problema>>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from problema where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" order by olimpiada, dia asc, numero asc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            string ultimaOMI = null;
+            List<Problema> lista = null;
+            foreach (DataRow r in table.Rows)
+            {
+                Problema p = new Problema();
+                p.llenarDatos(r);
+
+                if (ultimaOMI == null || ultimaOMI != p.olimpiada)
+                {
+                    lista = new List<Problema>();
+                    problemas.Add(p.olimpiada, lista);
+                    ultimaOMI = p.olimpiada;
+                }
+
+                lista.Add(p);
+            }
+
+            return problemas;
+        }
+
+        /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// si el objeto no existe, lo crea.
         /// </summary>

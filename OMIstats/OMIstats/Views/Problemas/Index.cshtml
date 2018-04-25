@@ -1,0 +1,101 @@
+﻿@model Dictionary<string, List<OMIstats.Models.Problema>>
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
+}
+
+@{
+    List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
+    OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    ViewBag.Title = "Lista de problemas";
+}
+
+<div class="submenu">
+    @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
+    {
+        if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
+            tipo != OMIstats.Models.TipoOlimpiada.NULL &&
+            tipoOlimpiada != tipo)
+        {
+            @Html.ActionLink(tipo.ToString(), "Index", "Problemas",
+                new { tipo = tipo.ToString() }, new { @class = "mini-boton" })
+        }
+    }
+</div>
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+<table class="table" id="tablaPuntos">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">Olimpiada</th>
+            <th class="bottom-border right-border">Día</th>
+            <th class="bottom-border right-border">Problema</th>
+            <th class="bottom-border right-border">Media</th>
+            <th class="bottom-border right-border">Mediana</th>
+            <th class="bottom-border right-border">Ceros</th>
+            <th class="bottom-border right-border">Perfectos</th>
+            <th class="bottom-border right-border">Casos</th>
+            <th class="bottom-border">Soluciones</th>
+        </tr>
+    </thead>
+
+    @foreach (OMIstats.Models.Olimpiada o in olimpiadas)
+    {
+        List<OMIstats.Models.Problema> problemas;
+        if (!Model.TryGetValue(o.numero, out problemas))
+        {
+            continue;
+        }
+        tableManager.setCurrentOMI(o);
+        int[] pDias = new int[3];
+        for (int i = 0; i < problemas.Count; i++)
+        {
+            if (problemas[i].numero > 0)
+            {
+                pDias[problemas[i].dia]++;
+            }
+        }
+        bool headerOMI = false;
+        bool[] headerDias = new bool[3];
+        string casosDia = "";
+        string codigosDia = "";
+        foreach(OMIstats.Models.Problema problema in problemas)
+        {
+            if (problema.numero == 0)
+            {
+                casosDia = problema.casos;
+                codigosDia = problema.codigo;
+                continue;
+            }
+            <tr>
+                @if (!headerOMI)
+                {
+                    headerOMI = true;
+                <td rowspan="@(pDias[1] + pDias[2])" class="table-td right-border center">
+                    @Html.ActionLink(tableManager.enlaceOMI(), "Index", "Olimpiada",
+                        new { tipo = tipoOlimpiada, clave = o.numero }, new { @class = "nombre" })
+                </td>
+                }
+                @if (!headerDias[problema.dia])
+                {
+                    headerDias[problema.dia] = true;
+                <td rowspan="@(pDias[problema.dia])" class="table-td right-border center">Día @(problema.dia)</td>
+                }
+                <td class="table-td right-border">
+                   <img class="enlaceProblema" src="@Url.Content("~/" + problema.getURLIcon())"/>
+                   <a href="@problema.url" class="nombre" target="_blank">@problema.nombre</a>
+                </td>
+                <td class="table-td right-border center">@problema.media</td>
+                <td class="table-td right-border center">@problema.mediana</td>
+                <td class="table-td right-border center">@problema.ceros</td>
+                <td class="table-td right-border center">@problema.perfectos</td>
+                <td class="table-td right-border center"></td>
+                <td class="table-td center"></td>
+            </tr>
+        }
+    }
+</table>
