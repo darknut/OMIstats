@@ -72,6 +72,7 @@
                 continue;
             }
             string clase = "";
+            bool mostrarDatos = problema.media > 0;
             if (problema.numero == 1)
             {
                 clase = "top-border";
@@ -94,10 +95,46 @@
                    <img class="enlaceProblema" src="@Url.Content("~/" + problema.getURLIcon())"/>
                    <a href="@problema.url" class="nombre" target="_blank">@problema.nombre</a>
                 </td>
-                <td class="table-td right-border center @(clase)">@problema.media</td>
-                <td class="table-td right-border center @(clase)">@problema.mediana</td>
-                <td class="table-td right-border center @(clase)">@problema.ceros</td>
-                <td class="table-td right-border center @(clase)">@problema.perfectos</td>
+                <td class="table-td right-border center @(clase)">
+                    @if (mostrarDatos)
+                    {
+                        @(problema.media)
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td class="table-td right-border center @(clase)">
+                    @if (mostrarDatos)
+                    {
+                        @(problema.mediana)
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td class="table-td right-border center @(clase)">
+                    @if (mostrarDatos)
+                    {
+                        @(problema.ceros)
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td class="table-td right-border center @(clase)">
+                    @if (mostrarDatos)
+                    {
+                        @(problema.perfectos)
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
                 <td class="table-td right-border center @(clase)"></td>
                 <td class="table-td center @(clase)"></td>
             </tr>
