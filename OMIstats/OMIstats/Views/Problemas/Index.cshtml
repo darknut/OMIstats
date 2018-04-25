@@ -89,7 +89,23 @@
                 @if (!headerDias[problema.dia])
                 {
                     headerDias[problema.dia] = true;
-                <td rowspan="@(pDias[problema.dia])" class="table-td right-border center top-border">Día @(problema.dia)</td>
+                <td rowspan="@(pDias[problema.dia])" class="table-td right-border center top-border mini-padding">
+                    @if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI && o.año >= 2004 && o.año <= 2016)
+                    {
+                        if (problema.dia == 1)
+                        {
+                            @("Karel")
+                        }
+                        else
+                        {
+                            @("Lenguaje")
+                        }
+                    }
+                    else
+                    {
+                        @("Día " + problema.dia)
+                    }
+                </td>
                 }
                 <td class="table-td right-border @(clase)">
                    <img class="enlaceProblema" src="@Url.Content("~/" + problema.getURLIcon())"/>
