@@ -71,11 +71,16 @@
                 codigosDia = problema.codigo;
                 continue;
             }
+            string clase = "";
+            if (problema.numero == 1)
+            {
+                clase = "top-border";
+            }
             <tr>
                 @if (!headerOMI)
                 {
                     headerOMI = true;
-                <td rowspan="@(pDias[1] + pDias[2])" class="table-td right-border center">
+                <td rowspan="@(pDias[1] + pDias[2])" class="table-td right-border center top-border">
                     @Html.ActionLink(tableManager.enlaceOMI(), "Index", "Olimpiada",
                         new { tipo = tipoOlimpiada, clave = o.numero }, new { @class = "nombre" })
                 </td>
@@ -83,18 +88,18 @@
                 @if (!headerDias[problema.dia])
                 {
                     headerDias[problema.dia] = true;
-                <td rowspan="@(pDias[problema.dia])" class="table-td right-border center">Día @(problema.dia)</td>
+                <td rowspan="@(pDias[problema.dia])" class="table-td right-border center top-border">Día @(problema.dia)</td>
                 }
-                <td class="table-td right-border">
+                <td class="table-td right-border @(clase)">
                    <img class="enlaceProblema" src="@Url.Content("~/" + problema.getURLIcon())"/>
                    <a href="@problema.url" class="nombre" target="_blank">@problema.nombre</a>
                 </td>
-                <td class="table-td right-border center">@problema.media</td>
-                <td class="table-td right-border center">@problema.mediana</td>
-                <td class="table-td right-border center">@problema.ceros</td>
-                <td class="table-td right-border center">@problema.perfectos</td>
-                <td class="table-td right-border center"></td>
-                <td class="table-td center"></td>
+                <td class="table-td right-border center @(clase)">@problema.media</td>
+                <td class="table-td right-border center @(clase)">@problema.mediana</td>
+                <td class="table-td right-border center @(clase)">@problema.ceros</td>
+                <td class="table-td right-border center @(clase)">@problema.perfectos</td>
+                <td class="table-td right-border center @(clase)"></td>
+                <td class="table-td center @(clase)"></td>
             </tr>
         }
     }
