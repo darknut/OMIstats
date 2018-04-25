@@ -151,8 +151,40 @@
                         <span>-</span>
                     }
                 </td>
-                <td class="table-td right-border center @(clase)"></td>
-                <td class="table-td center @(clase)"></td>
+                @if (casosDia.Length == 0)
+                {
+                <td class="table-td right-border center @(clase)">
+                    @if (problema.casos.Length > 0)
+                    {
+                    <a href="@problema.casos"><img src="~/img/rar.png" /></a>
+                    }
+                </td>
+                } else
+                {
+                    if (problema.numero == 1)
+                    {
+                    <td class="table-td right-border center @(clase)" rowspan="@(pDias[problema.dia])">
+                        <a href="@casosDia"><img src="~/img/rar.png" /></a>
+                    </td>
+                    }
+                }
+                @if (codigosDia.Length == 0)
+                {
+                <td class="table-td center @(clase)">
+                    @if (problema.codigo.Length > 0)
+                    {
+                    <a href="@problema.codigo"><img src="~/img/cpp.png" /></a>
+                    }
+                </td>
+                } else
+                {
+                    if (problema.numero == 1)
+                    {
+                    <td class="table-td center @(clase)" rowspan="@(pDias[problema.dia])">
+                        <a href="@codigosDia"><img src="~/img/cpp.png" /></a>
+                    </td>
+                    }
+                }
             </tr>
         }
     }
