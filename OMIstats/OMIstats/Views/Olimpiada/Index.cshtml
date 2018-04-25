@@ -174,7 +174,21 @@
                 }
                 else
                 {
-                    title = "Día " + d;
+                    if (Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI && Model.año >= 2004 && Model.año <= 2016)
+                    {
+                        if (d == 1)
+                        {
+                            title = "Karel";
+                        }
+                        else
+                        {
+                            title = "Lenguaje";
+                        }
+                    }
+                    else
+                    {
+                        title = "Día " + d;
+                    }
                 }
                 <h1 class="subtitulo">
                 @if (metadata.Count > 0 && metadata[d].url.Length > 0)
