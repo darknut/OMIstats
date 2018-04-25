@@ -13,10 +13,19 @@ namespace OMIstats.Models
         //
         // GET: /Escuelas/
 
-        public ActionResult Index(TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult Index(string filtrar = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
+            if (filtrar != null)
+            {
+                Estado e = Estado.obtenerEstadoConClave(filtrar);
+                if (e == null)
+                    filtrar = null;
+            }
+
             ViewBag.tipoOlimpiada = tipo;
-            return View(Institucion.obtenerMejoresEscuelas(tipo));
+            ViewBag.filtro = filtrar;
+            ViewBag.estados = Estado.obtenerEstados();
+            return View(Institucion.obtenerMejoresEscuelas(filtrar, tipo));
         }
     }
 }

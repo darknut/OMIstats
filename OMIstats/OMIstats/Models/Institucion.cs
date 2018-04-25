@@ -214,8 +214,9 @@ namespace OMIstats.Models
         /// Obtiene la lista de las mejores escuelas con medallas
         /// </summary>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="estado">El estado que queremos filtrar</param>
         /// <returns>La lista de instituciones</returns>
-        public static List<KeyValuePair<Institucion, Medallero>> obtenerMejoresEscuelas(TipoOlimpiada tipoOlimpiada)
+        public static List<KeyValuePair<Institucion, Medallero>> obtenerMejoresEscuelas(string estado, TipoOlimpiada tipoOlimpiada)
         {
             List<KeyValuePair<Institucion, Medallero>> escuelas = new List<KeyValuePair<Institucion, Medallero>>();
 
@@ -226,7 +227,11 @@ namespace OMIstats.Models
             query.Append((int) Medallero.TipoMedallero.INSTITUCION);
             query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and oro > 1 order by oro desc, plata desc, bronce desc ");
+            if (estado == null)
+                query.Append(" and oro > 1 ");
+            else
+                query.Append(" and (oro + plata + bronce) > 1 ");
+            query.Append(" order by oro desc, plata desc, bronce desc ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -238,7 +243,8 @@ namespace OMIstats.Models
                 Institucion i = Institucion.obtenerInstitucionConClave(int.Parse(m.clave));
                 i.consultarEstadosDeInstitucion(tipoOlimpiada);
 
-                escuelas.Add(new KeyValuePair<Institucion,Medallero>(i, m));
+                if (estado == null || i.estados.Contains(estado))
+                    escuelas.Add(new KeyValuePair<Institucion,Medallero>(i, m));
             }
 
             return escuelas;

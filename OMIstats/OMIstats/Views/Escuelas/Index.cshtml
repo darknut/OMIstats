@@ -20,11 +20,47 @@
 
 @{
     OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipoOlimpiada;
+    string filtro = ViewBag.filtro;
     ViewBag.Title = "Tabla de escuelas con más medallas en la " + tipoOlimpiada;
 }
 
+<div class="submenu">
+    <div class="comboTitle">Filtrar estado:</div>
+    <select onChange="redirige('@Url.Content("~/Escuelas?filtrar=")', this.options[this.selectedIndex].value)" class="comboMargin">
+        <option value="">- - -</option>
+        @for (int i = 0; i < ViewBag.estados.Count; i++)
+        {
+            OMIstats.Models.Estado estado = ViewBag.estados[i];
+            <option value="@estado.clave" @(estado.clave == filtro ? "selected" : "")>@(estado.nombre)</option>
+        }
+    </select>
+</div>
+
 <h1 class="titulo">@ViewBag.Title</h1>
 
+@if (filtro == null)
+{
+<div>
+En esta página se muestran las escuelas que han obtenido
+al menos 2 medallas <b>de oro</b> en olimpiadas nacionales
+</div>
+<br />
+} else
+{
+<div>
+En esta página se muestran las escuelas que han obtenido
+al menos 2 medallas en olimpiadas nacionales
+</div>
+<br />
+    OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(filtro);
+<div>
+    Estamos filtrando al estado de @Html.ActionLink(estado.nombre, "Index", "Estado", new { clave = filtro }, new { @clase = "nombre" })
+</div>
+<br />
+}
+
+@if(Model.Count > 0)
+{
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
@@ -76,3 +112,10 @@
         </tr>
     }
 </table>
+}
+else
+{
+    <div class="subtitulo">
+        Este estado no cuenta con escuelas con más de 1 medalla
+    </div>
+}
