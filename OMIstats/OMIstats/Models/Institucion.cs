@@ -52,6 +52,10 @@ namespace OMIstats.Models
 
         public string logo { get; set; }
 
+        // Usado en la vista de escuelas para saber
+        // de qué estados es parte la escuela
+        public List<string> estados;
+
         public Institucion()
         {
             clave = 0;
@@ -63,6 +67,8 @@ namespace OMIstats.Models
             secundaria = false;
             preparatoria = false;
             universidad = false;
+
+            estados = null;
         }
 
         private void llenarDatos(DataRow datos)
@@ -230,11 +236,37 @@ namespace OMIstats.Models
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
                 Institucion i = Institucion.obtenerInstitucionConClave(int.Parse(m.clave));
+                i.consultarEstadosDeInstitucion(tipoOlimpiada);
 
                 escuelas.Add(new KeyValuePair<Institucion,Medallero>(i, m));
             }
 
             return escuelas;
+        }
+
+        /// <summary>
+        /// Calcula los estados de los cuales hay participantes para la escuela
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        private void consultarEstadosDeInstitucion(TipoOlimpiada tipoOlimpiada)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(estado) from MiembroDelegacion where institucion = ");
+            query.Append(this.clave);
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            estados = new List<string>();
+            foreach (DataRow r in table.Rows)
+            {
+                string estado = r[0].ToString().Trim();
+                estados.Add(estado);
+            }
         }
 
         /// <summary>

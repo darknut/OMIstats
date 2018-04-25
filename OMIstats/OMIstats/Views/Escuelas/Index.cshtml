@@ -30,6 +30,7 @@
         <tr class="table-header">
             <th class="bottom-border right-border table-header-clickable">Lugar</th>
             <th class="bottom-border right-border table-header-clickable">Escuela</th>
+            <th class="bottom-border right-border table-header-clickable">Estado(s)</th>
             <th class="bottom-border right-border table-header-clickable">Oros&nbsp;&nbsp;&nbsp;</th>
             <th class="bottom-border right-border table-header-clickable">Platas&nbsp;</th>
             <th class="bottom-border table-header-clickable">Bronces</th>
@@ -55,6 +56,19 @@
             <td class="table-td right-border mini-cell">
                 @Html.ActionLink(e.nombre, "Index", "Escuela", new { url = e.nombreURL, tipo = tipoOlimpiada },
                     new { @class = "nombre" })
+            </td>
+            <td class="table-td right-border mini-cell">
+                @{int count = 0; }
+                @foreach (string claveEstado in e.estados)
+                {
+                    if (count > 0)
+                    {
+                        <span>/</span>
+                    }
+                    count++;
+                    OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(claveEstado);
+                    @(Html.ActionLink(estado.nombre, "Index", "Estado", new { clave = claveEstado }, new { @class = "nombre" }))
+                }
             </td>
             <td class="table-td center right-border fondoOro mini-cell">@m.oros</td>
             <td class="table-td center right-border fondoPlata mini-cell">@m.platas</td>
