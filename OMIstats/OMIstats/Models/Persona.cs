@@ -44,6 +44,14 @@ namespace OMIstats.Models
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string correo { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+        public string codeforces { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+        public string topcoder { get; set; }
+
         public string usuario { get; set; }
 
         public bool admin { get; set; }
@@ -77,6 +85,8 @@ namespace OMIstats.Models
             ioiID = 0;
             CURP = "";
             omegaup = "";
+            codeforces = "";
+            topcoder = "";
         }
 
         /// <summary>
@@ -103,6 +113,8 @@ namespace OMIstats.Models
                 ioiID = (int) datos["ioiID"];
                 CURP = datos["CURP"].ToString().Trim();
                 omegaup = datos["omegaup"].ToString().Trim();
+                topcoder = datos["topcoder"].ToString().Trim();
+                codeforces = datos["codeforces"].ToString().Trim();
             }
         }
 
@@ -309,6 +321,14 @@ namespace OMIstats.Models
 
             query.Append(" omegaup = ");
             query.Append(Utilities.Cadenas.comillas(omegaup));
+            query.Append(",");
+
+            query.Append(" codeforces = ");
+            query.Append(Utilities.Cadenas.comillas(codeforces));
+            query.Append(",");
+
+            query.Append(" topcoder = ");
+            query.Append(Utilities.Cadenas.comillas(topcoder));
             query.Append(",");
 
             query.Append(" CURP = ");

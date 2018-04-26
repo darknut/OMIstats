@@ -110,6 +110,22 @@
                 </div>
             </div>
 
+            <div>
+                <div class="label">Code forces:</div>
+                <div class="input">
+                    http://codeforces.com/profile/@Html.TextBoxFor(model => model.codeforces, new { @class = "inputCodeForces" })
+                    @Html.ValidationMessageFor(model => model.codeforces)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Top coder:</div>
+                <div class="input">
+                    https://www.topcoder.com/members/@Html.TextBoxFor(model => model.topcoder, new { @class = "inputTopCoder" })
+                    @Html.ValidationMessageFor(model => model.topcoder)
+                </div>
+            </div>
+
             @if(ViewBag.usuario.admin)
             {
                 <div>

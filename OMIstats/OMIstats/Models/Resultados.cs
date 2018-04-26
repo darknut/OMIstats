@@ -333,7 +333,8 @@ namespace OMIstats.Models
 
             Resultados res = new Resultados();
             res.tipoOlimpiada = tipoOlimpiada;
-            res.llenarDatos(table.Rows[0], cargarObjetos: false);
+            if (table.Rows.Count > 0)
+                res.llenarDatos(table.Rows[0], cargarObjetos: false);
 
             return res;
         }

@@ -295,6 +295,7 @@
     <Content Include="img\celdafondoplata.png" />
     <Content Include="img\celdapendiente.png" />
     <Content Include="img\circulo.png" />
+    <Content Include="img\codeforces.png" />
     <Content Include="img\cpp.png" />
     <Content Include="img\diploma.png" />
     <Content Include="img\docx.png" />
@@ -318,6 +319,7 @@
     <Content Include="img\pdf_large.png" />
     <Content Include="img\plata.png" />
     <Content Include="img\rar.png" />
+    <Content Include="img\topcoder.png" />
     <Content Include="img\twitter.png" />
     <Content Include="img\up.png" />
     <Content Include="js\admin.js" />

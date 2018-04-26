@@ -73,32 +73,42 @@
 
             @if (Model.ioiID != 0)
             {
-                <a href='@tableManager.getIOIStatsLink(Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;"/></a>
+                <a href='@tableManager.getIOIStatsLink(Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;" title="IOI"/></a>
             }
 
             @if (Model.sitio.Length > 0)
             {
-                <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio"/></a>
+                <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio" title="Sitio web"/></a>
             }
 
             @if (Model.correo.Length > 0)
             {
-                <a href="mailto:@Model.correo" target="_blank"><img src="~/img/mail.png" alt="correo"/></a>
+                <a href="mailto:@Model.correo" target="_blank"><img src="~/img/mail.png" alt="correo" title="Correo"/></a>
             }
 
             @if (Model.facebook.Length > 0)
             {
-                <a href='@Url.Content("https://www.facebook.com/" + @Model.facebook)' target="_blank"><img src="~/img/facebook.png" alt="facebook"/></a>
+                <a href='@Url.Content("https://www.facebook.com/" + @Model.facebook)' target="_blank"><img src="~/img/facebook.png" alt="facebook" title="Facebook"/></a>
             }
 
             @if (Model.twitter.Length > 0)
             {
-                <a href='@Url.Content("http://www.twitter.com/" + @Model.twitter)' target="_blank"><img src="~/img/twitter.png" alt="twitter"/></a>
+                <a href='@Url.Content("http://www.twitter.com/" + @Model.twitter)' target="_blank"><img src="~/img/twitter.png" alt="twitter" title="Twitter"/></a>
             }
 
             @if (Model.omegaup.Length > 0)
             {
-                <a href='@Url.Content("https://omegaup.com/profile/" + @Model.omegaup)' target="_blank"><img class="omegaIcon" src="~/img/omega.png" alt="omegaup"/></a>
+                <a href='@Url.Content("https://omegaup.com/profile/" + @Model.omegaup)' target="_blank"><img class="omegaIcon" src="~/img/omega.png" alt="omegaup" title="OmegaUp"/></a>
+            }
+
+            @if (Model.codeforces.Length > 0)
+            {
+                <a href='@Url.Content("http://codeforces.com/profile/" + @Model.codeforces)' target="_blank"><img style="margin-bottom:3px" src="~/img/codeforces.png" alt="codeforces" title="Code forces"/></a>
+            }
+
+            @if (Model.topcoder.Length > 0)
+            {
+                <a href='@Url.Content("https://www.topcoder.com/members/" + @Model.topcoder)' target="_blank"><img style="margin-bottom:3px" src="~/img/topcoder.png" alt="topcoder" title="Top coder"/></a>
             }
         </div>
 
