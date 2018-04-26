@@ -33,4 +33,32 @@
         No se encontraron resultados
     </div>
     }
+    else
+    {
+<br />
+<br />
+<table class="table" id="resultados">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border">Persona</th>
+            <th class="bottom-border right-border">Medallas</th>
+            <th class="bottom-border right-border">Estado(s)</th>
+            <th class="bottom-border">Otras participaciones</th>
+        </tr>
+    </thead>
+
+    @foreach (OMIstats.Models.SearchResult sr in Model)
+    {
+        <tr>
+            <td class="table-td right-border">
+                @Html.ActionLink(sr.persona.nombre, "view", "Profile",
+                    new { usuario = sr.persona.usuario }, new { @class = "nombre" })
+            </td>
+            <td class="table-td right-border"></td>
+            <td class="table-td right-border"></td>
+            <td class="table-td"></td>
+        </tr>
+    }
+</table>
+    }
 }
