@@ -5,15 +5,13 @@
     <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/buscar.css" type="text/css" />
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="~/js/buscar.js"></script>
     <script type="text/javascript">
-        setTimeout(function () {
-            $(document).ready(function () {
-                $('#searchbox').keypress(function (e) {
-                    if (e.keyCode == 13)
-                        $('#buscarButton').click();
-                });
-            });
-        }, 0);
+        preparar("@Url.Content("~")");
     </script>
 }
 
@@ -22,5 +20,5 @@
 }
 
 <div class="searchbox-container">
-    <input class="searchbox" type="text" id="searchbox" /> <input id="buscarButton" type="button" value="Buscar" onclick="alert()" />
+    <input class="searchbox" type="text" id="searchbox" /> <input id="buscarButton" type="button" value="Buscar" onclick="buscar()" />
 </div>
