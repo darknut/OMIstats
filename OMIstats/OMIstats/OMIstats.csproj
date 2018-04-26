@@ -219,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\buscar.css" />
     <Content Include="Content\cabecera.css" />
     <Content Include="Content\error.css" />
     <Content Include="Content\escuelas.css" />

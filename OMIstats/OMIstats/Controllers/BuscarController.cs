@@ -12,10 +12,12 @@ namespace OMIstats.Controllers
         //
         // GET: /Buscar/
 
-        public ActionResult Index()
+        public ActionResult Index(string query = null)
         {
-            return View();
+            List<SearchResult> resultados = null;
+            if (query != null)
+                resultados = Persona.buscar(query);
+            return View(resultados);
         }
-
     }
 }

@@ -521,5 +521,15 @@ namespace OMIstats.Models
 
             return p;
         }
+
+        /// <summary>
+        /// Busca personas con el nombre mandado como parámetro
+        /// </summary>
+        /// <param name="nombre">El nombre a buscar</param>
+        /// <returns>La lista de resultados</returns>
+        public static List<SearchResult> buscar(string nombre)
+        {
+            return null;
+        }
     }
 }

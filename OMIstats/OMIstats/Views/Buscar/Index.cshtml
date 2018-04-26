@@ -1,5 +1,26 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model List<OMIstats.Models.SearchResult>
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/buscar.css" type="text/css" />
+    <script type="text/javascript">
+        setTimeout(function () {
+            $(document).ready(function () {
+                $('#searchbox').keypress(function (e) {
+                    if (e.keyCode == 13)
+                        $('#buscarButton').click();
+                });
+            });
+        }, 0);
+    </script>
 }
 
-<h2>Index</h2>
+@{
+    ViewBag.Title = "Buscar";
+}
+
+<div class="searchbox-container">
+    <input class="searchbox" type="text" id="searchbox" /> <input id="buscarButton" type="button" value="Buscar" onclick="alert()" />
+</div>

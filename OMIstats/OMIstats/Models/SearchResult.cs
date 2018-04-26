@@ -7,5 +7,9 @@ namespace OMIstats.Models
 {
     public class SearchResult
     {
+        public Dictionary<TipoOlimpiada, Medallero> medalleros;
+        public Persona persona;
+        public HashSet<string> estados;
+        public HashSet<string> participaciones;
     }
 }
