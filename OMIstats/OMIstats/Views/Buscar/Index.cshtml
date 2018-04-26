@@ -89,7 +89,19 @@
             @if(!nombrePuesto)
             {
                 nombrePuesto = true;
-            <td class="table-td right-border thin-top-border" rowspan="@rowspan"></td>
+            <td class="table-td right-border thin-top-border" rowspan="@rowspan">
+                @{int count = 0; }
+                @foreach (string claveEstado in sr.estados)
+                {
+                    if (count > 0)
+                    {
+                        <span>/</span>
+                    }
+                    count++;
+                    OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(claveEstado);
+                    @(Html.ActionLink(estado.nombre, "Index", "Estado", new { clave = claveEstado }, new { @class = "nombre" }))
+                }
+            </td>
             <td class="table-td thin-top-border" rowspan="@rowspan"></td>
             }
         </tr>

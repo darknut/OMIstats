@@ -9,8 +9,8 @@ namespace OMIstats.Models
     {
         public Dictionary<TipoOlimpiada, Medallero> medalleros;
         public Persona persona;
-        public HashSet<string> estados;
-        public HashSet<string> participaciones;
+        public List<string> estados;
+        public List<string> participaciones;
 
         public SearchResult(Persona p)
         {
@@ -24,6 +24,7 @@ namespace OMIstats.Models
                 if (m != null)
                     medalleros.Add(tipo, m);
             }
+            estados = p.consultarEstados();
         }
     }
 }

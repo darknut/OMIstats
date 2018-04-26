@@ -1,12 +1,11 @@
-﻿using OMIstats.Controllers;
-using OMIstats.Models;
+﻿using OMIstats.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OMIstats.Models
+namespace OMIstats.Controllers
 {
     public class EscuelasController : BaseController
     {

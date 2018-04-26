@@ -528,5 +528,35 @@ namespace OMIstats.Models
 
             return resultados;
         }
+
+        /// <summary>
+        /// Calcula los estados de los cuales hay participantes para la escuela
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        public List<string> consultarEstados(TipoOlimpiada tipoOlimpiada = TipoOlimpiada.NULL)
+        {
+            List<string> estados = new List<string>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(estado) from MiembroDelegacion where persona = ");
+            query.Append(this.clave);
+            if (tipoOlimpiada != TipoOlimpiada.NULL)
+            {
+                query.Append(" and clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            }
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            estados = new List<string>();
+            foreach (DataRow r in table.Rows)
+            {
+                string estado = r[0].ToString().Trim();
+                estados.Add(estado);
+            }
+            return estados;
+        }
     }
 }
