@@ -26,6 +26,17 @@ namespace OMIstats.Models
             }
             estados = p.consultarEstados();
             participaciones = p.consultarParticipaciones();
+
+            if (medalleros.Count == 0 && estados.Count == 0 && participaciones.Count == 0)
+            {
+                // En este caso, estamos tratando con un delegado que no ha ido a olimpiadas o un zombie
+                Estado estado = Estado.obtenerEstadoDeDelegado(p.clave);
+                if (estado != null)
+                {
+                    participaciones.Add(MiembroDelegacion.TipoAsistente.DELEGADO.ToString());
+                    estados.Add(estado.clave);
+                }
+            }
         }
     }
 }

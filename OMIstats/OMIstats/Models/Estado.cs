@@ -211,5 +211,28 @@ namespace OMIstats.Models
 
             return ((int)table.Rows[0][0]) > 0;
         }
+
+        /// <summary>
+        /// Regresa el estado del delegado mandado como parametro
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="olimpiada">La clave de la olimpiada</param>
+        /// <returns></returns>
+        public static Estado obtenerEstadoDeDelegado(int clave)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select clave from Estado where delegado = ");
+            query.Append(clave);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+                return null;
+
+            return obtenerEstadoConClave(table.Rows[0][0].ToString().Trim());
+        }
     }
 }
