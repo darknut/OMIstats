@@ -38,9 +38,10 @@
         <a class="boton" href="~/Escuelas">Escuelas</a>
         <a class="boton" href="~/Problemas">Problemas</a>
         <a class="boton boton-right" href="~/HallOfFame">Salón de la fama</a>
+        <a class="boton boton-left boton-right" href="~/Buscar">Buscar</a>
         @if (ViewBag.usuario != null && ViewBag.usuario.admin)
         {
-            <a class="boton" href="~/Request/Manage">Admin</a>
+            <a class="boton boton-left boton-right" href="~/Request/Manage">Admin</a>
         }
         <br />
         <div class="usuario">
