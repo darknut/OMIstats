@@ -1,6 +1,6 @@
 ﻿var base;
 
-function preparar(url) {
+function preparar(url, query) {
     base = url;
     $(document).ready(function () {
         $('#searchbox').keypress(function (e) {
@@ -9,6 +9,9 @@ function preparar(url) {
                 $('#buscarButton').click();
         });
     });
+    var input = document.getElementById("searchbox");
+    input.focus();
+    input.value = query;
 }
 
 function buscar() {

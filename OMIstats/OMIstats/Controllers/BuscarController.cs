@@ -17,6 +17,7 @@ namespace OMIstats.Controllers
             List<SearchResult> resultados = null;
             if (query != null)
                 resultados = Persona.buscar(query);
+            ViewBag.query = query == null ? "" : query;
             return View(resultados);
         }
     }

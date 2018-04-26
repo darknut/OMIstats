@@ -8,20 +8,21 @@
     <link rel="stylesheet" href="~/Content/estados.css" type="text/css" />
 }
 
+@{
+    ViewBag.Title = "Buscar";
+    string query = ViewBag.query;
+}
+
 @section scripts
 {
     <script type="text/javascript" src="~/js/buscar.js"></script>
     <script type="text/javascript">
-        preparar("@Url.Content("~")");
+        preparar("@Url.Content("~")", "@query");
     </script>
 }
 
-@{
-    ViewBag.Title = "Buscar";
-}
-
 <div class="searchbox-container">
-    <input class="searchbox" type="text" id="searchbox" /> <input id="buscarButton" type="button" value="Buscar" onclick="buscar()" />
+    <input class="searchbox" type="text" id="searchbox"/> <input id="buscarButton" type="button" value="Buscar" onclick="buscar()" />
 </div>
 
 <div id="errorSize" class="errorTextoRojo" style="display:none">Escribe un nombre de al menos tres caracteres</div>
