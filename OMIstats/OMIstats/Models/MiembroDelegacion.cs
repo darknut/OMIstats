@@ -113,11 +113,16 @@ namespace OMIstats.Models
 
         public string getTipoAsistenteString()
         {
-            if (this.tipo == TipoAsistente.DELELIDER)
+            return getTipoAsistenteString(tipo);
+        }
+
+        public static string getTipoAsistenteString(TipoAsistente tipo)
+        {
+            if (tipo == TipoAsistente.DELELIDER)
                 return DELELIDER;
-            if (this.tipo == TipoAsistente.COLO)
+            if (tipo == TipoAsistente.COLO)
                 return COLO;
-            return this.tipo.ToString();
+            return tipo.ToString();
         }
 
         private void llenarDatos(DataRow row, bool incluirPersona = true, bool incluirEscuela = true)

@@ -25,6 +25,7 @@ namespace OMIstats.Models
                     medalleros.Add(tipo, m);
             }
             estados = p.consultarEstados();
+            participaciones = p.consultarParticipaciones();
         }
     }
 }

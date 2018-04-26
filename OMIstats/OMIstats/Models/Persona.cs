@@ -530,7 +530,7 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Calcula los estados de los cuales hay participantes para la escuela
+        /// Calcula los estados de los cuales hay participantes para la persona
         /// </summary>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         public List<string> consultarEstados(TipoOlimpiada tipoOlimpiada = TipoOlimpiada.NULL)
@@ -557,6 +557,38 @@ namespace OMIstats.Models
                 estados.Add(estado);
             }
             return estados;
+        }
+
+        /// <summary>
+        /// Calcula las participaciones diferente a competidor que tiene la persona
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        public List<string> consultarParticipaciones(TipoOlimpiada tipoOlimpiada = TipoOlimpiada.NULL)
+        {
+            List<string> tipos = new List<string>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(tipo) from MiembroDelegacion where persona = ");
+            query.Append(this.clave);
+            query.Append(" and tipo != ");
+            query.Append(Utilities.Cadenas.comillas(MiembroDelegacion.TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            if (tipoOlimpiada != TipoOlimpiada.NULL)
+            {
+                query.Append(" and clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            }
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            tipos = new List<string>();
+            foreach (DataRow r in table.Rows)
+            {
+                string tipo = r[0].ToString().Trim().ToUpper();
+                tipos.Add(MiembroDelegacion.getTipoAsistenteString((MiembroDelegacion.TipoAsistente) Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipo)));
+            }
+            return tipos;
         }
     }
 }
