@@ -172,9 +172,8 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append("select * from persona where nombreHash = HASHBYTES(\'SHA1\', ");
+            query.Append("select * from persona where search = ");
             query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
-            query.Append(")");
             if (ignorarUsuarios)
                 query.Append(" and LEFT(usuario, 1) = '_' ");
 
@@ -289,9 +288,9 @@ namespace OMIstats.Models
                     query.Append(Utilities.Cadenas.comillas(nombre));
                     query.Append(",");
 
-                    query.Append(" nombreHash = HASHBYTES(\'SHA1\', ");
+                    query.Append(" search = ");
                     query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
-                    query.Append("),");
+                    query.Append(",");
                 }
             }
 

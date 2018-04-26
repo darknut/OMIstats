@@ -202,8 +202,8 @@ namespace OMIstats.Controllers
             if (file != null)
                 p.foto = Utilities.Archivos.guardaArchivo(file);
 
-            // Si el nombre es el mismo, no se actualiza
-            if (p.nombre.Equals(current.nombre))
+            // Si el nombre es el mismo, no se actualiza (excepto si es admin)
+            if (!esAdmin() && p.nombre.Equals(current.nombre))
                 p.nombre = "";
 
             // Se guardan los datos
