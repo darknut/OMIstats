@@ -15,6 +15,15 @@ namespace OMIstats.Models
         public SearchResult(Persona p)
         {
             persona = p;
+
+            Medalleros ms = Medallero.obtenerMedalleros(Medallero.TipoMedallero.PERSONA, p.clave.ToString());
+            medalleros = new Dictionary<TipoOlimpiada, Medallero>();
+            foreach (TipoOlimpiada tipo in Enum.GetValues(typeof(TipoOlimpiada)))
+            {
+                Medallero m = ms.medalleroDeTipo(tipo);
+                if (m != null)
+                    medalleros.Add(tipo, m);
+            }
         }
     }
 }

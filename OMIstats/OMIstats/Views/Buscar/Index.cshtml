@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/buscar.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/estados.css" type="text/css" />
 }
 
 @section scripts
@@ -40,24 +41,55 @@
 <table class="table" id="resultados">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border">Persona</th>
-            <th class="bottom-border right-border">Medallas</th>
-            <th class="bottom-border right-border">Estado(s)</th>
-            <th class="bottom-border">Otras participaciones</th>
+            <th class="bottom-border right-border" rowspan="2">Persona</th>
+            <th class="bottom-border right-border center" colspan="4">Medallas</th>
+            <th class="bottom-border right-border" rowspan="2">Estado(s)</th>
+            <th class="bottom-border" rowspan="2">Otras participaciones</th>
+        </tr>
+        <tr class="table-header">
+            <th class="bottom-border center">Nivel</th>
+            <th class="bottom-border center" title="Medallas de oro"><img src="~/img/oro.png" class="medalla-img-titulo"/></th>
+            <th class="bottom-border center" title="Medallas de plata"><img src="~/img/plata.png" class="medalla-img-titulo"/></th>
+            <th class="bottom-border center" title="Medallas de bronce"><img src="~/img/bronce.png" class="medalla-img-titulo"/></th>
         </tr>
     </thead>
 
     @foreach (OMIstats.Models.SearchResult sr in Model)
     {
+        int rowspan = sr.medalleros.Count;
+        if (rowspan == 0)
+        {
+            rowspan = 1;
+        }
+        bool nombrePuesto = false;
+        List<OMIstats.Models.TipoOlimpiada> keys = sr.medalleros.Keys.ToList();
+        for (int i = 0; i < rowspan; i++)
+        {
         <tr>
-            <td class="table-td right-border">
+            @if(!nombrePuesto)
+            {
+                nombrePuesto = true;
+            <td class="table-td right-border" rowspan="@rowspan">
                 @Html.ActionLink(sr.persona.nombre, "view", "Profile",
                     new { usuario = sr.persona.usuario }, new { @class = "nombre" })
             </td>
-            <td class="table-td right-border"></td>
+            }
+            @if (keys.Count <= i)
+            {
+                <td class="table-td right-border center" colspan="4">-</td>
+            }
+            else
+            {
+                OMIstats.Models.Medallero m = sr.medalleros[keys[i]];
+                <td class="table-td center"><img src="@Url.Content("~/img/" + keys[i].ToString() + ".png")" style="width:30px"/></td>
+                <td class="table-td center fondoOro">@m.oros</td>
+                <td class="table-td center fondoPlata">@m.platas</td>
+                <td class="table-td right-border center fondoBronce">@m.bronces</td>
+            }
             <td class="table-td right-border"></td>
             <td class="table-td"></td>
         </tr>
+        }
     }
 </table>
     }
