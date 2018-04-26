@@ -585,8 +585,20 @@ namespace OMIstats.Models
             tipos = new List<string>();
             foreach (DataRow r in table.Rows)
             {
-                string tipo = r[0].ToString().Trim().ToUpper();
-                tipos.Add(MiembroDelegacion.getTipoAsistenteString((MiembroDelegacion.TipoAsistente) Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipo)));
+                MiembroDelegacion.TipoAsistente tipo = (MiembroDelegacion.TipoAsistente) Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), r[0].ToString().Trim().ToUpper());
+                if (tipo == MiembroDelegacion.TipoAsistente.DELELIDER)
+                {
+                    if (!tipos.Contains(MiembroDelegacion.TipoAsistente.LIDER.ToString()))
+                        tipos.Add(MiembroDelegacion.TipoAsistente.LIDER.ToString());
+                    if (!tipos.Contains(MiembroDelegacion.TipoAsistente.DELEGADO.ToString()))
+                        tipos.Add(MiembroDelegacion.TipoAsistente.DELEGADO.ToString());
+                }
+                else
+                {
+                    string t = MiembroDelegacion.getTipoAsistenteString(tipo); 
+                    if (!tipos.Contains(t))
+                        tipos.Add(t);
+                }
             }
             return tipos;
         }
