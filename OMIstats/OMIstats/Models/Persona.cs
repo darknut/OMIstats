@@ -595,7 +595,7 @@ namespace OMIstats.Models
                 }
                 else
                 {
-                    string t = MiembroDelegacion.getTipoAsistenteString(tipo); 
+                    string t = MiembroDelegacion.getTipoAsistenteString(tipo);
                     if (!tipos.Contains(t))
                         tipos.Add(t);
                 }
