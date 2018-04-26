@@ -5,3 +5,7 @@
 .searchbox-container {
     margin-top: 50px;
 }
+
+.thin-top-border {
+    border-top: solid 1px #336699;
+}

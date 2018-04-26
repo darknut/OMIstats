@@ -68,19 +68,19 @@
         <tr>
             @if(!nombrePuesto)
             {
-            <td class="table-td right-border top-border" rowspan="@rowspan">
+            <td class="table-td right-border thin-top-border" rowspan="@rowspan">
                 @Html.ActionLink(sr.persona.nombre, "view", "Profile",
                     new { usuario = sr.persona.usuario }, new { @class = "nombre" })
             </td>
             }
             @if (keys.Count <= i)
             {
-                <td class="table-td right-border center top-border" colspan="4">-</td>
+                <td class="table-td right-border center thin-top-border" colspan="4">-</td>
             }
             else
             {
                 OMIstats.Models.Medallero m = sr.medalleros[keys[i]];
-                string clase = i == 0 ? "top-border" : "";
+                string clase = i == 0 ? "thin-top-border" : "";
                 <td class="table-td center @clase"><img src="@Url.Content("~/img/" + keys[i].ToString() + ".png")" style="width:30px"/></td>
                 <td class="table-td center fondoOro @clase">@m.oros</td>
                 <td class="table-td center fondoPlata @clase">@m.platas</td>
@@ -89,8 +89,8 @@
             @if(!nombrePuesto)
             {
                 nombrePuesto = true;
-            <td class="table-td right-border top-border" rowspan="@rowspan"></td>
-            <td class="table-td top-border" rowspan="@rowspan"></td>
+            <td class="table-td right-border thin-top-border" rowspan="@rowspan"></td>
+            <td class="table-td thin-top-border" rowspan="@rowspan"></td>
             }
         </tr>
         }
