@@ -11,5 +11,10 @@ namespace OMIstats.Models
         public Persona persona;
         public HashSet<string> estados;
         public HashSet<string> participaciones;
+
+        public SearchResult(Persona p)
+        {
+            persona = p;
+        }
     }
 }

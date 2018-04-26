@@ -22,3 +22,15 @@
 <div class="searchbox-container">
     <input class="searchbox" type="text" id="searchbox" /> <input id="buscarButton" type="button" value="Buscar" onclick="buscar()" />
 </div>
+
+<div id="errorSize" class="errorTextoRojo" style="display:none">Escribe un nombre de al menos tres caracteres</div>
+
+@if (Model != null)
+{
+    if (Model.Count == 0)
+    {
+    <div class="subtitulo">
+        No se encontraron resultados
+    </div>
+    }
+}

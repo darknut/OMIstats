@@ -231,34 +231,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Regresa los datos de los admins del sitio
-        /// como una lista de personas
-        /// </summary>
-        public static List<Persona> obtenerAdmins()
-        {
-            List<Persona> admins = new List<Persona>();
-
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append("select * from persona where admin = 1");
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return admins;
-
-            DataTable table = db.getTable();
-
-            foreach (DataRow r in table.Rows)
-            {
-                Persona p = new Persona();
-                p.llenarDatos(r, completo:false);
-                admins.Add(p);
-            }
-
-            return admins;
-        }
-
-        /// <summary>
         /// Guarda los datos en la base de datos
         /// </summary>
         /// <param name="generarPeticiones">Si nombre y foto deben de guardarse
@@ -529,7 +501,31 @@ namespace OMIstats.Models
         /// <returns>La lista de resultados</returns>
         public static List<SearchResult> buscar(string nombre)
         {
-            return null;
+            List<SearchResult> resultados = new List<SearchResult>();
+            if (String.IsNullOrEmpty(nombre))
+                return resultados;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append("select * from persona where search like ");
+            query.Append(Utilities.Cadenas.comillas("%" + nombre + "%"));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+            if (table.Rows.Count == 0)
+                return resultados;
+
+            foreach (DataRow r in table.Rows)
+            {
+                Persona p = new Persona();
+                p.llenarDatos(r, completo: false);
+
+                SearchResult sr = new SearchResult(p);
+                resultados.Add(sr);
+            }
+
+            return resultados;
         }
     }
 }
