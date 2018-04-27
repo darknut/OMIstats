@@ -9,7 +9,7 @@
 }
 
 @{
-    ViewBag.Title = "Buscar";
+    ViewBag.Title = "Buscar personas";
     string query = ViewBag.query;
 }
 
@@ -20,6 +20,8 @@
         preparar("@Url.Content("~")", "@query");
     </script>
 }
+
+<h2 class="titulo">@ViewBag.Title</h2>
 
 <div class="searchbox-container">
     <input class="searchbox" type="text" id="searchbox"/> <input id="buscarButton" type="button" value="Buscar" onclick="buscar()" />
