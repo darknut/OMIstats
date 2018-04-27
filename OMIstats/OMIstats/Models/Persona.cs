@@ -509,7 +509,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where search like ");
-            query.Append(Utilities.Cadenas.comillas("%" + nombre + "%"));
+            query.Append(Utilities.Cadenas.comillas("%" + Utilities.Cadenas.quitaEspeciales(nombre) + "%"));
             query.Append(" order by search asc");
 
             db.EjecutarQuery(query.ToString());

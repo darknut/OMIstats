@@ -17,7 +17,7 @@
 {
     <script type="text/javascript" src="~/js/buscar.js"></script>
     <script type="text/javascript">
-        preparar("@Url.Content("~")", "@query");
+        preparar("@Url.Content("~")", "@(new HtmlString(query))");
     </script>
 }
 
