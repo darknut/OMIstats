@@ -30,6 +30,7 @@ namespace OMIstats
             Models.Usuario.PRODUCTION = (bool)Application["production"];
             Controllers.BaseController.CAPTCHA_SECRET = ConfigurationManager.AppSettings.Get("captchaSecret");
             Controllers.BaseController.CAPTCHA_KEY = ConfigurationManager.AppSettings.Get("captchaKey");
+            Models.Album.ACCESS_TOKEN = ConfigurationManager.AppSettings.Get("facebook");
         }
 
         public void Session_Start()

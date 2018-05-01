@@ -13,6 +13,8 @@ namespace OMIstats.Models
 {
     public class Album
     {
+        public static string ACCESS_TOKEN;
+
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
         public string id { get; set; }
@@ -95,6 +97,9 @@ namespace OMIstats.Models
         {
             tryNew();
 
+            if (update)
+                updateAlbum();
+
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
@@ -115,6 +120,10 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
+        }
+
+        private void updateAlbum()
+        {
         }
     }
 }
