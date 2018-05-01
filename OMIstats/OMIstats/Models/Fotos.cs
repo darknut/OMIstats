@@ -31,6 +31,44 @@ namespace OMIstats.Models
             imagen = "";
             url = "";
         }
+
+        /// <summary>
+        /// Borra todas las fotos del album mandado como parametro
+        /// </summary>
+        /// <param name="album">El álbum a borrar</param>
+        public static void borrarDeAlbum(string album)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" delete foto where album = ");
+            query.Append(Utilities.Cadenas.comillas(album));
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        /// <summary>
+        /// Guarda una nueva foto en la base de datos con los datos en el objeto
+        /// </summary>
+        public void guardar()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" insert into foto(album, id, orden, imagen, url) values(");
+            query.Append(Utilities.Cadenas.comillas(album));
+            query.Append(", ");
+            query.Append(Utilities.Cadenas.comillas(id));
+            query.Append(", ");
+            query.Append(orden);
+            query.Append(", ");
+            query.Append(Utilities.Cadenas.comillas(imagen));
+            query.Append(", ");
+            query.Append(Utilities.Cadenas.comillas(url));
+            query.Append(")");
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 
     public class Album
@@ -53,6 +91,7 @@ namespace OMIstats.Models
         public const string PAGING = "paging";
         public const string CURSORS = "cursors";
         public const string AFTER = "after";
+        public const string LINK = "link";
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
@@ -223,7 +262,11 @@ namespace OMIstats.Models
             response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, coverId, "", FOTOS_METADATA));
             portada = obtenerFoto(response);
 
+            // Borramos las fotos del album
+            Foto.borrarDeAlbum(id);
+
             string after = "";
+            int ordenFoto = 0;
             // Finalmente, obtenemos las fotos del album
             while (true)
             {
@@ -236,7 +279,18 @@ namespace OMIstats.Models
                 if (data.Count == 0)
                     break;
 
-                // Calcular las fotos
+                // Se agregan las fotos
+                foreach (Dictionary<string, object> foto in data)
+                {
+                    Foto f = new Foto();
+                    f.album = id;
+                    f.id = (string)foto[ID];
+                    f.orden = ++ordenFoto;
+                    f.url = (string)foto[LINK];
+                    f.imagen = obtenerFoto(foto);
+
+                    f.guardar();
+                }
 
                 Dictionary<string, object> paging = (Dictionary<string, object>)response[PAGING];
                 Dictionary<string, object> cursors = (Dictionary<string, object>)paging[CURSORS];
