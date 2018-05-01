@@ -15,12 +15,32 @@ using System.Web.Script.Serialization;
 
 namespace OMIstats.Models
 {
+    public class Foto
+    {
+        public string album { get; set; }
+        public string id { get; set; }
+        public int orden { get; set; }
+        public string imagen { get; set; }
+        public string url { get; set; }
+
+        public Foto()
+        {
+            album = "";
+            id = "";
+            orden = 0;
+            imagen = "";
+            url = "";
+        }
+    }
+
     public class Album
     {
         public static string ACCESS_TOKEN;
         public const string BASE_FACEBOOK_URL = "https://graph.facebook.com/{1}{2}?access_token={0}{3}";
+        public const string AFTER_METADATA = "&after={0}";
         public const string ALBUM_METADATA = "&fields=cover_photo,count,name";
-        public const string FOTOS_METADATA = "&fields=images";
+        public const string ALBUM_FOTOS = "/photos";
+        public const string FOTOS_METADATA = "&fields=images,link";
         public const string NOMBRE_ALBUM = "name";
         public const string COUNT_ALBUM = "count";
         public const string PORTADA_ALBUM = "cover_photo";
@@ -29,6 +49,10 @@ namespace OMIstats.Models
         public const int THUMBNAIL_SIZE = 225;
         public const string SIZE = "height";
         public const string URL = "source";
+        public const string DATA = "data";
+        public const string PAGING = "paging";
+        public const string CURSORS = "cursors";
+        public const string AFTER = "after";
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
@@ -199,7 +223,25 @@ namespace OMIstats.Models
             response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, coverId, "", FOTOS_METADATA));
             portada = obtenerFoto(response);
 
+            string after = "";
             // Finalmente, obtenemos las fotos del album
+            while (true)
+            {
+                string url = String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, id, ALBUM_FOTOS, FOTOS_METADATA);
+                if (after.Length > 0)
+                    url += String.Format(AFTER_METADATA, after);
+                response = call(url);
+
+                ArrayList data = (ArrayList)response[DATA];
+                if (data.Count == 0)
+                    break;
+
+                // Calcular las fotos
+
+                Dictionary<string, object> paging = (Dictionary<string, object>)response[PAGING];
+                Dictionary<string, object> cursors = (Dictionary<string, object>)paging[CURSORS];
+                after = (string)cursors[AFTER];
+            }
         }
     }
 }
