@@ -1,4 +1,4 @@
-﻿@model OMIstats.Models.Fotos
+﻿@model OMIstats.Models.Album
 
 @section AddToHead
 {
@@ -10,7 +10,6 @@
 @{
     OMIstats.Models.Olimpiada olimpiada = ViewBag.olimpiada;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
-    string errorImagen = ViewBag.errorImagen;
     ViewBag.Title = "Editar álbum";
 }
 
@@ -20,18 +19,10 @@
     <div>
         <div class="datosOlimpiada">
             <div>
-                <div class="label">Nombre:</div>
+                <div class="label">ID:</div>
                 <div class="input">
-                    @Html.TextBoxFor(model => model.nombre)
-                    @Html.ValidationMessageFor(model => model.nombre, "Escribe un nombre válido")
-                </div>
-            </div>
-
-            <div>
-                <div class="label">URL:</div>
-                <div class="input">
-                    @Html.TextBoxFor(model => model.url)
-                    @Html.ValidationMessageFor(model => model.url)
+                    @Html.TextBoxFor(model => model.id)
+                    @Html.ValidationMessageFor(model => model.id, "Escribe un nombre válido")
                 </div>
             </div>
 
@@ -44,20 +35,17 @@
             </div>
 
             <div>
-                <div class="label">Portada:</div>
+                <div class="label">¿Actualizar?:</div>
                 <div class="input">
-                    <input type="file" name="portada" id="portada"
-                        class="@(errorImagen.Length == 0 ? "" : "input-validation-error")"/>
-                        @if (errorImagen == "imagen_invalida")
-                        {
-                            <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
-                        }
+                    @Html.CheckBoxFor(model => model.update)
                 </div>
             </div>
 
             @Html.HiddenFor(model => model.olimpiada)
             @Html.HiddenFor(model => model.tipoOlimpiada)
-            @Html.HiddenFor(model => model.clave)
+            @Html.HiddenFor(model => model.id)
+            @Html.HiddenFor(model => model.fotos)
+            @Html.HiddenFor(model => model.portada)
 
             <div class="label">
                 <input type="button"  onclick="muestraLoadGifYSubmit('editFotos')" value="Enviar"/>

@@ -30,7 +30,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Fotos/Edit/
 
-        public ActionResult Edit(string omi, TipoOlimpiada tipo = TipoOlimpiada.OMI, int id = 0)
+        public ActionResult Edit(string omi, TipoOlimpiada tipo = TipoOlimpiada.OMI, string id = null)
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 504);
@@ -42,57 +42,36 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            ViewBag.errorImagen = "";
+            Album al = Album.obtenerAlbum(id);
+            al.olimpiada = omi;
+            al.tipoOlimpiada = tipo;
 
-            Fotos f = Fotos.obtenerFotos(id);
-            f.olimpiada = omi;
-            f.tipoOlimpiada = tipo;
-
-            return View(f);
+            return View(al);
         }
 
         //
         // POST: /Fotos/Edit/
 
         [HttpPost]
-        public ActionResult Edit(Fotos fotos, HttpPostedFileBase portada)
+        public ActionResult Edit(Album album)
         {
-            if (!esAdmin() || fotos == null)
+            if (!esAdmin() || album == null)
                 return RedirectTo(Pagina.HOME);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(fotos.olimpiada, fotos.tipoOlimpiada);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(album.olimpiada, album.tipoOlimpiada);
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            ViewBag.errorImagen = "";
             if (!ModelState.IsValid)
-                return View(fotos);
+                return View(album);
 
-            if (portada == null && fotos.clave == 0)
-            {
-                ViewBag.errorImagen = Utilities.Archivos.ResultadoImagen.IMAGEN_INVALIDA.ToString().ToLower();
-                return View(fotos);
-            }
+            if (String.IsNullOrEmpty(album.id))
+                album.update = true;
+            album.guardarDatos();
 
-            if (portada != null)
-            {
-                Utilities.Archivos.ResultadoImagen resultadoLogo = Utilities.Archivos.esImagenValida(portada);
-                if (resultadoLogo != Utilities.Archivos.ResultadoImagen.VALIDA)
-                {
-                    ViewBag.errorImagen = resultadoLogo.ToString().ToLower();
-                    return View(fotos);
-                }
-            }
+            Log.add(Log.TipoLog.ADMIN, "Álbum " + album.id + " actualizado por admin " + getUsuario().nombre);
 
-            fotos.guardarDatos();
-
-            if (portada != null)
-                Utilities.Archivos.guardaArchivo(portada, fotos.clave + ".jpg",
-                    Utilities.Archivos.FolderImagenes.FOTOS);
-
-            Log.add(Log.TipoLog.ADMIN, "Álbum " + fotos.clave + " actualizado por admin " + getUsuario().nombre);
-
-            return RedirectTo(Pagina.FOTOS, fotos.olimpiada);
+            return RedirectTo(Pagina.FOTOS, album.olimpiada);
         }
     }
 }

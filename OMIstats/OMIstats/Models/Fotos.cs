@@ -11,9 +11,11 @@ using System.Web;
 
 namespace OMIstats.Models
 {
-    public class Fotos
+    public class Album
     {
-        public int clave { get; set; }
+        [Required(ErrorMessage = "Campo requerido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
+        public string id { get; set; }
 
         public string olimpiada { get; set; }
 
@@ -22,83 +24,81 @@ namespace OMIstats.Models
         [Required(ErrorMessage = "Campo requerido")]
         public int orden { get; set; }
 
-        [Required(ErrorMessage = "Campo requerido")]
-        [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
         public string nombre { get; set; }
 
-        [Required(ErrorMessage = "Campo requerido")]
-        [MaxLength(200, ErrorMessage = "El tamaño máximo es 200 caracteres")]
-        public string url { get; set; }
+        public int fotos { get; set; }
 
-        public Fotos()
+        public string portada { get; set; }
+
+        public bool update { get; set; }
+
+        public Album()
         {
-            clave = 0;
+            id = "";
             olimpiada = "";
             tipoOlimpiada = TipoOlimpiada.NULL;
             orden = 0;
             nombre = "";
-            url = "";
+            fotos = 0;
+            portada = "";
         }
 
         private void llenarDatos(DataRow r)
         {
-            clave = (int)r["clave"];
+            id = r["id"].ToString().Trim();
             olimpiada = r["olimpiada"].ToString().Trim();
             tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
             orden = (int)r["orden"];
-            url = r["url"].ToString().Trim();
+            fotos = (int)r["fotos"];
             nombre = r["nombre"].ToString().Trim();
+            portada = r["portada"].ToString().Trim();
         }
 
-        public static Fotos obtenerFotos(int id)
+        public static Album obtenerAlbum(string id)
         {
-            Fotos f = new Fotos();
+            Album al = new Album();
 
-            if (id == 0)
-                return f;
+            if (String.IsNullOrEmpty(id))
+                return al;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from Fotos where clave = ");
-            query.Append(id);
+            query.Append(" select * from album where id = ");
+            query.Append(Utilities.Cadenas.comillas(id));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
             if (table.Rows.Count == 0)
-                return f;
+                return al;
 
-            f.llenarDatos(table.Rows[0]);
+            al.llenarDatos(table.Rows[0]);
 
-            return f;
+            return al;
         }
 
-        private void nuevo()
+        private void tryNew()
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" declare @inserted table(clave int); ");
-            query.Append(" insert into fotos (orden) output inserted.clave into @inserted values( ");
-            query.Append(" 0); select clave from @inserted ");
+            query.Append(" insert into album (id) values( ");
+            query.Append(Utilities.Cadenas.comillas(id));
+            query.Append(" )");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
-
-            if (table.Rows.Count == 1)
-                clave = (int)table.Rows[0][0];
         }
 
         public void guardarDatos()
         {
-            if (clave == 0)
-                nuevo();
+            tryNew();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" update fotos set olimpiada = ");
+            query.Append(" update album set olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(olimpiada));
             query.Append(", clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
@@ -106,10 +106,12 @@ namespace OMIstats.Models
             query.Append(orden);
             query.Append(", nombre = ");
             query.Append(Utilities.Cadenas.comillas(nombre));
-            query.Append(", url = ");
-            query.Append(Utilities.Cadenas.comillas(url));
-            query.Append(" where clave = ");
-            query.Append(clave);
+            query.Append(", fotos = ");
+            query.Append(fotos);
+            query.Append(", portada = ");
+            query.Append(Utilities.Cadenas.comillas(portada));
+            query.Append(" where id = ");
+            query.Append(Utilities.Cadenas.comillas(id));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
