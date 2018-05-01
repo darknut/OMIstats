@@ -1,0 +1,71 @@
+﻿@model OMIstats.Models.Fotos
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/olimpiada.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+@{
+    OMIstats.Models.Olimpiada olimpiada = ViewBag.olimpiada;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    string errorImagen = ViewBag.errorImagen;
+    ViewBag.Title = "Editar álbum";
+}
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+<form name="editFotos" id="editFotos" action="~/Fotos/Edit" method="post" enctype="multipart/form-data">
+    <div>
+        <div class="datosOlimpiada">
+            <div>
+                <div class="label">Nombre:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.nombre)
+                    @Html.ValidationMessageFor(model => model.nombre, "Escribe un nombre válido")
+                </div>
+            </div>
+
+            <div>
+                <div class="label">URL:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.url)
+                    @Html.ValidationMessageFor(model => model.url)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Orden:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.orden, new { @class = "smallInput" })
+                    @Html.ValidationMessageFor(model => model.orden)
+                </div>
+            </div>
+
+            <div>
+                <div class="label">Portada:</div>
+                <div class="input">
+                    <input type="file" name="portada" id="portada"
+                        class="@(errorImagen.Length == 0 ? "" : "input-validation-error")"/>
+                        @if (errorImagen == "imagen_invalida")
+                        {
+                            <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                        }
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.olimpiada)
+            @Html.HiddenFor(model => model.tipoOlimpiada)
+            @Html.HiddenFor(model => model.clave)
+
+            <div class="label">
+                <input type="button"  onclick="muestraLoadGifYSubmit('editFotos')" value="Enviar"/>
+                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="clear">
+</div>

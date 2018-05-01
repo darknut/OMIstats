@@ -346,6 +346,9 @@ namespace OMIstats.Models
 
             Olimpiada o = null;
 
+            if (clave == null)
+                return null;
+
             olimpiadas.TryGetValue(clave.Trim(), out o);
 
             return o;

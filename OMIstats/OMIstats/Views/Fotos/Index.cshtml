@@ -1,0 +1,18 @@
+﻿@model List<OMIstats.Models.Fotos>
+
+@{
+    OMIstats.Models.Olimpiada olimpiada = ViewBag.olimpiada;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    bool admin = ViewBag.admin;
+    tableManager.setCurrentOMI(olimpiada);
+    ViewBag.Title = "Fotos de la " + tableManager.enlaceOMI();
+}
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+@if (admin)
+{
+    @Html.ActionLink("Agregar álbum", "Edit", "Fotos",
+        new { omi = olimpiada.numero, tipo = olimpiada.tipoOlimpiada },
+        new { @class = "boton" })
+}

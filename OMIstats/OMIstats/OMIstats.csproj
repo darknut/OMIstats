@@ -170,6 +170,7 @@
     <Compile Include="Controllers\EscuelaController.cs" />
     <Compile Include="Controllers\EstadoController.cs" />
     <Compile Include="Controllers\EstadosController.cs" />
+    <Compile Include="Controllers\FotosController.cs" />
     <Compile Include="Controllers\HallOfFameController.cs" />
     <Compile Include="Controllers\OlimpiadaController.cs" />
     <Compile Include="Controllers\OlimpiadasController.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Controllers\EscuelasController.cs" />
     <Compile Include="Models\Estado.cs" />
+    <Compile Include="Models\Fotos.cs" />
     <Compile Include="Models\HallOfFamer.cs" />
     <Compile Include="Models\Institucion.cs" />
     <Compile Include="Models\Log.cs" />
@@ -401,6 +403,8 @@
     <Content Include="Views\Escuelas\Index.cshtml" />
     <Content Include="Views\Problemas\Index.cshtml" />
     <Content Include="Views\Buscar\Index.cshtml" />
+    <Content Include="Views\Fotos\Index.cshtml" />
+    <Content Include="Views\Fotos\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
