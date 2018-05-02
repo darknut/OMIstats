@@ -17,8 +17,13 @@
 <div class="album-container">
 @foreach (OMIstats.Models.Album al in Model)
 {
+    string enlace = Url.Content("~/Fotos/Album?id=" + al.id);
+    if (admin)
+    {
+        enlace = Url.Content("~/Fotos/Edit?id=" + al.id);
+    }
     <div class="album">
-        <a href="@Url.Content("~/Fotos/Album?id=" + al.id)">
+        <a href="@enlace">
             <img src="@al.portada" alt="Album" />
             <br />
             @al.nombre

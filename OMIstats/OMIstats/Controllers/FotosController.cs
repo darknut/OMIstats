@@ -50,6 +50,14 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 504);
 
+            Album al = Models.Album.obtenerAlbum(id);
+
+            if (omi == null && id != null)
+            {
+                omi = al.olimpiada;
+                tipo = al.tipoOlimpiada;
+            }
+
             if (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIS)
                 tipo = TipoOlimpiada.OMI;
 
@@ -57,7 +65,6 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            Album al = Models.Album.obtenerAlbum(id);
             al.olimpiada = omi;
             al.tipoOlimpiada = tipo;
 
