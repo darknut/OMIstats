@@ -22,13 +22,13 @@
     {
         enlace = Url.Content("~/Fotos/Edit?id=" + al.id);
     }
-    <div class="album">
-        <a href="@enlace">
+    <a href="@enlace">
+        <div class="album">
             <img src="@al.portada" alt="Album" />
             <br />
             @al.nombre
-        </a>
-    </div>
+        </div>
+    </a>
 }
 </div>
 

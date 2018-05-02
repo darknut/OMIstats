@@ -14,11 +14,11 @@
 <div class="album-container">
 @foreach (OMIstats.Models.Foto foto in fotos)
 {
-    <div class="album">
-        <a href="@foto.url" target="_blank">
+    <a href="@foto.url" target="_blank">
+        <div class="album">
             <img src="@foto.imagen"/>
-        </a>
-    </div>
+        </div>
+    </a>
 }
 </div>
 
