@@ -21,6 +21,10 @@
     height: 210px;
 }
 
+.nombre-album {
+    padding-top: 8px;
+}
+
 .album:hover {
     border: 1px solid #777;
 }
