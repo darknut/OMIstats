@@ -34,6 +34,8 @@ namespace OMIstats.Controllers
 
             ViewBag.olimpiada = o;
             ViewBag.admin = esAdmin();
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
+            ViewBag.olimpiadasConFotos = Models.Album.obtenerOlimpiadasConAlbumes(tipo);
 
             return View(albumes);
         }
