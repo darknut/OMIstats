@@ -43,7 +43,8 @@ namespace OMIstats.Controllers
             ADMIN_SCOREBOARD,
             ADMIN_LOGS,
             DELEGACION,
-            FOTOS
+            FOTOS,
+            ALBUM
         }
 
         public BaseController()
@@ -183,6 +184,10 @@ namespace OMIstats.Controllers
                 case Pagina.FOTOS:
                     if (opciones != null)
                         return RedirectToAction("Index", "Fotos", new { clave = opciones.ToString() });
+                    return RedirectTo(Pagina.ERROR, 404);
+                case Pagina.ALBUM:
+                    if (opciones != null)
+                        return RedirectToAction("Album", "Fotos", new { id = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.PROBLEMA:
                     if (opciones != null)

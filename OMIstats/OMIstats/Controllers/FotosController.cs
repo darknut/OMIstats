@@ -21,10 +21,21 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
+            List<Album> albumes = Models.Album.obtenerAlbumsDeOlimpiada(clave, tipo);
+
+            if (!esAdmin())
+            {
+                if (albumes == null || albumes.Count == 0)
+                    return RedirectTo(Pagina.ERROR, 404);
+
+                if (albumes.Count == 1)
+                    return RedirectTo(Pagina.ALBUM, albumes[0].id);
+            }
+
             ViewBag.olimpiada = o;
             ViewBag.admin = esAdmin();
 
-            return View(Models.Album.obtenerAlbumsDeOlimpiada(clave, tipo));
+            return View(albumes);
         }
 
         //
