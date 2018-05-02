@@ -228,6 +228,7 @@
     <Content Include="Content\estados.css" />
     <Content Include="Content\fechas.css" />
     <Content Include="Content\formas.css" />
+    <Content Include="Content\fotos.css" />
     <Content Include="Content\general.css" />
     <Content Include="Content\inicio.css" />
     <Content Include="Content\olimpiadas.css" />

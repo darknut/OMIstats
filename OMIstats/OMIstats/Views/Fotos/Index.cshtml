@@ -1,5 +1,9 @@
 ﻿@model List<OMIstats.Models.Album>
 
+@section AddToHead {
+    <link rel="stylesheet" href="~/Content/fotos.css" type="text/css" />
+}
+
 @{
     OMIstats.Models.Olimpiada olimpiada = ViewBag.olimpiada;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
@@ -10,12 +14,20 @@
 
 <h2 class="titulo">@ViewBag.Title</h2>
 
+<div class="album-container">
 @foreach (OMIstats.Models.Album al in Model)
 {
-    <div>
-        @al.portada
+    <div class="album">
+        <a href="@Url.Content("~/Fotos/Album?id=" + al.id)">
+            <img src="@al.portada" alt="Album" />
+            <br />
+            @al.nombre
+        </a>
     </div>
 }
+</div>
+
+<div class="clear"></div>
 
 @if (admin)
 {

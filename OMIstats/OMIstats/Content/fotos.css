@@ -1,0 +1,23 @@
+﻿.album-container {
+    padding: 20px;
+    display: table;
+    clear: both;
+}
+
+.album {
+    text-align: center;
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 250px;
+    padding: 15px;
+}
+
+.album:hover {
+    border: 1px solid #777;
+}
+
+.album img {
+    max-width: 250px;
+    padding-bottom: 5px;
+}
