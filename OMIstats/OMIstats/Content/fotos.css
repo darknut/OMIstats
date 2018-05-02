@@ -12,13 +12,27 @@
     padding: 15px;
 }
 
+.picture {
+    height: 250px;
+    line-height: 250px;
+}
+
+.album-height {
+    height: 210px;
+}
+
 .album:hover {
     border: 1px solid #777;
 }
 
 .album img {
     max-width: 250px;
-    padding-bottom: 5px;
+}
+
+.picture img {
+    max-height: 250px;
+    margin: auto;
+    vertical-align: middle;
 }
 
 .maxCombo {

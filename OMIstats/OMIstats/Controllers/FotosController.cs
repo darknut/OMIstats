@@ -47,7 +47,7 @@ namespace OMIstats.Controllers
         {
             Models.Album album = Models.Album.obtenerAlbum(id);
 
-            if (album == null)
+            if (album == null || string.IsNullOrEmpty(album.id))
                 return RedirectTo(Pagina.ERROR, 404);
 
             ViewBag.fotos = Foto.obtenerFotosDeAlbum(id);
