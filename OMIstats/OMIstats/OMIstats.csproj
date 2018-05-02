@@ -406,6 +406,7 @@
     <Content Include="Views\Buscar\Index.cshtml" />
     <Content Include="Views\Fotos\Index.cshtml" />
     <Content Include="Views\Fotos\Edit.cshtml" />
+    <Content Include="Views\Fotos\Album.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

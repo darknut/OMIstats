@@ -1,0 +1,25 @@
+﻿@model OMIstats.Models.Album
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/Content/fotos.css" type="text/css" />
+}
+
+@{
+    List<OMIstats.Models.Foto> fotos = ViewBag.fotos;
+    ViewBag.Title = Model.nombre;
+}
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+<div class="album-container">
+@foreach (OMIstats.Models.Foto foto in fotos)
+{
+    <div class="album">
+        <a href="@foto.url" target="_blank">
+            <img src="@foto.imagen"/>
+        </a>
+    </div>
+}
+</div>
+
+<div class="clear"></div>

@@ -24,7 +24,22 @@ namespace OMIstats.Controllers
             ViewBag.olimpiada = o;
             ViewBag.admin = esAdmin();
 
-            return View(Album.obtenerAlbumsDeOlimpiada(clave, tipo));
+            return View(Models.Album.obtenerAlbumsDeOlimpiada(clave, tipo));
+        }
+
+        //
+        // GET: /Fotos/Album/
+
+        public ActionResult Album(string id)
+        {
+            Models.Album album = Models.Album.obtenerAlbum(id);
+
+            if (album == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            ViewBag.fotos = Foto.obtenerFotosDeAlbum(id);
+
+            return View(album);
         }
 
         //
@@ -42,7 +57,7 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            Album al = Album.obtenerAlbum(id);
+            Album al = Models.Album.obtenerAlbum(id);
             al.olimpiada = omi;
             al.tipoOlimpiada = tipo;
 

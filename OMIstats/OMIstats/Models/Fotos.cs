@@ -32,6 +32,15 @@ namespace OMIstats.Models
             url = "";
         }
 
+        private void llenarDatos(DataRow r)
+        {
+            album = r["album"].ToString().Trim();
+            id = r["id"].ToString().Trim();
+            orden = (int)r["orden"];
+            imagen = r["imagen"].ToString().Trim();
+            url = r["url"].ToString().Trim();
+        }
+
         /// <summary>
         /// Borra todas las fotos del album mandado como parametro
         /// </summary>
@@ -68,6 +77,29 @@ namespace OMIstats.Models
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public static List<Foto> obtenerFotosDeAlbum(string album)
+        {
+            List<Foto> fotos = new List<Foto>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from foto where album = ");
+            query.Append(Utilities.Cadenas.comillas(album));
+            query.Append(" order by orden ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow row in table.Rows)
+            {
+                Foto f = new Foto();
+                f.llenarDatos(row);
+                fotos.Add(f);
+            }
+
+            return fotos;
         }
     }
 
