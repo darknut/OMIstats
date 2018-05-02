@@ -166,6 +166,36 @@ namespace OMIstats.Models
             portada = r["portada"].ToString().Trim();
         }
 
+        /// <summary>
+        /// Obtiene una lista de todas las olimpiadas con albumes de fotos
+        /// </summary>
+        /// <param name="tipo">El tipo de olimpiada</param>
+        /// <returns>La lista de olimpiadas</returns>
+        public static HashSet<string> obtenerOlimpiadasConAlbumes(TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        {
+            HashSet<string> olimpiadas = new HashSet<string>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(olimpiada) from album where clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow row in table.Rows)
+            {
+                olimpiadas.Add(row[0].ToString().Trim());
+            }
+
+            return olimpiadas;
+        }
+
+        /// <summary>
+        /// Obtiene el album con la id especificada
+        /// </summary>
+        /// <param name="id">La id del album</param>
+        /// <returns>El objeto album requerido</returns>
         public static Album obtenerAlbum(string id)
         {
             Album al = new Album();

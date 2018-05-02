@@ -7,6 +7,9 @@
 @{
     List<OMIstats.Models.Foto> fotos = ViewBag.fotos;
     List<OMIstats.Models.Album> albumes = ViewBag.albumes;
+    List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
+    HashSet<string> olimpiadasConFotos = ViewBag.olimpiadasConFotos;
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     ViewBag.Title = Model.nombre;
 }
 
@@ -24,6 +27,20 @@
         }
     </select>
     }
+    <br />
+    <div class="comboTitle">Otros años:</div>
+    <select onChange="redirige('@Url.Content("~/Fotos?tipo=" + Model.tipoOlimpiada + "&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
+        @for (int i = olimpiadas.Count - 1; i >= 0; i--)
+        {
+            if (!olimpiadasConFotos.Contains(olimpiadas[i].numero))
+            {
+                continue;
+            }
+            OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            tableManager.setCurrentOMI(omi);
+            <option value="@omi.numero" @(omi.numero == Model.olimpiada ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
+        }
+    </select>
 </div>
 
 <h2 class="titulo">@ViewBag.Title</h2>

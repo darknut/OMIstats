@@ -50,6 +50,8 @@ namespace OMIstats.Controllers
 
             ViewBag.fotos = Foto.obtenerFotosDeAlbum(id);
             ViewBag.albumes = Models.Album.obtenerAlbumsDeOlimpiada(album.olimpiada, album.tipoOlimpiada);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(album.tipoOlimpiada);
+            ViewBag.olimpiadasConFotos = Models.Album.obtenerOlimpiadasConAlbumes(album.tipoOlimpiada);
 
             return View(album);
         }
