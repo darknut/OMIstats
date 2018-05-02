@@ -33,6 +33,8 @@ namespace OMIstats.Controllers
             // Mientras las OMIS y OMIPS sean en el mismo evento que la OMI, no tienen su propia vista
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 
+            ViewBag.fotos = Album.obtenerAlbumsDeOlimpiada(clave, tipo).Count > 0;
+
             return View(o);
         }
 

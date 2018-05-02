@@ -11,6 +11,7 @@
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);
     ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
+    bool fotos = ViewBag.fotos;
 }
 
 <div class="submenu">
@@ -22,10 +23,12 @@
 
     <br />
 
-    @Html.ActionLink("Fotos", "Index", "Fotos",
-            new { clave = Model.numero }, new { @class = "mini-boton" })
-
-    <br />
+    @if (ViewBag.admin || fotos)
+    {
+        @Html.ActionLink("Fotos", "Index", "Fotos",
+            new { clave = Model.numero }, new { @class = "mini-boton" });
+        <br />
+    }
 </div>
 
 <div class="OMItituloFlexBox">
