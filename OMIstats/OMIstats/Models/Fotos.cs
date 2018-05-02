@@ -158,6 +158,38 @@ namespace OMIstats.Models
             return al;
         }
 
+        /// <summary>
+        /// Obtiene todos los albumes de la olimpiada
+        /// </summary>
+        /// <param name="olimpiada">La olimpiada de la que se quieren los albumes</param>
+        /// <param name="tipo">El tipo de olipiada</param>
+        /// <returns>La lista de álbumes</returns>
+        public static List<Album> obtenerAlbumsDeOlimpiada(string olimpiada, TipoOlimpiada tipo)
+        {
+            List<Album> albums = new List<Album>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from album where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" order by orden ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow row in table.Rows)
+            {
+                Album al = new Album();
+                al.llenarDatos(row);
+                albums.Add(al);
+            }
+
+            return albums;
+        }
+
         private void tryNew()
         {
             Utilities.Acceso db = new Utilities.Acceso();
@@ -239,7 +271,7 @@ namespace OMIstats.Models
                 int size = (int)sizeObj[SIZE];
                 if (size >= THUMBNAIL_SIZE)
                 {
-                    if (bestSize < size)
+                    if (size < bestSize || bestSize == 0)
                     {
                         bestSize = size;
                         bestURL = (string)sizeObj[URL];

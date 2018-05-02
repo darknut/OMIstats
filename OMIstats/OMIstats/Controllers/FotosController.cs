@@ -24,7 +24,7 @@ namespace OMIstats.Controllers
             ViewBag.olimpiada = o;
             ViewBag.admin = esAdmin();
 
-            return View();
+            return View(Album.obtenerAlbumsDeOlimpiada(clave, tipo));
         }
 
         //

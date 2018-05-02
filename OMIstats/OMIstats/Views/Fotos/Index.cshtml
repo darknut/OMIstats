@@ -10,6 +10,13 @@
 
 <h2 class="titulo">@ViewBag.Title</h2>
 
+@foreach (OMIstats.Models.Album al in Model)
+{
+    <div>
+        @al.portada
+    </div>
+}
+
 @if (admin)
 {
     @Html.ActionLink("Agregar álbum", "Edit", "Fotos",
