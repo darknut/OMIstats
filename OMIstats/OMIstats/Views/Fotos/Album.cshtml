@@ -6,8 +6,25 @@
 
 @{
     List<OMIstats.Models.Foto> fotos = ViewBag.fotos;
+    List<OMIstats.Models.Album> albumes = ViewBag.albumes;
     ViewBag.Title = Model.nombre;
 }
+
+<div class="submenu">
+    @Html.ActionLink("Datos", "Index", "Olimpiada",
+            new { clave = Model.olimpiada }, new { @class = "mini-boton" })
+    @if (albumes.Count > 1)
+    {
+    <br />
+    <div class="comboTitle">Álbumes:</div>
+    <select onChange="redirige('@Url.Content("~/Fotos/Album?id=")', this.options[this.selectedIndex].value)" class="comboMargin maxCombo">
+        @foreach (OMIstats.Models.Album album in albumes)
+        {
+            <option value="@album.id" @(album.id == Model.id ? "selected" : "")>@album.nombre</option>
+        }
+    </select>
+    }
+</div>
 
 <h2 class="titulo">@ViewBag.Title</h2>
 

@@ -49,6 +49,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             ViewBag.fotos = Foto.obtenerFotosDeAlbum(id);
+            ViewBag.albumes = Models.Album.obtenerAlbumsDeOlimpiada(album.olimpiada, album.tipoOlimpiada);
 
             return View(album);
         }
@@ -63,11 +64,14 @@ namespace OMIstats.Controllers
 
             Album al = Models.Album.obtenerAlbum(id);
 
-            if (omi == null && id != null)
+            if (omi == null && !String.IsNullOrEmpty(id))
             {
                 omi = al.olimpiada;
                 tipo = al.tipoOlimpiada;
             }
+
+            if (String.IsNullOrEmpty(id))
+                al.update = true;
 
             if (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIS)
                 tipo = TipoOlimpiada.OMI;
@@ -98,8 +102,6 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(album);
 
-            if (String.IsNullOrEmpty(album.id))
-                album.update = true;
             album.guardarDatos();
 
             Log.add(Log.TipoLog.ADMIN, "Álbum " + album.id + " actualizado por admin " + getUsuario().nombre);
