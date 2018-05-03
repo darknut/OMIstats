@@ -14,7 +14,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectTo(Pagina.HOME);
+            return View();
         }
 
         //
