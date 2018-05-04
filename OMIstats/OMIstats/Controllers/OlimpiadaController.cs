@@ -349,7 +349,7 @@ namespace OMIstats.Controllers
 
             List<Problema> metadata = Problema.obetnerMetaDatadeOMI(clave, tipo);
 
-            if (metadata.Count > 0)
+            if (metadata.Count >= 3)
             {
                 ViewBag.numerosDia1 = metadata[1];
                 ViewBag.numerosDia2 = metadata[2];

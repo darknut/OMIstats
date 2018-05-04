@@ -24,13 +24,13 @@ namespace OMIstats.Models
             clave = r.clave;
             if (dia == 1)
             {
-                for (int i = 1; i <= problemas; i++)
+                for (int i = 0; i < problemas; i++)
                     puntos.Add(r.dia1[i]);
                 totalDia = r.totalDia1;
             }
             else
             {
-                for (int i = 1; i <= problemas; i++)
+                for (int i = 0; i < problemas; i++)
                     puntos.Add(r.dia2[i]);
                 totalDia = r.totalDia2;
             }

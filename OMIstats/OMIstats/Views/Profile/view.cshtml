@@ -217,17 +217,17 @@
             <div class="separador">:</div>
             <div class="medalla" title="Medallas de oro">
                 <div><img src="~/img/oro.png"/></div>
-                <div>@(medallero.oros)</div>
+                <div>@(medallero == null ? "?" : medallero.oros.ToString())</div>
             </div>
             <div class="medalla" title="Medallas de plata">
                 <div><img src="~/img/plata.png"/></div>
-                <div>@(medallero.platas)</div>
+                <div>@(medallero == null ? "?" : medallero.platas.ToString())</div>
             </div>
             <div class="medalla" title="Medallas de bronce">
                 <div><img src="~/img/bronce.png"/></div>
-                <div>@(medallero.bronces)</div>
+                <div>@(medallero == null ? "?" : medallero.bronces.ToString())</div>
             </div>
-            @if (medallero.otros > 0)
+            @if (medallero != null && medallero.otros > 0)
             {
                 <div class="medalla" title="Participaciones sin medalla">
                     <div><img src="~/img/diploma.png"/></div>
