@@ -10,14 +10,6 @@ namespace OMIstats.Controllers
     public class ProblemaController : BaseController
     {
         //
-        // GET: /Problema/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-        //
         // GET: /Problema/Edit/
 
         public ActionResult Edit(string omi, int dia, int numero, TipoOlimpiada tipo = TipoOlimpiada.OMI)

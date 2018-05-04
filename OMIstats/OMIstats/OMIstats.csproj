@@ -409,7 +409,7 @@
     <Content Include="Views\Fotos\Index.cshtml" />
     <Content Include="Views\Fotos\Edit.cshtml" />
     <Content Include="Views\Fotos\Album.cshtml" />
-    <Content Include="Views\Problema\Index.cshtml" />
+    <Content Include="Views\Problemas\Graficas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,5 +18,14 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             return View(Problema.obtenerProblemas(tipo));
         }
+
+        //
+        // GET: /Problemas/Graficas/
+
+        public ActionResult Graficas()
+        {
+            return View();
+        }
+
     }
 }
