@@ -24,6 +24,10 @@ namespace OMIstats.Controllers
 
         public ActionResult Graficas()
         {
+            List<float> resultados = Problema.obtenerResultadosParaProblema("22", TipoOlimpiada.OMI, 1, 1);
+            Problema problema = Problema.obtenerProblema("22", TipoOlimpiada.OMI, 1, 1);
+            ViewBag.resultados = resultados;
+            ViewBag.problema = problema;
             return View();
         }
 

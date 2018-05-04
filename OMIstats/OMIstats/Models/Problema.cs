@@ -298,5 +298,44 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        /// <summary>
+        /// Regresa la lista de resultados para el problema seleccionado
+        /// </summary>
+        /// <param name="olimpiada">La olimpiada del problema</param>
+        /// <param name="tipo">El tipo de olimpiada</param>
+        /// <param name="dia">El dia del problema</param>
+        /// <param name="numero">El id del problema</param>
+        /// <returns>La lista ordenada de resultados</returns>
+        public static List<float> obtenerResultadosParaProblema(string olimpiada, TipoOlimpiada tipo, int dia, int numero)
+        {
+            List<float> resultados = new List<float>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+            string puntos = "puntosD" + dia + "P" + numero;
+
+            query.Append(" select ");
+            query.Append(puntos);
+            query.Append(" from resultados where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" order by ");
+            query.Append(puntos);
+            query.Append(" asc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                if (r[0] is DBNull)
+                    resultados.Add(0);
+                else
+                    resultados.Add(float.Parse(r[0].ToString()));
+            }
+
+            return resultados;
+        }
     }
 }
