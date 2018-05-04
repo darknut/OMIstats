@@ -201,7 +201,7 @@
                     }
                 }
                 <h1 class="subtitulo">
-                @if (metadata.Count > 0 && metadata[d].url.Length > 0)
+                @if (metadata.Count > d && metadata[d].url.Length > 0)
                 {
                     <a href="@metadata[d].url" target="_blank">@title</a>
                 }
@@ -209,7 +209,7 @@
                 {
                     @title
                 }
-                @if (metadata.Count > 0)
+                @if (metadata.Count > d)
                 {
                     if (metadata[d].casos.Length > 0)
                     {
