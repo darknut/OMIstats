@@ -735,8 +735,11 @@ namespace OMIstats.Models
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(olimpiada));
-            query.Append(" and md.clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            if (tipo == TipoAsistente.COMPETIDOR)
+            {
+                query.Append(" and md.clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            }
             query.Append(" and md.estado = ");
             query.Append(Utilities.Cadenas.comillas(estado));
 
