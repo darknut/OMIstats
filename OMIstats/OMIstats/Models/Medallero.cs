@@ -640,7 +640,7 @@ namespace OMIstats.Models
 
         public bool promedioEsInvalido()
         {
-            return (int)Math.Round((double)promedio) == 0 &&
+            return promedio <= 0.001 &&
                     (puntos > 0 || bronces > 0 ||
                     platas > 0 || oros > 0);
         }
@@ -657,7 +657,7 @@ namespace OMIstats.Models
 
         public bool puntosSonInvalidos()
         {
-            return (int)Math.Round((double)puntos) == 0 &&
+            return puntos <= 0.001 &&
                     (bronces > 0 ||
                     platas > 0 || oros > 0);
         }
