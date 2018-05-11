@@ -252,7 +252,9 @@ namespace OMIstats.Models
         /// Guarda los datos del objeto en la base de datos
         /// si el objeto no existe, lo crea.
         /// </summary>
-        public void guardar()
+        /// <param name="guardarTodo">Si también se tienen que guardar campos
+        /// como los casos y soluciones</param>
+        public void guardar(bool guardarTodo = true)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -273,12 +275,15 @@ namespace OMIstats.Models
 
             query.Append(" update problema set nombre = ");
             query.Append(Utilities.Cadenas.comillas(nombre));
-            query.Append(", url = ");
-            query.Append(Utilities.Cadenas.comillas(url));
-            query.Append(", casos = ");
-            query.Append(Utilities.Cadenas.comillas(casos));
-            query.Append(", codigo = ");
-            query.Append(Utilities.Cadenas.comillas(codigo));
+            if (guardarTodo)
+            {
+                query.Append(", url = ");
+                query.Append(Utilities.Cadenas.comillas(url));
+                query.Append(", casos = ");
+                query.Append(Utilities.Cadenas.comillas(casos));
+                query.Append(", codigo = ");
+                query.Append(Utilities.Cadenas.comillas(codigo));
+            }
             query.Append(", media = ");
             query.Append(media);
             query.Append(", mediana = ");

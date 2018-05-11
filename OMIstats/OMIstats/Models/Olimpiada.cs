@@ -632,11 +632,11 @@ namespace OMIstats.Models
             // Se guardan los bosquejos del metadata de la omi y los dias
             // Los cargamos de la base de datos en caso de ya existir.
             Problema p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 0, 0);
-            p.guardar();
+            p.guardar(guardarTodo: false);
             p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 1, 0);
-            p.guardar();
+            p.guardar(guardarTodo: false);
             p = Problema.obtenerProblema(this.numero, this.tipoOlimpiada, 2, 0);
-            p.guardar();
+            p.guardar(guardarTodo: false);
 
             // Calculamos el lugar de cada competidor y lo guardamos en la base
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada, cargarObjetos: false);
@@ -686,13 +686,13 @@ namespace OMIstats.Models
 
             // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
             prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
-            prob.guardar();
+            prob.guardar(guardarTodo: false);
 
             prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: problemasDia2);
-            prob.guardar();
+            prob.guardar(guardarTodo: false);
 
             prob = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
-            prob.guardar();
+            prob.guardar(guardarTodo: false);
 
             List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 1);
             foreach (Problema p in lista)
@@ -703,7 +703,7 @@ namespace OMIstats.Models
                     p.mediana = pp.mediana;
                     p.perfectos = pp.perfectos;
                     p.ceros = pp.ceros;
-                    p.guardar();
+                    p.guardar(guardarTodo: false);
                 }
 
             lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 2);
@@ -715,7 +715,7 @@ namespace OMIstats.Models
                     p.mediana = pp.mediana;
                     p.perfectos = pp.perfectos;
                     p.ceros = pp.ceros;
-                    p.guardar();
+                    p.guardar(guardarTodo: false);
                 }
         }
 

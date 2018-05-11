@@ -21,7 +21,8 @@ namespace OMIstats.Models
             COMI,
             COLO,
             INVITADO,
-            ACOMPAÑANTE
+            ACOMPAÑANTE,
+            SUBLIDER
         }
 
         public const string DELELIDER = "DELEGADO Y LIDER";
@@ -629,8 +630,9 @@ namespace OMIstats.Models
         /// <param name="omi">La olimpiada de la clave</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="clave">La clave buscada</param>
+        /// <param name="aproximarClave">Si la clave solo debe de ser aproximada</param>
         /// <returns>La lista de miembros con la clave buscada</returns>
-        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, TipoOlimpiada tipoOlimpiada, string clave)
+        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, TipoOlimpiada tipoOlimpiada, string clave, bool aproximarClave = false)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -641,8 +643,16 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            if (aproximarClave)
+            {
+                query.Append(" and clave like ");
+                query.Append(Utilities.Cadenas.comillas("%" + clave + "%"));
+            }
+            else
+            {
+                query.Append(" and clave = ");
+                query.Append(Utilities.Cadenas.comillas(clave));
+            }
             query.Append(" order by clave ");
 
             db.EjecutarQuery(query.ToString());

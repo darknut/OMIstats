@@ -47,7 +47,7 @@ namespace OMIstats.Controllers
 
             if (usuario == null && clave != null)
             {
-                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave);
+                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave, aproximarClave: true);
                 if (md.Count == 0)
                     return RedirectTo(Pagina.ERROR, 404);
                 if (md.Count > 1)
