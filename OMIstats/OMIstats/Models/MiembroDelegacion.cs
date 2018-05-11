@@ -764,6 +764,7 @@ namespace OMIstats.Models
                 case TipoAsistente.DELELIDER:
                 case TipoAsistente.LIDER:
                 case TipoAsistente.DELEGADO:
+                case TipoAsistente.SUBLIDER:
                     {
                         query.Append(" and (md.tipo = ");
                         query.Append(Utilities.Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
