@@ -786,6 +786,8 @@ namespace OMIstats.Models
                         query.Append(" and md.tipo <> ");
                         query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
                         query.Append(" and md.tipo <> ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
+                        query.Append(" and md.tipo <> ");
                         query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
                         break;
                     }
