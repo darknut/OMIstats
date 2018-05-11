@@ -772,6 +772,8 @@ namespace OMIstats.Models
                         query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
                         query.Append(" or md.tipo = ");
                         query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
+                        query.Append(" or md.tipo = ");
+                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
                         query.Append(")");
                         break;
                     }
