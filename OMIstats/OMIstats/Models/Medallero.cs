@@ -445,6 +445,9 @@ namespace OMIstats.Models
 
                 estado.guardarDatos();
             }
+
+            // Al final hacemos los ajustes hardcodeados
+            hardcode();
         }
 
         /// <summary>
@@ -670,6 +673,25 @@ namespace OMIstats.Models
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Harcodea ciertos medalleros que sabemos los resultados
+        /// pero no tenemos los números para que salgan correctamente
+        /// </summary>
+        public static void hardcode()
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update Medallero set lugar = lugar + 1 where clase = ");
+            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+            query.Append(" and omi = \'10\' and lugar < 14 ");
+            db.EjecutarQuery(query.ToString());
+
+            query.Clear();
+            query.Append(" update Medallero set lugar = 1 where clave = \'GRO_10\'");
+            db.EjecutarQuery(query.ToString());
         }
 
         public int CompareTo(Medallero obj)
