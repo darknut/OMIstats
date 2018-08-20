@@ -117,7 +117,8 @@ namespace OMIstats.Models
         public const string ID = "id";
         public const string IMAGES = "images";
         public const int THUMBNAIL_SIZE = 225;
-        public const string SIZE = "height";
+        public const string HEIGHT = "height";
+        public const string WIDTH = "width";
         public const string URL = "source";
         public const string DATA = "data";
         public const string PAGING = "paging";
@@ -144,6 +145,8 @@ namespace OMIstats.Models
 
         public bool update { get; set; }
 
+        public DateTime lastUpdated { get; set; }
+
         public Album()
         {
             id = "";
@@ -153,6 +156,7 @@ namespace OMIstats.Models
             nombre = "";
             fotos = 0;
             portada = "";
+            lastUpdated = new DateTime(1900, 1, 1);
         }
 
         private void llenarDatos(DataRow r)
@@ -164,6 +168,7 @@ namespace OMIstats.Models
             fotos = (int)r["fotos"];
             nombre = r["nombre"].ToString().Trim();
             portada = r["portada"].ToString().Trim();
+            lastUpdated = Utilities.Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
         }
 
         /// <summary>
@@ -216,6 +221,14 @@ namespace OMIstats.Models
                 return al;
 
             al.llenarDatos(table.Rows[0]);
+
+            // Si ya tiene más de una semana que
+            // cacheamos el album, lo refrescamos
+            if (al.lastUpdated.AddDays(7) < DateTime.Today)
+            {
+                al.updateAlbum();
+                al.guardarDatos();
+            }
 
             return al;
         }
@@ -287,6 +300,8 @@ namespace OMIstats.Models
             query.Append(fotos);
             query.Append(", portada = ");
             query.Append(Utilities.Cadenas.comillas(portada));
+            query.Append(", lastUpdated = ");
+            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(lastUpdated)));
             query.Append(" where id = ");
             query.Append(Utilities.Cadenas.comillas(id));
 
@@ -322,7 +337,7 @@ namespace OMIstats.Models
             }
         }
 
-        private string obtenerFoto(Dictionary<string, object> foto)
+        private string obtenerFoto(Dictionary<string, object> foto, bool ignorarVerticales = false)
         {
             ArrayList images = (ArrayList)foto[IMAGES];
             int bestSize = 0;
@@ -330,12 +345,17 @@ namespace OMIstats.Models
 
             foreach (Dictionary<string, object> sizeObj in images)
             {
-                int size = (int)sizeObj[SIZE];
-                if (size >= THUMBNAIL_SIZE)
+                int height = (int)sizeObj[HEIGHT];
+                int width = (int)sizeObj[WIDTH];
+
+                if (ignorarVerticales && height > width)
+                    continue;
+
+                if (height >= THUMBNAIL_SIZE)
                 {
-                    if (size < bestSize || bestSize == 0)
+                    if (height < bestSize || bestSize == 0)
                     {
-                        bestSize = size;
+                        bestSize = height;
                         bestURL = (string)sizeObj[URL];
                     }
                 }
@@ -354,7 +374,7 @@ namespace OMIstats.Models
 
             // Luego sacamos el metadata de la portada
             response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, coverId, "", FOTOS_METADATA));
-            portada = obtenerFoto(response);
+            portada = obtenerFoto(response, ignorarVerticales: true);
 
             // Borramos las fotos del album
             Foto.borrarDeAlbum(id);
@@ -383,6 +403,9 @@ namespace OMIstats.Models
                     f.url = (string)foto[LINK];
                     f.imagen = obtenerFoto(foto);
 
+                    if (portada.Length == 0)
+                        portada = obtenerFoto(foto, ignorarVerticales: true);
+
                     f.guardar();
                 }
 
@@ -390,6 +413,8 @@ namespace OMIstats.Models
                 Dictionary<string, object> cursors = (Dictionary<string, object>)paging[CURSORS];
                 after = (string)cursors[AFTER];
             }
+
+            lastUpdated = DateTime.Today;
         }
     }
 }
