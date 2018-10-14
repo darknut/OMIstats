@@ -39,6 +39,21 @@ else
     using (@Html.BeginForm())
     {
         @Html.HiddenFor(model => model.subtipo)
+
+        if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.NO_ESTOY)
+        {
+            <div class="biglabel">
+                <p>
+                    <b>Si estás participando este año</b>, y estás buscando tus resultados,
+                    lo puedes encontrar en
+                    <a href="http://www.olimpiadadeinformatica.org.mx/OMI/Perfil/PaginaPersonal.aspx">tu página personal</a>.
+                </p>
+                <p>
+                    Esta página es solo para agregar tus datos al histórico de olimpiadas nacionales
+                    presenciales pasadas.
+                </p>
+            </div>
+        }
  
         <div>
             <div class="label"> Nombre: </div>
@@ -64,9 +79,13 @@ else
             <div class="biglabel">
             @if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.NO_ESTOY)
             {
-                <span>
+                <p>
                     Infórmanos en qué olimpiada participaste, para cuál estado y con qué rol:
-                </span>
+                </p>
+                <p>
+                    <b>IMPORTANTE</b>: Sólo podemos agregar a personas que han participado en
+                    olimpiadas nacionales de forma presencial.
+                </p>
             }
             @if (Model.subtipo == OMIstats.Models.Peticion.TipoPeticion.NO_ERROR)
             {
