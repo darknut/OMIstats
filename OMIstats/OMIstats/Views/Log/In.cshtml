@@ -16,12 +16,20 @@
     <div class="textoGrande">
         <p class="errorTextoRojo">No se encontró un usuario en el sistema que corresponda con la cuenta con la que iniciaste sesión.</p>
     
+        <p>
+            <b>Si estás participando este año</b>, y estás buscando tus resultados,
+            lo puedes encontrar en
+            <a href="http://www.olimpiadadeinformatica.org.mx/OMI/Perfil/PaginaPersonal.aspx">tu página personal</a>.
+            Esta página es solo para agregar tus datos al histórico de olimpiadas nacionales
+            presenciales pasadas.
+        </p>
+
         <p>Si estás seguro que has participado en una <b>olimpiada nacional</b> como competidor, líder, delegado, asesor, invitado, 
             comité o con algún otro rol (sin importar si fue en primaria, secundaria o preparatoria), puedes hacer lo siguiente:</p>
     
         <ol>
-            <li> <!-- -TODO- Agregar enlace a la búsqueda de usuarios -->
-                Búscate en las tablas de resultados o en la delegación que deberías estar.
+            <li>
+                 @Html.ActionLink("Búscate","Index","Buscar", null, new { target="_blank"}) en nuestra base de datos y después:
                 <ul>
                     <li class="espaciado">
                         Si no te encuentras,
