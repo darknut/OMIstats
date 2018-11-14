@@ -126,6 +126,9 @@ namespace OMIstats.Models
         public const string AFTER = "after";
         public const string LINK = "link";
 
+        private const int DAYS_UPDATE = 7;
+        private const int MAX_UPDATES = 150;
+
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es 50 caracteres")]
         public string id { get; set; }
@@ -146,6 +149,8 @@ namespace OMIstats.Models
         public bool update { get; set; }
 
         public DateTime lastUpdated { get; set; }
+
+        private static int currentCalls = 0;
 
         public Album()
         {
@@ -224,13 +229,43 @@ namespace OMIstats.Models
 
             // Si ya tiene más de una semana que
             // cacheamos el album, lo refrescamos
-            if (al.lastUpdated.AddDays(7) < DateTime.Today)
+            if (puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today)
             {
                 al.updateAlbum();
                 al.guardarDatos();
             }
 
             return al;
+        }
+
+        private static bool puedeActualizar()
+        {
+            if (currentCalls > 0)
+                return false;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select orden, lastUpdated from album where id = '0' ");
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            try
+            {
+                int count = (int)table.Rows[0]["orden"];
+                DateTime lastUpdated = Utilities.Fechas.stringToDate(table.Rows[0]["lastUpdated"].ToString().Trim());
+
+                return (lastUpdated < DateTime.Today || count < MAX_UPDATES);
+            }
+            catch (Exception)
+            {
+                // El valor no está en la base de datos, lo agregamos
+                query.Append(" insert into Album (id, orden, lastUpdated) values ('0', 0, ");
+                query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(DateTime.Today)));
+                query.Append(" )");
+                db.EjecutarQuery(query.ToString());
+            }
+            return true;
         }
 
         /// <summary>
@@ -319,6 +354,7 @@ namespace OMIstats.Models
             try
             {
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                currentCalls++;
 
                 string content = string.Empty;
                 using (Stream stream = response.GetResponseStream())
@@ -366,55 +402,74 @@ namespace OMIstats.Models
 
         private void updateAlbum()
         {
-            // Sacamos el metadata del album
-            Dictionary<string, object> response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, id, "", ALBUM_METADATA));
-            nombre = (string)response[NOMBRE_ALBUM];
-            fotos = (int)response[COUNT_ALBUM];
-            string coverId = (string)((Dictionary<string, object>)response[PORTADA_ALBUM])[ID];
-
-            // Luego sacamos el metadata de la portada
-            response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, coverId, "", FOTOS_METADATA));
-            portada = obtenerFoto(response, ignorarVerticales: true);
-
-            // Borramos las fotos del album
-            Foto.borrarDeAlbum(id);
-
-            string after = "";
-            int ordenFoto = 0;
-            // Finalmente, obtenemos las fotos del album
-            while (true)
+            try
             {
-                string url = String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, id, ALBUM_FOTOS, FOTOS_METADATA);
-                if (after.Length > 0)
-                    url += String.Format(AFTER_METADATA, after);
-                response = call(url);
+                currentCalls = 1; // Bloqueamos a otros procesos con esta bandera
 
-                ArrayList data = (ArrayList)response[DATA];
-                if (data.Count == 0)
-                    break;
+                // Sacamos el metadata del album
+                Dictionary<string, object> response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, id, "", ALBUM_METADATA));
+                nombre = (string)response[NOMBRE_ALBUM];
+                fotos = (int)response[COUNT_ALBUM];
+                string coverId = (string)((Dictionary<string, object>)response[PORTADA_ALBUM])[ID];
 
-                // Se agregan las fotos
-                foreach (Dictionary<string, object> foto in data)
+                // Luego sacamos el metadata de la portada
+                response = call(String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, coverId, "", FOTOS_METADATA));
+                portada = obtenerFoto(response, ignorarVerticales: true);
+
+                // Borramos las fotos del album
+                Foto.borrarDeAlbum(id);
+
+                string after = "";
+                int ordenFoto = 0;
+                // Finalmente, obtenemos las fotos del album
+                while (true)
                 {
-                    Foto f = new Foto();
-                    f.album = id;
-                    f.id = (string)foto[ID];
-                    f.orden = ++ordenFoto;
-                    f.url = (string)foto[LINK];
-                    f.imagen = obtenerFoto(foto);
+                    string url = String.Format(BASE_FACEBOOK_URL, ACCESS_TOKEN, id, ALBUM_FOTOS, FOTOS_METADATA);
+                    if (after.Length > 0)
+                        url += String.Format(AFTER_METADATA, after);
+                    response = call(url);
 
-                    if (portada.Length == 0)
-                        portada = obtenerFoto(foto, ignorarVerticales: true);
+                    ArrayList data = (ArrayList)response[DATA];
+                    if (data.Count == 0)
+                        break;
 
-                    f.guardar();
+                    // Se agregan las fotos
+                    foreach (Dictionary<string, object> foto in data)
+                    {
+                        Foto f = new Foto();
+                        f.album = id;
+                        f.id = (string)foto[ID];
+                        f.orden = ++ordenFoto;
+                        f.url = (string)foto[LINK];
+                        f.imagen = obtenerFoto(foto);
+
+                        if (portada.Length == 0)
+                            portada = obtenerFoto(foto, ignorarVerticales: true);
+
+                        f.guardar();
+                    }
+
+                    Dictionary<string, object> paging = (Dictionary<string, object>)response[PAGING];
+                    Dictionary<string, object> cursors = (Dictionary<string, object>)paging[CURSORS];
+                    after = (string)cursors[AFTER];
                 }
-
-                Dictionary<string, object> paging = (Dictionary<string, object>)response[PAGING];
-                Dictionary<string, object> cursors = (Dictionary<string, object>)paging[CURSORS];
-                after = (string)cursors[AFTER];
             }
+            finally
+            {
+                Utilities.Acceso db = new Utilities.Acceso();
+                StringBuilder query = new StringBuilder();
 
-            lastUpdated = DateTime.Today;
+                // Actualizamos los calls en el sistema
+                query.Append(" update Album set orden = orden + ");
+                query.Append(currentCalls - 1); // Le quitamos 1 del extra que le pusimos al principio
+                query.Append(", lastUpdated = ");
+                query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(DateTime.Today)));
+                query.Append(" where id = '0' ");
+                db.EjecutarQuery(query.ToString());
+
+                lastUpdated = DateTime.Today;
+                currentCalls = 0;
+            }
         }
     }
 }
