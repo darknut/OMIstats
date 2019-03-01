@@ -231,6 +231,7 @@ namespace OMIstats.Models
             // cacheamos el album, lo refrescamos
             if (puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today)
             {
+                Log.add(Log.TipoLog.FACEBOOK, "Álbum " + album.id + " actualizado por inactividad");
                 al.updateAlbum();
                 al.guardarDatos();
             }
@@ -367,8 +368,9 @@ namespace OMIstats.Models
 
                 return new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(content);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Models.Log.add(Log.TipoLog.FACEBOOK, e.ToString());
                 return null;
             }
         }
