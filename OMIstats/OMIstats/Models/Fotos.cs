@@ -169,6 +169,7 @@ namespace OMIstats.Models
         {
             id = r["id"].ToString().Trim();
             lastUpdated = Utilities.Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
+            orden = (int)r["orden"];
 
             // Los datos generales no guardan nada mas
             if (id == ALBUM_GRAL)
@@ -178,7 +179,6 @@ namespace OMIstats.Models
 
             olimpiada = r["olimpiada"].ToString().Trim();
             tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
-            orden = (int)r["orden"];
             fotos = (int)r["fotos"];
             nombre = r["nombre"].ToString().Trim();
             portada = r["portada"].ToString().Trim();
