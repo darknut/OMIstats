@@ -126,6 +126,7 @@ namespace OMIstats.Models
         public const string AFTER = "after";
         public const string LINK = "link";
 
+        private const string ALBUM_GRAL = "0";
         private const int DAYS_UPDATE = 7;
         private const int MAX_UPDATES = 150;
 
@@ -167,13 +168,20 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow r)
         {
             id = r["id"].ToString().Trim();
+            lastUpdated = Utilities.Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
+
+            // Los datos generales no guardan nada mas
+            if (id == ALBUM_GRAL)
+            {
+                return;
+            }
+
             olimpiada = r["olimpiada"].ToString().Trim();
             tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
             orden = (int)r["orden"];
             fotos = (int)r["fotos"];
             nombre = r["nombre"].ToString().Trim();
             portada = r["portada"].ToString().Trim();
-            lastUpdated = Utilities.Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
         }
 
         /// <summary>
@@ -229,7 +237,7 @@ namespace OMIstats.Models
 
             // Si ya tiene más de una semana que
             // cacheamos el album, lo refrescamos
-            if (puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today)
+            if (id != ALBUM_GRAL && puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today)
             {
                 Log.add(Log.TipoLog.FACEBOOK, "Álbum " + al.id + " actualizado por inactividad");
                 al.updateAlbum();
@@ -324,20 +332,23 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" update album set olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
-            query.Append(", clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" update album set lastUpdated = ");
+            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(lastUpdated)));
             query.Append(", orden = ");
             query.Append(orden);
-            query.Append(", nombre = ");
-            query.Append(Utilities.Cadenas.comillas(nombre));
-            query.Append(", fotos = ");
-            query.Append(fotos);
-            query.Append(", portada = ");
-            query.Append(Utilities.Cadenas.comillas(portada));
-            query.Append(", lastUpdated = ");
-            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(lastUpdated)));
+            if (id != ALBUM_GRAL)
+            {
+                query.Append(", olimpiada = ");
+                query.Append(Utilities.Cadenas.comillas(olimpiada));
+                query.Append(", clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(", nombre = ");
+                query.Append(Utilities.Cadenas.comillas(nombre));
+                query.Append(", fotos = ");
+                query.Append(fotos);
+                query.Append(", portada = ");
+                query.Append(Utilities.Cadenas.comillas(portada));
+            }
             query.Append(" where id = ");
             query.Append(Utilities.Cadenas.comillas(id));
 
@@ -459,7 +470,7 @@ namespace OMIstats.Models
             finally
             {
                 // Actualizamos las actualizaciones en general
-                Album al = Album.obtenerAlbum("0");
+                Album al = Album.obtenerAlbum(ALBUM_GRAL);
 
                 if (al.lastUpdated < DateTime.Today)
                 {
