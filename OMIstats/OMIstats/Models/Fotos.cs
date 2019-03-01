@@ -458,17 +458,26 @@ namespace OMIstats.Models
             }
             finally
             {
-                Utilities.Acceso db = new Utilities.Acceso();
-                StringBuilder query = new StringBuilder();
+                // Actualizamos las actualizaciones en general
+                Album al = Album.obtenerAlbum("0");
+
+                if (al.lastUpdated < DateTime.Today)
+                {
+                    al.lastUpdated = DateTime.Today;
+                    al.orden = currentCalls;
+                }
+                else
+                {
+                    al.orden += currentCalls;
+                }
+
+                // Le quitamos 1 del extra que le pusimos al principio
+                al.orden--;
 
                 // Actualizamos los calls en el sistema
-                query.Append(" update Album set orden = orden + ");
-                query.Append(currentCalls - 1); // Le quitamos 1 del extra que le pusimos al principio
-                query.Append(", lastUpdated = ");
-                query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(DateTime.Today)));
-                query.Append(" where id = '0' ");
-                db.EjecutarQuery(query.ToString());
+                al.guardarDatos();
 
+                // También actualizamos la fecha del album que estamos actualizando
                 lastUpdated = DateTime.Today;
                 currentCalls = 0;
             }
