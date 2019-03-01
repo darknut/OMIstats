@@ -231,7 +231,7 @@ namespace OMIstats.Models
             // cacheamos el album, lo refrescamos
             if (puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today)
             {
-                Log.add(Log.TipoLog.FACEBOOK, "Álbum " + album.id + " actualizado por inactividad");
+                Log.add(Log.TipoLog.FACEBOOK, "Álbum " + al.id + " actualizado por inactividad");
                 al.updateAlbum();
                 al.guardarDatos();
             }
