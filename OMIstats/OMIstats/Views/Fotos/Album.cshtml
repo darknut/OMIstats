@@ -49,8 +49,10 @@
 @foreach (OMIstats.Models.Foto foto in fotos)
 {
     <a href="@foto.url" target="_blank">
-        <div class="album picture">
-            <img src="@foto.imagen"/>
+        <div
+            class="album picture"
+            style="background-image: url(@foto.imagen), url(@Url.Content("/img/celdafondo.png"))"
+            title="Click para ver foto en Facebook">
         </div>
     </a>
 }
