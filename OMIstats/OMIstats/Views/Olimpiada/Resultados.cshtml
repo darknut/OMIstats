@@ -92,7 +92,7 @@
     <br />
     <div class="comboTitle">Olimpiadas:</div>
     <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
-        @for (int i = ViewBag.olimpiadas.Count - 1; i >= 0; i--)
+        @for (int i = 0; i < ViewBag.olimpiadas.Count; i++)
         {
             OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
             tableManager.setCurrentOMI(omi);
@@ -104,7 +104,7 @@
         <br />
         <div class="comboTitle">Secundarias:</div>
         <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?tipo=omis&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
-            @for (int i = ViewBag.omis.Count - 1; i >= 0; i--)
+            @for (int i = 0; i < ViewBag.omis.Count; i++)
             {
                 OMIstats.Models.Olimpiada omi = ViewBag.omis[i];
                 tableManager.setCurrentOMI(omi);
@@ -114,7 +114,7 @@
         <br />
         <div class="comboTitle">Primarias:</div>
         <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?tipo=omip&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
-            @for (int i = ViewBag.omip.Count - 1; i >= 0; i--)
+            @for (int i = 0; i < ViewBag.omip.Count; i++)
             {
                 OMIstats.Models.Olimpiada omi = ViewBag.omip[i];
                 tableManager.setCurrentOMI(omi);
