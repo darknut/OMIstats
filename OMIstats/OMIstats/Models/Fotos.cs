@@ -398,7 +398,7 @@ namespace OMIstats.Models
                 int height = (int)sizeObj[HEIGHT];
                 int width = (int)sizeObj[WIDTH];
 
-                if (ignorarVerticales && height > width)
+                if (ignorarVerticales && (height > width || width * 0.6 > height))
                     continue;
 
                 if (height >= THUMBNAIL_SIZE)
