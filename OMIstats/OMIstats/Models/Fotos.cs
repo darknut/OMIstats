@@ -391,6 +391,7 @@ namespace OMIstats.Models
             ArrayList images = (ArrayList)foto[IMAGES];
             int bestSize = 0;
             string bestURL = "";
+            string fallbackURL = "";
 
             foreach (Dictionary<string, object> sizeObj in images)
             {
@@ -408,7 +409,12 @@ namespace OMIstats.Models
                         bestURL = (string)sizeObj[URL];
                     }
                 }
+
+                fallbackURL = (string)sizeObj[URL];
             }
+
+            if (bestURL == "")
+                return fallbackURL;
 
             return bestURL;
         }
