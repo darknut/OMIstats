@@ -314,7 +314,7 @@ namespace OMIstats.Models
                 numero + ".png"))
                 logo = numero + ".png";
             else
-                logo = "omi.png";
+                logo = Utilities.Archivos.OMI_LOGO;
 
             if (numero != TEMP_CLAVE &&
                 (tipoOlimpiada == TipoOlimpiada.OMIP ||

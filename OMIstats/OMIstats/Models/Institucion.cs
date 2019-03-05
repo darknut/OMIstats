@@ -88,7 +88,7 @@ namespace OMIstats.Models
                                                 clave + ".png"))
                 logo = clave + ".png";
             else
-                logo = "omi.png";
+                logo = Utilities.Archivos.OMI_LOGO;
         }
 
         /// <summary>
