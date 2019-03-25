@@ -38,7 +38,8 @@ namespace OMIstats.Models
             USUARIO,
             ADMIN,
             SCOREBOARD,
-            FACEBOOK
+            FACEBOOK,
+            REGISTRO
         }
 
         private void llenarDatos(DataRow r)

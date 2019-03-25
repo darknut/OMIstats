@@ -129,6 +129,34 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Devuelve la clave local del estado basado en la clave
+        /// de estado basado en el ISO que usan en la OMI
+        /// </summary>
+        /// <param name="clave">La clave ISO del estado</param>
+        /// <returns>La clave local del estado</returns>
+        public static string obtenerEstadoConClaveISO(string clave)
+        {
+            if (clave.Length == 0)
+                return null;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct estado, olimpiada from MiembroDelegacion where clave like ");
+            query.Append(Utilities.Cadenas.comillas(clave + "%"));
+            query.Append(" and tipo = 'competidor' order by olimpiada desc ");
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+                return null;
+
+            return (string)table.Rows[0][0];
+        }
+
+        /// <summary>
         /// Guarda los datos del estado en la base de datos
         /// </summary>
         /// <remarks>Los únicos datos que se guardan son el sitio web y el delegado</remarks>

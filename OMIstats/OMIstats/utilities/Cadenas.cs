@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace OMIstats.Utilities
@@ -65,6 +66,12 @@ namespace OMIstats.Utilities
                 cadena = cadena.Replace(" ", "");
 
             return cadena.Trim().ToLower();
+        }
+
+        public static bool esCorreo(string correo)
+        {
+            Regex regex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$");
+            return regex.IsMatch(correo);
         }
     }
 }

@@ -788,15 +788,165 @@ namespace OMIstats.Models
             return false;
         }
 
-        public static Olimpiada obtenerMasReciente()
+        public static Olimpiada obtenerMasReciente(bool yaEmpezada = true)
         {
             List<Olimpiada> omis = obtenerOlimpiadas(TipoOlimpiada.OMI);
 
-            for (int i = 0; i < omis.Count; i++)
-                if (omis[i].inicio <= DateTime.Now)
-                    return omis[i];
+            if (yaEmpezada)
+                for (int i = 0; i < omis.Count; i++)
+                    if (omis[i].inicio <= DateTime.Now)
+                        return omis[i];
 
             return omis[0];
+        }
+
+        public static int Registrar(string tipoOlimpiada, string nombre, string estado,
+            string tipoAsistente, string clave, string fecha, string genero, string correo,
+            string curp, string escuela, string nivelEscuela, int grado, bool publica, bool test)
+        {
+            int error = 0;
+            try
+            {
+                // Necesitamos parsear cada una de las entradas a valores que reconozcamos
+                // Primero queremos ver si hay una olimpiada lista para hacer registro
+                Olimpiada o = Olimpiada.obtenerMasReciente(yaEmpezada: false);
+
+                if (o.año != DateTime.Now.Year)
+                {
+                    error = -1;
+                    throw new Exception();
+                }
+
+                // Parseamos ahora el tipoOlimpiada
+                TipoOlimpiada tipo;
+                try
+                {
+                    tipo = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipoOlimpiada.ToUpper());
+                }
+                catch (Exception e)
+                {
+                    error = 1;
+                    throw e;
+                }
+
+                // El nombre nada más tiene que exisitr
+                if (nombre.Length == 0)
+                {
+                    error = 2;
+                    throw new Exception();
+                }
+
+                // Con el estado se vuelve interesante
+                // Como ellos utilizan otras claves diferentes a las mias,
+                // necesito hacer query a la base de datos para ver si esa clave
+                // ya ha sido usada con anterioridad
+
+                string localEstado = Estado.obtenerEstadoConClaveISO(estado);
+                if (localEstado == null)
+                {
+                    error = 3;
+                    throw new Exception();
+                }
+
+                // Del tipo competidor, es un enum
+                MiembroDelegacion.TipoAsistente asistente;
+                try
+                {
+                    asistente = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente.ToUpper());
+                }
+                catch (Exception e)
+                {
+                    error = 4;
+                    throw e;
+                }
+
+                // Para la clave, es requerida para competidor y debe ser además única
+                // Si no nos proporcionan para los no competidores, la creamos
+                if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                {
+                    List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(o.numero, tipo, clave);
+                    if (clave.Length == 0 || md.Count > 0)
+                    {
+                        error = 5;
+                        throw new Exception();
+                    }
+                }
+                else
+                {
+                    if (clave.Length == 0)
+                        clave = estado + "-" + asistente.ToString()[0];
+                }
+
+                // La fecha de nacimiento es opcional, pero si nos 
+                // llega hay que ver que se parsee correctamente
+                if (fecha.Length != 0)
+                {
+                    try
+                    {
+                        Utilities.Fechas.stringToDate(fecha);
+                    }
+                    catch (Exception e)
+                    {
+                        error = 6;
+                        throw e;
+                    }
+                }
+
+                // Género es fácil, solo se permite H o M
+                if (genero != "H" & genero != "M")
+                {
+                    error = 7;
+                    throw new Exception();
+                }
+
+                // El correo es opcional,
+                // si se mandó hay que revisar que sea válido
+                if (correo.Length > 0)
+                {
+                    if (!Utilities.Cadenas.esCorreo(correo))
+                    {
+                        error = 8;
+                        throw new Exception();
+                    }
+                }
+
+                // El curp es 100% opcional y no lo validamos
+
+                // Todo lo relacionado con escuela es opcional para no competidor
+                Institucion.NivelInstitucion nivel = Institucion.NivelInstitucion.NULL;
+                if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                {
+                    if (escuela.Length == 0)
+                    {
+                        error = 10;
+                        throw new Exception();
+                    }
+
+                    try
+                    {
+                        nivel = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), nivelEscuela.ToUpper());
+                    }
+                    catch (Exception e)
+                    {
+                        error = 11;
+                        throw e;
+                    }
+
+                    if (grado < 1 || grado > 6)
+                    {
+                        error = 12;
+                        throw new Exception();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Log.add(Log.TipoLog.REGISTRO, tipoOlimpiada + "," + nombre + "," + estado + "," +
+                    tipoAsistente + "," + clave + "," + fecha + "," + genero + "," + correo + "," +
+                    curp + "," + escuela + "," + nivelEscuela + "," + grado + "," + publica + ":" + error);
+            }
+
+            return error;
         }
     }
 }
