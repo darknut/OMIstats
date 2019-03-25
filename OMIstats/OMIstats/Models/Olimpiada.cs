@@ -800,6 +800,10 @@ namespace OMIstats.Models
             return omis[0];
         }
 
+        /// <summary>
+        /// Registra a los usuarios en el sistema
+        /// </summary>
+        /// <returns>0 si todo salió bien o un número indicando qué parámetro falló</returns>
         public static int Registrar(string tipoOlimpiada, string nombre, string estado,
             string tipoAsistente, string clave, string fecha, string genero, string correo,
             string curp, string escuela, string nivelEscuela, int grado, bool publica, bool test)
@@ -840,7 +844,6 @@ namespace OMIstats.Models
                 // Como ellos utilizan otras claves diferentes a las mias,
                 // necesito hacer query a la base de datos para ver si esa clave
                 // ya ha sido usada con anterioridad
-
                 string localEstado = Estado.obtenerEstadoConClaveISO(estado);
                 if (localEstado == null)
                 {
@@ -848,99 +851,95 @@ namespace OMIstats.Models
                     throw new Exception();
                 }
 
-                // Del tipo competidor, es un enum
-                MiembroDelegacion.TipoAsistente asistente;
-                try
-                {
-                    asistente = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente.ToUpper());
-                }
-                catch (Exception e)
-                {
-                    error = 4;
-                    throw e;
-                }
+                // Ya que vimos revisamos los campos diferentes
+                // construimos la línea admin y llamamos a MiembroDelegacion
+                StringBuilder lineaAdmin = new StringBuilder();
+                lineaAdmin.Append(","); // El usuario no lo sabemos
+                lineaAdmin.Append(nombre);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(localEstado);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(tipoAsistente);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(clave);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(fecha);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(genero);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(correo);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(curp);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(escuela);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(nivelEscuela);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(grado);
+                lineaAdmin.Append(",");
+                lineaAdmin.Append(publica ? "publica" : "privada");
 
-                // Para la clave, es requerida para competidor y debe ser además única
-                // Si no nos proporcionan para los no competidores, la creamos
-                if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
-                {
-                    List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(o.numero, tipo, clave);
-                    if (clave.Length == 0 || md.Count > 0)
-                    {
-                        error = 5;
-                        throw new Exception();
-                    }
-                }
-                else
-                {
-                    if (clave.Length == 0)
-                        clave = estado + "-" + asistente.ToString()[0];
-                }
+                MiembroDelegacion.TipoError tipoError = MiembroDelegacion.guardarLineaAdmin(o.numero, tipo,
+                    lineaAdmin.ToString(), registroOnline: true, test: test);
 
-                // La fecha de nacimiento es opcional, pero si nos 
-                // llega hay que ver que se parsee correctamente
-                if (fecha.Length != 0)
+                if (tipoError != MiembroDelegacion.TipoError.OK)
                 {
-                    try
+                    switch (tipoError)
                     {
-                        Utilities.Fechas.stringToDate(fecha);
+                        case MiembroDelegacion.TipoError.CAMPOS_USUARIO:
+                            {
+                                error = -2;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.TIPO_ASISTENTE:
+                            {
+                                error = 4;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.FALTAN_CAMPOS:
+                        case MiembroDelegacion.TipoError.CLAVE_DUPLICADA:
+                            {
+                                error = 5;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.FECHA_NACIMIENTO:
+                            {
+                                error = 6;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.GENERO:
+                            {
+                                error = 7;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.CORREO:
+                            {
+                                error = 8;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.ESCUELA:
+                            {
+                                error = 10;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.NIVEL_INSTITUCION:
+                            {
+                                error = 11;
+                                break;
+                            }
+                        case MiembroDelegacion.TipoError.AñO_ESCUELA:
+                            {
+                                error = 12;
+                                break;
+                            }
                     }
-                    catch (Exception e)
-                    {
-                        error = 6;
-                        throw e;
-                    }
-                }
-
-                // Género es fácil, solo se permite H o M
-                if (genero != "H" & genero != "M")
-                {
-                    error = 7;
                     throw new Exception();
-                }
-
-                // El correo es opcional,
-                // si se mandó hay que revisar que sea válido
-                if (correo.Length > 0)
-                {
-                    if (!Utilities.Cadenas.esCorreo(correo))
-                    {
-                        error = 8;
-                        throw new Exception();
-                    }
-                }
-
-                // El curp es 100% opcional y no lo validamos
-
-                // Todo lo relacionado con escuela es opcional para no competidor
-                Institucion.NivelInstitucion nivel = Institucion.NivelInstitucion.NULL;
-                if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
-                {
-                    if (escuela.Length == 0)
-                    {
-                        error = 10;
-                        throw new Exception();
-                    }
-
-                    try
-                    {
-                        nivel = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), nivelEscuela.ToUpper());
-                    }
-                    catch (Exception e)
-                    {
-                        error = 11;
-                        throw e;
-                    }
-
-                    if (grado < 1 || grado > 6)
-                    {
-                        error = 12;
-                        throw new Exception();
-                    }
                 }
             }
             catch (Exception)
             {
+                if (error == 0)
+                    error = -2;
                 Log.add(Log.TipoLog.REGISTRO, tipoOlimpiada + "," + nombre + "," + estado + "," +
                     tipoAsistente + "," + clave + "," + fecha + "," + genero + "," + correo + "," +
                     curp + "," + escuela + "," + nivelEscuela + "," + grado + "," + publica + ":" + error);

@@ -41,7 +41,8 @@ namespace OMIstats.Models
             GENERO,
             NIVEL_INSTITUCION,
             AñO_ESCUELA,
-            CLAVE_DUPLICADA
+            CLAVE_DUPLICADA,
+            ESCUELA
         }
 
         private enum Campos
@@ -168,6 +169,8 @@ namespace OMIstats.Models
             {
                 if (datos.Length > (int)Campos.TIPO_ASISTENTE)
                     tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
+                if (tipo == TipoAsistente.NULL)
+                    throw new Exception();
             }
             catch (Exception)
             {
@@ -370,8 +373,10 @@ namespace OMIstats.Models
         /// <param name="omi">La clave de la olimpiada</param>
         /// <param name="tipoOlimpiada">El tipo de olimpiada a los que los datos pertenecen</param>
         /// <param name="linea">Los datos tabulados por comas</param>
+        /// <param name="test">True si estamos testeando y no queremos guardar en la base</param>
+        /// <param name="registroOnline">Si se está llamando por llamada API</param>
         /// <returns>Si hubo un error, lo devuelve</returns>
-        public static TipoError guardarLineaAdmin(string omi, TipoOlimpiada tipoOlimpiada, string linea)
+        public static TipoError guardarLineaAdmin(string omi, TipoOlimpiada tipoOlimpiada, string linea, bool registroOnline = false, bool test = false)
         {
             if (linea.Trim().Length == 0)
                 return TipoError.OK;
@@ -385,37 +390,41 @@ namespace OMIstats.Models
             string[] datos = linea.Split(',');
 
             // Casteamos los datos del string a variables
-
             TipoError err = md.obtenerCampos(datos);
             if (err != TipoError.OK)
                 return err;
 
             // Borramos al usuario de la tabla
-
             if (md.eliminar)
             {
                 p = Persona.obtenerPersonaDeUsuario(md.usuario);
                 if (p == null)
                     return TipoError.OK;
 
-                query.Append(" delete miembrodelegacion ");
-                query.Append(" where olimpiada = ");
-                query.Append(Utilities.Cadenas.comillas(omi));
-                query.Append(" and persona = ");
-                query.Append(p.clave);
-                query.Append(" and estado = ");
-                query.Append(Utilities.Cadenas.comillas(md.estado));
-                query.Append(" and clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                if (!test)
+                {
+                    query.Append(" delete miembrodelegacion ");
+                    query.Append(" where olimpiada = ");
+                    query.Append(Utilities.Cadenas.comillas(omi));
+                    query.Append(" and persona = ");
+                    query.Append(p.clave);
+                    query.Append(" and estado = ");
+                    query.Append(Utilities.Cadenas.comillas(md.estado));
+                    query.Append(" and clase = ");
+                    query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
-                db.EjecutarQuery(query.ToString());
-                Resultados.eliminarResultado(omi, tipoOlimpiada, md.clave);
+                    db.EjecutarQuery(query.ToString());
+                    Resultados.eliminarResultado(omi, tipoOlimpiada, md.clave);
+                }
 
                 return TipoError.OK;
             }
 
-            // Verificamos que los datos mandatorios se hayan dado
+            // La clave solo es requerida para competidores, si no es competidor, la generamos
+            if (md.clave.Length == 0 && md.tipo != TipoAsistente.COMPETIDOR)
+                md.clave = md.estado + "-" + md.tipo.ToString()[0];
 
+            // Verificamos que los datos mandatorios se hayan dado
             if (md.nombreAsistente.Length == 0 ||
                 md.estado.Length == 0 ||
                 md.tipo == TipoAsistente.NULL ||
@@ -424,7 +433,6 @@ namespace OMIstats.Models
                 return TipoError.FALTAN_CAMPOS;
 
             // Verificar que exista el usuario
-
             if (md.usuario.Length == 0)
             {
                 // El usuario se desconoce, hay que buscarlo
@@ -438,7 +446,6 @@ namespace OMIstats.Models
                 }
 
                 // El usuario es nuevo, lo creamos
-
                 if (p == null)
                 {
                     p = new Persona();
@@ -450,23 +457,21 @@ namespace OMIstats.Models
                     if (md.tipo == TipoAsistente.COMPETIDOR)
                         foto = Utilities.Archivos.FotoInicial.KAREL;
 
-                    p.nuevoUsuario(foto);
+                    if (!test)
+                        p.nuevoUsuario(foto);
                 }
             }
             else
             {
                 // El usuario está presente, lo sacamos de la base
-
                 p = Persona.obtenerPersonaDeUsuario(md.usuario);
 
                 // Si el usuario no existe, hay que lanzar un error
-
                 if (p == null)
                     return TipoError.USUARIO_INEXISTENTE;
             }
 
             // Ya se tiene un usuario valido, guardamos sus datos
-
             p.nombre = md.nombreAsistente;
 
             try
@@ -489,30 +494,27 @@ namespace OMIstats.Models
                 p.correo = md.correo;
             }
 
-            if (!p.guardarDatos())
+            if (!test && !p.guardarDatos())
                 return TipoError.CAMPOS_USUARIO;
 
             md.usuario = p.usuario;
 
             // Revisamos que exista la escuela
-
             Institucion i = null;
 
             if (md.nombreEscuela.Length > 0)
             {
                 i = Institucion.buscarInstitucionConNombre(md.nombreEscuela);
 
-                if (i == null)
+                if (i == null && !test)
                 {
                     // La escuela es nueva, creamos una nueva.
-
                     i = new Institucion();
                     i.nombre = md.nombreEscuela;
                     i.nuevaInstitucion();
                 }
 
                 // Ya tenemos un objeto institución, actualizamos los datos
-
                 switch (md.nivelEscuela)
                 {
                     case Institucion.NivelInstitucion.PRIMARIA:
@@ -530,19 +532,17 @@ namespace OMIstats.Models
                 }
 
                 i.publica = md.escuelaPublica;
-
-                i.guardar(generarPeticiones: false);
+                if (!test)
+                    i.guardar(generarPeticiones: false);
             }
 
             // Revisamos que el estado exista
-
             Estado e = Estado.obtenerEstadoConClave(md.estado);
 
             if (e == null)
                 return TipoError.ESTADO;
 
             // Buscamos ahora si ya hay un miembro con estos datos
-
             query.Append(" select * from miembrodelegacion ");
             query.Append(" where olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
@@ -557,67 +557,96 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
             table = db.getTable();
 
-            if (table.Rows.Count == 0)
+            // Si llegó por registro online, hay que hacer validaciones extra
+            if (registroOnline)
             {
-                // El usuario no existe, lo agregamos
-
-                query.Clear();
-                query.Append(" insert into miembrodelegacion values (");
-                query.Append(Utilities.Cadenas.comillas(omi));
-                query.Append(", ");
-                query.Append(Utilities.Cadenas.comillas(md.estado));
-                query.Append(", ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-                query.Append(", ");
-                query.Append(Utilities.Cadenas.comillas(md.clave));
-                query.Append(", ");
-                query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
-                query.Append(", ");
-                query.Append(p.clave);
-                query.Append(", ");
-                query.Append(i == null ? "0" : i.clave.ToString());
-                query.Append(", ");
-                query.Append((int)md.nivelEscuela);
-                query.Append(", ");
-                query.Append(md.añoEscuela);
-                query.Append(")");
-
-                db.EjecutarQuery(query.ToString());
-            }
-            else
-            {
-                // El usuario existe, cargamos los datos y los actualizamos
-
-                MiembroDelegacion md_current = new MiembroDelegacion();
-                md_current.llenarDatos(table.Rows[0], incluirPersona: false, incluirEscuela: false);
-
-                if (md_current.clave != md.clave)
+                if (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
                 {
-                    if (!Resultados.cambiarClave(omi, tipoOlimpiada, md_current.clave, md.clave))
+                    List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, md.clave);
+                    if (md.clave.Length == 0 || miembros.Count > 0)
+                    {
                         return TipoError.CLAVE_DUPLICADA;
+                    }
+
+                    if (md.nombreEscuela.Length == 0)
+                    {
+                        return TipoError.ESCUELA;
+                    }
+
+                    if (md.nivelEscuela == Institucion.NivelInstitucion.NULL)
+                    {
+                        return TipoError.NIVEL_INSTITUCION;
+                    }
+
+                    if (md.añoEscuela == 0)
+                    {
+                        return TipoError.AñO_ESCUELA;
+                    }
                 }
+            }
 
-                query.Clear();
-                query.Append(" update miembrodelegacion set clave = ");
-                query.Append(Utilities.Cadenas.comillas(md.clave));
-                query.Append(", tipo = ");
-                query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
-                query.Append(", institucion = ");
-                query.Append(i == null ? "0" : i.clave.ToString());
-                query.Append(", nivel = ");
-                query.Append((int)md.nivelEscuela);
-                query.Append(", año = ");
-                query.Append(md.añoEscuela);
-                query.Append(" where olimpiada = ");
-                query.Append(Utilities.Cadenas.comillas(omi));
-                query.Append(" and persona = ");
-                query.Append(p.clave);
-                query.Append(" and estado = ");
-                query.Append(Utilities.Cadenas.comillas(md.estado));
-                query.Append(" and clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            if (!test)
+            {
+                if (table.Rows.Count == 0)
+                {
+                    // El usuario no existe, lo agregamos
+                    query.Clear();
+                    query.Append(" insert into miembrodelegacion values (");
+                    query.Append(Utilities.Cadenas.comillas(omi));
+                    query.Append(", ");
+                    query.Append(Utilities.Cadenas.comillas(md.estado));
+                    query.Append(", ");
+                    query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                    query.Append(", ");
+                    query.Append(Utilities.Cadenas.comillas(md.clave));
+                    query.Append(", ");
+                    query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
+                    query.Append(", ");
+                    query.Append(p.clave);
+                    query.Append(", ");
+                    query.Append(i == null ? "0" : i.clave.ToString());
+                    query.Append(", ");
+                    query.Append((int)md.nivelEscuela);
+                    query.Append(", ");
+                    query.Append(md.añoEscuela);
+                    query.Append(")");
 
-                db.EjecutarQuery(query.ToString());
+                    db.EjecutarQuery(query.ToString());
+                }
+                else
+                {
+                    // El usuario existe, cargamos los datos y los actualizamos
+                    MiembroDelegacion md_current = new MiembroDelegacion();
+                    md_current.llenarDatos(table.Rows[0], incluirPersona: false, incluirEscuela: false);
+
+                    if (md_current.clave != md.clave)
+                    {
+                        if (!Resultados.cambiarClave(omi, tipoOlimpiada, md_current.clave, md.clave))
+                            return TipoError.CLAVE_DUPLICADA;
+                    }
+
+                    query.Clear();
+                    query.Append(" update miembrodelegacion set clave = ");
+                    query.Append(Utilities.Cadenas.comillas(md.clave));
+                    query.Append(", tipo = ");
+                    query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
+                    query.Append(", institucion = ");
+                    query.Append(i == null ? "0" : i.clave.ToString());
+                    query.Append(", nivel = ");
+                    query.Append((int)md.nivelEscuela);
+                    query.Append(", año = ");
+                    query.Append(md.añoEscuela);
+                    query.Append(" where olimpiada = ");
+                    query.Append(Utilities.Cadenas.comillas(omi));
+                    query.Append(" and persona = ");
+                    query.Append(p.clave);
+                    query.Append(" and estado = ");
+                    query.Append(Utilities.Cadenas.comillas(md.estado));
+                    query.Append(" and clase = ");
+                    query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+                    db.EjecutarQuery(query.ToString());
+                }
             }
 
             return TipoError.OK;
