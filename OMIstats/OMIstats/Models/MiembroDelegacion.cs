@@ -375,11 +375,11 @@ namespace OMIstats.Models
         /// <param name="linea">Los datos tabulados por comas</param>
         /// <param name="test">True si estamos testeando y no queremos guardar en la base</param>
         /// <param name="registroOnline">Si se está llamando por llamada API</param>
-        /// <returns>Si hubo un error, lo devuelve</returns>
-        public static TipoError guardarLineaAdmin(string omi, TipoOlimpiada tipoOlimpiada, string linea, bool registroOnline = false, bool test = false)
+        /// <returns>Si hubo un error, lo devuelve casteado a int, si no, devuelve la clave de usuario</returns>
+        public static int guardarLineaAdmin(string omi, TipoOlimpiada tipoOlimpiada, string linea, bool registroOnline = false, bool test = false)
         {
             if (linea.Trim().Length == 0)
-                return TipoError.OK;
+                return (int) TipoError.OK;
 
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -392,14 +392,14 @@ namespace OMIstats.Models
             // Casteamos los datos del string a variables
             TipoError err = md.obtenerCampos(datos);
             if (err != TipoError.OK)
-                return err;
+                return (int) err;
 
             // Borramos al usuario de la tabla
             if (md.eliminar)
             {
                 p = Persona.obtenerPersonaDeUsuario(md.usuario);
                 if (p == null)
-                    return TipoError.OK;
+                    return (int) TipoError.OK;
 
                 if (!test)
                 {
@@ -417,7 +417,7 @@ namespace OMIstats.Models
                     Resultados.eliminarResultado(omi, tipoOlimpiada, md.clave);
                 }
 
-                return TipoError.OK;
+                return (int) TipoError.OK;
             }
 
             // La clave solo es requerida para competidores, si no es competidor, la generamos
@@ -425,12 +425,12 @@ namespace OMIstats.Models
                 md.clave = md.estado + "-" + md.tipo.ToString()[0];
 
             // Verificamos que los datos mandatorios se hayan dado
-            if (md.nombreAsistente.Length == 0 ||
+            if ((md.nombreAsistente.Length == 0 && md.usuario.Length == 0) ||
                 md.estado.Length == 0 ||
                 md.tipo == TipoAsistente.NULL ||
                 md.clave.Length == 0 ||
                 md.genero.Length != 1)
-                return TipoError.FALTAN_CAMPOS;
+                return (int) TipoError.FALTAN_CAMPOS;
 
             // Verificar que exista el usuario
             if (md.usuario.Length == 0)
@@ -464,15 +464,30 @@ namespace OMIstats.Models
             else
             {
                 // El usuario está presente, lo sacamos de la base
-                p = Persona.obtenerPersonaDeUsuario(md.usuario);
+                if (registroOnline)
+                {
+                    try
+                    {
+                        p = Persona.obtenerPersonaConClave(Int32.Parse(md.usuario));
+                    }
+                    catch (Exception)
+                    {
+                        return (int)TipoError.USUARIO_INEXISTENTE;
+                    }
+                }
+                else
+                {
+                    p = Persona.obtenerPersonaDeUsuario(md.usuario);
+                }
 
                 // Si el usuario no existe, hay que lanzar un error
                 if (p == null)
-                    return TipoError.USUARIO_INEXISTENTE;
+                    return (int) TipoError.USUARIO_INEXISTENTE;
             }
 
             // Ya se tiene un usuario valido, guardamos sus datos
-            p.nombre = md.nombreAsistente;
+            if (md.nombreAsistente.Length > 0)
+                p.nombre = md.nombreAsistente;
 
             try
             {
@@ -481,7 +496,7 @@ namespace OMIstats.Models
             }
             catch (Exception)
             {
-                return TipoError.FECHA_NACIMIENTO;
+                return (int) TipoError.FECHA_NACIMIENTO;
             }
 
             p.genero = md.genero;
@@ -490,12 +505,12 @@ namespace OMIstats.Models
             if (md.correo.Length > 0)
             {
                 if (!Utilities.Cadenas.esCorreo(md.correo))
-                    return TipoError.CORREO;
+                    return (int) TipoError.CORREO;
                 p.correo = md.correo;
             }
 
             if (!test && !p.guardarDatos())
-                return TipoError.CAMPOS_USUARIO;
+                return (int) TipoError.CAMPOS_USUARIO;
 
             md.usuario = p.usuario;
 
@@ -540,7 +555,7 @@ namespace OMIstats.Models
             Estado e = Estado.obtenerEstadoConClave(md.estado);
 
             if (e == null)
-                return TipoError.ESTADO;
+                return (int) TipoError.ESTADO;
 
             // Buscamos ahora si ya hay un miembro con estos datos
             query.Append(" select * from miembrodelegacion ");
@@ -565,22 +580,22 @@ namespace OMIstats.Models
                     List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, md.clave);
                     if (md.clave.Length == 0 || miembros.Count > 0)
                     {
-                        return TipoError.CLAVE_DUPLICADA;
+                        return (int) TipoError.CLAVE_DUPLICADA;
                     }
 
                     if (md.nombreEscuela.Length == 0)
                     {
-                        return TipoError.ESCUELA;
+                        return (int) TipoError.ESCUELA;
                     }
 
                     if (md.nivelEscuela == Institucion.NivelInstitucion.NULL)
                     {
-                        return TipoError.NIVEL_INSTITUCION;
+                        return (int) TipoError.NIVEL_INSTITUCION;
                     }
 
                     if (md.añoEscuela == 0)
                     {
-                        return TipoError.AñO_ESCUELA;
+                        return (int) TipoError.AñO_ESCUELA;
                     }
                 }
             }
@@ -622,7 +637,7 @@ namespace OMIstats.Models
                     if (md_current.clave != md.clave)
                     {
                         if (!Resultados.cambiarClave(omi, tipoOlimpiada, md_current.clave, md.clave))
-                            return TipoError.CLAVE_DUPLICADA;
+                            return (int) TipoError.CLAVE_DUPLICADA;
                     }
 
                     query.Clear();
@@ -649,7 +664,7 @@ namespace OMIstats.Models
                 }
             }
 
-            return TipoError.OK;
+            return p.clave;
         }
 
         /// <summary>

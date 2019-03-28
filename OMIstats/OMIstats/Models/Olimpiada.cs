@@ -548,7 +548,9 @@ namespace OMIstats.Models
             lineas = tabla.Split('\n');
             foreach (string linea in lineas)
             {
-                MiembroDelegacion.TipoError error = MiembroDelegacion.guardarLineaAdmin(numero, tipoOlimpiada, linea.Trim());
+                int result = MiembroDelegacion.guardarLineaAdmin(numero, tipoOlimpiada, linea.Trim());
+                MiembroDelegacion.TipoError error = result >= Persona.PrimerClave ?
+                    MiembroDelegacion.TipoError.OK : (MiembroDelegacion.TipoError)result;
                 if (error != MiembroDelegacion.TipoError.OK)
                 {
                     errores.Append(linea.Trim());
@@ -804,11 +806,12 @@ namespace OMIstats.Models
         /// Registra a los usuarios en el sistema
         /// </summary>
         /// <returns>0 si todo salió bien o un número indicando qué parámetro falló</returns>
-        public static int Registrar(string tipoOlimpiada, string nombre, string estado,
+        public static int Registrar(string tipoOlimpiada, string usuario, string nombre, string estado,
             string tipoAsistente, string clave, string fecha, string genero, string correo,
             string curp, string escuela, string nivelEscuela, int grado, bool publica, bool test)
         {
             int error = 0;
+            int claveUsuario = 0;
             try
             {
                 // Necesitamos parsear cada una de las entradas a valores que reconozcamos
@@ -833,8 +836,8 @@ namespace OMIstats.Models
                     throw e;
                 }
 
-                // El nombre nada más tiene que exisitr
-                if (nombre.Length == 0)
+                // Nos tienen que mandar o nombre o usuario
+                if (nombre.Length == 0 && usuario.Length == 0)
                 {
                     error = 2;
                     throw new Exception();
@@ -854,7 +857,8 @@ namespace OMIstats.Models
                 // Ya que vimos revisamos los campos diferentes
                 // construimos la línea admin y llamamos a MiembroDelegacion
                 StringBuilder lineaAdmin = new StringBuilder();
-                lineaAdmin.Append(","); // El usuario no lo sabemos
+                lineaAdmin.Append(usuario);
+                lineaAdmin.Append(",");
                 lineaAdmin.Append(nombre);
                 lineaAdmin.Append(",");
                 lineaAdmin.Append(localEstado);
@@ -879,8 +883,13 @@ namespace OMIstats.Models
                 lineaAdmin.Append(",");
                 lineaAdmin.Append(publica ? "publica" : "privada");
 
-                MiembroDelegacion.TipoError tipoError = MiembroDelegacion.guardarLineaAdmin(o.numero, tipo,
+                int result = MiembroDelegacion.guardarLineaAdmin(o.numero, tipo,
                     lineaAdmin.ToString(), registroOnline: true, test: test);
+                MiembroDelegacion.TipoError tipoError = result >= Persona.PrimerClave ?
+                    MiembroDelegacion.TipoError.OK : (MiembroDelegacion.TipoError)result;
+
+                if (tipoError == MiembroDelegacion.TipoError.OK)
+                    claveUsuario = result;
 
                 if (tipoError != MiembroDelegacion.TipoError.OK)
                 {
@@ -897,6 +906,13 @@ namespace OMIstats.Models
                                 break;
                             }
                         case MiembroDelegacion.TipoError.FALTAN_CAMPOS:
+                            {
+                                if (nombre.Length == 0)
+                                    error = 2;
+                                else
+                                    error = 5;
+                                break;
+                            }
                         case MiembroDelegacion.TipoError.CLAVE_DUPLICADA:
                             {
                                 error = 5;
@@ -932,6 +948,11 @@ namespace OMIstats.Models
                                 error = 12;
                                 break;
                             }
+                        case MiembroDelegacion.TipoError.USUARIO_INEXISTENTE:
+                            {
+                                error = 15;
+                                break;
+                            }
                     }
                     throw new Exception();
                 }
@@ -945,7 +966,7 @@ namespace OMIstats.Models
                     curp + "," + escuela + "," + nivelEscuela + "," + grado + "," + publica + ":" + error);
             }
 
-            return error;
+            return error == 0 ? claveUsuario : error;
         }
     }
 }

@@ -168,13 +168,15 @@ namespace OMIstats.Controllers
         public JsonResult Registrar(string tipoOlimpiada = "", string nombre = "", string estado = "",
             string tipoAsistente = "", string clave = "", string fecha = "", string genero = "",
             string correo = "", string curp = "", string escuela = "", string nivelEscuela = "",
-            int grado = 0, bool publica = false, bool test = false)
+            int grado = 0, bool publica = false, bool test = false, string usuario = "")
         {
+            int result = Olimpiada.Registrar(tipoOlimpiada.Trim(), usuario.Trim(), nombre.Trim(),
+                estado.Trim(), tipoAsistente.Trim(), clave.Trim(), fecha.Trim(), genero.Trim(),
+                correo.Trim(), curp.Trim(), escuela.Trim(), nivelEscuela, grado, publica, test);
             return Json(new
             {
-                result = Olimpiada.Registrar(tipoOlimpiada.Trim(), nombre.Trim(), estado.Trim(),
-                    tipoAsistente.Trim(), clave.Trim(), fecha.Trim(), genero.Trim(), correo.Trim(),
-                    curp.Trim(), escuela.Trim(), nivelEscuela, grado, publica, test)
+                result = result >= Persona.PrimerClave ? 0 : result,
+                clave = result >= Persona.PrimerClave ? result : 0
             }, JsonRequestBehavior.AllowGet);
         }
 

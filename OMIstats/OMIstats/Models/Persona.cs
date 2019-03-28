@@ -14,6 +14,7 @@ namespace OMIstats.Models
     {
         public const int TamañoUsuarioMaximo = 20;
         public const int UsuarioNulo = -1;
+        public const int PrimerClave = 1000;
 
         public int clave { get; set; }
 
