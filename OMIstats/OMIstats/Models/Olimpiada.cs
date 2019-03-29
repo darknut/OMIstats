@@ -818,7 +818,8 @@ namespace OMIstats.Models
                 // Primero queremos ver si hay una olimpiada lista para hacer registro
                 Olimpiada o = Olimpiada.obtenerMasReciente(yaEmpezada: false);
 
-                if (o.año != DateTime.Now.Year)
+                if (o.año != DateTime.Now.Year ||
+                    o.fin < DateTime.Now)
                 {
                     error = -1;
                     throw new Exception();

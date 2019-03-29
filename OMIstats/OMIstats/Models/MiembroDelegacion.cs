@@ -184,12 +184,9 @@ namespace OMIstats.Models
             {
                 if (datos.Length > (int)Campos.GENERO)
                     genero = datos[(int)Campos.GENERO].Trim().ToCharArray()[0].ToString().ToUpper();
-                if (genero != "M" && genero != "F")
-                    return TipoError.GENERO;
             }
             catch (Exception)
             {
-                return TipoError.GENERO;
             }
             if (datos.Length > (int)Campos.CORREO)
                 correo = datos[(int)Campos.CORREO].Trim();
@@ -428,8 +425,7 @@ namespace OMIstats.Models
             if ((md.nombreAsistente.Length == 0 && md.usuario.Length == 0) ||
                 md.estado.Length == 0 ||
                 md.tipo == TipoAsistente.NULL ||
-                md.clave.Length == 0 ||
-                md.genero.Length != 1)
+                md.clave.Length == 0)
                 return (int) TipoError.FALTAN_CAMPOS;
 
             // Verificar que exista el usuario
@@ -450,6 +446,9 @@ namespace OMIstats.Models
                 {
                     p = new Persona();
                     p.nombre = md.nombreAsistente;
+
+                    if (md.genero != "M" && md.genero != "F")
+                        return (int) TipoError.GENERO;
 
                     Utilities.Archivos.FotoInicial foto = Utilities.Archivos.FotoInicial.DOMI;
                     if (md.tipo == TipoAsistente.COMI || md.tipo == TipoAsistente.COLO)
@@ -499,7 +498,8 @@ namespace OMIstats.Models
                 return (int) TipoError.FECHA_NACIMIENTO;
             }
 
-            p.genero = md.genero;
+            if (md.genero == "M" || md.genero == "F")
+                p.genero = md.genero;
             p.CURP = md.CURP;
 
             if (md.correo.Length > 0)
