@@ -239,7 +239,7 @@ namespace OMIstats.Models
         private static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos, bool cargarCache, int dia, int problemas, out List<CachedResult> cached)
         {
             List<Resultados> lista = new List<Resultados>();
-            cached = null;
+            List<CachedResult> temp = null;
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -258,7 +258,7 @@ namespace OMIstats.Models
             DataTable table = db.getTable();
 
             if (cargarCache)
-                cached = new List<CachedResult>();
+                temp = new List<CachedResult>();
 
             foreach (DataRow r in table.Rows)
             {
@@ -272,9 +272,11 @@ namespace OMIstats.Models
                 {
                     CachedResult cr = new CachedResult();
                     cr.llenarDatos(res, dia, problemas);
-                    cached.Add(cr);
+                    temp.Add(cr);
                 }
             }
+
+            cached = temp;
 
             return lista;
         }
