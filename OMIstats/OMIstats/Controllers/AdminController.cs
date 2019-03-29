@@ -138,14 +138,6 @@ namespace OMIstats.Controllers
             Olimpiada.resetOMIs(TipoOlimpiada.OMIS);
             Olimpiada.resetOMIs(TipoOlimpiada.OMIP);
 
-            List<OmegaUp> polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
-
-            foreach (OmegaUp p in polls)
-            {
-                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
-                o.liveResults = true;
-            }
-
             List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
             OmegaUp.RunnerStarted = (status.Count > 0);
 
