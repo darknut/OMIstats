@@ -43,6 +43,9 @@ namespace OMIstats.Controllers
 
                 if (usuario == null)
                 {
+                    if (estaLoggeado())
+                        return RedirectTo(Pagina.HOME);
+
                     ViewBag.GUIDerror = true;
                     return View();
                 }
