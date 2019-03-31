@@ -101,6 +101,9 @@
  * @author Christian Bach/christian.bach@polyester.se
  */
 
+var lastColumn = -1;
+var lastOrder = 0;
+
 (function ($) {
     $.extend({
         tablesorter: new
@@ -728,6 +731,9 @@
 							// always sort on the locked order.
 							if(this.lockedOrder) this.order = this.lockedOrder;
 							
+							lastColumn = i;
+							lastOrder = this.order;
+
 							// user only whants to sort on one
                             // column
                             if (!e[config.sortMultiSortKey]) {
@@ -802,6 +808,9 @@
                         cache.normalized[pos[0]][pos[1]] = config.parsers[pos[1]].format(
                         getElementText(config, cell), cell);
                     }).bind("sorton", function (e, list) {
+                        if (lastColumn >= 0)
+                            list = [[[lastColumn, lastOrder]]];
+
                         $(this).trigger("sortStart");
                         config.sortList = list;
                         // update and store the sortlist
