@@ -330,6 +330,18 @@ namespace OMIstats.Models
             {
                 olimpiadas = cargarOlimpiadas(tipoOlimpiada);
                 HttpContext.Current.Application[application] = olimpiadas;
+
+                // Cargamos las instrucciones en caso de que haya un scoreboard activo
+                List<OmegaUp> polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
+
+                foreach (OmegaUp p in polls)
+                {
+                    if (p.tipoOlimpiada == tipoOlimpiada)
+                    {
+                        Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
+                        o.liveResults = true;
+                    }
+                }
             }
 
             return olimpiadas;
@@ -434,18 +446,6 @@ namespace OMIstats.Models
         public static void resetOMIs(TipoOlimpiada tipoOlimpiada)
         {
             HttpContext.Current.Application[obtenerApplicationString(tipoOlimpiada)] = null;
-
-            // Cargamos las instrucciones en caso de que haya un scoreboard activo
-            List<OmegaUp> polls = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.POLL);
-
-            foreach (OmegaUp p in polls)
-            {
-                if (p.tipoOlimpiada == tipoOlimpiada)
-                {
-                    Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(p.olimpiada, p.tipoOlimpiada);
-                    o.liveResults = true;
-                }
-            }
         }
 
         /// <summary>
