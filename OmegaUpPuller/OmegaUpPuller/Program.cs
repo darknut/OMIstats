@@ -13,9 +13,6 @@ namespace OmegaUpPuller
 {
     class Program
     {
-        private static bool IS_MOCKING = false;
-        private const string MOCKING_STRING = "mock";
-
         private bool hayOtroActivo()
         {
             List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
@@ -51,7 +48,11 @@ namespace OmegaUpPuller
 
         private void poll(OmegaUp instruccion)
         {
-            if (WebRequest.ScoreboardManager.Instance.Update(instruccion, IS_MOCKING))
+#if DEBUG
+            if (WebRequest.ScoreboardManager.Instance.Update(instruccion, mock: true))
+#else
+            if (WebRequest.ScoreboardManager.Instance.Update(instruccion))
+#endif
                 instruccion.status = OmegaUp.Status.OK;
             else
                 instruccion.status = OmegaUp.Status.ERROR;
@@ -92,12 +93,10 @@ namespace OmegaUpPuller
                                     Log.add(Log.TipoLog.OMEGAUP, "-------------------");
                                     polls++;
                                     this.poll(instruccion);
-
-                                    if (!IS_MOCKING)
-                                    {
-                                        Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + instruccion.ping + " seconds.");
-                                        System.Threading.Thread.Sleep(instruccion.ping * 1000);
-                                    }
+#if !DEBUG
+                                    Log.add(Log.TipoLog.OMEGAUP, "Sleeping for " + instruccion.ping + " seconds.");
+                                    System.Threading.Thread.Sleep(instruccion.ping * 1000);
+#endif
                                     break;
                                 }
                         }
@@ -125,10 +124,6 @@ namespace OmegaUpPuller
 
         static void Main(string[] args)
         {
-            if (args.Length == 1 && args[0] == MOCKING_STRING)
-                Program.IS_MOCKING = true;
-            Log.ToConsole = Program.IS_MOCKING;
-
             CultureInfo culture = new CultureInfo("es-MX");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
