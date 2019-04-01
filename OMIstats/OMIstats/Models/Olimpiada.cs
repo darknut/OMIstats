@@ -8,7 +8,7 @@ using System.Web;
 
 namespace OMIstats.Models
 {
-    public class Olimpiada
+    public partial class Olimpiada
     {
         public const string TEMP_CLAVE = "TMP";
         private const int PUNTOS_MINIMOS_CONOCIDOS = 100;
@@ -17,12 +17,6 @@ namespace OMIstats.Models
         private const string APPLICATION_OMI = "OlimpiadasOMI";
         private const string APPLICATION_OMIS = "OlimpiadasOMIS";
         private const string APPLICATION_OMIP = "OlimpiadasOMIP";
-
-        [Required(ErrorMessage = "Campo requerido")]
-        [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
-        public string numero { get; set; }
-
-        public TipoOlimpiada tipoOlimpiada { get; set; }
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(30, ErrorMessage = "El tamaño máximo es 30 caracteres")]
@@ -54,14 +48,10 @@ namespace OMIstats.Models
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string reporte { get; set; }
 
-        public int estados { get; set; }
-
         public bool datosPublicos { get; set; }
 
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
         public string relacion { get; set; }
-
-        public int participantes { get; set; }
 
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string nombreEscuela { get; set; }
@@ -76,21 +66,13 @@ namespace OMIstats.Models
 
         public string logo { get; set; }
 
-        public int problemasDia1 { get; set; }
-
-        public int problemasDia2 { get; set; }
-
         public bool mostrarResultadosPorDia { get; set; }
 
         public bool mostrarResultadosPorProblema { get; set; }
 
         public bool mostrarResultadosTotales { get; set; }
 
-        public bool puntosDesconocidos { get; set; }
-
         public bool alsoOmips { get; set; }
-
-        public bool noMedallistasConocidos { get; set; }
 
         public string omisActualNumber { get; set; }
 
@@ -683,54 +665,6 @@ namespace OMIstats.Models
 
             // Guardamos los datos en la base
             guardarDatos();
-        }
-
-        /// <summary>
-        /// Calcula los campos calculados de olimpiadas y problemas
-        /// </summary>
-        public void calcularNumeros()
-        {
-            Problema prob;
-
-            estados = Resultados.obtenerEstadosParticipantes(numero, tipoOlimpiada);
-            participantes = MiembroDelegacion.obtenerParticipantes(numero, tipoOlimpiada);
-
-            problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
-            problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
-
-            // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
-            prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
-            prob.guardar(guardarTodo: false);
-
-            prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: problemasDia2);
-            prob.guardar(guardarTodo: false);
-
-            prob = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
-            prob.guardar(guardarTodo: false);
-
-            List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 1);
-            foreach (Problema p in lista)
-                if (p != null)
-                {
-                    Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
-                    p.media = pp.media;
-                    p.mediana = pp.mediana;
-                    p.perfectos = pp.perfectos;
-                    p.ceros = pp.ceros;
-                    p.guardar(guardarTodo: false);
-                }
-
-            lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 2);
-            foreach (Problema p in lista)
-                if (p != null)
-                {
-                    Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
-                    p.media = pp.media;
-                    p.mediana = pp.mediana;
-                    p.perfectos = pp.perfectos;
-                    p.ceros = pp.ceros;
-                    p.guardar(guardarTodo: false);
-                }
         }
 
         /// <summary>

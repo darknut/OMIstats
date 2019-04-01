@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if OMISTATS
 using System.ComponentModel.DataAnnotations;
+#endif
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -23,16 +25,24 @@ namespace OMIstats.Models
 
         public int numero { get; set; }
 
+#if OMISTATS
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+#endif
         public string nombre { get; set; }
 
+#if OMISTATS
         [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
+#endif
         public string url { get; set; }
 
+#if OMISTATS
         [MaxLength(150, ErrorMessage = "El tamaño máximo es de 150 caracteres")]
+#endif
         public string casos { get; set; }
 
+#if OMISTATS
         [MaxLength(150, ErrorMessage = "El tamaño máximo es de 150 caracteres")]
+#endif
         public string codigo { get; set; }
 
         public float media { get; set; }

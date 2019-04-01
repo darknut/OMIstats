@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OMIStats\Models\Mock.cs" />
-    <Compile Include="OMIStats\Models\Olimpiada.cs" />
     <Compile Include="OMIStats\Utilities\Mock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -57,10 +56,13 @@
     <Compile Include="..\..\OMIStats\OMIStats\utilities\Fechas.cs">
       <Link>OMIStats\Utilities\Fechas.cs</Link>
     </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\Common\Olimpiada.cs">
+      <Link>OMIStats\Models\Common\Olimpiada.cs</Link>
+    </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\OmegaUp.cs">
       <Link>OMIStats\Models\OmegaUp.cs</Link>
     </Compile>
-	<Compile Include="..\..\OMIStats\OMIStats\Models\Log.cs">
+    <Compile Include="..\..\OMIStats\OMIStats\Models\Log.cs">
       <Link>OMIStats\Models\Log.cs</Link>
     </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\TipoOlimpiada.cs">
@@ -69,10 +71,13 @@
     <Compile Include="..\..\OMIStats\OMIStats\Models\Resultados.cs">
       <Link>OMIStats\Models\Resultados.cs</Link>
     </Compile>
+	<Compile Include="..\..\OMIStats\OMIStats\Models\Problema.cs">
+      <Link>OMIStats\Models\Problema.cs</Link>
+    </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\MiembroDelegacion.cs">
       <Link>OMIStats\Models\MiembroDelegacion.cs</Link>
     </Compile>
-	<Compile Include="..\..\OMIStats\OMIStats\Models\Medallero.cs">
+    <Compile Include="..\..\OMIStats\OMIStats\Models\Medallero.cs">
       <Link>OMIStats\Models\Medallero.cs</Link>
     </Compile>
     <Compile Include="WebRequest\ScoreboardManager.cs" />

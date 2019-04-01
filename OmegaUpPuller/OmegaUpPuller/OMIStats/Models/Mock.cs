@@ -97,16 +97,17 @@ namespace OMIstats.Models
         }
     }
 
-    public class Problema
+    public partial class Olimpiada
     {
-        public int ceros;
-        public int perfectos;
-        public float media;
-        public float mediana;
-        public int dia;
-        public int numero;
-        public string olimpiada;
-        public TipoOlimpiada tipoOlimpiada;
+        public static Olimpiada obtenerOlimpiadaConClave(string clave, TipoOlimpiada tipo)
+        {
+            throw new InvalidOperationException("obtenerOlimpiadaConClave no permitido en este contexto");
+        }
+
+        public static List<Olimpiada> obtenerOlimpiadas(TipoOlimpiada tipoOlimpiada)
+        {
+            throw new InvalidOperationException("obtenerOlimpiadas no permitido en este contexto");
+        }
     }
 
     public class CachedResult
