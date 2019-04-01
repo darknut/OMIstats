@@ -10,7 +10,7 @@ using System.Web;
 
 namespace OMIstats.Models
 {
-    public partial class Olimpiada
+    public class Olimpiada
     {
 #if OMISTATS
         [Required(ErrorMessage = "Campo requerido")]
