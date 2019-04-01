@@ -124,6 +124,9 @@ namespace OmegaUpPuller
 
         static void Main(string[] args)
         {
+#if DEBUG
+            Log.ToConsole = true;
+#endif
             CultureInfo culture = new CultureInfo("es-MX");
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;

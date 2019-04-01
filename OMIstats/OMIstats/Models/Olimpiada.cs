@@ -134,42 +134,33 @@ namespace OMIstats.Models
             estados = Resultados.obtenerEstadosParticipantes(numero, tipoOlimpiada);
             participantes = MiembroDelegacion.obtenerParticipantes(numero, tipoOlimpiada);
 
-            problemasDia1 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 1);
-            problemasDia2 = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, 2);
+            int[] problemasDia = new int[3];
 
             // Calculamos las estadisticas por dia y por competencia y las guardamos en la base
-            prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 1, totalProblemas: problemasDia1);
-            prob.guardar(guardarTodo: false);
+            for (int i = 1; i <= 2; i++)
+            {
+                problemasDia[i] = Problema.obtenerCantidadDeProblemas(numero, tipoOlimpiada, i);
 
-            prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: 2, totalProblemas: problemasDia2);
-            prob.guardar(guardarTodo: false);
+                prob = Resultados.calcularNumeros(numero, tipoOlimpiada, dia: i, totalProblemas: problemasDia[i]);
+                prob.guardar(guardarTodo: false);
 
+                List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, i);
+                foreach (Problema p in lista)
+                    if (p != null)
+                    {
+                        Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
+                        p.media = pp.media;
+                        p.mediana = pp.mediana;
+                        p.perfectos = pp.perfectos;
+                        p.ceros = pp.ceros;
+                        p.guardar(guardarTodo: false);
+                    }
+            }
+
+            problemasDia1 = problemasDia[1];
+            problemasDia2 = problemasDia[2];
             prob = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
             prob.guardar(guardarTodo: false);
-
-            List<Problema> lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 1);
-            foreach (Problema p in lista)
-                if (p != null)
-                {
-                    Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
-                    p.media = pp.media;
-                    p.mediana = pp.mediana;
-                    p.perfectos = pp.perfectos;
-                    p.ceros = pp.ceros;
-                    p.guardar(guardarTodo: false);
-                }
-
-            lista = Problema.obtenerProblemasDeOMI(numero, tipoOlimpiada, 2);
-            foreach (Problema p in lista)
-                if (p != null)
-                {
-                    Problema pp = Resultados.calcularNumeros(numero, tipoOlimpiada, p.dia, p.numero);
-                    p.media = pp.media;
-                    p.mediana = pp.mediana;
-                    p.perfectos = pp.perfectos;
-                    p.ceros = pp.ceros;
-                    p.guardar(guardarTodo: false);
-                }
         }
 
         public static void guardaProblemas(string olimpiada, TipoOlimpiada tipoOlimpiada, int problemas, int dia)
