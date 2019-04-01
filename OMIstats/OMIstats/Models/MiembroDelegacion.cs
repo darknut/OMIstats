@@ -74,7 +74,9 @@ namespace OMIstats.Models
         public string genero;
         public string nombreEscuela;
         public bool escuelaPublica;
+#if OMISTATS
         public Institucion.NivelInstitucion nivelEscuela;
+#endif
         public int añoEscuela;
         public string clave;
         public string estado;
@@ -88,9 +90,9 @@ namespace OMIstats.Models
         /// Solo presente cuando se llama a traves de 'obtenerMiembrosDelegacion'
         /// </summary>
         public string fotoUsuario;
-
+#if OMISTATS
         private bool eliminar;
-
+#endif
         public string nombreEstado;
 
         public MiembroDelegacion()
@@ -103,14 +105,15 @@ namespace OMIstats.Models
             genero = "";
             nombreEscuela = "";
             escuelaPublica = false;
+#if OMISTATS
             nivelEscuela = Institucion.NivelInstitucion.NULL;
+            eliminar = false;
+#endif
             añoEscuela = 0;
             clave = "";
             estado = "";
             tipo = TipoAsistente.NULL;
             resultados = null;
-
-            eliminar = false;
         }
 
         public string getTipoAsistenteString()
@@ -150,13 +153,16 @@ namespace OMIstats.Models
             claveEscuela = (int)row["institucion"];
             estado = row["estado"].ToString().Trim();
             olimpiada = row["olimpiada"].ToString().Trim();
-            nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
             clave = row["clave"].ToString().Trim();
             tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
+#if OMISTATS
             nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
+            nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
+#endif
             añoEscuela = (int)row["año"];
         }
 
+#if OMISTATS
         private TipoError obtenerCampos(string []datos)
         {
             if (datos.Length > (int)Campos.USUARIO)
@@ -666,6 +672,7 @@ namespace OMIstats.Models
 
             return p.clave;
         }
+#endif
 
         /// <summary>
         /// Regresa una lista de miembro de la delegación con la clave mandada como parametro

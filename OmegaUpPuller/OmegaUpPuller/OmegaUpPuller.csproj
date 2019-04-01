@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OMIStats\Models\Mock.cs" />
     <Compile Include="OMIStats\Utilities\Mock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,7 +70,10 @@
     <Compile Include="..\..\OMIStats\OMIStats\Models\Resultados.cs">
       <Link>OMIStats\Models\Resultados.cs</Link>
     </Compile>
-	<Compile Include="..\..\OMIStats\OMIStats\Models\Problema.cs">
+    <Compile Include="..\..\OMIStats\OMIStats\Models\CachedResult.cs">
+      <Link>OMIStats\Models\CachedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\Problema.cs">
       <Link>OMIStats\Models\Problema.cs</Link>
     </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\MiembroDelegacion.cs">

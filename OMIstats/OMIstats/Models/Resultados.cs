@@ -56,9 +56,11 @@ namespace OMIstats.Models
         public bool publico;
         public string ioi;
 
+#if OMISTATS
         public Persona persona;
         public Institucion escuela;
         public Institucion.NivelInstitucion nivelInstitucion;
+#endif
         public int añoEscolar;
         public string nombreEstado;
 
@@ -80,9 +82,11 @@ namespace OMIstats.Models
             publico = false;
             ioi = "";
 
+#if OMISTATS
             persona = null;
             escuela = null;
             nivelInstitucion = Institucion.NivelInstitucion.NULL;
+#endif
             añoEscolar = 0;
 
             dia1 = new List<float?>();
@@ -126,6 +130,7 @@ namespace OMIstats.Models
             publico = (bool)row["publico"];
             ioi = row["ioi"].ToString().Trim();
 
+#if OMISTATS
             if (cargarObjetos)
             {
                 persona = Persona.obtenerPersonaConClave(usuario);
@@ -146,6 +151,7 @@ namespace OMIstats.Models
                 }
                 nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
             }
+#endif
         }
 
         private TipoError obtenerCampos(string[] datos, int problemasDia1, int problemasDia2)
@@ -430,6 +436,7 @@ namespace OMIstats.Models
             return true;
         }
 
+#if OMISTATS
         /// <summary>
         /// Guarda la linea mandada como parametro en la base de datos
         /// </summary>
@@ -468,6 +475,7 @@ namespace OMIstats.Models
 
             return res.guardar();
         }
+#endif
 
         /// <summary>
         /// Guarda los datos del objeto en la base de datos
@@ -482,9 +490,11 @@ namespace OMIstats.Models
 
             if (this.clave.StartsWith(CLAVE_DESCONOCIDA) || this.clave.StartsWith(CLAVE_FALTANTE) || this.clave.StartsWith(NOMBRE_FALTANTE))
             {
+#if OMISTATS
                 Estado e = Estado.obtenerEstadoConClave(this.estado);
                 if (e == null)
                     return TipoError.ESTADO_INEXISTENTE;
+#endif
             }
 
             if (!(this.clave.StartsWith(CLAVE_DESCONOCIDA) || this.clave.StartsWith(NOMBRE_FALTANTE)))

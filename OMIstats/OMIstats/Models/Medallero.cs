@@ -41,8 +41,9 @@ namespace OMIstats.Models
         public int lugar { get; set; }
 
         // Variables auxiliares para conteo
-
+#if OMISTATS
         private bool hayUNKs;
+#endif
         public int count;
 
         public Medallero()
@@ -59,8 +60,9 @@ namespace OMIstats.Models
             lugar = 0;
 
             omi = "";
-
+#if OMISTATS
             hayUNKs = false;
+#endif
             count = 0;
         }
 
@@ -215,6 +217,7 @@ namespace OMIstats.Models
             return !db.EjecutarQuery(query.ToString()).error;
         }
 
+#if OMISTATS
         /// <summary>
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
@@ -449,6 +452,7 @@ namespace OMIstats.Models
             // Al final hacemos los ajustes hardcodeados
             hardcode();
         }
+#endif
 
         /// <summary>
         /// Ajusta las medallas del medallero actual para que no haya más de
@@ -514,6 +518,7 @@ namespace OMIstats.Models
             return lista;
         }
 
+#if OMISTATS
         /// <summary>
         /// Obtiene la tabla de estados generales, similar a las que se ve en wikipedia
         /// </summary>
@@ -571,6 +576,7 @@ namespace OMIstats.Models
 
             return estados;
         }
+#endif
 
         /// <summary>
         /// Obtiene la tabla de estados generales
