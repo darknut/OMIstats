@@ -20,8 +20,6 @@ namespace OMIstats.Models
 
         public string CURP { get; set; }
 
-        public static bool PRODUCTION;
-
         public Usuario()
         {
             Id = 0;
@@ -32,7 +30,11 @@ namespace OMIstats.Models
 
         private static string tableName(string table)
         {
-            return (PRODUCTION ? "" : "[") + table + (PRODUCTION ? "" : "]");
+#if DEBUG
+            return "[" + table + "]";
+#else
+            return table;
+#endif
         }
 
         /// <summary>

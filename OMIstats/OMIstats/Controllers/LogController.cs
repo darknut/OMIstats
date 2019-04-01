@@ -14,16 +14,13 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            if (ViewBag.production)
-            {
-                return Redirect(Utilities.Server.direccionOMI());
-            }
-            else
-            {
-                // En Debug mode hacemos mock
-                string guid = Models.Usuario.MockUserLoggedIn(1);
-                return RedirectToAction("In", "Log", new { GUID = guid });
-            }
+#if DEBUG
+            // En Debug mode hacemos mock
+            string guid = Models.Usuario.MockUserLoggedIn(1);
+            return RedirectToAction("In", "Log", new { GUID = guid });
+#else
+            return Redirect(Utilities.Server.direccionOMI());
+#endif
         }
 
         //
