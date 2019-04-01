@@ -193,7 +193,6 @@
     <Compile Include="Models\Medallero.cs" />
     <Compile Include="Models\MiembroDelegacion.cs" />
     <Compile Include="Models\Olimpiada.cs" />
-    <Compile Include="Models\Common\Olimpiada.cs" />
     <Compile Include="Models\OmegaUp.cs" />
     <Compile Include="Models\Peticion.cs" />
     <Compile Include="Models\Problema.cs" />

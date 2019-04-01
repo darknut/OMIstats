@@ -55,8 +55,8 @@
     <Compile Include="..\..\OMIStats\OMIStats\utilities\Fechas.cs">
       <Link>OMIStats\Utilities\Fechas.cs</Link>
     </Compile>
-    <Compile Include="..\..\OMIStats\OMIStats\Models\Common\Olimpiada.cs">
-      <Link>OMIStats\Models\Common\Olimpiada.cs</Link>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\Olimpiada.cs">
+      <Link>OMIStats\Models\Olimpiada.cs</Link>
     </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\OmegaUp.cs">
       <Link>OMIStats\Models\OmegaUp.cs</Link>
