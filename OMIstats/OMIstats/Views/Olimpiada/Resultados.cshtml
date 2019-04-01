@@ -260,11 +260,13 @@ else
             string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
             <tr id="@(isRunnerLive ? datos.clave : "")">
-                <td class="ioi-mini-imagen">
+                <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
                     @if (isLive && isRunnerLive)
                     {
                         <img class="up" src="@Url.Content("~/img/up.png")" style="display:none"/>
                         <img class="down" src="@Url.Content("~/img/down.png")" style="display:none"/>
+                        <img class="unchecked" src="@Url.Content("~/img/checkbox.png")" onclick="addBorder('@(datos.clave)')"/>
+                        <img class="checked" src="@Url.Content("~/img/checkbox2.png")" onclick="addBorder('@(datos.clave)')" style="display:none"/>
                     }
                     else
                     {

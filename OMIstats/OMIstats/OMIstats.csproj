@@ -301,6 +301,8 @@
     <Content Include="img\celdafondooro.png" />
     <Content Include="img\celdafondoplata.png" />
     <Content Include="img\celdapendiente.png" />
+    <Content Include="img\checkbox.png" />
+    <Content Include="img\checkbox2.png" />
     <Content Include="img\circulo.png" />
     <Content Include="img\codeforces.png" />
     <Content Include="img\cpp.png" />

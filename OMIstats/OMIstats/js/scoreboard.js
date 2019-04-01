@@ -9,6 +9,11 @@ var intervalHandler;
 var lastPing = 0;
 var remainingSeconds = 0;
 
+var colores = ["red", "blue", "green", "darkorange", "indigo", "maroon", "chocolate", "olivedrab"];
+var currentColor = 0;
+
+var style = "dashed 2px ";
+
 function setVisibility(id, status) {
     document.getElementById(id).style.display = status;
 }
@@ -254,4 +259,24 @@ function retryAjax() {
     setVisibility("retryLink", "none");
     setVisibility("loading", "inline");
     callServer();
+}
+
+function addBorder(clave, base) {
+    var row = document.getElementById(clave);
+    var checked = row.getElementsByClassName("checked")[0];
+    var unchecked = row.getElementsByClassName("unchecked")[0];
+
+    if (row.style.border == "") {
+        row.style.border = style + colores[currentColor];
+        currentColor++;
+        if (currentColor == colores.length)
+            currentColor = 0;
+        checked.style.display = "inline";
+        unchecked.style.display = "none";
+    }
+    else {
+        row.style.border = "";
+        checked.style.display = "none";
+        unchecked.style.display = "inline";
+    }
 }

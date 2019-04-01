@@ -119,6 +119,12 @@
     width:25px;
 }
 
+.options-scoreboard {
+    text-align: right;
+    vertical-align: middle;
+    width: 60px;
+}
+
 .escuela-td {
     width:90px;
 }
