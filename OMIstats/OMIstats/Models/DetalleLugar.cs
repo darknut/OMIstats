@@ -16,6 +16,10 @@ namespace OMIstats.Models
         public Resultados.TipoMedalla medalla;
         public int lugar;
 
+        private DetalleLugar()
+        {
+        }
+
         public DetalleLugar(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, Resultados.TipoMedalla medalla, int lugar)
         {
             this.omi = omi;

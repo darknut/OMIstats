@@ -19,6 +19,10 @@ namespace OMIstats.Models
         public float? totalDia2;
         public float? total;
 
+        private DetallePuntos()
+        {
+        }
+
         public DetallePuntos(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, List<float?> dia1, List<float?> dia2)
         {
             this.omi = omi;
