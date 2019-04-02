@@ -388,11 +388,11 @@ namespace OMIstats.Controllers
                 return Json(ERROR);
 
             OmegaUp ou = o.calculateCachedResults();
-            AjaxResponse ajax = new AjaxResponse();
+            ScoreboardAjax ajax = new ScoreboardAjax();
 
             if (ou == null || !OmegaUp.RunnerStarted)
             {
-                ajax.status = AjaxResponse.Status.ERROR.ToString();
+                ajax.status = ScoreboardAjax.Status.ERROR.ToString();
                 return Json(ajax);
             }
 
@@ -401,7 +401,7 @@ namespace OMIstats.Controllers
             if (ajax.timeToFinish == 0)
             {
                 ajax.resultados = o.cachedResults;
-                ajax.status = AjaxResponse.Status.FINISHED.ToString();
+                ajax.status = ScoreboardAjax.Status.FINISHED.ToString();
 
                 return Json(ajax);
             }
@@ -412,19 +412,19 @@ namespace OMIstats.Controllers
             if (retry)
             {
                 ajax.retry = o.shouldReload(ou.dia);
-                ajax.status = AjaxResponse.Status.NOT_CHANGED.ToString();
+                ajax.status = ScoreboardAjax.Status.NOT_CHANGED.ToString();
 
                 return Json(ajax);
             }
 
             if (ou.timestamp.Ticks == ticks)
             {
-                ajax.status = AjaxResponse.Status.NOT_CHANGED.ToString();
+                ajax.status = ScoreboardAjax.Status.NOT_CHANGED.ToString();
             }
             else
             {
                 ajax.ticks = ou.timestamp.Ticks.ToString();
-                ajax.status = AjaxResponse.Status.UPDATED.ToString();
+                ajax.status = ScoreboardAjax.Status.UPDATED.ToString();
                 ajax.resultados = o.cachedResults;
                 ajax.secondsSinceUpdate = (int)Math.Round((decimal)(DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond);
             }

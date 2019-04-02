@@ -39,7 +39,7 @@ namespace OMIstats.Models
         }
     }
 
-    public class AjaxResponse
+    public class ScoreboardAjax
     {
         public enum Status
         {
@@ -56,7 +56,7 @@ namespace OMIstats.Models
         public string ticks;
         public bool retry;
 
-        public AjaxResponse()
+        public ScoreboardAjax()
         {
             this.resultados = null;
             this.secondsSinceUpdate = 0;
