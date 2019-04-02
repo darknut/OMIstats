@@ -197,7 +197,7 @@ namespace OmegaUpPuller.WebRequest
                 mockTime++;
 #else
                 timestamp = (long)resultados[TIME];
-                timestamp /= 100;   // El tiempo en OmegaUp se cuenta en milisegundos
+                timestamp /= 1000;   // El tiempo en OmegaUp se cuenta en milisegundos
                 timestamp -= (long)resultados[START_TIME];
 #endif
 

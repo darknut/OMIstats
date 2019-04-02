@@ -29,6 +29,8 @@ namespace OMIstats.Models
             this.tipoOlimpiada = tipoOlimpiada;
             this.clave = clave;
             this.timestamp = timestamp;
+            this.dia1 = dia1;
+            this.dia2 = dia2;
             totalDia1 = 0;
             totalDia2 = 0;
             total = 0;
@@ -58,16 +60,10 @@ namespace OMIstats.Models
             clave = row["clave"].ToString().Trim();
             timestamp = (int) row["timestamp"];
             for (int i = 0; i < 6; i++)
-                if (row["puntosD1P" + (i + 1)] == DBNull.Value)
-                    dia1[i] = null;
-                else
-                    dia1[i] = float.Parse(row["puntosD1P" + (i + 1)].ToString());
+                dia1[i] = float.Parse(row["puntosD1P" + (i + 1)].ToString());
             totalDia1 = float.Parse(row["puntosD1"].ToString());
             for (int i = 0; i < 6; i++)
-                if (row["puntosD2P" + (i + 1)] == DBNull.Value)
-                    dia2[i] = null;
-                else
-                    dia2[i] = float.Parse(row["puntosD2P" + (i + 1)].ToString());
+                dia2[i] = float.Parse(row["puntosD2P" + (i + 1)].ToString());
             totalDia2 = float.Parse(row["puntosD2"].ToString());
             total = float.Parse(row["puntos"].ToString());
         }
@@ -124,35 +120,35 @@ namespace OMIstats.Models
             query.Append(",");
             query.Append(timestamp);
             query.Append(",");
-            query.Append(this.dia1[0] == null ? "null" : this.dia1[0].ToString());
+            query.Append(this.dia1[0] == null ? "0" : this.dia1[0].ToString());
             query.Append(",");
-            query.Append(this.dia1[1] == null ? "null" : this.dia1[1].ToString());
+            query.Append(this.dia1[1] == null ? "0" : this.dia1[1].ToString());
             query.Append(",");
-            query.Append(this.dia1[2] == null ? "null" : this.dia1[2].ToString());
+            query.Append(this.dia1[2] == null ? "0" : this.dia1[2].ToString());
             query.Append(",");
-            query.Append(this.dia1[3] == null ? "null" : this.dia1[3].ToString());
+            query.Append(this.dia1[3] == null ? "0" : this.dia1[3].ToString());
             query.Append(",");
-            query.Append(this.dia1[4] == null ? "null" : this.dia1[4].ToString());
+            query.Append(this.dia1[4] == null ? "0" : this.dia1[4].ToString());
             query.Append(",");
-            query.Append(this.dia1[5] == null ? "null" : this.dia1[5].ToString());
+            query.Append(this.dia1[5] == null ? "0" : this.dia1[5].ToString());
             query.Append(",");
-            query.Append(this.totalDia1 == null ? "null" : this.totalDia1.ToString());
+            query.Append(this.totalDia1 == null ? "0" : this.totalDia1.ToString());
             query.Append(",");
-            query.Append(this.dia2[0] == null ? "null" : this.dia2[0].ToString());
+            query.Append(this.dia2[0] == null ? "0" : this.dia2[0].ToString());
             query.Append(",");
-            query.Append(this.dia2[1] == null ? "null" : this.dia2[1].ToString());
+            query.Append(this.dia2[1] == null ? "0" : this.dia2[1].ToString());
             query.Append(",");
-            query.Append(this.dia2[2] == null ? "null" : this.dia2[2].ToString());
+            query.Append(this.dia2[2] == null ? "0" : this.dia2[2].ToString());
             query.Append(",");
-            query.Append(this.dia2[3] == null ? "null" : this.dia2[3].ToString());
+            query.Append(this.dia2[3] == null ? "0" : this.dia2[3].ToString());
             query.Append(",");
-            query.Append(this.dia2[4] == null ? "null" : this.dia2[4].ToString());
+            query.Append(this.dia2[4] == null ? "0" : this.dia2[4].ToString());
             query.Append(",");
-            query.Append(this.dia2[5] == null ? "null" : this.dia2[5].ToString());
+            query.Append(this.dia2[5] == null ? "0" : this.dia2[5].ToString());
             query.Append(",");
-            query.Append(this.totalDia2 == null ? "null" : this.totalDia2.ToString());
+            query.Append(this.totalDia2 == null ? "0" : this.totalDia2.ToString());
             query.Append(",");
-            query.Append(this.total == null ? "null" : this.total.ToString());
+            query.Append(this.total == null ? "0" : this.total.ToString());
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
