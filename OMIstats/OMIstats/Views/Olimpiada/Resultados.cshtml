@@ -344,7 +344,7 @@ else
                 }
                 @if (Model.mostrarResultadosPorDia)
                 {
-                    <td class="@("table-td center right-border resultado-dia " + claseCSS)">
+                    <td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
                         @datos.totalDia1
                     </td>
                 }
@@ -359,13 +359,13 @@ else
                 }
                 @if (Model.mostrarResultadosPorDia)
                 {
-                    <td class="@("table-td center right-border resultado-dia " + claseCSS)">
+                    <td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
                         @datos.totalDia2
                     </td>
                 }
                 @if (Model.mostrarResultadosTotales)
                 {
-                    <td class="@("table-td center right-border resultado-total " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+                    <td class="@("table-td center right-border resultado-total open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
                         @datos.total
                     </td>
                 }

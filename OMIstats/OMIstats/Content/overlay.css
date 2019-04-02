@@ -32,3 +32,9 @@
 .close-button:hover {
     cursor: pointer;
 }
+
+.open-overlay:hover {
+    color: blue;
+    cursor: pointer;
+    text-decoration:underline;
+}
