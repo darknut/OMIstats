@@ -185,6 +185,7 @@
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Models\CachedResult.cs" />
     <Compile Include="Controllers\EscuelasController.cs" />
+    <Compile Include="Models\DetalleLugar.cs" />
     <Compile Include="Models\DetallePuntos.cs" />
     <Compile Include="Models\Estado.cs" />
     <Compile Include="Models\Fotos.cs" />
