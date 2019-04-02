@@ -15,9 +15,11 @@ namespace OmegaUpPuller.WebRequest
         private static string USERNAME_STRING = "username";
         private static string POINTS_STRING = "points";
         private static string RUNS_STRING = "runs";
+#if !DEBUG
         private static string START_TIME = "start_time";
-        private static string FINISH_TIME = "finish_time";
         private static string TIME = "time";
+#endif
+        private static string FINISH_TIME = "finish_time";
 
         private static ScoreboardManager _instance = null;
 
