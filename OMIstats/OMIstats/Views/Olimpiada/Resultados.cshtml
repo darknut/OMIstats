@@ -160,89 +160,89 @@ else
     }
 
 <table class="table" id="tablaPuntos">
-    <thead>
-        <tr>
-            <td colspan="5"></td>
-            @if (Model.mostrarResultadosPorProblema)
+<thead>
+<tr>
+<td colspan="5"></td>
+    @if (Model.mostrarResultadosPorProblema)
+    {
+        for (var i = 0; i < Model.problemasDia1; i++)
+        {
+<td class="enlaceProblema">
+    @if (problemasDia1[i] != null)
+    {
+<a href="@problemasDia1[i].url" target="_blank">
+<img src="~/img/link.png" title="@problemasDia1[i].nombre" />
+</a>
+    }
+</td>
+        }
+    }
+    @if (Model.mostrarResultadosPorDia)
+    {
+<td></td>
+    }
+    @if (Model.mostrarResultadosPorProblema)
+    {
+        for (var i = 0; i < Model.problemasDia2; i++)
+        {
+<td class="enlaceProblema">
+    @if (problemasDia2[i] != null)
+    {
+<a href="@problemasDia2[i].url" target="_blank">
+<img src="~/img/link.png" title="@problemasDia2[i].nombre" />
+</a>
+    }
+</td>
+        }
+    }
+</tr>
+<tr class="table-header">
+<th></th>
+<th class="bottom-border right-border table-header-clickable">Lugar</th>
+<th class="bottom-border right-border table-header-clickable">Género</th>
+<th class="bottom-border right-border table-header-clickable">Competidor</th>
+<th class="bottom-border right-border table-header-clickable clave-width">Clave</th>
+    @if (Model.mostrarResultadosPorProblema)
+    {
+        for (var i = 0; i < Model.problemasDia1; i++)
+        {
+            string title = "";
+            if (problemasDia1[i] != null)
             {
-                for (var i = 0; i < Model.problemasDia1; i++)
-                {
-                    <td class="enlaceProblema">
-                        @if (problemasDia1[i] != null)
-                        {
-                            <a href="@problemasDia1[i].url" target="_blank">
-                                <img src="~/img/link.png" title="@problemasDia1[i].nombre" />
-                            </a>
-                        }
-                    </td>
-                }
+                title = problemasDia1[i].nombre;
             }
-            @if (Model.mostrarResultadosPorDia)
+<th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
+        }
+    }
+    @if (Model.mostrarResultadosPorDia)
+    {
+<th class="bottom-border right-border table-header-clickable">D1</th>
+    }
+    @if (Model.mostrarResultadosPorProblema)
+    {
+        for (var i = 0; i < Model.problemasDia2; i++)
+        {
+            string title = "";
+            if (problemasDia2[i] != null)
             {
-                <td></td>
+                title = problemasDia2[i].nombre;
             }
-            @if (Model.mostrarResultadosPorProblema)
-            {
-                for (var i = 0; i < Model.problemasDia2; i++)
-                {
-                    <td class="enlaceProblema">
-                        @if (problemasDia2[i] != null)
-                        {
-                            <a href="@problemasDia2[i].url" target="_blank">
-                                <img src="~/img/link.png" title="@problemasDia2[i].nombre" />
-                            </a>
-                        }
-                    </td>
-                }
-            }
-        </tr>
-        <tr class="table-header">
-            <th></th>
-            <th class="bottom-border right-border table-header-clickable">Lugar</th>
-            <th class="bottom-border right-border table-header-clickable">Género</th>
-            <th class="bottom-border right-border table-header-clickable">Competidor</th>
-            <th class="bottom-border right-border table-header-clickable clave-width">Clave</th>
-            @if (Model.mostrarResultadosPorProblema)
-            {
-                for (var i = 0; i < Model.problemasDia1; i++)
-                {
-                    string title = "";
-                    if (problemasDia1[i] != null)
-                    {
-                        title = problemasDia1[i].nombre;
-                    }
-                    <th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia)
-            {
-                <th class="bottom-border right-border table-header-clickable">D1</th>
-            }
-            @if (Model.mostrarResultadosPorProblema)
-            {
-                for (var i = 0; i < Model.problemasDia2; i++)
-                {
-                    string title = "";
-                    if (problemasDia2[i] != null)
-                    {
-                        title = problemasDia2[i].nombre;
-                    }
-                    <th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia)
-            {
-                <th class="bottom-border right-border table-header-clickable">D2</th>
-            }
-            @if (Model.mostrarResultadosTotales)
-            {
-                <th class="bottom-border right-border table-header-clickable">Total</th>
-            }
-            <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
-            <th class="bottom-border table-header-clickable">Escuela</th>
-        </tr>
-    </thead>
-    <tbody>
+<th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
+        }
+    }
+    @if (Model.mostrarResultadosPorDia)
+    {
+<th class="bottom-border right-border table-header-clickable">D2</th>
+    }
+    @if (Model.mostrarResultadosTotales)
+    {
+<th class="bottom-border right-border table-header-clickable">Total</th>
+    }
+<th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+<th class="bottom-border table-header-clickable">Escuela</th>
+</tr>
+</thead>
+<tbody>
     @{
             tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
             tableManager.setCurrentOMI(Model);
@@ -261,403 +261,401 @@ else
         {
             string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
-            <tr id="@(datos.clave)">
-                <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
-                    @if (isLive && isRunnerLive)
-                    {
-                        <img class="up" src="@Url.Content("~/img/up.png")" style="display:none"/>
-                        <img class="down" src="@Url.Content("~/img/down.png")" style="display:none"/>
-                        <img class="unchecked" src="@Url.Content("~/img/checkbox.png")" onclick="addBorder('@(datos.clave)')"/>
-                        <img class="checked" src="@Url.Content("~/img/checkbox2.png")" onclick="addBorder('@(datos.clave)')" style="display:none"/>
-                    }
-                    else
-                    {
-                        if (tableManager.mostrarLogoIOI())
-                        {
-                        <a href="@tableManager.getIOIStatsLink(datos.persona.ioiID)" target="_blank">
-                            <img src="~/img/ioi.png" />
-                        </a>
-                        }
-                    }
-                </td>
-                <td class="@("table-td center right-border " + claseCSS)">
-                    @if (Model.mostrarResultadosTotales && datos.lugar > 0)
-                    {
-                        @(datos.lugar)
-                    }
-                </td>
-                <td class="@("table-td center right-border " + claseCSS)">
-                    @if (mostrar && datos.persona != null)
-                    {
-                        if (datos.persona.genero == "M")
-                        {
-                           <span class="azul">H</span>
-                        }
-                        else
-                        {
-                           <span class="rosa">M</span>
-                        }
-                    }
-                </td>
-                <td class="@("table-td break-word right-border nombre-td " + claseCSS)">
-                    @if (mostrar && datos.persona != null)
-                    {
-                        <span>
-                            <a class="nombre" href="@Url.Content("~/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">
-                                @datos.persona.nombre
-                            </a>
-                        </span>
-                    }
-                </td>
-                <td class="@("table-td center right-border " + claseCSS)">
-                    @if (mostrar)
-                    {
-                        <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + datos.estado)">
-                        @if (tableManager.faltaClave())
-                        {
-                            <span>
-                                @datos.estado
-                            </span>
-                        }
-                        else
-                        {
-                            if (tableManager.faltaNombre())
-                            {
-                                <span>@datos.clave.Substring(4)</span>
-                            }
-                            else
-                            {
-                                <span>@datos.clave</span>
-                            }
-                        }
-                        </a>
-                    }
-                </td>
-                @if (Model.mostrarResultadosPorProblema)
-                {
-                    for (var i = 0; i < Model.problemasDia1; i++)
-                    {
-                        <td class="@("table-td center right-border " + claseCSS)">
-                            @tableManager.puntosProblema(1, i)
-                        </td>
-                    }
-                }
-                @if (Model.mostrarResultadosPorDia)
-                {
-                    <td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
-                        @datos.totalDia1
-                    </td>
-                }
-                @if (Model.mostrarResultadosPorProblema)
-                {
-                    for (var i = 0; i < Model.problemasDia2; i++)
-                    {
-                         <td class="@("table-td center right-border " + claseCSS)">
-                            @tableManager.puntosProblema(2, i)
-                        </td>
-                    }
-                }
-                @if (Model.mostrarResultadosPorDia)
-                {
-                    <td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
-                        @datos.totalDia2
-                    </td>
-                }
-                @if (Model.mostrarResultadosTotales)
-                {
-                    <td class="@("table-td center right-border resultado-total open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
-                        @datos.total
-                    </td>
-                }
-                <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
-                    @tableManager.medallaString(mostrarPrimeros: false, mostrarPendientes: false)
-                </td>
-                <td class="@("table-td break-word escuela-td " + claseCSS)">
-                    @if (mostrar && datos.escuela != null)
-                    {
-                        <span>
-                            <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + Model.tipoOlimpiada)">
-                                @datos.escuela.nombreCorto
-                            </a>
-                        </span>
-                    }
-                </td>
-            </tr>
+<tr id="@(datos.clave)">
+<td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
+@if (isLive && isRunnerLive)
+{
+<img class="up" src="@Url.Content("~/img/up.png")" style="display:none"/>
+<img class="down" src="@Url.Content("~/img/down.png")" style="display:none"/>
+<img class="unchecked" src="@Url.Content("~/img/checkbox.png")" onclick="addBorder('@(datos.clave)')"/>
+<img class="checked" src="@Url.Content("~/img/checkbox2.png")" onclick="addBorder('@(datos.clave)')" style="display:none"/>
+}
+else
+{
+    if (tableManager.mostrarLogoIOI())
+    {
+<a href="@tableManager.getIOIStatsLink(datos.persona.ioiID)" target="_blank"><img src="~/img/ioi.png" /></a>
+    }
+}
+</td>
+<td class="@("table-td center right-border " + claseCSS)">
+    @if (Model.mostrarResultadosTotales && datos.lugar > 0)
+    {
+     @(datos.lugar)
+    }
+</td>
+<td class="@("table-td center right-border " + claseCSS)">
+    @if (mostrar && datos.persona != null)
+    {
+        if (datos.persona.genero == "M")
+        {
+<span class="azul">H</span>
+        }
+        else
+        {
+<span class="rosa">M</span>
         }
     }
-    </tbody>
+</td>
+<td class="@("table-td break-word right-border nombre-td " + claseCSS)">
+    @if (mostrar && datos.persona != null)
+    {
+<span>
+<a class="nombre" href="@Url.Content("~/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">
+        @datos.persona.nombre
+</a>
+</span>
+    }
+</td>
+<td class="@("table-td center right-border " + claseCSS)">
+    @if (mostrar)
+    {
+<a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + datos.estado)">
+@if (tableManager.faltaClave())
+{
+<span>
+        @datos.estado
+</span>
+}
+else
+{
+    if (tableManager.faltaNombre())
+    {
+<span>@datos.clave.Substring(4)</span>
+    }
+    else
+    {
+<span>@datos.clave</span>
+    }
+}
+</a>
+    }
+</td>
+@if (Model.mostrarResultadosPorProblema)
+{
+    for (var i = 0; i < Model.problemasDia1; i++)
+    {
+<td class="@("table-td center right-border " + claseCSS)">
+@tableManager.puntosProblema(1, i)
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia)
+{
+<td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+@datos.totalDia1
+</td>
+}
+@if (Model.mostrarResultadosPorProblema)
+{
+    for (var i = 0; i < Model.problemasDia2; i++)
+    {
+<td class="@("table-td center right-border " + claseCSS)">
+@tableManager.puntosProblema(2, i)
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia)
+{
+<td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+@datos.totalDia2
+</td>
+}
+@if (Model.mostrarResultadosTotales)
+{
+<td class="@("table-td center right-border resultado-total open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+@datos.total
+</td>
+}
+<td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
+@tableManager.medallaString(mostrarPrimeros: false, mostrarPendientes: false)
+</td>
+<td class="@("table-td break-word escuela-td " + claseCSS)">
+    @if (mostrar && datos.escuela != null)
+    {
+<span>
+<a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + Model.tipoOlimpiada)">
+@datos.escuela.nombreCorto
+</a>
+</span>
+    }
+</td>
+</tr>
+        }
+    }
+</tbody>
     @if (!isLive)
     {
-    <tfoot>
-        <tr>
-            <td></td>
-            @if (!Model.noMedallistasConocidos)
-            {
-                <td class="top-border"></td>
-            }
-            <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-                {
-                    <span>Media</span>
-                }
-            </td>
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia1; i++)
-                {
-                    <td class="center right-border top-border pie">
-                        @if (problemasDia1[i] != null)
-                        {
-                            @ViewBag.problemasDia1[i].media
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia top-border pie">
-                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
-                    {
-                        @ViewBag.numerosDia1.media
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia2; i++)
-                {
-                    <td class="center right-border top-border pie">
-                        @if (problemasDia2[i] != null)
-                        {
-                            @ViewBag.problemasDia2[i].media
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia top-border pie">
-                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
-                    {
-                        @ViewBag.numerosDia2.media
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-            {
-                <td class="center resultado-total top-border pie">
-                    @if (ViewBag.numerosTotal != null)
-                    {
-                        @ViewBag.numerosTotal.media
-                    }
-                </td>
-            }
-            <td class="top-border table-footer center" colspan="2">
-                Estados participantes
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            @if (!Model.noMedallistasConocidos)
-            {
-                <td></td>
-            }
-            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-                {
-                    <span>Mediana</span>
-                }
-            </td>
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia1; i++)
-                {
-                    <td class="center right-border pie">
-                        @if (problemasDia1[i] != null)
-                        {
-                            @ViewBag.problemasDia1[i].mediana
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
-                    {
-                        @ViewBag.numerosDia1.mediana
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia2; i++)
-                {
-                    <td class="center right-border pie">
-                        @if (problemasDia2[i] != null)
-                        {
-                            @ViewBag.problemasDia2[i].mediana
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
-                    {
-                        @ViewBag.numerosDia2.mediana
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-            {
-                <td class="center resultado-total pie">
-                    @if (ViewBag.numerosTotal != null)
-                    {
-                        @ViewBag.numerosTotal.mediana
-                    }
-                </td>
-            }
-            <td class="center" colspan="2">
-                @Model.estados
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            @if (!Model.noMedallistasConocidos)
-            {
-                <td></td>
-            }
-            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (!hayUNKs && Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-                {
-                    <span>Perfectos</span>
-                }
-            </td>
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia1; i++)
-                {
-                    <td class="center right-border pie">
-                        @if (problemasDia1[i] != null)
-                        {
-                            @ViewBag.problemasDia1[i].perfectos
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
-                    {
-                        @ViewBag.numerosDia1.perfectos
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia2; i++)
-                {
-                    <td class="center right-border pie">
-                        @if (problemasDia2[i] != null)
-                        {
-                            @ViewBag.problemasDia2[i].perfectos
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
-                    {
-                        @ViewBag.numerosDia2.perfectos
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-            {
-                <td class="center resultado-total pie">
-                    @if (!hayUNKs && ViewBag.numerosTotal != null)
-                    {
-                        @ViewBag.numerosTotal.perfectos
-                    }
-                </td>
-            }
-            <td class="table-footer center" colspan="2">
-                Total competidores
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            @if (!Model.noMedallistasConocidos)
-            {
-                <td></td>
-            }
-            <td class="right-border derecha pie pieTitulo table-footer" colspan="4">
-                @if (!hayUNKs && Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-                {
-                    <span>Ceros</span>
-                }
-            </td>
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia1; i++)
-                {
-                    <td class="center right-border pie">
-                        @if (problemasDia1[i] != null)
-                        {
-                            @ViewBag.problemasDia1[i].ceros
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs && ViewBag.numerosDia1 != null)
-                    {
-                        @ViewBag.numerosDia1.ceros
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
-            {
-                for (var i = 0; i < Model.problemasDia2; i++)
-                {
-                    <td class="center right-border pie">
-                        @if (problemasDia2[i] != null)
-                        {
-                            @ViewBag.problemasDia2[i].ceros
-                        }
-                    </td>
-                }
-            }
-            @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
-            {
-                <td class="center right-border resultado-dia pie">
-                    @if (!hayUNKs && ViewBag.numerosDia2 != null)
-                    {
-                        @ViewBag.numerosDia2.ceros
-                    }
-                </td>
-            }
-            @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
-            {
-                <td class="center resultado-total pie">
-                    @if (!hayUNKs && ViewBag.numerosTotal != null)
-                    {
-                        @ViewBag.numerosTotal.ceros
-                    }
-                </td>
-            }
-            <td class="center" colspan="2">
-                @Model.participantes
-            </td>
-        </tr>
-    </tfoot>
+<tfoot>
+<tr>
+<td></td>
+@if (!Model.noMedallistasConocidos)
+{
+<td class="top-border"></td>
+}
+<td class="right-border top-border derecha pie pieTitulo table-footer" colspan="4">
+    @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+    {
+<span>Media</span>
+    }
+</td>
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia1; i++)
+    {
+<td class="center right-border top-border pie">
+    @if (problemasDia1[i] != null)
+    {
+        @ViewBag.problemasDia1[i].media
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia top-border pie">
+    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    {
+        @ViewBag.numerosDia1.media
+    }
+</td>
+}
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia2; i++)
+    {
+<td class="center right-border top-border pie">
+    @if (problemasDia2[i] != null)
+    {
+        @ViewBag.problemasDia2[i].media
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia top-border pie">
+    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    {
+        @ViewBag.numerosDia2.media
+    }
+</td>
+}
+@if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+{
+<td class="center resultado-total top-border pie">
+    @if (ViewBag.numerosTotal != null)
+    {
+        @ViewBag.numerosTotal.media
+    }
+</td>
+}
+<td class="top-border table-footer center" colspan="2">
+    Estados participantes
+</td>
+</tr>
+<tr>
+<td></td>
+@if (!Model.noMedallistasConocidos)
+{
+<td></td>
+}
+<td class="right-border derecha pie pieTitulo table-footer" colspan="4">
+    @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+    {
+<span>Mediana</span>
+    }
+</td>
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia1; i++)
+    {
+<td class="center right-border pie">
+    @if (problemasDia1[i] != null)
+    {
+        @ViewBag.problemasDia1[i].mediana
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia pie">
+    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    {
+        @ViewBag.numerosDia1.mediana
+    }
+</td>
+}
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia2; i++)
+    {
+<td class="center right-border pie">
+    @if (problemasDia2[i] != null)
+    {
+        @ViewBag.problemasDia2[i].mediana
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia pie">
+    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    {
+        @ViewBag.numerosDia2.mediana
+    }
+</td>
+}
+@if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+{
+<td class="center resultado-total pie">
+    @if (ViewBag.numerosTotal != null)
+    {
+        @ViewBag.numerosTotal.mediana
+    }
+</td>
+}
+<td class="center" colspan="2">
+    @Model.estados
+</td>
+</tr>
+<tr>
+<td></td>
+@if (!Model.noMedallistasConocidos)
+{
+<td></td>
+}
+<td class="right-border derecha pie pieTitulo table-footer" colspan="4">
+    @if (!hayUNKs && Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+    {
+<span>Perfectos</span>
+    }
+</td>
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia1; i++)
+    {
+<td class="center right-border pie">
+    @if (problemasDia1[i] != null)
+    {
+        @ViewBag.problemasDia1[i].perfectos
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia pie">
+    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    {
+        @ViewBag.numerosDia1.perfectos
+    }
+</td>
+}
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia2; i++)
+    {
+<td class="center right-border pie">
+    @if (problemasDia2[i] != null)
+    {
+        @ViewBag.problemasDia2[i].perfectos
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia pie">
+    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    {
+        @ViewBag.numerosDia2.perfectos
+    }
+</td>
+}
+@if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+{
+<td class="center resultado-total pie">
+    @if (!hayUNKs && ViewBag.numerosTotal != null)
+    {
+        @ViewBag.numerosTotal.perfectos
+    }
+</td>
+}
+<td class="table-footer center" colspan="2">
+Total competidores
+</td>
+</tr>
+<tr>
+<td></td>
+@if (!Model.noMedallistasConocidos)
+{
+<td></td>
+}
+<td class="right-border derecha pie pieTitulo table-footer" colspan="4">
+    @if (!hayUNKs && Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+    {
+<span>Ceros</span>
+    }
+</td>
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia1; i++)
+{
+<td class="center right-border pie">
+    @if (problemasDia1[i] != null)
+    {
+        @ViewBag.problemasDia1[i].ceros
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia pie">
+    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    {
+        @ViewBag.numerosDia1.ceros
+    }
+</td>
+}
+@if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
+{
+    for (var i = 0; i < Model.problemasDia2; i++)
+    {
+<td class="center right-border pie">
+    @if (problemasDia2[i] != null)
+    {
+        @ViewBag.problemasDia2[i].ceros
+    }
+</td>
+    }
+}
+@if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
+{
+<td class="center right-border resultado-dia pie">
+    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    {
+        @ViewBag.numerosDia2.ceros
+    }
+</td>
+}
+@if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
+{
+<td class="center resultado-total pie">
+    @if (!hayUNKs && ViewBag.numerosTotal != null)
+    {
+        @ViewBag.numerosTotal.ceros
+    }
+</td>
+}
+<td class="center" colspan="2">
+    @Model.participantes
+</td>
+</tr>
+</tfoot>
     }
 </table>
 
