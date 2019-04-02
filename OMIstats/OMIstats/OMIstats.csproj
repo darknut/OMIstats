@@ -235,6 +235,7 @@
     <Content Include="Content\general.css" />
     <Content Include="Content\inicio.css" />
     <Content Include="Content\olimpiadas.css" />
+    <Content Include="Content\overlay.css" />
     <Content Include="Content\profile.css" />
     <Content Include="Content\request.css" />
     <Content Include="Content\tablas.css" />
@@ -306,6 +307,7 @@
     <Content Include="img\checkbox.png" />
     <Content Include="img\checkbox2.png" />
     <Content Include="img\circulo.png" />
+    <Content Include="img\close.png" />
     <Content Include="img\codeforces.png" />
     <Content Include="img\cpp.png" />
     <Content Include="img\diploma.png" />

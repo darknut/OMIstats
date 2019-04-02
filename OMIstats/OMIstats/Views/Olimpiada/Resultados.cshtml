@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/overlay.css" type="text/css"/>
 }
 
 @section scripts
@@ -658,4 +659,11 @@ else
     </tfoot>
     }
 </table>
+
+<div class="overlay-container" id="overlay-container">
+</div>
+
+<div class="overlay" id="overlay">
+    <img src="@(Url.Content("~/img/close.png"))" class="close-button" onclick="setVisible('overlay-container', false);setVisible('overlay', false);"/>
+</div>
 }
