@@ -342,6 +342,7 @@
     <Content Include="js\general.js" />
     <Content Include="js\fechas.js" />
     <Content Include="js\graficas.js" />
+    <Content Include="js\overlay.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\request.js" />
     <Content Include="js\scoreboard.js" />

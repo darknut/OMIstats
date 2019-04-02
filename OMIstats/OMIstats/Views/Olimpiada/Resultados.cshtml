@@ -38,6 +38,7 @@
     <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
     <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
     <script type="text/javascript" src="~/js/sorters.js"></script>
+    <script type="text/javascript" src="~/js/overlay.js"></script>
     <script>
         $(function () {
             agregaSorterMedallas();
@@ -260,7 +261,7 @@ else
         {
             string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
             bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
-            <tr id="@(isRunnerLive ? datos.clave : "")">
+            <tr id="@(datos.clave)">
                 <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
                     @if (isLive && isRunnerLive)
                     {
@@ -364,7 +365,7 @@ else
                 }
                 @if (Model.mostrarResultadosTotales)
                 {
-                    <td class="@("table-td center right-border resultado-total " + claseCSS)">
+                    <td class="@("table-td center right-border resultado-total " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
                         @datos.total
                     </td>
                 }
@@ -660,10 +661,11 @@ else
     }
 </table>
 
-<div class="overlay-container" id="overlay-container">
+<div class="overlay-container" id="overlay-container" style="display:none">
 </div>
 
-<div class="overlay" id="overlay">
+<div class="overlay" id="overlay" style="display:none">
     <img src="@(Url.Content("~/img/close.png"))" class="close-button" onclick="setVisible('overlay-container', false);setVisible('overlay', false);"/>
+    <div id="overlay-temp"></div>
 </div>
 }
