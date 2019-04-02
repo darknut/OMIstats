@@ -15,7 +15,9 @@ namespace OmegaUpPuller.WebRequest
         private static string USERNAME_STRING = "username";
         private static string POINTS_STRING = "points";
         private static string RUNS_STRING = "runs";
+        private static string START_TIME = "start_time";
         private static string FINISH_TIME = "finish_time";
+        private static string TIME = "time";
 
         private static ScoreboardManager _instance = null;
 
@@ -36,6 +38,7 @@ namespace OmegaUpPuller.WebRequest
 
         private Dictionary<string, Scoreboard> scoreboards;
         private Dictionary<string, Dictionary<string, object>> mockScoreboards;
+        private int mockTime = 0;
 
         private string getClaveScoreBoard(OmegaUp pull)
         {
@@ -186,8 +189,18 @@ namespace OmegaUpPuller.WebRequest
             // Finalmente, ordenamos y guardamos en la base de datos
             try
             {
+                long timestamp;
+#if DEBUG
+                timestamp = mockTime;
+                mockTime++;
+#else
+                timestamp = (long)resultados[TIME];
+                timestamp /= 100;   // El tiempo en OmegaUp se cuenta en milisegundos
+                timestamp -= (long)resultados[START_TIME];
+#endif
+
                 Log.add(Log.TipoLog.OMEGAUP, "Ordenando los resultados");
-                scoreboard.ordena();
+                scoreboard.ordena((int)timestamp);
             }
             catch (Exception e)
             {

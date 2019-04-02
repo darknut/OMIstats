@@ -150,7 +150,7 @@ namespace OmegaUpPuller.WebRequest
             return y1.CompareTo(x1);
         }
 
-        public void ordena()
+        public void ordena(int timestamp)
         {
             // Ordenamos los resutlados
             List<Resultados> list = this.resultados.Values.ToList();
@@ -257,7 +257,6 @@ namespace OmegaUpPuller.WebRequest
                     }
                 }
 
-                int timestamp = 0;
                 // Finalmente guardamos la linea en la base de datos
                 r.guardar(detalles: true, timestamp: timestamp);
             }
