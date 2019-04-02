@@ -214,6 +214,8 @@ namespace OmegaUpPuller.WebRequest
                 if (currentPoints == 0)
                 {
                     r.medalla = Resultados.TipoMedalla.NADA;
+                    // Si no hay puntos, tienes el último lugar
+                    r.lugar = concursantes;
                 }
                 else
                 {
