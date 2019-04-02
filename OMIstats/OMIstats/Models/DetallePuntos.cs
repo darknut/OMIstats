@@ -19,31 +19,33 @@ namespace OMIstats.Models
         public float? totalDia2;
         public float? total;
 
-        public DetallePuntos()
+        public DetallePuntos(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, List<float?> dia1, List<float?> dia2)
         {
-            omi = "";
-            tipoOlimpiada = TipoOlimpiada.NULL;
-
-            clave = "";
+            this.omi = omi;
+            this.tipoOlimpiada = tipoOlimpiada;
+            this.clave = clave;
+            this.timestamp = timestamp;
             totalDia1 = 0;
             totalDia2 = 0;
             total = 0;
 
-            dia1 = new List<float?>();
-            dia1.Add(0);
-            dia1.Add(0);
-            dia1.Add(0);
-            dia1.Add(0);
-            dia1.Add(0);
-            dia1.Add(0);
+            foreach (float? t in dia1)
+            {
+                if (t != null)
+                {
+                    totalDia1 += t;
+                    total += t;
+                }
+            }
 
-            dia2 = new List<float?>();
-            dia2.Add(0);
-            dia2.Add(0);
-            dia2.Add(0);
-            dia2.Add(0);
-            dia2.Add(0);
-            dia2.Add(0);
+            foreach (float? t in dia2)
+            {
+                if (t != null)
+                {
+                    totalDia2 += t;
+                    total += t;
+                }
+            }
         }
 
         private void llenarDatos(DataRow row)

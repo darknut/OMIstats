@@ -70,6 +70,12 @@
     <Compile Include="..\..\OMIStats\OMIStats\Models\Resultados.cs">
       <Link>OMIStats\Models\Resultados.cs</Link>
     </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\DetalleLugar.cs">
+      <Link>OMIStats\Models\DetalleLugar.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Models\DetallePuntos.cs">
+      <Link>OMIStats\Models\DetallePuntos.cs</Link>
+    </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\CachedResult.cs">
       <Link>OMIStats\Models\CachedResult.cs</Link>
     </Compile>

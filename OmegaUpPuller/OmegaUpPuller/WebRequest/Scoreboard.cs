@@ -257,8 +257,9 @@ namespace OmegaUpPuller.WebRequest
                     }
                 }
 
+                int timestamp = 0;
                 // Finalmente guardamos la linea en la base de datos
-                r.guardar();
+                r.guardar(detalles: true, timestamp: timestamp);
             }
 
             // Para OMIPS ya terminamos los cálculos

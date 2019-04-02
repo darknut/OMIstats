@@ -16,14 +16,14 @@ namespace OMIstats.Models
         public Resultados.TipoMedalla medalla;
         public int lugar;
 
-        public DetalleLugar()
+        public DetalleLugar(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, Resultados.TipoMedalla medalla, int lugar)
         {
-            omi = "";
-            tipoOlimpiada = TipoOlimpiada.NULL;
-            clave = "";
-            timestamp = 0;
-            medalla = Resultados.TipoMedalla.NULL;
-            lugar = 0;
+            this.omi = omi;
+            this.tipoOlimpiada = tipoOlimpiada;
+            this.clave = clave;
+            this.timestamp = timestamp;
+            this.medalla = medalla;
+            this.lugar = lugar;
         }
 
         private void llenarDatos(DataRow row)
