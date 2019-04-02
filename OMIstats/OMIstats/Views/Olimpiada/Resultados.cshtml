@@ -26,37 +26,43 @@
 
 @section AddToHead
 {
-    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
-    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
-    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
-    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
-    <link rel="stylesheet" href="~/Content/overlay.css" type="text/css"/>
+<link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+<link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+@if(Model.puntosDetallados)
+{
+<link rel="stylesheet" href="~/Content/overlay.css" type="text/css"/>
+}
 }
 
 @section scripts
 {
-    <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
-    <script type="text/javascript" src="~/js/sorters.js"></script>
-    <script type="text/javascript" src="~/js/overlay.js"></script>
-    <script>
-        $(function () {
-            agregaSorterMedallas();
-            cargaSorter("tablaPuntos");
-        });
-    </script>
-    @if(isRunnerLive)
-    {
-        <script type="text/javascript" src="~/js/formas.js"></script>
-        <script type="text/javascript" src="~/js/scoreboard.js"></script>
-        <script>
-            $(function () {
-                setUpScoreboard("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), "@(ticks)", @(remainingSeconds));
-                setTimes(@(lastUpdate));
-                startTimer();
-            });
-        </script>
-    }
+<script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
+<script type="text/javascript" src="~/js/sorters.js"></script>
+@if(Model.puntosDetallados)
+{
+<script type="text/javascript" src="~/js/overlay.js"></script>
+}
+<script>
+$(function () {
+    agregaSorterMedallas();
+    cargaSorter("tablaPuntos");
+});
+</script>
+@if(isRunnerLive)
+{
+<script type="text/javascript" src="~/js/formas.js"></script>
+<script type="text/javascript" src="~/js/scoreboard.js"></script>
+<script>
+$(function () {
+    setUpScoreboard("@(Url.Content("~"))" + "Olimpiada/ResultadosAjax", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @(dia), @(problemasPorDia), "@(ticks)", @(remainingSeconds));
+    setTimes(@(lastUpdate));
+    startTimer();
+});
+</script>
+}
 }
 
 @{
@@ -659,11 +665,13 @@ Total competidores
     }
 </table>
 
+if(Model.puntosDetallados)
+{
 <div class="overlay-container" id="overlay-container" style="display:none">
 </div>
-
 <div class="overlay" id="overlay" style="display:none">
     <img src="@(Url.Content("~/img/close.png"))" class="close-button" onclick="setVisible('overlay-container', false);setVisible('overlay', false);"/>
     <div id="overlay-temp"></div>
 </div>
+}
 }

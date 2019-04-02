@@ -862,7 +862,8 @@ namespace OMIstats.Models
                 Olimpiada o = Olimpiada.obtenerMasReciente(yaEmpezada: false);
 
                 if (o.año != DateTime.Now.Year ||
-                    o.fin < DateTime.Now)
+                    o.fin < DateTime.Now ||
+                    !o.registroActivo)
                 {
                     error = -1;
                     throw new Exception();
