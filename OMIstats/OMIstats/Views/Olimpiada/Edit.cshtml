@@ -121,6 +121,20 @@ else
                 </div>
 
                 <div>
+                    <div class="label">Puntos detallados:</div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.puntosDetallados)
+                    </div>
+                </div>
+
+                <div>
+                    <div class="label">Registro activo:</div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.registroActivo)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">¿También OMIPS?:</div>
                     <div class="input">
                         @Html.CheckBoxFor(model => model.alsoOmips)

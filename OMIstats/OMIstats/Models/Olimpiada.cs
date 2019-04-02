@@ -97,6 +97,10 @@ namespace OMIstats.Models
 
         public bool liveResults { get; set; }
 
+        public bool puntosDetallados { get; set; }
+
+        public bool registroActivo { get; set; }
+
         public float media
         {
             get
@@ -258,6 +262,8 @@ namespace OMIstats.Models
             alsoOmips = false;
             noMedallistasConocidos = false;
             omisActualNumber = "";
+            registroActivo = false;
+            puntosDetallados = false;
 
             liveResults = false;
         }
@@ -362,6 +368,8 @@ namespace OMIstats.Models
             puntosDesconocidos = (bool)datos["puntosDesconocidos"];
             alsoOmips = (bool)datos["alsoOmips"];
             noMedallistasConocidos = (bool)datos["noMedallistasConocidos"];
+            puntosDetallados = (bool)datos["puntosDetallados"];
+            registroActivo = (bool)datos["registroActivo"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -518,6 +526,10 @@ namespace OMIstats.Models
             query.Append(alsoOmips ? 1 : 0);
             query.Append(", noMedallistasConocidos = ");
             query.Append(noMedallistasConocidos ? 1 : 0);
+            query.Append(", puntosDetallados = ");
+            query.Append(puntosDetallados ? 1 : 0);
+            query.Append(", registroActivo = ");
+            query.Append(registroActivo ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
             query.Append(" and clase = ");
@@ -565,6 +577,8 @@ namespace OMIstats.Models
             omi.reporte = this.reporte;
             omi.logo = this.logo;
             omi.poster = this.poster;
+            omi.puntosDetallados = this.puntosDetallados;
+            omi.registroActivo = this.registroActivo;
 
             omi.guardarDatos(clave);
         }
@@ -586,7 +600,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 1, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }
