@@ -129,7 +129,9 @@ namespace OMIstats.Models
 #endif
 
         /// <summary>
-        /// Calcula los campos calculados de olimpiadas y problemas
+        /// Calcula los campos que aparecen el el footer de la tabla de resultados
+        /// Calcula media, mediana, perfectos, ceros de cada problema, día y general
+        /// así como número de estados y número de competidores
         /// </summary>
         public void calcularNumeros()
         {
@@ -702,6 +704,9 @@ namespace OMIstats.Models
                 }
             }
             precalcularValores();
+            // No se llama a calcularNumeros porque
+            // olimpiadas donde no se tienen los datos se
+            // romperían, hay que llamar calcular números aparte desde el UI.
 
             return errores.ToString();
         }
@@ -709,6 +714,9 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda valores en la base de datos que estan directamente relacionados
         /// con los resultados y que no pueden escribirse a mano
+        /// Calcula las banderas en el objeto olimpiada, el número de problemas por día,
+        /// genera el metadata (vacio) de los problemas, asigna lugar a los competidores
+        /// y calcula las medallas de todas las personas y escuelas
         /// </summary>
         private void precalcularValores()
         {
