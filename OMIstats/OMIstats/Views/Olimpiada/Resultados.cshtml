@@ -690,8 +690,53 @@ Total competidores
                 <img id="overlay-estado" class="overlay-estado" src=""/>
             </div>
         </div>
-        <div class="overlay-puntos" style="border: 1px solid blue">
-            TABLA
+        <div class="overlay-puntos">
+            <table>
+                <thead>
+                    <tr class="table-header">
+                        <td></td>
+                        <td>Puntos</td>
+                        <td>Lugar</td>
+                    </tr>
+                </thead>
+                <tr class="overlay-total">
+                    <td>Total</td>
+                    <td id="puntos" class="overlay-numeros"></td>
+                    <td id="lugar" class="overlay-numeros"></td>
+                </tr>
+                @if(Model.mostrarResultadosPorDia)
+                {
+                <tr class="overlay-dia">
+                    <td>&nbsp;&nbsp;&nbsp;Día 1</td>
+                    <td id="puntosD1" class="overlay-numeros"></td>
+                    <td id="lugarD1" class="overlay-numeros"></td>
+                </tr>
+                }
+                @for (var i = 0; i < Model.problemasDia1; i++)
+                {
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@(problemasDia1[i] != null ? problemasDia1[i].nombre : "Problema " + (i + 1))</td>
+                    <td id="@("puntosD1P" + (i + 1))" class="overlay-numeros"></td>
+                    <td id="@("lugarD1P" + (i + 1))" class="overlay-numeros"></td>
+                </tr>
+                }
+                @if(Model.mostrarResultadosPorDia)
+                {
+                <tr class="overlay-dia">
+                    <td>&nbsp;&nbsp;&nbsp;Día 2</td>
+                    <td id="puntosD2" class="overlay-numeros"></td>
+                    <td id="lugarD2" class="overlay-numeros"></td>
+                </tr>
+                }
+                @for (var i = 0; i < Model.problemasDia2; i++)
+                {
+                <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@(problemasDia2[i] != null ? problemasDia2[i].nombre : "Problema " + (i + 1))</td>
+                    <td id="@("puntosD2P" + (i + 1))" class="overlay-numeros"></td>
+                    <td id="@("lugarD2P" + (i + 1))" class="overlay-numeros"></td>
+                </tr>
+                }
+            </table>
         </div>
     </div>
 </div>

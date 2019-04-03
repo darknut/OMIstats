@@ -79,3 +79,15 @@
     margin-left: 5px;
     width: 15px;
 }
+
+.overlay-total {
+    background-color: #DDDDDD;
+}
+
+.overlay-dia {
+   background-color: #EEEEEE;
+}
+
+.overlay-numeros {
+    text-align: center;
+}
