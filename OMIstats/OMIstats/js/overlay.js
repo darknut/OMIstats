@@ -39,6 +39,10 @@ function showOverlay(clave) {
     if (medalla != "- - -") {
         overlayMedalla.setAttribute("src", baseUrl + "img/" + medalla + ".png");
     }
+
+    // Sacamos el id de la posible foto
+    var fotoId = tr.getAttribute("foto");
+    overlayFotoImg.setAttribute("src", baseUrl + fotoId);
 }
 
 function closeOverlay() {
@@ -47,7 +51,7 @@ function closeOverlay() {
 
     overlayEstado.setAttribute("src", "");
     overlayMedalla.setAttribute("src", "");
-    overlayFotoImg.setAttribute("src", baseUrl + "img/karel.bmp");
+    overlayFotoImg.setAttribute("src", "");
     overlayNombre.textContent = "";
     overlayClave.textContent = "";
 }

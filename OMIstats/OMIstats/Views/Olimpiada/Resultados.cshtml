@@ -252,25 +252,25 @@ else
 </tr>
 </thead>
 <tbody>
-    @{
-    tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
-    tableManager.setCurrentOMI(Model);
-    bool hayUNKs = false;
-    }
-    @for (var l = 0; l < ViewBag.resultados.Count; l++)
-    {
-        OMIstats.Models.Resultados datos = ViewBag.resultados[l];
-        tableManager.setCurrentResultados(datos);
+@{
+tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
+tableManager.setCurrentOMI(Model);
+bool hayUNKs = false;
+}
+@for (var l = 0; l < ViewBag.resultados.Count; l++)
+{
+    OMIstats.Models.Resultados datos = ViewBag.resultados[l];
+    tableManager.setCurrentResultados(datos);
 
-        if (tableManager.esClaveDesconocida())
-        {
-            hayUNKs = true;
-        }
-        else
-        {
-            string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
-            bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
-<tr id="@(datos.clave)">
+    if (tableManager.esClaveDesconocida())
+    {
+        hayUNKs = true;
+    }
+    else
+    {
+        string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
+        bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
+<tr id="@(datos.clave)" foto="@(datos.persona.foto.Substring(2))">
 <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
 @if (isLive && isRunnerLive)
 {
