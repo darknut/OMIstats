@@ -3,6 +3,7 @@ var overlayNombre = null;
 var overlayClave = null;
 var overlayEstado = null;
 var overlayFotoImg = null;
+var overlayMedalla = null;
 
 function setUpOverlay(base) {
     baseUrl = base;
@@ -10,6 +11,7 @@ function setUpOverlay(base) {
     overlayClave = document.getElementById('overlay-clave');
     overlayEstado = document.getElementById('overlay-estado');
     overlayFotoImg = document.getElementById('overlay-foto-img');
+    overlayMedalla = document.getElementById('overlay-medalla');
 }
 
 function showOverlay(clave) {
@@ -31,6 +33,12 @@ function showOverlay(clave) {
     var estado = href.split("=")[2];
 
     overlayEstado.setAttribute("src", baseUrl + "img/estados/" + estado + ".png");
+
+    // Sacamos la medalla actual
+    var medalla = tds[tds.length - 2].innerText;
+    if (medalla != "- - -") {
+        overlayMedalla.setAttribute("src", baseUrl + "img/" + medalla + ".png");
+    }
 }
 
 function closeOverlay() {
@@ -38,7 +46,8 @@ function closeOverlay() {
     setVisible('overlay', false);
 
     overlayEstado.setAttribute("src", "");
-    overlayEstado.setAttribute("src", baseUrl + "img/estados/karel.bmp");
+    overlayMedalla.setAttribute("src", "");
+    overlayFotoImg.setAttribute("src", baseUrl + "img/karel.bmp");
     overlayNombre.textContent = "";
     overlayClave.textContent = "";
 }
