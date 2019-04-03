@@ -165,6 +165,9 @@ namespace OMIstats.Models
             problemasDia2 = problemasDia[2];
             prob = Models.Resultados.calcularNumeros(numero, tipoOlimpiada, totalProblemas: problemasDia1 + problemasDia2);
             prob.guardar(guardarTodo: false);
+
+            // Guardar en la base
+            this.guardarDatos();
         }
 
         public static void guardaProblemas(string olimpiada, TipoOlimpiada tipoOlimpiada, int problemas, int dia)
