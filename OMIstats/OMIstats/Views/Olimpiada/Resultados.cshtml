@@ -44,6 +44,9 @@
 @if(Model.puntosDetallados)
 {
 <script type="text/javascript" src="~/js/overlay.js"></script>
+<script>
+    setUpOverlay("@(Url.Content("~"))");
+</script>
 }
 <script>
 $(function () {
@@ -51,7 +54,7 @@ $(function () {
     cargaSorter("tablaPuntos");
 });
 </script>
-@if(isRunnerLive)
+@if (isRunnerLive)
 {
 <script type="text/javascript" src="~/js/formas.js"></script>
 <script type="text/javascript" src="~/js/scoreboard.js"></script>
@@ -250,9 +253,9 @@ else
 </thead>
 <tbody>
     @{
-            tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
-            tableManager.setCurrentOMI(Model);
-            bool hayUNKs = false;
+    tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
+    tableManager.setCurrentOMI(Model);
+    bool hayUNKs = false;
     }
     @for (var l = 0; l < ViewBag.resultados.Count; l++)
     {
@@ -609,7 +612,7 @@ Total competidores
 @if (Model.mostrarResultadosPorProblema && Model.noMedallistasConocidos)
 {
     for (var i = 0; i < Model.problemasDia1; i++)
-{
+    {
 <td class="center right-border pie">
     @if (problemasDia1[i] != null)
     {
@@ -665,13 +668,31 @@ Total competidores
     }
 </table>
 
-if(Model.puntosDetallados)
-{
+    if (Model.puntosDetallados)
+    {
 <div class="overlay-container" id="overlay-container" style="display:none">
 </div>
 <div class="overlay" id="overlay" style="display:none">
-    <img src="@(Url.Content("~/img/close.png"))" class="close-button" onclick="setVisible('overlay-container', false);setVisible('overlay', false);"/>
-    <div id="overlay-temp"></div>
+    <img src="@(Url.Content("~/img/close.png"))" class="close-button" onclick="closeOverlay()"/>
+    <div class="overlay-top-menus">
+        <div class="overlay-foto">
+            <div class="foto">
+                <img id="overlay-foto-img" src="@(Url.Content("~/img/karel.bmp"))"/>
+            </div>
+        </div>
+        <div class="overlay-datos">
+            <div id="overlay-nombre" class="nombrePerfil">
+            </div>
+            <div id="overlay-clave" class="overlay-clave">
+            </div>
+            <div>
+                <img id="overlay-estado" class="overlay-estado" src=""/>
+            </div>
+        </div>
+        <div class="overlay-puntos" style="border: 1px solid blue">
+            TABLA
+        </div>
+    </div>
 </div>
-}
+    }
 }

@@ -38,3 +38,39 @@
     cursor: pointer;
     text-decoration:underline;
 }
+
+.overlay-top-menus {
+    margin: 50px;
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.overlay-foto {
+    display: flex;
+    flex: 0 0 auto;
+    width: 160px;
+}
+
+.overlay-datos {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+}
+
+.overlay-puntos {
+    display: flex;
+    flex: 0 0 auto;
+    width: 300px;
+}
+
+.overlay-clave {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.overlay-estado {
+    height: 100px;
+    border-top-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
