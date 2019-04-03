@@ -270,7 +270,7 @@ bool hayUNKs = false;
     {
         string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
         bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
-<tr id="@(datos.clave)" foto="@(datos.persona.foto.Substring(2))">
+<tr id="@((isRunnerLive || Model.puntosDetallados) ? datos.clave : null)" foto="@((isRunnerLive || Model.puntosDetallados) ? datos.persona.foto.Substring(2) : null)">
 <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
 @if (isLive && isRunnerLive)
 {
