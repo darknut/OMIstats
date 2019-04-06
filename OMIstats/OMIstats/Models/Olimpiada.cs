@@ -127,7 +127,6 @@ namespace OMIstats.Models
         public List<CachedResult> cachedResults = null;
         public List<Resultados> resultados = null;
         private DateTime lastUpdate;
-#endif
 
         /// <summary>
         /// Calcula los campos que aparecen el el footer de la tabla de resultados
@@ -172,6 +171,7 @@ namespace OMIstats.Models
             // Guardar en la base
             this.guardarDatos();
         }
+#endif
 
         public static void guardaProblemas(string olimpiada, TipoOlimpiada tipoOlimpiada, int problemas, int dia)
         {

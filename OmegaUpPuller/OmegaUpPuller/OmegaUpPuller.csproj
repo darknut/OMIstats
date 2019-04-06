@@ -76,8 +76,11 @@
     <Compile Include="..\..\OMIStats\OMIStats\Models\DetallePuntos.cs">
       <Link>OMIStats\Models\DetallePuntos.cs</Link>
     </Compile>
-    <Compile Include="..\..\OMIStats\OMIStats\Models\CachedResult.cs">
-      <Link>OMIStats\Models\CachedResult.cs</Link>
+    <Compile Include="..\..\OMIStats\OMIStats\Ajax\ScoreboardAjax.cs">
+      <Link>OMIStats\Ajax\ScoreboardAjax.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OMIStats\OMIStats\Ajax\CachedResult.cs">
+      <Link>OMIStats\Ajax\CachedResult.cs</Link>
     </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\Models\Problema.cs">
       <Link>OMIStats\Models\Problema.cs</Link>
