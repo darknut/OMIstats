@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 #if OMISTATS
 using System.ComponentModel.DataAnnotations;
+using OMIstats.Ajax;
 #endif
 using System.Data;
 using System.Linq;

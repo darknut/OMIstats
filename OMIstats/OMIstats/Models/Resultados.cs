@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Ajax;
 
 namespace OMIstats.Models
 {

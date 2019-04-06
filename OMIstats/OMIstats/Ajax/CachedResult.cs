@@ -4,8 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Models;
 
-namespace OMIstats.Models
+namespace OMIstats.Ajax
 {
     public class CachedResult
     {
@@ -36,33 +37,6 @@ namespace OMIstats.Models
             }
             total = r.total;
             medalla = r.medalla.ToString();
-        }
-    }
-
-    public class ScoreboardAjax
-    {
-        public enum Status
-        {
-            UPDATED,
-            NOT_CHANGED,
-            FINISHED,
-            ERROR
-        }
-
-        public List<CachedResult> resultados;
-        public int secondsSinceUpdate;
-        public int timeToFinish;
-        public string status;
-        public string ticks;
-        public bool retry;
-
-        public ScoreboardAjax()
-        {
-            this.resultados = null;
-            this.secondsSinceUpdate = 0;
-            this.timeToFinish = 0;
-            this.ticks = "0";
-            this.retry = false;
         }
     }
 }

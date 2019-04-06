@@ -1,4 +1,5 @@
 ﻿using OMIstats.Models;
+using OMIstats.Ajax;
 using System;
 using System.Collections.Generic;
 using System.Linq;

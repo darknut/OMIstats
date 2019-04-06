@@ -164,6 +164,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ajax\ScoreboardAjax.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BuscarController.cs" />
@@ -183,7 +184,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RequestController.cs" />
-    <Compile Include="Models\ClasesAjax.cs" />
+    <Compile Include="Ajax\CachedResult.cs" />
     <Compile Include="Controllers\EscuelasController.cs" />
     <Compile Include="Models\DetalleLugar.cs" />
     <Compile Include="Models\DetallePuntos.cs" />
