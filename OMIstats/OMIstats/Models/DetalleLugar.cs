@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Ajax;
 
 namespace OMIstats.Models
 {
@@ -30,18 +31,19 @@ namespace OMIstats.Models
             this.lugar = lugar;
         }
 
-        private void llenarDatos(DataRow row)
+        private static OverlayLugares llenarDatos(DataRow row)
         {
-            lugar = (int)row["lugar"];
-            omi = row["olimpiada"].ToString().Trim();
-            clave = row["clave"].ToString().Trim();
-            timestamp = (int)row["timestamp"];
-            medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), row["medalla"].ToString());
+            OverlayLugares res = new OverlayLugares();
+            res.lugar = (int)row["lugar"];
+            res.timestamp = (int)row["timestamp"];
+            res.medalla = (int)row["medalla"];
+
+            return res;
         }
 
-        private static List<DetalleLugar> cargarResultadosDeUsuario(string omi, TipoOlimpiada tipoOlimpiada, string clave)
+        public static List<OverlayLugares> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave)
         {
-            List<DetalleLugar> lista = new List<DetalleLugar>();
+            List<OverlayLugares> lista = new List<OverlayLugares>();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -60,11 +62,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                DetalleLugar res = new DetalleLugar();
-                res.tipoOlimpiada = tipoOlimpiada;
-                res.llenarDatos(r);
-
-                lista.Add(res);
+                lista.Add(llenarDatos(r));
             }
 
             return lista;
