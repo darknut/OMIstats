@@ -55,9 +55,9 @@ namespace OMIstats.Models
             }
         }
 
-        private static OverlayAjax llenarDatos(DataRow row, int dia1, int dia2)
+        private static OverlayPuntos llenarDatos(DataRow row, int dia1, int dia2)
         {
-            OverlayAjax res = new OverlayAjax();
+            OverlayPuntos res = new OverlayPuntos();
 
             res.timestamp = (int) row["timestamp"];
             res.dia1 = new List<float?>();
@@ -80,9 +80,9 @@ namespace OMIstats.Models
         /// Obtiene la lista de resultados de un usuario en particular, de una olimpiada en particular
         /// </summary>
         /// <returns></returns>
-        public static List<OverlayAjax> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave, int dia1, int dia2)
+        public static List<OverlayPuntos> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave, int dia1, int dia2)
         {
-            List<OverlayAjax> lista = new List<OverlayAjax>();
+            List<OverlayPuntos> lista = new List<OverlayPuntos>();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();

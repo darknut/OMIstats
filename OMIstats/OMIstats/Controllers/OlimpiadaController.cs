@@ -539,9 +539,10 @@ namespace OMIstats.Controllers
             if (o == null)
                 return Json(ERROR);
 
-            List<OverlayAjax> temp = DetallePuntos.cargarResultados(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
+            OverlayAjax response = new OverlayAjax();
+            response.puntos = DetallePuntos.cargarResultados(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
 
-            return Json(temp);
+            return Json(response);
         }
     }
 }
