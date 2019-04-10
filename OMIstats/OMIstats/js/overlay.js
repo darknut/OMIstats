@@ -142,3 +142,7 @@ function closeOverlay() {
         lugarD2P[i].textContent = "";
     }
 }
+
+function handleOverlayAjax(data) {
+    console.log(data);
+}

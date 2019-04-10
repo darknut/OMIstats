@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Ajax;
 
 namespace OMIstats.Models
 {
@@ -54,27 +55,34 @@ namespace OMIstats.Models
             }
         }
 
-        private void llenarDatos(DataRow row)
+        private static OverlayAjax llenarDatos(DataRow row, int dia1, int dia2)
         {
-            omi = row["olimpiada"].ToString().Trim();
-            clave = row["clave"].ToString().Trim();
-            timestamp = (int) row["timestamp"];
-            for (int i = 0; i < 6; i++)
-                dia1[i] = float.Parse(row["puntosD1P" + (i + 1)].ToString());
-            totalDia1 = float.Parse(row["puntosD1"].ToString());
-            for (int i = 0; i < 6; i++)
-                dia2[i] = float.Parse(row["puntosD2P" + (i + 1)].ToString());
-            totalDia2 = float.Parse(row["puntosD2"].ToString());
-            total = float.Parse(row["puntos"].ToString());
+            OverlayAjax res = new OverlayAjax();
+
+            res.timestamp = (int) row["timestamp"];
+            res.dia1 = new List<float?>();
+            for (int i = 0; i < dia1; i++)
+                res.dia1.Add(float.Parse(row["puntosD1P" + (i + 1)].ToString()));
+            if (dia2 > 0)
+            {
+                res.totalDia1 = float.Parse(row["puntosD1"].ToString());
+                res.dia2 = new List<float?>();
+                for (int i = 0; i < dia2; i++)
+                    res.dia2.Add( float.Parse(row["puntosD2P" + (i + 1)].ToString()));
+                res.totalDia2 = float.Parse(row["puntosD2"].ToString());
+            }
+            res.total = float.Parse(row["puntos"].ToString());
+
+            return res;
         }
 
         /// <summary>
         /// Obtiene la lista de resultados de un usuario en particular, de una olimpiada en particular
         /// </summary>
         /// <returns></returns>
-        private static List<DetallePuntos> cargarResultadosDeUsuario(string omi, TipoOlimpiada tipoOlimpiada, string clave)
+        public static List<OverlayAjax> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave, int dia1, int dia2)
         {
-            List<DetallePuntos> lista = new List<DetallePuntos>();
+            List<OverlayAjax> lista = new List<OverlayAjax>();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -93,11 +101,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                DetallePuntos res = new DetallePuntos();
-                res.tipoOlimpiada = tipoOlimpiada;
-                res.llenarDatos(r);
-
-                lista.Add(res);
+                lista.Add(llenarDatos(r, dia1, dia2));
             }
 
             return lista;

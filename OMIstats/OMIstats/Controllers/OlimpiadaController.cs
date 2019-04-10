@@ -534,7 +534,14 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult OverlayAjax(string omi, TipoOlimpiada tipo, string clave)
         {
-            return Json("");
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
+
+            if (o == null)
+                return Json(ERROR);
+
+            List<OverlayAjax> temp = DetallePuntos.cargarResultados(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
+
+            return Json(temp);
         }
     }
 }
