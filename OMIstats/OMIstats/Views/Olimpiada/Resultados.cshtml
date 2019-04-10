@@ -43,9 +43,10 @@
 <script type="text/javascript" src="~/js/sorters.js"></script>
 @if(Model.puntosDetallados)
 {
+<script type="text/javascript" src="~/js/formas.js"></script>
 <script type="text/javascript" src="~/js/overlay.js"></script>
 <script>
-    setUpOverlay("@(Url.Content("~"))", @Model.problemasDia1, @Model.problemasDia2);
+    setUpOverlay("@(Url.Content("~"))" + "Olimpiada/OverlayAjax", "@(Url.Content("~"))", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @Model.problemasDia1, @Model.problemasDia2);
 </script>
 }
 <script>
@@ -56,7 +57,10 @@ $(function () {
 </script>
 @if (isRunnerLive)
 {
+    if(!Model.puntosDetallados)
+    {
 <script type="text/javascript" src="~/js/formas.js"></script>
+    }
 <script type="text/javascript" src="~/js/scoreboard.js"></script>
 <script>
 $(function () {

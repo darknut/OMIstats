@@ -528,5 +528,13 @@ namespace OMIstats.Controllers
 
             return RedirectTo(Pagina.OLIMPIADA, clave);
         }
+
+        // POST: /Olimpiada/OverlayAjax/
+
+        [HttpPost]
+        public JsonResult OverlayAjax(string omi, TipoOlimpiada tipo, string clave)
+        {
+            return Json("");
+        }
     }
 }

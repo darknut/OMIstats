@@ -14,12 +14,18 @@ var puntosD1P = [];
 var lugarD1P = [];
 var puntosD2P = [];
 var lugarD2P = [];
+var overlayAjax = "";
+var overlayTipo = ""
+var overlayOMI = "";
 
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
 
-function setUpOverlay(base, problemasDia1, problemasDia2) {
+function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2) {
     baseUrl = base;
+    overlayAjax = url;
+    overlayOMI = omi;
+    overlayTipo = tipo;
     overlayNombre = document.getElementById('overlay-nombre');
     overlayClave = document.getElementById('overlay-clave');
     overlayEstado = document.getElementById('overlay-estado');
@@ -98,6 +104,12 @@ function showOverlay(clave) {
     for (var i = 0; i < overlayProblemasDia2; i++) {
         puntosD2P[i].textContent = tds[6 + overlayProblemasDia1 + i].innerHTML;
     }
+
+    // Hacemos la llamada ajax para obtener los puntos detallados
+    llamadaAjax(overlayAjax,
+        { omi: overlayOMI, tipo: overlayTipo, clave: clave },
+        function (data) { handleOverlayAjax(data); },
+        function (data) { handleOverlayError(); });
 }
 
 function closeOverlay() {
