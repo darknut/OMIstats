@@ -9,11 +9,13 @@ namespace OMIstats.Ajax
     {
         public List<OverlayPuntos> puntos;
         public List<OverlayLugares> lugares;
+        public List<int> problemas;
 
         public OverlayAjax()
         {
             puntos = null;
             lugares = null;
+            problemas = null;
         }
     }
 }

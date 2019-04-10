@@ -891,5 +891,63 @@ namespace OMIstats.Models
 
             return (int)db.getTable().Rows[0][0];
         }
+
+        private static int countMejores(string columna, float? puntos, string omi, string tipo)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select COUNT(*) from Resultados where ");
+            query.Append(columna);
+            query.Append(" > ");
+            query.Append(puntos);
+            query.Append(" and olimpiada = ");
+            query.Append(omi);
+            query.Append(" and clase = ");
+            query.Append(tipo);
+
+            db.EjecutarQuery(query.ToString());
+            return (int)db.getTable().Rows[0][0] + 1;
+        }
+
+        /// <summary>
+        /// Regresa una lista con el lugar del competidor mandado como parametro para cada problema y cada dia
+        /// </summary>
+        public static List<int> cargarMejores(string omi, TipoOlimpiada tipo, string clave, int problemasDia1, int problemasDia2)
+        {
+            List<int> mejores = new List<int>();
+            Resultados res = Resultados.cargarResultados(omi, tipo, clave);
+            string omiString = Utilities.Cadenas.comillas(omi);
+            string tipoString = Utilities.Cadenas.comillas(tipo.ToString().ToLower());
+
+            for (int i = 1; i <= problemasDia1; i++)
+            {
+                if (res.dia1[i - 1] == null || res.dia1[i - 1] == 0.0)
+                {
+                    mejores.Add(0);
+                    continue;
+                }
+                mejores.Add(countMejores("puntosD1P" + i, res.dia1[i - 1], omiString, tipoString));
+            }
+
+            if (problemasDia2 > 0)
+            {
+                mejores.Add(countMejores("puntosD1", res.totalDia1, omiString, tipoString));
+
+                for (int i = 1; i <= problemasDia2; i++)
+                {
+                    if (res.dia2[i - 1] == null || res.dia2[i - 1] == 0.0)
+                    {
+                        mejores.Add(0);
+                        continue;
+                    }
+                    mejores.Add(countMejores("puntosD2P" + i, res.dia2[i - 1], omiString, tipoString));
+                }
+
+                mejores.Add(countMejores("puntosD2", res.totalDia2, omiString, tipoString));
+            }
+
+            return mejores;
+        }
     }
 }

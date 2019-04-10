@@ -46,7 +46,7 @@
 <script type="text/javascript" src="~/js/formas.js"></script>
 <script type="text/javascript" src="~/js/overlay.js"></script>
 <script>
-    setUpOverlay("@(Url.Content("~"))" + "Olimpiada/OverlayAjax", "@(Url.Content("~"))", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @Model.problemasDia1, @Model.problemasDia2);
+    setUpOverlay("@(Url.Content("~"))" + "Olimpiada/OverlayAjax", "@(Url.Content("~"))", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @Model.problemasDia1, @Model.problemasDia2, @ViewBag.resultados.Count);
 </script>
 }
 <script>

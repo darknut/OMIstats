@@ -542,6 +542,7 @@ namespace OMIstats.Controllers
             OverlayAjax response = new OverlayAjax();
             response.puntos = DetallePuntos.cargarResultados(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
             response.lugares = DetalleLugar.cargarResultados(omi, tipo, clave);
+            response.problemas = Models.Resultados.cargarMejores(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
 
             return Json(response);
         }

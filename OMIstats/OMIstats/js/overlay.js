@@ -20,12 +20,14 @@ var overlayOMI = "";
 
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
+var overlayCompetidores = 0;
 
-function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2) {
+function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noCompetidores) {
     baseUrl = base;
     overlayAjax = url;
     overlayOMI = omi;
     overlayTipo = tipo;
+    overlayCompetidores = noCompetidores;
     overlayNombre = document.getElementById('overlay-nombre');
     overlayClave = document.getElementById('overlay-clave');
     overlayEstado = document.getElementById('overlay-estado');
