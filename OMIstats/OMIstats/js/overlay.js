@@ -179,10 +179,21 @@ function handleOverlayAjax(data) {
     if (data.puntos.length > 0) {
         // Dibujamos las gráficas, primero la de los puntos totales
         var puntos = [];
+        var eje = [];
         for (var i = 0; i < data.puntos.length; i++) {
             puntos.push(data.puntos[i].total);
+            var timestamp = data.puntos[i].timestamp / 60;
+            var minutos = timestamp % 60;
+
+            if (minutos == 0 || i == data.puntos.length - 1) {
+                if (minutos == 0)
+                    minutos += "0";
+                eje.push(Math.floor(timestamp / 60) + ":" + minutos);
+            } else {
+                eje.push("");
+            }
         }
-        cargaGrafica('chartPuntos', [ puntos ], 'Puntos', (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+        cargaGrafica('chartPuntos', [ puntos ], ['Puntos'], eje, (overlayProblemasDia1 + overlayProblemasDia2) * 100);
 
         // Cambiamos la visibilidad de los objetos
         setVisible('chartPuntos', true);

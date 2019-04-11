@@ -1,13 +1,9 @@
 ﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
 
-function cargaGrafica(container, datasets, labels, max)
+function cargaGrafica(container, datasets, labels, ejeX, max)
 {
     var ctx = document.getElementById(container).getContext('2d');
     var sets = [];
-    var emptyLab = [];
-    for (var i = 0; i < datasets[0].length; i++) {
-        emptyLab.push("");
-    }
     for (var i = 0; i < datasets.length; i++) {
         sets.push({
             label: labels[i],
@@ -23,7 +19,7 @@ function cargaGrafica(container, datasets, labels, max)
     var chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: emptyLab,
+            labels: ejeX,
             datasets: sets
         },
         options: {
@@ -44,7 +40,15 @@ function cargaGrafica(container, datasets, labels, max)
             },
             scales: {
                 xAxes: [{
-                    display: false
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Horas'
+                    },
+                    ticks: {
+                        min: 0,
+                        max: 10
+                    }
                 }],
                 yAxes: [{
                     display: true,
