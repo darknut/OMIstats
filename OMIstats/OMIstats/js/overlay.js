@@ -17,14 +17,10 @@ var lugarD2P = [];
 var overlayAjax = "";
 var overlayTipo = ""
 var overlayOMI = "";
-var overlayLoading = null;
-var chartPuntos = null;
 
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
 var overlayCompetidores = 0;
-
-var overlayData = null;
 
 function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noCompetidores) {
     baseUrl = base;
@@ -39,8 +35,6 @@ function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noComp
     overlayMedalla = document.getElementById('overlay-medalla');
     puntosTotal = document.getElementById('puntos');
     lugarTotal = document.getElementById('lugar');
-    overlayLoading = document.getElementById('overlayLoading');
-    chartPuntos = document.getElementById('chartPuntos');
 
     overlayProblemasDia1 = problemasDia1;
     overlayProblemasDia2 = problemasDia2;
@@ -158,7 +152,6 @@ function closeOverlay() {
 }
 
 function handleOverlayAjax(data) {
-    overlayData = data;
     console.log(data);
 
     // Ponemos los lugares en la tabla
@@ -176,24 +169,9 @@ function handleOverlayAjax(data) {
         lugarD2.textContent = data.problemas[overlayProblemasDia1 + overlayProblemasDia2 + 1] == 0 ? overlayCompetidores : data.problemas[overlayProblemasDia1 + overlayProblemasDia2 + 1];
     }
 
-    if (data.puntos.length > 0) {
+    if (data.puntosD1 != null && data.puntosD1.puntos.length > 0) {
         // Dibujamos las gráficas, primero la de los puntos totales
-        var puntos = [];
-        var eje = [];
-        for (var i = 0; i < data.puntos.length; i++) {
-            puntos.push(data.puntos[i].total);
-            var timestamp = data.puntos[i].timestamp / 60;
-            var minutos = timestamp % 60;
-
-            if (minutos == 0 || i == data.puntos.length - 1) {
-                if (minutos == 0)
-                    minutos += "0";
-                eje.push(Math.floor(timestamp / 60) + ":" + minutos);
-            } else {
-                eje.push("");
-            }
-        }
-        cargaGrafica('chartPuntos', [ puntos ], ['Puntos'], eje, (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+        cargaGrafica('chartPuntos', [ data.puntosD1.puntos ], ['Puntos'], data.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100);
 
         // Cambiamos la visibilidad de los objetos
         setVisible('chartPuntos', true);

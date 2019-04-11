@@ -38,12 +38,26 @@ namespace OMIstats.Models
         }
 
 #if OMISTATS
-        private static void llenarDatos(DataRow row, OverlayPuntos puntos, int problemas)
+        private static void llenarDatos(DataRow row, OverlayPuntos puntos, int problemas, bool ultimo)
         {
-            puntos.timestamp.Add((int)row["timestamp"]);
+            int timestamp = (int)row["timestamp"] / 60;
+            int minutos = timestamp % 60;
+            string extra = "";
+
+            if (minutos == 0 || ultimo)
+            {
+                if (minutos == 0)
+                    extra = "0";
+                puntos.timestamp.Add((timestamp / 60) + ":" + minutos + extra);
+            }
+            else
+            {
+                puntos.timestamp.Add("");
+            }
+
             for (int i = 0; i < problemas; i++)
-                puntos.problemas[i].Add(float.Parse(row["puntosD1P" + (i + 1)].ToString()));
-            puntos.puntos.Add(float.Parse(row["puntos"].ToString()));
+                puntos.problemas[i].Add(float.Parse(row["puntosP" + (i + 1)].ToString()));
+            puntos.puntos.Add(float.Parse(row["puntosD"].ToString()));
         }
 
         /// <summary>
@@ -71,9 +85,9 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
-            foreach (DataRow r in table.Rows)
+            for (int i = 0; i < table.Rows.Count; i++)
             {
-                llenarDatos(r, puntos, problemas);
+                llenarDatos(table.Rows[i], puntos, problemas, i == table.Rows.Count - 1);
             }
 
             puntos.problemas = null;
