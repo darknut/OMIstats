@@ -14,47 +14,30 @@ namespace OMIstats.Models
         public TipoOlimpiada tipoOlimpiada;
         public string clave;
         public int timestamp;
-        public List<float?> dia1;
-        public float? totalDia1;
-        public List<float?> dia2;
-        public float? totalDia2;
-        public float? total;
+        public int dia;
+        public List<float?> puntosProblemas;
+        public float? puntosDia;
 
         private DetallePuntos()
         {
         }
 
-        public DetallePuntos(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, List<float?> dia1, List<float?> dia2)
+        public DetallePuntos(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, int dia, List<float?> puntos)
         {
             this.omi = omi;
             this.tipoOlimpiada = tipoOlimpiada;
             this.clave = clave;
             this.timestamp = timestamp;
-            this.dia1 = dia1;
-            this.dia2 = dia2;
-            totalDia1 = 0;
-            totalDia2 = 0;
-            total = 0;
+            this.dia = dia;
+            this.puntosProblemas = puntos;
+            puntosDia = 0;
 
-            foreach (float? t in dia1)
-            {
+            foreach (float? t in puntos)
                 if (t != null)
-                {
-                    totalDia1 += t;
-                    total += t;
-                }
-            }
-
-            foreach (float? t in dia2)
-            {
-                if (t != null)
-                {
-                    totalDia2 += t;
-                    total += t;
-                }
-            }
+                    puntosDia += t;
         }
 
+#if OMISTATS
         private static OverlayPuntos llenarDatos(DataRow row, int dia1, int dia2)
         {
             OverlayPuntos res = new OverlayPuntos();
@@ -106,7 +89,7 @@ namespace OMIstats.Models
 
             return lista;
         }
-
+#endif
         /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
@@ -124,35 +107,21 @@ namespace OMIstats.Models
             query.Append(",");
             query.Append(timestamp);
             query.Append(",");
-            query.Append(this.dia1[0] == null ? "0" : this.dia1[0].ToString());
+            query.Append(dia);
             query.Append(",");
-            query.Append(this.dia1[1] == null ? "0" : this.dia1[1].ToString());
+            query.Append(this.puntosProblemas[0] == null ? "0" : this.puntosProblemas[0].ToString());
             query.Append(",");
-            query.Append(this.dia1[2] == null ? "0" : this.dia1[2].ToString());
+            query.Append(this.puntosProblemas[1] == null ? "0" : this.puntosProblemas[1].ToString());
             query.Append(",");
-            query.Append(this.dia1[3] == null ? "0" : this.dia1[3].ToString());
+            query.Append(this.puntosProblemas[2] == null ? "0" : this.puntosProblemas[2].ToString());
             query.Append(",");
-            query.Append(this.dia1[4] == null ? "0" : this.dia1[4].ToString());
+            query.Append(this.puntosProblemas[3] == null ? "0" : this.puntosProblemas[3].ToString());
             query.Append(",");
-            query.Append(this.dia1[5] == null ? "0" : this.dia1[5].ToString());
+            query.Append(this.puntosProblemas[4] == null ? "0" : this.puntosProblemas[4].ToString());
             query.Append(",");
-            query.Append(this.totalDia1 == null ? "0" : this.totalDia1.ToString());
+            query.Append(this.puntosProblemas[5] == null ? "0" : this.puntosProblemas[5].ToString());
             query.Append(",");
-            query.Append(this.dia2[0] == null ? "0" : this.dia2[0].ToString());
-            query.Append(",");
-            query.Append(this.dia2[1] == null ? "0" : this.dia2[1].ToString());
-            query.Append(",");
-            query.Append(this.dia2[2] == null ? "0" : this.dia2[2].ToString());
-            query.Append(",");
-            query.Append(this.dia2[3] == null ? "0" : this.dia2[3].ToString());
-            query.Append(",");
-            query.Append(this.dia2[4] == null ? "0" : this.dia2[4].ToString());
-            query.Append(",");
-            query.Append(this.dia2[5] == null ? "0" : this.dia2[5].ToString());
-            query.Append(",");
-            query.Append(this.totalDia2 == null ? "0" : this.totalDia2.ToString());
-            query.Append(",");
-            query.Append(this.total == null ? "0" : this.total.ToString());
+            query.Append(this.puntosDia == null ? "0" : this.puntosDia.ToString());
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());

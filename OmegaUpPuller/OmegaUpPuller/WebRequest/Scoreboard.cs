@@ -150,7 +150,7 @@ namespace OmegaUpPuller.WebRequest
             return y1.CompareTo(x1);
         }
 
-        public void ordena(int timestamp)
+        public void ordena(int timestamp, int dia)
         {
             // Ordenamos los resutlados
             List<Resultados> list = this.resultados.Values.ToList();
@@ -260,7 +260,7 @@ namespace OmegaUpPuller.WebRequest
                 }
 
                 // Finalmente guardamos la linea en la base de datos
-                r.guardar(detalles: true, timestamp: timestamp);
+                r.guardar(detalles: true, timestamp: timestamp, dia: dia);
             }
 
             // Para OMIPS ya terminamos los cálculos

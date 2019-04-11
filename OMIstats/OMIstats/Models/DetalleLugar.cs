@@ -14,6 +14,7 @@ namespace OMIstats.Models
         public TipoOlimpiada tipoOlimpiada;
         public string clave;
         public int timestamp;
+        public int dia;
         public Resultados.TipoMedalla medalla;
         public int lugar;
 
@@ -21,16 +22,17 @@ namespace OMIstats.Models
         {
         }
 
-        public DetalleLugar(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, Resultados.TipoMedalla medalla, int lugar)
+        public DetalleLugar(string omi, TipoOlimpiada tipoOlimpiada, string clave, int timestamp, int dia, Resultados.TipoMedalla medalla, int lugar)
         {
             this.omi = omi;
             this.tipoOlimpiada = tipoOlimpiada;
             this.clave = clave;
             this.timestamp = timestamp;
+            this.dia = dia;
             this.medalla = medalla;
             this.lugar = lugar;
         }
-
+#if OMISTATS
         private static OverlayLugares llenarDatos(DataRow row)
         {
             OverlayLugares res = new OverlayLugares();
@@ -67,7 +69,7 @@ namespace OMIstats.Models
 
             return lista;
         }
-
+#endif
         /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
@@ -84,6 +86,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(clave));
             query.Append(",");
             query.Append(timestamp);
+            query.Append(",");
+            query.Append(dia);
             query.Append(",");
             query.Append((int)medalla);
             query.Append(",");

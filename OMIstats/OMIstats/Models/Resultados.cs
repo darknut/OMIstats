@@ -482,8 +482,9 @@ namespace OMIstats.Models
         /// Guarda los datos del objeto en la base de datos
         /// <param name="detalles">Si las tablas de detalles también deben de guardarse</param>
         /// <param name="timestamp">Si detalles es true, el timestamp es requerido</param>
+        /// <param name="timestamp">Si detalles es true, el dia es requerido</param>
         /// </summary>
-        public TipoError guardar(bool detalles = false, int timestamp = 0)
+        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0)
         {
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -586,9 +587,9 @@ namespace OMIstats.Models
 
             if (detalles)
             {
-                DetallePuntos detallePuntos = new DetallePuntos(omi, tipoOlimpiada, clave, timestamp, dia1, dia2);
+                DetallePuntos detallePuntos = new DetallePuntos(omi, tipoOlimpiada, clave, timestamp, dia, dia == 1 ? dia1 : dia2);
                 detallePuntos.guardar();
-                DetalleLugar detalleLugar = new DetalleLugar(omi, tipoOlimpiada, clave, timestamp, medalla, lugar);
+                DetalleLugar detalleLugar = new DetalleLugar(omi, tipoOlimpiada, clave, timestamp, dia, medalla, lugar);
                 detalleLugar.guardar();
             }
 
