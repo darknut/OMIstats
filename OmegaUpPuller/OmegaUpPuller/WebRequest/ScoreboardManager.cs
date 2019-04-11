@@ -194,7 +194,7 @@ namespace OmegaUpPuller.WebRequest
                 long timestamp;
 #if DEBUG
                 timestamp = mockTime;
-                mockTime += 1000 * 60 * 20; // Cada 20 min
+                mockTime += 60 * 20; // Cada 20 min
 #else
                 timestamp = (long)resultados[TIME];
                 timestamp /= 1000;   // El tiempo en OmegaUp se cuenta en milisegundos
