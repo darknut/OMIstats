@@ -171,18 +171,7 @@ function handleOverlayAjax(data) {
 
     if (data.puntosD1 != null && data.puntosD1.puntos.length > 0) {
         // Dibujamos las gráficas, primero la de los puntos totales
-
-        var pts = [];
-        for (var i = 0; i < data.puntosD1.puntos.length; i++) {
-            if (i == 0 || i == data.puntosD1.puntos.length - 1 ||
-                data.puntosD1.puntos[i] != data.puntosD1.puntos[i - 1])
-                    pts.push({
-                        x: data.puntosD1.timestamp[i],
-                        y: data.puntosD1.puntos[i]
-                    });
-        }
-
-        cargaGrafica('chartPuntos', [ pts ], ['Puntos'], data.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+        cargaGrafica('chartPuntos', [data.puntosD1.puntos], ['Puntos'], data.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100);
 
         // Cambiamos la visibilidad de los objetos
         setVisible('chartPuntos', true);

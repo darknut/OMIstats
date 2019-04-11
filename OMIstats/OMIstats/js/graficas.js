@@ -12,7 +12,8 @@ function cargaGrafica(container, datasets, labels, ejeX, max)
             borderColor: coloresGraph[i],
             fill: false,
             borderWidth: 1,
-            cubicInterpolationMode: "monotone",
+            lineTension: 0,
+            radius: 0
         });
     }
 
@@ -47,7 +48,6 @@ function cargaGrafica(container, datasets, labels, ejeX, max)
                     },
                     gridLines: {
                         display: true,
-                        color: ["gray", "gray", "gray", "gray", "blue", "gray"]
                     },
                     ticks: {
                         callback: function (value, index, values) {
