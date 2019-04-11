@@ -45,9 +45,16 @@ function cargaGrafica(container, datasets, labels, ejeX, max)
                         display: true,
                         labelString: 'Horas'
                     },
+                    gridLines: {
+                        display: true,
+                        color: ["gray", "gray", "gray", "gray", "blue", "gray"]
+                    },
                     ticks: {
-                        min: 0,
-                        max: 10
+                        callback: function (value, index, values) {
+                            if (value.endsWith(":00") || index == values.length - 1)
+                                return value;
+                            return null;
+                        },
                     }
                 }],
                 yAxes: [{
