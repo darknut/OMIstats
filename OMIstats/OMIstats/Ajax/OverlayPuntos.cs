@@ -7,21 +7,35 @@ namespace OMIstats.Ajax
 {
     public class OverlayPuntos
     {
-        public int timestamp;
-        public List<float?> dia1;
-        public float? totalDia1;
-        public List<float?> dia2;
-        public float? totalDia2;
-        public float? total;
+        public List<int> timestamp;
+        public List<float?> puntosD1;
+        public List<float?> puntosD2;
+        public List<float?> puntosD3;
+        public List<float?> puntosD4;
+        public List<float?> puntosD5;
+        public List<float?> puntosD6;
+        public List<float?> puntos;
+
+        internal List<float?>[] problemas;
 
         public OverlayPuntos()
         {
-            timestamp = 0;
-            dia1 = null;
-            totalDia1 = null;
-            dia2 = null;
-            totalDia2 = null;
-            total = null;
+            timestamp = new List<int>();
+            puntosD1 = new List<float?>();
+            puntosD2 = new List<float?>();
+            puntosD3 = new List<float?>();
+            puntosD4 = new List<float?>();
+            puntosD5 = new List<float?>();
+            puntosD6 = new List<float?>();
+            puntos = new List<float?>();
+
+            problemas = new List<float?>[6];
+            problemas[0] = puntosD1;
+            problemas[1] = puntosD2;
+            problemas[2] = puntosD3;
+            problemas[3] = puntosD4;
+            problemas[4] = puntosD5;
+            problemas[5] = puntosD6;
         }
     }
 }

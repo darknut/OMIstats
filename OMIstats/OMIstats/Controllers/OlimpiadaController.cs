@@ -540,8 +540,13 @@ namespace OMIstats.Controllers
                 return Json(ERROR);
 
             OverlayAjax response = new OverlayAjax();
-            response.puntos = DetallePuntos.cargarResultados(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
-            response.lugares = DetalleLugar.cargarResultados(omi, tipo, clave);
+            response.puntosD1 = DetallePuntos.cargarResultados(omi, tipo, clave, 1, o.problemasDia1);
+            response.lugaresD1 = DetalleLugar.cargarResultados(omi, tipo, 1, clave);
+            if (o.problemasDia2 > 0)
+            {
+                response.puntosD2 = DetallePuntos.cargarResultados(omi, tipo, clave, 2, o.problemasDia2);
+                response.lugaresD2 = DetalleLugar.cargarResultados(omi, tipo, 2, clave);
+            }
             response.problemas = Models.Resultados.cargarMejores(omi, tipo, clave, o.problemasDia1, o.problemasDia2);
 
             return Json(response);

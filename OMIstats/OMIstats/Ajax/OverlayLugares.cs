@@ -7,15 +7,15 @@ namespace OMIstats.Ajax
 {
     public class OverlayLugares
     {
-        public int timestamp;
-        public int lugar;
-        public int medalla;
+        public List<int> timestamp;
+        public List<int> lugar;
+        public List<int> medalla;
 
         public OverlayLugares()
         {
-            timestamp = 0;
-            lugar = 0;
-            medalla = 0;
+            timestamp = new List<int>();
+            lugar = new List<int>();
+            medalla = new List<int>();
         }
     }
 }

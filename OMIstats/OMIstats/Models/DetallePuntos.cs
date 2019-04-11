@@ -38,34 +38,21 @@ namespace OMIstats.Models
         }
 
 #if OMISTATS
-        private static OverlayPuntos llenarDatos(DataRow row, int dia1, int dia2)
+        private static void llenarDatos(DataRow row, OverlayPuntos puntos, int problemas)
         {
-            OverlayPuntos res = new OverlayPuntos();
-
-            res.timestamp = (int) row["timestamp"];
-            res.dia1 = new List<float?>();
-            for (int i = 0; i < dia1; i++)
-                res.dia1.Add(float.Parse(row["puntosD1P" + (i + 1)].ToString()));
-            if (dia2 > 0)
-            {
-                res.totalDia1 = float.Parse(row["puntosD1"].ToString());
-                res.dia2 = new List<float?>();
-                for (int i = 0; i < dia2; i++)
-                    res.dia2.Add( float.Parse(row["puntosD2P" + (i + 1)].ToString()));
-                res.totalDia2 = float.Parse(row["puntosD2"].ToString());
-            }
-            res.total = float.Parse(row["puntos"].ToString());
-
-            return res;
+            puntos.timestamp.Add((int)row["timestamp"]);
+            for (int i = 0; i < problemas; i++)
+                puntos.problemas[i].Add(float.Parse(row["puntosD1P" + (i + 1)].ToString()));
+            puntos.puntos.Add(float.Parse(row["puntos"].ToString()));
         }
 
         /// <summary>
         /// Obtiene la lista de resultados de un usuario en particular, de una olimpiada en particular
         /// </summary>
         /// <returns></returns>
-        public static List<OverlayPuntos> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave, int dia1, int dia2)
+        public static OverlayPuntos cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave, int dia, int problemas)
         {
-            List<OverlayPuntos> lista = new List<OverlayPuntos>();
+            OverlayPuntos puntos = new OverlayPuntos();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -77,6 +64,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and clave = ");
             query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and dia = ");
+            query.Append(dia);
             query.Append(" order by timestamp asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -84,10 +73,11 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                lista.Add(llenarDatos(r, dia1, dia2));
+                llenarDatos(r, puntos, problemas);
             }
 
-            return lista;
+            puntos.problemas = null;
+            return puntos;
         }
 #endif
         /// <summary>

@@ -33,19 +33,16 @@ namespace OMIstats.Models
             this.lugar = lugar;
         }
 #if OMISTATS
-        private static OverlayLugares llenarDatos(DataRow row)
+        private static void llenarDatos(DataRow row, OverlayLugares lugares)
         {
-            OverlayLugares res = new OverlayLugares();
-            res.lugar = (int)row["lugar"];
-            res.timestamp = (int)row["timestamp"];
-            res.medalla = (int)row["medalla"];
-
-            return res;
+            lugares.lugar.Add((int)row["lugar"]);
+            lugares.timestamp.Add((int)row["timestamp"]);
+            lugares.medalla.Add((int)row["medalla"]);
         }
 
-        public static List<OverlayLugares> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, string clave)
+        public static OverlayLugares cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, int dia, string clave)
         {
-            List<OverlayLugares> lista = new List<OverlayLugares>();
+            OverlayLugares lugares = new OverlayLugares();
 
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -57,6 +54,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(omi));
             query.Append(" and clave = ");
             query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and dia = ");
+            query.Append(dia);
             query.Append(" order by timestamp asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -64,10 +63,10 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                lista.Add(llenarDatos(r));
+                llenarDatos(r, lugares);
             }
 
-            return lista;
+            return lugares;
         }
 #endif
         /// <summary>
