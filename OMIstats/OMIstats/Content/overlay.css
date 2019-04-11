@@ -20,6 +20,7 @@
     border: 1px solid black;
     z-index: 1500;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .close-button {

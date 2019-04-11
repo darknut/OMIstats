@@ -26,7 +26,7 @@ function cargaGrafica(container, datasets, labels, ejeX, max)
             legend: {
                 display: datasets.length > 1
             },
-            responsive: false,
+            responsive: true,
             title: {
                 display: false,
             },
