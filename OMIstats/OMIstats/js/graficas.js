@@ -1,4 +1,4 @@
-﻿var colores = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
+﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
 
 function cargaGrafica(container, datasets, labels, max)
 {
@@ -12,8 +12,8 @@ function cargaGrafica(container, datasets, labels, max)
         sets.push({
             label: labels[i],
             data: datasets[i],
-            backgroundColor: colores[i],
-            borderColor: colores[i],
+            backgroundColor: coloresGraph[i],
+            borderColor: coloresGraph[i],
             fill: false,
             borderWidth: 1,
             cubicInterpolationMode: "monotone",

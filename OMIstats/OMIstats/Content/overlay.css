@@ -16,9 +16,10 @@
     left:50px;
     right:50px;
     background: white;
-    border-radius: 20px;
+    border-radius: 20px 0 0 20px;
     border: 1px solid black;
     z-index: 1500;
+    overflow-y: scroll;
 }
 
 .close-button {
@@ -95,6 +96,5 @@
 }
 
 .graph-containers {
-    min-height: 400px;
     text-align: center;
 }

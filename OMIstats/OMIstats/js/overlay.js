@@ -18,10 +18,13 @@ var overlayAjax = "";
 var overlayTipo = ""
 var overlayOMI = "";
 var overlayLoading = null;
+var chartPuntos = null;
 
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
 var overlayCompetidores = 0;
+
+var overlayData = null;
 
 function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noCompetidores) {
     baseUrl = base;
@@ -37,6 +40,7 @@ function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noComp
     puntosTotal = document.getElementById('puntos');
     lugarTotal = document.getElementById('lugar');
     overlayLoading = document.getElementById('overlayLoading');
+    chartPuntos = document.getElementById('chartPuntos');
 
     overlayProblemasDia1 = problemasDia1;
     overlayProblemasDia2 = problemasDia2;
@@ -123,6 +127,7 @@ function closeOverlay() {
     setVisible('overlay-container', false);
     setVisible('overlay', false);
     setVisible('overlayLoading', false);
+    setVisible('chartPuntos', false);
 
     overlayEstado.setAttribute("src", "");
     overlayMedalla.setAttribute("src", "");
@@ -131,6 +136,7 @@ function closeOverlay() {
     overlayClave.textContent = "";
     puntosTotal.textContent = "";
     lugarTotal.textContent = "";
+    overlayData = null;
 
     if (puntosD1 != null) {
         puntosD1.textContent = "";
@@ -152,8 +158,10 @@ function closeOverlay() {
 }
 
 function handleOverlayAjax(data) {
+    overlayData = data;
     console.log(data);
-    setVisible('overlayLoading', false);
+
+    // Ponemos los lugares en la tabla
     for (var i = 0; i < overlayProblemasDia1; i++) {
         lugarD1P[i].textContent = data.problemas[i] == 0 ? overlayCompetidores : data.problemas[i];
     }
@@ -167,4 +175,17 @@ function handleOverlayAjax(data) {
 
         lugarD2.textContent = data.problemas[overlayProblemasDia1 + overlayProblemasDia2 + 1] == 0 ? overlayCompetidores : data.problemas[overlayProblemasDia1 + overlayProblemasDia2 + 1];
     }
+
+    if (data.puntos.length > 0) {
+        // Dibujamos las gráficas, primero la de los puntos totales
+        var puntos = [];
+        for (var i = 0; i < data.puntos.length; i++) {
+            puntos.push(data.puntos[i].total);
+        }
+        cargaGrafica('chartPuntos', [ puntos ], 'Puntos', (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+
+        // Cambiamos la visibilidad de los objetos
+        setVisible('chartPuntos', true);
+    }
+    setVisible('overlayLoading', false);
 }
