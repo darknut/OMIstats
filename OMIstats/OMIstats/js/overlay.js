@@ -17,6 +17,7 @@ var lugarD2P = [];
 var overlayAjax = "";
 var overlayTipo = ""
 var overlayOMI = "";
+var overlayLoading = null;
 
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
@@ -35,6 +36,7 @@ function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noComp
     overlayMedalla = document.getElementById('overlay-medalla');
     puntosTotal = document.getElementById('puntos');
     lugarTotal = document.getElementById('lugar');
+    overlayLoading = document.getElementById('overlayLoading');
 
     overlayProblemasDia1 = problemasDia1;
     overlayProblemasDia2 = problemasDia2;
@@ -107,6 +109,9 @@ function showOverlay(clave) {
         puntosD2P[i].textContent = tds[6 + overlayProblemasDia1 + i].innerHTML;
     }
 
+    // Hacemos visible el cosito de cargando
+    setVisible('overlayLoading', true);
+
     // Hacemos la llamada ajax para obtener los puntos detallados
     llamadaAjax(overlayAjax,
         { omi: overlayOMI, tipo: overlayTipo, clave: clave },
@@ -117,6 +122,7 @@ function showOverlay(clave) {
 function closeOverlay() {
     setVisible('overlay-container', false);
     setVisible('overlay', false);
+    setVisible('overlayLoading', false);
 
     overlayEstado.setAttribute("src", "");
     overlayMedalla.setAttribute("src", "");
@@ -147,4 +153,18 @@ function closeOverlay() {
 
 function handleOverlayAjax(data) {
     console.log(data);
+    setVisible('overlayLoading', false);
+    for (var i = 0; i < overlayProblemasDia1; i++) {
+        lugarD1P[i].textContent = data.problemas[i] == 0 ? overlayCompetidores : data.problemas[i];
+    }
+
+    if (overlayProblemasDia2 > 0) {
+        lugarD1.textContent = data.problemas[overlayProblemasDia1] == 0 ? overlayCompetidores : data.problemas[overlayProblemasDia1];
+
+        for (var i = 0; i < overlayProblemasDia2; i++) {
+            lugarD2P[i].textContent = data.problemas[overlayProblemasDia1 + i + 1] == 0 ? overlayCompetidores : data.problemas[overlayProblemasDia1 + i + 1];
+        }
+
+        lugarD2.textContent = data.problemas[overlayProblemasDia1 + overlayProblemasDia2 + 1] == 0 ? overlayCompetidores : data.problemas[overlayProblemasDia1 + overlayProblemasDia2 + 1];
+    }
 }

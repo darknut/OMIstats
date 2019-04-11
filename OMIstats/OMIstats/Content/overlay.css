@@ -93,3 +93,8 @@
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.graph-containers {
+    min-height: 400px;
+    text-align: center;
+}
