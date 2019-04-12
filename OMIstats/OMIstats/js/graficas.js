@@ -1,5 +1,5 @@
 ﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
-
+var chart = null;
 function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels)
 {
     var ctx = document.getElementById(container).getContext('2d');
@@ -17,7 +17,7 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels)
         });
     }
 
-    var chart = new Chart(ctx, {
+    chart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: ejeX,
@@ -77,4 +77,11 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels)
             }
         }
     });
+}
+
+function destruyeChart() {
+    if (chart != null) {
+        chart.destroy();
+        chart = null;
+    }
 }

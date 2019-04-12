@@ -23,6 +23,7 @@ var overlayProblemasDia2 = 0;
 var overlayCompetidores = 0;
 var SECONDS_PER_TICK = 60 * 5;
 var MAX_SECONDS = 60 * 60 * 5;
+var overlayData = null;
 
 function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noCompetidores) {
     baseUrl = base;
@@ -151,6 +152,8 @@ function closeOverlay() {
         puntosD2P[i].textContent = "";
         lugarD2P[i].textContent = "";
     }
+
+    destruyeChart();
 }
 
 function dibujaGrafica(puntos, tiempos, canvas, maxY) {
@@ -211,7 +214,7 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
 }
 
 function handleOverlayAjax(data) {
-    console.log(data);
+    overlayData = data;
 
     // Ponemos los lugares en la tabla
     for (var i = 0; i < overlayProblemasDia1; i++) {
