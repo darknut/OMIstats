@@ -1,6 +1,6 @@
 ﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
 
-function cargaGrafica(container, datasets, labels, ejeX, max, colors)
+function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels)
 {
     var ctx = document.getElementById(container).getContext('2d');
     var sets = [];
@@ -34,10 +34,15 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors)
             tooltips: {
                 mode: 'point',
                 intersect: false,
+                callbacks: {
+                    title: function (items) {
+                        return allLabels[items[0].index];
+                    }
+                }
             },
             hover: {
                 mode: 'nearest',
-                intersect: true
+                intersect: false
             },
             scales: {
                 xAxes: [{

@@ -158,6 +158,7 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
     var labels = [];
     var linea = [];
     var colors = [];
+    var allLabels = [];
     var i = 0;
     var maxTiempo = MAX_SECONDS > tiempos[tiempos.length - 1] ? MAX_SECONDS : tiempos[tiempos.length - 1];
     if (maxTiempo % SECONDS_PER_TICK != 0)
@@ -176,13 +177,13 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
             avanzo = true;
         }
 
-        if (avanzo || tiempo % 3600 == 0) {
-            var timestamp = Math.floor(tiempo / 60);
-            var minutos = timestamp % 60;
-            var extra = "";
+        var timestamp = Math.floor(tiempo / 60);
+        var minutos = timestamp % 60;
+        var extra = "";
 
-            if (minutos < 10)
-                extra = "0";
+        if (minutos < 10)
+            extra = "0";
+        if (avanzo || tiempo % 3600 == 0) {
             labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
             if (tiempo % 3600 == 0) {
                 colors.push("gray");
@@ -194,6 +195,7 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
             colors.push("");
         }
         linea.push(puntos[i]);
+        allLabels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
 
         tiempo += SECONDS_PER_TICK;
 
@@ -202,7 +204,7 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
         }
     }
 
-    cargaGrafica(canvas, [linea], ['Puntos'], labels, maxY, colors);
+    cargaGrafica(canvas, [linea], ['Puntos'], labels, maxY, colors, allLabels);
 
     // Cambiamos la visibilidad del canvas
     setVisible(canvas, true);
