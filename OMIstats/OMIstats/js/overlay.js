@@ -21,7 +21,7 @@ var overlayOMI = "";
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
 var overlayCompetidores = 0;
-var SECONDS_PER_TICK = 60 * 5;
+var SECONDS_PER_TICK = 60;
 var MAX_SECONDS = 60 * 60 * 5;
 var overlayData = null;
 
