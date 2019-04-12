@@ -7,7 +7,7 @@ namespace OMIstats.Ajax
 {
     public class OverlayPuntos
     {
-        public List<string> timestamp;
+        public List<int> timestamp;
         public List<float?> puntosD1;
         public List<float?> puntosD2;
         public List<float?> puntosD3;
@@ -20,7 +20,7 @@ namespace OMIstats.Ajax
 
         public OverlayPuntos()
         {
-            timestamp = new List<string>();
+            timestamp = new List<int>();
             puntosD1 = new List<float?>();
             puntosD2 = new List<float?>();
             puntosD3 = new List<float?>();

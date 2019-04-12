@@ -1,6 +1,6 @@
 ﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
 
-function cargaGrafica(container, datasets, labels, ejeX, max)
+function cargaGrafica(container, datasets, labels, ejeX, max, colors)
 {
     var ctx = document.getElementById(container).getContext('2d');
     var sets = [];
@@ -48,10 +48,11 @@ function cargaGrafica(container, datasets, labels, ejeX, max)
                     },
                     gridLines: {
                         display: true,
+                        color: colors
                     },
                     ticks: {
                         callback: function (value, index, values) {
-                            if (value.endsWith(":00") || index == values.length - 1)
+                            if (value != "" || index == values.length - 1)
                                 return value;
                             return null;
                         },

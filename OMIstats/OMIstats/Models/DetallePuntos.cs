@@ -40,14 +40,7 @@ namespace OMIstats.Models
 #if OMISTATS
         private static void llenarDatos(DataRow row, OverlayPuntos puntos, int problemas)
         {
-            int timestamp = (int)row["timestamp"] / 60;
-            int minutos = timestamp % 60;
-            string extra = "";
-
-            if (minutos == 0)
-                extra = "0";
-            puntos.timestamp.Add((timestamp / 60) + ":" + minutos + extra);
-
+            puntos.timestamp.Add((int)row["timestamp"]);
             for (int i = 0; i < problemas; i++)
                 puntos.problemas[i].Add(float.Parse(row["puntosP" + (i + 1)].ToString()));
             puntos.puntos.Add(float.Parse(row["puntosD"].ToString()));

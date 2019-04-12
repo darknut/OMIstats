@@ -21,6 +21,8 @@ var overlayOMI = "";
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
 var overlayCompetidores = 0;
+var SECONDS_PER_TICK = 60 * 5;
+var MAX_SECONDS = 60 * 60 * 5;
 
 function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noCompetidores) {
     baseUrl = base;
@@ -151,6 +153,61 @@ function closeOverlay() {
     }
 }
 
+function dibujaGrafica(puntos, tiempos, canvas, maxY) {
+    var tiempo = 0;
+    var labels = [];
+    var linea = [];
+    var colors = [];
+    var i = 0;
+    var maxTiempo = MAX_SECONDS > tiempos[tiempos.length - 1] ? MAX_SECONDS : tiempos[tiempos.length - 1];
+    if (maxTiempo % SECONDS_PER_TICK != 0)
+        maxTiempo += SECONDS_PER_TICK;
+    while (true)
+    {
+        var avanzo = false;
+        while (true) {
+            if (tiempo == 0)
+                break;
+            if (i == tiempos.length - 1)
+                break;
+            if (tiempo <= tiempos[i + 1])
+                break;
+            i++;
+            avanzo = true;
+        }
+
+        if (avanzo || tiempo % 3600 == 0) {
+            var timestamp = Math.floor(tiempo / 60);
+            var minutos = timestamp % 60;
+            var extra = "";
+
+            if (minutos < 10)
+                extra = "0";
+            labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
+            if (tiempo % 3600 == 0) {
+                colors.push("gray");
+            } else {
+                colors.push("#EEEEEE");
+            }
+        } else {
+            labels.push("");
+            colors.push("");
+        }
+        linea.push(puntos[i]);
+
+        tiempo += SECONDS_PER_TICK;
+
+        if (tiempo > maxTiempo && tiempo > tiempos[i]) {
+            break;
+        }
+    }
+
+    cargaGrafica(canvas, [linea], ['Puntos'], labels, maxY, colors);
+
+    // Cambiamos la visibilidad del canvas
+    setVisible(canvas, true);
+}
+
 function handleOverlayAjax(data) {
     console.log(data);
 
@@ -171,10 +228,7 @@ function handleOverlayAjax(data) {
 
     if (data.puntosD1 != null && data.puntosD1.puntos.length > 0) {
         // Dibujamos las gráficas, primero la de los puntos totales
-        cargaGrafica('chartPuntos', [data.puntosD1.puntos], ['Puntos'], data.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100);
-
-        // Cambiamos la visibilidad de los objetos
-        setVisible('chartPuntos', true);
+        dibujaGrafica(data.puntosD1.puntos, data.puntosD1.timestamp, 'chartPuntos', (overlayProblemasDia1 + overlayProblemasDia2) * 100);
     }
     setVisible('overlayLoading', false);
 }
