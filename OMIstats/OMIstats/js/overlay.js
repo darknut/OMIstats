@@ -170,7 +170,7 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
                 break;
             if (i == tiempos.length - 1)
                 break;
-            if (tiempo <= tiempos[i + 1])
+            if (tiempo < tiempos[i + 1])
                 break;
             i++;
             avanzo = true;
