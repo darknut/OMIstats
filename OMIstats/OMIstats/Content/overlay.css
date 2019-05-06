@@ -99,3 +99,16 @@
 .graph-containers {
     text-align: center;
 }
+
+.chart-title {
+    font-size: 16pt;
+}
+
+.chart-title a {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.chart-title a:hover {
+    text-decoration: underline;
+}

@@ -214,6 +214,12 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
     setVisible(canvas, true);
 }
 
+function muestraChartTotal() {
+    destruyeChart();
+    // Dibujamos las gráficas, primero la de los puntos totales
+    dibujaGrafica(overlayData.puntosD1.puntos, overlayData.puntosD1.timestamp, 'chartPuntos', (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+}
+
 function handleOverlayAjax(data) {
     overlayData = data;
 
@@ -233,8 +239,7 @@ function handleOverlayAjax(data) {
     }
 
     if (data.puntosD1 != null && data.puntosD1.puntos.length > 0) {
-        // Dibujamos las gráficas, primero la de los puntos totales
-        dibujaGrafica(data.puntosD1.puntos, data.puntosD1.timestamp, 'chartPuntos', (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+        muestraChartTotal();
     }
     setVisible('overlayLoading', false);
 }
