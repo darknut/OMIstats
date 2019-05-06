@@ -1,6 +1,6 @@
 ﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
 var chart = null;
-function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndex, valorMinimo, yInverso)
+function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndex, valorMinimo, yInverso, tituloEje)
 {
     var ctx = document.getElementById(container).getContext('2d');
     var sets = [];
@@ -67,7 +67,7 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels,
                     display: true,
                     scaleLabel: {
                         display: true,
-                        labelString: 'Puntos'
+                        labelString: tituloEje
                     },
                     ticks: {
                         min: valorMinimo,
