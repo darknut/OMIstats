@@ -197,7 +197,8 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
             labels.push("");
             colors.push("");
         }
-        linea.push(puntos[i]);
+        if (avanzo || i != tiempos.length - 1)
+            linea.push(puntos[i]);
         allLabels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
 
         tiempo += SECONDS_PER_TICK;
