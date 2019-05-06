@@ -1,8 +1,9 @@
-﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory"];
+﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory", "black"];
 var chart = null;
-function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndex, valorMinimo, yInverso, tituloEje)
+function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndex, valorMinimo, yInverso, tituloEje, grandienteColores)
 {
     var ctx = document.getElementById(container).getContext('2d');
+
     var sets = [];
     for (var i = 0; i < datasets.length; i++) {
         sets.push({
@@ -10,10 +11,14 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels,
             data: datasets[i],
             backgroundColor: coloresGraph[colorIndex],
             borderColor: coloresGraph[colorIndex],
+            pointBackgroundColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
+            pointBorderColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
+            pointHoverBackgroundColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
+            pointHoverBorderColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
             fill: false,
             borderWidth: 1,
             lineTension: 0,
-            radius: 0
+            radius: grandienteColores ? 2 : 0
         });
     }
 
