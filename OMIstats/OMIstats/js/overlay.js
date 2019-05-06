@@ -156,7 +156,7 @@ function closeOverlay() {
     destruyeChart();
 }
 
-function dibujaGrafica(puntos, tiempos, canvas, maxY) {
+function dibujaGrafica(puntos, tiempos, maxY, colorIndex, valorMinimo, yInverso) {
     var tiempo = 0;
     var labels = [];
     var linea = [];
@@ -208,16 +208,20 @@ function dibujaGrafica(puntos, tiempos, canvas, maxY) {
         }
     }
 
-    cargaGrafica(canvas, [linea], ['Puntos'], labels, maxY, colors, allLabels);
+    cargaGrafica('chartPuntos', [linea], ['Puntos'], labels, maxY, colors, allLabels, colorIndex, valorMinimo, yInverso);
 
     // Cambiamos la visibilidad del canvas
-    setVisible(canvas, true);
+    setVisible('chartPuntos', true);
 }
 
 function muestraChartTotal() {
     destruyeChart();
-    // Dibujamos las gráficas, primero la de los puntos totales
-    dibujaGrafica(overlayData.puntosD1.puntos, overlayData.puntosD1.timestamp, 'chartPuntos', (overlayProblemasDia1 + overlayProblemasDia2) * 100);
+    dibujaGrafica(overlayData.puntosD1.puntos, overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, 0, 0, false);
+}
+
+function muestraChartLugar() {
+    destruyeChart();
+    dibujaGrafica(overlayData.lugaresD1.lugar, overlayData.lugaresD1.timestamp, overlayCompetidores, 1, 1, true);
 }
 
 function handleOverlayAjax(data) {
