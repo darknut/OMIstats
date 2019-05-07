@@ -8,12 +8,12 @@ namespace OMIstats.Ajax
     public class OverlayPuntos
     {
         public List<int> timestamp;
-        public List<float?> puntosD1;
-        public List<float?> puntosD2;
-        public List<float?> puntosD3;
-        public List<float?> puntosD4;
-        public List<float?> puntosD5;
-        public List<float?> puntosD6;
+        public List<float?> puntosP1;
+        public List<float?> puntosP2;
+        public List<float?> puntosP3;
+        public List<float?> puntosP4;
+        public List<float?> puntosP5;
+        public List<float?> puntosP6;
         public List<float?> puntos;
 
         internal List<float?>[] problemas;
@@ -21,21 +21,21 @@ namespace OMIstats.Ajax
         public OverlayPuntos()
         {
             timestamp = new List<int>();
-            puntosD1 = new List<float?>();
-            puntosD2 = new List<float?>();
-            puntosD3 = new List<float?>();
-            puntosD4 = new List<float?>();
-            puntosD5 = new List<float?>();
-            puntosD6 = new List<float?>();
+            puntosP1 = new List<float?>();
+            puntosP2 = new List<float?>();
+            puntosP3 = new List<float?>();
+            puntosP4 = new List<float?>();
+            puntosP5 = new List<float?>();
+            puntosP6 = new List<float?>();
             puntos = new List<float?>();
 
             problemas = new List<float?>[6];
-            problemas[0] = puntosD1;
-            problemas[1] = puntosD2;
-            problemas[2] = puntosD3;
-            problemas[3] = puntosD4;
-            problemas[4] = puntosD5;
-            problemas[5] = puntosD6;
+            problemas[0] = puntosP1;
+            problemas[1] = puntosP2;
+            problemas[2] = puntosP3;
+            problemas[3] = puntosP4;
+            problemas[4] = puntosP5;
+            problemas[5] = puntosP6;
         }
     }
 }
