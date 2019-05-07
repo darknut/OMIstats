@@ -16,7 +16,7 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels,
             pointHoverBackgroundColor: grandienteColores ? grandienteColores : undefined,
             pointHoverBorderColor: grandienteColores ? grandienteColores : undefined,
             fill: false,
-            borderWidth: 1,
+            borderWidth: grandienteColores ? 1 : 3,
             lineTension: 0,
             radius: grandienteColores ? 2 : 0
         });
