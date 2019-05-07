@@ -249,7 +249,7 @@ function muestraChartProblemas() {
     for (var i = 0; i < overlayProblemasDia1; i++) {
         puntos.push(temp[i]);
         colores.push(i + 1);
-        titulos.push("P" + (i + 1));
+        titulos.push(document.getElementById('nombresD1P' + (i + 1)).innerHTML.substr(36));
     }
 
     destruyeChart();
