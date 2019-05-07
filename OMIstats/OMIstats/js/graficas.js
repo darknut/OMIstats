@@ -107,5 +107,6 @@ function actualizaGrafica(grafica, datasets, labels, colors) {
             radius: 0
         });
     }
+    grafica.options.legend.display = true;
     grafica.update();
 }

@@ -249,9 +249,6 @@ function muestraChartLugar() {
 
 function mustraChartPorDias() {
     destruyeChart();
-    var timestamp = overlayData.puntosD1.timestamp;
-    if (timestamp[timestamp.length - 1] < overlayData.puntosD2.timestamp[overlayData.puntosD2.timestamp.length - 1])
-        timestamp = overlayData.puntosD2.timestamp;
 
     var time = overlayProblemasDia1;
     if (overlayProblemasDia1 < overlayProblemasDia2)
@@ -259,8 +256,8 @@ function mustraChartPorDias() {
 
     time *= 100;
 
-    var chart = dibujaGrafica(null, [overlayData.puntosD1.puntos], timestamp, time, [1], 0, false, ['Puntos'], 'Puntos', null);
-    dibujaGrafica(chart, [overlayData.puntosD2.puntos], timestamp, time, [2], 0, false, ['Puntos'], 'Puntos', null);
+    var chart = dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, time, [1], 0, false, ['Día 1'], 'Puntos', null);
+    dibujaGrafica(chart, [overlayData.puntosD2.puntos], overlayData.puntosD2.timestamp, time, [2], 0, false, ['Día 2'], 'Puntos', null);
 
     scrollToBottom();
 }
