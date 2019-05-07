@@ -1,6 +1,6 @@
 ﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory", "black"];
 var chart = null;
-function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndex, valorMinimo, yInverso, tituloEje, grandienteColores)
+function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndexes, valorMinimo, yInverso, tituloEje, grandienteColores)
 {
     var ctx = document.getElementById(container).getContext('2d');
 
@@ -9,12 +9,12 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels,
         sets.push({
             label: labels[i],
             data: datasets[i],
-            backgroundColor: coloresGraph[colorIndex],
-            borderColor: coloresGraph[colorIndex],
-            pointBackgroundColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
-            pointBorderColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
-            pointHoverBackgroundColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
-            pointHoverBorderColor: grandienteColores ? grandienteColores : coloresGraph[colorIndex],
+            backgroundColor: coloresGraph[colorIndexes[i]],
+            borderColor: coloresGraph[colorIndexes[i]],
+            pointBackgroundColor: grandienteColores ? grandienteColores : undefined,
+            pointBorderColor: grandienteColores ? grandienteColores : undefined,
+            pointHoverBackgroundColor: grandienteColores ? grandienteColores : undefined,
+            pointHoverBorderColor: grandienteColores ? grandienteColores : undefined,
             fill: false,
             borderWidth: 1,
             lineTension: 0,

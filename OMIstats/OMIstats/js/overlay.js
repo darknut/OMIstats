@@ -157,7 +157,7 @@ function closeOverlay() {
     destruyeChart();
 }
 
-function dibujaGrafica(puntos, tiempos, maxY, colorIndex, valorMinimo, yInverso, tituloEje, medallas) {
+function dibujaGrafica(puntos, tiempos, maxY, colorIndexes, valorMinimo, yInverso, tituloEje, medallas) {
     var tiempo = 0;
     var labels = [];
     var linea = [];
@@ -166,6 +166,8 @@ function dibujaGrafica(puntos, tiempos, maxY, colorIndex, valorMinimo, yInverso,
     var gradientMedallas = [];
     var i = 0;
     var maxTiempo = MAX_SECONDS > tiempos[tiempos.length - 1] ? MAX_SECONDS : tiempos[tiempos.length - 1];
+    for (var j = 0; j < puntos.length; j++)
+        linea.push([]);
     if (maxTiempo % SECONDS_PER_TICK != 0)
         maxTiempo += SECONDS_PER_TICK;
     while (true)
@@ -200,7 +202,8 @@ function dibujaGrafica(puntos, tiempos, maxY, colorIndex, valorMinimo, yInverso,
             colors.push("");
         }
         if (avanzo || i != tiempos.length - 1) {
-            linea.push(puntos[i]);
+            for (var j = 0; j < puntos.length; j++)
+                linea[j].push(puntos[j][i]);
             if (medallas) {
                 gradientMedallas.push(medallaToGradient[medallas[i]]);
             }
@@ -214,7 +217,7 @@ function dibujaGrafica(puntos, tiempos, maxY, colorIndex, valorMinimo, yInverso,
         }
     }
 
-    cargaGrafica('chartPuntos', [linea], [tituloEje], labels, maxY, colors, allLabels, colorIndex, valorMinimo, yInverso, tituloEje, medallas ? gradientMedallas : null);
+    cargaGrafica('chartPuntos', linea, [tituloEje], labels, maxY, colors, allLabels, colorIndexes, valorMinimo, yInverso, tituloEje, medallas ? gradientMedallas : null);
 
     // Cambiamos la visibilidad del canvas
     setVisible('chartPuntos', true);
@@ -222,12 +225,12 @@ function dibujaGrafica(puntos, tiempos, maxY, colorIndex, valorMinimo, yInverso,
 
 function muestraChartTotal() {
     destruyeChart();
-    dibujaGrafica(overlayData.puntosD1.puntos, overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, 0, 0, false, 'Puntos', null);
+    dibujaGrafica([overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, 'Puntos', null);
 }
 
 function muestraChartLugar() {
     destruyeChart();
-    dibujaGrafica(overlayData.lugaresD1.lugar, overlayData.lugaresD1.timestamp, overlayCompetidores, 11, 1, true, 'Lugar', overlayData.lugaresD1.medalla);
+    dibujaGrafica([overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, 'Lugar', overlayData.lugaresD1.medalla);
 }
 
 function handleOverlayAjax(data) {
