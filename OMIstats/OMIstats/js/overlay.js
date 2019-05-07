@@ -288,8 +288,14 @@ function muestraChartProblemas() {
         titulos.push(document.getElementById('nombresD1P' + (i + 1)).innerHTML.substr(36));
     }
 
+    var timestamp1 = overlayData.puntosD1.timestamp[overlayData.puntosD1.timestamp.length - 1];
+    var timestamp2 = overlayProblemasDia2 > 0 ? overlayData.puntosD2.timestamp[overlayData.puntosD2.timestamp.length - 1] : 0;
+    var maxX = timestamp1;
+    if (maxX < timestamp2)
+        maxX = timestamp2;
+
     destruyeChart();
-    var chart = dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, null);
+    var chart = dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, maxX);
 
     if (overlayProblemasDia2 > 0) {
         puntos = [];
@@ -310,7 +316,7 @@ function muestraChartProblemas() {
             titulos.push(document.getElementById('nombresD2P' + (i + 1)).innerHTML.substr(36));
         }
 
-        dibujaGrafica(chart, puntos, overlayData.puntosD2.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, null);
+        dibujaGrafica(chart, puntos, overlayData.puntosD2.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, maxX);
     }
 
     scrollToBottom();
