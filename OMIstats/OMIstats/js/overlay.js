@@ -157,7 +157,7 @@ function closeOverlay() {
     destruyeChart();
 }
 
-function dibujaGrafica(puntos, tiempos, maxY, colorIndexes, valorMinimo, yInverso, labelsLineas, tituloEje, medallas) {
+function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, yInverso, labelsLineas, tituloEje, medallas) {
     var tiempo = 0;
     var labels = [];
     var linea = [];
@@ -217,20 +217,52 @@ function dibujaGrafica(puntos, tiempos, maxY, colorIndexes, valorMinimo, yInvers
         }
     }
 
-    cargaGrafica('chartPuntos', linea, labelsLineas, labels, maxY, colors, allLabels, colorIndexes, valorMinimo, yInverso, tituloEje, medallas ? gradientMedallas : null);
+    if (chart) {
+        actualizaGrafica(chart, linea, labelsLineas, colorIndexes);
+    } else {
+        chart = cargaGrafica('chartPuntos', linea, labelsLineas, labels, maxY, colors, allLabels, colorIndexes, valorMinimo, yInverso, tituloEje, medallas ? gradientMedallas : null);
+    }
 
     // Cambiamos la visibilidad del canvas
     setVisible('chartPuntos', true);
+
+    return chart;
 }
 
-function muestraChartTotal() {
+function scrollToBottom() {
+    var objDiv = document.getElementById("overlay");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
+
+function muestraChartTotal(ignoreScrolling) {
     destruyeChart();
-    dibujaGrafica([overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, ['Puntos'], 'Puntos', null);
+    dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, ['Puntos'], 'Puntos', null);
+    if (!ignoreScrolling)
+        scrollToBottom();
 }
 
 function muestraChartLugar() {
     destruyeChart();
-    dibujaGrafica([overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', overlayData.lugaresD1.medalla);
+    dibujaGrafica(null, [overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', overlayData.lugaresD1.medalla);
+    scrollToBottom();
+}
+
+function mustraChartPorDias() {
+    destruyeChart();
+    var timestamp = overlayData.puntosD1.timestamp;
+    if (timestamp[timestamp.length - 1] < overlayData.puntosD2.timestamp[overlayData.puntosD2.timestamp.length - 1])
+        timestamp = overlayData.puntosD2.timestamp;
+
+    var time = overlayProblemasDia1;
+    if (overlayProblemasDia1 < overlayProblemasDia2)
+        time = overlayProblemasDia2;
+
+    time *= 100;
+
+    var chart = dibujaGrafica(null, [overlayData.puntosD1.puntos], timestamp, time, [1], 0, false, ['Puntos'], 'Puntos', null);
+    dibujaGrafica(chart, [overlayData.puntosD2.puntos], timestamp, time, [2], 0, false, ['Puntos'], 'Puntos', null);
+
+    scrollToBottom();
 }
 
 function muestraChartProblemas() {
@@ -248,12 +280,13 @@ function muestraChartProblemas() {
 
     for (var i = 0; i < overlayProblemasDia1; i++) {
         puntos.push(temp[i]);
-        colores.push(i + 1);
+        colores.push(i + 3);
         titulos.push(document.getElementById('nombresD1P' + (i + 1)).innerHTML.substr(36));
     }
 
     destruyeChart();
-    dibujaGrafica(puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null);
+    dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null);
+    scrollToBottom();
 }
 
 function handleOverlayAjax(data) {
@@ -275,7 +308,7 @@ function handleOverlayAjax(data) {
     }
 
     if (data.puntosD1 != null && data.puntosD1.puntos.length > 0) {
-        muestraChartTotal();
+        muestraChartTotal(true);
     }
     setVisible('overlayLoading', false);
 }

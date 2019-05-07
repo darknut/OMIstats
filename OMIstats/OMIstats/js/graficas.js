@@ -83,6 +83,8 @@ function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels,
             }
         }
     });
+
+    return chart;
 }
 
 function destruyeChart() {
@@ -90,4 +92,20 @@ function destruyeChart() {
         chart.destroy();
         chart = null;
     }
+}
+
+function actualizaGrafica(grafica, datasets, labels, colors) {
+    for (var i = 0; i < datasets.length; i++) {
+        grafica.data.datasets.push({
+            label: labels[i],
+            data: datasets[i],
+            backgroundColor: coloresGraph[colors[i]],
+            borderColor: coloresGraph[colors[i]],
+            fill: false,
+            borderWidth: 3,
+            lineTension: 0,
+            radius: 0
+        });
+    }
+    grafica.update();
 }
