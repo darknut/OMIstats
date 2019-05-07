@@ -1,4 +1,4 @@
-﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "black", "gray", "greenyellow", "ivory", "black"];
+﻿var coloresGraph = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "DarkSeaGreen", "Tomato", "greenyellow", "Navy", "black"];
 var chart = null;
 function cargaGrafica(container, datasets, labels, ejeX, max, colors, allLabels, colorIndexes, valorMinimo, yInverso, tituloEje, grandienteColores)
 {
@@ -101,6 +101,10 @@ function actualizaGrafica(grafica, datasets, labels, colors) {
             data: datasets[i],
             backgroundColor: coloresGraph[colors[i]],
             borderColor: coloresGraph[colors[i]],
+            pointBackgroundColor: coloresGraph[colors[i]],
+            pointBorderColor: coloresGraph[colors[i]],
+            pointHoverBackgroundColor: coloresGraph[colors[i]],
+            pointHoverBorderColor: coloresGraph[colors[i]],
             fill: false,
             borderWidth: 3,
             lineTension: 0,

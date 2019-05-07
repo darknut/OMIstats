@@ -289,7 +289,30 @@ function muestraChartProblemas() {
     }
 
     destruyeChart();
-    dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, null);
+    var chart = dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, null);
+
+    if (overlayProblemasDia2 > 0) {
+        puntos = [];
+        colores = [];
+        titulos = [];
+        temp = [];
+
+        temp.push(overlayData.puntosD2.puntosP1);
+        temp.push(overlayData.puntosD2.puntosP2);
+        temp.push(overlayData.puntosD2.puntosP3);
+        temp.push(overlayData.puntosD2.puntosP4);
+        temp.push(overlayData.puntosD2.puntosP5);
+        temp.push(overlayData.puntosD2.puntosP6);
+
+        for (var i = 0; i < overlayProblemasDia2; i++) {
+            puntos.push(temp[i]);
+            colores.push(i + 3 + overlayProblemasDia1);
+            titulos.push(document.getElementById('nombresD2P' + (i + 1)).innerHTML.substr(36));
+        }
+
+        dibujaGrafica(chart, puntos, overlayData.puntosD2.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, null);
+    }
+
     scrollToBottom();
 }
 
