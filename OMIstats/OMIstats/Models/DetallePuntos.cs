@@ -76,6 +76,14 @@ namespace OMIstats.Models
                 llenarDatos(table.Rows[i], puntos, problemas);
             }
 
+            if (puntos.timestamp[0] != 0)
+            {
+                puntos.timestamp.Insert(0, 0);
+                for (int i = 0; i < problemas; i++)
+                    puntos.problemas[i].Insert(0, 0);
+                puntos.puntos.Insert(0, 0);
+            }
+
             puntos.problemas = null;
             return puntos;
         }

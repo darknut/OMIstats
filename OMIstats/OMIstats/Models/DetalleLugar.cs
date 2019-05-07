@@ -66,6 +66,13 @@ namespace OMIstats.Models
                 llenarDatos(r, lugares);
             }
 
+            if (lugares.timestamp[0] != 0)
+            {
+                lugares.timestamp.Insert(0, 0);
+                lugares.lugar.Insert(0, 0);
+                lugares.medalla.Insert(0, 7);
+            }
+
             return lugares;
         }
 #endif

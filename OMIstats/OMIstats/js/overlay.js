@@ -192,17 +192,18 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
 
         if (minutos < 10)
             extra = "0";
-        if (avanzo || tiempo % 3600 == 0) {
+
+        if (tiempo % 3600 == 0) {
+            colors.push("gray");
             labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
-            if (tiempo % 3600 == 0) {
-                colors.push("gray");
-            } else {
-                colors.push("#EEEEEE");
-            }
+        } else if (tiempo % 1200 == 0) {
+            colors.push("#EEEEEE");
+            labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
         } else {
-            labels.push("");
             colors.push("");
+            labels.push("");
         }
+
         if (avanzo || i != tiempos.length - 1) {
             for (var j = 0; j < puntos.length; j++)
                 linea[j].push(puntos[j][i]);
