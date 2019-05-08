@@ -190,22 +190,14 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
         }
 
         var timestamp = Math.floor(tiempo / 60);
+        if (cambioDia && tiempo > cambioDia)
+            timestamp -= (cambioDia / 60);
+
         var minutos = timestamp % 60;
         var extra = "";
         if (minutos < 10)
             extra = "0";
-        var tickValue = "";
-        if (cambioDia && tiempo > cambioDia) {
-            var newTime = timestamp - (cambioDia / 60);
-            minutos = newTime % 60;
-            extra = "";
-            if (minutos < 10)
-                extra = "0";
-            tickValue = Math.floor(newTime / 60) + ":" + extra + minutos;
-        }
-        else {
-            tickValue = Math.floor(timestamp / 60) + ":" + extra + minutos;
-        }
+        var tickValue = tickValue = Math.floor(timestamp / 60) + ":" + extra + minutos;
 
         if (cambioDia && tiempo == cambioDia) {
             colors.push("brown");
