@@ -102,5 +102,80 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        private static void borrar(string omi, string clase, string clave, int timestamp, int dia)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" delete DetalleLugar where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase =  ");
+            query.Append(Utilities.Cadenas.comillas(clase));
+            query.Append(" and clave =  ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and timestamp =  ");
+            query.Append(timestamp);
+            query.Append(" and dia =  ");
+            query.Append(dia);
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        public static void clean(string omi)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select * from DetalleLugar where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" order by clase, clave, dia, timestamp asc ");
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            bool first = false;
+            DetalleLugar anterior = new DetalleLugar();
+            DetalleLugar actual = new DetalleLugar();
+            foreach (DataRow r in table.Rows)
+            {
+                actual.lugar = (int)r["lugar"];
+                actual.timestamp = (int)r["timestamp"];
+                actual.medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), r["medalla"].ToString());
+                actual.dia = (int)r["dia"];
+                actual.clave = r["clave"].ToString();
+                actual.tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+
+                if (actual.tipoOlimpiada != anterior.tipoOlimpiada ||
+                    actual.clave != anterior.clave ||
+                    actual.dia != anterior.dia)
+                {
+                    first = true;
+                }
+                else
+                {
+                    if (actual.medalla == anterior.medalla &&
+                        actual.lugar == anterior.lugar)
+                    {
+                        if (!first)
+                            borrar(omi, anterior.tipoOlimpiada.ToString().ToLower(), anterior.clave, anterior.timestamp, anterior.dia);
+                        first = false;
+                    }
+                    else
+                    {
+                        first = true;
+                    }
+
+                }
+
+                anterior.lugar = actual.lugar;
+                anterior.timestamp = actual.timestamp;
+                anterior.medalla = actual.medalla;
+                anterior.dia = actual.dia;
+                anterior.clave = actual.clave;
+                anterior.tipoOlimpiada = actual.tipoOlimpiada;
+            }
+        }
     }
 }

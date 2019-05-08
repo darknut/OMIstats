@@ -145,6 +145,22 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/Clean/
+
+        public ActionResult Clean()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Olimpiada o = Olimpiada.obtenerMasReciente();
+
+            DetalleLugar.clean(o.numero);
+            //DetallePuntos.clean(o.numero);
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
         // GET: /Admin/Logs/
 
         public ActionResult Logs(int count = 0, Log.TipoLog tipo = Log.TipoLog.NULL)
