@@ -193,7 +193,10 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
         if (minutos < 10)
             extra = "0";
 
-        if (tiempo % 3600 == 0) {
+        if (cambioDia && tiempo == cambioDia) {
+            colors.push("brown");
+            labels.push("Día 2");
+        } else if (tiempo % 3600 == 0) {
             colors.push("gray");
             labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
         } else if (tiempo % 1200 == 0) {
@@ -274,6 +277,8 @@ function muestraChartLugar() {
         }
 
         cambioDia = Math.ceil(cambioDia / 60) * 60;
+        if (cambioDia % 2 == 1)
+            cambioDia++;
 
         dibujaGrafica(null, [lugares], timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', medalla, MAX_SECONDS * 2, cambioDia);
     }
