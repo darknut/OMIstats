@@ -157,7 +157,7 @@ function closeOverlay() {
     destruyeChart();
 }
 
-function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, yInverso, labelsLineas, tituloEje, medallas, maxX) {
+function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, yInverso, labelsLineas, tituloEje, medallas, maxX, cambioDia) {
     var tiempo = 0;
     var labels = [];
     var linea = [];
@@ -218,6 +218,8 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
         allLabels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
 
         tiempo += SECONDS_PER_TICK;
+        if (cambioDia)
+            tiempo += SECONDS_PER_TICK;
 
         if (tiempo > maxTiempo && tiempo > tiempos[i]) {
             break;
@@ -243,7 +245,7 @@ function scrollToBottom() {
 
 function muestraChartTotal(ignoreScrolling) {
     destruyeChart();
-    dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, ['Puntos'], 'Puntos', null, null);
+    dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, ['Puntos'], 'Puntos', null, null, null);
     if (!ignoreScrolling)
         scrollToBottom();
 }
@@ -251,7 +253,7 @@ function muestraChartTotal(ignoreScrolling) {
 function muestraChartLugar() {
     destruyeChart();
     if (overlayProblemasDia2 == 0) {
-        dibujaGrafica(null, [overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', overlayData.lugaresD1.medalla, null);
+        dibujaGrafica(null, [overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', overlayData.lugaresD1.medalla, null, null);
     }
     else {
         var lugares = [];
@@ -265,7 +267,15 @@ function muestraChartLugar() {
             medalla.push(overlayData.lugaresD1.medalla[i]);
         }
 
-        dibujaGrafica(null, [lugares], timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', medalla, null);
+        for (var i = 0; i < overlayData.lugaresD2.timestamp.length; i++) {
+            lugares.push(overlayData.lugaresD2.lugar[i]);
+            timestamp.push(overlayData.lugaresD2.timestamp[i] + cambioDia);
+            medalla.push(overlayData.lugaresD2.medalla[i]);
+        }
+
+        cambioDia = Math.ceil(cambioDia / 60) * 60;
+
+        dibujaGrafica(null, [lugares], timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', medalla, MAX_SECONDS * 2, cambioDia);
     }
     scrollToBottom();
 }
@@ -284,8 +294,8 @@ function mustraChartPorDias() {
     if (maxX < timestamp2)
         maxX = timestamp2;
 
-    var chart = dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, time, [1], 0, false, ['Día 1'], 'Puntos', null, maxX);
-    dibujaGrafica(chart, [overlayData.puntosD2.puntos], overlayData.puntosD2.timestamp, time, [2], 0, false, ['Día 2'], 'Puntos', null, maxX);
+    var chart = dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, time, [1], 0, false, ['Día 1'], 'Puntos', null, maxX, null);
+    dibujaGrafica(chart, [overlayData.puntosD2.puntos], overlayData.puntosD2.timestamp, time, [2], 0, false, ['Día 2'], 'Puntos', null, maxX, null);
 
     scrollToBottom();
 }
@@ -316,7 +326,7 @@ function muestraChartProblemas() {
         maxX = timestamp2;
 
     destruyeChart();
-    var chart = dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, maxX);
+    var chart = dibujaGrafica(null, puntos, overlayData.puntosD1.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, maxX, null);
 
     if (overlayProblemasDia2 > 0) {
         puntos = [];
@@ -337,7 +347,7 @@ function muestraChartProblemas() {
             titulos.push(document.getElementById('nombresD2P' + (i + 1)).innerHTML.substr(36));
         }
 
-        dibujaGrafica(chart, puntos, overlayData.puntosD2.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, maxX);
+        dibujaGrafica(chart, puntos, overlayData.puntosD2.timestamp, 100, colores, 0, false, titulos, 'Puntos', null, maxX, null);
     }
 
     scrollToBottom();
