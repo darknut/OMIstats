@@ -155,7 +155,7 @@ namespace OMIstats.Controllers
             Olimpiada o = Olimpiada.obtenerMasReciente();
 
             DetalleLugar.clean(o.numero);
-            //DetallePuntos.clean(o.numero);
+            DetallePuntos.clean(o.numero);
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }

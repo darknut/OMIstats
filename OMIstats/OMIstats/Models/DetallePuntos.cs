@@ -124,5 +124,77 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        private static void borrar(string omi, string clase, string clave, int timestamp, int dia)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" delete DetallePuntos where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and clase =  ");
+            query.Append(Utilities.Cadenas.comillas(clase));
+            query.Append(" and clave =  ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(" and timestamp =  ");
+            query.Append(timestamp);
+            query.Append(" and dia =  ");
+            query.Append(dia);
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        public static void clean(string omi)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select * from DetallePuntos where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" order by clase, clave, dia, timestamp asc ");
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            bool first = false;
+            DetallePuntos anterior = new DetallePuntos();
+            DetallePuntos actual = new DetallePuntos();
+            foreach (DataRow r in table.Rows)
+            {
+                actual.puntosDia = float.Parse(r["puntosD"].ToString());
+                actual.timestamp = (int)r["timestamp"];
+                actual.dia = (int)r["dia"];
+                actual.clave = r["clave"].ToString();
+                actual.tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+
+                if (actual.tipoOlimpiada != anterior.tipoOlimpiada ||
+                    actual.clave != anterior.clave ||
+                    actual.dia != anterior.dia)
+                {
+                    first = true;
+                }
+                else
+                {
+                    if (actual.puntosDia == anterior.puntosDia)
+                    {
+                        if (!first)
+                            borrar(omi, anterior.tipoOlimpiada.ToString().ToLower(), anterior.clave, anterior.timestamp, anterior.dia);
+                        first = false;
+                    }
+                    else
+                    {
+                        first = true;
+                    }
+
+                }
+
+                anterior.puntosDia = actual.puntosDia;
+                anterior.timestamp = actual.timestamp;
+                anterior.dia = actual.dia;
+                anterior.clave = actual.clave;
+                anterior.tipoOlimpiada = actual.tipoOlimpiada;
+            }
+        }
     }
 }
