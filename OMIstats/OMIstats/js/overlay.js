@@ -126,6 +126,7 @@ function closeOverlay() {
     setVisible('overlay', false);
     setVisible('overlayLoading', false);
     setVisible('chartPuntos', false);
+    setVisible('overlayError', false);
 
     overlayEstado.setAttribute("src", "");
     overlayMedalla.setAttribute("src", "");
@@ -390,6 +391,7 @@ function muestraChartProblemas() {
 }
 
 function handleOverlayAjax(data) {
+    setVisible('overlayError', false);
     overlayData = data;
 
     // Ponemos los lugares en la tabla
@@ -411,4 +413,9 @@ function handleOverlayAjax(data) {
         muestraChartTotal(true);
     }
     setVisible('overlayLoading', false);
+}
+
+function handleOverlayError() {
+    setVisible('overlayLoading', false);
+    setVisible('overlayError', true);
 }
