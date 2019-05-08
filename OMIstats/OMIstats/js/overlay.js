@@ -205,8 +205,12 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
         }
 
         if (avanzo || i != tiempos.length - 1) {
-            for (var j = 0; j < puntos.length; j++)
-                linea[j].push(puntos[j][i]);
+            for (var j = 0; j < puntos.length; j++) {
+                if (yInverso && puntos[j][i] == 0)
+                    linea[j].push(maxY);
+                else
+                    linea[j].push(puntos[j][i]);
+            }
             if (medallas) {
                 gradientMedallas.push(medallaToGradient[medallas[i]]);
             }
@@ -246,7 +250,23 @@ function muestraChartTotal(ignoreScrolling) {
 
 function muestraChartLugar() {
     destruyeChart();
-    dibujaGrafica(null, [overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', overlayData.lugaresD1.medalla, null);
+    if (overlayProblemasDia2 == 0) {
+        dibujaGrafica(null, [overlayData.lugaresD1.lugar], overlayData.lugaresD1.timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', overlayData.lugaresD1.medalla, null);
+    }
+    else {
+        var lugares = [];
+        var timestamp = [];
+        var medalla = [];
+        var cambioDia = overlayData.lugaresD1.timestamp[overlayData.lugaresD1.timestamp.length - 1];
+
+        for (var i = 0; i < overlayData.lugaresD1.timestamp.length; i++) {
+            lugares.push(overlayData.lugaresD1.lugar[i]);
+            timestamp.push(overlayData.lugaresD1.timestamp[i]);
+            medalla.push(overlayData.lugaresD1.medalla[i]);
+        }
+
+        dibujaGrafica(null, [lugares], timestamp, overlayCompetidores, [11], 1, true, ['Lugar'], 'Lugar', medalla, null);
+    }
     scrollToBottom();
 }
 
