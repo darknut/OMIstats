@@ -166,6 +166,9 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
     var gradientMedallas = [];
     var i = 0;
     var maxTiempo = MAX_SECONDS > tiempos[tiempos.length - 1] ? MAX_SECONDS : tiempos[tiempos.length - 1];
+    var prefijo = "";
+    if (cambioDia)
+        prefijo = "Día 1 ";
     if (maxX && maxX > maxTiempo)
         maxTiempo = maxX;
     for (var j = 0; j < puntos.length; j++)
@@ -189,19 +192,31 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
         var timestamp = Math.floor(tiempo / 60);
         var minutos = timestamp % 60;
         var extra = "";
-
         if (minutos < 10)
             extra = "0";
+        var tickValue = "";
+        if (cambioDia && tiempo > cambioDia) {
+            var newTime = timestamp - (cambioDia / 60);
+            minutos = newTime % 60;
+            extra = "";
+            if (minutos < 10)
+                extra = "0";
+            tickValue = Math.floor(newTime / 60) + ":" + extra + minutos;
+        }
+        else {
+            tickValue = Math.floor(timestamp / 60) + ":" + extra + minutos;
+        }
 
         if (cambioDia && tiempo == cambioDia) {
             colors.push("brown");
             labels.push("Día 2");
+            prefijo = "Día 2 ";
         } else if (tiempo % 3600 == 0) {
             colors.push("gray");
-            labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
+            labels.push(prefijo + tickValue);
         } else if (tiempo % 1200 == 0) {
             colors.push("#EEEEEE");
-            labels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
+            labels.push(prefijo + tickValue);
         } else {
             colors.push("");
             labels.push("");
@@ -218,7 +233,7 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
                 gradientMedallas.push(medallaToGradient[medallas[i]]);
             }
         }
-        allLabels.push(Math.floor(timestamp / 60) + ":" + extra + minutos);
+        allLabels.push(prefijo + tickValue);
 
         tiempo += SECONDS_PER_TICK;
         if (cambioDia)
