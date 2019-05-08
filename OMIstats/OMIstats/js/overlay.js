@@ -191,7 +191,7 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
 
         var timestamp = Math.floor(tiempo / 60);
         if (cambioDia && tiempo > cambioDia)
-            timestamp -= (cambioDia / 60);
+            timestamp -= Math.floor(cambioDia / 60);
 
         var minutos = timestamp % 60;
         var extra = "";
@@ -255,7 +255,31 @@ function scrollToBottom() {
 
 function muestraChartTotal(ignoreScrolling) {
     destruyeChart();
-    dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, ['Puntos'], 'Puntos', null, null, null);
+    if (overlayProblemasDia2 == 0) {
+        dibujaGrafica(null, [overlayData.puntosD1.puntos], overlayData.puntosD1.timestamp, overlayProblemasDia1 * 100, [0], 0, false, ['Puntos'], 'Puntos', null, null, null);
+    }
+    else {
+        var puntos = [];
+        var timestamp = [];
+        var cambioDia = overlayData.puntosD1.timestamp[overlayData.puntosD1.timestamp.length - 1];
+        var puntosDia = overlayData.puntosD1.puntos[overlayData.puntosD1.puntos.length - 1];
+
+        for (var i = 0; i < overlayData.puntosD1.timestamp.length; i++) {
+            timestamp.push(overlayData.puntosD1.timestamp[i]);
+            puntos.push(overlayData.puntosD1.puntos[i]);
+        }
+
+        for (var i = 0; i < overlayData.puntosD2.timestamp.length; i++) {
+            timestamp.push(overlayData.puntosD2.timestamp[i] + cambioDia);
+            puntos.push(overlayData.puntosD2.puntos[i] + puntosDia);
+        }
+
+        cambioDia = Math.ceil(cambioDia / 60) * 60;
+        if (cambioDia % 2 == 1)
+            cambioDia++;
+
+        dibujaGrafica(null, [puntos], timestamp, (overlayProblemasDia1 + overlayProblemasDia2) * 100, [0], 0, false, ['Puntos'], 'Puntos', null, MAX_SECONDS * 2, cambioDia);
+    }
     if (!ignoreScrolling)
         scrollToBottom();
 }
