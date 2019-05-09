@@ -863,5 +863,71 @@ namespace OMIstats.Models
 
             return lista;
         }
+
+        public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes)
+        {
+            StringBuilder lineas = new StringBuilder();
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select p.clave as persona, p.nombre, md.clave, md.clase, md.tipo from miembrodelegacion as md ");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" order by persona ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+            int lastUsuario = 0;
+
+            foreach (DataRow r in table.Rows)
+            {
+                int claveUsuario = (int)r["persona"];
+                string nombre = r["nombre"].ToString().Trim();
+                string clave = r["clave"].ToString().Trim();
+                TipoOlimpiada clase = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+                TipoAsistente tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), r["tipo"].ToString().ToUpper());
+
+                if (lastUsuario == claveUsuario)
+                    continue;
+                lastUsuario = claveUsuario;
+
+                lineas.Append(claveUsuario);
+                lineas.Append(".pdf,");
+                lineas.Append(nombre);
+                lineas.Append(",");
+                lineas.Append(X);
+                lineas.Append(",");
+
+                string asistente = stringsAsistentes[((int)tipo) - 1];
+                if (asistente.Trim().Length == 0)
+                    asistente = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(tipo.ToString().ToLower());
+
+                lineas.Append(asistente);
+                lineas.Append(",");
+                lineas.Append(baseURL);
+                lineas.Append("/Profile/view?");
+
+                if (tipo == TipoAsistente.COMPETIDOR)
+                {
+                    lineas.Append("clave=");
+                    lineas.Append(clave);
+                    lineas.Append("&tipo=");
+                    lineas.Append(clase.ToString());
+                    lineas.Append("&omi=");
+                    lineas.Append(omi);
+                }
+                else
+                {
+                    lineas.Append("clave=");
+                    lineas.Append(clave);
+                    lineas.Append("&usuario=");
+                    lineas.Append(claveUsuario);
+                }
+                lineas.Append("\n");
+            }
+
+            return lineas.ToString();
+        }
     }
 }

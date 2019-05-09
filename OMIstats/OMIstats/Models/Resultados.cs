@@ -950,5 +950,58 @@ namespace OMIstats.Models
 
             return mejores;
         }
+
+        public static string generarDiplomas(string omi, string X, string baseURL)
+        {
+            StringBuilder lineas = new StringBuilder();
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" select p.clave as persona, p.nombre, r.clave,r.clase, r.medalla from Resultados as r ");
+            query.Append(" inner join Persona as p on p.clave = r.concursante ");
+            query.Append(" where r.olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and medalla <> 7 ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                int claveUsuario = (int)r["persona"];
+                string nombre = r["nombre"].ToString().Trim();
+                string clave = r["clave"].ToString().Trim();
+                TipoOlimpiada clase = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+                TipoMedalla medalla = (TipoMedalla)Enum.Parse(typeof(TipoMedalla), r["medalla"].ToString().ToUpper());
+
+                lineas.Append(claveUsuario);
+                lineas.Append("-medalla.pdf,");
+                lineas.Append(nombre);
+                lineas.Append(",");
+                lineas.Append(X);
+                lineas.Append(",");
+                lineas.Append("Medalla de ");
+
+                if (medalla == TipoMedalla.BRONCE)
+                    lineas.Append("bronce");
+                else if (medalla == TipoMedalla.PLATA)
+                    lineas.Append("plata");
+                else
+                    lineas.Append("oro");
+
+                lineas.Append(",");
+                lineas.Append(baseURL);
+                lineas.Append("/Profile/view?");
+                lineas.Append("clave=");
+                lineas.Append(clave);
+                lineas.Append("&tipo=");
+                lineas.Append(clase.ToString());
+                lineas.Append("&omi=");
+                lineas.Append(omi);
+                lineas.Append("\n");
+            }
+
+            return lineas.ToString();
+        }
     }
 }

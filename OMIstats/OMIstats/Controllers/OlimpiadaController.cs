@@ -574,6 +574,11 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
             ViewBag.omi = clave;
 
+            string[] X = textoX.Split(';');
+            string[] Y = textoY.Split(';');
+            string asistentes = MiembroDelegacion.generarDiplomas(clave, X[0], Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/'), Y);
+            string medallistas = Models.Resultados.generarDiplomas(clave, X[1], Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/'));
+
             return View();
         }
     }

@@ -52,25 +52,27 @@ namespace OMIstats.Controllers
                 if (md.Count == 0)
                     return RedirectTo(Pagina.ERROR, 404);
                 if (md.Count > 1)
-                    return RedirectTo(Pagina.DELEGACION, omi + ":" + md[0].estado );
+                    return RedirectTo(Pagina.DELEGACION, omi + ":" + md[0].estado);
                 p = Persona.obtenerPersonaConClave(md[0].claveUsuario);
                 usuario = p.usuario;
             }
-
-            // QR's de no competidores vienen en la forma usuario=claveUsuario;clave=CMX-L
-            if (usuario != null && clave != null)
+            else
             {
-                int claveUsuario;
-                if (!Int32.TryParse(usuario, out claveUsuario))
+                // QR's de no competidores vienen en la forma usuario=claveUsuario;clave=CMX-L
+                if (usuario != null && clave != null)
                 {
-                    return RedirectTo(Pagina.ERROR, 404);
+                    int claveUsuario;
+                    if (!Int32.TryParse(usuario, out claveUsuario))
+                    {
+                        return RedirectTo(Pagina.ERROR, 404);
+                    }
+                    p = Persona.obtenerPersonaConClave(claveUsuario);
+                    if (p == null)
+                    {
+                        return RedirectTo(Pagina.ERROR, 404);
+                    }
+                    return RedirectTo(Pagina.VIEW_PROFILE, p.usuario);
                 }
-                p = Persona.obtenerPersonaConClave(claveUsuario);
-                if (p == null)
-                {
-                    return RedirectTo(Pagina.ERROR, 404);
-                }
-                return RedirectTo(Pagina.VIEW_PROFILE, p.usuario);
             }
 
             if (String.IsNullOrEmpty(usuario))
