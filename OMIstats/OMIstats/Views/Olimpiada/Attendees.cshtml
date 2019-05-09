@@ -79,4 +79,7 @@ else
             <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
         </div>
     </form>
+    <br />
+    @Html.ActionLink("Diplomas", "Diplomas", "Olimpiada",
+        new { clave = Model.numero }, new { @class = "boton botonOMI" })
 }

@@ -551,5 +551,30 @@ namespace OMIstats.Controllers
 
             return Json(response);
         }
+
+        //
+        // GET: /Olimpiada/Diplomas/
+
+        public ActionResult Diplomas(string clave)
+        {
+            if (!esAdmin() || clave == null)
+                return RedirectTo(Pagina.HOME);
+            ViewBag.omi = clave;
+
+            return View();
+        }
+
+        //
+        // POST: /Olimpiada/Diplomas/
+
+        [HttpPost]
+        public ActionResult Diplomas(string clave, string textoX, string textoY)
+        {
+            if (!esAdmin() || clave == null || textoX == null || textoY == null)
+                return RedirectTo(Pagina.HOME);
+            ViewBag.omi = clave;
+
+            return View();
+        }
     }
 }

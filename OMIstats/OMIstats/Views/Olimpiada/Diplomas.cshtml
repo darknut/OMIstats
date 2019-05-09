@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Diplomas";
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    string omi = ViewBag.omi;
+}
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+<h2 class="titulo">Generar diplomas de la @tableManager.enlaceOMI(olimpiada: omi)</h2>
+
+<form name="diplomas" id="diplomas" action="~/Olimpiada/Diplomas" method="post" enctype="multipart/form-data">
+    <div>
+        <div>
+            <div class="label">Texto X:
+                <br />
+                <div class="minimensaje">(participación; medalla)</div>
+            </div>
+            <div class="input">
+                <input type="text" value="POR SU PARTICIPACIÓN COMO;POR HABER OBTENIDO" id="textoX" name="textoX" class="inputLarge"/>
+            </div>
+        </div>
+
+        <div>
+            <div class="label">Texto Y:
+                <br />
+                <div class="minimensaje">(separa tipos por ';', vacio para default)</div>
+            </div>
+            <div class="input">
+                <input type="text" value=";;Líder;;Líder;Miembro del Comité Académico;Miembro del Comité Local;;;" id="textoY" name="textoY" class="inputLarge"/>
+            </div>
+        </div>
+
+        <div>
+            <br />
+            Tipos:
+            <ul>
+                <li>COMPETIDOR</li>
+                <li>ASESOR</li>
+                <li>LIDER</li>
+                <li>DELEGADO</li>
+                <li>DELELIDER</li>
+                <li>COMI</li>
+                <li>COLO</li>
+                <li>INVITADO</li>
+                <li>ACOMPAÑANTE</li>
+                <li>SUBLIDER</li>
+            </ul>
+        </div>
+
+        <input type="hidden" value="@omi" id="clave" name="clave" />
+
+        <div class="label">
+            <input type="submit"value="Enviar"/>
+        </div>
+    </div>
+</form>

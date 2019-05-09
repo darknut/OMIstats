@@ -422,6 +422,7 @@
     <Content Include="Views\Fotos\Edit.cshtml" />
     <Content Include="Views\Fotos\Album.cshtml" />
     <Content Include="Views\Problemas\Graficas.cshtml" />
+    <Content Include="Views\Olimpiada\Diplomas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
