@@ -45,6 +45,7 @@ namespace OMIstats.Controllers
             Persona p = null;
             limpiarErroresViewBag();
 
+            // QR's de competidor vienen en la forma usuario=null;clave=CMX-3;tipo=OMI;omi='30'
             if (usuario == null && clave != null)
             {
                 List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave, aproximarClave: true);
@@ -54,6 +55,22 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.DELEGACION, omi + ":" + md[0].estado );
                 p = Persona.obtenerPersonaConClave(md[0].claveUsuario);
                 usuario = p.usuario;
+            }
+
+            // QR's de no competidores vienen en la forma usuario=claveUsuario;clave=CMX-L
+            if (usuario != null && clave != null)
+            {
+                int claveUsuario;
+                if (!Int32.TryParse(usuario, out claveUsuario))
+                {
+                    return RedirectTo(Pagina.ERROR, 404);
+                }
+                p = Persona.obtenerPersonaConClave(claveUsuario);
+                if (p == null)
+                {
+                    return RedirectTo(Pagina.ERROR, 404);
+                }
+                return RedirectTo(Pagina.VIEW_PROFILE, p.usuario);
             }
 
             if (String.IsNullOrEmpty(usuario))
