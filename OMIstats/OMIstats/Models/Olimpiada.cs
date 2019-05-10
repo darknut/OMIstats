@@ -102,6 +102,8 @@ namespace OMIstats.Models
 
         public bool registroActivo { get; set; }
 
+        public bool diplomasOnline { get; set; }
+
         public float media
         {
             get
@@ -270,6 +272,7 @@ namespace OMIstats.Models
             omisActualNumber = "";
             registroActivo = false;
             puntosDetallados = false;
+            diplomasOnline = false;
 
             liveResults = false;
         }
@@ -376,6 +379,7 @@ namespace OMIstats.Models
             noMedallistasConocidos = (bool)datos["noMedallistasConocidos"];
             puntosDetallados = (bool)datos["puntosDetallados"];
             registroActivo = (bool)datos["registroActivo"];
+            diplomasOnline = (bool)datos["diplomasOnline"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -536,6 +540,8 @@ namespace OMIstats.Models
             query.Append(puntosDetallados ? 1 : 0);
             query.Append(", registroActivo = ");
             query.Append(registroActivo ? 1 : 0);
+            query.Append(", diplomasOnline = ");
+            query.Append(diplomasOnline ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Utilities.Cadenas.comillas(clave));
             query.Append(" and clase = ");
@@ -585,6 +591,7 @@ namespace OMIstats.Models
             omi.poster = this.poster;
             omi.puntosDetallados = this.puntosDetallados;
             omi.registroActivo = this.registroActivo;
+            omi.diplomasOnline = this.diplomasOnline;
 
             omi.guardarDatos(clave);
         }
@@ -606,7 +613,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 1, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }
