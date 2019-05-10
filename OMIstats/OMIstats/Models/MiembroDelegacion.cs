@@ -870,7 +870,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
+            query.Append(" select p.clave as persona, p.nombre, p.genero, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
@@ -886,6 +886,7 @@ namespace OMIstats.Models
                 string nombre = r["nombre"].ToString().Trim();
                 string clave = r["clave"].ToString().Trim();
                 string estado = r["estado"].ToString().Trim();
+                string genero = r["genero"].ToString().Trim();
                 TipoOlimpiada clase = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
                 TipoAsistente tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), r["tipo"].ToString().ToUpper());
 
@@ -903,6 +904,14 @@ namespace OMIstats.Models
                 string asistente = stringsAsistentes[((int)tipo) - 1];
                 if (asistente.Trim().Length == 0)
                     asistente = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(tipo.ToString().ToLower());
+                string[] generos = asistente.Split('/');
+                if (generos.Length > 1)
+                {
+                    if (genero == "M")
+                        asistente = generos[0];
+                    else
+                        asistente = generos[1];
+                }
 
                 lineas.Append(asistente);
 
