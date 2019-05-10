@@ -983,11 +983,11 @@ namespace OMIstats.Models
                 lineas.Append("Medalla de ");
 
                 if (medalla == TipoMedalla.BRONCE)
-                    lineas.Append("bronce");
+                    lineas.Append("Bronce");
                 else if (medalla == TipoMedalla.PLATA)
-                    lineas.Append("plata");
+                    lineas.Append("Plata");
                 else
-                    lineas.Append("oro");
+                    lineas.Append("Oro");
 
                 lineas.Append(",");
                 lineas.Append(baseURL);
@@ -998,6 +998,8 @@ namespace OMIstats.Models
                 lineas.Append(clase.ToString());
                 lineas.Append("&omi=");
                 lineas.Append(omi);
+                lineas.Append(",");
+                lineas.Append(clase.ToString());
                 lineas.Append("\n");
             }
 

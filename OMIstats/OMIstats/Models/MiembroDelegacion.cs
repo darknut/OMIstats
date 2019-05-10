@@ -924,6 +924,8 @@ namespace OMIstats.Models
                     lineas.Append("&usuario=");
                     lineas.Append(claveUsuario);
                 }
+                lineas.Append(",");
+                lineas.Append(clase.ToString());
                 lineas.Append("\n");
             }
 
