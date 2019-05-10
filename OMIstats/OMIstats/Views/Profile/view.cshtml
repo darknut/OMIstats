@@ -252,7 +252,7 @@
                     <th class="bottom-border table-header-clickable">Año escolar</th>
                     @if(perfilPropio)
                     {
-                    <th>Diplomas</th>
+                    <th class="bottom-border left-border">Diplomas</th>
                     }
                 </tr>
             </thead>
@@ -330,8 +330,20 @@
                     </td>
                     @if (perfilPropio)
                     {
-                    <td>
-
+                    <td class="left-border padding-diploma">
+                        @if (tableManager.tieneDiplomas())
+                        {
+                             @Html.ActionLink("Competidor", "Diploma", "Profile",
+                                new { omi = datos.omi },
+                                new { @class = "botonPerfil" })
+                            if (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA)
+                            {
+                                <span>&nbsp;</span>
+                                @Html.ActionLink("Medallista", "Diploma", "Profile",
+                                new { omi = datos.omi, medalla = 1 },
+                                new { @class = "botonPerfil" })
+                            }
+                        }
                     </td>
                     }
                 </tr>
@@ -360,7 +372,7 @@
                     <th class="bottom-border table-header-clickable">Rol</th>
                     @if (perfilPropio)
                     {
-                    <th>Diplomas</th>
+                    <th class="bottom-border left-border">Diplomas</th>
                     }
                 </tr>
             </thead>
@@ -389,7 +401,14 @@
                     </td>
                     @if (perfilPropio)
                     {
-                    <td></td>
+                    <td class="left-border padding-diploma">
+                        @if (tableManager.tieneDiplomas())
+                        {
+                             @Html.ActionLink("Diploma", "Diploma", "Profile",
+                                new { omi = datos.olimpiada },
+                                new { @class = "botonPerfil" })
+                        }
+                    </td>
                     }
                 </tr>
             }

@@ -91,6 +91,10 @@
     border-right: solid 4px #336699;
 }
 
+.left-border {
+    border-left: solid 4px #336699;
+}
+
 .bottom-border {
     border-bottom: solid 4px #336699;
 }
@@ -117,4 +121,8 @@
 .mini-padding {
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.padding-diploma {
+    padding-left: 5px;
 }

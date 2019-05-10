@@ -231,5 +231,12 @@ namespace OMIstats.Utilities
             }
             return enlace + "ª " + (currentOMI != null ? currentOMI.tipoOlimpiada.ToString() : "OMI");
         }
+
+        public bool tieneDiplomas()
+        {
+            if (currentOMI == null)
+                return false;
+            return currentOMI.diplomasOnline;
+        }
     }
 }
