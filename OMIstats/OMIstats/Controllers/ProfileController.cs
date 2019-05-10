@@ -249,5 +249,31 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.SAVED_PROFILE);
             }
         }
+
+        //
+        // GET: /Profile/Diploma/
+
+        public ActionResult Diploma(string omi, bool medalla = false)
+        {
+            if (!estaLoggeado())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !o.diplomasOnline)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            Persona p = getUsuario();
+            string contentFile = "application/pdf";
+            string url = "~/private/diplomas/" + omi + "/" + p.clave;
+            if (medalla)
+                url += "-medalla";
+            url += ".pdf";
+            string file = Server.MapPath(url);
+
+            if (!System.IO.File.Exists(file))
+                return RedirectTo(Pagina.ERROR, 404);
+
+            return File(file, contentFile, "Diploma.pdf");
+        }
     }
 }
