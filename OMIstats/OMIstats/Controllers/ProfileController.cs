@@ -56,24 +56,6 @@ namespace OMIstats.Controllers
                 p = Persona.obtenerPersonaConClave(md[0].claveUsuario);
                 usuario = p.usuario;
             }
-            else
-            {
-                // QR's de no competidores vienen en la forma usuario=claveUsuario;clave=CMX-L
-                if (usuario != null && clave != null)
-                {
-                    int claveUsuario;
-                    if (!Int32.TryParse(usuario, out claveUsuario))
-                    {
-                        return RedirectTo(Pagina.ERROR, 404);
-                    }
-                    p = Persona.obtenerPersonaConClave(claveUsuario);
-                    if (p == null)
-                    {
-                        return RedirectTo(Pagina.ERROR, 404);
-                    }
-                    return RedirectTo(Pagina.VIEW_PROFILE, p.usuario);
-                }
-            }
 
             if (String.IsNullOrEmpty(usuario))
             {
