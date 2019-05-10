@@ -991,13 +991,12 @@ namespace OMIstats.Models
 
                 lineas.Append(",");
                 lineas.Append(baseURL);
-                lineas.Append("/Profile/view?");
-                lineas.Append("clave=");
-                lineas.Append(clave);
-                lineas.Append("&tipo=");
+                lineas.Append("/Profile/");
                 lineas.Append(clase.ToString());
-                lineas.Append("&omi=");
+                lineas.Append("/");
                 lineas.Append(omi);
+                lineas.Append("/");
+                lineas.Append(clave);
                 lineas.Append(",");
                 lineas.Append(clase.ToString());
                 lineas.Append("\n");
