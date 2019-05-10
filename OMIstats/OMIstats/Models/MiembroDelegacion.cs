@@ -870,7 +870,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, md.clave, md.clase, md.tipo from miembrodelegacion as md ");
+            query.Append(" select p.clave as persona, p.nombre, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
@@ -885,6 +885,7 @@ namespace OMIstats.Models
                 int claveUsuario = (int)r["persona"];
                 string nombre = r["nombre"].ToString().Trim();
                 string clave = r["clave"].ToString().Trim();
+                string estado = r["estado"].ToString().Trim();
                 TipoOlimpiada clase = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
                 TipoAsistente tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), r["tipo"].ToString().ToUpper());
 
@@ -904,6 +905,33 @@ namespace OMIstats.Models
                     asistente = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(tipo.ToString().ToLower());
 
                 lineas.Append(asistente);
+
+                switch (tipo)
+                {
+                    case TipoAsistente.COMPETIDOR:
+                    case TipoAsistente.ASESOR:
+                    case TipoAsistente.LIDER:
+                    case TipoAsistente.DELEGADO:
+                    case TipoAsistente.DELELIDER:
+                    case TipoAsistente.SUBLIDER:
+                        {
+                            if (estado == "MDF")
+                            {
+                                lineas.Append(" de la Ciudad de México");
+                            }
+                            else if (estado == "MEX")
+                            {
+                                lineas.Append(" del Estado de México");
+                            }
+                            else
+                            {
+                                lineas.Append(" del Estado de ");
+                                lineas.Append(Estado.obtenerEstadoConClave(estado).nombre);
+                            }
+                            break;
+                        }
+                }
+
                 lineas.Append(",");
                 lineas.Append(baseURL);
                 lineas.Append("/Profile/view?");
