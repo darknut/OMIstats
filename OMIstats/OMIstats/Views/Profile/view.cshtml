@@ -29,6 +29,7 @@
 
 @{
     ViewBag.Title = Model.nombre;
+    bool perfilPropio = (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave));
 }
 
     @{
@@ -118,7 +119,7 @@
 
         @if (@ViewBag.usuario != null)
         {
-            if (ViewBag.usuario.admin || (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave)))
+            if (ViewBag.usuario.admin || perfilPropio)
             {
                 <div>
                     @Html.ActionLink("Actualizar datos", "Edit", "Profile",
@@ -249,6 +250,10 @@
                     <th class="bottom-border right-border table-header-clickable">Escuela</th>
                     <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
                     <th class="bottom-border table-header-clickable">Año escolar</th>
+                    @if(perfilPropio)
+                    {
+                    <th>Diplomas</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -323,6 +328,12 @@
                             @(datos.añoEscolar + "º")
                         }
                     </td>
+                    @if (perfilPropio)
+                    {
+                    <td>
+
+                    </td>
+                    }
                 </tr>
             }
             </tbody>
@@ -347,6 +358,10 @@
                     <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
                     <th class="bottom-border right-border table-header-clickable">Estado</th>
                     <th class="bottom-border table-header-clickable">Rol</th>
+                    @if (perfilPropio)
+                    {
+                    <th>Diplomas</th>
+                    }
                 </tr>
             </thead>
             <tbody>
@@ -372,6 +387,10 @@
                             @datos.getTipoAsistenteString()
                         </a>
                     </td>
+                    @if (perfilPropio)
+                    {
+                    <td></td>
+                    }
                 </tr>
             }
             </tbody>
