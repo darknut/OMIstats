@@ -39,6 +39,7 @@
             <th class="bottom-border right-border">Ceros</th>
             <th class="bottom-border right-border">Perfectos</th>
             <th class="bottom-border right-border">Casos</th>
+            <th class="bottom-border right-border">Códigos</th>
             <th class="bottom-border">Soluciones</th>
         </tr>
     </thead>
@@ -63,12 +64,14 @@
         bool[] headerDias = new bool[3];
         string casosDia = "";
         string codigosDia = "";
+        string solucionesDia = "";
         foreach(OMIstats.Models.Problema problema in problemas)
         {
             if (problema.numero == 0)
             {
                 casosDia = problema.casos;
                 codigosDia = problema.codigo;
+                solucionesDia = problema.solucion;
                 continue;
             }
             string clase = "";
@@ -170,10 +173,27 @@
                 }
                 @if (codigosDia.Length == 0)
                 {
-                <td class="table-td center @(clase)">
+                <td class="table-td right-border center @(clase)">
                     @if (problema.codigo.Length > 0)
                     {
-                    <a href="@problema.codigo"  target="@((problema.codigo.EndsWith(".cpp") || problema.codigo.EndsWith(".txt")) ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                    <a href="@problema.codigo" target="@(problema.codigoEsTextoPlano() ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                    }
+                </td>
+                } else
+                {
+                    if (problema.numero == 1)
+                    {
+                    <td class="table-td right-border center @(clase)" rowspan="@(pDias[problema.dia])">
+                        <a href="@codigosDia"><img src="~/img/cpp.png" /></a>
+                    </td>
+                    }
+                }
+                @if (solucionesDia.Length == 0)
+                {
+                <td class="table-td center @(clase)">
+                    @if (problema.solucion.Length > 0)
+                    {
+                    <a href="@problema.solucion" target="_blank"><img src="~/img/pdf.png" /></a>
                     }
                 </td>
                 } else
@@ -181,7 +201,7 @@
                     if (problema.numero == 1)
                     {
                     <td class="table-td center @(clase)" rowspan="@(pDias[problema.dia])">
-                        <a href="@codigosDia"><img src="~/img/cpp.png" /></a>
+                        <a href="@solucionesDia" target="_blank"><img src="~/img/pdf.png" /></a>
                     </td>
                     }
                 }

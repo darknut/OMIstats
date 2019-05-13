@@ -217,7 +217,11 @@
                     }
                     if (metadata[d].codigo.Length > 0)
                     {
-                    <a href="@metadata[d].codigo"><img src="~/img/cpp.png" /></a>
+                    <a href="@metadata[d].codigo" target="@(metadata[d].codigoEsTextoPlano() ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                    }
+                    if (metadata[d].solucion.Length > 0)
+                    {
+                    <a href="@metadata[d].solucion" target="_blank"><img src="~/img/pdf.png" /></a>
                     }
                 }
                 </h1>
@@ -255,11 +259,15 @@
                                 <a href="@dia[i].url" class="nombre" target="_blank">@dia[i].nombre</a>
                                 @if(dia[i].casos.Length > 0)
                                 {
-                                    <a href="@dia[i].casos"><img src="~/img/rar.png" /></a>
+                                <a href="@dia[i].casos"><img src="~/img/rar.png" /></a>
                                 }
                                 @if(dia[i].codigo.Length > 0)
                                 {
-                                    <a href="@dia[i].codigo" target="_blank"><img src="~/img/cpp.png" /></a>
+                                <a href="@dia[i].codigo" target="@(dia[i].codigoEsTextoPlano() ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                                }
+                                @if(dia[i].solucion.Length > 0)
+                                {
+                                <a href="@dia[i].solucion" target="_blank"><img src="~/img/pdf.png" /></a>
                                 }
                             </li>
                         }
