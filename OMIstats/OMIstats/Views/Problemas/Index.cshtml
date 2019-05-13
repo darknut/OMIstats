@@ -173,7 +173,7 @@
                 <td class="table-td center @(clase)">
                     @if (problema.codigo.Length > 0)
                     {
-                    <a href="@problema.codigo"><img src="~/img/cpp.png" /></a>
+                    <a href="@problema.codigo"  target="@((problema.codigo.EndsWith(".cpp") || problema.codigo.EndsWith(".txt")) ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
                     }
                 </td>
                 } else
