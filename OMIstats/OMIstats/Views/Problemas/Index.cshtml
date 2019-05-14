@@ -65,6 +65,7 @@
         string casosDia = "";
         string codigosDia = "";
         string solucionesDia = "";
+        string github = "";
         foreach(OMIstats.Models.Problema problema in problemas)
         {
             if (problema.numero == 0)
@@ -72,6 +73,10 @@
                 casosDia = problema.casos;
                 codigosDia = problema.codigo;
                 solucionesDia = problema.solucion;
+                if (problema.dia == 0)
+                {
+                    github = problema.codigo;
+                }
                 continue;
             }
             string clase = "";
@@ -87,6 +92,10 @@
                 <td rowspan="@(pDias[1] + pDias[2])" class="table-td right-border center top-border">
                     @Html.ActionLink(tableManager.enlaceOMI(), "Index", "Olimpiada",
                         new { tipo = tipoOlimpiada, clave = o.numero }, new { @class = "nombre" })
+                    @if(github.Length != 0)
+                    {
+                    <br /><br /><a href="@(github)" target="_blank" title="GitHub"><img src="~/img/github.png" /></a>
+                    }
                 </td>
                 }
                 @if (!headerDias[problema.dia])

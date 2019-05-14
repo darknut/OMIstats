@@ -98,15 +98,6 @@
                 <img src="~/img/docx.png"/><br />Reporte</a>
         </div>
     }
-
-    @if (metadata.Count > 0 && metadata[0].codigo.Length > 0)
-    {
-        <div class="mediaOMI">
-            <a href="@Uri.EscapeUriString(metadata[0].codigo)" class="nombre" target="_blank">
-                <img src="~/img/pdf_large.png"/><br />Soluciones</a>
-        </div>
-    }
-
 </div>
 
 <div class="clear">
