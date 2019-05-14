@@ -12,6 +12,16 @@
     tableManager.setCurrentOMI(Model);
     ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
     bool fotos = ViewBag.fotos;
+
+    List<OMIstats.Models.Problema> dia1 = ViewBag.dia1;
+    List<OMIstats.Models.Problema> dia2 = ViewBag.dia2;
+    List<OMIstats.Models.Problema> metadata = ViewBag.metadata;
+    string github = "";
+
+    if (metadata.Count > 0)
+    {
+        github = metadata[0].codigo;
+    }
 }
 
 <div class="submenu">
@@ -39,6 +49,10 @@
         @(tableManager.enlaceOMI(nombreCompleto: true) + ": " + (Model.claveEstado == "MDF" ? "" : @Model.ciudad + ", "))
         <a href="@Url.Content("~/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
         @Model.año
+        @if (github.Length > 0)
+        {
+        <span>&nbsp;</span><a href="@(github)" target="_blank" title="GitHub"><img src="~/img/github.png" /></a>
+        }
     </h2>
     @if (ViewBag.admin)
     {
@@ -49,13 +63,6 @@
         </div>
     }
 </div>
-
-@{
-    List<OMIstats.Models.Problema> dia1 = ViewBag.dia1;
-    List<OMIstats.Models.Problema> dia2 = ViewBag.dia2;
-    List<OMIstats.Models.Problema> metadata = ViewBag.metadata;
-}
-
 <div>
 
     <div class="datosOlimpiada">
