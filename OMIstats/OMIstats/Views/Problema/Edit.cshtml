@@ -89,6 +89,15 @@
             </div>
         </div>
 
+        @if (Model.numero == 0 && Model.dia == 0) {
+        <div>
+            <div class="label">GitHub:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.codigo)
+                @Html.ValidationMessageFor(model => model.codigo)
+            </div>
+        </div>
+        } else {
         <div>
             <div class="label">Código:</div>
             <div class="input">
@@ -96,6 +105,7 @@
                 @Html.ValidationMessageFor(model => model.codigo)
             </div>
         </div>
+        }
 
         <div>
             <div class="label">Solución:</div>
