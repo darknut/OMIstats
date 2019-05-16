@@ -41,6 +41,13 @@
                 </div>
             </div>
 
+            <div>
+                <div class="label">¿Newsletter?:</div>
+                <div class="input">
+                    @Html.CheckBoxFor(model => model.newsletter)
+                </div>
+            </div>
+
             @Html.HiddenFor(model => model.olimpiada)
             @Html.HiddenFor(model => model.tipoOlimpiada)
             @Html.HiddenFor(model => model.fotos)

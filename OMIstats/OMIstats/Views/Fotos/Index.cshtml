@@ -12,6 +12,7 @@
     bool admin = ViewBag.admin;
     tableManager.setCurrentOMI(olimpiada);
     ViewBag.Title = "Fotos de la " + tableManager.enlaceOMI();
+    OMIstats.Models.Album newsletter = null;
 }
 
 <div class="submenu">
@@ -38,6 +39,11 @@
 <div class="album-container">
 @foreach (OMIstats.Models.Album al in Model)
 {
+    if (al.newsletter)
+    {
+        newsletter = al;
+        continue;
+    }
     string enlace = Url.Content("~/Fotos/Album?id=" + al.id);
     if (admin)
     {
@@ -52,6 +58,20 @@
     </a>
 }
 </div>
+
+@if (newsletter != null)
+{
+<h2 class="titulo">Noticieros</h2>    
+<div class="album-container">
+@for (int i = 1; i <= newsletter.orden; i++)
+{
+<a href="@Url.Content("~/img/news/" + newsletter.olimpiada + "/" + i + ".pdf")" target="_blank">
+<div class="album album-adorner newsletter">
+<img src="~/img/pdf_large.png" />
+<br />Día @(i)</div></a>
+}
+</div>
+}
 
 <div class="clear"></div>
 

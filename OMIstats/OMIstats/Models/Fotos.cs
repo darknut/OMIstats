@@ -149,6 +149,8 @@ namespace OMIstats.Models
 
         public bool update { get; set; }
 
+        public bool newsletter { get; set; }
+
         public DateTime lastUpdated { get; set; }
 
         private static int currentCalls = 0;
@@ -162,6 +164,7 @@ namespace OMIstats.Models
             nombre = "";
             fotos = 0;
             portada = "";
+            newsletter = false;
             lastUpdated = new DateTime(1900, 1, 1);
         }
 
@@ -182,6 +185,7 @@ namespace OMIstats.Models
             fotos = (int)r["fotos"];
             nombre = r["nombre"].ToString().Trim();
             portada = r["portada"].ToString().Trim();
+            newsletter = (bool)r["newsletter"];
         }
 
         /// <summary>
@@ -237,7 +241,7 @@ namespace OMIstats.Models
 
             // Si ya tiene más de una semana que
             // cacheamos el album, lo refrescamos
-            if (id != ALBUM_GRAL && puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today)
+            if (id != ALBUM_GRAL && puedeActualizar() && al.lastUpdated.AddDays(DAYS_UPDATE) < DateTime.Today && !al.newsletter)
             {
                 Log.add(Log.TipoLog.FACEBOOK, "Álbum " + al.id + " actualizado por inactividad");
                 al.updateAlbum();
@@ -326,7 +330,7 @@ namespace OMIstats.Models
         {
             tryNew();
 
-            if (update)
+            if (!newsletter && update)
                 updateAlbum();
 
             Utilities.Acceso db = new Utilities.Acceso();
@@ -348,6 +352,8 @@ namespace OMIstats.Models
                 query.Append(fotos);
                 query.Append(", portada = ");
                 query.Append(Utilities.Cadenas.comillas(portada));
+                query.Append(", newsletter = ");
+                query.Append(newsletter ? "1" : "0");
             }
             query.Append(" where id = ");
             query.Append(Utilities.Cadenas.comillas(id));
@@ -472,6 +478,9 @@ namespace OMIstats.Models
                     Dictionary<string, object> cursors = (Dictionary<string, object>)paging[CURSORS];
                     after = (string)cursors[AFTER];
                 }
+            }
+            catch (Exception)
+            {
             }
             finally
             {
