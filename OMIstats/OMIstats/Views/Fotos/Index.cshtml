@@ -65,7 +65,12 @@
 <div class="album-container">
 @for (int i = 1; i <= newsletter.orden; i++)
 {
-<a href="@Url.Content("~/img/news/" + newsletter.olimpiada + "/" + i + ".pdf")" target="_blank">
+    string path = "~/img/news/" + newsletter.olimpiada + "/" + i + ".pdf";
+    if (!File.Exists(ViewBag.server.MapPath(path)))
+    {
+        continue;
+    }
+<a href="@Url.Content(path)" target="_blank">
 <div class="album album-adorner newsletter">
 <img src="~/img/pdf_large.png" />
 <br />Día @(i)</div></a>
