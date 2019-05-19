@@ -65,6 +65,7 @@
 <div class="album-container">
 @for (int i = 1; i <= newsletter.orden; i++)
 {
+    string path = "~/img/news/" + newsletter.olimpiada + "/" + i + ".pdf";
 <a href="@Url.Content(path)" target="_blank">
 <div class="album album-adorner newsletter">
 <img src="~/img/pdf_large.png" />
