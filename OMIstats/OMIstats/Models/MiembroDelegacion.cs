@@ -863,7 +863,7 @@ namespace OMIstats.Models
 
             return lista;
         }
-
+#if OMISTATS
         public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes)
         {
             StringBuilder lineas = new StringBuilder();
@@ -980,5 +980,6 @@ namespace OMIstats.Models
 
             return lineas.ToString();
         }
+#endif
     }
 }

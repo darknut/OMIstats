@@ -273,7 +273,11 @@ namespace OmegaUpPuller.WebRequest
             // Primero calculamos los promedios
             foreach(Medallero estado in sortedEstados)
             {
-                estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+                // Arreglamos el estado sede
+                int competidores = estado.count;
+                if (competidores > 4)
+                    competidores = 4;
+                estado.promedio = (float?)Math.Round((double)(estado.puntos / competidores), 2);
             }
 
             // Luego ordenamos

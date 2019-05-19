@@ -184,7 +184,7 @@ namespace OmegaUpPuller.WebRequest
             catch (Exception e)
             {
                 Log.add(Log.TipoLog.OMEGAUP, "Falló algo cuando se parseaba el json de OmegaUp: ");
-                Log.add(Log.TipoLog.OMEGAUP, e.ToString());
+                Log.add(Log.TipoLog.OMEGAUP, e.ToString() + e.StackTrace);
                 return false;
             }
 
@@ -198,7 +198,7 @@ namespace OmegaUpPuller.WebRequest
 #else
                 timestamp = (long)resultados[TIME];
                 timestamp /= 1000;   // El tiempo en OmegaUp se cuenta en milisegundos
-                timestamp -= (long)resultados[START_TIME];
+                timestamp -= Convert.ToInt64(resultados[START_TIME].ToString());
 #endif
 
                 Log.add(Log.TipoLog.OMEGAUP, "Ordenando los resultados");
