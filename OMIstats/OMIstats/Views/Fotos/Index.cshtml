@@ -65,7 +65,12 @@
 <div class="album-container">
 @for (int i = 1; i <= newsletter.orden; i++)
 {
-    string path = "~/img/news/" + newsletter.olimpiada + "/" + i + ".pdf";
+    string fileName = newsletter.olimpiada + "/" + i + ".pdf";
+    string path = "~/img/news/" + fileName;
+    if (!OMIstats.Utilities.Archivos.existeArchivo(OMIstats.Utilities.Archivos.FolderImagenes.NEWSLETTERS, fileName))
+    {
+        continue;
+    }
 <a href="@Url.Content(path)" target="_blank">
 <div class="album album-adorner newsletter">
 <img src="~/img/pdf_large.png" />

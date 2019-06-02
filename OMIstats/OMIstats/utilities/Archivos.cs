@@ -17,6 +17,8 @@ namespace OMIstats.Utilities
         public const string FOLDER_OLIMPIADAS = "~/img/omi";
         public const string FOLDER_POSTERS = "~/img/posters";
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
+        public const string FOLDER_NEWSLETTERS = "~/img/news";
+        public const string FOLDER_DEFAULT = "~/img";
 
         public const string OMI_LOGO = "omi.png";
 
@@ -38,7 +40,8 @@ namespace OMIstats.Utilities
             USUARIOS,
             OLIMPIADAS,
             POSTERS,
-            ESCUELAS
+            ESCUELAS,
+            NEWSLETTERS
         }
 
         public enum FotoInicial
@@ -101,6 +104,12 @@ namespace OMIstats.Utilities
                     break;
                 case FolderImagenes.ESCUELAS:
                     s = FOLDER_ESCUELAS;
+                    break;
+                case FolderImagenes.NEWSLETTERS:
+                    s = FOLDER_NEWSLETTERS;
+                    break;
+                default:
+                    s = FOLDER_DEFAULT;
                     break;
             }
 
