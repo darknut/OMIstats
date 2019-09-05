@@ -222,7 +222,7 @@ namespace OMIstats.Models
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
         /// </param name="tipoOlimpiada">El tipo de olimpiada para el que se requieren los tipos</param>
-        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada)
+        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada)
         {
             if (tipoOlimpiada == TipoOlimpiada.NULL)
                 return;
@@ -232,8 +232,14 @@ namespace OMIstats.Models
 
             query.Append(" delete medallero where clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and (tipo <> ");
+            query.Append((int)TipoMedallero.ESTADO_POR_OMI);
+            query.Append(" or clave like '%_");
+            query.Append(olimpiada);
+            query.Append("%')");
 
             // Primero borramos todo lo que está en la base de datos
+            // a excepción de otros tipos de olimpiada u otros estado-olimpiada
             db.EjecutarQuery(query.ToString());
 
             // Obtenermos todos los resultados
@@ -251,7 +257,8 @@ namespace OMIstats.Models
                 Medallero persona;
                 Medallero institucion;
                 Medallero estado;
-                Medallero estadoPorOlimpiada;
+                Medallero estadoPorOlimpiada = null;
+                bool aplicaAOlimpiada = olimpiada == resultado.omi;
 
                 string estadoPorOlimpiadaClave = resultado.estado + "_" + resultado.omi;
 
@@ -290,18 +297,21 @@ namespace OMIstats.Models
                     estados.Add(resultado.estado, estado);
                 }
 
-                if (!estadosPorOlimpiada.TryGetValue(estadoPorOlimpiadaClave, out estadoPorOlimpiada))
+                if (aplicaAOlimpiada)
                 {
-                    estadoPorOlimpiada = new Medallero();
-                    estadoPorOlimpiada.clave = estadoPorOlimpiadaClave;
-                    estadoPorOlimpiada.tipoOlimpiada = tipoOlimpiada;
-                    estadoPorOlimpiada.omi = resultado.omi;
-                    estadoPorOlimpiada.tipoMedallero = TipoMedallero.ESTADO_POR_OMI;
-                    estadoPorOlimpiada.count = 0;
-                    estadoPorOlimpiada.puntos = 0;
-                    estadoPorOlimpiada.promedio = 0;
-                    estadoPorOlimpiada.hayUNKs = false;
-                    estadosPorOlimpiada.Add(estadoPorOlimpiadaClave, estadoPorOlimpiada);
+                    if (!estadosPorOlimpiada.TryGetValue(estadoPorOlimpiadaClave, out estadoPorOlimpiada))
+                    {
+                        estadoPorOlimpiada = new Medallero();
+                        estadoPorOlimpiada.clave = estadoPorOlimpiadaClave;
+                        estadoPorOlimpiada.tipoOlimpiada = tipoOlimpiada;
+                        estadoPorOlimpiada.omi = resultado.omi;
+                        estadoPorOlimpiada.tipoMedallero = TipoMedallero.ESTADO_POR_OMI;
+                        estadoPorOlimpiada.count = 0;
+                        estadoPorOlimpiada.puntos = 0;
+                        estadoPorOlimpiada.promedio = 0;
+                        estadoPorOlimpiada.hayUNKs = false;
+                        estadosPorOlimpiada.Add(estadoPorOlimpiadaClave, estadoPorOlimpiada);
+                    }
                 }
 
                 switch (resultado.medalla)
@@ -314,7 +324,10 @@ namespace OMIstats.Models
                             persona.oros++;
                             estado.oros++;
                             institucion.oros++;
-                            estadoPorOlimpiada.oros++;
+                            if (aplicaAOlimpiada)
+                            {
+                                estadoPorOlimpiada.oros++;
+                            }
                             break;
                         }
                     case Resultados.TipoMedalla.PLATA:
@@ -322,7 +335,10 @@ namespace OMIstats.Models
                             persona.platas++;
                             estado.platas++;
                             institucion.platas++;
-                            estadoPorOlimpiada.platas++;
+                            if (aplicaAOlimpiada)
+                            {
+                                estadoPorOlimpiada.platas++;
+                            }
                             break;
                         }
                     case Resultados.TipoMedalla.BRONCE:
@@ -330,7 +346,10 @@ namespace OMIstats.Models
                             persona.bronces++;
                             estado.bronces++;
                             institucion.bronces++;
-                            estadoPorOlimpiada.bronces++;
+                            if (aplicaAOlimpiada)
+                            {
+                                estadoPorOlimpiada.bronces++;
+                            }
                             break;
                         }
                     default:
@@ -342,29 +361,32 @@ namespace OMIstats.Models
                         }
                 }
 
-                if (resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
-                    estadoPorOlimpiada.hayUNKs = true;
-
-                // No se han guardado mas de 4 lugares
-                if (estadoPorOlimpiada.count < 4)
+                if (aplicaAOlimpiada)
                 {
-                    // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
-                    if (!resultado.clave.EndsWith("I"))
-                    {
-                        Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
+                    if (resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
+                        estadoPorOlimpiada.hayUNKs = true;
 
-                        // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
-                        if (o.noMedallistasConocidos)
+                    // No se han guardado mas de 4 lugares
+                    if (estadoPorOlimpiada.count < 4)
+                    {
+                        // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
+                        if (!resultado.clave.EndsWith("I"))
                         {
-                            // En las OMIs con puntos desconocidos, se guarda en los puntos del día 2, los puntos de los estados
-                            if (o.puntosDesconocidos)
+                            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
+
+                            // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
+                            if (o.noMedallistasConocidos)
                             {
-                                estadoPorOlimpiada.puntos += resultado.totalDia2;
-                            }
-                            else
-                            {
-                                estadoPorOlimpiada.count++;
-                                estadoPorOlimpiada.puntos += resultado.total;
+                                // En las OMIs con puntos desconocidos, se guarda en los puntos del día 2, los puntos de los estados
+                                if (o.puntosDesconocidos)
+                                {
+                                    estadoPorOlimpiada.puntos += resultado.totalDia2;
+                                }
+                                else
+                                {
+                                    estadoPorOlimpiada.count++;
+                                    estadoPorOlimpiada.puntos += resultado.total;
+                                }
                             }
                         }
                     }
@@ -450,7 +472,7 @@ namespace OMIstats.Models
             }
 
             // Al final hacemos los ajustes hardcodeados
-            hardcode();
+            hardcode(tipoOlimpiada, olimpiada);
         }
 #endif
 
@@ -685,19 +707,24 @@ namespace OMIstats.Models
         /// Harcodea ciertos medalleros que sabemos los resultados
         /// pero no tenemos los números para que salgan correctamente
         /// </summary>
-        public static void hardcode()
+        public static void hardcode(TipoOlimpiada tipoOlimpiada, string olimpiada)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" update Medallero set lugar = lugar + 1 where clase = ");
-            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
-            query.Append(" and omi = \'10\' and lugar < 14 ");
-            db.EjecutarQuery(query.ToString());
+            // En la 10a OMI, hay que mover a GRO manualmente a 1er lugar
+            if (tipoOlimpiada == TipoOlimpiada.OMI && olimpiada == "10")
+            {
+                query.Append(" update Medallero set lugar = lugar + 1 where clase = ");
+                query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+                query.Append(" and omi = \'10\' and lugar < 14 ");
+                db.EjecutarQuery(query.ToString());
 
-            query.Clear();
-            query.Append(" update Medallero set lugar = 1 where clave = \'GRO_10\'");
-            db.EjecutarQuery(query.ToString());
+                query.Clear();
+                query.Append(" update Medallero set lugar = 1 where clave = \'GRO_10\'");
+                db.EjecutarQuery(query.ToString());
+                query.Clear();
+            }
         }
 
         public int CompareTo(Medallero obj)

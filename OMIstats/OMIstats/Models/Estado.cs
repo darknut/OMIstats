@@ -39,7 +39,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from estado ");
+            query.Append(" select * from estado order by nombre ");
 
             db.EjecutarQuery(query.ToString());
 

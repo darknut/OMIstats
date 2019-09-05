@@ -783,7 +783,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = puntosMaximos > PUNTOS_MINIMOS_CONOCIDOS;
 
             // Calculamos el medallero y lo guardamos en la base
-            Medallero.calcularMedallas(tipoOlimpiada);
+            Medallero.calcularMedallas(tipoOlimpiada, numero);
 
             // Guardamos los datos en la base
             guardarDatos();
