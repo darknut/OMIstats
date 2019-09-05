@@ -894,7 +894,9 @@ namespace OMIstats.Models
                     continue;
                 lastUsuario = claveUsuario;
 
-                lineas.Append(claveUsuario);
+                lineas.Append(estado);
+                lineas.Append("\\");
+                lineas.Append(clave);
                 lineas.Append(".pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
@@ -942,37 +944,13 @@ namespace OMIstats.Models
                 }
 
                 lineas.Append(",");
-
-                switch (tipo)
-                {
-                    case TipoAsistente.COMPETIDOR:
-                        {
-                            lineas.Append(baseURL);
-                            lineas.Append("/Profile/");
-                            lineas.Append(clase.ToString());
-                            lineas.Append("/");
-                            lineas.Append(omi);
-                            lineas.Append("/");
-                            lineas.Append(clave);
-                            break;
-                        }
-                    case TipoAsistente.ASESOR:
-                    case TipoAsistente.LIDER:
-                    case TipoAsistente.DELEGADO:
-                    case TipoAsistente.DELELIDER:
-                    case TipoAsistente.SUBLIDER:
-                        {
-                            lineas.Append(baseURL);
-                            lineas.Append("/Profile/");
-                            lineas.Append(clase.ToString());
-                            lineas.Append("/");
-                            lineas.Append(omi);
-                            lineas.Append("/");
-                            lineas.Append(clave.Substring(0,3));
-                            break;
-                        }
-                }
-
+                lineas.Append(baseURL);
+                lineas.Append("/Profile/");
+                lineas.Append(clase.ToString());
+                lineas.Append("/");
+                lineas.Append(omi);
+                lineas.Append("/");
+                lineas.Append(clave);
                 lineas.Append(",");
                 lineas.Append(clase.ToString());
                 lineas.Append("\n");
