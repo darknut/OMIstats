@@ -18,6 +18,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_POSTERS = "~/img/posters";
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
         public const string FOLDER_NEWSLETTERS = "~/img/news";
+        public const string FOLDER_DIPLOMAS = "~/private/diplomas";
         public const string FOLDER_DEFAULT = "~/img";
 
         public const string OMI_LOGO = "omi.png";
@@ -41,7 +42,8 @@ namespace OMIstats.Utilities
             OLIMPIADAS,
             POSTERS,
             ESCUELAS,
-            NEWSLETTERS
+            NEWSLETTERS,
+            DIPLOMAS
         }
 
         public enum FotoInicial
@@ -107,6 +109,9 @@ namespace OMIstats.Utilities
                     break;
                 case FolderImagenes.NEWSLETTERS:
                     s = FOLDER_NEWSLETTERS;
+                    break;
+                case FolderImagenes.DIPLOMAS:
+                    s = FOLDER_DIPLOMAS;
                     break;
                 default:
                     s = FOLDER_DEFAULT;
@@ -196,6 +201,13 @@ namespace OMIstats.Utilities
         {
             string path = pathAbsoluto(folder);
             return File.Exists(Path.Combine(path, imagen));
+        }
+
+        public static int cuantosExisten(FolderImagenes folder, string subfolder, string nombre)
+        {
+            string path = pathAbsoluto(folder);
+            var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre + "*");
+            return archivos.Count();
         }
     }
 }

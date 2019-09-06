@@ -253,7 +253,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/Diploma/
 
-        public ActionResult Diploma(string omi, bool medalla = false)
+        public ActionResult Diploma(string omi, string clave, bool todos = false)
         {
             if (!estaLoggeado())
                 return RedirectTo(Pagina.ERROR, 401);
@@ -263,17 +263,35 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             Persona p = getUsuario();
-            string contentFile = "application/pdf";
-            string url = "~/private/diplomas/" + omi + "/" + p.clave;
-            if (medalla)
-                url += "-medalla";
-            url += ".pdf";
-            string file = Server.MapPath(url);
+            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, TipoOlimpiada.NULL, clave)[0];
 
-            if (!System.IO.File.Exists(file))
+            if (md.claveUsuario != p.clave)
+                return RedirectTo(Pagina.ERROR, 401);
+
+            if (todos && (md.tipo != MiembroDelegacion.TipoAsistente.LIDER &&
+                        md.tipo != MiembroDelegacion.TipoAsistente.DELEGADO &&
+                        md.tipo != MiembroDelegacion.TipoAsistente.SUBLIDER &&
+                        md.tipo != MiembroDelegacion.TipoAsistente.DELELIDER))
+                return RedirectTo(Pagina.ERROR, 401);
+
+            int numeroDeDiplomas = Utilities.Archivos.cuantosExisten(Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
+
+            if (numeroDeDiplomas == 0)
                 return RedirectTo(Pagina.ERROR, 404);
 
-            return File(file, contentFile, "Diploma.pdf");
+            if (numeroDeDiplomas == 1)
+            {
+                string contentFile = "application/pdf";
+                string url = "~/private/diplomas/" + omi + "/" + md.estado + "/" + clave + ".pdf";
+                string file = Server.MapPath(url);
+
+                if (!System.IO.File.Exists(file))
+                    return RedirectTo(Pagina.ERROR, 404);
+
+                return File(file, contentFile, "Diploma.pdf");
+            }
+
+            return RedirectTo(Pagina.ERROR, 404);
         }
     }
 }

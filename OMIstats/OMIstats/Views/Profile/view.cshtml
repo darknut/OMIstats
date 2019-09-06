@@ -333,16 +333,9 @@
                     <td class="left-border padding-diploma">
                         @if (tableManager.tieneDiplomas())
                         {
-                             @Html.ActionLink("Competidor", "Diploma", "Profile",
-                                new { omi = datos.omi },
+                             @Html.ActionLink("Descargar", "Diploma", "Profile",
+                                new { omi = datos.omi, clave = datos.clave },
                                 new { @class = "botonPerfil" })
-                            if (datos.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA)
-                            {
-                                <span>&nbsp;</span>
-                                @Html.ActionLink("Medallista", "Diploma", "Profile",
-                                new { omi = datos.omi, medalla = true },
-                                new { @class = "botonPerfil" })
-                            }
                         }
                     </td>
                     }
@@ -404,9 +397,19 @@
                     <td class="left-border padding-diploma">
                         @if (tableManager.tieneDiplomas())
                         {
-                             @Html.ActionLink("Diploma", "Diploma", "Profile",
-                                new { omi = datos.olimpiada },
+                             @Html.ActionLink("Descargar", "Diploma", "Profile",
+                                new { omi = datos.olimpiada, clave = datos.clave },
                                 new { @class = "botonPerfil" })
+
+                            if (datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.LIDER ||
+                                datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUBLIDER ||
+                                datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEGADO ||
+                                datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER)
+                            {
+                                @Html.ActionLink("Descargar todos", "Diploma", "Profile",
+                                    new { omi = datos.olimpiada, clave = datos.clave, todos = true },
+                                    new { @class = "botonPerfil" })
+                            }
                         }
                     </td>
                     }

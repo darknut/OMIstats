@@ -691,8 +691,11 @@ namespace OMIstats.Models
             query.Append(" select * from miembrodelegacion ");
             query.Append(" where olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
-            query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            if (tipoOlimpiada != TipoOlimpiada.NULL)
+            {
+                query.Append(" and clase = ");
+                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            }
             if (aproximarClave)
             {
                 query.Append(" and clave like ");
