@@ -223,7 +223,11 @@ namespace OMIstats.Utilities
                 {
                     foreach (var archivo in archivos)
                     {
-                        var file = archive.CreateEntry(archivo.Split('\\').Last());
+                        var nombreArchivo = archivo.Split('\\').Last();
+                        // No incluimos los diplomas del comi en los zip
+                        if (nombreArchivo.StartsWith("COMI"))
+                            continue;
+                        var file = archive.CreateEntry(nombreArchivo);
 
                         using (var outputStream = file.Open())
                         {
