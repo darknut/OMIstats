@@ -1007,5 +1007,76 @@ namespace OMIstats.Models
 
             return lineas.ToString();
         }
+
+        public static string generarDiplomasEspeciales(string omi, string baseURL)
+        {
+            StringBuilder lineas = new StringBuilder();
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            // El primer diploma especial es el medallista más joven
+            var resultados = Resultados.cargarResultados(omi, TipoOlimpiada.OMI, cargarObjetos: true);
+            Resultados joven = resultados[0];
+
+            foreach (Resultados resultado in resultados)
+            {
+                if (resultado.medalla != TipoMedalla.NADA &&
+                    resultado.persona.nacimiento > joven.persona.nacimiento)
+                {
+                    joven = resultado;
+                }
+            }
+
+            lineas.Append(joven.estado);
+            lineas.Append("\\");
+            lineas.Append(joven.clave);
+            lineas.Append("-joven.pdf,");
+            lineas.Append(joven.persona.nombre);
+            lineas.Append(",POR HABER SIDO,El Medallista Más Joven,");
+            lineas.Append(baseURL);
+            lineas.Append("/Profile/");
+            lineas.Append(joven.tipoOlimpiada.ToString());
+            lineas.Append("/");
+            lineas.Append(omi);
+            lineas.Append("/");
+            lineas.Append(joven.clave);
+            lineas.Append(",");
+            lineas.Append(joven.tipoOlimpiada.ToString());
+            lineas.Append("\n");
+
+            // Los siguientes diplomas, son los diplomas de estados
+
+            Medallero medalleroGral = null;
+            List<Medallero> medallero = Medallero.obtenerTablaEstados(TipoOlimpiada.OMI, omi, out medalleroGral);
+
+            for (int i = 0; i < 3; i++)
+            {
+                Estado estado = Estado.obtenerEstadoConClave(medallero[i].clave);
+                lineas.Append(estado.clave);
+                lineas.Append("\\");
+                lineas.Append(estado.nombre);
+                lineas.Append(".pdf,");
+                lineas.Append(estado.nombre);
+                lineas.Append(",");
+                lineas.Append("POR HABER OBTENIDO");
+                lineas.Append(",");
+                switch (i)
+                {
+                    case 0:
+                        lineas.Append("Primer");
+                        break;
+                    case 1:
+                        lineas.Append("Segundo");
+                        break;
+                    case 2:
+                        lineas.Append("Tercer");
+                        break;
+                }
+                lineas.Append(" Lugar a Nivel Estados");
+                lineas.Append("\n");
+            }
+
+            return lineas.ToString();
+        }
     }
 }
