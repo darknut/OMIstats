@@ -253,7 +253,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Profile/Diploma/
 
-        public ActionResult Diploma(string omi, string clave, bool todos = false)
+        public ActionResult Diploma(string omi, string clave, TipoOlimpiada clase = TipoOlimpiada.NULL, bool todos = false)
         {
             if (!estaLoggeado())
                 return RedirectTo(Pagina.ERROR, 401);
@@ -263,7 +263,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             Persona p = getUsuario();
-            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, TipoOlimpiada.NULL, clave)[0];
+            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, clase, clave)[0];
 
             if (md.claveUsuario != p.clave)
                 return RedirectTo(Pagina.ERROR, 401);
@@ -273,6 +273,14 @@ namespace OMIstats.Controllers
                         md.tipo != MiembroDelegacion.TipoAsistente.SUBLIDER &&
                         md.tipo != MiembroDelegacion.TipoAsistente.DELELIDER))
                 return RedirectTo(Pagina.ERROR, 401);
+
+            if (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
+                if (clase == TipoOlimpiada.OMIP)
+                    clave = "P-" + clave;
+                if (clase == TipoOlimpiada.OMIS)
+                    clave = "S-" + clave;
+            }
 
             int numeroDeDiplomas = Utilities.Archivos.cuantosExisten
                 (Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);

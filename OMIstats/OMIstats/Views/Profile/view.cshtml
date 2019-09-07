@@ -334,7 +334,7 @@
                         @if (tableManager.tieneDiplomas())
                         {
                              @Html.ActionLink("Descargar", "Diploma", "Profile",
-                                new { omi = datos.omi, clave = datos.clave },
+                                new { omi = datos.omi, clave = datos.clave, clase = tipo },
                                 new { @class = "botonPerfil" })
                         }
                     </td>

@@ -899,6 +899,13 @@ namespace OMIstats.Models
 
                 lineas.Append(estado);
                 lineas.Append("\\");
+                if (tipo == TipoAsistente.COMPETIDOR)
+                {
+                    if (clase == TipoOlimpiada.OMIP)
+                        lineas.Append("P-");
+                    if (clase == TipoOlimpiada.OMIS)
+                        lineas.Append("S-");
+                }
                 lineas.Append(clave);
                 lineas.Append(".pdf,");
                 lineas.Append(nombre);
