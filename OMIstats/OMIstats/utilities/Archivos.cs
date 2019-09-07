@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.IO.Compression;
 
 namespace OMIstats.Utilities
 {
@@ -208,6 +209,36 @@ namespace OMIstats.Utilities
             string path = pathAbsoluto(folder);
             var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre + "*");
             return archivos.Count();
+        }
+
+        public static byte[] comprimeArchivos(FolderImagenes folder, string subfolder, string nombre = null)
+        {
+            string path = pathAbsoluto(folder);
+            var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre == null ? "*" : nombre + "*");
+            byte[] bytes = null;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var archivo in archivos)
+                    {
+                        var file = archive.CreateEntry(archivo.Split('\\').Last());
+
+                        using (var outputStream = file.Open())
+                        {
+                            using (var streamWriter = new BinaryWriter(outputStream))
+                            {
+                                streamWriter.Write(File.ReadAllBytes(archivo));
+                            }
+                        }
+                    }
+                }
+
+                bytes = memoryStream.ToArray();
+            }
+
+            return bytes;
         }
     }
 }

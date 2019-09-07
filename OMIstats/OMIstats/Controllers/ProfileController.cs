@@ -274,7 +274,8 @@ namespace OMIstats.Controllers
                         md.tipo != MiembroDelegacion.TipoAsistente.DELELIDER))
                 return RedirectTo(Pagina.ERROR, 401);
 
-            int numeroDeDiplomas = Utilities.Archivos.cuantosExisten(Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
+            int numeroDeDiplomas = Utilities.Archivos.cuantosExisten
+                (Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
 
             if (numeroDeDiplomas == 0)
                 return RedirectTo(Pagina.ERROR, 404);
@@ -291,7 +292,9 @@ namespace OMIstats.Controllers
                 return File(file, contentFile, "Diploma.pdf");
             }
 
-            return RedirectTo(Pagina.ERROR, 404);
+            return File(Utilities.Archivos.comprimeArchivos(
+                Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave),
+                "application/zip", "Diplomas.zip");
         }
     }
 }
