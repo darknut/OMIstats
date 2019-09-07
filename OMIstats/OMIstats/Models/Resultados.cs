@@ -1056,6 +1056,18 @@ namespace OMIstats.Models
                 lineas.Append("\\");
                 lineas.Append(estado.nombre);
                 lineas.Append(".pdf,");
+                switch (estado.clave)
+                {
+                    case "MDF":
+                        lineas.Append("La ");
+                        break;
+                    case "MEX":
+                        lineas.Append("El ");
+                        break;
+                    default:
+                        lineas.Append("El Estado de ");
+                        break;
+                }
                 lineas.Append(estado.nombre);
                 lineas.Append(",");
                 lineas.Append("POR HABER OBTENIDO");
@@ -1072,7 +1084,7 @@ namespace OMIstats.Models
                         lineas.Append("Tercer");
                         break;
                 }
-                lineas.Append(" Lugar a Nivel Estados");
+                lineas.Append(" Lugar a Nivel Estados,,OMI");
                 lineas.Append("\n");
             }
 
