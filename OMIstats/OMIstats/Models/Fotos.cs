@@ -427,6 +427,7 @@ namespace OMIstats.Models
 
         private void updateAlbum()
         {
+            string fallbackPortada = "";
             try
             {
                 currentCalls = 1; // Bloqueamos a otros procesos con esta bandera
@@ -468,6 +469,9 @@ namespace OMIstats.Models
                         f.url = (string)foto[LINK];
                         f.imagen = obtenerFoto(foto);
 
+                        if (fallbackPortada.Length == 0)
+                            fallbackPortada = f.imagen;
+
                         if (portada.Length == 0)
                             portada = obtenerFoto(foto, ignorarVerticales: true);
 
@@ -479,11 +483,15 @@ namespace OMIstats.Models
                     after = (string)cursors[AFTER];
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.add(Log.TipoLog.FACEBOOK, e.ToString());
             }
             finally
             {
+                if (portada.Length == 0)
+                    portada = fallbackPortada;
+
                 // Actualizamos las actualizaciones en general
                 Album al = Album.obtenerAlbum(ALBUM_GRAL);
 
