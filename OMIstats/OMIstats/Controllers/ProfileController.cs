@@ -282,22 +282,25 @@ namespace OMIstats.Controllers
                     clave = "S-" + clave;
             }
 
-            int numeroDeDiplomas = Utilities.Archivos.cuantosExisten
-                (Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
-
-            if (numeroDeDiplomas == 0)
-                return RedirectTo(Pagina.ERROR, 404);
-
-            if (numeroDeDiplomas == 1)
+            if (!todos)
             {
-                string contentFile = "application/pdf";
-                string url = "~/private/diplomas/" + omi + "/" + md.estado + "/" + clave + ".pdf";
-                string file = Server.MapPath(url);
+                int numeroDeDiplomas = Utilities.Archivos.cuantosExisten
+                    (Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
 
-                if (!System.IO.File.Exists(file))
+                if (numeroDeDiplomas == 0)
                     return RedirectTo(Pagina.ERROR, 404);
 
-                return File(file, contentFile, "Diploma.pdf");
+                if (numeroDeDiplomas == 1)
+                {
+                    string contentFile = "application/pdf";
+                    string url = "~/private/diplomas/" + omi + "/" + md.estado + "/" + clave + ".pdf";
+                    string file = Server.MapPath(url);
+
+                    if (!System.IO.File.Exists(file))
+                        return RedirectTo(Pagina.ERROR, 404);
+
+                    return File(file, contentFile, "Diploma.pdf");
+                }
             }
 
             return File(Utilities.Archivos.comprimeArchivos(
