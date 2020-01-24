@@ -192,7 +192,7 @@ namespace OMIstats.Controllers
                 p.genero = "F";
 
             // Se copian los datos que no se pueden modificar
-            p.admin = current.admin;
+            p.permisos = current.permisos;
             p.clave = current.clave;
             if (!esAdmin())
                 p.ioiID = current.ioiID;

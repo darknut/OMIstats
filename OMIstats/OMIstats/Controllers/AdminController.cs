@@ -226,6 +226,7 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult Change(Persona p)
         {
+            // TODO: cambiar forma de hacer admins
             if (!esAdmin() || p == null)
                 return RedirectTo(Pagina.HOME);
 
@@ -234,12 +235,12 @@ namespace OMIstats.Controllers
             Persona cambiar = Persona.obtenerPersonaDeUsuario(p.usuario);
             Persona admin = getUsuario();
 
-            cambiar.admin = !cambiar.admin;
+            //cambiar.permisos = !cambiar.admin;
             cambiar.guardarDatos();
 
             ViewBag.guardado = true;
 
-            Log.add(Log.TipoLog.ADMIN, "Admin " + admin.nombre + (cambiar.admin ? " volvió " : " quitó privilegios de " ) + "admin al usuario " + cambiar.nombre);
+            //Log.add(Log.TipoLog.ADMIN, "Admin " + admin.nombre + (cambiar.admin ? " volvió " : " quitó privilegios de " ) + "admin al usuario " + cambiar.nombre);
 
             return View(cambiar);
         }

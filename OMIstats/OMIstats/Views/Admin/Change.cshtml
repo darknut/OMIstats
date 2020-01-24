@@ -12,7 +12,7 @@
     if (ViewBag.guardado)
     {
         titulo = "Cambio satisfactorio";
-    }else if(Model.admin)
+    }else if(Model.esAdmin())
     {
         titulo = "Quitar de admin";
     }else{
@@ -42,7 +42,7 @@ else
         <p>
             Actualmente este usuario
             <span class="importante">
-                @if (Model.admin)
+                @if (Model.esAdmin())
                 {
                     <span>ES UN ADMINISTRDOR.</span>
                 }

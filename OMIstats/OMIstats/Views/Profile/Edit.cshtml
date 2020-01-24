@@ -126,7 +126,7 @@
                 </div>
             </div>
 
-            @if(ViewBag.usuario.admin)
+            @if (ViewBag.usuario.esAdmin())
             {
                 <div>
                     <div class="label">IOI ID:</div>
@@ -138,7 +138,7 @@
 
             <input id="clave" name="clave" type="hidden" value="@Model.clave" />
 
-            @if(!ViewBag.usuario.admin)
+            @if (!ViewBag.usuario.esAdmin())
             {
                 <div>
                     <div>

@@ -16,6 +16,14 @@ namespace OMIstats.Models
         public const int UsuarioNulo = -1;
         public const int PrimerClave = 1000;
 
+        public enum TipoPermisos
+        {
+            NORMAL,
+            ADMIN,
+            COMI,
+            DELEGADO
+        }
+
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe tu nombre")]
@@ -55,7 +63,7 @@ namespace OMIstats.Models
 
         public string usuario { get; set; }
 
-        public bool admin { get; set; }
+        public TipoPermisos permisos { get; set; }
 
         public string genero { get; set; }
 
@@ -80,7 +88,7 @@ namespace OMIstats.Models
             sitio = "";
             correo = "";
             usuario = "";
-            admin = false;
+            permisos = TipoPermisos.NORMAL;
             genero = "M";
             foto = "";
             ioiID = 0;
@@ -108,7 +116,7 @@ namespace OMIstats.Models
                 twitter = datos["twitter"].ToString().Trim();
                 sitio = datos["sitio"].ToString().Trim();
                 correo = datos["correo"].ToString().Trim();
-                admin = (bool) datos["admin"];
+                permisos = (TipoPermisos)Enum.Parse(typeof(TipoPermisos), datos["permisos"].ToString());
                 genero = datos["genero"].ToString();
                 foto = datos["foto"].ToString().Trim();
                 ioiID = (int) datos["ioiID"];
@@ -283,8 +291,8 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(usuario));
             query.Append(",");
 
-            query.Append(" [admin] = ");
-            query.Append(admin ? "1" : "0");
+            query.Append(" permisos = ");
+            query.Append((int) permisos);
             query.Append(",");
 
             query.Append(" genero = ");
@@ -351,6 +359,11 @@ namespace OMIstats.Models
         {
             List<Peticion> peticiones = Peticion.obtenerPeticionesDeUsuario(this);
             return peticiones.Count > 0;
+        }
+
+        public bool esAdmin()
+        {
+            return this.permisos == TipoPermisos.ADMIN;
         }
 
         /// <summary>

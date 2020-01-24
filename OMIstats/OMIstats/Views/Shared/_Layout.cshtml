@@ -39,7 +39,7 @@
         <a class="boton" href="~/Problemas">Problemas</a>
         <a class="boton boton-right" href="~/HallOfFame">Salón de la fama</a>
         <a class="boton boton-left boton-right" href="~/Buscar">Buscar</a>
-        @if (ViewBag.usuario != null && ViewBag.usuario.admin)
+        @if (ViewBag.usuario != null && ViewBag.usuario.esAdmin())
         {
             <a class="boton boton-left boton-right" href="~/Request/Manage">Admin</a>
         }

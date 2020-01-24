@@ -119,23 +119,23 @@
 
         @if (@ViewBag.usuario != null)
         {
-            if (ViewBag.usuario.admin || perfilPropio)
+            if (ViewBag.usuario.esAdmin() || perfilPropio)
             {
                 <div>
                     @Html.ActionLink("Actualizar datos", "Edit", "Profile",
-                                ViewBag.usuario.admin ? new { usuario = Model.usuario } : null,
+                                ViewBag.usuario.esAdmin() ? new { usuario = Model.usuario } : null,
                                 new { @class = "botonPerfil" })
                 </div>
                 <br />
             }
 
-            if (@ViewBag.usuario.admin)
+            if (@ViewBag.usuario.esAdmin())
             {
                 if (@ViewBag.usuario.clave != Model.clave)
                 {
                     <div>
                         <a href='@Url.Content("~/Admin/Change?usuario=" + Model.usuario)' class="botonPerfil">
-                            @if (Model.admin)
+                            @if (Model.esAdmin())
                             {
                                 <span>Eliminar Admin</span>
                             }
@@ -167,7 +167,7 @@
     }
 
     <div style="clear:both">
-        @if (ViewBag.usuario != null && ViewBag.usuario.clave == Model.clave && !ViewBag.usuario.admin)
+        @if (ViewBag.usuario != null && ViewBag.usuario.clave == Model.clave && !ViewBag.usuario.esAdmin())
         {
             <div>
                 @Html.ActionLink("¿No eres tú?", "user", "Request",

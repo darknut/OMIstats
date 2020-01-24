@@ -81,7 +81,7 @@ namespace OMIstats.Controllers
         {
             if (p.clave != Persona.UsuarioNulo)
             {
-                if (p.admin)
+                if (p.esAdmin())
                     Log.add(Log.TipoLog.ADMIN, "Admin inició sesión: " + p.nombre);
                 else
                     Log.add(Log.TipoLog.USUARIO, "Usuario inició sesión: " + p.clave);
@@ -114,7 +114,7 @@ namespace OMIstats.Controllers
             if (!estaLoggeado())
                 return false;
 
-            return getUsuario().admin;
+            return getUsuario().esAdmin();
         }
 
         protected ActionResult RedirectTo(Pagina pagina, object opciones = null)
