@@ -134,19 +134,6 @@
                 if (@ViewBag.usuario.clave != Model.clave)
                 {
                     <div>
-                        <a href='@Url.Content("~/Admin/Change?usuario=" + Model.usuario)' class="botonPerfil">
-                            @if (Model.esAdmin())
-                            {
-                                <span>Eliminar Admin</span>
-                            }
-                            else
-                            {
-                                <span>Hacer admin</span>
-                            }
-                        </a>
-                    </div>
-                    <br />
-                    <div>
                         <a href='@Url.Content("~/Admin/Unlink?usuario=" + Model.usuario)' class="botonPerfil">
                             Deslinkear usuario
                         </a>

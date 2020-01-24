@@ -221,31 +221,6 @@ namespace OMIstats.Controllers
         }
 
         //
-        // POST: /Admin/Change/
-
-        [HttpPost]
-        public ActionResult Change(Persona p)
-        {
-            // TODO: cambiar forma de hacer admins
-            if (!esAdmin() || p == null)
-                return RedirectTo(Pagina.HOME);
-
-            limpiarErroresViewBag();
-
-            Persona cambiar = Persona.obtenerPersonaDeUsuario(p.usuario);
-            Persona admin = getUsuario();
-
-            //cambiar.permisos = !cambiar.admin;
-            cambiar.guardarDatos();
-
-            ViewBag.guardado = true;
-
-            //Log.add(Log.TipoLog.ADMIN, "Admin " + admin.nombre + (cambiar.admin ? " volvió " : " quitó privilegios de " ) + "admin al usuario " + cambiar.nombre);
-
-            return View(cambiar);
-        }
-
-        //
         // GET: /Admin/Zombies/
 
         public ActionResult Zombies()
