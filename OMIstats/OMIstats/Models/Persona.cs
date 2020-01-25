@@ -366,6 +366,12 @@ namespace OMIstats.Models
             return this.permisos == TipoPermisos.ADMIN;
         }
 
+        public bool esSuperUsuario()
+        {
+            return this.permisos == TipoPermisos.ADMIN ||
+                this.permisos == TipoPermisos.COMI;
+        }
+
         /// <summary>
         /// Crea un nuevo usuario con los datos en el objeto
         /// </summary>

@@ -133,12 +133,10 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.LOGIN);
             }
 
-            Persona p;
+            Persona p = getUsuario();
 
-            if (usuario != null && esAdmin())
+            if (usuario != null && p.esSuperUsuario())
                 p = Persona.obtenerPersonaDeUsuario(usuario);
-            else
-                p = getUsuario();
 
             limpiarErroresViewBag();
             ponFechasEnViewBag();
@@ -155,10 +153,11 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             Persona current = getUsuario();
+            bool esSuperUsuario = current.esSuperUsuario();
 
             if (p.clave != current.clave)
             {
-                if (!esAdmin())
+                if (!esSuperUsuario)
                     return RedirectTo(Pagina.ERROR, 403);
                 current = Persona.obtenerPersonaConClave(p.clave);
             }
@@ -168,7 +167,7 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
 
-            if (!esAdmin() && !revisaCaptcha())
+            if (!esSuperUsuario && !revisaCaptcha())
             {
                 ViewBag.errorCaptcha = true;
                 return Edit(current.usuario);
@@ -204,19 +203,19 @@ namespace OMIstats.Controllers
                 p.foto = Utilities.Archivos.guardaArchivo(file);
 
             // Si el nombre es el mismo, no se actualiza (excepto si es admin)
-            if (!esAdmin() && p.nombre.Equals(current.nombre))
+            if (!esSuperUsuario && p.nombre.Equals(current.nombre))
                 p.nombre = "";
 
             // Se guardan los datos
-            if (p.guardarDatos(generarPeticiones:!esAdmin()))
+            if (p.guardarDatos(generarPeticiones:!esSuperUsuario))
             {
-                if (!esAdmin())
+                if (!esSuperUsuario)
                     Log.add(Log.TipoLog.USUARIO, "Usuario actualizó sus datos");
 
                 // Se modificaron los datos del usuario, tenemos que recargarlos en la variable de sesion
                 recargarDatos();
 
-                if (esAdmin())
+                if (esSuperUsuario)
                 {
                     if (file != null)
                     {

@@ -119,7 +119,7 @@
 
         @if (@ViewBag.usuario != null)
         {
-            if (ViewBag.usuario.esAdmin() || perfilPropio)
+            if (ViewBag.usuario.esSuperUsuario() || perfilPropio)
             {
                 <div>
                     @Html.ActionLink("Actualizar datos", "Edit", "Profile",
