@@ -147,7 +147,7 @@ namespace OMIstats.Controllers
         //
         // POST: /Profile/Edit/
         [HttpPost]
-        public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p)
+        public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p, string tipoUsuario)
         {
             if (!estaLoggeado() || p == null)
                 return RedirectTo(Pagina.HOME);
@@ -190,8 +190,21 @@ namespace OMIstats.Controllers
             else
                 p.genero = "F";
 
+            // Validación permisos
+            if (esSuperUsuario && tipoUsuario != null && tipoUsuario != "")
+            {
+                Persona.TipoPermisos permisos;
+                permisos = (Persona.TipoPermisos)Enum.Parse(typeof(Persona.TipoPermisos), tipoUsuario);
+                if (permisos == Persona.TipoPermisos.ADMIN && !esAdmin())
+                    return RedirectTo(Pagina.ERROR, 403);
+                p.permisos = permisos;
+            }
+            else
+            {
+                p.permisos = current.permisos;
+            }
+
             // Se copian los datos que no se pueden modificar
-            p.permisos = current.permisos;
             p.clave = current.clave;
             if (!esAdmin())
                 p.ioiID = current.ioiID;
