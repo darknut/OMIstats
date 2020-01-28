@@ -47,7 +47,7 @@
             }
             else
             {
-                if (ViewBag.usuario.permisos != OMIstats.Models.Persona.TipoPermisos.NORMAL)
+                if (ViewBag.registroActivo && ViewBag.usuario.permisos != OMIstats.Models.Persona.TipoPermisos.NORMAL)
                 {
         <a class="boton boton-left boton-right" href="~/Registro/Select">Registro</a>
                 }
