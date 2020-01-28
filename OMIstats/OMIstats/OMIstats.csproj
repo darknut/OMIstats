@@ -188,6 +188,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\RegistroController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Ajax\CachedResult.cs" />
     <Compile Include="Controllers\EscuelasController.cs" />
@@ -424,6 +425,7 @@
     <Content Include="Views\Fotos\Album.cshtml" />
     <Content Include="Views\Problemas\Graficas.cshtml" />
     <Content Include="Views\Olimpiada\Diplomas.cshtml" />
+    <Content Include="Views\Registro\Select.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
