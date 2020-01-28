@@ -622,5 +622,32 @@ namespace OMIstats.Models
             }
             return tipos;
         }
+
+        /// <summary>
+        /// Regresa como un arreglo de strings las claves para las que este delegado puede registrar
+        /// competidores
+        /// </summary>
+        /// <returns>La lista de claves de estado</returns>
+        public List<Estado> obtenerEstadosDeDelegado()
+        {
+            if (this.permisos != TipoPermisos.DELEGADO)
+                return null;
+            List<Estado> estados = new List<Estado>();
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(estado) from MiembroDelegacion where persona =");
+            query.Append(this.clave);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                estados.Add(Estado.obtenerEstadoConClave(r[0].ToString().Trim()));
+            }
+
+            return estados;
+        }
     }
 }

@@ -47,6 +47,13 @@ namespace OMIstats.Controllers
             if (!tienePermisos(o.registroActivo))
                 return RedirectTo(Pagina.ERROR, 403);
 
+            Persona p = getUsuario();
+
+            if (p.permisos == Persona.TipoPermisos.DELEGADO)
+                ViewBag.estados = p.obtenerEstadosDeDelegado();
+            else
+                ViewBag.estados = Estado.obtenerEstados();
+
             return View();
         }
     }
