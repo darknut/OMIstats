@@ -7,9 +7,18 @@
     ViewBag.Title = "Elige el estado";
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
     string omi = ViewBag.omi;
+    bool esSuperUsuario = ViewBag.esSuperUsuario;
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
+
+@if (esSuperUsuario)
+{
+    <div class="submenu">
+    @Html.ActionLink("Lista de registrados", "Registrados", "Registro",
+            new { omi = omi }, new { @class = "mini-boton" })
+    </div>
+}
 
 <ul>
 @foreach (OMIstats.Models.Estado estado in estados)
