@@ -6,6 +6,7 @@
 @{
     ViewBag.Title = "Elige el estado";
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
+    string omi = ViewBag.omi;
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
@@ -15,7 +16,7 @@
 {
     <li class="registro-lista">
         @Html.ActionLink(estado.nombre, "Delegacion", "Registro",
-            new { estado = estado.clave }, new { @class = "nombre" })
+            new { estado = estado.clave, omi = omi }, new { @class = "nombre" })
     </li>
 }
 </ul>

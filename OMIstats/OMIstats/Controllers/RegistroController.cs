@@ -54,6 +54,7 @@ namespace OMIstats.Controllers
             else
                 ViewBag.estados = Estado.obtenerEstados();
 
+            ViewBag.omi = o.numero;
             return View();
         }
     }
