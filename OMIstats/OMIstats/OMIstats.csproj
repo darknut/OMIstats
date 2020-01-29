@@ -244,6 +244,7 @@
     <Content Include="Content\olimpiadas.css" />
     <Content Include="Content\overlay.css" />
     <Content Include="Content\profile.css" />
+    <Content Include="Content\registro.css" />
     <Content Include="Content\request.css" />
     <Content Include="Content\tablas.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />

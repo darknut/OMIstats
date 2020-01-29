@@ -1,13 +1,21 @@
-﻿@{
+﻿@section AddToHead
+{
+    <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
+}
+
+@{
     ViewBag.Title = "Elige el estado";
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
+<ul>
 @foreach (OMIstats.Models.Estado estado in estados)
 {
-    <div>
-        @estado.nombre
-    </div>
+    <li class="registro-lista">
+        @Html.ActionLink(estado.nombre, "Delegacion", "Registro",
+            new { estado = estado.clave }, new { @class = "nombre" })
+    </li>
 }
+</ul>
