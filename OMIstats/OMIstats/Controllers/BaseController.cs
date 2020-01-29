@@ -44,7 +44,8 @@ namespace OMIstats.Controllers
             ADMIN_LOGS,
             DELEGACION,
             FOTOS,
-            ALBUM
+            ALBUM,
+            REGISTRO
         }
 
         public BaseController()
@@ -208,6 +209,8 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.HOME:
                 case Pagina.OLIMPIADAS:
+                case Pagina.REGISTRO:
+                    return RedirectToAction("Delegacion", "Registro");
                 default:
                     return RedirectToAction("Index", "Olimpiadas");
             }

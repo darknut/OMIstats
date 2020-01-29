@@ -49,13 +49,11 @@ namespace OMIstats.Controllers
 
             Persona p = getUsuario();
 
-            if (p.permisos == Persona.TipoPermisos.DELEGADO)
-                ViewBag.estados = p.obtenerEstadosDeDelegado();
-            else
-                ViewBag.estados = Estado.obtenerEstados();
+            if (p.esSuperUsuario())
+                return RedirectTo(Pagina.REGISTRO);
 
-            ViewBag.omi = o.numero;
-            ViewBag.esSuperUsuario = p.esSuperUsuario();
+            ViewBag.estados = p.obtenerEstadosDeDelegado();
+
             return View();
         }
     }
