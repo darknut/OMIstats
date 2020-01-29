@@ -39,15 +39,16 @@
         <a class="boton" href="~/Problemas">Problemas</a>
         <a class="boton boton-right" href="~/HallOfFame">Salón de la fama</a>
         <a class="boton boton-left boton-right" href="~/Buscar">Buscar</a>
-        @if (ViewBag.usuario != null)
+        @{OMIstats.Models.Persona usuario = ViewBag.usuario; }
+        @if (usuario != null)
         {
-            if (ViewBag.usuario.esAdmin())
+            if (usuario.esAdmin())
             {
         <a class="boton boton-left boton-right" href="~/Request/Manage">Admin</a>
             }
             else
             {
-                if (ViewBag.registroActivo && ViewBag.usuario.permisos != OMIstats.Models.Persona.TipoPermisos.NORMAL)
+                if (ViewBag.registroActivo && usuario.permisos != OMIstats.Models.Persona.TipoPermisos.NORMAL)
                 {
         <a class="boton boton-left boton-right" href="~/Registro/Select">Registro</a>
                 }
@@ -55,10 +56,10 @@
         }
         <br />
         <div class="usuario">
-            @if (ViewBag.usuario != null && ViewBag.usuario.clave > 0)
+            @if (usuario != null && usuario.clave > 0)
             {
                 <span>
-                    @if (ViewBag.usuario.genero[0] == 'F')
+                    @if (usuario.genero[0] == 'F')
                     {
                         <span>Bienvenida</span>
                     }
@@ -66,8 +67,8 @@
                     {
                         <span>Bienvenido</span>
                     }
-                    @Html.ActionLink((string)ViewBag.usuario.nombre, "view", "Profile",
-                                      new { usuario = (string)ViewBag.usuario.usuario },
+                    @Html.ActionLink(usuario.nombre, "view", "Profile",
+                                      new { usuario = usuario.usuario },
                                       new { @class = "nombre" })
                 </span>
                 <div>@Html.ActionLink("Cerrar sesión", "Out", "Log")</div>
