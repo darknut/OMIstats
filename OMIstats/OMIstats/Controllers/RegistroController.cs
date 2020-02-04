@@ -45,7 +45,7 @@ namespace OMIstats.Controllers
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (!tienePermisos(o.registroActivo))
-                return RedirectTo(Pagina.ERROR, 403);
+                return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
 
@@ -67,7 +67,7 @@ namespace OMIstats.Controllers
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (!tienePermisos(o.registroActivo))
-                return RedirectTo(Pagina.ERROR, 403);
+                return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
 
@@ -75,9 +75,11 @@ namespace OMIstats.Controllers
             {
                 List<Estado> estados = p.obtenerEstadosDeDelegado();
                 if (!estados.Any(e => e.clave == estado))
-                    return RedirectTo(Pagina.ERROR, 403);
+                    return RedirectTo(Pagina.HOME);
                 ViewBag.estado = Estado.obtenerEstadoConClave(estado);
             }
+
+            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL);
             return View();
         }
     }

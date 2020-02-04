@@ -803,8 +803,11 @@ namespace OMIstats.Models
                 query.Append(" and md.clase = ");
                 query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
-            query.Append(" and md.estado = ");
-            query.Append(Utilities.Cadenas.comillas(estado));
+            if (estado != null)
+            {
+                query.Append(" and md.estado = ");
+                query.Append(Utilities.Cadenas.comillas(estado));
+            }
 
             switch (tipo)
             {
@@ -830,7 +833,7 @@ namespace OMIstats.Models
                         query.Append(")");
                         break;
                     }
-                case TipoAsistente.NULL:
+                case TipoAsistente.INVITADO:
                     {
                         query.Append(" and md.tipo <> ");
                         query.Append(Utilities.Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
