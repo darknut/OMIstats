@@ -62,6 +62,25 @@ namespace OMIstats.Controllers
 
         public ActionResult Delegacion(string omi = null, string estado = null)
         {
+            if (omi == null)
+                omi = Olimpiada.obtenerMasReciente().numero;
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (!tienePermisos(o.registroActivo))
+                return RedirectTo(Pagina.ERROR, 403);
+
+            Persona p = getUsuario();
+
+            if (p.esSuperUsuario())
+                return RedirectTo(Pagina.REGISTRO);
+
+            List<Estado> estados = p.obtenerEstadosDeDelegado();
+            if (!estados.Any(e => e.clave == estado))
+            {
+                return RedirectTo(Pagina.ERROR, 403);
+            }
+            ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+
             return View();
         }
     }
