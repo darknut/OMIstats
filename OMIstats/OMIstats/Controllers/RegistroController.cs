@@ -32,7 +32,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Index()
         {
-            return RedirectTo(Pagina.ERROR, 404);
+            return Select();
         }
 
         //
@@ -54,6 +54,14 @@ namespace OMIstats.Controllers
 
             ViewBag.estados = p.obtenerEstadosDeDelegado();
 
+            return View();
+        }
+
+        //
+        // GET: /Registro/Delegacion
+
+        public ActionResult Delegacion(string omi = null, string estado = null)
+        {
             return View();
         }
     }

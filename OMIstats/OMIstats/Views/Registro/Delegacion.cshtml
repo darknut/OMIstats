@@ -1,0 +1,17 @@
+﻿@section AddToHead
+{
+    <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    OMIstats.Models.Persona usuario = ViewBag.usuario;
+    OMIstats.Models.Estado estado = ViewBag.estado;
+    if (usuario.esSuperUsuario())
+    {
+        ViewBag.Title = "Registro";
+    } else {
+        ViewBag.Title = "Registro de delegación: " + estado.nombre;
+    }
+}
+
+<h1 class="titulo">@ViewBag.Title</h1>
