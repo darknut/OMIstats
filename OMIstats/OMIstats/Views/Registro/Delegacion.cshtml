@@ -1,4 +1,6 @@
-﻿@section AddToHead
+﻿@model List<OMIstats.Models.MiembroDelegacion>
+
+@section AddToHead
 {
     <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
 }
@@ -6,6 +8,10 @@
 @{
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
+    OMIstats.Models.TipoOlimpiada ultimoTipo = OMIstats.Models.TipoOlimpiada.NULL;
+    bool procesandoCompetidores = true;
+    int competidoresProcesados = 0;
+    string lastEstado = "";
     if (usuario.esSuperUsuario())
     {
         ViewBag.Title = "Registro";
@@ -15,3 +21,51 @@
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
+
+<table>
+@foreach (OMIstats.Models.MiembroDelegacion miembro in Model)
+{
+    if (!usuario.esSuperUsuario())
+    {
+        if (miembro.tipoOlimpiada != ultimoTipo)
+        {
+            if (ultimoTipo != OMIstats.Models.TipoOlimpiada.NULL && competidoresProcesados == 0)
+            {
+    <tr><td>No se han registrado competidores</td></tr>
+            }
+            ultimoTipo = miembro.tipoOlimpiada;
+            procesandoCompetidores = true;
+            competidoresProcesados = 0;
+    <tr><td>Competidores de @ultimoTipo</td></tr>
+        }
+        competidoresProcesados++;
+        if (miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && procesandoCompetidores)
+        {
+            procesandoCompetidores = false;
+    <tr><td>Líderes, asesores e invitados</td></tr>
+        }
+    }
+    <tr>
+         @if (usuario.esSuperUsuario())
+         {
+        <td>
+            @if (lastEstado != miembro.estado)
+            {
+                @OMIstats.Models.Estado.obtenerEstadoConClave(miembro.estado).nombre
+                lastEstado = miembro.estado;
+            }
+        </td>
+         }
+        <td>
+            @miembro.nombreAsistente
+        </td>
+        <td>
+            @miembro.tipo
+        </td>
+        <td>
+            @miembro.clave
+        </td>
+    </tr>
+}
+
+</table>

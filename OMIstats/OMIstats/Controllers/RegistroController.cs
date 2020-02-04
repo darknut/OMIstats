@@ -44,7 +44,7 @@ namespace OMIstats.Controllers
                 omi = Olimpiada.obtenerMasReciente().numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (!tienePermisos(o.registroActivo))
+            if (o == null || !tienePermisos(o.registroActivo))
                 return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
@@ -66,7 +66,7 @@ namespace OMIstats.Controllers
                 omi = Olimpiada.obtenerMasReciente().numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (!tienePermisos(o.registroActivo))
+            if (o == null || !tienePermisos(o.registroActivo))
                 return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
@@ -80,7 +80,7 @@ namespace OMIstats.Controllers
             }
 
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL);
-            return View();
+            return View(registrados);
         }
     }
 }

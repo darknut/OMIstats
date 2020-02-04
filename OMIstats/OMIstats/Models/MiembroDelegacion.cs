@@ -81,6 +81,7 @@ namespace OMIstats.Models
         public string clave;
         public string estado;
         public TipoAsistente tipo;
+        public TipoOlimpiada tipoOlimpiada;
 
         /// <summary>
         /// Solo presente cuando se llama a traves de 'obtenerMiembrosDelegacion'
@@ -155,6 +156,7 @@ namespace OMIstats.Models
             olimpiada = row["olimpiada"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
             tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
+            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), row["clase"].ToString().ToUpper());
 #if OMISTATS
             nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
             nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
@@ -307,7 +309,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave,");
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.clase");
             query.Append(" p.nacimiento, p.genero, p.correo, p.CURP, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona, md.institucion from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
@@ -757,7 +759,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.institucion, ");
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
             query.Append(" p.nacimiento, p.genero, p.correo, p.curp, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
@@ -849,7 +851,14 @@ namespace OMIstats.Models
                     }
             }
 
-            query.Append(" order by md.clave ");
+            if (tipo == TipoAsistente.NULL)
+            {
+                query.Append(" order by md.estado, md.clase desc, md.clave ");
+            }
+            else
+            {
+                query.Append(" order by md.clave ");
+            }
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();

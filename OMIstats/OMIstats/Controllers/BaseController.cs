@@ -207,10 +207,10 @@ namespace OMIstats.Controllers
                      if (opciones != null)
                         return RedirectToAction("Index", "Olimpiada", new { clave = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
-                case Pagina.HOME:
-                case Pagina.OLIMPIADAS:
                 case Pagina.REGISTRO:
                     return RedirectToAction("Delegacion", "Registro");
+                case Pagina.HOME:
+                case Pagina.OLIMPIADAS:
                 default:
                     return RedirectToAction("Index", "Olimpiadas");
             }
