@@ -2,3 +2,20 @@
     padding-top:10px;
     font-size:18px;
 }
+
+.titulo-registro {
+    background-color: #E0E0E0;
+    border: 1px solid white;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.lineas-registro {
+    background-color: #F4F4F4;
+    border: 1px solid white;
+    padding: 3px;
+}
+
+.clave-registro {
+    font-weight: bold;
+}

@@ -36,14 +36,18 @@
             ultimoTipo = miembro.tipoOlimpiada;
             procesandoCompetidores = true;
             competidoresProcesados = 0;
-    <tr><td>Competidores de @ultimoTipo</td></tr>
+    <tr><td class="titulo-registro" colspan="2">Competidores de @ultimoTipo</td></tr>
         }
         competidoresProcesados++;
         if (miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && procesandoCompetidores)
         {
             procesandoCompetidores = false;
-    <tr><td>Líderes, asesores e invitados</td></tr>
+    <tr><td class="titulo-registro" colspan="2">Líderes, asesores e invitados</td></tr>
         }
+    }
+    if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
+    {
+        continue;
     }
     <tr>
          @if (usuario.esSuperUsuario())
@@ -56,14 +60,21 @@
             }
         </td>
          }
-        <td>
+        <td class="lineas-registro">
             @miembro.nombreAsistente
         </td>
-        <td>
-            @miembro.tipo
-        </td>
-        <td>
+        <td class="lineas-registro clave-registro">
+            @if (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
             @miembro.clave
+            }
+            else
+            {
+            @miembro.tipo
+            }
+        </td>
+        <td class="lineas-registro">
+
         </td>
     </tr>
 }
