@@ -8,6 +8,8 @@
 @{
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
+    OMIstats.Models.Olimpiada omi = ViewBag.omi;
+    bool registroActivo = ViewBag.registroActivo;
     int competidoresProcesados = 0;
     string lastEstado = "";
     string[] subTitulos = {
@@ -73,19 +75,32 @@
             @miembro.tipo
             }
         </td>
-        <td class="lineas-registro">
-
+        <td>
+            <a href="~/Views/Olimpiada/Index">Modificar</a>
+            @if (usuario.esAdmin() || registroActivo)
+            {
+            <a href="~/Views/Olimpiada/Index">Eliminar</a>
+            }
         </td>
     </tr>
+        }
+    }
+    if (competidoresProcesados == 0)
+    {
+    <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
+    }
+    if(usuario.esAdmin() || registroActivo)
+    {
+        if (usuario.esSuperUsuario() || competidoresProcesados < 4 || (estado.clave == omi.claveEstado && competidoresProcesados < 8))
+        {
+    <tr><td class="lineas-registro" colspan="2">
+        <a href="~/Views/Olimpiada/Index">Registrar</a>
+    </td></tr>
         }
     }
     if (usuario.esSuperUsuario())
     {
         break;
-    }
-    if (competidoresProcesados == 0)
-    {
-    <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
     }
 }
 </table>

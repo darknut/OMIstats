@@ -80,6 +80,7 @@ namespace OMIstats.Controllers
             }
 
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL);
+            ViewBag.omi = o;
             return View(registrados);
         }
     }
