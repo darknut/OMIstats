@@ -19,3 +19,8 @@
 .clave-registro {
     font-weight: bold;
 }
+
+.no-registrados {
+    font-style: italic;
+    color: red;
+}

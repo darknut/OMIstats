@@ -8,10 +8,20 @@
 @{
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
-    OMIstats.Models.TipoOlimpiada ultimoTipo = OMIstats.Models.TipoOlimpiada.NULL;
-    bool procesandoCompetidores = true;
     int competidoresProcesados = 0;
     string lastEstado = "";
+    string[] subTitulos = {
+        "Competidores de OMI",
+        "Competidores de primaria",
+        "Competidores de secundaria",
+        "Líderes, asesores e invitados"
+    };
+    OMIstats.Models.TipoOlimpiada[] tipos = {
+        OMIstats.Models.TipoOlimpiada.OMI,
+        OMIstats.Models.TipoOlimpiada.OMIP,
+        OMIstats.Models.TipoOlimpiada.OMIS,
+        OMIstats.Models.TipoOlimpiada.NULL
+    };
     if (usuario.esSuperUsuario())
     {
         ViewBag.Title = "Registro";
@@ -23,43 +33,33 @@
 <h1 class="titulo">@ViewBag.Title</h1>
 
 <table>
-@foreach (OMIstats.Models.MiembroDelegacion miembro in Model)
+@for(int i = 0; i < tipos.Length; i++)
 {
     if (!usuario.esSuperUsuario())
     {
-        if (miembro.tipoOlimpiada != ultimoTipo)
-        {
-            if (ultimoTipo != OMIstats.Models.TipoOlimpiada.NULL && competidoresProcesados == 0)
-            {
-    <tr><td>No se han registrado competidores</td></tr>
-            }
-            ultimoTipo = miembro.tipoOlimpiada;
-            procesandoCompetidores = true;
-            competidoresProcesados = 0;
-    <tr><td class="titulo-registro" colspan="2">Competidores de @ultimoTipo</td></tr>
-        }
-        competidoresProcesados++;
-        if (miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && procesandoCompetidores)
-        {
-            procesandoCompetidores = false;
-    <tr><td class="titulo-registro" colspan="2">Líderes, asesores e invitados</td></tr>
-        }
+        <tr><td class="titulo-registro" colspan="2">@subTitulos[i]</td></tr>
     }
-    if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
+    competidoresProcesados = 0;
+    foreach (OMIstats.Models.MiembroDelegacion miembro in Model)
     {
-        continue;
-    }
-    <tr>
-         @if (usuario.esSuperUsuario())
-         {
-        <td>
-            @if (lastEstado != miembro.estado)
+        if (usuario.esSuperUsuario() || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
+        {
+            competidoresProcesados++;
+            if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
             {
-                @OMIstats.Models.Estado.obtenerEstadoConClave(miembro.estado).nombre
-                lastEstado = miembro.estado;
+                continue;
             }
+    <tr>
+            @if (usuario.esSuperUsuario())
+            {
+        <td>
+                @if (lastEstado != miembro.estado)
+                {
+                    @OMIstats.Models.Estado.obtenerEstadoConClave(miembro.estado).nombre
+                    lastEstado = miembro.estado;
+                }
         </td>
-         }
+            }
         <td class="lineas-registro">
             @miembro.nombreAsistente
         </td>
@@ -77,6 +77,15 @@
 
         </td>
     </tr>
+        }
+    }
+    if (usuario.esSuperUsuario())
+    {
+        break;
+    }
+    if (competidoresProcesados == 0)
+    {
+    <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
+    }
 }
-
 </table>
