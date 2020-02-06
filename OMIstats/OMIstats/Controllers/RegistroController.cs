@@ -83,5 +83,14 @@ namespace OMIstats.Controllers
             ViewBag.omi = o;
             return View(registrados);
         }
+
+        //
+        // POST: /Registro/Buscar/
+
+        [HttpPost]
+        public JsonResult Buscar(TipoOlimpiada tipo, string query)
+        {
+            return Json(tipo + query);
+        }
     }
 }
