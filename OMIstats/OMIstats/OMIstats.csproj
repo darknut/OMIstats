@@ -352,6 +352,7 @@
     <Content Include="js\graficas.js" />
     <Content Include="js\overlay.js" />
     <Content Include="js\profile.js" />
+    <Content Include="js\registro.js" />
     <Content Include="js\request.js" />
     <Content Include="js\scoreboard.js" />
     <Content Include="js\sorters.js" />
