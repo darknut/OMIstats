@@ -21,7 +21,7 @@ function handleError() {
 
 function callServer(subUrl, tipo, query) {
     llamadaAjax(ajaxUrl + subUrl,
-        { tipo: tipo, query: query },
+        { tipo: tipo, query: query, estado: estado },
         function (data) { handleAjax(data); },
         function (data) { handleError(); });
 }
