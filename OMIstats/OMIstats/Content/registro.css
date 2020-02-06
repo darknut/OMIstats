@@ -24,3 +24,20 @@
     font-style: italic;
     color: red;
 }
+
+.a-sin-href {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.registro-container {
+    margin-bottom: 20px;
+}
+
+.loading {
+    margin: 10px;
+}
+
+.input-name {
+    width: 500px;
+}

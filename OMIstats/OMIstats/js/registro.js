@@ -2,7 +2,7 @@
 
 function muestraRegistro(tipo) {
     tipoRegistro = tipo;
-    setVisible("registro", true);
+    setVisible("registro", "block");
     setVisible("tablaRegistro", false);
     setVisible("loading", true);
 }

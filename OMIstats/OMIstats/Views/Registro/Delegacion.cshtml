@@ -35,13 +35,13 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
-<div id="registro" style="display:none">
+<div id="registro" class="registro-container" style="display:none">
     <div>Busca una persona o elige a alguien de la lista de abajo</div>
-    <div><input type="text" id="nombre"/><input type="button" value="Buscar"/></div>
+    <div><input type="text" id="nombre" class="input-name"/><input type="button" value="Buscar"/></div>
     <table id="tablaRegistro" style="display:none">
         <tr><td>TEST</td></tr>
     </table>
-    <img id="loading" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none"/>
+    <img id="loading" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none" class="loading"/>
 </div>
 
 <table>
@@ -104,7 +104,7 @@
         if (usuario.esSuperUsuario() || competidoresProcesados < 4 || (estado.clave == omi.claveEstado && competidoresProcesados < 8))
         {
     <tr><td class="lineas-registro" colspan="2">
-        <a onclick="muestraRegistro('@tipos[i]')">Registrar</a>
+        <a onclick="muestraRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
     </td></tr>
         }
     }

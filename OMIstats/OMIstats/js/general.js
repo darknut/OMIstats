@@ -1,9 +1,11 @@
 ﻿function setVisible(id, visible) {
     var elem = document.getElementById(id);
-    if (visible)
+    if (visible === true)
         elem.style.display = 'inline';
-    else
+    else if (visible === false)
         elem.style.display = 'none';
+    else
+        elem.style.display = visible;
 }
 
 function esconde(id)
