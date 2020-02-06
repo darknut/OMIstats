@@ -1,12 +1,16 @@
 ﻿var tipoRegistro = "";
 var ajaxUrl = "";
+var estado = "";
 
-function setUpAjax(url) {
+function setUpAjax(url, claveEstado) {
     ajaxUrl = url;
+    estado = claveEstado;
 }
 
 function handleAjax(data) {
-    alert(data);
+    setVisible("loading", false);
+    setVisible("tablaRegistro", true);
+    setVisible("errorLoading", false);
 }
 
 function handleError() {

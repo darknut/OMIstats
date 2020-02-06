@@ -1,17 +1,5 @@
 ﻿@model List<OMIstats.Models.MiembroDelegacion>
 
-@section AddToHead
-{
-    <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="~/js/formas.js"></script>
-    <script type="text/javascript" src="~/js/registro.js"></script>
-    <script>
-    $(function () {
-        setUpAjax("@(Url.Content("~"))" + "Registro/");
-    });
-</script>
-}
-
 @{
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
@@ -37,6 +25,18 @@
     } else {
         ViewBag.Title = "Registro de delegación: " + estado.nombre;
     }
+}
+
+@section AddToHead
+{
+    <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/formas.js"></script>
+    <script type="text/javascript" src="~/js/registro.js"></script>
+    <script>
+    $(function () {
+        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)");
+    });
+</script>
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
