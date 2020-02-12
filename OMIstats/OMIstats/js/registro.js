@@ -1,14 +1,15 @@
 ﻿var tipoRegistro = "";
 var ajaxUrl = "";
 var estado = "";
+var omi = "";
 
-function setUpAjax(url, claveEstado) {
+function setUpAjax(url, claveEstado, claveOmi) {
     ajaxUrl = url;
     estado = claveEstado;
+    omi = claveOmi;
 }
 
 function handleAjax(data) {
-    alert(data);
     setVisible("loading", false);
     setVisible("tablaRegistro", true);
     setVisible("errorLoading", false);
@@ -22,7 +23,7 @@ function handleError() {
 
 function callServer(subUrl, query) {
     llamadaAjax(ajaxUrl + subUrl,
-        { tipo: tipoRegistro, query: query, estado: estado },
+        { omi: omi, tipo: tipoRegistro, query: query, estado: estado },
         function (data) { handleAjax(data); },
         function (data) { handleError(); });
 }

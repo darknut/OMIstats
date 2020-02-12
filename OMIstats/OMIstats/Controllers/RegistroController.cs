@@ -94,9 +94,9 @@ namespace OMIstats.Controllers
         // POST: /Registro/Buscar/
 
         [HttpPost]
-        public JsonResult Buscar(TipoOlimpiada tipo, string query, string estado)
+        public JsonResult Buscar(string omi, TipoOlimpiada tipo, string query, string estado)
         {
-            return Json(tipo + query + estado);
+            return Json(MiembroDelegacion.buscarParaRegistro(omi, tipo, estado, query));
         }
     }
 }

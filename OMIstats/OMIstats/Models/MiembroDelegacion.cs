@@ -980,6 +980,38 @@ namespace OMIstats.Models
 
             return lineas.ToString();
         }
+
+        public static List<OMIstats.Ajax.BuscarPersonas> buscarParaRegistro(string omi, TipoOlimpiada tipo, string estado, string input)
+        {
+            List<OMIstats.Ajax.BuscarPersonas> personas = new List<OMIstats.Ajax.BuscarPersonas>();
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            if (!String.IsNullOrEmpty(input))
+            {
+                query.Append(" select * from Persona where search like ");
+                query.Append(Utilities.Cadenas.comillas("%" + input + "%"));
+                query.Append(" and clave not in ( select persona from MiembroDelegacion where olimpiada = ");
+                query.Append(Utilities.Cadenas.comillas(omi));
+                query.Append(" and estado = ");
+                query.Append(Utilities.Cadenas.comillas(estado));
+                query.Append(")");
+            }
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            if (table != null)
+            foreach (DataRow r in table.Rows)
+            {
+                Persona p = new Persona();
+                p.llenarDatos(r, completo: false);
+                personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
+            }
+
+            return personas;
+        }
 #endif
     }
 }

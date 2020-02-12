@@ -103,7 +103,7 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="datos">La fila con el origen de los datos</param>
         /// <param name="completo">Si es true, saca todos los datos de la fila, de ser false, solo nombre, usuario y clave</param>
-        private void llenarDatos(DataRow datos, bool completo = true)
+        public void llenarDatos(DataRow datos, bool completo = true)
         {
             clave = (int) datos["clave"];
             nombre = datos["nombre"].ToString().Trim();

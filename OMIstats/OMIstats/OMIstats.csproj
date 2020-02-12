@@ -166,6 +166,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ajax\BuscarPersonas.cs" />
     <Compile Include="Ajax\OverlayAjax.cs" />
     <Compile Include="Ajax\OverlayLugares.cs" />
     <Compile Include="Ajax\OverlayPuntos.cs" />
