@@ -9,7 +9,7 @@ namespace OMIstats.Controllers
 {
     public class RegistroController : BaseController
     {
-        private bool tienePermisos(bool registroActivo)
+        private bool tienePermisos(bool registroActivo, string estado = null)
         {
             if (!estaLoggeado())
                 return false;
@@ -23,6 +23,13 @@ namespace OMIstats.Controllers
 
             if (!registroActivo)
                 return false;
+
+            if (estado != null)
+            {
+                List<Estado> estados = p.obtenerEstadosDeDelegado();
+                if (!estados.Any(e => e.clave == estado))
+                    return false;
+            }
 
             return true;
         }
@@ -66,15 +73,14 @@ namespace OMIstats.Controllers
                 omi = Olimpiada.obtenerMasReciente().numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo))
+            if (o == null || !tienePermisos(o.registroActivo, estado))
                 return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
 
             if (!p.esSuperUsuario())
             {
-                List<Estado> estados = p.obtenerEstadosDeDelegado();
-                if (!estados.Any(e => e.clave == estado))
+                if (estado == null)
                     return RedirectTo(Pagina.HOME);
                 ViewBag.estado = Estado.obtenerEstadoConClave(estado);
             }
