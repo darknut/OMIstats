@@ -990,7 +990,7 @@ namespace OMIstats.Models
 
             if (!String.IsNullOrEmpty(input))
             {
-                query.Append(" select * from Persona where search like ");
+                query.Append(" select top 10 * from Persona where search like ");
                 query.Append(Utilities.Cadenas.comillas("%" + input + "%"));
                 query.Append(" and clave not in ( select persona from MiembroDelegacion where olimpiada = ");
                 query.Append(Utilities.Cadenas.comillas(omi));

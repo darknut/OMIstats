@@ -6,6 +6,7 @@
         elem.style.display = 'none';
     else
         elem.style.display = visible;
+    return elem;
 }
 
 function esconde(id)

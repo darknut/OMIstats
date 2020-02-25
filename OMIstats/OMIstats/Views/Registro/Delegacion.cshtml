@@ -41,10 +41,13 @@
 
 <div id="registro" class="registro-container" style="display:none">
     <div>Busca una persona o elige a alguien de la lista de abajo</div>
-    <div><input type="text" id="nombre" class="input-name"/><input type="button" value="Buscar" onclick="buscar()"/></div>
-    <table id="tablaRegistro" style="display:none">
-        <tr><td>TEST</td></tr>
-    </table>
+    <div><input type="text" id="nombre" class="input-name"/><input id="buscar" type="submit" value="Buscar" onclick="buscar()"/></div>
+    <ul id="tablaRegistro" style="display:none">
+        @for(int i = 0; i < 10; i++)
+        {
+            <li style="display:none" id="@("resultados" + i)"><a class="a-sin-href"></a></li>
+        }
+    </ul>
     <div class="loading errorTextoRojo" style="display:none">Se produjo un error, por favor contacta a un administrador o a un miembro del COMI</div>
     <img id="loading" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none" class="loading"/>
 </div>
@@ -108,7 +111,7 @@
     {
         if (usuario.esSuperUsuario() || competidoresProcesados < 4 || (estado.clave == omi.claveEstado && competidoresProcesados < 8))
         {
-    <tr><td class="lineas-registro" colspan="2">
+    <tr><td>
         <a onclick="muestraRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
     </td></tr>
         }
