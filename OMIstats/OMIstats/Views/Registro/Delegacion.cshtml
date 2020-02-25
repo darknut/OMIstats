@@ -47,8 +47,11 @@
         {
             <li style="display:none" id="@("resultados" + i)"><a class="a-sin-href"></a></li>
         }
+        <li id="mas10" style="display:none" class="mas10">Mostrando solo los primeros 10 resultados</li>
     </ul>
-    <div class="loading errorTextoRojo" style="display:none">Se produjo un error, por favor contacta a un administrador o a un miembro del COMI</div>
+    <div id="info" style="display:none" class="redefine">Si no encuentras a quien buscas, redefine tu búsqueda</div>
+    <div id="noResults" style="display:none" class="loading errorTextoRojo">No se encontraron resultados</div>
+    <div id="errorLoading" class="loading errorTextoRojo" style="display:none">Se produjo un error, por favor contacta a un administrador o a un miembro del COMI</div>
     <img id="loading" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none" class="loading"/>
 </div>
 

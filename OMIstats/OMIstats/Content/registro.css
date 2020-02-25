@@ -41,3 +41,13 @@
 .input-name {
     width: 500px;
 }
+
+.redefine {
+    font-weight: bold;
+    color: green;
+}
+
+.mas10 {
+    font-weight: bold;
+    font-style:italic;
+}
