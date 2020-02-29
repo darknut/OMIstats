@@ -988,7 +988,39 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            if (!String.IsNullOrEmpty(input))
+            if (String.IsNullOrEmpty(input))
+            {
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+
+                query.Append(" select p.clave, p.nombre, MAX(o.año) as reciente from MiembroDelegacion as md ");
+                query.Append(" inner join Persona as p on p.clave = md.persona ");
+                query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
+                query.Append(" where md.estado = ");
+                query.Append(Utilities.Cadenas.comillas(estado));
+                query.Append(" and o.año > ");
+                query.Append(o.año - 3);
+                query.Append(" and md.tipo = '");
+                query.Append(TipoAsistente.COMPETIDOR.ToString().ToLower());
+                query.Append("' group by p.nombre, p.clave ");
+                query.Append(" order by reciente desc ");
+
+                db.EjecutarQuery(query.ToString());
+                DataTable table = db.getTable();
+
+                foreach (DataRow r in table.Rows)
+                {
+                    int año = int.Parse(r[2].ToString().Trim());
+
+                    if (año == o.año)
+                        continue;
+
+                    Persona p = Persona.obtenerPersonaConClave((int)r[0], completo:false);
+                    personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
+                    if (personas.Count == 10)
+                        break;
+                }
+            }
+            else
             {
                 query.Append(" select top 11 * from Persona where search like ");
                 query.Append(Utilities.Cadenas.comillas("%" + input + "%"));
@@ -997,17 +1029,17 @@ namespace OMIstats.Models
                 query.Append(" and estado = ");
                 query.Append(Utilities.Cadenas.comillas(estado));
                 query.Append(")");
-            }
 
-            db.EjecutarQuery(query.ToString());
-            DataTable table = db.getTable();
+                db.EjecutarQuery(query.ToString());
+                DataTable table = db.getTable();
 
-            if (table != null)
-            foreach (DataRow r in table.Rows)
-            {
-                Persona p = new Persona();
-                p.llenarDatos(r, completo: false);
-                personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
+                if (table != null)
+                    foreach (DataRow r in table.Rows)
+                    {
+                        Persona p = new Persona();
+                        p.llenarDatos(r, completo: false);
+                        personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
+                    }
             }
 
             return personas;

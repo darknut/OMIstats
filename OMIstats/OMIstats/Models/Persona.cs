@@ -202,11 +202,11 @@ namespace OMIstats.Models
         /// <summary>
         /// Regresa la persona asociada con la clave mandada como parametro
         /// </summary>
-        public static Persona obtenerPersonaConClave(int clave)
+        public static Persona obtenerPersonaConClave(int clave, bool completo = true)
         {
             Persona p = new Persona();
             p.clave = clave;
-            if (p.recargarDatos())
+            if (p.recargarDatos(completo))
                 return p;
             else
                 return null;
@@ -216,7 +216,7 @@ namespace OMIstats.Models
         /// Lee de nuevo los datos del usuario de la base de datos y los actualiza en el objeto
         /// </summary>
         /// <returns>Si se recargaron satisfactoriamente los datos</returns>
-        public bool recargarDatos()
+        public bool recargarDatos(bool completo = true)
         {
             if (clave == 0)
                 return false;
@@ -234,7 +234,7 @@ namespace OMIstats.Models
             if (table.Rows.Count != 1)
                 return false;
 
-            llenarDatos(table.Rows[0]);
+            llenarDatos(table.Rows[0], completo);
 
             return true;
         }
