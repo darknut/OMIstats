@@ -747,6 +747,28 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Obtiene el objeto MiembroDeletacion más reciente para la persona mandada como parámetro
+        /// </summary>
+        /// <param name="persona">La persona en cuestión</param>
+        /// <returns>El objeto deseado</returns>
+        private static MiembroDelegacion obtenerParticipacionMasReciente(int persona)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+            MiembroDelegacion md = new MiembroDelegacion();
+
+            query.Append(" select * from MiembroDelegacion where persona = ");
+            query.Append(persona);
+            query.Append(" order by olimpiada desc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+            md.llenarDatos(table.Rows[0], incluirPersona: false, incluirEscuela: false);
+
+            return md;
+        }
+
+        /// <summary>
         /// Regresa las participaciones del usuario mandado como parámetro que no son como competidor
         /// </summary>
         /// <param name="persona">La clave de la persona deseada</param>
@@ -999,7 +1021,11 @@ namespace OMIstats.Models
                 query.Append(Utilities.Cadenas.comillas(estado));
                 query.Append(" and o.año > ");
                 query.Append(o.año - 3);
-                query.Append(" and md.tipo = '");
+                query.Append(" and md.tipo ");
+                if (tipo == TipoOlimpiada.NULL)
+                    query.Append(" <> '");
+                else
+                    query.Append(" = '");
                 query.Append(TipoAsistente.COMPETIDOR.ToString().ToLower());
                 query.Append("' group by p.nombre, p.clave ");
                 query.Append(" order by reciente desc ");
@@ -1010,11 +1036,31 @@ namespace OMIstats.Models
                 foreach (DataRow r in table.Rows)
                 {
                     int año = int.Parse(r[2].ToString().Trim());
+                    int clavePersona = (int)r[0];
 
+                    // Filtra a los que ya están registrados este año
                     if (año == o.año)
                         continue;
 
-                    Persona p = Persona.obtenerPersonaConClave((int)r[0], completo:false);
+                    if (tipo != TipoOlimpiada.NULL)
+                    {
+                        // Revisamos la última participación del competidor en particular
+                        MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(clavePersona);
+
+                        // Descartamos a los que ya participaron en categorías mas altas
+                        if (tipo == TipoOlimpiada.OMIS && md.tipoOlimpiada == TipoOlimpiada.OMI ||
+                            tipo == TipoOlimpiada.OMIP && md.tipoOlimpiada != TipoOlimpiada.OMIP)
+                                continue;
+
+                        // Descartamos a los que ya se gruaduaron de la escuela en su nivel
+                        Institucion.NivelInstitucion nivel = Institucion.calculaNuevoNivel(md.nivelEscuela, md.añoEscuela, (int)o.año - año);
+                        if (nivel == Institucion.NivelInstitucion.UNIVERSIDAD ||
+                            tipo == TipoOlimpiada.OMIS && nivel == Institucion.NivelInstitucion.PREPARATORIA ||
+                            tipo == TipoOlimpiada.OMIP && nivel != Institucion.NivelInstitucion.PRIMARIA)
+                            continue;
+                    }
+
+                    Persona p = Persona.obtenerPersonaConClave(clavePersona, completo:false);
                     personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
                     if (personas.Count == 10)
                         break;
