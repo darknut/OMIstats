@@ -67,11 +67,11 @@
     {
         if (usuario.esSuperUsuario() || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
         {
-            competidoresProcesados++;
             if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
             {
                 continue;
             }
+            competidoresProcesados++;
     <tr>
             @if (usuario.esSuperUsuario())
             {
@@ -112,7 +112,7 @@
     }
     if(usuario.esAdmin() || registroActivo)
     {
-        if (usuario.esSuperUsuario() || competidoresProcesados < 4 || (estado.clave == omi.claveEstado && competidoresProcesados < 8))
+        if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < 4 || (estado.clave == omi.claveEstado && competidoresProcesados < 8))
         {
     <tr><td>
         <a onclick="muestraRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
