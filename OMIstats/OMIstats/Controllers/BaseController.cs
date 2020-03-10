@@ -208,7 +208,7 @@ namespace OMIstats.Controllers
                         return RedirectToAction("Index", "Olimpiada", new { clave = opciones.ToString() });
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.REGISTRO:
-                    return RedirectToAction("Delegacion", "Registro");
+                    return RedirectToAction("Delegacion", "Registro", opciones);
                 case Pagina.HOME:
                 case Pagina.OLIMPIADAS:
                 default:

@@ -98,5 +98,20 @@ namespace OMIstats.Controllers
         {
             return Json(MiembroDelegacion.buscarParaRegistro(omi, tipo, estado, query));
         }
+
+        //
+        // GET: /Registro/Eliminar
+
+        public ActionResult Eliminar(string omi, TipoOlimpiada tipo, string estado, string clave)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave)[0];
+            md.borrarMiembroDelegacion();
+
+            return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
+        }
     }
 }

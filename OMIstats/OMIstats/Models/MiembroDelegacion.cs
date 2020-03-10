@@ -373,6 +373,37 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Borra la instancia de miembro delegación de la base de datos
+        /// </summary>
+        /// <param name="byClave">Si true, borra utilizando la clave, si false, utilizando persona & estado</param>
+        public void borrarMiembroDelegacion(bool byClave = true)
+        {
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" delete miembrodelegacion ");
+            query.Append(" where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(this.olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Utilities.Cadenas.comillas(this.tipoOlimpiada.ToString().ToLower()));
+            if (byClave)
+            {
+                query.Append(" and clave = ");
+                query.Append(Utilities.Cadenas.comillas(this.clave));
+            }
+            else
+            {
+                query.Append(" and persona = ");
+                query.Append(this.claveUsuario);
+                query.Append(" and estado = ");
+                query.Append(Utilities.Cadenas.comillas(this.estado));
+            }
+
+            db.EjecutarQuery(query.ToString());
+            Resultados.eliminarResultado(this.olimpiada, this.tipoOlimpiada, this.clave);
+        }
+
+        /// <summary>
         /// Guarda la linea mandada como parametro en la base de datos
         /// </summary>
         /// <param name="omi">La clave de la olimpiada</param>
@@ -408,18 +439,10 @@ namespace OMIstats.Models
 
                 if (!test)
                 {
-                    query.Append(" delete miembrodelegacion ");
-                    query.Append(" where olimpiada = ");
-                    query.Append(Utilities.Cadenas.comillas(omi));
-                    query.Append(" and persona = ");
-                    query.Append(p.clave);
-                    query.Append(" and estado = ");
-                    query.Append(Utilities.Cadenas.comillas(md.estado));
-                    query.Append(" and clase = ");
-                    query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-
-                    db.EjecutarQuery(query.ToString());
-                    Resultados.eliminarResultado(omi, tipoOlimpiada, md.clave);
+                    md.olimpiada = omi;
+                    md.tipoOlimpiada = tipoOlimpiada;
+                    md.claveUsuario = p.clave;
+                    md.borrarMiembroDelegacion(byClave: false);
                 }
 
                 return (int) TipoError.OK;
