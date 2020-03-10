@@ -100,8 +100,7 @@
             <a href="~/Views/Olimpiada/Index">Modificar</a>
             @if (usuario.esAdmin() || registroActivo)
             {
-                @Html.ActionLink("Eliminar", "Eliminar", "Registro",
-                     new { omi = omi.numero, tipo = miembro.tipoOlimpiada, estado = miembro.estado, clave = miembro.clave }, null);
+            <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
             }
         </td>
     </tr>

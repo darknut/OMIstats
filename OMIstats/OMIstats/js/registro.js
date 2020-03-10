@@ -87,3 +87,10 @@ function muestraRegistro(tipo) {
     searching = false;
     callServer("Buscar", "");
 }
+
+function eliminarUsuario(tipoOlimpiada, clave, nombre) {
+    var result = confirm("¿Eliminar a " + nombre + "?");
+    if (result) {
+        redirige(ajaxUrl, "Eliminar?omi=" + omi + "&tipo=" + tipoOlimpiada + "&estado=" + estado + "&clave=" + clave);
+    }
+}
