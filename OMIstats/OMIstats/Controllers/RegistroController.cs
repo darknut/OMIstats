@@ -59,7 +59,10 @@ namespace OMIstats.Controllers
             if (p.esSuperUsuario())
                 return RedirectTo(Pagina.REGISTRO);
 
-            ViewBag.estados = p.obtenerEstadosDeDelegado();
+            List<Estado> estados = p.obtenerEstadosDeDelegado();
+            if (estados.Count == 1)
+                return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estados[0].clave });
+            ViewBag.estados = estados;
 
             return View();
         }
@@ -85,7 +88,7 @@ namespace OMIstats.Controllers
                 ViewBag.estado = Estado.obtenerEstadoConClave(estado);
             }
 
-            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL);
+            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, TipoOlimpiada.NULL);
             ViewBag.omi = o;
             return View(registrados);
         }
