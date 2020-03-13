@@ -164,24 +164,6 @@ namespace OMIstats.Controllers
         }
 
         //
-        // Public API para el registro automático de Pacha
-
-        public JsonResult Registrar(string tipoOlimpiada = "", string nombre = "", string estado = "",
-            string tipoAsistente = "", string clave = "", string fecha = "", string genero = "",
-            string correo = "", string curp = "", string escuela = "", string nivelEscuela = "",
-            int grado = 0, bool publica = false, bool test = false, string usuario = "")
-        {
-            int result = Olimpiada.Registrar(tipoOlimpiada.Trim(), usuario.Trim(), nombre.Trim(),
-                estado.Trim(), tipoAsistente.Trim(), clave.Trim(), fecha.Trim(), genero.Trim(),
-                correo.Trim(), curp.Trim(), escuela.Trim(), nivelEscuela, grado, publica, test);
-            return Json(new
-            {
-                result = result >= Persona.PrimerClave ? 0 : result,
-                clave = result >= Persona.PrimerClave ? result : 0
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        //
         // GET: /Olimpiada/Attendees/
 
         public ActionResult Attendees(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)

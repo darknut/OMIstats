@@ -17,6 +17,7 @@
 
 @{
     ViewBag.Title = "Actualizar Estado";
+    OMIstats.Models.Persona usuario = ViewBag.usuario;
 }
 
 <h1 class="titulo">@Model.nombre</h1>
@@ -27,7 +28,7 @@
         Los cambios se guardaron satisfactoriamente.
     </p>
     <p>
-        <a href="~/Estados">Volver a estados</a>
+        <a href="~/Estados/Delegados">Volver a estados</a>
     </p>
 
 }
@@ -58,8 +59,21 @@ else
                         @Html.ValidationMessageFor(model => model.sitio)
                     </div>
                 </div>
+                @if(usuario.esSuperUsuario())
+                {
+                <div>
+                    <div class="label">ISO:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.ISO, new { @class = "smallInput" })
+                        @Html.ValidationMessageFor(model => model.ISO)
+                    </div>
+                </div>
+                } else
+                {
+                    @Html.HiddenFor(model => model.ISO)
+                }
                 <div id="datosDelegado" class="oculto">
-                    @if (!ViewBag.usuario.esAdmin())
+                    @if (usuario.esAdmin())
                     {
                         <div>
                             <div class="biglabel">

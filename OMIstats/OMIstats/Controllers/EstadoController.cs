@@ -150,6 +150,14 @@ namespace OMIstats.Controllers
             else
                 estado.delegado = null;
 
+            // Regresando los valores que solo super usuarios deberían de poder modificar
+            // * JUST IN CASE *
+            if (!getUsuario().esSuperUsuario())
+            {
+                estado.nombre = e.nombre;
+                estado.ISO = e.ISO;
+            }
+
             if (!estado.guardar())
                 return RedirectTo(Pagina.ERROR, 500);
 
