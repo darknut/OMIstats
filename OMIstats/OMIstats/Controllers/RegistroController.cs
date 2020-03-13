@@ -116,5 +116,19 @@ namespace OMIstats.Controllers
 
             return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
         }
+
+        //
+        // GET: /Registro/Asistente
+
+        public ActionResult Asistente(string omi, TipoOlimpiada tipo, string estado = null, string clave = null, string persona = null)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            ViewBag.nuevo = (clave == null);
+
+            return View();
+        }
     }
 }

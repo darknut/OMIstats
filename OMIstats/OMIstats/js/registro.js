@@ -94,3 +94,7 @@ function eliminarUsuario(tipoOlimpiada, clave, nombre) {
         redirige(ajaxUrl, "Eliminar?omi=" + omi + "&tipo=" + tipoOlimpiada + "&estado=" + estado + "&clave=" + clave);
     }
 }
+
+function nuevaPersona() {
+    redirige(ajaxUrl, "Asistente?omi=" + omi + "&tipo=" + tipoRegistro + (estado == "" ? "" : "&estado=" + estado));
+}

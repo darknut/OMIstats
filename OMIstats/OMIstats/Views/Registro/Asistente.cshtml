@@ -1,0 +1,13 @@
+﻿@{
+    bool nuevo = ViewBag.nuevo;
+    ViewBag.Title = nuevo ? "Registro" : "Modificar";
+}
+
+@section AddToHead
+{
+    <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="~/js/formas.js"></script>
+    <script type="text/javascript" src="~/js/registro.js"></script>
+}
+
+<h1 class="titulo">@ViewBag.Title</h1>

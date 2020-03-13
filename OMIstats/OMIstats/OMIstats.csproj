@@ -430,6 +430,7 @@
     <Content Include="Views\Olimpiada\Diplomas.cshtml" />
     <Content Include="Views\Registro\Select.cshtml" />
     <Content Include="Views\Registro\Delegacion.cshtml" />
+    <Content Include="Views\Registro\Asistente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
