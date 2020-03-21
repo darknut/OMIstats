@@ -79,7 +79,7 @@ else
                     </div>
                     <a href="javascript:aprobar(@item.clave, '@Url.Content("~")')">Responder</a>
                 }
-                else if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.FOTO)
+                else if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.FOTO || item.subtipo == Peticion.TipoPeticion.APELLIDO_MATERNO || item.subtipo == Peticion.TipoPeticion.APELLIDO_PATERNO)
                 {
                     <a href="javascript:aprobar(@item.clave, '@Url.Content("~")')">Aprobar</a>
                 }
@@ -93,13 +93,28 @@ else
 
             @if (item.tipo == Peticion.TipoPeticion.USUARIO)
             {
-                if (item.subtipo == Peticion.TipoPeticion.NOMBRE)
+                if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.APELLIDO_PATERNO || item.subtipo == Peticion.TipoPeticion.APELLIDO_MATERNO)
                 {
                     <td class="negritas">
                         Cambio de nombre
                     </td>
                     <td>
-                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
+                        @{
+                            string nombre = "";
+                            if (item.subtipo == Peticion.TipoPeticion.NOMBRE)
+                            {
+                                nombre = item.usuario.nombre;
+                            }
+                            if (item.subtipo == Peticion.TipoPeticion.APELLIDO_MATERNO)
+                            {
+                                nombre = item.usuario.apellidoMaterno;
+                            }
+                            if (item.subtipo == Peticion.TipoPeticion.APELLIDO_PATERNO)
+                            {
+                                nombre = item.usuario.apellidoPaterno;
+                            }
+                        }
+                        @Html.ActionLink(nombre, "view", "Profile",
                         new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
                     </td>
                     <td>

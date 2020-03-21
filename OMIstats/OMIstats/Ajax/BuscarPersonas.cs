@@ -13,7 +13,7 @@ namespace OMIstats.Ajax
 
         public BuscarPersonas(Persona persona)
         {
-            nombre = persona.nombre;
+            nombre = persona.nombreCompleto;
             clave = persona.clave;
         }
     }

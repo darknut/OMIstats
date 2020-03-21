@@ -83,7 +83,7 @@ namespace OMIstats.Controllers
             if (p.clave != Persona.UsuarioNulo)
             {
                 if (p.esAdmin())
-                    Log.add(Log.TipoLog.ADMIN, "Admin inició sesión: " + p.nombre);
+                    Log.add(Log.TipoLog.ADMIN, "Admin inició sesión: " + p.nombreCompleto);
                 else
                     Log.add(Log.TipoLog.USUARIO, "Usuario inició sesión: " + p.clave);
             }

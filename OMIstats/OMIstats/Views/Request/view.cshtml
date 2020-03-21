@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Mis peticiones";
+    OMIstats.Models.Persona usuario = ViewBag.usuario;
 }
 
 @section AddToHead
@@ -38,6 +39,8 @@
         switch (item.subtipo)
         {
             case Peticion.TipoPeticion.NOMBRE:
+            case Peticion.TipoPeticion.APELLIDO_PATERNO:
+            case Peticion.TipoPeticion.APELLIDO_MATERNO:
                 {
                     nombre.Add(item);
                     break;
@@ -66,13 +69,13 @@ else
     if (nombre.Count > 0)
     {
         
-    <h3>Cambio de nombre</h3>
+    <h3>Cambio de nombre o apellido</h3>
 
     <table>
 
         <tr>
-            <th>Nombre actual</th>
-            <th>Nuevo nombre</th>
+            <th>Nombre o apellido actual</th>
+            <th>Nuevo nombre o apellido</th>
             <th></th>
         </tr>
 
@@ -80,7 +83,24 @@ else
         {
             <tr id='@("row" + item.clave)'>
                 <td class="tdNombre">
-                    @ViewBag.usuario.nombre
+                    @switch (item.subtipo)
+                    {
+                        case Peticion.TipoPeticion.NOMBRE:
+                        {
+                            @usuario.nombre
+                            break;
+                        }
+                        case Peticion.TipoPeticion.APELLIDO_PATERNO:
+                        {
+                            @usuario.apellidoPaterno
+                            break;
+                        }
+                        case Peticion.TipoPeticion.APELLIDO_MATERNO:
+                        {
+                            @usuario.apellidoMaterno
+                            break;
+                        }
+                    }
                 </td>
                 <td class="tdNombre">
                     @Html.DisplayFor(model => item.datos1)

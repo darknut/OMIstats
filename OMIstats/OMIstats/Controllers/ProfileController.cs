@@ -215,12 +215,8 @@ namespace OMIstats.Controllers
             if (file != null)
                 p.foto = Utilities.Archivos.guardaArchivo(file);
 
-            // Si el nombre es el mismo, no se actualiza (excepto si es admin)
-            if (!esSuperUsuario && p.nombre.Equals(current.nombre))
-                p.nombre = "";
-
             // Se guardan los datos
-            if (p.guardarDatos(generarPeticiones:!esSuperUsuario))
+            if (p.guardarDatos(generarPeticiones:!esSuperUsuario, currentValues: current))
             {
                 if (!esSuperUsuario)
                     Log.add(Log.TipoLog.USUARIO, "Usuario actualizó sus datos");

@@ -26,10 +26,19 @@ namespace OMIstats.Models
 
         public int clave { get; set; }
 
-        [Required(ErrorMessage = "Escribe tu nombre")]
-        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en tu nombre")]
+        [Required(ErrorMessage = "Escribe el nombre")]
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el nombre")]
         [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
         public string nombre { get; set; }
+
+        [Required(ErrorMessage = "Escribe el apellido paterno")]
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el apellido paterno")]
+        [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
+        public string apellidoPaterno { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el apellido materno")]
+        [MaxLength(60, ErrorMessage = "El tamaño máximo es 60 caracteres")]
+        public string apellidoMaterno { get; set; }
 
         public DateTime nacimiento { get; set; }
 
@@ -61,6 +70,35 @@ namespace OMIstats.Models
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string topcoder { get; set; }
 
+        [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
+        [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
+        public string celular { get; set; }
+
+        [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
+        [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
+        public string telefono { get; set; }
+
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres. Abrevia la dirección lo más posible")]
+        public string direccion { get; set; }
+
+        [MaxLength(60, ErrorMessage = "El tamaño máximo es de 60 caracteres")]
+        public string emergencia { get; set; }
+
+        [MaxLength(20, ErrorMessage = "El tamaño máximo es de 20 caracteres")]
+        public string parentesco { get; set; }
+
+        [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
+        [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
+        public string telEmergencia { get; set; }
+
+        [MaxLength(60, ErrorMessage = "El tamaño máximo es de 60 caracteres")]
+        public string medicina { get; set; }
+
+        [MaxLength(60, ErrorMessage = "El tamaño máximo es de 60 caracteres")]
+        public string alergias { get; set; }
+
+        public string estado { get; set; }
+
         public string usuario { get; set; }
 
         public TipoPermisos permisos { get; set; }
@@ -73,6 +111,14 @@ namespace OMIstats.Models
 
         public string CURP { get; set; }
 
+        public string nombreCompleto
+        {
+            get
+            {
+                return nombre + " " + apellidoPaterno + " " + apellidoMaterno;
+            }
+        }
+
         public Persona(int clave): this()
         {
             this.clave = clave;
@@ -82,6 +128,8 @@ namespace OMIstats.Models
         {
             clave = 0;
             nombre = "";
+            apellidoPaterno = "";
+            apellidoMaterno = "";
             nacimiento = new DateTime(1900, 1, 1);
             facebook = "";
             twitter = "";
@@ -96,6 +144,15 @@ namespace OMIstats.Models
             omegaup = "";
             codeforces = "";
             topcoder = "";
+            estado = "";
+            celular = "";
+            telefono = "";
+            direccion = "";
+            emergencia = "";
+            parentesco = "";
+            telEmergencia = "";
+            medicina = "";
+            alergias = "";
         }
 
         /// <summary>
@@ -103,11 +160,13 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="datos">La fila con el origen de los datos</param>
         /// <param name="completo">Si es true, saca todos los datos de la fila, de ser false, solo nombre, usuario y clave</param>
-        public void llenarDatos(DataRow datos, bool completo = true)
+        /// <param name="completo">Si es true, incluye datos privados como telefono y direccion </param>
+        public void llenarDatos(DataRow datos, bool completo = true, bool incluirDatosPrivados = false)
         {
             clave = (int) datos["clave"];
             nombre = datos["nombre"].ToString().Trim();
-            usuario = datos["usuario"].ToString().Trim();
+            apellidoPaterno = datos["apellidoP"].ToString().Trim();
+            apellidoMaterno = datos["apellidoM"].ToString().Trim();
 
             if (completo)
             {
@@ -119,11 +178,24 @@ namespace OMIstats.Models
                 permisos = (TipoPermisos)Enum.Parse(typeof(TipoPermisos), datos["permisos"].ToString());
                 genero = datos["genero"].ToString();
                 foto = datos["foto"].ToString().Trim();
-                ioiID = (int) datos["ioiID"];
+                ioiID = (int)datos["ioiID"];
                 CURP = datos["CURP"].ToString().Trim();
                 omegaup = datos["omegaup"].ToString().Trim();
                 topcoder = datos["topcoder"].ToString().Trim();
                 codeforces = datos["codeforces"].ToString().Trim();
+
+                if (incluirDatosPrivados)
+                {
+                    estado = datos["estado"].ToString().Trim();
+                    celular = datos["celular"].ToString().Trim();
+                    telefono = datos["telefono"].ToString().Trim();
+                    direccion = datos["direccion"].ToString().Trim();
+                    emergencia = datos["emergencia"].ToString();
+                    parentesco = datos["parentesco"].ToString().Trim();
+                    telEmergencia = datos["telemergencia"].ToString().Trim();
+                    medicina = datos["medicina"].ToString().Trim();
+                    alergias = datos["alergias"].ToString().Trim();
+                }
             }
         }
 
@@ -245,16 +317,16 @@ namespace OMIstats.Models
         /// <param name="generarPeticiones">Si nombre y foto deben de guardarse
         /// directamente en la base de datos o si se deben generar peticiones</param>
         /// <returns>Si el update se ejecutó correctamente</returns>
-        public bool guardarDatos(bool generarPeticiones = false)
+        public bool guardarDatos(bool generarPeticiones = false, Persona currentValues = null)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update persona set ");
 
-            if (!String.IsNullOrEmpty(nombre))
+            if (generarPeticiones)
             {
-                if (generarPeticiones)
+                if (nombre != currentValues.nombre)
                 {
                     Peticion pet = new Peticion();
                     pet.tipo = Peticion.TipoPeticion.USUARIO;
@@ -263,16 +335,44 @@ namespace OMIstats.Models
                     pet.datos1 = nombre;
                     pet.guardarPeticion();
                 }
-                else
-                {
-                    query.Append(" nombre = ");
-                    query.Append(Utilities.Cadenas.comillas(nombre));
-                    query.Append(",");
 
-                    query.Append(" search = ");
-                    query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
-                    query.Append(",");
+                if (apellidoPaterno != currentValues.apellidoPaterno)
+                {
+                    Peticion pet = new Peticion();
+                    pet.tipo = Peticion.TipoPeticion.USUARIO;
+                    pet.subtipo = Peticion.TipoPeticion.APELLIDO_PATERNO;
+                    pet.usuario = this;
+                    pet.datos1 = apellidoPaterno;
+                    pet.guardarPeticion();
                 }
+
+                if (!String.IsNullOrEmpty(apellidoMaterno))
+                {
+                    Peticion pet = new Peticion();
+                    pet.tipo = Peticion.TipoPeticion.USUARIO;
+                    pet.subtipo = Peticion.TipoPeticion.APELLIDO_MATERNO;
+                    pet.usuario = this;
+                    pet.datos1 = apellidoMaterno;
+                    pet.guardarPeticion();
+                }
+            }
+            else
+            {
+                query.Append(" nombre = ");
+                query.Append(Utilities.Cadenas.comillas(nombre));
+                query.Append(",");
+
+                query.Append(" apellidoP = ");
+                query.Append(Utilities.Cadenas.comillas(apellidoPaterno));
+                query.Append(",");
+
+                query.Append(" apellidoM = ");
+                query.Append(Utilities.Cadenas.comillas(apellidoMaterno));
+                query.Append(",");
+
+                query.Append(" search = ");
+                query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre + apellidoPaterno + apellidoMaterno)));
+                query.Append(",");
             }
 
             query.Append(" facebook = ");
@@ -314,6 +414,69 @@ namespace OMIstats.Models
             query.Append(" CURP = ");
             query.Append(Utilities.Cadenas.comillas(CURP.Trim().ToUpper()));
             query.Append(",");
+
+            if (estado.Length > 0)
+            {
+                query.Append(" estado = ");
+                query.Append(Utilities.Cadenas.comillas(estado));
+                query.Append(",");
+            }
+
+            if (celular.Length > 0)
+            {
+                query.Append(" celular = ");
+                query.Append(Utilities.Cadenas.comillas(celular));
+                query.Append(",");
+            }
+
+            if (telefono.Length > 0)
+            {
+                query.Append(" telefono = ");
+                query.Append(Utilities.Cadenas.comillas(telefono));
+                query.Append(",");
+            }
+
+            if (direccion.Length > 0)
+            {
+                query.Append(" direccion = ");
+                query.Append(Utilities.Cadenas.comillas(direccion));
+                query.Append(",");
+            }
+
+            if (estado.Length > 0)
+            {
+                query.Append(" emergencia = ");
+                query.Append(Utilities.Cadenas.comillas(emergencia));
+                query.Append(",");
+            }
+
+            if (parentesco.Length > 0)
+            {
+                query.Append(" parentesco = ");
+                query.Append(Utilities.Cadenas.comillas(parentesco));
+                query.Append(",");
+            }
+
+            if (telEmergencia.Length > 0)
+            {
+                query.Append(" telemergencia = ");
+                query.Append(Utilities.Cadenas.comillas(telEmergencia));
+                query.Append(",");
+            }
+
+            if (medicina.Length > 0)
+            {
+                query.Append(" medicina = ");
+                query.Append(Utilities.Cadenas.comillas(medicina));
+                query.Append(",");
+            }
+
+            if (alergias.Length > 0)
+            {
+                query.Append(" alergias = ");
+                query.Append(Utilities.Cadenas.comillas(alergias));
+                query.Append(",");
+            }
 
             if (!String.IsNullOrEmpty(foto))
             {

@@ -28,7 +28,7 @@
 <form name="asistente" id="asistente" action="~/Registro/Asistente" method="post" enctype="multipart/form-data">
     <div class="datosParticipante">
         <div>
-            <div class="label">Nombre:</div>
+            <div class="label">Nombre(s):</div>
             <div class="input">
                 @Html.TextBoxFor(model => model.nombre)
                 @Html.ValidationMessageFor(model => model.nombre)

@@ -45,7 +45,9 @@ namespace OMIstats.Models
             INCOMPLETO,
             DUPLICADO,
             NO_SOY_YO,
-            PUNTOS
+            PUNTOS,
+            APELLIDO_PATERNO,
+            APELLIDO_MATERNO
         }
 
         public Peticion()
@@ -254,6 +256,12 @@ namespace OMIstats.Models
             {
                 if (subtipo == TipoPeticion.NOMBRE)
                     usuario.nombre = datos1;
+
+                if (subtipo == TipoPeticion.APELLIDO_PATERNO)
+                    usuario.apellidoPaterno = datos1;
+
+                if (subtipo == TipoPeticion.APELLIDO_MATERNO)
+                    usuario.apellidoMaterno = datos1;
 
                 if (subtipo == TipoPeticion.FOTO)
                     usuario.foto =
