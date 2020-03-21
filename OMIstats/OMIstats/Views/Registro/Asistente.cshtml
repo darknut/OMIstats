@@ -1,13 +1,100 @@
-﻿@{
+﻿@model OMIstats.Models.Persona
+
+@{
     bool nuevo = ViewBag.nuevo;
     ViewBag.Title = nuevo ? "Registro" : "Modificar";
 }
 
 @section AddToHead
 {
-    <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="~/js/formas.js"></script>
-    <script type="text/javascript" src="~/js/registro.js"></script>
+    <link rel="stylesheet" href="~/Content/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="~/Content/registro.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/fechas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+}
+
+@section Scripts
+{
+    <script src="~/Scripts/jquery-ui-1.8.20.min.js"></script>
+    <script src="~/js/fechas.js""></script>
+    <script src="~/js/formas.js"></script>
+    <script src="~/js/profile.js"></script>
+    <script src="~/js/registro.js"></script>
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
+
+<form name="asistente" id="asistente" action="~/Registro/Asistente" method="post" enctype="multipart/form-data">
+    <div class="datosParticipante">
+        <div>
+            <div class="label">Nombre:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.nombre)
+                @Html.ValidationMessageFor(model => model.nombre)
+            </div>
+        </div>
+        <div>
+            <div class="label">Sexo:</div>
+            <div class="input">
+                <select id="genero" name="genero">
+                    <option value="M" @(Model.genero == "M" ? "selected" : "")>Masculino</option>
+                    <option value="F" @(Model.genero == "F" ? "selected" : "")>Femenino</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <div class="label">Fecha de nacimiento:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}")
+                @Html.ValidationMessageFor(model => model.nacimiento, "No escribiste una fecha válida")
+            </div>
+        </div>
+        <div>
+            <div class="label">Correo electrónico:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.correo, new { @class = "inputLarge" })
+                @Html.ValidationMessageFor(model => model.correo)
+            </div>
+        </div>
+        <div>
+            <div class="label">Id de OmegaUp:</div>
+            <div class="input">
+                https://omegaup.com/profile/@Html.TextBoxFor(model => model.omegaup, new { @class = "inputOmegaUp" })
+                @Html.ValidationMessageFor(model => model.omegaup)
+            </div>
+        </div>
+
+        <div>
+            <div class="fotoReg">
+                <img src='@(@Model.foto.Length > 0 ? Url.Content(@Model.foto) : "")' alt="@Model.nombre"/>
+            </div>
+            <div class="label">Sube una foto:</div>
+            <div class="input">
+                <input type="file" name="file" id="file"
+                    class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
+                @if (ViewBag.errorImagen == "imagen_invalida")
+                {
+                    <div class="errorTextoRojo">El archivo que enviaste no es una imagen</div>
+                }
+                else if (ViewBag.errorImagen == "imagen_muy_grande")
+                {
+                    <div class="errorTextoRojo">El limite de tamaño para una imagen es 300KB</div>
+                }
+            </div>
+        </div>
+
+        <input id="clave" name="clave" type="hidden" value="@Model.clave" />
+
+        <div>
+            <div class="label">
+                <input type="submit" onclick="revisa()" value="Enviar"/>
+                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+            </div>
+            <div class="input floatRight">
+                <a href="~/Registro/Delegacion"><input type="button" value="Cancelar" /></a>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="clear"></div>

@@ -127,8 +127,9 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             ViewBag.nuevo = (clave == null);
+            limpiarErroresViewBag();
 
-            return View();
+            return View(new Persona());
         }
     }
 }
