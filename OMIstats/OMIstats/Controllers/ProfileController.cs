@@ -147,7 +147,7 @@ namespace OMIstats.Controllers
         //
         // POST: /Profile/Edit/
         [HttpPost]
-        public ActionResult Edit(HttpPostedFileBase file, string password2, string password3, Persona p, string tipoUsuario)
+        public ActionResult Edit(HttpPostedFileBase file, Persona p, string tipoUsuario)
         {
             if (!estaLoggeado() || p == null)
                 return RedirectTo(Pagina.HOME);

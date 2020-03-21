@@ -246,8 +246,6 @@ namespace OMIstats.Controllers
                 ViewBag.errorImagen = "";
             if (ViewBag.errorUsuario == null)
                 ViewBag.errorUsuario = "";
-            if (ViewBag.errorPassword == null)
-                ViewBag.errorPassword = "";
             ViewBag.errorInfo = "";
             ViewBag.errorPeticion = false;
             ViewBag.admin = esAdmin();

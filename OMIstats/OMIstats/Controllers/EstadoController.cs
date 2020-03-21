@@ -138,7 +138,7 @@ namespace OMIstats.Controllers
                 if (estado.delegado == null)
                 {
                     estado.delegado = new Persona();
-                    estado.delegado.nombre = estado.nombreDelegado;
+                    estado.delegado.breakNombre(estado.nombreDelegado);
                     estado.delegado.correo = estado.mailDelegado;
                     estado.delegado.nuevoUsuario(Utilities.Archivos.FotoInicial.DOMI);
 

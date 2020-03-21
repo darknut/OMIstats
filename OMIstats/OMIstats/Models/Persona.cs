@@ -812,5 +812,76 @@ namespace OMIstats.Models
 
             return estados;
         }
+
+        /// <summary>
+        /// Trata de poner el nombre mandado como parámetro en nombre y apellidos
+        /// </summary>
+        /// <param name="nombre">El nombre a analizar</param>
+        public void breakNombre(string nombre = null)
+        {
+            if (nombre == null)
+                nombre = this.nombre;
+
+            string[] nombres = nombre.Split(' ');
+            if (nombres.Count() == 1)
+            {
+                this.nombre = nombre;
+                this.apellidoPaterno = "";
+                this.apellidoMaterno = "";
+            }
+            else if (nombres.Count() == 2)
+            {
+                this.nombre = nombres[0];
+                this.apellidoPaterno = nombres[1];
+                this.apellidoMaterno = "";
+            }
+            else
+            {
+                int i = nombres.Count() - 1;
+                if (nombres[i - 1].Length < 4)
+                {
+                    this.apellidoMaterno = nombres[i - 1] + " " + nombres[i];
+                    i -= 2;
+                }
+                else
+                {
+                    this.apellidoMaterno = nombres[i];
+                    i--;
+                }
+
+                if (i == 0)
+                {
+                    this.nombre = nombres[0];
+                    this.apellidoPaterno = this.apellidoMaterno;
+                    this.apellidoMaterno = "";
+                }
+                else if (i == 1)
+                {
+                    this.nombre = nombres[0];
+                    this.apellidoPaterno = nombres[1];
+                }
+                else
+                {
+                    if (nombres[i - 1].Length < 4)
+                    {
+                        this.apellidoPaterno = nombres[i - 1] + " " + nombres[i];
+                        i -= 2;
+                    }
+                    else
+                    {
+                        this.apellidoPaterno = nombres[i];
+                        i--;
+                    }
+
+                    this.nombre = "";
+                    for (int j = 0; j <= i; j++)
+                    {
+                        this.nombre += nombres[j] + " ";
+                    }
+                    this.nombre = this.nombre.TrimEnd();
+                }
+
+            }
+        }
     }
 }

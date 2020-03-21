@@ -131,5 +131,13 @@ namespace OMIstats.Controllers
 
             return View(new Persona());
         }
+
+        //
+        // POST: /Registro/Asistente
+        [HttpPost]
+        public ActionResult Asistente(HttpPostedFileBase file, Persona p)
+        {
+            return View(p);
+        }
     }
 }
