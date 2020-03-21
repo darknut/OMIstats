@@ -108,7 +108,7 @@ namespace OMIstats.Controllers
 
             album.guardarDatos();
 
-            Log.add(Log.TipoLog.FACEBOOK, "Álbum " + album.id + " actualizado por admin " + getUsuario().nombre);
+            Log.add(Log.TipoLog.FACEBOOK, "Álbum " + album.id + " actualizado por admin " + getUsuario().nombreCompleto);
 
             return RedirectTo(Pagina.FOTOS, album.olimpiada);
         }

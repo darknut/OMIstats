@@ -28,7 +28,7 @@
 }
 
 @{
-    ViewBag.Title = Model.nombre;
+    ViewBag.Title = Model.nombreCompleto;
     bool perfilPropio = (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave));
 }
 
@@ -42,7 +42,7 @@
         </p>
         @Html.ActionLink("Sí", "In", "Log", new { GUID = GUID, force = true }, new { @class="botonPerfil" })
         <span>&nbsp;</span>
-        @Html.ActionLink("No", "Login", "Request", new { nombre = Model.nombre, correo = Model.correo,
+        @Html.ActionLink("No", "Login", "Request", new { nombre = Model.nombreCompleto, correo = Model.correo,
                 tipo = OMIstats.Models.Peticion.TipoPeticion.BAD_LINK }, new { @class="botonPerfil", target="_blank" })
         <br />
         <br />
@@ -54,12 +54,12 @@
     <h1 class="titulo">Datos de usuario</h1>
 
     <div class="foto" >
-        <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
+        <img src='@Url.Content(@Model.foto)' alt="@Model.nombreCompleto"/>
     </div>
 
     <div class="datosParticipante">
 
-        <div class="nombrePerfil">@Html.DisplayFor(model => model.nombre)</div>
+        <div class="nombrePerfil">@Model.nombreCompleto</div>
     
         <div>
             <div class="fechaNacimiento">

@@ -116,7 +116,7 @@ namespace OMIstats.Models
 
             if (delegado != null)
             {
-                nombreDelegado = delegado.nombre;
+                nombreDelegado = delegado.nombreCompleto;
                 usuarioDelegado = delegado.usuario;
                 mailDelegado = delegado.correo;
             }

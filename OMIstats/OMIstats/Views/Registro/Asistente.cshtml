@@ -35,6 +35,20 @@
             </div>
         </div>
         <div>
+            <div class="label">Apellido paterno:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.apellidoPaterno)
+                @Html.ValidationMessageFor(model => model.apellidoPaterno)
+            </div>
+        </div>
+        <div>
+            <div class="label">Apellido materno:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.apellidoMaterno)
+                @Html.ValidationMessageFor(model => model.apellidoMaterno)
+            </div>
+        </div>
+        <div>
             <div class="label">Sexo:</div>
             <div class="input">
                 <select id="genero" name="genero">
@@ -67,7 +81,7 @@
 
         <div>
             <div class="fotoReg">
-                <img src='@(@Model.foto.Length > 0 ? Url.Content(@Model.foto) : "")' alt="@Model.nombre"/>
+                <img src='@(@Model.foto.Length > 0 ? Url.Content(@Model.foto) : "")' alt="@Model.nombreCompleto"/>
             </div>
             <div class="label">Sube una foto:</div>
             <div class="input">

@@ -957,7 +957,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, r.clave,r.clase, r.medalla, r.estado from Resultados as r ");
+            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, r.clave,r.clase, r.medalla, r.estado from Resultados as r ");
             query.Append(" inner join Persona as p on p.clave = r.concursante ");
             query.Append(" where r.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
@@ -969,7 +969,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 int claveUsuario = (int)r["persona"];
-                string nombre = r["nombre"].ToString().Trim();
+                string nombre = r["nombre"].ToString().Trim() + " " + r["apellidoP"].ToString().Trim() + " " + r["apellidoM"].ToString().Trim();
                 string clave = r["clave"].ToString().Trim();
                 string estado = r["estado"].ToString().Trim();
                 TipoOlimpiada clase = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
@@ -1031,7 +1031,7 @@ namespace OMIstats.Models
             lineas.Append("\\");
             lineas.Append(joven.clave);
             lineas.Append("-joven.pdf,");
-            lineas.Append(joven.persona.nombre);
+            lineas.Append(joven.persona.nombreCompleto);
             lineas.Append(",POR HABER SIDO,El Medallista Más Joven,");
             lineas.Append(baseURL);
             lineas.Append("/Profile/");

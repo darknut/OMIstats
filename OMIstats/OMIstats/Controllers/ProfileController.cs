@@ -240,7 +240,7 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.SAVED_PROFILE, current.usuario);
                 }
 
-                if (file != null || p.nombre.Length > 0)
+                if (file != null || p.nombre != current.nombre || p.apellidoMaterno != current.apellidoMaterno || p.apellidoPaterno != current.apellidoMaterno)
                 {
                     guardarParams(Pagina.SAVED_PROFILE, ADMIN);
                     return RedirectTo(Pagina.SAVED_PROFILE);

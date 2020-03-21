@@ -128,7 +128,7 @@ else
                         Cambio de foto
                     </td>
                     <td>
-                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
+                        @Html.ActionLink(item.usuario.nombreCompleto, "view", "Profile",
                         new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
                     </td>
                     <td>
@@ -141,7 +141,7 @@ else
                         @item.subtipo
                     </td>
                     <td>
-                        @Html.ActionLink(item.usuario.nombre, "view", "Profile",
+                        @Html.ActionLink(item.usuario.nombreCompleto, "view", "Profile",
                         new { usuario = @item.usuario.usuario }, new { @class = "nombre", target = "_blank" })
                     </td>
                     <td>

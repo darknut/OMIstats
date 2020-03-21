@@ -51,7 +51,7 @@
                     clase += " right-border";
                 }
                 <td class="@clase mini-padding">
-                    @Html.ActionLink(par.Key.nombre, "view", "Profile", new { usuario = par.Key.usuario },
+                    @Html.ActionLink(par.Key.nombreCompleto, "view", "Profile", new { usuario = par.Key.usuario },
                         new { @class = "nombre"})
                 </td>
             }

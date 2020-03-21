@@ -146,7 +146,7 @@ namespace OMIstats.Controllers
             if (estaLoggeado())
             {
                 Persona p = getUsuario();
-                pe.datos1 = p.nombre;
+                pe.datos1 = p.nombreCompleto;
                 pe.datos2 = p.correo;
             }
             limpiarErroresViewBag();

@@ -72,7 +72,7 @@
             @if(!nombrePuesto)
             {
             <td class="table-td right-border thin-top-border" rowspan="@rowspan">
-                @Html.ActionLink(sr.persona.nombre, "view", "Profile",
+                @Html.ActionLink(sr.persona.nombreCompleto, "view", "Profile",
                     new { usuario = sr.persona.usuario }, new { @class = "nombre" })
             </td>
             }

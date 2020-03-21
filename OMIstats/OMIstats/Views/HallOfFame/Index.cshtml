@@ -79,7 +79,7 @@ else
         <tr>
             <td class="table-td center right-border ">@hof.lugar</td>
             <td class="table-td right-border ">
-                @Html.ActionLink(hof.persona.nombre, "view", "Profile", new { usuario = hof.persona.usuario }, new { @class = "nombre" })
+                @Html.ActionLink(hof.persona.nombreCompleto, "view", "Profile", new { usuario = hof.persona.usuario }, new { @class = "nombre" })
             </td>
             <td class="table-td right-border ">
                 @{int count = 0; }

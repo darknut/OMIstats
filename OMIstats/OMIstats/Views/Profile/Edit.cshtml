@@ -31,7 +31,7 @@
 <form name="editProfile" id="editProfile" action="~/Profile/Edit" method="post" enctype="multipart/form-data">
     <div>
         <div class="foto">
-            <img src='@Url.Content(@Model.foto)' alt="@Model.nombre"/>
+            <img src='@Url.Content(@Model.foto)' alt="@Model.nombreCompleto"/>
         </div>
 
         <div class="datosParticipante">
@@ -51,10 +51,24 @@
                 </div>
             </div>
             <div>
-                <div class="label">Nombre:</div>
+                <div class="label">Nombre(s):</div>
                 <div class="input">
                     @Html.TextBoxFor(model => model.nombre)
                     @Html.ValidationMessageFor(model => model.nombre)
+                </div>
+            </div>
+            <div>
+                <div class="label">Apellido paterno:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.apellidoPaterno)
+                    @Html.ValidationMessageFor(model => model.apellidoPaterno)
+                </div>
+            </div>
+            <div>
+                <div class="label">Apellido materno:</div>
+                <div class="input">
+                    @Html.TextBoxFor(model => model.apellidoMaterno)
+                    @Html.ValidationMessageFor(model => model.apellidoMaterno)
                 </div>
             </div>
             <div>

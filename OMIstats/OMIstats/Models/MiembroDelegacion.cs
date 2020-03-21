@@ -136,7 +136,7 @@ namespace OMIstats.Models
             if (incluirPersona)
             {
                 usuario = row["usuario"].ToString().Trim();
-                nombreAsistente = row["nombre"].ToString().Trim();
+                nombreAsistente = row["nombre"].ToString().Trim() + " " + row["apellidoP"].ToString().Trim() + " " + row["apellidoM"].ToString().Trim();
                 fechaNacimiento = row["nacimiento"].ToString().Trim();
                 genero = row["genero"].ToString().Trim();
                 correo = row["correo"].ToString().Trim();
@@ -165,79 +165,6 @@ namespace OMIstats.Models
         }
 
 #if OMISTATS
-        private TipoError obtenerCampos(string []datos)
-        {
-            if (datos.Length > (int)Campos.USUARIO)
-                usuario = datos[(int)Campos.USUARIO].Trim();
-            if (datos.Length > (int)Campos.NOMBRE)
-                nombreAsistente = datos[(int)Campos.NOMBRE].Trim();
-            if (datos.Length > (int)Campos.ESTADO)
-                estado = datos[(int)Campos.ESTADO].Trim();
-            try
-            {
-                if (datos.Length > (int)Campos.TIPO_ASISTENTE)
-                    tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
-                if (tipo == TipoAsistente.NULL)
-                    throw new Exception();
-            }
-            catch (Exception)
-            {
-                return TipoError.TIPO_ASISTENTE;
-            }
-            if (datos.Length > (int)Campos.CLAVE)
-                clave = datos[(int)Campos.CLAVE].Trim();
-            if (datos.Length > (int)Campos.FECHA_NACIMIENTO)
-                fechaNacimiento = datos[(int)Campos.FECHA_NACIMIENTO].Trim();
-            try
-            {
-                if (datos.Length > (int)Campos.GENERO)
-                    genero = datos[(int)Campos.GENERO].Trim().ToCharArray()[0].ToString().ToUpper();
-            }
-            catch (Exception)
-            {
-            }
-            if (datos.Length > (int)Campos.CORREO)
-                correo = datos[(int)Campos.CORREO].Trim();
-            if (datos.Length > (int)Campos.CURP)
-                CURP = datos[(int)Campos.CURP].Trim();
-            if (datos.Length > (int)Campos.NOMBRE_ESCUELA)
-                nombreEscuela = datos[(int)Campos.NOMBRE_ESCUELA].Trim();
-            try
-            {
-                if (datos.Length > (int)Campos.NIVEL_ESCUELA)
-                {
-                    if (datos[(int)Campos.NIVEL_ESCUELA].Trim().Length == 0)
-                        nivelEscuela = Institucion.NivelInstitucion.NULL;
-                    else
-                        nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
-                }
-            }
-            catch (Exception)
-            {
-                return TipoError.NIVEL_INSTITUCION;
-            }
-            try
-            {
-                if (datos.Length > (int)Campos.AÑO_ESCUELA)
-                {
-                    if (datos[(int)Campos.AÑO_ESCUELA].Trim().Length == 0)
-                        añoEscuela = 0;
-                    else
-                        añoEscuela = Int32.Parse(datos[(int)Campos.AÑO_ESCUELA]);
-                }
-                if (añoEscuela < 0 || añoEscuela > 6)
-                    return TipoError.AñO_ESCUELA;
-            } catch (Exception)
-            {
-                return TipoError.AñO_ESCUELA;
-            }
-            if (datos.Length > (int)Campos.PUBLICA)
-                escuelaPublica = datos[(int)Campos.PUBLICA].Trim().Equals("publica", StringComparison.InvariantCultureIgnoreCase);
-            if (datos.Length > (int)Campos.ELIMINAR)
-                eliminar = datos[(int)Campos.ELIMINAR].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
-
-            return TipoError.OK;
-        }
 
         /// <summary>
         /// Regresa el año de la primera OMI para la persona mandada como parametro
@@ -295,46 +222,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Regresa todos los asistentes de la olimpiada mandada como parámetro
-        /// </summary>
-        /// <param name="omi">La omi de la que se necesitan los asistentes</param>
-        /// <param name="tipoOlimpiada">El tipo de la olimpiada de la que se requieren asistentes</param>
-        /// <returns>Una lista con los asistentes de la OMI</returns>
-        public static List<MiembroDelegacion> cargarAsistentesOMI(string omi, TipoOlimpiada tipoOlimpiada)
-        {
-            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
-            if (omi == null)
-                return null;
-
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, ");
-            query.Append(" p.nacimiento, p.genero, p.correo, p.CURP, i.nombreCorto, md.nivel,");
-            query.Append(" md.año, i.publica, md.persona, md.institucion from miembrodelegacion as md");
-            query.Append(" inner join Persona as p on p.clave = md.persona ");
-            query.Append(" left outer join Institucion as i on i.clave = md.institucion");
-            query.Append(" where md.olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
-            query.Append(" and md.clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" order by md.clave ");
-
-            db.EjecutarQuery(query.ToString());
-            DataTable table = db.getTable();
-
-            foreach (DataRow r in table.Rows)
-            {
-                MiembroDelegacion md = new MiembroDelegacion();
-                md.llenarDatos(r);
-
-                lista.Add(md);
-            }
-
-            return lista;
-        }
-
-        /// <summary>
         /// Borra la instancia de miembro delegación de la base de datos
         /// </summary>
         /// <param name="byClave">Si true, borra utilizando la clave, si false, utilizando persona & estado</param>
@@ -388,7 +275,7 @@ namespace OMIstats.Models
             string[] datos = linea.Split(',');
 
             // Casteamos los datos del string a variables
-            TipoError err = md.obtenerCampos(datos);
+            TipoError err = TipoError.OK;
             if (err != TipoError.OK)
                 return (int) err;
 
@@ -766,7 +653,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
+            query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
             query.Append(" p.nacimiento, p.genero, p.correo, p.curp, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
@@ -892,7 +779,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Utilities.Acceso db = new Utilities.Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, p.genero, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
+            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(omi));
@@ -905,7 +792,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 int claveUsuario = (int)r["persona"];
-                string nombre = r["nombre"].ToString().Trim();
+                string nombre = r["nombre"].ToString().Trim() + " " + r["apellidoP"].ToString().Trim() + " " + r["apellidoM"].ToString().Trim();
                 string clave = r["clave"].ToString().Trim();
                 string estado = r["estado"].ToString().Trim();
                 string genero = r["genero"].ToString().Trim();
@@ -999,7 +886,7 @@ namespace OMIstats.Models
             {
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
 
-                query.Append(" select p.clave, p.nombre, MAX(o.año) as reciente from MiembroDelegacion as md ");
+                query.Append(" select p.clave, MAX(o.año) as reciente from MiembroDelegacion as md ");
                 query.Append(" inner join Persona as p on p.clave = md.persona ");
                 query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
                 query.Append(" where md.estado = ");
@@ -1012,7 +899,7 @@ namespace OMIstats.Models
                 else
                     query.Append(" = '");
                 query.Append(TipoAsistente.COMPETIDOR.ToString().ToLower());
-                query.Append("' group by p.nombre, p.clave ");
+                query.Append("' group by p.clave ");
                 query.Append(" order by reciente desc ");
 
                 db.EjecutarQuery(query.ToString());
@@ -1020,7 +907,7 @@ namespace OMIstats.Models
 
                 foreach (DataRow r in table.Rows)
                 {
-                    int año = int.Parse(r[2].ToString().Trim());
+                    int año = int.Parse(r[1].ToString().Trim());
                     int clavePersona = (int)r[0];
 
                     // Filtra a los que ya están registrados este año
