@@ -156,6 +156,7 @@ namespace OMIstats.Controllers
             {
                 estado.nombre = e.nombre;
                 estado.ISO = e.ISO;
+                estado.CURP = e.CURP;
             }
 
             if (!estado.guardar())
