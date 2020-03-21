@@ -164,64 +164,6 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Olimpiada/Attendees/
-
-        public ActionResult Attendees(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
-        {
-            if (!estaLoggeado())
-            {
-                guardarParams(Pagina.LOGIN, Pagina.ATTENDEES_OMI, clave);
-                return RedirectTo(Pagina.LOGIN);
-            }
-
-            if (!esAdmin())
-                return RedirectTo(Pagina.ERROR, 401);
-
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
-
-            if (o == null)
-                return RedirectTo(Pagina.ERROR, 404);
-
-            ViewBag.asistentes = o.obtenerTablaAsistentes();
-            limpiarErroresViewBag();
-
-            return View(o);
-        }
-
-        //
-        // POST: /Olimpiada/Attendees/
-
-        [HttpPost]
-        public ActionResult Attendees(string tabla, string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
-        {
-            if (!esAdmin() || tabla == null || clave == null)
-                return RedirectTo(Pagina.HOME);
-
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
-
-            if (o == null || clave == Olimpiada.TEMP_CLAVE)
-                return RedirectTo(Pagina.ERROR, 404);
-
-            limpiarErroresViewBag();
-            ViewBag.omi = clave;
-
-            string errores = o.guardarTablaAsistentes(tabla);
-
-            if (errores.Length > 0)
-            {
-                ViewBag.errorOMI = true;
-                ViewBag.asistentes = errores;
-            }
-            else
-            {
-                ViewBag.guardado = true;
-                Log.add(Log.TipoLog.ADMIN, "Participantes de " + o.tipoOlimpiada + " " + o.año + " actualizados por admin " + getUsuario().nombre);
-            }
-
-            return View(o);
-        }
-
-        //
         // GET: /Olimpiada/ResultsTable/
 
         public ActionResult ResultsTable(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)

@@ -619,55 +619,6 @@ namespace OMIstats.Models
         }
 
         /// <summary>
-        /// Regresa la tabla de asistentes en un formato tabulado con comas
-        /// para la edición manual para admins
-        /// </summary>
-        /// <returns>La tabla tabulada con comas</returns>
-        public string obtenerTablaAsistentes()
-        {
-            List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada);
-
-            StringBuilder tabla = new StringBuilder();
-
-            foreach (MiembroDelegacion asistente in asistentes)
-            {
-                tabla.Append(asistente.obtenerLineaAdmin());
-                tabla.Append("\n");
-            }
-
-            return tabla.ToString();
-        }
-
-        /// <summary>
-        /// Guarda en la base de datos la tabla de asistentes
-        /// </summary>
-        /// <param name="tabla">La nueva tabla de asistentes, un asistente por renglon
-        /// y tabulada con comas</param>
-        /// <returns>Los registros que ocasionaron error</returns>
-        public string guardarTablaAsistentes(string tabla)
-        {
-            StringBuilder errores = new StringBuilder();
-            string[] lineas;
-
-            lineas = tabla.Split('\n');
-            foreach (string linea in lineas)
-            {
-                int result = MiembroDelegacion.guardarLineaAdmin(numero, tipoOlimpiada, linea.Trim());
-                MiembroDelegacion.TipoError error = result >= Persona.PrimerClave ?
-                    MiembroDelegacion.TipoError.OK : (MiembroDelegacion.TipoError)result;
-                if (error != MiembroDelegacion.TipoError.OK)
-                {
-                    errores.Append(linea.Trim());
-                    errores.Append(": ");
-                    errores.Append(error.ToString());
-                    errores.Append("\n");
-                }
-            }
-
-            return errores.ToString();
-        }
-
-        /// <summary>
         /// Regresa la tabla de puntos en formato tabulado, con el número de problemas
         /// mandado como parámetro
         /// </summary>

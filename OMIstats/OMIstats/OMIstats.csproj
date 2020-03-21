@@ -404,7 +404,6 @@
     <Content Include="Views\Estado\Index.cshtml" />
     <Content Include="Views\Escuela\Edit.cshtml" />
     <Content Include="Views\Escuela\Saved.cshtml" />
-    <Content Include="Views\Olimpiada\Attendees.cshtml" />
     <Content Include="Views\Problema\Edit.cshtml" />
     <Content Include="Views\Olimpiada\ResultsTable.cshtml" />
     <Content Include="Views\Olimpiada\Resultados.cshtml" />
