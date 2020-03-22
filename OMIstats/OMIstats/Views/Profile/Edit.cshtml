@@ -155,12 +155,12 @@
                     <div class="label">Tipo usuario:</div>
                     <div class="input">
                         <select id="tipoUsuario" name="tipoUsuario">
-                            <option value="Normal" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.NORMAL ? "selected" : "") >Normal</option>
-                            <option value="Delegado" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.DELEGADO ? "selected" : "")>Delegado</option>
+                            <option value="NORMAL" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.NORMAL ? "selected" : "") >Normal</option>
+                            <option value="DELEGADO" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.DELEGADO ? "selected" : "")>Delegado</option>
                             <option value="COMI" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.COMI ? "selected" : "")>COMI</option>
                             @if (ViewBag.usuario.esAdmin())
                             {
-                                <option value="Admin" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.ADMIN ? "selected" : "")>Admin</option>
+                                <option value="ADMIN" @(Model.permisos == OMIstats.Models.Persona.TipoPermisos.ADMIN ? "selected" : "")>Admin</option>
                             }
                         </select>
                     </div>

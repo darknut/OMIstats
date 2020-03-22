@@ -79,7 +79,7 @@ else
                     </div>
                     <a href="javascript:aprobar(@item.clave, '@Url.Content("~")')">Responder</a>
                 }
-                else if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.FOTO || item.subtipo == Peticion.TipoPeticion.APELLIDO_MATERNO || item.subtipo == Peticion.TipoPeticion.APELLIDO_PATERNO)
+                else if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.FOTO || item.subtipo == Peticion.TipoPeticion.APELLIDOMATERNO || item.subtipo == Peticion.TipoPeticion.APELLIDOPATERNO)
                 {
                     <a href="javascript:aprobar(@item.clave, '@Url.Content("~")')">Aprobar</a>
                 }
@@ -93,7 +93,7 @@ else
 
             @if (item.tipo == Peticion.TipoPeticion.USUARIO)
             {
-                if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.APELLIDO_PATERNO || item.subtipo == Peticion.TipoPeticion.APELLIDO_MATERNO)
+                if (item.subtipo == Peticion.TipoPeticion.NOMBRE || item.subtipo == Peticion.TipoPeticion.APELLIDOPATERNO || item.subtipo == Peticion.TipoPeticion.APELLIDOMATERNO)
                 {
                     <td class="negritas">
                         Cambio de nombre
@@ -105,11 +105,11 @@ else
                             {
                                 nombre = item.usuario.nombre;
                             }
-                            if (item.subtipo == Peticion.TipoPeticion.APELLIDO_MATERNO)
+                            if (item.subtipo == Peticion.TipoPeticion.APELLIDOMATERNO)
                             {
                                 nombre = item.usuario.apellidoMaterno;
                             }
-                            if (item.subtipo == Peticion.TipoPeticion.APELLIDO_PATERNO)
+                            if (item.subtipo == Peticion.TipoPeticion.APELLIDOPATERNO)
                             {
                                 nombre = item.usuario.apellidoPaterno;
                             }

@@ -39,8 +39,8 @@
         switch (item.subtipo)
         {
             case Peticion.TipoPeticion.NOMBRE:
-            case Peticion.TipoPeticion.APELLIDO_PATERNO:
-            case Peticion.TipoPeticion.APELLIDO_MATERNO:
+            case Peticion.TipoPeticion.APELLIDOPATERNO:
+            case Peticion.TipoPeticion.APELLIDOMATERNO:
                 {
                     nombre.Add(item);
                     break;
@@ -90,12 +90,12 @@ else
                             @usuario.nombre
                             break;
                         }
-                        case Peticion.TipoPeticion.APELLIDO_PATERNO:
+                        case Peticion.TipoPeticion.APELLIDOPATERNO:
                         {
                             @usuario.apellidoPaterno
                             break;
                         }
-                        case Peticion.TipoPeticion.APELLIDO_MATERNO:
+                        case Peticion.TipoPeticion.APELLIDOMATERNO:
                         {
                             @usuario.apellidoMaterno
                             break;

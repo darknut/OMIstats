@@ -115,7 +115,7 @@ namespace OMIstats.Models
         {
             get
             {
-                return nombre + " " + apellidoPaterno + " " + apellidoMaterno;
+                return (nombre + " " + apellidoPaterno + " " + apellidoMaterno).Trim();
             }
         }
 
@@ -167,6 +167,7 @@ namespace OMIstats.Models
             nombre = datos["nombre"].ToString().Trim();
             apellidoPaterno = datos["apellidoP"].ToString().Trim();
             apellidoMaterno = datos["apellidoM"].ToString().Trim();
+            usuario = datos["usuario"].ToString().Trim();
 
             if (completo)
             {
@@ -324,7 +325,7 @@ namespace OMIstats.Models
 
             query.Append(" update persona set ");
 
-            if (generarPeticiones)
+            if (generarPeticiones && nombreCompleto != currentValues.nombreCompleto)
             {
                 if (nombre != currentValues.nombre)
                 {
@@ -340,17 +341,17 @@ namespace OMIstats.Models
                 {
                     Peticion pet = new Peticion();
                     pet.tipo = Peticion.TipoPeticion.USUARIO;
-                    pet.subtipo = Peticion.TipoPeticion.APELLIDO_PATERNO;
+                    pet.subtipo = Peticion.TipoPeticion.APELLIDOPATERNO;
                     pet.usuario = this;
                     pet.datos1 = apellidoPaterno;
                     pet.guardarPeticion();
                 }
 
-                if (!String.IsNullOrEmpty(apellidoMaterno))
+                if (apellidoMaterno != currentValues.apellidoMaterno)
                 {
                     Peticion pet = new Peticion();
                     pet.tipo = Peticion.TipoPeticion.USUARIO;
-                    pet.subtipo = Peticion.TipoPeticion.APELLIDO_MATERNO;
+                    pet.subtipo = Peticion.TipoPeticion.APELLIDOMATERNO;
                     pet.usuario = this;
                     pet.datos1 = apellidoMaterno;
                     pet.guardarPeticion();

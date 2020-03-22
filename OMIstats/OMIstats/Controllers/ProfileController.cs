@@ -137,6 +137,8 @@ namespace OMIstats.Controllers
 
             if (usuario != null && p.esSuperUsuario())
                 p = Persona.obtenerPersonaDeUsuario(usuario);
+            if (p.apellidoPaterno == "")
+                p.breakNombre();
 
             limpiarErroresViewBag();
             ponFechasEnViewBag();
@@ -167,11 +169,13 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
 
+#if !DEBUG
             if (!esSuperUsuario && !revisaCaptcha())
             {
                 ViewBag.errorCaptcha = true;
                 return Edit(current.usuario);
             }
+#endif
 
             // Validaciones foto
             if (file != null)
@@ -240,7 +244,7 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.SAVED_PROFILE, current.usuario);
                 }
 
-                if (file != null || p.nombre != current.nombre || p.apellidoMaterno != current.apellidoMaterno || p.apellidoPaterno != current.apellidoMaterno)
+                if (file != null || p.nombreCompleto != current.nombreCompleto)
                 {
                     guardarParams(Pagina.SAVED_PROFILE, ADMIN);
                     return RedirectTo(Pagina.SAVED_PROFILE);
