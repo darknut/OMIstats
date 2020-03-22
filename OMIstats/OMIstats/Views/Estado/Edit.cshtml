@@ -68,17 +68,9 @@ else
                         @Html.ValidationMessageFor(model => model.ISO)
                     </div>
                 </div>
-                <div>
-                    <div class="label">Código para CURP:</div>
-                    <div class="input">
-                        @Html.TextBoxFor(model => model.CURP, new { @class = "smallInput" })
-                        @Html.ValidationMessageFor(model => model.CURP)
-                    </div>
-                </div>
                 } else
                 {
                     @Html.HiddenFor(model => model.ISO)
-                    @Html.HiddenFor(model => model.CURP)
                 }
                 <div id="datosDelegado" class="oculto">
                     @if (usuario.esAdmin())

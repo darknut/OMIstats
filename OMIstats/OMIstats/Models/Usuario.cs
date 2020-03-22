@@ -18,14 +18,11 @@ namespace OMIstats.Models
 
         public string Nombre { get; set; }
 
-        public string CURP { get; set; }
-
         public Usuario()
         {
             Id = 0;
             Email = "";
             Nombre = "";
-            CURP = "";
         }
 
         private static string tableName(string table)
@@ -46,15 +43,6 @@ namespace OMIstats.Models
             Id = (long)datos["Id"];
             Email = datos["Email"].ToString().Trim();
             Nombre = datos["NombreCompleto"].ToString().Trim();
-
-            try
-            {
-                // El CURP aun no está en la base de la OMI
-                CURP = datos["CURP"].ToString().Trim();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         /// <summary>

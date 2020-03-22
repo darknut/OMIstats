@@ -36,9 +36,6 @@ namespace OMIstats.Models
         [MaxLength(3, ErrorMessage = "El tamaño máximo es de 3 caracteres")]
         public string ISO { get; set; }
 
-        [MaxLength(2, ErrorMessage = "El tamaño máximo es de 2 caracteres")]
-        public string CURP { get; set; }
-
         private static Dictionary<string, Estado> cargarEstados()
         {
             Dictionary<string, Estado> lista = new Dictionary<string, Estado>();
@@ -86,7 +83,6 @@ namespace OMIstats.Models
             nombre = "";
             sitio = "";
             ISO = "";
-            CURP = "";
             delegado = null;
 
             claveDelegado = Persona.UsuarioNulo;
@@ -109,7 +105,6 @@ namespace OMIstats.Models
             nombre = datos["nombre"].ToString().Trim();
             sitio = datos["sitio"].ToString().Trim();
             ISO = datos["iso"].ToString().Trim();
-            CURP = datos["curp"].ToString().Trim();
 
             claveDelegado = (int) (datos["delegado"] == DBNull.Value ? 0 : datos["delegado"]);
             delegado = Persona.obtenerPersonaConClave(claveDelegado);
@@ -155,8 +150,6 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(sitio));
             query.Append(" , iso = ");
             query.Append(Utilities.Cadenas.comillas(ISO));
-            query.Append(" , curp = ");
-            query.Append(Utilities.Cadenas.comillas(CURP));
             if (delegado != null)
             {
                 query.Append(", delegado = ");

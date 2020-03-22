@@ -55,7 +55,6 @@ namespace OMIstats.Models
             FECHA_NACIMIENTO,
             GENERO,
             CORREO,
-            CURP,
             NOMBRE_ESCUELA,
             NIVEL_ESCUELA,
             AÑO_ESCUELA,
@@ -70,7 +69,6 @@ namespace OMIstats.Models
         public string nombreAsistente;
         public string fechaNacimiento;
         public string correo;
-        public string CURP;
         public string genero;
         public string nombreEscuela;
         public bool escuelaPublica;
@@ -140,7 +138,6 @@ namespace OMIstats.Models
                 fechaNacimiento = row["nacimiento"].ToString().Trim();
                 genero = row["genero"].ToString().Trim();
                 correo = row["correo"].ToString().Trim();
-                CURP = row["CURP"].ToString().Trim();
             }
 
             if (incluirEscuela)
@@ -312,14 +309,8 @@ namespace OMIstats.Models
             if (md.usuario.Length == 0)
             {
                 // El usuario se desconoce, hay que buscarlo
-                // Primero buscamos por CURP
-                p = Persona.obtenerPersonaConCURP(md.CURP);
-
-                if (p == null)
-                {
-                    // No se encontró con curp, aproximamos por nombre
-                    p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
-                }
+                // Buscamos por nombre
+                p = Persona.obtenerPersonaConNombre(md.nombreAsistente);
 
                 // El usuario es nuevo, lo creamos
                 if (p == null)
@@ -380,7 +371,6 @@ namespace OMIstats.Models
 
             if (md.genero == "M" || md.genero == "F")
                 p.genero = md.genero;
-            p.CURP = md.CURP;
 
             if (md.correo.Length > 0)
             {
@@ -654,7 +644,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
-            query.Append(" p.nacimiento, p.genero, p.correo, p.curp, i.nombreCorto, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");

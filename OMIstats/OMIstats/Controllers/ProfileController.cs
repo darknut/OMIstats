@@ -213,7 +213,6 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 p.ioiID = current.ioiID;
             p.usuario = current.usuario;
-            p.CURP = current.CURP;
 
             // Se guarda la imagen en disco
             if (file != null)

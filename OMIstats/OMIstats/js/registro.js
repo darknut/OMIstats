@@ -98,23 +98,3 @@ function eliminarUsuario(tipoOlimpiada, clave, nombre) {
 function nuevaPersona() {
     redirige(ajaxUrl, "Asistente?omi=" + omi + "&tipo=" + tipoRegistro + (estado == "" ? "" : "&estado=" + estado));
 }
-
-function updateCURP() {
-    var value = document.getElementById("curp").value;
-
-    if (value.length == 0) {
-        var curp = generaCurp({
-            nombre: $("#name").val(),
-            apellido_paterno: $("#first_name").val(),
-            apellido_materno: $("#second_name").val(),
-            sexo: $("#gender").val().toUpperCase(),
-            estado: $("#natal_state").val(),
-            fecha_nacimiento: [
-                parseInt($("#birth_date").val().substring(8, 10)),
-                parseInt($("#birth_date").val().substring(5, 7)),
-                parseInt($("#birth_date").val().substring(0, 4))
-            ]
-        });
-        document.getElementById("curp").value = curp;
-    }
-}

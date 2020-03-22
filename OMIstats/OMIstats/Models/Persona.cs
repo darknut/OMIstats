@@ -109,8 +109,6 @@ namespace OMIstats.Models
 
         public int ioiID { get; set; }
 
-        public string CURP { get; set; }
-
         public string nombreCompleto
         {
             get
@@ -140,7 +138,6 @@ namespace OMIstats.Models
             genero = "M";
             foto = "";
             ioiID = 0;
-            CURP = "";
             omegaup = "";
             codeforces = "";
             topcoder = "";
@@ -180,7 +177,6 @@ namespace OMIstats.Models
                 genero = datos["genero"].ToString();
                 foto = datos["foto"].ToString().Trim();
                 ioiID = (int)datos["ioiID"];
-                CURP = datos["CURP"].ToString().Trim();
                 omegaup = datos["omegaup"].ToString().Trim();
                 topcoder = datos["topcoder"].ToString().Trim();
                 codeforces = datos["codeforces"].ToString().Trim();
@@ -412,10 +408,6 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(topcoder));
             query.Append(",");
 
-            query.Append(" CURP = ");
-            query.Append(Utilities.Cadenas.comillas(CURP.Trim().ToUpper()));
-            query.Append(",");
-
             if (estado.Length > 0)
             {
                 query.Append(" estado = ");
@@ -586,56 +578,13 @@ namespace OMIstats.Models
         /// <returns>La persona correspondiente en nuestra base</returns>
         public static Persona obtenerPersonaDeUsuario(Usuario usuario)
         {
-            // Primero revisamos los CURP
-            Persona p = Persona.obtenerPersonaConCURP(usuario.CURP, ignorarUsuarios: true);
+            // Primero intentamos aproximar el nombre
+            Persona p = Persona.obtenerPersonaConNombre(usuario.Nombre, ignorarUsuarios: true);
             if (p != null)
                 return p;
 
-            // Ahora intentamos aproximar el nombre
-            p = Persona.obtenerPersonaConNombre(usuario.Nombre, ignorarUsuarios: true);
-            if (p != null)
-                return p;
-
-            // Como último recurso, buscamos por correo
+            // También buscamos por correo
             p = Persona.obtenerPersonaConCorreo(usuario.Email, ignorarUsuarios: true);
-
-            return p;
-        }
-
-        /// <summary>
-        /// Busca una persona con el curp mandado como parámetro
-        /// </summary>
-        /// <param name="CURP">El curp de la persona deseada</param>
-        /// <param name="ignorarUsuarios">verdadero cuando no queremos recibir resultados de
-        /// personas que ya tienen asignado un usuario</param>
-        /// <returns></returns>
-        public static Persona obtenerPersonaConCURP(string CURP, bool ignorarUsuarios = false)
-        {
-            if (CURP == null)
-                return null;
-
-            CURP = CURP.Trim().ToUpper();
-
-            if (CURP.Length == 0)
-                return null;
-
-            Utilities.Acceso db = new Utilities.Acceso();
-            StringBuilder query = new StringBuilder();
-
-            query.Append("select * from persona where CURP = ");
-            query.Append(Utilities.Cadenas.comillas(CURP));
-            if (ignorarUsuarios)
-                query.Append(" and LEFT(usuario, 1) = '_' ");
-
-            if (db.EjecutarQuery(query.ToString()).error)
-                return null;
-
-            DataTable table = db.getTable();
-            if (table.Rows.Count != 1)
-                return null;
-
-            Persona p = new Persona();
-            p.llenarDatos(table.Rows[0]);
 
             return p;
         }
