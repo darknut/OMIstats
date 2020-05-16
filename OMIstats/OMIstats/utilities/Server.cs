@@ -7,7 +7,7 @@ namespace OMIstats.Utilities
 {
     public class Server
     {
-        private static string DIRECCION_OMI = "http://www.olimpiadadeinformatica.org.mx/OMI/Ingreso/Login.aspx?estadistica=1";
+        private static string DIRECCION_OMI = "https://www.olimpiadadeinformatica.org.mx/OMI/Ingreso/Login.aspx?estadistica=1";
 
         public static string direccionOMI()
         {
