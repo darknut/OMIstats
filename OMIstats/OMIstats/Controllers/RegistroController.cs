@@ -112,6 +112,8 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave)[0];
+            if (md.estado != estado)
+                return RedirectTo(Pagina.HOME);
             md.borrarMiembroDelegacion();
 
             return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
@@ -120,13 +122,23 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Asistente
 
-        public ActionResult Asistente(string omi, TipoOlimpiada tipo, string estado = null, string clave = null, string persona = null)
+        public ActionResult Asistente(string omi, TipoOlimpiada tipo, string estado = null, string clave = null)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null || !tienePermisos(o.registroActivo, estado))
                 return RedirectTo(Pagina.HOME);
 
+            Persona p = getUsuario();
+
+            if (!p.esSuperUsuario())
+            {
+                if (estado == null)
+                    return RedirectTo(Pagina.HOME);
+                ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+            }
+
             ViewBag.nuevo = (clave == null);
+            ViewBag.omi = o;
             limpiarErroresViewBag();
 
             return View(new Persona());

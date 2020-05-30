@@ -11,9 +11,9 @@ function setUpAjax(url, claveEstado, claveOmi) {
 }
 
 function handleAjax(data) {
-    setVisible("loading", false);
+    setVisible("searching", false);
     setVisible("tablaRegistro", "block");
-    setVisible("errorLoading", false);
+    setVisible("errorSearching", false);
     if (searching) {
         if (data.length == 0)
             setVisible("noResults", true);
@@ -37,9 +37,9 @@ function handleAjax(data) {
 }
 
 function handleError() {
-    setVisible("loading", false);
+    setVisible("searching", false);
     setVisible("tablaRegistro", false);
-    setVisible("errorLoading", true);
+    setVisible("errorSearching", true);
     setVisible("noResults", false);
     setVisible("info", false);
     setVisible("mas10", false);
@@ -54,7 +54,7 @@ function callServer(subUrl, query) {
 
 function buscar() {
     setVisible("tablaRegistro", false);
-    setVisible("loading", true);
+    setVisible("searching", true);
     setVisible("noResults", false);
     setVisible("info", false);
     setVisible("mas10", false);
@@ -64,30 +64,6 @@ function buscar() {
     callServer("Buscar", txt.value);
 }
 
-function muestraRegistro(tipo) {
-    tipoRegistro = tipo;
-    setVisible("registro", "block");
-    setVisible("tablaRegistro", false);
-    setVisible("loading", true);
-    setVisible("info", false);
-    setVisible("noResults", false);
-    setVisible("mas10", false);
-
-    var input = document.getElementById("nombre");
-    input.focus();
-    input.value = "";
-
-    input.onkeydown = function (e) {
-        if (e.keyCode == 13) { // Enter
-            var button = document.getElementById("buscar");
-            button.click();
-        }
-    };
-
-    searching = false;
-    callServer("Buscar", "");
-}
-
 function eliminarUsuario(tipoOlimpiada, clave, nombre) {
     var result = confirm("¿Eliminar a " + nombre + "?");
     if (result) {
@@ -95,6 +71,11 @@ function eliminarUsuario(tipoOlimpiada, clave, nombre) {
     }
 }
 
-function nuevaPersona() {
-    redirige(ajaxUrl, "Asistente?omi=" + omi + "&tipo=" + tipoRegistro + (estado == "" ? "" : "&estado=" + estado));
+function iniciaRegistro(tipo) {
+    var address = "Asistente?omi=" + omi;
+    if (tipo)
+        address += "&tipo=" + tipo;
+    if (estado)
+        address += "&estado=" + estado;
+    redirige(ajaxUrl, address);
 }

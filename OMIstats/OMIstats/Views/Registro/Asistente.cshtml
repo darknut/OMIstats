@@ -3,6 +3,10 @@
 @{
     bool nuevo = ViewBag.nuevo;
     ViewBag.Title = nuevo ? "Registro" : "Modificar";
+    OMIstats.Models.Persona usuario = ViewBag.usuario;
+    OMIstats.Models.Estado estado = ViewBag.estado;
+    OMIstats.Models.Olimpiada omi = ViewBag.omi;
+    bool registroActivo = ViewBag.registroActivo;
 }
 
 @section AddToHead
@@ -21,9 +25,28 @@
     <script src="~/js/formas.js"></script>
     <script src="~/js/profile.js"></script>
     <script src="~/js/registro.js"></script>
+    <script>
+        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
+    </script>
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
+
+<div id="registro" class="registro-container">
+    <div>Busca una persona, elige a alguien de la lista de abajo o registra a alguien nuevo.</div>
+    <div><input type="text" id="nombre" class="input-name"/><input id="buscar" type="submit" value="Buscar" onclick="buscar()"/></div>
+    <ul id="tablaRegistro" style="display:none">
+        @for(int i = 0; i < 10; i++)
+        {
+            <li style="display:none" id="@("resultados" + i)"><a class="a-sin-href"></a></li>
+        }
+        <li id="mas10" style="display:none" class="mas10">Mostrando solo los primeros 10 resultados</li>
+    </ul>
+    <div id="info" style="display:none" class="redefine">Si no encuentras a quien buscas, redefine tu búsqueda</div>
+    <div id="noResults" style="display:none" class="loading errorTextoRojo">No se encontraron resultados</div>
+    <div id="errorSearching" class="loading errorTextoRojo" style="display:none">Se produjo un error, por favor contacta a un administrador o a un miembro del COMI</div>
+    <img id="searching" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none" class="loading"/>
+</div>
 
 <form name="asistente" id="asistente" action="~/Registro/Asistente" method="post" enctype="multipart/form-data">
     <div class="datosParticipante">
@@ -103,7 +126,7 @@
         <div>
             <div class="label">
                 <input type="submit" onclick="revisa()" value="Enviar"/>
-                <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+                <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
             </div>
             <div class="input floatRight">
                 <a href="~/Registro/Delegacion"><input type="button" value="Cancelar" /></a>
