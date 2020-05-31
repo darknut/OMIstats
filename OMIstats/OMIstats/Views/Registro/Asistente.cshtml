@@ -194,16 +194,47 @@
         <div class="registro-single-control"></div>
     </div>
 </div>
-<input id="clave" name="clave" type="hidden" value="@Model.clave" />
-<div>
-    <div class="label">
-        <input type="submit" onclick="revisa()" value="Enviar"/>
-        <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
+</div>
+<div class="panel">
+    <div class="panel-heading"> Contacto de emergencia </div>
+    <div class="panel-body">
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Nombre del contacto de emergencia<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.emergencia, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.emergencia)
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Parentesco</span>
+            @Html.TextBoxFor(model => model.parentesco, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.parentesco)
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Teléfono de emergencia<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.telEmergencia, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.telEmergencia)
+        </div>
     </div>
-    <div class="input floatRight">
-        <a href="~/Registro/Delegacion"><input type="button" value="Cancelar" /></a>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Medicina especial</span>
+            @Html.TextBoxFor(model => model.medicina, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.medicina)
+        </div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Alergias</span>
+            @Html.TextBoxFor(model => model.alergias, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.alergias)
+        </div>
+    </div>
     </div>
 </div>
+<input id="clave" name="clave" type="hidden" value="@Model.clave" />
+<div class="boton-guardar">
+    <button type="submit" onclick="revisa()" class="boton-registro">Guardar</button>
+    <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
 </div>
 </form>
 <div class="clear"></div>
