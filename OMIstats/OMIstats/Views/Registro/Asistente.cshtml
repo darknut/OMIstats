@@ -179,7 +179,7 @@
             @Html.ValidationMessageFor(model => model.omegaup)
         </div>
         <div class="registro-single-control">
-            <span class="control-title">Foto</span>
+            <span class="control-title">Foto <span style="font-weight:normal">(300KB max)</span></span>
             <input type="file" name="file" id="file"
                     class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
                 @if (ViewBag.errorImagen == "imagen_invalida")
@@ -196,7 +196,7 @@
 </div>
 </div>
 <div class="panel">
-    <div class="panel-heading"> Contacto de emergencia </div>
+    <div class="panel-heading"> Datos de emergencia </div>
     <div class="panel-body">
     <div class="registro-controls">
         <div class="registro-single-control">
