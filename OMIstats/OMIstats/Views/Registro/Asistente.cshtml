@@ -28,6 +28,8 @@
     <script src="~/js/profile.js"></script>
     <script src="~/js/registro.js"></script>
     <script>
+        var OMI_minimo = @(DateTime.Today.Year - 80);
+        var OMI_maximo = @(DateTime.Today.Year - 6);
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
         setUpSearch("@tipo");
     </script>
@@ -130,44 +132,55 @@
             @Html.ValidationMessageFor(model => model.apellidoMaterno)
         </div>
     </div>
-        <div>
-            <div class="label">Sexo:</div>
-            <div class="input">
-                <select id="genero" name="genero">
-                    <option value="M" @(Model.genero == "M" ? "selected" : "")>Masculino</option>
-                    <option value="F" @(Model.genero == "F" ? "selected" : "")>Femenino</option>
-                </select>
-            </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Sexo<span class="errorTextoRojo">*</span></span>
+            <select id="genero" name="genero" class="shiny-box">
+                <option value=""></option>
+                <option value="M" @(Model.genero == "M" ? "selected" : "")>Masculino</option>
+                <option value="F" @(Model.genero == "F" ? "selected" : "")>Femenino</option>
+            </select>
         </div>
-        <div>
-            <div class="label">Fecha de nacimiento:</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}")
-                @Html.ValidationMessageFor(model => model.nacimiento, "No escribiste una fecha válida")
-            </div>
+        <div class="registro-single-control">
+            <span class="control-title">Fecha de nacimiento<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}", new { @class="shiny-box" })
+            @Html.ValidationMessageFor(model => model.nacimiento, "No escribiste una fecha válida")
         </div>
-        <div>
-            <div class="label">Correo electrónico:</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.correo, new { @class = "inputLarge" })
-                @Html.ValidationMessageFor(model => model.correo)
-            </div>
+        <div class="registro-single-control"></div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Correo electrónico<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.correo, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.correo)
         </div>
-        <div>
-            <div class="label">Id de OmegaUp:</div>
-            <div class="input">
-                https://omegaup.com/profile/@Html.TextBoxFor(model => model.omegaup, new { @class = "inputOmegaUp" })
-                @Html.ValidationMessageFor(model => model.omegaup)
-            </div>
+        <div class="registro-single-control">
+            <span class="control-title">Celular<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.celular, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.celular)
         </div>
-
-        <div>
-            <div class="fotoReg">
-                <img src='@(@Model.foto.Length > 0 ? Url.Content(@Model.foto) : "")' alt="@Model.nombreCompleto"/>
-            </div>
-            <div class="label">Sube una foto:</div>
-            <div class="input">
-                <input type="file" name="file" id="file"
+        <div class="registro-single-control">
+            <span class="control-title">Teléfono</span>
+            @Html.TextBoxFor(model => model.telefono, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.telefono)
+        </div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Dirección</span>
+            @Html.TextBoxFor(model => model.direccion, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.direccion)
+        </div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Usuario de OmageUp</span>
+            @Html.TextBoxFor(model => model.omegaup, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.omegaup)
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Foto</span>
+            <input type="file" name="file" id="file"
                     class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
                 @if (ViewBag.errorImagen == "imagen_invalida")
                 {
@@ -177,21 +190,20 @@
                 {
                     <div class="errorTextoRojo">El limite de tamaño para una imagen es 300KB</div>
                 }
-            </div>
         </div>
-
-        <input id="clave" name="clave" type="hidden" value="@Model.clave" />
-
-        <div>
-            <div class="label">
-                <input type="submit" onclick="revisa()" value="Enviar"/>
-                <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
-            </div>
-            <div class="input floatRight">
-                <a href="~/Registro/Delegacion"><input type="button" value="Cancelar" /></a>
-            </div>
-        </div>
+        <div class="registro-single-control"></div>
     </div>
+</div>
+<input id="clave" name="clave" type="hidden" value="@Model.clave" />
+<div>
+    <div class="label">
+        <input type="submit" onclick="revisa()" value="Enviar"/>
+        <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
+    </div>
+    <div class="input floatRight">
+        <a href="~/Registro/Delegacion"><input type="button" value="Cancelar" /></a>
+    </div>
+</div>
 </div>
 </form>
 <div class="clear"></div>
