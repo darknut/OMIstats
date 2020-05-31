@@ -14,7 +14,6 @@
 {
     <link rel="stylesheet" href="~/Content/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="~/Content/registro.css" type="text/css" />
-    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/fechas.css" type="text/css" />
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
 }
@@ -34,8 +33,8 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
-<div id="busqueda" class="panel-info">
-    <div class="panel-info-heading"> Buscar participantes de años anteriores </div>
+<div id="busqueda" class="panel">
+    <div class="panel-heading"> Buscar participantes de años anteriores </div>
     <div class="panel-body">
         <div class="registro-controls">
             <input type="text" id="nombre" class="shiny-box grow-input" placeholder="Buscar por nombre"/>
@@ -56,28 +55,38 @@
 </div>
 
 <form name="asistente" id="asistente" action="~/Registro/Asistente" method="post" enctype="multipart/form-data">
-    <div class="datosParticipante">
-        <div>
-            <div class="label">Nombre(s):</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.nombre)
-                @Html.ValidationMessageFor(model => model.nombre)
-            </div>
+<div class="panel panel-green datos-padding">
+    <div class="panel-heading panel-heading-green">Datos del participante</div>
+    <div class="panel-body">
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Concurso<span class="errorTextoRojo">*</span></span>
+            <select id="tipo" class="shiny-box">
+                <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
+                <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
+                <option value="OMI" @(tipo == OMIstats.Models.TipoOlimpiada.OMI ? "selected" : "")>OMI</option>
+            </select>
         </div>
-        <div>
-            <div class="label">Apellido paterno:</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.apellidoPaterno)
-                @Html.ValidationMessageFor(model => model.apellidoPaterno)
-            </div>
+        <div class="registro-single-control"></div>
+        <div class="registro-single-control"></div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Nombre(s)<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.nombre, new { @class="shiny-box" })
+            @Html.ValidationMessageFor(model => model.nombre)
         </div>
-        <div>
-            <div class="label">Apellido materno:</div>
-            <div class="input">
-                @Html.TextBoxFor(model => model.apellidoMaterno)
-                @Html.ValidationMessageFor(model => model.apellidoMaterno)
-            </div>
+        <div class="registro-single-control">
+            <span class="control-title">Apellido Paterno<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.apellidoPaterno, new { @class="shiny-box" })
+            @Html.ValidationMessageFor(model => model.apellidoPaterno)
         </div>
+        <div class="registro-single-control">
+            <span class="control-title">Apellido Materno<span class="errorTextoRojo">*</span></span>
+            @Html.TextBoxFor(model => model.apellidoMaterno, new { @class="shiny-box" })
+            @Html.ValidationMessageFor(model => model.apellidoMaterno)
+        </div>
+    </div>
         <div>
             <div class="label">Sexo:</div>
             <div class="input">
@@ -140,5 +149,6 @@
             </div>
         </div>
     </div>
+</div>
 </form>
 <div class="clear"></div>

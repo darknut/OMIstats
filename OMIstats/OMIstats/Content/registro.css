@@ -1,5 +1,4 @@
 ﻿.shiny-box {
-	height: 25px;
 	padding: 6px 12px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -18,7 +17,7 @@
 }
 
 .boton-registro {
-    height: 37px;
+    height: 35px;
     padding: 6px 12px;
     border-radius: 4px;
 	font-size: 14px;
@@ -41,7 +40,7 @@
     cursor: pointer;
 }
 
-.panel-info {
+.panel {
     border: 1px solid #bce8f1;
     border-radius: 4px;
     margin-right:20px;
@@ -49,7 +48,11 @@
     max-width: 1100px;
 }
 
-.panel-info-heading {
+.panel-green {
+    border-color: #d6e9c6;
+}
+
+.panel-heading {
 	padding: 10px 15px;
 	border-bottom: 1px solid transparent;
 	border-top-left-radius: 3px;
@@ -63,15 +66,39 @@
     padding: 15px;
 }
 
+.panel-heading-green {
+    color: #3c763d;
+	background-color: #dff0d8;
+	border-color: #d6e9c6
+}
+
 .registro-controls {
     display: flex;
     flex-direction: row;
     flex: 1 1 auto;
 }
 
+.registro-single-control {
+    float: left;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    padding: 10px;
+}
+
+.control-title {
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
 .grow-input {
     width: 100%;
     margin-right: 20px;
+}
+
+.datos-padding {
+    margin-top: 15px;
 }
 
 .registro-lista {
