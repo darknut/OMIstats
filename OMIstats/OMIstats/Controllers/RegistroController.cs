@@ -140,6 +140,7 @@ namespace OMIstats.Controllers
             ViewBag.nuevo = (clave == null);
             ViewBag.omi = o;
             ViewBag.tipo = tipo;
+            ViewBag.estados = Estado.obtenerEstados();
             limpiarErroresViewBag();
 
             return View(new Persona());

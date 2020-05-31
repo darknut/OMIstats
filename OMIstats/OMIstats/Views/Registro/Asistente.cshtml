@@ -7,7 +7,9 @@
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
     OMIstats.Models.TipoOlimpiada tipo = ViewBag.tipo;
+    List<OMIstats.Models.Estado> estados = ViewBag.estados;
     bool registroActivo = ViewBag.registroActivo;
+    bool esSede = estado != null && omi.claveEstado == estado.clave;
 }
 
 @section AddToHead
@@ -62,9 +64,9 @@
         <div class="registro-single-control">
             <span class="control-title">Concurso<span class="errorTextoRojo">*</span></span>
             <select id="tipo" class="shiny-box">
-                <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
-                <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
                 <option value="OMI" @(tipo == OMIstats.Models.TipoOlimpiada.OMI ? "selected" : "")>OMI</option>
+                <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
+                <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
             </select>
         </div>
         <div class="registro-single-control"></div>
@@ -72,18 +74,59 @@
     </div>
     <div class="registro-controls">
         <div class="registro-single-control">
+            <span class="control-title">Participar como<span class="errorTextoRojo">*</span></span>
+            <select id="tipoAsistente" class="shiny-box">
+                <option value=""></option>
+                <option value="COMPETIDOR" @(tipo != OMIstats.Models.TipoOlimpiada.NULL ? "selected" : "")>Competidor</option>
+                <option value="LIDER">Líder</option>
+                <option value="DELEGADO">Delegado</option>
+                <option value="ASESOR">Asesor</option>
+                <option value="INVITADO">Líder</option>
+                @if (usuario.esSuperUsuario())
+                {
+                <option value="COMI">COMI</option>
+                <option value="COLO">Comité local</option>
+                }
+            </select>
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Estado al que representa<span class="errorTextoRojo">*</span></span>
+            <select id="estado" class="shiny-box">
+                <option value=""></option>
+            @for (int i = 0; i < estados.Count; i++)
+            {
+                OMIstats.Models.Estado e = estados[i];
+                <option value="@e.clave" @(estado != null && e.clave == estado.clave ? "selected" : "")>@(e.nombre)</option>
+            }
+            </select>
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Clave<span class="errorTextoRojo">*</span></span>
+            <select id="claveSelect" class="shiny-box">
+            @if (estado != null)
+            {
+                for (int i = 1; i <= (esSede ? 8 : 4); i++)
+                {
+                <option value="@(estado.ISO + "-" + i)">@(estado.ISO + "-" + i)</option>
+                }
+            }
+            </select>
+        </div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
             <span class="control-title">Nombre(s)<span class="errorTextoRojo">*</span></span>
-            @Html.TextBoxFor(model => model.nombre, new { @class="shiny-box" })
+            @Html.TextBoxFor(model => model.nombre, new { @class = "shiny-box" })
             @Html.ValidationMessageFor(model => model.nombre)
         </div>
         <div class="registro-single-control">
             <span class="control-title">Apellido Paterno<span class="errorTextoRojo">*</span></span>
-            @Html.TextBoxFor(model => model.apellidoPaterno, new { @class="shiny-box" })
+            @Html.TextBoxFor(model => model.apellidoPaterno, new { @class = "shiny-box" })
             @Html.ValidationMessageFor(model => model.apellidoPaterno)
         </div>
         <div class="registro-single-control">
             <span class="control-title">Apellido Materno<span class="errorTextoRojo">*</span></span>
-            @Html.TextBoxFor(model => model.apellidoMaterno, new { @class="shiny-box" })
+            @Html.TextBoxFor(model => model.apellidoMaterno, new { @class = "shiny-box" })
             @Html.ValidationMessageFor(model => model.apellidoMaterno)
         </div>
     </div>
