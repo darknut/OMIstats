@@ -10,6 +10,32 @@ function setUpAjax(url, claveEstado, claveOmi) {
     omi = claveOmi;
 }
 
+function setUpSearch(tipo) {
+    tipoRegistro = tipo;
+    setVisible("tablaRegistro", false);
+    setVisible("info", false);
+    setVisible("noResults", false);
+    setVisible("mas10", false);
+
+    var input = document.getElementById("nombre");
+    input.focus();
+    input.value = "";
+
+    input.onkeydown = function (e) {
+        if (e.keyCode == 13) { // Enter
+            var button = document.getElementById("buscar");
+            button.click();
+        }
+    };
+
+    searching = false;
+
+    if (estado) {
+        setVisible("searching", true);
+        callServer("Buscar", "");
+    }
+}
+
 function handleAjax(data) {
     setVisible("searching", false);
     setVisible("tablaRegistro", "block");

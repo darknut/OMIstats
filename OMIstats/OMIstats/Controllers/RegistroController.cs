@@ -122,7 +122,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Asistente
 
-        public ActionResult Asistente(string omi, TipoOlimpiada tipo, string estado = null, string clave = null)
+        public ActionResult Asistente(string omi, TipoOlimpiada tipo = TipoOlimpiada.NULL, string estado = null, string clave = null)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null || !tienePermisos(o.registroActivo, estado))
@@ -139,6 +139,7 @@ namespace OMIstats.Controllers
 
             ViewBag.nuevo = (clave == null);
             ViewBag.omi = o;
+            ViewBag.tipo = tipo;
             limpiarErroresViewBag();
 
             return View(new Persona());

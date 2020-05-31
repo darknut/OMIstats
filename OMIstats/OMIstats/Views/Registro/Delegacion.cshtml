@@ -30,7 +30,6 @@
 @section AddToHead
 {
     <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="~/js/formas.js"></script>
     <script type="text/javascript" src="~/js/registro.js"></script>
     <script>
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");

@@ -6,6 +6,7 @@
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
+    OMIstats.Models.TipoOlimpiada tipo = ViewBag.tipo;
     bool registroActivo = ViewBag.registroActivo;
 }
 
@@ -21,12 +22,13 @@
 @section Scripts
 {
     <script src="~/Scripts/jquery-ui-1.8.20.min.js"></script>
-    <script src="~/js/fechas.js""></script>
+    <script src="~/js/fechas.js"></script>
     <script src="~/js/formas.js"></script>
     <script src="~/js/profile.js"></script>
     <script src="~/js/registro.js"></script>
     <script>
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
+        setUpSearch("@tipo");
     </script>
 }
 
