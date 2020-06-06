@@ -179,3 +179,7 @@ a {
 .espaciado {
     padding-top: 5px;
 }
+
+.oculto {
+    display:none;
+}

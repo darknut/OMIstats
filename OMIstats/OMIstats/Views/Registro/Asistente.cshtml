@@ -65,7 +65,7 @@
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Concurso<span class="errorTextoRojo">*</span></span>
-            <select id="tipo" class="shiny-box">
+            <select id="tipo" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled")>
                 <option value="OMI" @(tipo == OMIstats.Models.TipoOlimpiada.OMI ? "selected" : "")>OMI</option>
                 <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
                 <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
@@ -77,13 +77,16 @@
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Participar como<span class="errorTextoRojo">*</span></span>
-            <select id="tipoAsistente" class="shiny-box">
+            <select id="tipoAsistente" class="shiny-box" @(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "" : "disabled")>
                 <option value=""></option>
+                @if (usuario.esSuperUsuario() || tipo != OMIstats.Models.TipoOlimpiada.NULL)
+                {
                 <option value="COMPETIDOR" @(tipo != OMIstats.Models.TipoOlimpiada.NULL ? "selected" : "")>Competidor</option>
+                }
                 <option value="LIDER">Líder</option>
                 <option value="DELEGADO">Delegado</option>
                 <option value="ASESOR">Asesor</option>
-                <option value="INVITADO">Líder</option>
+                <option value="INVITADO">Invitado</option>
                 @if (usuario.esSuperUsuario())
                 {
                 <option value="COMI">COMI</option>
@@ -93,7 +96,7 @@
         </div>
         <div class="registro-single-control">
             <span class="control-title">Estado al que representa<span class="errorTextoRojo">*</span></span>
-            <select id="estado" class="shiny-box">
+            <select id="estado" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled")>
                 <option value=""></option>
             @for (int i = 0; i < estados.Count; i++)
             {
@@ -102,9 +105,9 @@
             }
             </select>
         </div>
-        <div class="registro-single-control">
+        <div class="registro-single-control" id="campoClave" style="@(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "opacity:0" : "")">
             <span class="control-title">Clave<span class="errorTextoRojo">*</span></span>
-            <select id="claveSelect" class="shiny-box">
+            <select id="claveSelect" class="shiny-box" @(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "disabled" : "")>
             @if (estado != null)
             {
                 for (int i = 1; i <= (esSede ? 8 : 4); i++)
