@@ -11,32 +11,34 @@ function setUpAjax(url, claveEstado, claveOmi) {
 }
 
 function setUpSearch(tipo) {
-    tipoRegistro = tipo;
-    setVisible("tablaRegistro", false);
-    setVisible("info", false);
-    setVisible("noResults", false);
-    setVisible("mas10", false);
-
-    var input = document.getElementById("nombre");
-    input.focus();
-    input.value = "";
-
-    input.onkeydown = function (e) {
-        if (e.keyCode == 13) { // Enter
-            var button = document.getElementById("buscar");
-            button.click();
+    if (updating) {
+        if (currentClave && !estado) {
+            llenaClaves(currentClave.substr(0,3));
         }
-    };
+    } else {
+        tipoRegistro = tipo;
+        setVisible("tablaRegistro", false);
+        setVisible("info", false);
+        setVisible("noResults", false);
+        setVisible("mas10", false);
 
-    searching = false;
+        var input = document.getElementById("nombre");
+        input.focus();
+        input.value = "";
 
-    if (estado) {
-        setVisible("searching", true);
-        callServer("Buscar", "");
-    }
+        input.onkeydown = function (e) {
+            if (e.keyCode == 13) { // Enter
+                var button = document.getElementById("buscar");
+                button.click();
+            }
+        };
 
-    if (currentClave && !estado) {
-        llenaClaves(currentClave.substr(0,3));
+        searching = false;
+
+        if (estado) {
+            setVisible("searching", true);
+            callServer("Buscar", "");
+        }
     }
 }
 

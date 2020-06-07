@@ -909,6 +909,10 @@ namespace OMIstats.Models
                         // Revisamos la última participación del competidor en particular
                         MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(clavePersona);
 
+                        // Esto será true si está registrado como otro tipo de asistente este año
+                        if (md.olimpiada == omi)
+                            continue;
+
                         // Descartamos a los que ya participaron en categorías mas altas
                         if (tipo == TipoOlimpiada.OMIS && md.tipoOlimpiada == TipoOlimpiada.OMI ||
                             tipo == TipoOlimpiada.OMIP && md.tipoOlimpiada != TipoOlimpiada.OMIP)

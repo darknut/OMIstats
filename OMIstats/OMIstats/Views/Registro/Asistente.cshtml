@@ -13,8 +13,8 @@
     OMIstats.Models.MiembroDelegacion md = ViewBag.md;
     string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
     string claveCompetidor = md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ? md.clave : "";
-    bool mostrarClaveCbo = claveCompetidor != "" || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
     OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = md != null ? md.tipo : OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL;
+    bool mostrarClaveCbo = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && (claveCompetidor != "" || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL));
 }
 
 @section AddToHead
@@ -37,6 +37,7 @@
         var OMI_maximo = @(DateTime.Today.Year - 6);
         var currentClave = "@claveCompetidor";
         var estadoSede = "@OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO";
+        var updating = @(md == null ? "false" : "true");
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
         setUpSearch("@tipo");
     </script>
@@ -44,6 +45,8 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
+@if (md == null)
+{
 <div id="busqueda" class="panel">
     <div class="panel-heading"> Buscar participantes de años anteriores </div>
     <div class="panel-body">
@@ -64,7 +67,7 @@
         <img id="searching" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none" class="loading"/>
     </div>
 </div>
-
+}
 <form name="asistente" id="asistente" action="~/Registro/Asistente" method="post" enctype="multipart/form-data">
 <div class="panel panel-green datos-padding">
     <div class="panel-heading panel-heading-green">Datos del participante</div>
@@ -124,7 +127,7 @@
             {
                 for (int i = 1; i <= (esSede ? 8 : 4); i++)
                 {
-                <option value="@(estado.ISO + "-" + i)">@(estado.ISO + "-" + i)</option>
+                <option value="@(estado.ISO + "-" + i)" @(claveCompetidor.EndsWith(i.ToString()) ? "selected" : "")>@(estado.ISO + "-" + i)</option>
                 }
             }
             </select>
@@ -246,7 +249,8 @@
     </div>
     </div>
 </div>
-<input id="clave" name="clave" type="hidden" value="@Model.clave" />
+<input id="persona" name="persona" type="hidden" value="@Model.clave" />
+<input id="claveOriginal" name="claveOriginal" type="hidden" value="@claveCompetidor" />
 <div class="boton-guardar">
     <button type="submit" onclick="revisa()" class="boton-registro">Guardar</button>
     <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
