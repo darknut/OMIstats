@@ -137,13 +137,27 @@ namespace OMIstats.Controllers
                 ViewBag.estado = Estado.obtenerEstadoConClave(estado);
             }
 
+            MiembroDelegacion md = null;
+            if (clave != null)
+            {
+                var temp = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave);
+                if (temp.Count != 1)
+                    return RedirectTo(Pagina.HOME);
+                md = temp[0];
+            }
+
+            ViewBag.md = md;
             ViewBag.nuevo = (clave == null);
             ViewBag.omi = o;
             ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
             limpiarErroresViewBag();
 
-            return View(new Persona());
+            p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario);
+            if (p.apellidoMaterno == "")
+                p.breakNombre();
+
+            return View(p);
         }
 
         //

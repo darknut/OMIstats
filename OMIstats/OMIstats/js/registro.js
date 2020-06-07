@@ -34,6 +34,31 @@ function setUpSearch(tipo) {
         setVisible("searching", true);
         callServer("Buscar", "");
     }
+
+    if (currentClave && !estado) {
+        llenaClaves(currentClave.substr(0,3));
+    }
+}
+
+function llenaClaves(subfijo) {
+    var combo = document.getElementById("claveSelect");
+
+    while (combo.options.length > 0) {
+        combo.remove(combo.options.length - 1);
+    }
+
+    var lim = estadoSede == subfijo ? 8 : 4;
+    for (i = 1; i <= lim; i++) {
+        var opt = document.createElement('option');
+
+        var tempClave = subfijo + "-" + i;
+        opt.text = tempClave;
+        opt.value = tempClave;
+        if (tempClave == currentClave)
+            opt.selected = true;
+
+        combo.add(opt, null);
+    }
 }
 
 function handleAjax(data) {
@@ -97,11 +122,13 @@ function eliminarUsuario(tipoOlimpiada, clave, nombre) {
     }
 }
 
-function iniciaRegistro(tipo) {
+function iniciaRegistro(tipo, clave) {
     var address = "Asistente?omi=" + omi;
     if (tipo)
         address += "&tipo=" + tipo;
     if (estado)
         address += "&estado=" + estado;
+    if (clave)
+        address += "&clave=" + clave;
     redirige(ajaxUrl, address);
 }

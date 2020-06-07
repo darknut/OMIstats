@@ -10,6 +10,11 @@
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
     bool registroActivo = ViewBag.registroActivo;
     bool esSede = estado != null && omi.claveEstado == estado.clave;
+    OMIstats.Models.MiembroDelegacion md = ViewBag.md;
+    string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
+    string claveCompetidor = md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ? md.clave : "";
+    bool mostrarClaveCbo = claveCompetidor != "" || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
+    OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = md != null ? md.tipo : OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL;
 }
 
 @section AddToHead
@@ -30,6 +35,8 @@
     <script>
         var OMI_minimo = @(DateTime.Today.Year - 80);
         var OMI_maximo = @(DateTime.Today.Year - 6);
+        var currentClave = "@claveCompetidor";
+        var estadoSede = "@OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO";
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
         setUpSearch("@tipo");
     </script>
@@ -81,16 +88,21 @@
                 <option value=""></option>
                 @if (usuario.esSuperUsuario() || tipo != OMIstats.Models.TipoOlimpiada.NULL)
                 {
-                <option value="COMPETIDOR" @(tipo != OMIstats.Models.TipoOlimpiada.NULL ? "selected" : "")>Competidor</option>
+                <option value="COMPETIDOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL) ? "selected" : "")>Competidor</option>
                 }
-                <option value="LIDER">Líder</option>
-                <option value="DELEGADO">Delegado</option>
-                <option value="ASESOR">Asesor</option>
-                <option value="INVITADO">Invitado</option>
+                <option value="LIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.LIDER ? "selected" : "")>Líder</option>
+                <option value="DELEGADO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEGADO ? "selected" : "")>Delegado</option>
+                <option value="ASESOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.ASESOR ? "selected" : "")>Asesor</option>
+                <option value="INVITADO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.INVITADO ? "selected" : "")>Invitado</option>
                 @if (usuario.esSuperUsuario())
                 {
-                <option value="COMI">COMI</option>
-                <option value="COLO">Comité local</option>
+                <option value="COMI" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI ? "selected" : "")>COMI</option>
+                <option value="COLO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO ? "selected" : "")>Comité local</option>
+                }
+                @if (usuario.esAdmin())
+                {
+                <option value="DELELIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER ? "selected" : "")>Delegado y líder</option>
+                <option value="SUBLIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUBLIDER ? "selected" : "")>Sublider</option>
                 }
             </select>
         </div>
@@ -101,13 +113,13 @@
             @for (int i = 0; i < estados.Count; i++)
             {
                 OMIstats.Models.Estado e = estados[i];
-                <option value="@e.clave" @(estado != null && e.clave == estado.clave ? "selected" : "")>@(e.nombre)</option>
+                <option value="@e.clave" @(e.clave == claveEstado ? "selected" : "")>@(e.nombre)</option>
             }
             </select>
         </div>
-        <div class="registro-single-control" id="campoClave" style="@(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "opacity:0" : "")">
+        <div class="registro-single-control" id="campoClave" style="@(mostrarClaveCbo ? "" : "opacity:0")">
             <span class="control-title">Clave<span class="errorTextoRojo">*</span></span>
-            <select id="claveSelect" class="shiny-box" @(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "disabled" : "")>
+            <select id="claveSelect" class="shiny-box" @(mostrarClaveCbo ? "" : "disabled")>
             @if (estado != null)
             {
                 for (int i = 1; i <= (esSede ? 8 : 4); i++)

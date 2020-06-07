@@ -80,7 +80,7 @@
             }
         </td>
         <td>
-            <a href="~/Views/Olimpiada/Index">Modificar</a>
+            <a onclick="iniciaRegistro('@miembro.tipoOlimpiada', '@miembro.clave')" class="a-sin-href">Modificar</a>
             @if (usuario.esAdmin() || registroActivo)
             {
             <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
