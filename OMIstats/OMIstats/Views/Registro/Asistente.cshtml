@@ -14,7 +14,9 @@
     string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
     string claveCompetidor = md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ? md.clave : "";
     OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = md != null ? md.tipo : OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL;
-    bool mostrarClaveCbo = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && (claveCompetidor != "" || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL));
+    bool mostrarClaveCbo = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
+                            (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL 
+                            && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL);
 }
 
 @section AddToHead
