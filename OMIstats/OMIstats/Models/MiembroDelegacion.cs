@@ -926,7 +926,7 @@ namespace OMIstats.Models
                             continue;
                     }
 
-                    Persona p = Persona.obtenerPersonaConClave(clavePersona, completo:false);
+                    Persona p = Persona.obtenerPersonaConClave(clavePersona, completo:true, incluirDatosPrivados:true);
                     personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
                     if (personas.Count == 10)
                         break;

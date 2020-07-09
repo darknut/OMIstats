@@ -137,8 +137,7 @@ namespace OMIstats.Controllers
 
             if (usuario != null && p.esSuperUsuario())
                 p = Persona.obtenerPersonaDeUsuario(usuario);
-            if (p.apellidoPaterno == "")
-                p.breakNombre();
+            p.breakNombre();
 
             limpiarErroresViewBag();
             ponFechasEnViewBag();

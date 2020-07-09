@@ -51,13 +51,13 @@
     <div class="panel-heading"> Buscar participantes de años anteriores </div>
     <div class="panel-body">
         <div class="registro-controls">
-            <input type="text" id="nombre" class="shiny-box grow-input" placeholder="Buscar por nombre"/>
+            <input type="text" id="nombreBuscar" class="shiny-box grow-input" placeholder="Buscar por nombre"/>
             <button class="boton-registro" id="buscar" type="submit" onclick="buscar()">Buscar</button>
         </div>
         <ul id="tablaRegistro" style="display:none">
             @for(int i = 0; i < 10; i++)
             {
-                <li style="display:none" id="@("resultados" + i)"><a class="a-sin-href"></a></li>
+                <li style="display:none" id="@("resultados" + i)"><a class="a-sin-href" onclick="personaSeleccionada(this)"></a></li>
             }
             <li id="mas10" style="display:none" class="mas10">Mostrando solo los primeros 10 resultados</li>
         </ul>
@@ -252,7 +252,7 @@
 <input id="persona" name="persona" type="hidden" value="@Model.clave" />
 <input id="claveOriginal" name="claveOriginal" type="hidden" value="@claveCompetidor" />
 <div class="boton-guardar">
-    <button type="submit" onclick="revisa()" class="boton-registro">Guardar</button>
+    <button id="botonGuardar" type="submit" onclick="revisa()" class="boton-registro">Guardar</button>
     <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
 </div>
 </form>

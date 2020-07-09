@@ -154,8 +154,7 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
 
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario);
-            if (p.apellidoMaterno == "")
-                p.breakNombre();
+            p.breakNombre();
 
             return View(p);
         }
