@@ -41,6 +41,12 @@
         var currentClave = "@claveCompetidor";
         var estadoSede = "@OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO";
         var updating = @(md == null ? "false" : "true");
+        var estados = {};
+        @foreach(OMIstats.Models.Estado e in estados)
+        {
+            @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
+        }
+
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
         setUpSearch("@tipo");
     </script>

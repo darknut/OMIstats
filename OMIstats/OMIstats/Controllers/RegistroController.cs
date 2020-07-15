@@ -130,6 +130,7 @@ namespace OMIstats.Controllers
 
             Persona p = getUsuario();
 
+
             if (!p.esSuperUsuario())
             {
                 if (estado == null)
@@ -138,17 +139,17 @@ namespace OMIstats.Controllers
             }
 
             MiembroDelegacion md = null;
-            if (clave != null)
+            if (clave == null)
+            {
+                if (!p.esSuperUsuario())
+                    ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado);
+            }
+            else
             {
                 var temp = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave);
                 if (temp.Count != 1)
                     return RedirectTo(Pagina.HOME);
                 md = temp[0];
-            }
-            else
-            {
-                if (!p.esSuperUsuario())
-                    ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado);
             }
 
             ViewBag.md = md;
