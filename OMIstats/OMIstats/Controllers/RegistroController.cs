@@ -145,6 +145,11 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.HOME);
                 md = temp[0];
             }
+            else
+            {
+                if (!p.esSuperUsuario())
+                    ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado);
+            }
 
             ViewBag.md = md;
             ViewBag.nuevo = (clave == null);

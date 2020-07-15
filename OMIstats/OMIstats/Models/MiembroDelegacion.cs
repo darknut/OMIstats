@@ -546,7 +546,7 @@ namespace OMIstats.Models
         /// <param name="clave">La clave buscada</param>
         /// <param name="aproximarClave">Si la clave solo debe de ser aproximada</param>
         /// <returns>La lista de miembros con la clave buscada</returns>
-        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, TipoOlimpiada tipoOlimpiada, string clave, bool aproximarClave = false)
+        public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, TipoOlimpiada tipoOlimpiada, string clave, bool aproximarClave = false, TipoAsistente tipoAsistente = TipoAsistente.NULL)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
             Utilities.Acceso db = new Utilities.Acceso();
@@ -569,6 +569,11 @@ namespace OMIstats.Models
             {
                 query.Append(" and clave = ");
                 query.Append(Utilities.Cadenas.comillas(clave));
+            }
+            if (tipoAsistente != TipoAsistente.NULL)
+            {
+                query.Append(" and tipo = ");
+                query.Append(Utilities.Cadenas.comillas(tipoAsistente.ToString().ToLower()));
             }
             query.Append(" order by clave ");
 
@@ -957,5 +962,20 @@ namespace OMIstats.Models
             return personas;
         }
 #endif
+        public static string obtenerPrimerClaveDisponible(string omi, TipoOlimpiada tipo, string estado)
+        {
+            var e = Estado.obtenerEstadoConClave(estado);
+            var miembros = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, e.ISO, aproximarClave: true, tipoAsistente: TipoAsistente.COMPETIDOR)
+                .Select((miembro) => miembro.clave);
+
+            for (int i = 1; i <= 8; i++)
+            {
+                var testClave = e.ISO + "-" + i;
+                if (!miembros.Contains(testClave))
+                    return testClave;
+            }
+
+            return "";
+        }
     }
 }

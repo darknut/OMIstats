@@ -17,6 +17,7 @@
     bool mostrarClaveCbo = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
                             (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL 
                             && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL);
+    string claveDisponble = ViewBag.claveDisponible;
 }
 
 @section AddToHead
@@ -129,7 +130,8 @@
             {
                 for (int i = 1; i <= (esSede ? 8 : 4); i++)
                 {
-                <option value="@(estado.ISO + "-" + i)" @(claveCompetidor.EndsWith(i.ToString()) ? "selected" : "")>@(estado.ISO + "-" + i)</option>
+                    var clave = estado.ISO + "-" + i;
+                <option value="@(clave)" @(claveCompetidor.EndsWith(i.ToString()) || (claveDisponble == clave) ? "selected" : "")>@(clave)</option>
                 }
             }
             </select>
