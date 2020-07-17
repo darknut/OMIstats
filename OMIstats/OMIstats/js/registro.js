@@ -183,7 +183,7 @@ function cambiaClavesCbo() {
     if (tipo === "COMPETIDOR" && estado) {
         span.style.opacity = "1";
         combo.disabled = false;
-        llenaClaves(estado);
+        llenaClaves(estados[estado]);
     } else {
         span.style.opacity = "0";
         combo.disabled = true;
