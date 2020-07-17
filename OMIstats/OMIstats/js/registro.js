@@ -173,3 +173,19 @@ function iniciaRegistro(tipo, clave) {
         address += "&clave=" + clave;
     redirige(ajaxUrl, address);
 }
+
+function cambiaClavesCbo() {
+    var tipo = document.getElementById("tipoAsistente").value;
+    var estado = document.getElementById("estado").value;
+    var span = document.getElementById("campoClave");
+    var combo = document.getElementById("claveSelect");
+
+    if (tipo === "COMPETIDOR" && estado) {
+        span.style.opacity = "1";
+        combo.disabled = false;
+        llenaClaves(estado);
+    } else {
+        span.style.opacity = "0";
+        combo.disabled = true;
+    }
+}
