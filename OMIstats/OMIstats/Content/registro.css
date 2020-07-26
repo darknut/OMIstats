@@ -174,3 +174,7 @@
     max-width:150px;
     max-height:300px;
 }
+
+.backgroundError {
+    background-color: #FFEEEE;
+}

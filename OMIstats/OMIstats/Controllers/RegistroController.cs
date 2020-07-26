@@ -179,7 +179,11 @@ namespace OMIstats.Controllers
         public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipo, string tipoAsistente, string tipoOriginal, string estado, string claveSelect, string persona, string claveOriginal)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
+            if (o == null ||
+                String.IsNullOrEmpty(estado) ||
+                String.IsNullOrEmpty(tipo) ||
+                String.IsNullOrEmpty(tipoAsistente) ||
+                !tienePermisos(o.registroActivo, estado))
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = null;
@@ -207,6 +211,9 @@ namespace OMIstats.Controllers
             ViewBag.tipoOriginal = tipoO;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
+
+            if (!ModelState.IsValid)
+                return View(p);
 
             return View(p);
         }

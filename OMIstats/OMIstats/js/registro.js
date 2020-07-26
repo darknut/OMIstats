@@ -186,7 +186,33 @@ function cambiaClavesCbo() {
     }
 }
 
-function submit() {
+function revisaNoVacio(campo) {
+    var campoObj = document.getElementById(campo);
+    if (campoObj.value == "") {
+        setVisible("error" + campo, true);
+        campoObj.focus();
+        campoObj.classList.add("backgroundError");
+        return true;
+    }
+}
+
+function validar() {
+    // Que esté elegido el tipo de asistente
+    if (revisaNoVacio("tipoAsistente"))
+        return false;
+
+    // Que esté elegido un estado
+    if (revisaNoVacio("estado"))
+        return false;
+
+    // Que hayan escrito un correo
+    if (revisaNoVacio("correo"))
+        return false;
+
+    // Que hayan escrito un teléfono celular
+    if (revisaNoVacio("celular"))
+        return false;
+
     setVisible("loading", true);
-    document.getElementById("asistente").submit();
+    return true;
 }
