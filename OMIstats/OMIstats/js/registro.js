@@ -12,11 +12,7 @@ function setUpAjax(url, claveEstado, claveOmi) {
 }
 
 function setUpSearch(tipo) {
-    if (updating) {
-        if (currentClave && !estado) {
-            llenaClaves(currentClave.substr(0,3));
-        }
-    } else {
+    if (!updating || !resubmit) {
         tipoRegistro = tipo;
         setVisible("tablaRegistro", false);
         setVisible("info", false);
@@ -188,4 +184,9 @@ function cambiaClavesCbo() {
         span.style.opacity = "0";
         combo.disabled = true;
     }
+}
+
+function submit() {
+    setVisible("loading", true);
+    document.getElementById("asistente").submit();
 }

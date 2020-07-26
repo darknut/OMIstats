@@ -12,12 +12,14 @@
     bool esSede = estado != null && omi.claveEstado == estado.clave;
     OMIstats.Models.MiembroDelegacion md = ViewBag.md;
     string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
-    string claveCompetidor = md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ? md.clave : "";
-    OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = md != null ? md.tipo : OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL;
+    string claveCompetidor = ViewBag.claveOriginal;
+    OMIstats.Models.TipoOlimpiada tipoOriginal = ViewBag.tipoOriginal;
+    OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = ViewBag.tipoAsistente;
     bool mostrarClaveCbo = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
                             (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL 
                             && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL);
-    string claveDisponble = ViewBag.claveDisponible;
+    string claveDisponible = ViewBag.claveDisponible;
+    bool resubmit = ViewBag.resubmit;
 }
 
 @section AddToHead
@@ -42,6 +44,7 @@
         var estadoSede = "@OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO";
         var updating = @(md == null ? "false" : "true");
         var estados = {};
+        var resubmit = @(resubmit ? "true" : "false");
         @foreach(OMIstats.Models.Estado e in estados)
         {
             @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
@@ -54,7 +57,7 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
-@if (md == null)
+@if (md == null && !resubmit)
 {
 <div id="busqueda" class="panel">
     <div class="panel-heading"> Buscar participantes de años anteriores </div>
@@ -84,7 +87,7 @@
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Concurso<span class="errorTextoRojo">*</span></span>
-            <select id="tipo" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled")>
+            <select id="tipo" name="tipo" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled")>
                 <option value="OMI" @(tipo == OMIstats.Models.TipoOlimpiada.OMI ? "selected" : "")>OMI</option>
                 <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
                 <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
@@ -96,7 +99,7 @@
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Participar como<span class="errorTextoRojo">*</span></span>
-            <select id="tipoAsistente" class="shiny-box" @(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "" : "disabled") onchange="cambiaClavesCbo()">
+            <select id="tipoAsistente" name="tipoAsistente" class="shiny-box" @(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "" : "disabled") onchange="cambiaClavesCbo()">
                 <option value=""></option>
                 @if (usuario.esSuperUsuario() || tipo != OMIstats.Models.TipoOlimpiada.NULL)
                 {
@@ -120,7 +123,7 @@
         </div>
         <div class="registro-single-control">
             <span class="control-title">Estado al que representa<span class="errorTextoRojo">*</span></span>
-            <select id="estado" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled") onchange="cambiaClavesCbo()">
+            <select id="estado" name="estado" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled") onchange="cambiaClavesCbo()">
                 <option value=""></option>
             @for (int i = 0; i < estados.Count; i++)
             {
@@ -131,13 +134,13 @@
         </div>
         <div class="registro-single-control" id="campoClave" style="@(mostrarClaveCbo ? "" : "opacity:0")">
             <span class="control-title">Clave<span class="errorTextoRojo">*</span></span>
-            <select id="claveSelect" class="shiny-box" @(mostrarClaveCbo ? "" : "disabled")>
+            <select id="claveSelect" name="claveSelect" class="shiny-box" @(mostrarClaveCbo ? "" : "disabled")>
             @if (estado != null)
             {
                 for (int i = 1; i <= (esSede ? 8 : 4); i++)
                 {
                     var clave = estado.ISO + "-" + i;
-                <option value="@(clave)" @(claveCompetidor.EndsWith(i.ToString()) || (claveDisponble == clave) ? "selected" : "")>@(clave)</option>
+                <option value="@(clave)" @((claveDisponible == clave) ? "selected" : "")>@(clave)</option>
                 }
             }
             </select>
@@ -259,10 +262,12 @@
     </div>
     </div>
 </div>
+<input id="omi" name="omi" type="hidden" value="@omi.numero" />
 <input id="persona" name="persona" type="hidden" value="@Model.clave" />
 <input id="claveOriginal" name="claveOriginal" type="hidden" value="@claveCompetidor" />
+<input id="tipoOriginal" name="tipoOriginal" type="hidden" value="@tipoOriginal" />
 <div class="boton-guardar">
-    <button id="botonGuardar" type="submit" onclick="revisa()" class="boton-registro">Guardar</button>
+    <button id="botonGuardar" onclick="submit()" class="boton-registro">Guardar</button>
     <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
 </div>
 </form>

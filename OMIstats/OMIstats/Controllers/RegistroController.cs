@@ -130,7 +130,6 @@ namespace OMIstats.Controllers
 
             Persona p = getUsuario();
 
-
             if (!p.esSuperUsuario())
             {
                 if (estado == null)
@@ -139,10 +138,12 @@ namespace OMIstats.Controllers
             }
 
             MiembroDelegacion md = null;
+            TipoOlimpiada tipoOriginal = TipoOlimpiada.NULL;
             if (clave == null)
             {
                 if (!p.esSuperUsuario())
                     ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado);
+                ViewBag.tipoAsistente = MiembroDelegacion.TipoAsistente.NULL;
             }
             else
             {
@@ -150,6 +151,11 @@ namespace OMIstats.Controllers
                 if (temp.Count != 1)
                     return RedirectTo(Pagina.HOME);
                 md = temp[0];
+                ViewBag.claveOriginal = md.clave;
+                ViewBag.claveDisponible = md.clave;
+                ViewBag.tipoAsistente = md.tipo;
+                ViewBag.estado = Estado.obtenerEstadoConClave(md.estado);
+                tipoOriginal = md.tipoOlimpiada;
             }
 
             ViewBag.md = md;
@@ -157,7 +163,9 @@ namespace OMIstats.Controllers
             ViewBag.omi = o;
             ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
+            ViewBag.tipoOriginal = tipoOriginal;
             limpiarErroresViewBag();
+            ViewBag.resubmit = false;
 
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario);
             p.breakNombre();
@@ -168,8 +176,38 @@ namespace OMIstats.Controllers
         //
         // POST: /Registro/Asistente
         [HttpPost]
-        public ActionResult Asistente(HttpPostedFileBase file, Persona p)
+        public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipo, string tipoAsistente, string tipoOriginal, string estado, string claveSelect, string persona, string claveOriginal)
         {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            MiembroDelegacion md = null;
+            MiembroDelegacion.TipoAsistente asistente = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente);
+            TipoOlimpiada tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipo);
+            TipoOlimpiada tipoO = TipoOlimpiada.NULL;
+            if (!String.IsNullOrEmpty(claveOriginal))
+            {
+                tipoO = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipoOriginal);
+                var temp = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoO, claveOriginal);
+                if (temp.Count != 1)
+                    return RedirectTo(Pagina.HOME);
+                md = temp[0];
+            }
+
+            ViewBag.claveDisponible = claveSelect;
+            ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+            ViewBag.md = md;
+            ViewBag.nuevo = String.IsNullOrEmpty(claveOriginal);
+            ViewBag.omi = o;
+            ViewBag.tipo = tipoOlimpiada;
+            ViewBag.estados = Estado.obtenerEstados();
+            ViewBag.tipoAsistente = asistente;
+            ViewBag.claveOriginal = claveOriginal;
+            ViewBag.tipoOriginal = tipoO;
+            limpiarErroresViewBag();
+            ViewBag.resubmit = true;
+
             return View(p);
         }
     }
