@@ -178,3 +178,8 @@
 .backgroundError {
     background-color: #FFEEEE;
 }
+
+.mockDisabled {
+    color: #CCCCCC;
+    border-color: #CCCCCC;
+}

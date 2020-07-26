@@ -194,24 +194,35 @@ function revisaNoVacio(campo) {
         campoObj.classList.add("backgroundError");
         return true;
     }
+    setVisible("error" + campo, false);
+    campoObj.classList.remove("backgroundError");
+}
+
+function reEnable(campo) {
+    var obj = document.getElementById(campo);
+    if (obj.disabled) {
+        obj.disabled = false;
+        obj.classList.add("mockDisabled");
+    }
 }
 
 function validar() {
-    // Que esté elegido el tipo de asistente
     if (revisaNoVacio("tipoAsistente"))
         return false;
-
-    // Que esté elegido un estado
     if (revisaNoVacio("estado"))
         return false;
-
-    // Que hayan escrito un correo
     if (revisaNoVacio("correo"))
         return false;
-
-    // Que hayan escrito un teléfono celular
     if (revisaNoVacio("celular"))
         return false;
+    if (revisaNoVacio("emergencia"))
+        return false;
+    if (revisaNoVacio("telEmergencia"))
+        return false;
+
+    reEnable("tipoAsistente");
+    reEnable("estado");
+    reEnable("tipo");
 
     setVisible("loading", true);
     return true;
