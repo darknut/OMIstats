@@ -536,6 +536,49 @@ namespace OMIstats.Models
 
             return p.clave;
         }
+
+        public void guardarDatos(string claveOriginal, TipoOlimpiada tipoOriginal)
+        {
+            if (String.IsNullOrEmpty(clave))
+            {
+                clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+            }
+            else
+            {
+                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOlimpiada, clave);
+                if (md.Count > 0 && md[0].claveUsuario != claveUsuario)
+                {
+                    md[0].clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                    md[0].guardarDatos(clave, tipoOlimpiada);
+                }
+            }
+
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" update miembrodelegacion set clave = ");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(", tipo = ");
+            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(", tipoOlimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(", estado = ");
+            query.Append(Utilities.Cadenas.comillas(estado));
+            /*query.Append(", institucion = ");
+            query.Append(i == null ? "0" : i.clave.ToString());
+            query.Append(", nivel = ");
+            query.Append((int)md.nivelEscuela);
+            query.Append(", año = ");
+            query.Append(md.añoEscuela);*/
+            query.Append(" where olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(" and tipoOlimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOriginal.ToString().ToLower()));
+            query.Append(" and clave = ");
+            query.Append(Utilities.Cadenas.comillas(claveOriginal));
+
+            db.EjecutarQuery(query.ToString());
+        }
 #endif
 
         /// <summary>
@@ -962,17 +1005,49 @@ namespace OMIstats.Models
             return personas;
         }
 #endif
-        public static string obtenerPrimerClaveDisponible(string omi, TipoOlimpiada tipo, string estado)
+        public static string obtenerPrimerClaveDisponible(string omi, TipoOlimpiada tipo, string estado, TipoAsistente tipoAsistente = TipoAsistente.COMPETIDOR)
         {
             var e = Estado.obtenerEstadoConClave(estado);
-            var miembros = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, e.ISO, aproximarClave: true, tipoAsistente: TipoAsistente.COMPETIDOR)
+            var prefijo = e.ISO;
+            string subfijo = null;
+            if (tipoAsistente == TipoAsistente.COLO || tipoAsistente == TipoAsistente.COMI)
+            {
+                prefijo = tipoAsistente.ToString();
+                subfijo = "";
+            }
+
+            var miembros = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, prefijo, aproximarClave: true, tipoAsistente: tipoAsistente)
                 .Select((miembro) => miembro.clave);
 
-            for (int i = 1; i <= 8; i++)
+            if (tipoAsistente == TipoAsistente.COMPETIDOR)
             {
-                var testClave = e.ISO + "-" + i;
-                if (!miembros.Contains(testClave))
-                    return testClave;
+                for (int i = 1; i <= 8; i++)
+                {
+                    var testClave = prefijo + "-" + i;
+                    if (!miembros.Contains(testClave))
+                        return testClave;
+                }
+            }
+            else
+            {
+                bool siempreNumero = true;
+                if (tipoAsistente == TipoAsistente.DELEGADO ||
+                    tipoAsistente == TipoAsistente.DELELIDER ||
+                    tipoAsistente == TipoAsistente.SUBLIDER ||
+                    tipoAsistente == TipoAsistente.LIDER)
+                    siempreNumero = false;
+                if (subfijo == null)
+                {
+                    subfijo = tipoAsistente.ToString()[0] + "";
+                }
+                int i = 1;
+                while (true)
+                {
+                    var testClave = prefijo + "-" + subfijo + (i > 1 || siempreNumero ? i.ToString() : "");
+                    if (!miembros.Contains(testClave))
+                        return testClave;
+                    i++;
+                }
             }
 
             return "";

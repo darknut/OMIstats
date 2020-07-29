@@ -166,6 +166,7 @@ namespace OMIstats.Controllers
             ViewBag.tipoOriginal = tipoOriginal;
             limpiarErroresViewBag();
             ViewBag.resubmit = false;
+            ViewBag.guardado = false;
 
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario);
             p.breakNombre();
@@ -212,10 +213,53 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
 
+            if (file != null)
+            {
+                var valida = Utilities.Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
+                if (valida != Utilities.Archivos.ResultadoImagen.VALIDA)
+                {
+                    ViewBag.errorImagen = valida.ToString().ToLower();
+                    return View(p);
+                }
+            }
+
             if (!ModelState.IsValid)
                 return View(p);
 
+            if (String.IsNullOrEmpty(claveOriginal))
+            {
+                // Nuevo asistente
+            }
+            else
+            {
+                // Modificando asistente
+
+                // Primero los datos de persona
+                p.foto = guardaFoto(file, p.clave);
+                Persona per = Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
+                p.clave = per.clave;
+                p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
+
+                // Luego el miembro delegacion
+                md.tipoOlimpiada = tipoOlimpiada;
+                md.estado = estado;
+                md.clave = claveSelect;
+                md.tipo = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente.ToString().ToUpper());
+                md.guardarDatos(claveOriginal, tipoO);
+            }
+
+            ViewBag.guardado = true;
             return View(p);
+        }
+
+        private string guardaFoto(HttpPostedFileBase file, int clave)
+        {
+            if (file != null)
+            {
+                return Utilities.Archivos.guardaArchivo(file, clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+            }
+
+            return "";
         }
     }
 }

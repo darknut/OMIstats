@@ -24,6 +24,12 @@ namespace OMIstats.Models
             DELEGADO
         }
 
+        public enum LugarGuardado
+        {
+            PROFILE,
+            REGISTRO
+        }
+
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre")]
@@ -97,8 +103,6 @@ namespace OMIstats.Models
         [MaxLength(60, ErrorMessage = "El tamaño máximo es de 60 caracteres")]
         public string alergias { get; set; }
 
-        public string estado { get; set; }
-
         public string usuario { get; set; }
 
         public TipoPermisos permisos { get; set; }
@@ -141,7 +145,6 @@ namespace OMIstats.Models
             omegaup = "";
             codeforces = "";
             topcoder = "";
-            estado = "";
             celular = "";
             telefono = "";
             direccion = "";
@@ -183,7 +186,6 @@ namespace OMIstats.Models
 
                 if (incluirDatosPrivados)
                 {
-                    estado = datos["estado"].ToString().Trim();
                     celular = datos["celular"].ToString().Trim();
                     telefono = datos["telefono"].ToString().Trim();
                     direccion = datos["direccion"].ToString().Trim();
@@ -313,8 +315,10 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="generarPeticiones">Si nombre y foto deben de guardarse
         /// directamente en la base de datos o si se deben generar peticiones</param>
+        /// <param name="currentValues">El valor actual de los datos</param>
+        /// <param name="lugarGuardado">El lugar de donde viene el guardado de datos</param>
         /// <returns>Si el update se ejecutó correctamente</returns>
-        public bool guardarDatos(bool generarPeticiones = false, Persona currentValues = null)
+        public bool guardarDatos(bool generarPeticiones = false, Persona currentValues = null, LugarGuardado lugarGuardado = LugarGuardado.PROFILE)
         {
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
@@ -372,25 +376,40 @@ namespace OMIstats.Models
                 query.Append(",");
             }
 
-            query.Append(" facebook = ");
-            query.Append(Utilities.Cadenas.comillas(facebook));
-            query.Append(",");
+            if (lugarGuardado == LugarGuardado.PROFILE)
+            {
+                query.Append(" facebook = ");
+                query.Append(Utilities.Cadenas.comillas(facebook));
+                query.Append(",");
 
-            query.Append(" twitter = ");
-            query.Append(Utilities.Cadenas.comillas(twitter));
-            query.Append(",");
+                query.Append(" twitter = ");
+                query.Append(Utilities.Cadenas.comillas(twitter));
+                query.Append(",");
 
-            query.Append(" sitio = ");
-            query.Append(Utilities.Cadenas.comillas(sitio));
-            query.Append(",");
+                query.Append(" sitio = ");
+                query.Append(Utilities.Cadenas.comillas(sitio));
+                query.Append(",");
 
-            query.Append(" usuario = ");
-            query.Append(Utilities.Cadenas.comillas(usuario));
-            query.Append(",");
+                query.Append(" usuario = ");
+                query.Append(Utilities.Cadenas.comillas(usuario));
+                query.Append(",");
 
-            query.Append(" permisos = ");
-            query.Append((int) permisos);
-            query.Append(",");
+                query.Append(" permisos = ");
+                query.Append((int)permisos);
+                query.Append(",");
+
+                query.Append(" codeforces = ");
+                query.Append(Utilities.Cadenas.comillas(codeforces));
+                query.Append(",");
+
+                query.Append(" topcoder = ");
+                query.Append(Utilities.Cadenas.comillas(topcoder));
+                query.Append(",");
+
+                query.Append(" ioiID = ");
+                query.Append(ioiID);
+                query.Append(",");
+            }
 
             query.Append(" genero = ");
             query.Append(Utilities.Cadenas.comillas(genero));
@@ -400,72 +419,36 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(omegaup));
             query.Append(",");
 
-            query.Append(" codeforces = ");
-            query.Append(Utilities.Cadenas.comillas(codeforces));
-            query.Append(",");
-
-            query.Append(" topcoder = ");
-            query.Append(Utilities.Cadenas.comillas(topcoder));
-            query.Append(",");
-
-            if (estado.Length > 0)
-            {
-                query.Append(" estado = ");
-                query.Append(Utilities.Cadenas.comillas(estado));
-                query.Append(",");
-            }
-
-            if (celular.Length > 0)
+            if (lugarGuardado == LugarGuardado.REGISTRO)
             {
                 query.Append(" celular = ");
                 query.Append(Utilities.Cadenas.comillas(celular));
                 query.Append(",");
-            }
 
-            if (telefono.Length > 0)
-            {
                 query.Append(" telefono = ");
                 query.Append(Utilities.Cadenas.comillas(telefono));
                 query.Append(",");
-            }
 
-            if (direccion.Length > 0)
-            {
                 query.Append(" direccion = ");
                 query.Append(Utilities.Cadenas.comillas(direccion));
                 query.Append(",");
-            }
 
-            if (estado.Length > 0)
-            {
                 query.Append(" emergencia = ");
                 query.Append(Utilities.Cadenas.comillas(emergencia));
                 query.Append(",");
-            }
 
-            if (parentesco.Length > 0)
-            {
                 query.Append(" parentesco = ");
                 query.Append(Utilities.Cadenas.comillas(parentesco));
                 query.Append(",");
-            }
 
-            if (telEmergencia.Length > 0)
-            {
                 query.Append(" telemergencia = ");
                 query.Append(Utilities.Cadenas.comillas(telEmergencia));
                 query.Append(",");
-            }
 
-            if (medicina.Length > 0)
-            {
                 query.Append(" medicina = ");
                 query.Append(Utilities.Cadenas.comillas(medicina));
                 query.Append(",");
-            }
 
-            if (alergias.Length > 0)
-            {
                 query.Append(" alergias = ");
                 query.Append(Utilities.Cadenas.comillas(alergias));
                 query.Append(",");
@@ -496,10 +479,6 @@ namespace OMIstats.Models
 
             query.Append(" nacimiento = ");
             query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(nacimiento)));
-            query.Append(",");
-
-            query.Append(" ioiID = ");
-            query.Append(ioiID);
 
             query.Append(" where clave = ");
             query.Append(clave);
