@@ -189,7 +189,7 @@ namespace OMIstats.Models
                     celular = datos["celular"].ToString().Trim();
                     telefono = datos["telefono"].ToString().Trim();
                     direccion = datos["direccion"].ToString().Trim();
-                    emergencia = datos["emergencia"].ToString();
+                    emergencia = datos["emergencia"].ToString().Trim();
                     parentesco = datos["parentesco"].ToString().Trim();
                     telEmergencia = datos["telemergencia"].ToString().Trim();
                     medicina = datos["medicina"].ToString().Trim();

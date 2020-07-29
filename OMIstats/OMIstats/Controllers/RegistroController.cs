@@ -135,7 +135,7 @@ namespace OMIstats.Controllers
                 if (estado == null ||
                     (String.IsNullOrEmpty(clave) &&
                      tipo != TipoOlimpiada.NULL &&
-                     !puedeRegistrarOtroMas(o, estado)))
+                     !puedeRegistrarOtroMas(o, tipo, estado)))
                     return RedirectTo(Pagina.HOME);
 
                 ViewBag.estado = Estado.obtenerEstadoConClave(estado);
@@ -145,7 +145,7 @@ namespace OMIstats.Controllers
             TipoOlimpiada tipoOriginal = TipoOlimpiada.NULL;
             if (clave == null)
             {
-                if (!p.esSuperUsuario())
+                if (!p.esSuperUsuario() && tipo != TipoOlimpiada.NULL)
                     ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado);
                 ViewBag.tipoAsistente = MiembroDelegacion.TipoAsistente.NULL;
             }
@@ -192,14 +192,14 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion.TipoAsistente asistente = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente);
+            TipoOlimpiada tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipo);
             if (!esAdmin() &&
                  String.IsNullOrEmpty(claveOriginal) &&
                  asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
-                 !puedeRegistrarOtroMas(o, estado))
+                 !puedeRegistrarOtroMas(o, tipoOlimpiada, estado))
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = null;
-            TipoOlimpiada tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipo);
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
             if (!String.IsNullOrEmpty(claveOriginal))
             {
@@ -272,10 +272,10 @@ namespace OMIstats.Controllers
             return "";
         }
 
-        private bool puedeRegistrarOtroMas(Olimpiada o, string estado)
+        private bool puedeRegistrarOtroMas(Olimpiada o, TipoOlimpiada tipo, string estado)
         {
             int maxUsuarios = o.getMaxParticipantesDeEstado(estado);
-            List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosDelegacion(o.numero, estado, o.tipoOlimpiada, MiembroDelegacion.TipoAsistente.COMPETIDOR);
+            List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosDelegacion(o.numero, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR);
             return (mds.Count < maxUsuarios);
         }
     }

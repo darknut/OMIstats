@@ -537,7 +537,7 @@ namespace OMIstats.Models
             return p.clave;
         }
 
-        public void guardarDatos(string claveOriginal, TipoOlimpiada tipoOriginal)
+        public void guardarDatos(string claveOriginal, TipoOlimpiada tipoOriginal, bool ignoreCollisions = false)
         {
             if (String.IsNullOrEmpty(clave))
             {
@@ -546,23 +546,29 @@ namespace OMIstats.Models
                 else
                 {
                     List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOriginal, claveOriginal);
-                    if (md.Count > 0 && md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada)
+                    if (md.Count > 0 && md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada && md[0].estado == estado)
                         clave = claveOriginal;
+                    else
+                        clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
                 }
             }
             else
             {
-                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOlimpiada, clave);
-                // Revisamos si hay colisiones de clave
-                if (md.Count > 0 && md[0].claveUsuario != claveUsuario)
+                if (!ignoreCollisions)
                 {
-                    // Se hace cambalache de claves en caso de que este registrado en la misma competicion
-                    // y sea el mismo tipo de asistente
-                    if (md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada)
-                        md[0].clave = clave;
-                    else
-                        md[0].clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
-                    md[0].guardarDatos(clave, tipoOlimpiada);
+                    List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOlimpiada, clave);
+                    // Revisamos si hay colisiones de clave
+                    if (md.Count > 0 && md[0].claveUsuario != claveUsuario)
+                    {
+                        // Se hace cambalache de claves en caso de que este registrado en la misma competicion
+                        // y sea el mismo tipo de asistente
+                        MiembroDelegacion original = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOriginal, claveOriginal)[0];
+                        if (md[0].tipo == original.tipo && md[0].tipoOlimpiada == original.tipoOlimpiada && md[0].estado == original.estado)
+                            md[0].clave = claveOriginal;
+                        else
+                            md[0].clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                        md[0].guardarDatos(clave, tipoOlimpiada, ignoreCollisions: true);
+                    }
                 }
             }
 

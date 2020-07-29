@@ -95,8 +95,7 @@
     }
     if(usuario.esAdmin() || registroActivo)
     {
-        int maxParticipantes = omi.getMaxParticipantesDeEstado(estado.clave);
-        if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < maxParticipantes)
+        if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))
         {
     <tr><td>
         <a onclick="iniciaRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>

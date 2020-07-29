@@ -144,10 +144,14 @@ namespace OMIstats.Models
                     }
                     else
                     {
-                        MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave)[0];
-                        escuela = Institucion.obtenerInstitucionConClave(md.claveEscuela);
-                        nivelInstitucion = md.nivelEscuela;
-                        añoEscolar = md.añoEscuela;
+                        List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoOlimpiada, clave);
+                        if (mds.Count > 0)
+                        {
+                            MiembroDelegacion md = mds[0];
+                            escuela = Institucion.obtenerInstitucionConClave(md.claveEscuela);
+                            nivelInstitucion = md.nivelEscuela;
+                            añoEscolar = md.añoEscuela;
+                        }
                     }
                 }
                 nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
