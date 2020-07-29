@@ -821,5 +821,9 @@ namespace OMIstats.Models
             return omis[0];
         }
 #endif
+        public int getMaxParticipantesDeEstado(string estado)
+        {
+            return estado == this.claveEstado ? 8 : 4;
+        }
     }
 }

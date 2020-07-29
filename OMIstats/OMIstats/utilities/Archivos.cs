@@ -137,20 +137,22 @@ namespace OMIstats.Utilities
         /// <param name="nombre">El nombre opcional de la imagen</param>
         /// <param name="folder">El folder donde colocar la imagen</param>
         /// <returns>El path relativo de la imagen</returns>
-        public static string guardaArchivo(HttpPostedFileBase archivo, string nombre = "", FolderImagenes folder = FolderImagenes.TEMPORAL)
+        public static string guardaArchivo(HttpPostedFileBase archivo, string nombre = "", FolderImagenes folder = FolderImagenes.TEMPORAL, bool appendExtension = false, bool returnRelativeFolder = false)
         {
             string extension = Path.GetExtension(archivo.FileName);
             string lugarEnDisco = pathAbsoluto(folder);
 
             if (String.IsNullOrEmpty(nombre))
-                do
-                {
-                    nombre = Guid.NewGuid().ToString() + extension;
-                } while (File.Exists(Path.Combine(lugarEnDisco, nombre)));
+                nombre = Guid.NewGuid().ToString() + extension;
+            if (appendExtension)
+                nombre += extension;
 
             if (!Directory.Exists(lugarEnDisco))
                 Directory.CreateDirectory(lugarEnDisco);
             archivo.SaveAs(Path.Combine(lugarEnDisco, nombre));
+
+            if (returnRelativeFolder)
+                return Path.Combine(pathRelativo(folder), nombre);
 
             return nombre;
         }

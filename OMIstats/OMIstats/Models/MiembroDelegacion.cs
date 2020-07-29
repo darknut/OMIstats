@@ -541,14 +541,27 @@ namespace OMIstats.Models
         {
             if (String.IsNullOrEmpty(clave))
             {
-                clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                if (String.IsNullOrEmpty(claveOriginal))
+                    clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                else
+                {
+                    List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOriginal, claveOriginal);
+                    if (md.Count > 0 && md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada)
+                        clave = claveOriginal;
+                }
             }
             else
             {
                 List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOlimpiada, clave);
+                // Revisamos si hay colisiones de clave
                 if (md.Count > 0 && md[0].claveUsuario != claveUsuario)
                 {
-                    md[0].clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                    // Se hace cambalache de claves en caso de que este registrado en la misma competicion
+                    // y sea el mismo tipo de asistente
+                    if (md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada)
+                        md[0].clave = clave;
+                    else
+                        md[0].clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
                     md[0].guardarDatos(clave, tipoOlimpiada);
                 }
             }
@@ -560,7 +573,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(clave));
             query.Append(", tipo = ");
             query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
-            query.Append(", tipoOlimpiada = ");
+            query.Append(", clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", estado = ");
             query.Append(Utilities.Cadenas.comillas(estado));
@@ -572,10 +585,12 @@ namespace OMIstats.Models
             query.Append(md.añoEscuela);*/
             query.Append(" where olimpiada = ");
             query.Append(Utilities.Cadenas.comillas(olimpiada));
-            query.Append(" and tipoOlimpiada = ");
+            query.Append(" and clase = ");
             query.Append(Utilities.Cadenas.comillas(tipoOriginal.ToString().ToLower()));
             query.Append(" and clave = ");
             query.Append(Utilities.Cadenas.comillas(claveOriginal));
+            query.Append(" and persona = ");
+            query.Append(claveUsuario);
 
             db.EjecutarQuery(query.ToString());
         }
@@ -1021,7 +1036,9 @@ namespace OMIstats.Models
 
             if (tipoAsistente == TipoAsistente.COMPETIDOR)
             {
-                for (int i = 1; i <= 8; i++)
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
+                int maxUsers = o.getMaxParticipantesDeEstado(estado);
+                for (int i = 1; i <= maxUsers; i++)
                 {
                     var testClave = prefijo + "-" + i;
                     if (!miembros.Contains(testClave))

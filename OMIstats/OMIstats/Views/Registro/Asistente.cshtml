@@ -139,7 +139,8 @@
             <select id="claveSelect" name="claveSelect" class="shiny-box" @(mostrarClaveCbo ? "" : "disabled")>
             @if (estado != null)
             {
-                for (int i = 1; i <= (esSede ? 8 : 4); i++)
+                int maxParticipantes = omi.getMaxParticipantesDeEstado(estado.clave);
+                for (int i = 1; i <= maxParticipantes; i++)
                 {
                     var clave = estado.ISO + "-" + i;
                 <option value="@(clave)" @((claveDisponible == clave) ? "selected" : "")>@(clave)</option>

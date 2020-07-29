@@ -132,8 +132,12 @@ namespace OMIstats.Controllers
 
             if (!p.esSuperUsuario())
             {
-                if (estado == null)
+                if (estado == null ||
+                    (String.IsNullOrEmpty(clave) &&
+                     tipo != TipoOlimpiada.NULL &&
+                     !puedeRegistrarOtroMas(o, estado)))
                     return RedirectTo(Pagina.HOME);
+
                 ViewBag.estado = Estado.obtenerEstadoConClave(estado);
             }
 
@@ -168,7 +172,7 @@ namespace OMIstats.Controllers
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
 
-            p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario);
+            p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
             p.breakNombre();
 
             return View(p);
@@ -187,8 +191,14 @@ namespace OMIstats.Controllers
                 !tienePermisos(o.registroActivo, estado))
                 return RedirectTo(Pagina.HOME);
 
-            MiembroDelegacion md = null;
             MiembroDelegacion.TipoAsistente asistente = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente);
+            if (!esAdmin() &&
+                 String.IsNullOrEmpty(claveOriginal) &&
+                 asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
+                 !puedeRegistrarOtroMas(o, estado))
+                return RedirectTo(Pagina.HOME);
+
+            MiembroDelegacion md = null;
             TipoOlimpiada tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipo);
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
             if (!String.IsNullOrEmpty(claveOriginal))
@@ -235,9 +245,9 @@ namespace OMIstats.Controllers
                 // Modificando asistente
 
                 // Primero los datos de persona
-                p.foto = guardaFoto(file, p.clave);
                 Persona per = Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
                 p.clave = per.clave;
+                p.foto = guardaFoto(file, p.clave);
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
 
                 // Luego el miembro delegacion
@@ -256,10 +266,17 @@ namespace OMIstats.Controllers
         {
             if (file != null)
             {
-                return Utilities.Archivos.guardaArchivo(file, clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+                return Utilities.Archivos.guardaArchivo(file, clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS, appendExtension: true, returnRelativeFolder: true);
             }
 
             return "";
+        }
+
+        private bool puedeRegistrarOtroMas(Olimpiada o, string estado)
+        {
+            int maxUsuarios = o.getMaxParticipantesDeEstado(estado);
+            List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosDelegacion(o.numero, estado, o.tipoOlimpiada, MiembroDelegacion.TipoAsistente.COMPETIDOR);
+            return (mds.Count < maxUsuarios);
         }
     }
 }
