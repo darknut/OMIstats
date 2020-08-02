@@ -242,6 +242,35 @@ namespace OMIstats.Controllers
             if (String.IsNullOrEmpty(claveOriginal))
             {
                 // Nuevo asistente
+                if (String.IsNullOrEmpty(persona) || persona == "0")
+                {
+                    // Si no hay clave de persona previa, se agrega una nueva persona
+                    p.nuevoUsuario();
+                }
+                else
+                {
+                    // Si tengo clave, se intenta conseguir
+                    Persona per = Persona.obtenerPersonaConClave(int.Parse(persona));
+                    if (per == null)
+                        return RedirectTo(Pagina.HOME);
+
+                    p.clave = per.clave;
+                }
+
+                string fotoURL = guardaFoto(file, p.clave);
+                if (!String.IsNullOrEmpty(fotoURL))
+                    p.foto = fotoURL;
+                p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
+
+                // Se genera un nuevo miembro delegacion
+                md = new MiembroDelegacion();
+                md.olimpiada = o.numero;
+                md.tipoOlimpiada = tipoOlimpiada;
+                md.estado = estado;
+                md.clave = claveSelect;
+                md.tipo = asistente;
+                md.claveUsuario = p.clave;
+                md.nuevo();
             }
             else
             {
@@ -261,7 +290,7 @@ namespace OMIstats.Controllers
 
                 // Modificando asistente
                 // Primero los datos de persona
-                Persona per = Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
+                Persona per = Persona.obtenerPersonaConClave(md.claveUsuario);
                 p.clave = per.clave;
                 p.foto = guardaFoto(file, p.clave);
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);

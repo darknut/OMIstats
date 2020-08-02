@@ -148,17 +148,20 @@ namespace OMIstats.Models
             }
 
             claveUsuario = (int)row["persona"];
-            claveEscuela = (int)row["institucion"];
             estado = row["estado"].ToString().Trim();
             olimpiada = row["olimpiada"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
             tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
             tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), row["clase"].ToString().ToUpper());
 #if OMISTATS
-            nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
+            try
+            {
+                claveEscuela = (int)row["institucion"];
+                nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
+                añoEscuela = (int)row["año"];
+            } catch(Exception) { }
             nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
 #endif
-            añoEscuela = (int)row["año"];
         }
 
 #if OMISTATS
@@ -537,20 +540,55 @@ namespace OMIstats.Models
             return p.clave;
         }
 
+        public void nuevo()
+        {
+            // Primero se revisa si hay clave
+            if (String.IsNullOrEmpty(clave))
+            {
+                // Si no hay, se asigna la siguiente disponible
+                clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+            }
+            else
+            {
+                // Si sí hay, se revisa por colisiones
+                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOlimpiada, clave);
+                if (md.Count > 0)
+                {
+                    // Si hay colisión, se asigna una nueva clave al competidor viejo
+                    md[0].clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                    md[0].guardarDatos(clave, tipoOlimpiada, ignoreCollisions: true);
+                }
+            }
+
+            StringBuilder query = new StringBuilder();
+            Utilities.Acceso db = new Utilities.Acceso();
+
+            query.Append(" insert into miembrodelegacion (olimpiada, estado, clase, clave, tipo, persona) values(");
+            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(",");
+            query.Append(Utilities.Cadenas.comillas(estado));
+            query.Append(",");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(",");
+            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(",");
+            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(",");
+            query.Append(claveUsuario);
+            query.Append(")");
+
+            db.EjecutarQuery(query.ToString());
+        }
+
         public void guardarDatos(string claveOriginal, TipoOlimpiada tipoOriginal, bool ignoreCollisions = false)
         {
             if (String.IsNullOrEmpty(clave))
             {
-                if (String.IsNullOrEmpty(claveOriginal))
-                    clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
+                List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOriginal, claveOriginal);
+                if (md.Count > 0 && md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada && md[0].estado == estado)
+                    clave = claveOriginal;
                 else
-                {
-                    List<MiembroDelegacion> md = MiembroDelegacion.obtenerMiembrosConClave(olimpiada, tipoOriginal, claveOriginal);
-                    if (md.Count > 0 && md[0].tipo == tipo && md[0].tipoOlimpiada == tipoOlimpiada && md[0].estado == estado)
-                        clave = claveOriginal;
-                    else
-                        clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
-                }
+                    clave = MiembroDelegacion.obtenerPrimerClaveDisponible(olimpiada, tipoOlimpiada, estado, tipo);
             }
             else
             {

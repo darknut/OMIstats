@@ -516,9 +516,11 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" declare @inserted table(clave int); ");
-            query.Append(" insert into persona (nombre) output inserted.clave into @inserted values( ");
+            query.Append(" insert into persona (nombre, facebook, twitter, sitio, usuario, permisos, codeforces,");
+            query.Append(" topcoder, ioiID, celular, telefono, direccion, emergencia, parentesco, telemergencia,");
+            query.Append(" medicina, alergias) output inserted.clave into @inserted values( ");
             query.Append(Utilities.Cadenas.comillas(nombre));
-            query.Append("); select clave from @inserted ");
+            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', ''); select clave from @inserted ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return;
