@@ -7,6 +7,7 @@
     bool registroActivo = ViewBag.registroActivo;
     int competidoresProcesados = 0;
     string lastEstado = "";
+    bool hayResultados = ViewBag.hayResultados;
     string[] subTitulos = {
         "Competidores de OMI",
         "Competidores de primaria",
@@ -81,7 +82,7 @@
         </td>
         <td>
             <a onclick="iniciaRegistro('@miembro.tipoOlimpiada', '@miembro.clave')" class="a-sin-href">Modificar</a>
-            @if (usuario.esAdmin() || registroActivo)
+            @if (!hayResultados && (usuario.esSuperUsuario() || registroActivo))
             {
             <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
             }

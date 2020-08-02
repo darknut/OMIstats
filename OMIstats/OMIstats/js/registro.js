@@ -171,6 +171,9 @@ function iniciaRegistro(tipo, clave) {
 }
 
 function cambiaClavesCbo() {
+    if (hayResultados)
+        return;
+
     var tipo = document.getElementById("tipoAsistente").value;
     var estado = document.getElementById("estado").value;
     var span = document.getElementById("campoClave");

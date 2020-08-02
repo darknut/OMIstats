@@ -90,6 +90,7 @@ namespace OMIstats.Controllers
 
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, TipoOlimpiada.NULL);
             ViewBag.omi = o;
+            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
             return View(registrados);
         }
 
@@ -108,7 +109,7 @@ namespace OMIstats.Controllers
         public ActionResult Eliminar(string omi, TipoOlimpiada tipo, string estado, string clave)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
+            if (o == null || !tienePermisos(o.registroActivo, estado) || Resultados.hayResultadosParaOMI(omi))
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave)[0];
@@ -171,6 +172,7 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
+            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
 
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
             p.breakNombre();
@@ -222,6 +224,7 @@ namespace OMIstats.Controllers
             ViewBag.tipoOriginal = tipoO;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
+            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
 
             if (file != null)
             {
@@ -242,8 +245,21 @@ namespace OMIstats.Controllers
             }
             else
             {
-                // Modificando asistente
+                // Si ya hay resultados no podemos cambiar la clave, estado, o tipo de OMI
+                if (Resultados.hayResultadosParaOMI(o.numero))
+                {
+                    tipoOlimpiada = md.tipoOlimpiada;
+                    claveSelect = md.clave;
+                    estado = md.estado;
 
+                    // Adicionalmente si es competidor, no se piuede cambiar su tipo de asistencia
+                    // ni volver a alguien mas competidor
+                    if (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR ||
+                        asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                        asistente = md.tipo;
+                }
+
+                // Modificando asistente
                 // Primero los datos de persona
                 Persona per = Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
                 p.clave = per.clave;
@@ -254,7 +270,7 @@ namespace OMIstats.Controllers
                 md.tipoOlimpiada = tipoOlimpiada;
                 md.estado = estado;
                 md.clave = claveSelect;
-                md.tipo = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente.ToString().ToUpper());
+                md.tipo = asistente;
                 md.guardarDatos(claveOriginal, tipoO);
             }
 

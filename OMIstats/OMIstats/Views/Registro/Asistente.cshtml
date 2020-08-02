@@ -15,11 +15,15 @@
     string claveCompetidor = ViewBag.claveOriginal;
     OMIstats.Models.TipoOlimpiada tipoOriginal = ViewBag.tipoOriginal;
     OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = ViewBag.tipoAsistente;
-    bool mostrarClaveCbo = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
+    bool hayResultados = ViewBag.hayResultados;
+    bool puedeCambiarSelects = nuevo || !hayResultados;
+    bool mostrarClaveCbo = !hayResultados &&
+                            (tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
                             (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL 
-                            && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL);
+                            && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL));
     string claveDisponible = ViewBag.claveDisponible;
     bool resubmit = ViewBag.resubmit;
+    bool puedeCambiarConPermisos = puedeCambiarSelects && usuario.esSuperUsuario();
 }
 
 @section AddToHead
@@ -45,6 +49,7 @@
         var updating = @(md == null ? "false" : "true");
         var estados = {};
         var resubmit = @(resubmit ? "true" : "false");
+        var hayResultados = @(hayResultados ? "true" : "false");
         @foreach(OMIstats.Models.Estado e in estados)
         {
             @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
@@ -87,7 +92,7 @@
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Concurso<span class="errorTextoRojo">*</span></span>
-            <select id="tipo" name="tipo" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled")>
+            <select id="tipo" name="tipo" class="shiny-box" @(puedeCambiarConPermisos ? "" : "disabled")>
                 <option value="OMI" @(tipo == OMIstats.Models.TipoOlimpiada.OMI ? "selected" : "")>OMI</option>
                 <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
                 <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
@@ -99,9 +104,9 @@
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Participar como<span class="errorTextoRojo">*</span></span>
-            <select id="tipoAsistente" name="tipoAsistente" class="shiny-box" @(usuario.esSuperUsuario() || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "" : "disabled") onchange="cambiaClavesCbo()">
+            <select id="tipoAsistente" name="tipoAsistente" class="shiny-box" @(puedeCambiarConPermisos || (tipoAsistente != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && tipoAsistente != OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL) || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "" : "disabled") onchange="cambiaClavesCbo()">
                 <option value=""></option>
-                @if (usuario.esSuperUsuario() || tipo != OMIstats.Models.TipoOlimpiada.NULL)
+                @if (puedeCambiarConPermisos || tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (nuevo && tipo != OMIstats.Models.TipoOlimpiada.NULL))
                 {
                 <option value="COMPETIDOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL) ? "selected" : "")>Competidor</option>
                 }
@@ -124,7 +129,7 @@
         </div>
         <div class="registro-single-control">
             <span class="control-title">Estado al que representa<span class="errorTextoRojo">*</span></span>
-            <select id="estado" name="estado" class="shiny-box" @(usuario.esSuperUsuario() ? "" : "disabled") onchange="cambiaClavesCbo()">
+            <select id="estado" name="estado" class="shiny-box" @(puedeCambiarConPermisos ? "" : "disabled") onchange="cambiaClavesCbo()">
                 <option value=""></option>
             @for (int i = 0; i < estados.Count; i++)
             {

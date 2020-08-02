@@ -916,6 +916,22 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa si ya hay resultados grabados en la base de datos para la omi
+        /// </summary>
+        public static bool hayResultadosParaOMI(string omi)
+        {
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select COUNT(*) from Resultados where ");
+            query.Append(" olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+
+            db.EjecutarQuery(query.ToString());
+            return (int)db.getTable().Rows[0][0] > 0;
+        }
+
+        /// <summary>
         /// Regresa una lista con el lugar del competidor mandado como parametro para cada problema y cada dia
         /// </summary>
         public static List<int> cargarMejores(string omi, TipoOlimpiada tipo, string clave, int problemasDia1, int problemasDia2)
