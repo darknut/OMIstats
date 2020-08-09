@@ -258,6 +258,8 @@ namespace OMIstats.Controllers
                 md = temp[0];
             }
 
+            if (persona != "0")
+                p.clave = int.Parse(persona);
             ViewBag.claveDisponible = claveSelect;
             ViewBag.estado = Estado.obtenerEstadoConClave(estado);
             ViewBag.md = md;
@@ -288,7 +290,7 @@ namespace OMIstats.Controllers
             if (String.IsNullOrEmpty(claveOriginal))
             {
                 // Nuevo asistente
-                if (String.IsNullOrEmpty(persona) || persona == "0")
+                if (persona == "0")
                 {
                     // Si no hay clave de persona previa, se agrega una nueva persona
                     p.nuevoUsuario();
