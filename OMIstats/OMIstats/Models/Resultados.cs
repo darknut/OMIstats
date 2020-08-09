@@ -928,7 +928,7 @@ namespace OMIstats.Models
             query.Append(Utilities.Cadenas.comillas(omi));
 
             db.EjecutarQuery(query.ToString());
-            return (int)db.getTable().Rows[0][0] == 0;
+            return (int)db.getTable().Rows[0][0] > 0;
         }
 
         /// <summary>

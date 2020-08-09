@@ -2,7 +2,8 @@
 
 @{
     bool nuevo = ViewBag.nuevo;
-    ViewBag.Title = nuevo ? "Registro" : "Modificar";
+    string errorInfo = ViewBag.errorInfo;
+    ViewBag.Title = errorInfo.Length > 0 ? "Error" : nuevo  ? "Registro" : "Modificar";
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
@@ -24,6 +25,7 @@
     string claveDisponible = ViewBag.claveDisponible;
     bool resubmit = ViewBag.resubmit;
     bool puedeCambiarConPermisos = puedeCambiarSelects && usuario.esSuperUsuario();
+    bool guardado = ViewBag.guardado;
 }
 
 @section AddToHead
@@ -50,19 +52,58 @@
         var estados = {};
         var resubmit = @(resubmit ? "true" : "false");
         var hayResultados = @(hayResultados ? "true" : "false");
-        @foreach(OMIstats.Models.Estado e in estados)
+        @if (errorInfo.Length == 0)
         {
-            @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
+            foreach(OMIstats.Models.Estado e in estados)
+            {
+        @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
+            }
+        @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "\" + \"Registro/\", \"" + (usuario.esSuperUsuario() ? "" : estado.clave) + "\", \"" + omi.numero + "\");"))
+        @(new MvcHtmlString("setUpSearch(\"" + tipo + "\");"))
         }
-
-        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
-        setUpSearch("@tipo");
     </script>
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
-
-@if (md == null && !resubmit)
+@if (guardado)
+{
+    <div> Se han guardado los datos con éxito </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+}
+else if (errorInfo == "limite")
+{
+    <div class="errorTextoRojo"> Este estado ya llegó al limite de competidores </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+}
+else if (errorInfo == "permisos")
+{
+    <div class="errorTextoRojo"> No tienes permisos para realizar esta acción </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+}
+else if (errorInfo == "duplicado")
+{
+    <div class="errorTextoRojo"> El usuario que se quiere cambiar tiene clave duplicada, contacta a un administrador </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+}
+else if (errorInfo == "invalido")
+{
+    <div class="errorTextoRojo"> La clave seleccionada es inválida </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+}
+else if (errorInfo == "persona")
+{
+    <div class="errorTextoRojo"> La persona seleccionada es inválida </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+}
+else
+{
+if (md == null && !resubmit)
 {
 <div id="busqueda" class="panel">
     <div class="panel-heading"> Buscar participantes de años anteriores </div>
@@ -283,4 +324,5 @@
     <img class="textoRojo" id="loading" src="~/img/ajax-loader.gif" />
 </div>
 </form>
+}
 <div class="clear"></div>
