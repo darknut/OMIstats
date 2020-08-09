@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -73,7 +74,7 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow datos)
         {
             olimpiada = datos["olimpiada"].ToString().Trim();
-            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), datos["clase"].ToString().ToUpper());
+            tipoOlimpiada = EnumParser.ToTipoOlimpiada(datos["clase"].ToString().ToUpper());
             dia = (int)datos["dia"];
             numero = (int)datos["numero"];
             nombre = datos["nombre"].ToString().Trim();
@@ -99,7 +100,7 @@ namespace OMIstats.Models
         public static List<Problema> obtenerProblemasDeOMI(string omi, TipoOlimpiada tipoOlimpiada, int dia)
         {
             List<Problema> problemas = new List<Problema>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             problemas.Add(null);
@@ -110,11 +111,11 @@ namespace OMIstats.Models
             problemas.Add(null);
 
             query.Append(" select * from problema where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and dia = ");
             query.Append(dia);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and numero <> 0 order by numero asc ");
 
             if (db.EjecutarQuery(query.ToString()).error)
@@ -141,13 +142,13 @@ namespace OMIstats.Models
         public static List<Problema> obetnerMetaDatadeOMI(string omi, TipoOlimpiada tipoOlimpiada)
         {
             List<Problema> problemas = new List<Problema>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from problema where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and numero = 0 order by dia asc ");
 
             if (db.EjecutarQuery(query.ToString()).error)
@@ -195,13 +196,13 @@ namespace OMIstats.Models
         /// <returns>El objeto problema</returns>
         public static Problema obtenerProblema(string omi, TipoOlimpiada tipoOlimpiada, int dia, int numero)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from problema where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and dia = ");
             query.Append(dia);
             query.Append(" and numero = ");
@@ -234,11 +235,11 @@ namespace OMIstats.Models
         public static Dictionary<string, List<Problema>> obtenerProblemas(TipoOlimpiada tipoOlimpiada)
         {
             Dictionary<string, List<Problema>> problemas = new Dictionary<string, List<Problema>>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from problema where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by olimpiada, dia asc, numero asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -272,13 +273,13 @@ namespace OMIstats.Models
         /// como los casos y soluciones</param>
         public void guardar(bool guardarTodo = true)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" insert into problema values( ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", ");
             query.Append(dia);
             query.Append(", ");
@@ -290,17 +291,17 @@ namespace OMIstats.Models
             query.Clear();
 
             query.Append(" update problema set nombre = ");
-            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append(Cadenas.comillas(nombre));
             if (guardarTodo)
             {
                 query.Append(", url = ");
-                query.Append(Utilities.Cadenas.comillas(url));
+                query.Append(Cadenas.comillas(url));
                 query.Append(", casos = ");
-                query.Append(Utilities.Cadenas.comillas(casos));
+                query.Append(Cadenas.comillas(casos));
                 query.Append(", codigo = ");
-                query.Append(Utilities.Cadenas.comillas(codigo));
+                query.Append(Cadenas.comillas(codigo));
                 query.Append(", solucion = ");
-                query.Append(Utilities.Cadenas.comillas(solucion));
+                query.Append(Cadenas.comillas(solucion));
             }
             query.Append(", media = ");
             query.Append(media);
@@ -311,9 +312,9 @@ namespace OMIstats.Models
             query.Append(", perfectos = ");
             query.Append(perfectos);
             query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and dia = ");
             query.Append(dia);
             query.Append(" and numero = ");
@@ -333,16 +334,16 @@ namespace OMIstats.Models
         public static List<float> obtenerResultadosParaProblema(string olimpiada, TipoOlimpiada tipo, int dia, int numero)
         {
             List<float> resultados = new List<float>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
             string puntos = "puntosD" + dia + "P" + numero;
 
             query.Append(" select ");
             query.Append(puntos);
             query.Append(" from resultados where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(" order by ");
             query.Append(puntos);
             query.Append(" asc ");

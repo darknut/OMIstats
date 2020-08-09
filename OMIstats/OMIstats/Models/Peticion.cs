@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -69,25 +70,25 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" declare @inserted table(clave int); ");
             query.Append(" insert into peticion output inserted.clave into @inserted values (");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(subtipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(subtipo.ToString().ToLower()));
             query.Append(", ");
             if (usuario != null)
                 query.Append(usuario.clave);
             else
                 query.Append("0");
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(datos1));
+            query.Append(Cadenas.comillas(datos1));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(datos2));
+            query.Append(Cadenas.comillas(datos2));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(datos3));
+            query.Append(Cadenas.comillas(datos3));
             query.Append("); select clave from @inserted");
 
             if (db.EjecutarQuery(query.ToString()).error)
@@ -110,7 +111,7 @@ namespace OMIstats.Models
                 return null;
 
             List<Peticion> lista = new List<Peticion>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from peticion where usuario = ");
@@ -140,7 +141,7 @@ namespace OMIstats.Models
         public static List<Peticion> obtenerPeticiones()
         {
             List<Peticion> lista = new List<Peticion>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select top 30 * from peticion ");
@@ -168,7 +169,7 @@ namespace OMIstats.Models
         public static int cuentaPeticiones()
         {
             List<Peticion> lista = new List<Peticion>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select count(*) from peticion ");
@@ -186,8 +187,8 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow datos, bool cargarUsuario = false)
         {
             clave = (int) datos["clave"];
-            tipo = (TipoPeticion) Enum.Parse(typeof(TipoPeticion), datos["tipo"].ToString().Trim().ToUpper());
-            subtipo = (TipoPeticion) Enum.Parse(typeof(TipoPeticion), datos["subtipo"].ToString().Trim().ToUpper());
+            tipo = EnumParser.ToTipoPeticion(datos["tipo"].ToString().Trim().ToUpper());
+            subtipo = EnumParser.ToTipoPeticion(datos["subtipo"].ToString().Trim().ToUpper());
             datos1 = datos["datos1"].ToString().Trim();
             datos2 = datos["datos2"].ToString().Trim();
             datos3 = datos["datos3"].ToString().Trim();
@@ -201,7 +202,7 @@ namespace OMIstats.Models
         /// </summary>
         public static Peticion obtenerPeticionConClave(int clave)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from peticion where clave = ");
@@ -229,7 +230,7 @@ namespace OMIstats.Models
             if (tipo == TipoPeticion.NULL || subtipo == TipoPeticion.NULL)
                 return false;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("delete peticion where clave = ");
@@ -239,7 +240,7 @@ namespace OMIstats.Models
                 return false;
 
             if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.FOTO)
-                Utilities.Archivos.eliminarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL);
+                Archivos.eliminarArchivo(datos1, Archivos.FolderImagenes.TEMPORAL);
 
             return true;
         }
@@ -265,8 +266,8 @@ namespace OMIstats.Models
 
                 if (subtipo == TipoPeticion.FOTO)
                     usuario.foto =
-                        Utilities.Archivos.copiarArchivo(datos1, Utilities.Archivos.FolderImagenes.TEMPORAL,
-                                            usuario.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
+                        Archivos.copiarArchivo(datos1, Archivos.FolderImagenes.TEMPORAL,
+                                    usuario.clave.ToString(), Archivos.FolderImagenes.USUARIOS);
 
                 if (!usuario.guardarDatos())
                     return false;

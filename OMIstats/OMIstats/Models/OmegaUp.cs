@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -107,15 +108,15 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow r)
         {
             clave = (int)r["clave"];
-            instruccion = (Instruccion)Enum.Parse(typeof(Instruccion), r["tipo"].ToString().ToUpper());
+            instruccion = EnumParser.ToInstruccion(r["tipo"].ToString().ToUpper());
             olimpiada = r["olimpiada"].ToString().Trim();
-            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+            tipoOlimpiada = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
             dia = (short)r["dia"];
             ping = (int)r["ping"];
             concurso = r["concurso"].ToString().Trim();
             token = r["token"].ToString().Trim();
             prefijo = r["prefijo"].ToString().Trim();
-            status = (Status)Enum.Parse(typeof(Status), r["status"].ToString().ToUpper());
+            status = EnumParser.ToStatus(r["status"].ToString().ToUpper());
             secondsToFinish = (int)r["secondsToFinish"];
             try
             {
@@ -128,7 +129,7 @@ namespace OMIstats.Models
 
         public static List<OmegaUp> obtenerInstrucciones(Instruccion i = Instruccion.NULL)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
             List<OmegaUp> lista = new List<OmegaUp>();
 
@@ -136,7 +137,7 @@ namespace OMIstats.Models
             if (i != Instruccion.NULL)
             {
                 query.Append(" where tipo = ");
-                query.Append(Utilities.Cadenas.comillas(i.ToString().ToLower()));
+                query.Append(Cadenas.comillas(i.ToString().ToLower()));
             }
             query.Append(" order by tipo asc ");
 
@@ -157,32 +158,32 @@ namespace OMIstats.Models
 
         public void guardar()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             if (status == Status.OK)
                 this.timestamp = DateTime.UtcNow;
 
             query.Append(" update omegaup set tipo = ");
-            query.Append(Utilities.Cadenas.comillas(instruccion.ToString().ToLower()));
+            query.Append(Cadenas.comillas(instruccion.ToString().ToLower()));
             query.Append(", olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(", clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", ping = ");
             query.Append(ping);
             query.Append(", concurso = ");
-            query.Append(Utilities.Cadenas.comillas(concurso));
+            query.Append(Cadenas.comillas(concurso));
             query.Append(", token = ");
-            query.Append(Utilities.Cadenas.comillas(token));
+            query.Append(Cadenas.comillas(token));
             query.Append(", prefijo = ");
-            query.Append(Utilities.Cadenas.comillas(prefijo));
+            query.Append(Cadenas.comillas(prefijo));
             query.Append(", dia = ");
             query.Append(dia);
             query.Append(", status = ");
-            query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
+            query.Append(Cadenas.comillas(status.ToString().ToLower()));
             query.Append(", timestamp = ");
-            query.Append(Utilities.Cadenas.comillas(timestamp.Ticks.ToString()));
+            query.Append(Cadenas.comillas(timestamp.Ticks.ToString()));
             query.Append(", secondsToFinish = ");
             query.Append(secondsToFinish);
             query.Append(" where clave = ");
@@ -193,7 +194,7 @@ namespace OMIstats.Models
 
         public void guardarNuevo()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             if (status == Status.OK)
@@ -203,25 +204,25 @@ namespace OMIstats.Models
 
             query.Append(" insert into OmegaUp (tipo, olimpiada, clase, ping, concurso, ");
             query.Append(" token, prefijo, dia, status, timestamp, secondsToFinish) values (");
-            query.Append(Utilities.Cadenas.comillas(instruccion.ToString().ToLower()));
+            query.Append(Cadenas.comillas(instruccion.ToString().ToLower()));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",");
             query.Append(ping);
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(concurso));
+            query.Append(Cadenas.comillas(concurso));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(token));
+            query.Append(Cadenas.comillas(token));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(prefijo));
+            query.Append(Cadenas.comillas(prefijo));
             query.Append(",");
             query.Append(dia);
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(status.ToString().ToLower()));
+            query.Append(Cadenas.comillas(status.ToString().ToLower()));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(timestamp.Ticks.ToString()));
+            query.Append(Cadenas.comillas(timestamp.Ticks.ToString()));
             query.Append(",");
             query.Append(secondsToFinish);
             query.Append(")");
@@ -231,7 +232,7 @@ namespace OMIstats.Models
 
         public void borrar()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("delete OmegaUp where clave = ");
@@ -242,7 +243,7 @@ namespace OMIstats.Models
 
         public static void borrarTodo()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("delete OmegaUp");
@@ -252,7 +253,7 @@ namespace OMIstats.Models
 
         public static void borrarConClave(int clave)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("delete OmegaUp where clave = ");
@@ -263,7 +264,7 @@ namespace OMIstats.Models
 
         public static OmegaUp obtenerConClave(int clave)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from OmegaUp where clave = ");
@@ -284,15 +285,15 @@ namespace OMIstats.Models
 
         public static OmegaUp obtenerParaOMI(string olimpiada, TipoOlimpiada tipoOlimpiada)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from OmegaUp where tipo = ");
-            query.Append(Utilities.Cadenas.comillas(Instruccion.POLL.ToString().ToLower()));
+            query.Append(Cadenas.comillas(Instruccion.POLL.ToString().ToLower()));
             query.Append(" and olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
 
@@ -309,20 +310,20 @@ namespace OMIstats.Models
 
         public static void startTimestampsForPolls()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update OmegaUp set timestamp = ");
-            query.Append(Utilities.Cadenas.comillas(DateTime.UtcNow.Ticks.ToString()));
+            query.Append(Cadenas.comillas(DateTime.UtcNow.Ticks.ToString()));
             query.Append(" where tipo = ");
-            query.Append(Utilities.Cadenas.comillas(Instruccion.POLL.ToString()));
+            query.Append(Cadenas.comillas(Instruccion.POLL.ToString()));
 
             db.EjecutarQuery(query.ToString());
         }
 
         public void setSecondsToFinish(long seconds)
         {
-            DateTime finishTime = Utilities.Fechas.fromUnixTime(seconds);
+            DateTime finishTime = Fechas.fromUnixTime(seconds);
             DateTime now = DateTime.UtcNow;
 
             if (now >= finishTime)

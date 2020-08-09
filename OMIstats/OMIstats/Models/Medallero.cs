@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -73,8 +74,8 @@ namespace OMIstats.Models
 
         public void llenarDatos(DataRow datos)
         {
-            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), datos["clase"].ToString().ToUpper());
-            tipoMedallero = (TipoMedallero)Enum.Parse(typeof(TipoMedallero), datos["tipo"].ToString().ToUpper());
+            tipoOlimpiada = EnumParser.ToTipoOlimpiada(datos["clase"].ToString().ToUpper());
+            tipoMedallero = EnumParser.ToTipoMedallero(datos["tipo"].ToString().ToUpper());
             clave = datos["clave"].ToString().Trim();
             oros = (int)datos["oro"];
             platas = (int)datos["plata"];
@@ -97,15 +98,15 @@ namespace OMIstats.Models
         /// <returns>Un objeto medallero con los datos deseados</returns>
         public static Medallero obtenerMedallas(TipoOlimpiada tipoOlimpiada, TipoMedallero tipoMedallero, string clave, bool nullSiInexistente = false)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from medallero where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and tipo = ");
             query.Append((int)tipoMedallero);
             query.Append(" and clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -152,15 +153,15 @@ namespace OMIstats.Models
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" insert into medallero values( ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", ");
             query.Append((int)tipoMedallero);
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(", ");
             query.Append(oros);
             query.Append(", ");
@@ -170,7 +171,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(otros);
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(", ");
             query.Append(puntos);
             query.Append(", ");
@@ -190,7 +191,7 @@ namespace OMIstats.Models
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update medallero set oro = ");
@@ -208,11 +209,11 @@ namespace OMIstats.Models
             query.Append(", lugar = ");
             query.Append(lugar);
             query.Append(" where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and tipo = ");
             query.Append((int)tipoMedallero);
             query.Append(" and clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
 
             return !db.EjecutarQuery(query.ToString()).error;
         }
@@ -227,11 +228,11 @@ namespace OMIstats.Models
             if (tipoOlimpiada == TipoOlimpiada.NULL)
                 return;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" delete medallero where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and (tipo <> ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
             query.Append(" or clave like '%_");
@@ -505,15 +506,15 @@ namespace OMIstats.Models
         {
             List<Medallero> lista = new List<Medallero>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from Medallero where tipo = ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
             query.Append(" and omi = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by lugar asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -552,13 +553,13 @@ namespace OMIstats.Models
         {
             Dictionary<string, Dictionary<string, Medallero>> estados = new Dictionary<string, Dictionary<string, Medallero>>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from Medallero where tipo = ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -610,13 +611,13 @@ namespace OMIstats.Models
         {
             Dictionary<string, Medallero> estados = new Dictionary<string, Medallero>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from Medallero where tipo = ");
             query.Append((int)TipoMedallero.ESTADO);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -643,15 +644,15 @@ namespace OMIstats.Models
         {
             Dictionary<string, Medallero> estados = new Dictionary<string, Medallero>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from Medallero where tipo = ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
             query.Append(" and left(clave,3) = ");
-            query.Append(Utilities.Cadenas.comillas(estado));
+            query.Append(Cadenas.comillas(estado));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -709,14 +710,14 @@ namespace OMIstats.Models
         /// </summary>
         public static void hardcode(TipoOlimpiada tipoOlimpiada, string olimpiada)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             // En la 10a OMI, hay que mover a GRO manualmente a 1er lugar
             if (tipoOlimpiada == TipoOlimpiada.OMI && olimpiada == "10")
             {
                 query.Append(" update Medallero set lugar = lugar + 1 where clase = ");
-                query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
                 query.Append(" and omi = \'10\' and lugar < 14 ");
                 db.EjecutarQuery(query.ToString());
 

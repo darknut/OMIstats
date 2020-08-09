@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -46,7 +47,7 @@ namespace OMIstats.Models
         {
             clave = (int)r["clave"];
             log = r["log"].ToString().Trim();
-            tipo = (TipoLog)Enum.Parse(typeof(TipoLog), r["tipo"].ToString().ToUpper());
+            tipo = EnumParser.ToTipoLog(r["tipo"].ToString().ToUpper());
             timestamp = DateTime.Parse(r["timestamp"].ToString().Trim());
         }
 
@@ -83,7 +84,7 @@ namespace OMIstats.Models
 
         public static List<Log> get(int count = DEFAULT_LOG_COUNT, TipoLog tipo = TipoLog.NULL)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             if (count == 0)
@@ -96,7 +97,7 @@ namespace OMIstats.Models
             if (tipo != TipoLog.NULL)
             {
                 query.Append(" where tipo = ");
-                query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             }
 
             query.Append(" order by clave desc ");
@@ -119,15 +120,15 @@ namespace OMIstats.Models
 
         private void guardar()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" insert into Log values(");
-            query.Append(Utilities.Cadenas.comillas(timestamp.ToString()));
+            query.Append(Cadenas.comillas(timestamp.ToString()));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(log));
+            query.Append(Cadenas.comillas(log));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
@@ -135,7 +136,7 @@ namespace OMIstats.Models
 
         public static void clear()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" delete log ");

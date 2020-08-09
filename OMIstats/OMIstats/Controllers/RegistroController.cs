@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using OMIstats.Models;
+using OMIstats.Utilities;
 
 namespace OMIstats.Controllers
 {
@@ -228,8 +229,8 @@ namespace OMIstats.Controllers
                 return View(new Persona());
             }
 
-            MiembroDelegacion.TipoAsistente asistente = (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), tipoAsistente);
-            TipoOlimpiada tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipo);
+            MiembroDelegacion.TipoAsistente asistente = EnumParser.ToTipoAsistente(tipoAsistente);
+            TipoOlimpiada tipoOlimpiada = EnumParser.ToTipoOlimpiada(tipo);
             if (!esAdmin() &&
                  String.IsNullOrEmpty(claveOriginal) &&
                  asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
@@ -243,7 +244,7 @@ namespace OMIstats.Controllers
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
             if (!String.IsNullOrEmpty(claveOriginal))
             {
-                tipoO = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), tipoOriginal);
+                tipoO = EnumParser.ToTipoOlimpiada(tipoOriginal);
                 var temp = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoO, claveOriginal);
                 if (temp.Count == 0)
                 {
@@ -276,8 +277,8 @@ namespace OMIstats.Controllers
 
             if (file != null)
             {
-                var valida = Utilities.Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
-                if (valida != Utilities.Archivos.ResultadoImagen.VALIDA)
+                var valida = Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
+                if (valida != Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = valida.ToString().ToLower();
                     return View(p);
@@ -362,7 +363,7 @@ namespace OMIstats.Controllers
         {
             if (file != null)
             {
-                return Utilities.Archivos.guardaArchivo(file, clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS, appendExtension: true, returnRelativeFolder: true);
+                return Archivos.guardaArchivo(file, clave.ToString(), Archivos.FolderImagenes.USUARIOS, appendExtension: true, returnRelativeFolder: true);
             }
 
             return "";

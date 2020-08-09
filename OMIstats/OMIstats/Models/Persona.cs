@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -171,12 +172,12 @@ namespace OMIstats.Models
 
             if (completo)
             {
-                nacimiento = Utilities.Fechas.stringToDate(datos["nacimiento"].ToString().Trim());
+                nacimiento = Fechas.stringToDate(datos["nacimiento"].ToString().Trim());
                 facebook = datos["facebook"].ToString().Trim();
                 twitter = datos["twitter"].ToString().Trim();
                 sitio = datos["sitio"].ToString().Trim();
                 correo = datos["correo"].ToString().Trim();
-                permisos = (TipoPermisos)Enum.Parse(typeof(TipoPermisos), datos["permisos"].ToString());
+                permisos = EnumParser.ToTipoPermisos(datos["permisos"].ToString());
                 genero = datos["genero"].ToString();
                 foto = datos["foto"].ToString().Trim();
                 ioiID = (int)datos["ioiID"];
@@ -219,11 +220,11 @@ namespace OMIstats.Models
             if (String.IsNullOrEmpty(usuario))
                 return null;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where usuario = ");
-            query.Append(Utilities.Cadenas.comillas(usuario.ToLower()));
+            query.Append(Cadenas.comillas(usuario.ToLower()));
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -249,11 +250,11 @@ namespace OMIstats.Models
             if (String.IsNullOrEmpty(nombre))
                 return null;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where search = ");
-            query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre)));
+            query.Append(Cadenas.comillas(Cadenas.quitaEspeciales(nombre)));
             if (ignorarUsuarios)
                 query.Append(" and LEFT(usuario, 1) = '_' ");
 
@@ -292,7 +293,7 @@ namespace OMIstats.Models
             if (clave == 0)
                 return false;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where clave = ");
@@ -320,7 +321,7 @@ namespace OMIstats.Models
         /// <returns>Si el update se ejecutó correctamente</returns>
         public bool guardarDatos(bool generarPeticiones = false, Persona currentValues = null, LugarGuardado lugarGuardado = LugarGuardado.PROFILE)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update persona set ");
@@ -360,38 +361,38 @@ namespace OMIstats.Models
             else
             {
                 query.Append(" nombre = ");
-                query.Append(Utilities.Cadenas.comillas(nombre));
+                query.Append(Cadenas.comillas(nombre));
                 query.Append(",");
 
                 query.Append(" apellidoP = ");
-                query.Append(Utilities.Cadenas.comillas(apellidoPaterno));
+                query.Append(Cadenas.comillas(apellidoPaterno));
                 query.Append(",");
 
                 query.Append(" apellidoM = ");
-                query.Append(Utilities.Cadenas.comillas(apellidoMaterno));
+                query.Append(Cadenas.comillas(apellidoMaterno));
                 query.Append(",");
 
                 query.Append(" search = ");
-                query.Append(Utilities.Cadenas.comillas(Utilities.Cadenas.quitaEspeciales(nombre + apellidoPaterno + apellidoMaterno)));
+                query.Append(Cadenas.comillas(Cadenas.quitaEspeciales(nombre + apellidoPaterno + apellidoMaterno)));
                 query.Append(",");
             }
 
             if (lugarGuardado == LugarGuardado.PROFILE)
             {
                 query.Append(" facebook = ");
-                query.Append(Utilities.Cadenas.comillas(facebook));
+                query.Append(Cadenas.comillas(facebook));
                 query.Append(",");
 
                 query.Append(" twitter = ");
-                query.Append(Utilities.Cadenas.comillas(twitter));
+                query.Append(Cadenas.comillas(twitter));
                 query.Append(",");
 
                 query.Append(" sitio = ");
-                query.Append(Utilities.Cadenas.comillas(sitio));
+                query.Append(Cadenas.comillas(sitio));
                 query.Append(",");
 
                 query.Append(" usuario = ");
-                query.Append(Utilities.Cadenas.comillas(usuario));
+                query.Append(Cadenas.comillas(usuario));
                 query.Append(",");
 
                 query.Append(" permisos = ");
@@ -399,11 +400,11 @@ namespace OMIstats.Models
                 query.Append(",");
 
                 query.Append(" codeforces = ");
-                query.Append(Utilities.Cadenas.comillas(codeforces));
+                query.Append(Cadenas.comillas(codeforces));
                 query.Append(",");
 
                 query.Append(" topcoder = ");
-                query.Append(Utilities.Cadenas.comillas(topcoder));
+                query.Append(Cadenas.comillas(topcoder));
                 query.Append(",");
 
                 query.Append(" ioiID = ");
@@ -412,45 +413,45 @@ namespace OMIstats.Models
             }
 
             query.Append(" genero = ");
-            query.Append(Utilities.Cadenas.comillas(genero));
+            query.Append(Cadenas.comillas(genero));
             query.Append(",");
 
             query.Append(" omegaup = ");
-            query.Append(Utilities.Cadenas.comillas(omegaup));
+            query.Append(Cadenas.comillas(omegaup));
             query.Append(",");
 
             if (lugarGuardado == LugarGuardado.REGISTRO)
             {
                 query.Append(" celular = ");
-                query.Append(Utilities.Cadenas.comillas(celular));
+                query.Append(Cadenas.comillas(celular));
                 query.Append(",");
 
                 query.Append(" telefono = ");
-                query.Append(Utilities.Cadenas.comillas(telefono));
+                query.Append(Cadenas.comillas(telefono));
                 query.Append(",");
 
                 query.Append(" direccion = ");
-                query.Append(Utilities.Cadenas.comillas(direccion));
+                query.Append(Cadenas.comillas(direccion));
                 query.Append(",");
 
                 query.Append(" emergencia = ");
-                query.Append(Utilities.Cadenas.comillas(emergencia));
+                query.Append(Cadenas.comillas(emergencia));
                 query.Append(",");
 
                 query.Append(" parentesco = ");
-                query.Append(Utilities.Cadenas.comillas(parentesco));
+                query.Append(Cadenas.comillas(parentesco));
                 query.Append(",");
 
                 query.Append(" telemergencia = ");
-                query.Append(Utilities.Cadenas.comillas(telEmergencia));
+                query.Append(Cadenas.comillas(telEmergencia));
                 query.Append(",");
 
                 query.Append(" medicina = ");
-                query.Append(Utilities.Cadenas.comillas(medicina));
+                query.Append(Cadenas.comillas(medicina));
                 query.Append(",");
 
                 query.Append(" alergias = ");
-                query.Append(Utilities.Cadenas.comillas(alergias));
+                query.Append(Cadenas.comillas(alergias));
                 query.Append(",");
             }
 
@@ -468,17 +469,17 @@ namespace OMIstats.Models
                 else
                 {
                     query.Append(" foto = ");
-                    query.Append(Utilities.Cadenas.comillas(foto));
+                    query.Append(Cadenas.comillas(foto));
                     query.Append(",");
                 }
             }
 
             query.Append(" correo = ");
-            query.Append(Utilities.Cadenas.comillas(correo));
+            query.Append(Cadenas.comillas(correo));
             query.Append(",");
 
             query.Append(" nacimiento = ");
-            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(nacimiento)));
+            query.Append(Cadenas.comillas(Fechas.dateToString(nacimiento)));
 
             query.Append(" where clave = ");
             query.Append(clave);
@@ -510,16 +511,16 @@ namespace OMIstats.Models
         /// <summary>
         /// Crea un nuevo usuario con los datos en el objeto
         /// </summary>
-        public void nuevoUsuario(Utilities.Archivos.FotoInicial fotoInicial = Utilities.Archivos.FotoInicial.KAREL)
+        public void nuevoUsuario(Archivos.FotoInicial fotoInicial = Archivos.FotoInicial.KAREL)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" declare @inserted table(clave int); ");
             query.Append(" insert into persona (nombre, facebook, twitter, sitio, usuario, permisos, codeforces,");
             query.Append(" topcoder, ioiID, celular, telefono, direccion, emergencia, parentesco, telemergencia,");
             query.Append(" medicina, alergias) output inserted.clave into @inserted values( ");
-            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append(Cadenas.comillas(nombre));
             query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', ''); select clave from @inserted ");
 
             if (db.EjecutarQuery(query.ToString()).error)
@@ -530,7 +531,7 @@ namespace OMIstats.Models
                 return;
             clave = (int)table.Rows[0][0];
             usuario = "_" + clave.ToString();
-            foto = Utilities.Archivos.obtenerFotoInicial(fotoInicial);
+            foto = Archivos.obtenerFotoInicial(fotoInicial);
 
             guardarDatos();
         }
@@ -540,7 +541,7 @@ namespace OMIstats.Models
         /// </summary>
         public static void borrarZombies()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" delete persona where clave in ( ");
@@ -587,11 +588,11 @@ namespace OMIstats.Models
             if (correo.Length == 0)
                 return null;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where correo = ");
-            query.Append(Utilities.Cadenas.comillas(correo));
+            query.Append(Cadenas.comillas(correo));
             if (ignorarUsuarios)
                 query.Append(" and LEFT(usuario, 1) = '_' ");
 
@@ -619,11 +620,11 @@ namespace OMIstats.Models
             if (String.IsNullOrEmpty(nombre))
                 return resultados;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append("select * from persona where search like ");
-            query.Append(Utilities.Cadenas.comillas("%" + Utilities.Cadenas.quitaEspeciales(nombre) + "%"));
+            query.Append(Cadenas.comillas("%" + Cadenas.quitaEspeciales(nombre) + "%"));
             query.Append(" order by search asc");
 
             db.EjecutarQuery(query.ToString());
@@ -650,7 +651,7 @@ namespace OMIstats.Models
         public List<string> consultarEstados(TipoOlimpiada tipoOlimpiada = TipoOlimpiada.NULL)
         {
             List<string> estados = new List<string>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select distinct(estado) from MiembroDelegacion where persona = ");
@@ -658,7 +659,7 @@ namespace OMIstats.Models
             if (tipoOlimpiada != TipoOlimpiada.NULL)
             {
                 query.Append(" and clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
 
             db.EjecutarQuery(query.ToString());
@@ -680,17 +681,17 @@ namespace OMIstats.Models
         public List<string> consultarParticipaciones(TipoOlimpiada tipoOlimpiada = TipoOlimpiada.NULL)
         {
             List<string> tipos = new List<string>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select distinct(tipo) from MiembroDelegacion where persona = ");
             query.Append(this.clave);
             query.Append(" and tipo != ");
-            query.Append(Utilities.Cadenas.comillas(MiembroDelegacion.TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(Cadenas.comillas(MiembroDelegacion.TipoAsistente.COMPETIDOR.ToString().ToLower()));
             if (tipoOlimpiada != TipoOlimpiada.NULL)
             {
                 query.Append(" and clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
 
             db.EjecutarQuery(query.ToString());
@@ -699,7 +700,7 @@ namespace OMIstats.Models
             tipos = new List<string>();
             foreach (DataRow r in table.Rows)
             {
-                MiembroDelegacion.TipoAsistente tipo = (MiembroDelegacion.TipoAsistente) Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), r[0].ToString().Trim().ToUpper());
+                MiembroDelegacion.TipoAsistente tipo = EnumParser.ToTipoAsistente(r[0].ToString().Trim().ToUpper());
                 if (tipo == MiembroDelegacion.TipoAsistente.DELELIDER)
                 {
                     if (!tipos.Contains(MiembroDelegacion.TipoAsistente.LIDER.ToString()))
@@ -727,7 +728,7 @@ namespace OMIstats.Models
             if (this.permisos != TipoPermisos.DELEGADO)
                 return null;
             List<Estado> estados = new List<Estado>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select distinct(estado) from MiembroDelegacion where persona =");

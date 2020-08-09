@@ -11,7 +11,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
-
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -47,11 +47,11 @@ namespace OMIstats.Models
         /// <param name="album">El álbum a borrar</param>
         public static void borrarDeAlbum(string album)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" delete foto where album = ");
-            query.Append(Utilities.Cadenas.comillas(album));
+            query.Append(Cadenas.comillas(album));
 
             db.EjecutarQuery(query.ToString());
         }
@@ -61,19 +61,19 @@ namespace OMIstats.Models
         /// </summary>
         public void guardar()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" insert into foto(album, id, orden, imagen, url) values(");
-            query.Append(Utilities.Cadenas.comillas(album));
+            query.Append(Cadenas.comillas(album));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(id));
+            query.Append(Cadenas.comillas(id));
             query.Append(", ");
             query.Append(orden);
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(imagen));
+            query.Append(Cadenas.comillas(imagen));
             query.Append(", ");
-            query.Append(Utilities.Cadenas.comillas(url));
+            query.Append(Cadenas.comillas(url));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
@@ -82,11 +82,11 @@ namespace OMIstats.Models
         public static List<Foto> obtenerFotosDeAlbum(string album)
         {
             List<Foto> fotos = new List<Foto>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from foto where album = ");
-            query.Append(Utilities.Cadenas.comillas(album));
+            query.Append(Cadenas.comillas(album));
             query.Append(" order by orden ");
 
             db.EjecutarQuery(query.ToString());
@@ -171,7 +171,7 @@ namespace OMIstats.Models
         private void llenarDatos(DataRow r)
         {
             id = r["id"].ToString().Trim();
-            lastUpdated = Utilities.Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
+            lastUpdated = Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
             orden = (int)r["orden"];
 
             // Los datos generales no guardan nada mas
@@ -181,7 +181,7 @@ namespace OMIstats.Models
             }
 
             olimpiada = r["olimpiada"].ToString().Trim();
-            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+            tipoOlimpiada = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
             fotos = (int)r["fotos"];
             nombre = r["nombre"].ToString().Trim();
             portada = r["portada"].ToString().Trim();
@@ -196,11 +196,11 @@ namespace OMIstats.Models
         public static HashSet<string> obtenerOlimpiadasConAlbumes(TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             HashSet<string> olimpiadas = new HashSet<string>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select distinct(olimpiada) from album where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -225,11 +225,11 @@ namespace OMIstats.Models
             if (String.IsNullOrEmpty(id))
                 return al;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from album where id = ");
-            query.Append(Utilities.Cadenas.comillas(id));
+            query.Append(Cadenas.comillas(id));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -256,7 +256,7 @@ namespace OMIstats.Models
             if (currentCalls > 0)
                 return false;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select orden, lastUpdated from album where id = '0' ");
@@ -266,7 +266,7 @@ namespace OMIstats.Models
             try
             {
                 int count = (int)table.Rows[0]["orden"];
-                DateTime lastUpdated = Utilities.Fechas.stringToDate(table.Rows[0]["lastUpdated"].ToString().Trim());
+                DateTime lastUpdated = Fechas.stringToDate(table.Rows[0]["lastUpdated"].ToString().Trim());
 
                 return (lastUpdated < DateTime.Today || count < MAX_UPDATES);
             }
@@ -274,7 +274,7 @@ namespace OMIstats.Models
             {
                 // El valor no está en la base de datos, lo agregamos
                 query.Append(" insert into Album (id, orden, lastUpdated) values ('0', 0, ");
-                query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(DateTime.Today)));
+                query.Append(Cadenas.comillas(Fechas.dateToString(DateTime.Today)));
                 query.Append(" )");
                 db.EjecutarQuery(query.ToString());
             }
@@ -291,13 +291,13 @@ namespace OMIstats.Models
         {
             List<Album> albums = new List<Album>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from album where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(" order by orden ");
 
             db.EjecutarQuery(query.ToString());
@@ -315,11 +315,11 @@ namespace OMIstats.Models
 
         private void tryNew()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" insert into album (id) values( ");
-            query.Append(Utilities.Cadenas.comillas(id));
+            query.Append(Cadenas.comillas(id));
             query.Append(" )");
 
             db.EjecutarQuery(query.ToString());
@@ -333,30 +333,30 @@ namespace OMIstats.Models
             if (!newsletter && update)
                 updateAlbum();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update album set lastUpdated = ");
-            query.Append(Utilities.Cadenas.comillas(Utilities.Fechas.dateToString(lastUpdated)));
+            query.Append(Cadenas.comillas(Fechas.dateToString(lastUpdated)));
             query.Append(", orden = ");
             query.Append(orden);
             if (id != ALBUM_GRAL)
             {
                 query.Append(", olimpiada = ");
-                query.Append(Utilities.Cadenas.comillas(olimpiada));
+                query.Append(Cadenas.comillas(olimpiada));
                 query.Append(", clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
                 query.Append(", nombre = ");
-                query.Append(Utilities.Cadenas.comillas(nombre));
+                query.Append(Cadenas.comillas(nombre));
                 query.Append(", fotos = ");
                 query.Append(fotos);
                 query.Append(", portada = ");
-                query.Append(Utilities.Cadenas.comillas(portada));
+                query.Append(Cadenas.comillas(portada));
                 query.Append(", newsletter = ");
                 query.Append(newsletter ? "1" : "0");
             }
             query.Append(" where id = ");
-            query.Append(Utilities.Cadenas.comillas(id));
+            query.Append(Cadenas.comillas(id));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();

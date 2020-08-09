@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using OMIstats.Ajax;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -44,16 +45,16 @@ namespace OMIstats.Models
         {
             OverlayLugares lugares = new OverlayLugares();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from detallelugar ");
             query.Append(" where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(" and dia = ");
             query.Append(dia);
             query.Append(" order by timestamp asc ");
@@ -82,14 +83,14 @@ namespace OMIstats.Models
         public void guardar()
         {
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append("insert into DetalleLugar values(");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(",");
             query.Append(timestamp);
             query.Append(",");
@@ -106,14 +107,14 @@ namespace OMIstats.Models
         private static void borrar(string omi, string clase, string clave, int timestamp, int dia)
         {
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append(" delete DetalleLugar where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and clase =  ");
-            query.Append(Utilities.Cadenas.comillas(clase));
+            query.Append(Cadenas.comillas(clase));
             query.Append(" and clave =  ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(" and timestamp =  ");
             query.Append(timestamp);
             query.Append(" and dia =  ");
@@ -125,10 +126,10 @@ namespace OMIstats.Models
         public static void clean(string omi)
         {
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append(" select * from DetalleLugar where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" order by clase, clave, dia, timestamp asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -142,10 +143,10 @@ namespace OMIstats.Models
             {
                 actual.lugar = (int)r["lugar"];
                 actual.timestamp = (int)r["timestamp"];
-                actual.medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), r["medalla"].ToString());
+                actual.medalla = EnumParser.ToTipoMedalla(r["medalla"].ToString());
                 actual.dia = (int)r["dia"];
                 actual.clave = r["clave"].ToString();
-                actual.tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
+                actual.tipoOlimpiada = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
 
                 if (actual.tipoOlimpiada != anterior.tipoOlimpiada ||
                     actual.clave != anterior.clave ||

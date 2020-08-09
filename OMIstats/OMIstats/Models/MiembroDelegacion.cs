@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -151,8 +152,8 @@ namespace OMIstats.Models
             estado = row["estado"].ToString().Trim();
             olimpiada = row["olimpiada"].ToString().Trim();
             clave = row["clave"].ToString().Trim();
-            tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), row["tipo"].ToString().ToUpper());
-            tipoOlimpiada = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), row["clase"].ToString().ToUpper());
+            tipo = EnumParser.ToTipoAsistente(row["tipo"].ToString().ToUpper());
+            tipoOlimpiada = EnumParser.ToTipoOlimpiada(row["clase"].ToString().ToUpper());
 #if OMISTATS
             try
             {
@@ -175,7 +176,7 @@ namespace OMIstats.Models
             if (p == null)
                 return 0;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select o.año from MiembroDelegacion as md ");
@@ -202,7 +203,7 @@ namespace OMIstats.Models
             if (p == null)
                 return 0;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select o.año from MiembroDelegacion as md ");
@@ -228,24 +229,24 @@ namespace OMIstats.Models
         public void borrarMiembroDelegacion(bool byClave = true)
         {
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append(" delete miembrodelegacion ");
             query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(this.olimpiada));
+            query.Append(Cadenas.comillas(this.olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(this.tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(this.tipoOlimpiada.ToString().ToLower()));
             if (byClave)
             {
                 query.Append(" and clave = ");
-                query.Append(Utilities.Cadenas.comillas(this.clave));
+                query.Append(Cadenas.comillas(this.clave));
             }
             else
             {
                 query.Append(" and persona = ");
                 query.Append(this.claveUsuario);
                 query.Append(" and estado = ");
-                query.Append(Utilities.Cadenas.comillas(this.estado));
+                query.Append(Cadenas.comillas(this.estado));
             }
 
             db.EjecutarQuery(query.ToString());
@@ -267,7 +268,7 @@ namespace OMIstats.Models
                 return (int) TipoError.OK;
 
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             MiembroDelegacion md = new MiembroDelegacion();
             Persona p = null;
             DataTable table = null;
@@ -324,11 +325,11 @@ namespace OMIstats.Models
                     if (md.genero != "M" && md.genero != "F")
                         return (int) TipoError.GENERO;
 
-                    Utilities.Archivos.FotoInicial foto = Utilities.Archivos.FotoInicial.DOMI;
+                    Archivos.FotoInicial foto = Archivos.FotoInicial.DOMI;
                     if (md.tipo == TipoAsistente.COMI || md.tipo == TipoAsistente.COLO)
-                        foto = Utilities.Archivos.FotoInicial.OMI;
+                        foto = Archivos.FotoInicial.OMI;
                     if (md.tipo == TipoAsistente.COMPETIDOR)
-                        foto = Utilities.Archivos.FotoInicial.KAREL;
+                        foto = Archivos.FotoInicial.KAREL;
 
                     if (!test)
                         p.nuevoUsuario(foto);
@@ -365,7 +366,7 @@ namespace OMIstats.Models
             try
             {
                 if (md.fechaNacimiento.Length > 0)
-                    p.nacimiento = Utilities.Fechas.stringToDate(md.fechaNacimiento);
+                    p.nacimiento = Fechas.stringToDate(md.fechaNacimiento);
             }
             catch (Exception)
             {
@@ -377,7 +378,7 @@ namespace OMIstats.Models
 
             if (md.correo.Length > 0)
             {
-                if (!Utilities.Cadenas.esCorreo(md.correo))
+                if (!Cadenas.esCorreo(md.correo))
                     return (int) TipoError.CORREO;
                 p.correo = md.correo;
             }
@@ -433,14 +434,14 @@ namespace OMIstats.Models
             // Buscamos ahora si ya hay un miembro con estos datos
             query.Append(" select * from miembrodelegacion ");
             query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and persona = ");
             query.Append(p.clave);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             // Agregamos estado por casos como Martín que tienen dos roles en diferentes estados
             query.Append(" and estado = ");
-            query.Append(Utilities.Cadenas.comillas(md.estado));
+            query.Append(Cadenas.comillas(md.estado));
 
             db.EjecutarQuery(query.ToString());
             table = db.getTable();
@@ -480,15 +481,15 @@ namespace OMIstats.Models
                     // El usuario no existe, lo agregamos
                     query.Clear();
                     query.Append(" insert into miembrodelegacion values (");
-                    query.Append(Utilities.Cadenas.comillas(omi));
+                    query.Append(Cadenas.comillas(omi));
                     query.Append(", ");
-                    query.Append(Utilities.Cadenas.comillas(md.estado));
+                    query.Append(Cadenas.comillas(md.estado));
                     query.Append(", ");
-                    query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                    query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
                     query.Append(", ");
-                    query.Append(Utilities.Cadenas.comillas(md.clave));
+                    query.Append(Cadenas.comillas(md.clave));
                     query.Append(", ");
-                    query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
+                    query.Append(Cadenas.comillas(md.tipo.ToString().ToLower()));
                     query.Append(", ");
                     query.Append(p.clave);
                     query.Append(", ");
@@ -515,9 +516,9 @@ namespace OMIstats.Models
 
                     query.Clear();
                     query.Append(" update miembrodelegacion set clave = ");
-                    query.Append(Utilities.Cadenas.comillas(md.clave));
+                    query.Append(Cadenas.comillas(md.clave));
                     query.Append(", tipo = ");
-                    query.Append(Utilities.Cadenas.comillas(md.tipo.ToString().ToLower()));
+                    query.Append(Cadenas.comillas(md.tipo.ToString().ToLower()));
                     query.Append(", institucion = ");
                     query.Append(i == null ? "0" : i.clave.ToString());
                     query.Append(", nivel = ");
@@ -525,13 +526,13 @@ namespace OMIstats.Models
                     query.Append(", año = ");
                     query.Append(md.añoEscuela);
                     query.Append(" where olimpiada = ");
-                    query.Append(Utilities.Cadenas.comillas(omi));
+                    query.Append(Cadenas.comillas(omi));
                     query.Append(" and persona = ");
                     query.Append(p.clave);
                     query.Append(" and estado = ");
-                    query.Append(Utilities.Cadenas.comillas(md.estado));
+                    query.Append(Cadenas.comillas(md.estado));
                     query.Append(" and clase = ");
-                    query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                    query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
                     db.EjecutarQuery(query.ToString());
                 }
@@ -561,18 +562,18 @@ namespace OMIstats.Models
             }
 
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append(" insert into miembrodelegacion (olimpiada, estado, clase, clave, tipo, persona) values(");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(estado));
+            query.Append(Cadenas.comillas(estado));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(",");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(",");
             query.Append(claveUsuario);
             query.Append(")");
@@ -611,16 +612,16 @@ namespace OMIstats.Models
             }
 
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append(" update miembrodelegacion set clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(", tipo = ");
-            query.Append(Utilities.Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(", clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", estado = ");
-            query.Append(Utilities.Cadenas.comillas(estado));
+            query.Append(Cadenas.comillas(estado));
             /*query.Append(", institucion = ");
             query.Append(i == null ? "0" : i.clave.ToString());
             query.Append(", nivel = ");
@@ -628,11 +629,11 @@ namespace OMIstats.Models
             query.Append(", año = ");
             query.Append(md.añoEscuela);*/
             query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOriginal.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOriginal.ToString().ToLower()));
             query.Append(" and clave = ");
-            query.Append(Utilities.Cadenas.comillas(claveOriginal));
+            query.Append(Cadenas.comillas(claveOriginal));
             query.Append(" and persona = ");
             query.Append(claveUsuario);
 
@@ -651,31 +652,31 @@ namespace OMIstats.Models
         public static List<MiembroDelegacion> obtenerMiembrosConClave(string omi, TipoOlimpiada tipoOlimpiada, string clave, bool aproximarClave = false, TipoAsistente tipoAsistente = TipoAsistente.NULL)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from miembrodelegacion ");
             query.Append(" where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             if (tipoOlimpiada != TipoOlimpiada.NULL)
             {
                 query.Append(" and clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
             if (aproximarClave)
             {
                 query.Append(" and clave like ");
-                query.Append(Utilities.Cadenas.comillas("%" + clave + "%"));
+                query.Append(Cadenas.comillas("%" + clave + "%"));
             }
             else
             {
                 query.Append(" and clave = ");
-                query.Append(Utilities.Cadenas.comillas(clave));
+                query.Append(Cadenas.comillas(clave));
             }
             if (tipoAsistente != TipoAsistente.NULL)
             {
                 query.Append(" and tipo = ");
-                query.Append(Utilities.Cadenas.comillas(tipoAsistente.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipoAsistente.ToString().ToLower()));
             }
             query.Append(" order by clave ");
 
@@ -701,15 +702,15 @@ namespace OMIstats.Models
         /// <returns>Cuantos competidores participaron</returns>
         public static int obtenerParticipantes(string omi, TipoOlimpiada tipoOlimpiada)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select COUNT(*) from MiembroDelegacion where olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and tipo = ");
-            query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             return (int)db.getTable().Rows[0][0];
@@ -722,7 +723,7 @@ namespace OMIstats.Models
         /// <returns>El objeto deseado</returns>
         private static MiembroDelegacion obtenerParticipacionMasReciente(int persona)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
             MiembroDelegacion md = new MiembroDelegacion();
 
@@ -747,7 +748,7 @@ namespace OMIstats.Models
         {  // -TODO- Cuando agregue IOI, hay que revisitar este método
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
@@ -759,7 +760,7 @@ namespace OMIstats.Models
             query.Append(" where p.clave = ");
             query.Append(persona);
             query.Append(" and md.tipo <> ");
-            query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
             query.Append(" order by o.año asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -784,22 +785,22 @@ namespace OMIstats.Models
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from MiembroDelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             if (tipo == TipoAsistente.COMPETIDOR)
             {
                 query.Append(" and md.clase = ");
-                query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
             if (estado != null)
             {
                 query.Append(" and md.estado = ");
-                query.Append(Utilities.Cadenas.comillas(estado));
+                query.Append(Cadenas.comillas(estado));
             }
 
             switch (tipo)
@@ -807,7 +808,7 @@ namespace OMIstats.Models
                 case TipoAsistente.COMPETIDOR:
                     {
                         query.Append(" and md.tipo = ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
                         break;
                     }
                 case TipoAsistente.DELELIDER:
@@ -816,28 +817,28 @@ namespace OMIstats.Models
                 case TipoAsistente.SUBLIDER:
                     {
                         query.Append(" and (md.tipo = ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
                         query.Append(" or md.tipo = ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
                         query.Append(" or md.tipo = ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
                         query.Append(" or md.tipo = ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
                         query.Append(")");
                         break;
                     }
                 case TipoAsistente.INVITADO:
                     {
                         query.Append(" and md.tipo <> ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.LIDER.ToString().ToLower()));
                         query.Append(" and md.tipo <> ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.DELEGADO.ToString().ToLower()));
                         query.Append(" and md.tipo <> ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.DELELIDER.ToString().ToLower()));
                         query.Append(" and md.tipo <> ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
                         query.Append(" and md.tipo <> ");
-                        query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+                        query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
                         break;
                     }
             }
@@ -874,12 +875,12 @@ namespace OMIstats.Models
         {
             StringBuilder lineas = new StringBuilder();
             StringBuilder query = new StringBuilder();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
 
             query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" order by persona ");
 
             db.EjecutarQuery(query.ToString());
@@ -893,8 +894,8 @@ namespace OMIstats.Models
                 string clave = r["clave"].ToString().Trim();
                 string estado = r["estado"].ToString().Trim();
                 string genero = r["genero"].ToString().Trim();
-                TipoOlimpiada clase = (TipoOlimpiada)Enum.Parse(typeof(TipoOlimpiada), r["clase"].ToString().ToUpper());
-                TipoAsistente tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), r["tipo"].ToString().ToUpper());
+                TipoOlimpiada clase = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
+                TipoAsistente tipo = EnumParser.ToTipoAsistente(r["tipo"].ToString().ToUpper());
 
                 if (lastUsuario == claveUsuario)
                     continue;
@@ -976,7 +977,7 @@ namespace OMIstats.Models
         {
             List<OMIstats.Ajax.BuscarPersonas> personas = new List<OMIstats.Ajax.BuscarPersonas>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             if (String.IsNullOrEmpty(input))
@@ -987,7 +988,7 @@ namespace OMIstats.Models
                 query.Append(" inner join Persona as p on p.clave = md.persona ");
                 query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
                 query.Append(" where md.estado = ");
-                query.Append(Utilities.Cadenas.comillas(estado));
+                query.Append(Cadenas.comillas(estado));
                 query.Append(" and o.año > ");
                 query.Append(o.año - 3);
                 query.Append(" and md.tipo ");
@@ -1042,11 +1043,11 @@ namespace OMIstats.Models
             else
             {
                 query.Append(" select top 11 * from Persona where search like ");
-                query.Append(Utilities.Cadenas.comillas("%" + input + "%"));
+                query.Append(Cadenas.comillas("%" + input + "%"));
                 query.Append(" and clave not in ( select persona from MiembroDelegacion where olimpiada = ");
-                query.Append(Utilities.Cadenas.comillas(omi));
+                query.Append(Cadenas.comillas(omi));
                 query.Append(" and estado = ");
-                query.Append(Utilities.Cadenas.comillas(estado));
+                query.Append(Cadenas.comillas(estado));
                 query.Append(")");
 
                 db.EjecutarQuery(query.ToString());

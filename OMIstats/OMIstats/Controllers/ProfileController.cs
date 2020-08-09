@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using OMIstats.Models;
+using OMIstats.Utilities;
 
 namespace OMIstats.Controllers
 {
@@ -179,8 +180,8 @@ namespace OMIstats.Controllers
             // Validaciones foto
             if (file != null)
             {
-                Utilities.Archivos.ResultadoImagen resultado = Utilities.Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
-                if (resultado != Utilities.Archivos.ResultadoImagen.VALIDA)
+                Archivos.ResultadoImagen resultado = Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
+                if (resultado != Archivos.ResultadoImagen.VALIDA)
                 {
                     ViewBag.errorImagen = resultado.ToString().ToLower();
                     return Edit(current.usuario);
@@ -197,7 +198,7 @@ namespace OMIstats.Controllers
             if (esSuperUsuario && tipoUsuario != null && tipoUsuario != "")
             {
                 Persona.TipoPermisos permisos;
-                permisos = (Persona.TipoPermisos)Enum.Parse(typeof(Persona.TipoPermisos), tipoUsuario);
+                permisos = EnumParser.ToTipoPermisos(tipoUsuario);
                 if (permisos == Persona.TipoPermisos.ADMIN && !esAdmin())
                     return RedirectTo(Pagina.ERROR, 403);
                 p.permisos = permisos;
@@ -215,7 +216,7 @@ namespace OMIstats.Controllers
 
             // Se guarda la imagen en disco
             if (file != null)
-                p.foto = Utilities.Archivos.guardaArchivo(file);
+                p.foto = Archivos.guardaArchivo(file);
 
             // Se guardan los datos
             if (p.guardarDatos(generarPeticiones:!esSuperUsuario, currentValues: current))
@@ -232,9 +233,9 @@ namespace OMIstats.Controllers
                     {
                         string oldFoto = p.foto;
                         p.foto =
-                            Utilities.Archivos.copiarArchivo(p.foto, Utilities.Archivos.FolderImagenes.TEMPORAL,
-                                                p.clave.ToString(), Utilities.Archivos.FolderImagenes.USUARIOS);
-                        Utilities.Archivos.eliminarArchivo(oldFoto, Utilities.Archivos.FolderImagenes.TEMPORAL);
+                            Archivos.copiarArchivo(p.foto, Archivos.FolderImagenes.TEMPORAL,
+                                                p.clave.ToString(), Archivos.FolderImagenes.USUARIOS);
+                        Archivos.eliminarArchivo(oldFoto, Archivos.FolderImagenes.TEMPORAL);
                         p.guardarDatos();
                     }
 
@@ -294,8 +295,8 @@ namespace OMIstats.Controllers
 
             if (!todos)
             {
-                int numeroDeDiplomas = Utilities.Archivos.cuantosExisten
-                    (Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
+                int numeroDeDiplomas = Archivos.cuantosExisten
+                    (Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
 
                 if (numeroDeDiplomas == 0)
                     return RedirectTo(Pagina.ERROR, 404);
@@ -313,8 +314,8 @@ namespace OMIstats.Controllers
                 }
             }
 
-            return File(Utilities.Archivos.comprimeArchivos(
-                Utilities.Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave),
+            return File(Archivos.comprimeArchivos(
+                Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave),
                 "application/zip", "Diplomas.zip");
         }
     }

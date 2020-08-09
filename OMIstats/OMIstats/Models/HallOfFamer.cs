@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -31,7 +32,7 @@ namespace OMIstats.Models
         {
             List<HallOfFamer> medallistas = new List<HallOfFamer>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select clave from Medallero where tipo = ");
@@ -40,7 +41,7 @@ namespace OMIstats.Models
             if (excluirNoOros)
                 query.Append(" oro > 0 and ");
             query.Append(" (oro + plata + bronce) > 1 and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by oro desc, plata desc, bronce desc");
 
             db.EjecutarQuery(query.ToString());
@@ -82,13 +83,13 @@ namespace OMIstats.Models
             // Primero obtenemos la persona
             this.persona = Persona.obtenerPersonaConClave(usuario);
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select olimpiada, medalla, estado from Resultados where concursante = ");
             query.Append(usuario);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by medalla");
 
             db.EjecutarQuery(query.ToString());
@@ -98,7 +99,7 @@ namespace OMIstats.Models
             estados = new HashSet<string>();
             foreach (DataRow r in table.Rows)
             {
-                Resultados.TipoMedalla medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), r["medalla"].ToString().ToUpper());
+                Resultados.TipoMedalla medalla = EnumParser.ToTipoMedalla(r["medalla"].ToString().ToUpper());
 
                 if (medalla == Resultados.TipoMedalla.NADA)
                     continue;
@@ -128,11 +129,11 @@ namespace OMIstats.Models
         {
             Dictionary<string, List<KeyValuePair<Persona, Resultados.TipoMedalla>>> top3 = new Dictionary<string, List<KeyValuePair<Persona, Resultados.TipoMedalla>>>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select olimpiada, concursante, medalla from resultados where clase =  ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and (medalla = ");
             query.Append((int)Resultados.TipoMedalla.ORO_1);
             query.Append(" or medalla = ");
@@ -150,7 +151,7 @@ namespace OMIstats.Models
             {
                 string olimpiada = r["olimpiada"].ToString();
                 int concursante = (int)r["concursante"];
-                Resultados.TipoMedalla medalla = (Resultados.TipoMedalla)Enum.Parse(typeof(Resultados.TipoMedalla), r["medalla"].ToString());
+                Resultados.TipoMedalla medalla = EnumParser.ToTipoMedalla(r["medalla"].ToString());
 
                 if (lastOMI == null || lastOMI != olimpiada)
                 {
