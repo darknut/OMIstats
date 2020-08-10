@@ -223,6 +223,82 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa todos los asistentes de la olimpiada mandada como parámetro
+        /// </summary>
+        /// <param name="omi">La omi de la que se necesitan los asistentes</param>
+        /// <param name="tipoOlimpiada">El tipo de la olimpiada de la que se requieren asistentes</param>
+        /// <returns>Una lista con los asistentes de la OMI</returns>
+        public static List<MiembroDelegacion> cargarAsistentesOMI(string omi, TipoOlimpiada tipoOlimpiada)
+        {
+            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
+            if (omi == null)
+                return null;
+
+            Utilities.Acceso db = new Utilities.Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, ");
+            query.Append(" p.nacimiento, p.genero, p.correo, p.CURP, i.nombreCorto, md.nivel,");
+            query.Append(" md.año, i.publica, md.persona, md.institucion from miembrodelegacion as md");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" left outer join Institucion as i on i.clave = md.institucion");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(" and md.clase = ");
+            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" order by md.clave ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r);
+
+                lista.Add(md);
+            }
+
+            return lista;
+        }
+
+        /// <summary>
+        /// Regresa los datos en este objeto como un string separado por comas
+        /// para que los admins puedan ver los datos en una tabla
+        /// </summary>
+        /// <returns>Los datos separados por coma</returns>
+        public string obtenerLineaAdmin()
+        {
+            StringBuilder s = new StringBuilder();
+
+            s.Append(usuario);
+            s.Append(", ");
+            s.Append(nombreAsistente);
+            s.Append(", ");
+            s.Append(estado);
+            s.Append(", ");
+            s.Append(tipo.ToString().ToLower());
+            s.Append(", ");
+            s.Append(clave);
+            s.Append(", ");
+            s.Append(fechaNacimiento);
+            s.Append(", ");
+            s.Append(genero);
+            s.Append(", ");
+            s.Append(correo);
+            s.Append(", ");
+            s.Append(nombreEscuela);
+            s.Append(", ");
+            s.Append(nivelEscuela.ToString().ToLower());
+            s.Append(", ");
+            s.Append(añoEscuela);
+            s.Append(", ");
+            s.Append(escuelaPublica ? "publica" : "privada");
+
+            return s.ToString();
+        }
+
+        /// <summary>
         /// Borra la instancia de miembro delegación de la base de datos
         /// </summary>
         /// <param name="byClave">Si true, borra utilizando la clave, si false, utilizando persona & estado</param>
