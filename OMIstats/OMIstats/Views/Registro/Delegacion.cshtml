@@ -70,6 +70,15 @@
         <td class="lineas-registro">
             @miembro.nombreAsistente
         </td>
+        @if (usuario.esSuperUsuario())
+        {
+        <td class="lineas-registro clave-registro">
+            @if (miembro.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMI && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
+                @(miembro.tipoOlimpiada)
+            }
+        </td>
+        }
         <td class="lineas-registro clave-registro">
             @if (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
