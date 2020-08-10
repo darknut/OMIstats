@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -84,11 +85,11 @@ namespace OMIstats.Models
             universidad = (bool)datos["universidad"];
             publica = (bool)datos["publica"];
 
-            if (Utilities.Archivos.existeArchivo(Utilities.Archivos.FolderImagenes.ESCUELAS,
+            if (Archivos.existeArchivo(Archivos.FolderImagenes.ESCUELAS,
                                                 clave + ".png"))
                 logo = clave + ".png";
             else
-                logo = Utilities.Archivos.OMI_LOGO;
+                logo = Archivos.OMI_LOGO;
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace OMIstats.Models
         /// <returns>El objeto institucion</returns>
         public static Institucion obtenerInstitucionConClave(int clave)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from institucion where clave = ");
@@ -124,11 +125,11 @@ namespace OMIstats.Models
         /// <returns>El objeto institucion</returns>
         public static Institucion obtenerInstitucionConNombreCorto(string nombre)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from institucion where nombrecorto = ");
-            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append(Cadenas.comillas(nombre));
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -150,11 +151,11 @@ namespace OMIstats.Models
         /// <returns>El objeto institucion</returns>
         public static Institucion obtenerInstitucionConNombreURL(string url)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from institucion where nombreurl = ");
-            query.Append(Utilities.Cadenas.comillas(url));
+            query.Append(Cadenas.comillas(url));
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return null;
@@ -187,14 +188,14 @@ namespace OMIstats.Models
             if (i != null)
                 return i;
 
-            string hash = Utilities.Cadenas.quitaEspeciales(nombre);
-            hash = Utilities.Cadenas.quitaEspacios(hash);
+            string hash = Cadenas.quitaEspeciales(nombre);
+            hash = Cadenas.quitaEspacios(hash);
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from institucion where nombrehash = HASHBYTES(\'SHA1\', ");
-            query.Append(Utilities.Cadenas.comillas(hash));
+            query.Append(Cadenas.comillas(hash));
             query.Append(")");
 
             if (db.EjecutarQuery(query.ToString()).error)
@@ -220,13 +221,13 @@ namespace OMIstats.Models
         {
             List<KeyValuePair<Institucion, Medallero>> escuelas = new List<KeyValuePair<Institucion, Medallero>>();
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from Medallero where tipo = ");
             query.Append((int) Medallero.TipoMedallero.INSTITUCION);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             if (estado == null)
                 query.Append(" and oro > 1 ");
             else
@@ -256,13 +257,13 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         private void consultarEstadosDeInstitucion(TipoOlimpiada tipoOlimpiada)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select distinct(estado) from MiembroDelegacion where institucion = ");
             query.Append(this.clave);
             query.Append(" and clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -293,8 +294,8 @@ namespace OMIstats.Models
             if (nombreURL.Length == 0)
             {
                 nombreURL = nombreCorto;
-                nombreURL = Utilities.Cadenas.quitaEspeciales(nombreURL);
-                nombreURL = Utilities.Cadenas.quitaEspacios(nombreURL);
+                nombreURL = Cadenas.quitaEspeciales(nombreURL);
+                nombreURL = Cadenas.quitaEspacios(nombreURL);
                 if (nombreURL.Length > 10)
                     nombreURL = nombreURL.Substring(0, 10);
             }
@@ -347,22 +348,22 @@ namespace OMIstats.Models
                 nombreCorto += counter.ToString();
             }
 
-            string hash = Utilities.Cadenas.quitaEspeciales(nombre);
-            hash = Utilities.Cadenas.quitaEspacios(hash);
+            string hash = Cadenas.quitaEspeciales(nombre);
+            hash = Cadenas.quitaEspacios(hash);
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update institucion set nombre = ");
-            query.Append(Utilities.Cadenas.comillas(nombre));
+            query.Append(Cadenas.comillas(nombre));
             query.Append(", nombrecorto = ");
-            query.Append(Utilities.Cadenas.comillas(nombreCorto));
+            query.Append(Cadenas.comillas(nombreCorto));
             query.Append(", nombreurl = ");
-            query.Append(Utilities.Cadenas.comillas(nombreURL));
+            query.Append(Cadenas.comillas(nombreURL));
             query.Append(", url = ");
-            query.Append(Utilities.Cadenas.comillas(pagina));
+            query.Append(Cadenas.comillas(pagina));
             query.Append(", nombrehash = HASHBYTES(\'SHA1\', ");
-            query.Append(Utilities.Cadenas.comillas(hash));
+            query.Append(Cadenas.comillas(hash));
             query.Append("), primaria = ");
             query.Append(primaria ? "1" : "0");
             query.Append(", secundaria = ");
@@ -384,7 +385,7 @@ namespace OMIstats.Models
         /// </summary>
         public bool nuevaInstitucion()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" declare @inserted table(clave int); ");
@@ -410,14 +411,14 @@ namespace OMIstats.Models
         public List<Olimpiada> obtenerOlimpiadasSede()
         {
             List<Olimpiada> list = new List<Olimpiada>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select numero from Olimpiada where escuela = ");
             query.Append(clave);
             query.Append(" and clase = ");
             // Mientras las OMIS y OMIPS no sean aparte, las sedes se cargan de OMIS
-            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
 
@@ -459,7 +460,7 @@ namespace OMIstats.Models
         /// </summary>
         public static void borrarZombies()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" delete institucion where clave in ( ");

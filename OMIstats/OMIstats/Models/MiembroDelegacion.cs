@@ -177,7 +177,7 @@ namespace OMIstats.Models
             try
             {
                 if (datos.Length > (int)Campos.TIPO_ASISTENTE)
-                    tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
+                    tipo = EnumParser.ToTipoAsistente(datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
                 if (tipo == TipoAsistente.NULL)
                     throw new Exception();
             }
@@ -208,7 +208,7 @@ namespace OMIstats.Models
                     if (datos[(int)Campos.NIVEL_ESCUELA].Trim().Length == 0)
                         nivelEscuela = Institucion.NivelInstitucion.NULL;
                     else
-                        nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
+                        nivelEscuela = EnumParser.ToNivelInstitucion(datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
                 }
             }
             catch (Exception)
@@ -305,7 +305,7 @@ namespace OMIstats.Models
             if (omi == null)
                 return null;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, ");
@@ -314,9 +314,9 @@ namespace OMIstats.Models
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
             query.Append(" where md.olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(omi));
+            query.Append(Cadenas.comillas(omi));
             query.Append(" and md.clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by md.clave ");
 
             db.EjecutarQuery(query.ToString());

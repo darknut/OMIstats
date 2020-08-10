@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {   
@@ -52,18 +53,18 @@ namespace OMIstats.Models
         /// <returns>El guid que se guardó en la base de datos</returns>
         public static string MockUserLoggedIn(int userId)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
             string guid = Guid.NewGuid().ToString();
 
             query.Append(" update ");
             query.Append(tableName("Usuarios.Usuarios"));
             query.Append(" set GUID = ");
-            query.Append(Utilities.Cadenas.comillas(guid));
+            query.Append(Cadenas.comillas(guid));
             query.Append(" where Id = ");
             query.Append(userId);
 
-            db.EjecutarQuery(query.ToString(), Utilities.Acceso.BaseDeDatos.OMI);
+            db.EjecutarQuery(query.ToString(), Acceso.BaseDeDatos.OMI);
             return guid;
         }
 
@@ -72,7 +73,7 @@ namespace OMIstats.Models
         /// </summary>
         public void borrarGUID()
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update ");
@@ -81,7 +82,7 @@ namespace OMIstats.Models
             query.Append(" where Id = ");
             query.Append(Id);
 
-            db.EjecutarQuery(query.ToString(), Utilities.Acceso.BaseDeDatos.OMI);
+            db.EjecutarQuery(query.ToString(), Acceso.BaseDeDatos.OMI);
         }
 
         /// <summary>
@@ -91,16 +92,16 @@ namespace OMIstats.Models
         /// <returns>Un objeto Usuario con los datos en la base de datos</returns>
         public static Usuario obtenerUsuarioConGUID(string guid)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
             Usuario usuario = new Usuario();
 
             query.Append(" select * from ");
             query.Append(tableName("Usuarios.Usuarios"));
             query.Append(" where GUID = ");
-            query.Append(Utilities.Cadenas.comillas(guid));
+            query.Append(Cadenas.comillas(guid));
 
-            db.EjecutarQuery(query.ToString(), Utilities.Acceso.BaseDeDatos.OMI);
+            db.EjecutarQuery(query.ToString(), Acceso.BaseDeDatos.OMI);
 
             DataTable table = db.getTable();
 

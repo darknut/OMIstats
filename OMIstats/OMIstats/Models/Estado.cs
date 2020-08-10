@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
@@ -39,7 +40,7 @@ namespace OMIstats.Models
         private static Dictionary<string, Estado> cargarEstados()
         {
             Dictionary<string, Estado> lista = new Dictionary<string, Estado>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select * from estado order by nombre ");
@@ -143,20 +144,20 @@ namespace OMIstats.Models
             // Borramos la referencia en la aplicacion para que el siguiente query recargue los datos
             HttpContext.Current.Application[APPLICATION_ESTADOS] = null;
 
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" update estado set sitio = ");
-            query.Append(Utilities.Cadenas.comillas(sitio));
+            query.Append(Cadenas.comillas(sitio));
             query.Append(" , iso = ");
-            query.Append(Utilities.Cadenas.comillas(ISO));
+            query.Append(Cadenas.comillas(ISO));
             if (delegado != null)
             {
                 query.Append(", delegado = ");
                 query.Append(delegado.clave);
             }
             query.Append(" where clave = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
 
             return !db.EjecutarQuery(query.ToString()).error;
         }
@@ -169,14 +170,14 @@ namespace OMIstats.Models
         public List<Olimpiada> obtenerOlimpiadasSede()
         {
             List<Olimpiada> list = new List<Olimpiada>();
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select numero from Olimpiada where estado = ");
-            query.Append(Utilities.Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(clave));
             query.Append(" and clase = ");
             // Mientras las OMIS y OMIPS no sean aparte, las sedes se cargan de OMIS
-            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
 
@@ -202,15 +203,15 @@ namespace OMIstats.Models
         /// <returns></returns>
         public bool estadoVinoAOlimpiada(TipoOlimpiada tipoOlimpiada, string olimpiada)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select COUNT(*) from Resultados where clase = ");
-            query.Append(Utilities.Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and olimpiada = ");
-            query.Append(Utilities.Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and estado = ");
-            query.Append(Utilities.Cadenas.comillas(this.clave));
+            query.Append(Cadenas.comillas(this.clave));
 
             db.EjecutarQuery(query.ToString());
 
@@ -227,7 +228,7 @@ namespace OMIstats.Models
         /// <returns></returns>
         public static Estado obtenerEstadoDeDelegado(int clave)
         {
-            Utilities.Acceso db = new Utilities.Acceso();
+            Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
             query.Append(" select clave from Estado where delegado = ");

@@ -52,5 +52,10 @@ namespace OMIstats.Utilities
         {
             return (Peticion.TipoPeticion)Enum.Parse(typeof(Peticion.TipoPeticion), value);
         }
+
+        public static Institucion.NivelInstitucion ToNivelInstitucion(string value)
+        {
+            return (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), value);
+        }
     }
 }
