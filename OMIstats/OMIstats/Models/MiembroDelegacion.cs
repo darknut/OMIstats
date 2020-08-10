@@ -166,6 +166,77 @@ namespace OMIstats.Models
         }
 
 #if OMISTATS
+        private TipoError obtenerCampos(string []datos)
+        {
+            if (datos.Length > (int)Campos.USUARIO)
+                usuario = datos[(int)Campos.USUARIO].Trim();
+            if (datos.Length > (int)Campos.NOMBRE)
+                nombreAsistente = datos[(int)Campos.NOMBRE].Trim();
+            if (datos.Length > (int)Campos.ESTADO)
+                estado = datos[(int)Campos.ESTADO].Trim();
+            try
+            {
+                if (datos.Length > (int)Campos.TIPO_ASISTENTE)
+                    tipo = (TipoAsistente)Enum.Parse(typeof(TipoAsistente), datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
+                if (tipo == TipoAsistente.NULL)
+                    throw new Exception();
+            }
+            catch (Exception)
+            {
+                return TipoError.TIPO_ASISTENTE;
+            }
+            if (datos.Length > (int)Campos.CLAVE)
+                clave = datos[(int)Campos.CLAVE].Trim();
+            if (datos.Length > (int)Campos.FECHA_NACIMIENTO)
+                fechaNacimiento = datos[(int)Campos.FECHA_NACIMIENTO].Trim();
+            try
+            {
+                if (datos.Length > (int)Campos.GENERO)
+                    genero = datos[(int)Campos.GENERO].Trim().ToCharArray()[0].ToString().ToUpper();
+            }
+            catch (Exception)
+            {
+            }
+            if (datos.Length > (int)Campos.CORREO)
+                correo = datos[(int)Campos.CORREO].Trim();
+            if (datos.Length > (int)Campos.NOMBRE_ESCUELA)
+                nombreEscuela = datos[(int)Campos.NOMBRE_ESCUELA].Trim();
+            try
+            {
+                if (datos.Length > (int)Campos.NIVEL_ESCUELA)
+                {
+                    if (datos[(int)Campos.NIVEL_ESCUELA].Trim().Length == 0)
+                        nivelEscuela = Institucion.NivelInstitucion.NULL;
+                    else
+                        nivelEscuela = (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
+                }
+            }
+            catch (Exception)
+            {
+                return TipoError.NIVEL_INSTITUCION;
+            }
+            try
+            {
+                if (datos.Length > (int)Campos.AÑO_ESCUELA)
+                {
+                    if (datos[(int)Campos.AÑO_ESCUELA].Trim().Length == 0)
+                        añoEscuela = 0;
+                    else
+                        añoEscuela = Int32.Parse(datos[(int)Campos.AÑO_ESCUELA]);
+                }
+                if (añoEscuela < 0 || añoEscuela > 6)
+                    return TipoError.AñO_ESCUELA;
+            } catch (Exception)
+            {
+                return TipoError.AñO_ESCUELA;
+            }
+            if (datos.Length > (int)Campos.PUBLICA)
+                escuelaPublica = datos[(int)Campos.PUBLICA].Trim().Equals("publica", StringComparison.InvariantCultureIgnoreCase);
+            if (datos.Length > (int)Campos.ELIMINAR)
+                eliminar = datos[(int)Campos.ELIMINAR].Trim().Equals("eliminar", StringComparison.InvariantCultureIgnoreCase);
+
+            return TipoError.OK;
+        }
 
         /// <summary>
         /// Regresa el año de la primera OMI para la persona mandada como parametro
@@ -237,7 +308,7 @@ namespace OMIstats.Models
             Utilities.Acceso db = new Utilities.Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select p.usuario, p.nombre, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, ");
+            query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, ");
             query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
             query.Append(" md.año, i.publica, md.persona, md.institucion from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
@@ -350,7 +421,7 @@ namespace OMIstats.Models
             string[] datos = linea.Split(',');
 
             // Casteamos los datos del string a variables
-            TipoError err = TipoError.OK;
+            TipoError err = md.obtenerCampos(datos);
             if (err != TipoError.OK)
                 return (int) err;
 
@@ -416,7 +487,10 @@ namespace OMIstats.Models
 
             // Ya se tiene un usuario valido, guardamos sus datos
             if (md.nombreAsistente.Length > 0)
+            {
                 p.nombre = md.nombreAsistente;
+                p.breakNombre();
+            }
 
             try
             {
