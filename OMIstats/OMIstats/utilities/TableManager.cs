@@ -205,7 +205,7 @@ namespace OMIstats.Utilities
             return "";
         }
 
-        public string enlaceOMI(bool nombreCompleto = false, string olimpiada = null)
+        public string enlaceOMI(bool nombreCompleto = false, string olimpiada = null, bool incluirCiudad = false)
         {
             if (olimpiada == null)
                 olimpiada = currentOMI.numero;
@@ -229,7 +229,13 @@ namespace OMIstats.Utilities
             {
                 enlace = olimpiada;
             }
-            return enlace + "ª " + (currentOMI != null ? currentOMI.tipoOlimpiada.ToString() : "OMI");
+
+            enlace += "ª " + (currentOMI != null ? currentOMI.tipoOlimpiada.ToString() : "OMI");
+            if (incluirCiudad && currentOMI != null && !currentOMI.esOnline)
+            {
+                enlace += ": " + (currentOMI.claveEstado == "MDF" ? "" : currentOMI.ciudad + ", ");
+            }
+            return enlace;
         }
 
         public bool tieneDiplomas()

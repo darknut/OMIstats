@@ -46,8 +46,11 @@
         <img src="@Url.Content("~/img/omi/" + Model.logo)"/>
     </div>
     <h2 class="titulo tituloOMI">
-        @(tableManager.enlaceOMI(nombreCompleto: true) + ": " + (Model.claveEstado == "MDF" ? "" : @Model.ciudad + ", "))
+        @tableManager.enlaceOMI(nombreCompleto: true, incluirCiudad: true)
+        @if(!Model.esOnline)
+        {
         <a href="@Url.Content("~/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
+        }
         @Model.año
         @if (github.Length > 0)
         {

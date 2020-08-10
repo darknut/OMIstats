@@ -178,6 +178,8 @@ namespace OMIstats.Models
             query.Append(" and clase = ");
             // Mientras las OMIS y OMIPS no sean aparte, las sedes se cargan de OMIS
             query.Append(Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+            // Filtramos las OMI online
+            query.Append(" and esOnline = 0 ");
 
             db.EjecutarQuery(query.ToString());
 

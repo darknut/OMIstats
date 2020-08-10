@@ -60,11 +60,14 @@
                     @item.año
                 </td>
                 <td class="table-td right-border break-word">
-                    @if(item.claveEstado != "MDF")
+                    @if(!item.esOnline)
                     {
-                        @(item.ciudad + ", ")
-                    }
+                        if(item.claveEstado != "MDF")
+                        {
+                    @(item.ciudad + ", ")
+                        }
                     <a href ="@Url.Content("~/Estado?clave=" + item.claveEstado)" class="nombre">@item.nombreEstado </a>
+                    }
                 </td>
                 <td class="table-td right-border break-word">
                     @item.friendlyDate
