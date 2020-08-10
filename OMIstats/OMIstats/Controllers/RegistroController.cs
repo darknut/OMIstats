@@ -49,7 +49,7 @@ namespace OMIstats.Controllers
         public ActionResult Select(string omi = null)
         {
             if (omi == null)
-                omi = Olimpiada.obtenerMasReciente().numero;
+                omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null || !tienePermisos(o.registroActivo))
@@ -74,7 +74,7 @@ namespace OMIstats.Controllers
         public ActionResult Delegacion(string omi = null, string estado = null)
         {
             if (omi == null)
-                omi = Olimpiada.obtenerMasReciente().numero;
+                omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null || !tienePermisos(o.registroActivo, estado))
