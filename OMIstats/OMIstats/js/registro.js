@@ -218,10 +218,12 @@ function validar() {
         return false;
     if (revisaNoVacio("celular"))
         return false;
-    if (revisaNoVacio("emergencia"))
-        return false;
-    if (revisaNoVacio("telEmergencia"))
-        return false;
+    if (!esSuperUsuario) {
+        if (revisaNoVacio("emergencia"))
+            return false;
+        if (revisaNoVacio("telEmergencia"))
+            return false;
+    }
 
     reEnable("tipoAsistente");
     reEnable("estado");

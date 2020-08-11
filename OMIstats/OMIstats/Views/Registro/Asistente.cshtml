@@ -52,6 +52,7 @@
         var estados = {};
         var resubmit = @(resubmit ? "true" : "false");
         var hayResultados = @(hayResultados ? "true" : "false");
+        var esSuperUsuario = @(usuario.esSuperUsuario() ? "true" : "false");
         @if (errorInfo.Length == 0)
         {
             foreach(OMIstats.Models.Estado e in estados)
