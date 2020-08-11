@@ -207,6 +207,18 @@ namespace OMIstats.Controllers
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
             p.breakNombre();
 
+            List<Institucion> escuelas = null;
+            if (md != null && md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
+                escuelas = Institucion.obtenerEscuelasDeEstado(md.tipoOlimpiada, md.estado);
+            }
+            else if (estado != null)
+            {
+                if (tipo != TipoOlimpiada.NULL)
+                    escuelas = Institucion.obtenerEscuelasDeEstado(tipo, estado);
+            }
+            ViewBag.escuelas = escuelas;
+
             return View(p);
         }
 
@@ -274,6 +286,9 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+
+            if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipoOlimpiada, estado);
 
             if (file != null)
             {

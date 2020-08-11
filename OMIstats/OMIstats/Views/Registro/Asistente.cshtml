@@ -28,6 +28,7 @@
     bool guardado = ViewBag.guardado;
     bool mostrarEscuela = (md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) ||
                            (nuevo && !usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
+    List<OMIstats.Models.Institucion> escuelas = ViewBag.escuelas;
 }
 
 @section AddToHead
@@ -288,7 +289,13 @@ if (md == null && !resubmit)
             <span class="control-title">Elige una escuela</span>
             <select name="selectEscuela" id="selectEscuela" class="shiny-box" onchange="onEscuelaChanged()">
                 <option></option>
-                <option value="CAT">Colegio Americano de Torreon</option>
+                @if (escuelas != null)
+                {
+                    foreach (var escuela in escuelas)
+                    {
+                <option value="@escuela.clave">@escuela.nombre</option>
+                    }
+                }
                 <option value="---">- La escuela no está listada -</option>
             </select>
             <div id="errorselectEscuela" class="errorTextoRojo" style="display:none">Elige una escuela</div>

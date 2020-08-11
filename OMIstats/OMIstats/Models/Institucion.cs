@@ -277,6 +277,37 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Regresa todas las escuelas que han representado a un estado
+        /// </summary>
+        /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
+        /// <param name="estado">El estado que se quiere consultar</param>
+        public static List<Institucion> obtenerEscuelasDeEstado(TipoOlimpiada tipoOlimpiada, string estado)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+            List<Institucion> escuelas = new List<Institucion>();
+
+            query.Append(" select * from Institucion where clave in ");
+            query.Append(" (select distinct(institucion) from MiembroDelegacion as md ");
+            query.Append(" where md.estado =  ");
+            query.Append(Cadenas.comillas(estado));
+            query.Append(" and md.clase =  ");
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" ) order by nombre ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Institucion i = new Institucion();
+                i.llenarDatos(r);
+                escuelas.Add(i);
+            }
+            return escuelas;
+        }
+
+        /// <summary>
         /// Guarda los datos en este objeto a la base de datos
         /// </summary>
         private bool guardarDatos()
