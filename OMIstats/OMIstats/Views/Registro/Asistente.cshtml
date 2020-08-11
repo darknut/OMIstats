@@ -278,6 +278,47 @@ if (md == null && !resubmit)
     </div>
 </div>
 </div>
+<div class="panel panel-green datos-padding">
+    <div class="panel-heading panel-heading-green">Datos de la escuela</div>
+    <div class="panel-body">
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Elige una escuela</span>
+            <select name="selectEscuela" id="selectEscuela" class="shiny-box">
+                <option></option>
+                <option value="CAT">Colegio Americano de Torreon</option>
+                <option value="---">- La escuela no está listada -</option>
+            </select>
+            <div id="errorselectEscuela" class="errorTextoRojo" style="display:none">Elige una escuela</div>
+            <span class="control-title">Escribe el nombre de la escuela</span>
+            <input name="nombreEscuela" id="nombreEscuela" class="shiny-box"/>
+            <div id="errornombreEscuela" class="errorTextoRojo" style="display:none">Escribe el nombre de la escuela</div>
+        </div>
+    </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Nivel escolar</span>
+            <select name="selectNivelEscolar" id="selectNivelEscolar" class="shiny-box">
+                <option></option>
+                <option value="PRIMARIA">Primaria</option>
+                <option value="SECUNDARIA">Secundaria</option>
+                <option value="PREPARATORIA">Bachillerato/Preparatoria</option>
+            </select>
+            <div id="errorselectNivelEscolar" class="errorTextoRojo" style="display:none">Elige el nivel escolar</div>
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Año escolar <img src="~/img/info.svg" title="Preparatorias cuenten por año y no por semestre. Empiecen en 1° y no en 4°" style="width:12px"/></span>
+            <select name="selectAnioEscolar" id="selectAnioEscolar" class="shiny-box">
+                <option></option>
+                <option value="1">1°</option>
+                <option value="2">2°</option>
+                <option value="3">3°</option>
+            </select>
+            <div id="errorselectAnioEscolar" class="errorTextoRojo" style="display:none">Elige el año escolar</div>
+        </div>
+    </div>
+    </div>
+</div>
 <div class="panel">
     <div class="panel-heading"> Datos de emergencia </div>
     <div class="panel-body">
