@@ -39,24 +39,30 @@ function setUpSearch(tipo) {
     }
 }
 
-function llenaClaves(subfijo) {
-    var combo = document.getElementById("claveSelect");
+function generaOpcion(text, value) {
+    var opt = document.createElement("option");
+    opt.text = text;
+    opt.value = value;
+    return opt;
+}
 
+function borrarOpciones(combo) {
     while (combo.options.length > 0) {
         combo.remove(combo.options.length - 1);
     }
+}
+
+function llenaClaves(subfijo) {
+    var combo = document.getElementById("claveSelect");
+    borrarOpciones(combo);
 
     var lim = estadoSede == subfijo ? 8 : 4;
     for (i = 1; i <= lim; i++) {
-        var opt = document.createElement('option');
-
         var tempClave = subfijo + "-" + i;
-        opt.text = tempClave;
-        opt.value = tempClave;
+        var opt = generaOpcion(tempClave, tempClave);
         if (tempClave == currentClave)
             opt.selected = true;
-
-        combo.add(opt, null);
+        combo.add(opt);
     }
 }
 
@@ -171,21 +177,24 @@ function iniciaRegistro(tipo, clave) {
 }
 
 function cambiaClavesCbo() {
-    if (hayResultados)
-        return;
-
     var tipo = document.getElementById("tipoAsistente").value;
     var estado = document.getElementById("estado").value;
     var span = document.getElementById("campoClave");
     var combo = document.getElementById("claveSelect");
 
     if (tipo === "COMPETIDOR" && estado) {
-        span.style.opacity = "1";
-        combo.disabled = false;
-        llenaClaves(estados[estado]);
+        if (hayResultados) {
+            span.style.opacity = "1";
+            combo.disabled = false;
+            llenaClaves(estados[estado]);
+        }
+        setVisible("bloqueEscuela", "block");
     } else {
-        span.style.opacity = "0";
-        combo.disabled = true;
+        if (hayResultados) {
+            span.style.opacity = "0";
+            combo.disabled = true;
+        }
+        setVisible("bloqueEscuela", false);
     }
 }
 
@@ -231,4 +240,49 @@ function validar() {
 
     setVisible("loading", true);
     return true;
+}
+
+function onEscuelaChanged() {
+    var escuela = document.getElementById("selectEscuela").value;
+
+    if (escuela == "---") {
+        setVisible("labelNombreEscuela", true);
+        setVisible("nombreEscuela", true);
+        document.getElementById("nombreEscuela").focus();
+    }
+    else {
+        setVisible("labelNombreEscuela", false);
+        setVisible("nombreEscuela", false);
+    }
+}
+
+function onOMIselected() {
+    var tipo = document.getElementById("tipo").value;
+    var combo = document.getElementById("selectNivelEscolar");
+    borrarOpciones(combo);
+
+    if (tipo != "OMIP")
+        combo.add(generaOpcion("", ""));
+    combo.add(generaOpcion("Primaria", "PRIMARIA"));
+    if (tipo != "OMIP") {
+        combo.add(generaOpcion("Secundaria", "SECUNDARIA"));
+        if (tipo != "OMIS")
+            combo.add(generaOpcion("Bachillerato/Preparatoria", "PREPARATORIA"));
+    }
+}
+
+function onNivelEscolar() {
+    var nivel = document.getElementById("selectNivelEscolar").value;
+    var combo = document.getElementById("selectAnioEscolar");
+    borrarOpciones(combo);
+
+    combo.add(generaOpcion("", ""));
+    combo.add(generaOpcion("1°", "1"));
+    combo.add(generaOpcion("2°", "2"));
+    combo.add(generaOpcion("3°", "3"));
+    if (nivel == "PRIMARIA") {
+        combo.add(generaOpcion("4°", "4"));
+        combo.add(generaOpcion("5°", "5"));
+        combo.add(generaOpcion("6°", "6"));
+    }
 }
