@@ -208,6 +208,7 @@ function revisaNoVacio(campo) {
     }
     setVisible("error" + campo, false);
     campoObj.classList.remove("backgroundError");
+    return false;
 }
 
 function reEnable(campo) {
@@ -231,6 +232,21 @@ function validar() {
         if (revisaNoVacio("emergencia"))
             return false;
         if (revisaNoVacio("telEmergencia"))
+            return false;
+    }
+
+    var tipo = document.getElementById("tipoAsistente").value;
+    if (tipo == "COMPETIDOR") {
+        if (revisaNoVacio("selectEscuela"))
+            return false;
+        var escuela = document.getElementById("selectEscuela").value;
+        if (escuela == "---") {
+            if (revisaNoVacio("nombreEscuela"))
+                return false;
+        }
+        if (revisaNoVacio("selectNivelEscolar"))
+            return false;
+        if (revisaNoVacio("selectAnioEscolar"))
             return false;
     }
 
