@@ -11,6 +11,11 @@ function setUpAjax(url, claveEstado, claveOmi) {
     omi = claveOmi;
 }
 
+function getDataSearch(query)
+{
+    return { omi: omi, tipo: tipoRegistro, query: query, estado: estado };
+}
+
 function setUpSearch(tipo) {
     if (!updating || !resubmit) {
         tipoRegistro = tipo;
@@ -34,7 +39,7 @@ function setUpSearch(tipo) {
 
         if (estado) {
             setVisible("searching", true);
-            callServer("Buscar", "");
+            callServer("Buscar", getDataSearch(""), handleAjax, handleError);
         }
     }
 }
@@ -139,11 +144,10 @@ function handleError() {
     setVisible("mas10", false);
 }
 
-function callServer(subUrl, query) {
-    llamadaAjax(ajaxUrl + subUrl,
-        { omi: omi, tipo: tipoRegistro, query: query, estado: estado },
-        function (data) { handleAjax(data); },
-        function (data) { handleError(); });
+function callServer(subUrl, data, successHandler, errorHandler) {
+    llamadaAjax(ajaxUrl + subUrl, data,
+        function (data) { successHandler(data); },
+        function (data) { errorHandler(); });
 }
 
 function buscar() {
@@ -155,7 +159,7 @@ function buscar() {
     searching = true;
 
     var txt = document.getElementById("nombreBuscar");
-    callServer("Buscar", txt.value);
+    callServer("Buscar", getDataSearch(txt.value), handleAjax, handleError);
 }
 
 function eliminarUsuario(tipoOlimpiada, clave, nombre) {
@@ -176,6 +180,45 @@ function iniciaRegistro(tipo, clave) {
     redirige(ajaxUrl, address);
 }
 
+function preparaAjaxEscuela() {
+    var tipo = document.getElementById("tipo").value;
+    var estado = document.getElementById("estado").value;
+
+    setVisible("bloqueEscuela", "block");
+    setVisible("panelEscuela", false);
+    setVisible("panelSpinner", true);
+    setVisible("panelError", false);
+    callServer("Escuelas", { tipo: tipo, estado: estado }, receiveEscuelas, errorEscuelas);
+}
+
+function receiveEscuelas(data)
+{
+    var tipo = data[0];
+    var estado = data[1];
+    var escuelas = data[2];
+
+    if (!(document.getElementById("tipo").value == tipo &&
+        document.getElementById("estado").value == estado))
+        return;
+
+    var combo = document.getElementById("selectEscuela");
+    borrarOpciones(combo);
+    combo.add(generaOpcion("", ""));
+    for (var i = 0; i < escuelas.length; i++) {
+        combo.add(generaOpcion(escuelas[i].nombre, escuelas[i].clave));
+    }
+    combo.add(generaOpcion("--- La escuela no está listada ---", "---"));
+
+    setVisible("panelEscuela", "block");
+    setVisible("panelSpinner", false);
+}
+
+function errorEscuelas()
+{
+    setVisible("panelError", "block");
+    setVisible("panelSpinner", false);
+}
+
 function cambiaClavesCbo() {
     var tipo = document.getElementById("tipoAsistente").value;
     var estado = document.getElementById("estado").value;
@@ -188,7 +231,7 @@ function cambiaClavesCbo() {
             combo.disabled = false;
             llenaClaves(estados[estado]);
         }
-        setVisible("bloqueEscuela", "block");
+        preparaAjaxEscuela();
     } else {
         if (hayResultados) {
             span.style.opacity = "0";
@@ -284,6 +327,13 @@ function onOMIselected() {
         combo.add(generaOpcion("Secundaria", "SECUNDARIA"));
         if (tipo != "OMIS")
             combo.add(generaOpcion("Bachillerato/Preparatoria", "PREPARATORIA"));
+    }
+
+    var tipoA = document.getElementById("tipoAsistente").value;
+    var estado = document.getElementById("estado").value;
+
+    if (tipoA == "COMPETIDOR" && estado) {
+        preparaAjaxEscuela();
     }
 }
 

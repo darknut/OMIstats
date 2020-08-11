@@ -105,6 +105,19 @@ namespace OMIstats.Controllers
         }
 
         //
+        // POST: /Registro/Escuelas/
+
+        [HttpPost]
+        public JsonResult Escuelas(TipoOlimpiada tipo, string estado)
+        {
+            List<object> lista = new List<object>();
+            lista.Add(tipo.ToString());
+            lista.Add(estado);
+            lista.Add(Institucion.obtenerEscuelasDeEstado(tipo, estado));
+            return Json(lista);
+        }
+
+        //
         // GET: /Registro/Eliminar
 
         public ActionResult Eliminar(string omi, TipoOlimpiada tipo, string estado, string clave)
@@ -207,7 +220,7 @@ namespace OMIstats.Controllers
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
             p.breakNombre();
 
-            List<Institucion> escuelas = null;
+            List<Ajax.BuscarEscuelas> escuelas = null;
             if (md != null && md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 escuelas = Institucion.obtenerEscuelasDeEstado(md.tipoOlimpiada, md.estado);

@@ -28,7 +28,7 @@
     bool guardado = ViewBag.guardado;
     bool mostrarEscuela = (md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) ||
                            (nuevo && !usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
-    List<OMIstats.Models.Institucion> escuelas = ViewBag.escuelas;
+    List<OMIstats.Ajax.BuscarEscuelas> escuelas = ViewBag.escuelas;
 }
 
 @section AddToHead
@@ -283,7 +283,7 @@ if (md == null && !resubmit)
 </div>
 <div class="panel panel-green datos-padding" id="bloqueEscuela" style="@(mostrarEscuela ? "" : "display:none")">
     <div class="panel-heading panel-heading-green">Datos de la escuela</div>
-    <div class="panel-body">
+    <div class="panel-body" id="panelEscuela">
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Elige una escuela</span>
@@ -296,7 +296,7 @@ if (md == null && !resubmit)
                 <option value="@escuela.clave">@escuela.nombre</option>
                     }
                 }
-                <option value="---">- La escuela no está listada -</option>
+                <option value="---">--- La escuela no está listada ---</option>
             </select>
             <div id="errorselectEscuela" class="errorTextoRojo" style="display:none">Elige una escuela</div>
             <span id="labelNombreEscuela" class="control-title" style="display:none">Escribe el nombre de la escuela:</span>
@@ -341,6 +341,12 @@ if (md == null && !resubmit)
             <div id="errorselectAnioEscolar" class="errorTextoRojo" style="display:none">Elige el año escolar</div>
         </div>
     </div>
+    </div>
+    <div class="panel-body" id="panelSpinner" style="display:none">
+        <img src="@(Url.Content("~/img/ajax-loader.gif"))" class="loading"/>
+    </div>
+    <div class="panel-body errorTextoRojo" id="panelError" style="display:none">
+        Ocurrio un error <a class="a-sin-href" onclick="preparaAjaxEscuela()">Reintentar</a>
     </div>
 </div>
 <div class="panel">

@@ -281,11 +281,11 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="estado">El estado que se quiere consultar</param>
-        public static List<Institucion> obtenerEscuelasDeEstado(TipoOlimpiada tipoOlimpiada, string estado)
+        public static List<Ajax.BuscarEscuelas> obtenerEscuelasDeEstado(TipoOlimpiada tipoOlimpiada, string estado)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
-            List<Institucion> escuelas = new List<Institucion>();
+            List<Ajax.BuscarEscuelas> escuelas = new List<Ajax.BuscarEscuelas>();
 
             query.Append(" select * from Institucion where clave in ");
             query.Append(" (select distinct(institucion) from MiembroDelegacion as md ");
@@ -300,9 +300,9 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                Institucion i = new Institucion();
-                i.llenarDatos(r);
-                escuelas.Add(i);
+                Ajax.BuscarEscuelas be = new Ajax.BuscarEscuelas();
+                be.llenarDatos(r);
+                escuelas.Add(be);
             }
             return escuelas;
         }
