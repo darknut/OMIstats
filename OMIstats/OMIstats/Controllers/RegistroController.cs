@@ -397,6 +397,11 @@ namespace OMIstats.Controllers
                 md.tipo = asistente;
                 md.claveUsuario = p.clave;
                 md.nuevo();
+
+                // Se registra la telemetria
+                Log.add(Log.TipoLog.REGISTRO, "Usuario " + getUsuario().nombreCompleto + " registró a " +
+                    p.nombreCompleto + " en el estado " + md.estado + " con clave " + md.clave +
+                    " en la categoría " + md.tipoOlimpiada.ToString());
             }
             else
             {
@@ -427,6 +432,11 @@ namespace OMIstats.Controllers
                 md.clave = claveSelect;
                 md.tipo = asistente;
                 md.guardarDatos(claveOriginal, tipoO);
+
+                // Se registra la telemetria
+                Log.add(Log.TipoLog.REGISTRO, "Usuario " + getUsuario().nombreCompleto + " actualizó a " +
+                    p.nombreCompleto + " en el estado " + md.estado + " con clave " + md.clave +
+                    " en la categoría " + md.tipoOlimpiada.ToString());
             }
 
             // Ahora se guarda la escuela
