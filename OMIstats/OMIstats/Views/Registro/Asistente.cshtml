@@ -34,6 +34,7 @@
     int añoEscuela = ViewBag.añoEscuela;
     string nivelEscuela = ViewBag.nivelEscuela;
     bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
+    bool escuelaPublica = ViewBag.publica;
 }
 
 @section AddToHead
@@ -308,9 +309,20 @@ if (md == null && !resubmit)
                 <option value="-1" @(escuelaDesconocida ? "selected" : "")>--- La escuela no está listada ---</option>
             </select>
             <div id="errorselectEscuela" class="errorTextoRojo" style="display:none">Elige una escuela</div>
-            <span id="labelNombreEscuela" class="control-title" style="@(escuelaDesconocida ? "" : "display:none")">Escribe el nombre de la escuela<span class="errorTextoRojo">*</span>:</span>
-            <input name="nombreEscuela" id="nombreEscuela" class="shiny-box" style="@(escuelaDesconocida ? "" : "display:none")" value="@(escuelaDesconocida ? nombreEscuela : "")"/>
+        </div>
+    </div>
+    <div class="registro-controls" id ="sectionNombreEscuela" style="@(escuelaDesconocida ? "" : "display:none")">
+        <div class="registro-single-control">
+            <span class="control-title">Escribe el nombre de la escuela<span class="errorTextoRojo">*</span>:</span>
+            <input name="nombreEscuela" id="nombreEscuela" class="shiny-box" value="@(escuelaDesconocida ? nombreEscuela : "")"/>
             <div id="errornombreEscuela" class="errorTextoRojo" style="display:none">Escribe el nombre de la escuela</div>
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">¿La escuela es pública o privada?</span>
+            <select name="selectPublica" class="shiny-box">
+                <option value="true">Pública</option>
+                <option value="false" @(escuelaDesconocida && !escuelaPublica ? "selected" : "")>Privada</option>
+            </select>
         </div>
     </div>
     <div class="registro-controls">

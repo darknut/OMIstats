@@ -148,6 +148,7 @@ namespace OMIstats.Controllers
             ViewBag.claveEscuela = 0;
             ViewBag.añoEscuela = 0;
             ViewBag.nivelEscuela = "";
+            ViewBag.publica = true;
         }
 
         //
@@ -248,7 +249,8 @@ namespace OMIstats.Controllers
         [HttpPost]
         public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipo, string tipoAsistente,
             string tipoOriginal, string estado, string claveSelect, string persona, string claveOriginal,
-            int selectEscuela, string nombreEscuela, int selectAnioEscolar, Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL)
+            int selectEscuela, string nombreEscuela, int selectAnioEscolar, bool selectPublica = true,
+            Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null)
@@ -335,6 +337,7 @@ namespace OMIstats.Controllers
                 else
                 {
                     ViewBag.nombreEscuela = nombreEscuela;
+                    ViewBag.publica = selectPublica;
                 }
             }
 

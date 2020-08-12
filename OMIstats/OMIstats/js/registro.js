@@ -331,13 +331,11 @@ function onEscuelaChanged() {
     var escuela = document.getElementById("selectEscuela").value;
 
     if (escuela == -1) {
-        setVisible("labelNombreEscuela", true);
-        setVisible("nombreEscuela", true);
+        setVisible("sectionNombreEscuela", "flex");
         document.getElementById("nombreEscuela").focus();
     }
     else {
-        setVisible("labelNombreEscuela", false);
-        setVisible("nombreEscuela", false);
+        setVisible("sectionNombreEscuela", false);
     }
 }
 
