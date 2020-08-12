@@ -228,7 +228,7 @@ function receiveEscuelas(data)
     for (var i = 0; i < escuelas.length; i++) {
         combo.add(generaOpcion(escuelas[i].nombre, escuelas[i].clave));
     }
-    combo.add(generaOpcion("--- La escuela no está listada ---", "---"));
+    combo.add(generaOpcion("--- La escuela no está listada ---", -1));
     if (nombreEscuela) {
         agregaEscuelaACombo(nombreEscuela, claveEscuela);
         setCampo("selectNivelEscolar", nivelEscuela);
@@ -309,7 +309,7 @@ function validar() {
         if (revisaNoVacio("selectEscuela"))
             return false;
         var escuela = document.getElementById("selectEscuela").value;
-        if (escuela == "---") {
+        if (escuela == -1) {
             if (revisaNoVacio("nombreEscuela"))
                 return false;
         }
@@ -330,7 +330,7 @@ function validar() {
 function onEscuelaChanged() {
     var escuela = document.getElementById("selectEscuela").value;
 
-    if (escuela == "---") {
+    if (escuela == -1) {
         setVisible("labelNombreEscuela", true);
         setVisible("nombreEscuela", true);
         document.getElementById("nombreEscuela").focus();

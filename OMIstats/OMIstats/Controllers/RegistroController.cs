@@ -246,7 +246,9 @@ namespace OMIstats.Controllers
         //
         // POST: /Registro/Asistente
         [HttpPost]
-        public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipo, string tipoAsistente, string tipoOriginal, string estado, string claveSelect, string persona, string claveOriginal)
+        public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipo, string tipoAsistente,
+            string tipoOriginal, string estado, string claveSelect, string persona, string claveOriginal,
+            int selectEscuela, string nombreEscuela, int selectAnioEscolar, Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null)
@@ -275,6 +277,7 @@ namespace OMIstats.Controllers
 
             MiembroDelegacion md = null;
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
+            Institucion i = null;
             if (!String.IsNullOrEmpty(claveOriginal))
             {
                 tipoO = EnumParser.ToTipoOlimpiada(tipoOriginal);
@@ -312,7 +315,28 @@ namespace OMIstats.Controllers
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
 
             if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
                 ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipoOlimpiada, estado);
+                ViewBag.claveEscuela = selectEscuela;
+                ViewBag.añoEscuela = selectAnioEscolar;
+                ViewBag.nivelEscuela = selectNivelEscolar.ToString();
+
+                if (selectEscuela > 0)
+                {
+                    i = Institucion.obtenerInstitucionConClave(selectEscuela);
+                    if (i == null)
+                    {
+                        ViewBag.nombreEscuela = "";
+                        ViewBag.claveEscuela = 0;
+                    }
+                    else
+                        ViewBag.nombreEscuela = i.nombre;
+                }
+                else
+                {
+                    ViewBag.nombreEscuela = nombreEscuela;
+                }
+            }
 
             if (file != null)
             {

@@ -33,6 +33,7 @@
     int claveEscuela = ViewBag.claveEscuela;
     int añoEscuela = ViewBag.añoEscuela;
     string nivelEscuela = ViewBag.nivelEscuela;
+    bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
 }
 
 @section AddToHead
@@ -304,11 +305,11 @@ if (md == null && !resubmit)
                 <option value="@escuela.clave" @(claveEscuela == escuela.clave ? "selected" : "")>@escuela.nombre</option>
                     }
                 }
-                <option value="---">--- La escuela no está listada ---</option>
+                <option value="-1" @(escuelaDesconocida ? "selected" : "")>--- La escuela no está listada ---</option>
             </select>
             <div id="errorselectEscuela" class="errorTextoRojo" style="display:none">Elige una escuela</div>
-            <span id="labelNombreEscuela" class="control-title" style="display:none">Escribe el nombre de la escuela<span class="errorTextoRojo">*</span>:</span>
-            <input name="nombreEscuela" id="nombreEscuela" class="shiny-box" style="display:none"/>
+            <span id="labelNombreEscuela" class="control-title" style="@(escuelaDesconocida ? "" : "display:none")">Escribe el nombre de la escuela<span class="errorTextoRojo">*</span>:</span>
+            <input name="nombreEscuela" id="nombreEscuela" class="shiny-box" style="@(escuelaDesconocida ? "" : "display:none")" value="@(escuelaDesconocida ? nombreEscuela : "")"/>
             <div id="errornombreEscuela" class="errorTextoRojo" style="display:none">Escribe el nombre de la escuela</div>
         </div>
     </div>
