@@ -205,6 +205,11 @@ namespace OMIstats.Controllers
                     return View(new Persona());
                 }
                 md = temp[0];
+                if (!p.esSuperUsuario() && md.estado != estado)
+                {
+                    ViewBag.errorInfo = "permisos";
+                    return View(new Persona());
+                }
                 ViewBag.claveOriginal = md.clave;
                 ViewBag.claveDisponible = md.clave;
                 ViewBag.tipoAsistente = md.tipo;
@@ -298,14 +303,21 @@ namespace OMIstats.Controllers
                     return View(new Persona());
                 }
                 md = temp[0];
+                if (!p.esSuperUsuario() && md.estado != estado)
+                {
+                    ViewBag.errorInfo = "permisos";
+                    return View(new Persona());
+                }
             }
 
-            // Se regresan todos los valores al viewbag en caso de error
+            // Se valida que la clave que se eligió sea valida para el estado
             Estado e = Estado.obtenerEstadoConClave(estado);
             if (claveSelect != null && asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !claveSelect.StartsWith(e.ISO))
                 claveSelect = "";
             if (persona != "0")
                 p.clave = int.Parse(persona);
+
+            // Se regresan todos los valores al viewbag en caso de error
             ViewBag.claveDisponible = claveSelect;
             ViewBag.estado = e;
             ViewBag.md = md;
