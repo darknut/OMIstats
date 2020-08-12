@@ -29,6 +29,10 @@
     bool mostrarEscuela = (md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) ||
                            (nuevo && !usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
     List<OMIstats.Ajax.BuscarEscuelas> escuelas = ViewBag.escuelas;
+    string nombreEscuela = ViewBag.nombreEscuela;
+    int claveEscuela = ViewBag.claveEscuela;
+    int añoEscuela = ViewBag.añoEscuela;
+    string nivelEscuela = ViewBag.nivelEscuela;
 }
 
 @section AddToHead
@@ -56,8 +60,10 @@
         var resubmit = @(resubmit ? "true" : "false");
         var hayResultados = @(hayResultados ? "true" : "false");
         var esSuperUsuario = @(usuario.esSuperUsuario() ? "true" : "false");
-        var nombreEscuela = null;
-        var claveEscuela = 0;
+        var nombreEscuela = "@nombreEscuela";
+        var claveEscuela = @claveEscuela;
+        var anioEscuela = @añoEscuela;
+        var nivelEscuela = "@nivelEscuela";
         @if (errorInfo.Length == 0)
         {
             foreach(OMIstats.Models.Estado e in estados)
@@ -295,7 +301,7 @@ if (md == null && !resubmit)
                 {
                     foreach (var escuela in escuelas)
                     {
-                <option value="@escuela.clave">@escuela.nombre</option>
+                <option value="@escuela.clave" @(claveEscuela == escuela.clave ? "selected" : "")>@escuela.nombre</option>
                     }
                 }
                 <option value="---">--- La escuela no está listada ---</option>
@@ -314,13 +320,13 @@ if (md == null && !resubmit)
                 {
                 <option></option>
                 }
-                <option value="PRIMARIA">Primaria</option>
+                <option value="PRIMARIA" @(nivelEscuela == "PRIMARIA" ? "selected" : "")>Primaria</option>
                 @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP)
                 {
-                <option value="SECUNDARIA">Secundaria</option>
+                <option value="SECUNDARIA" @(nivelEscuela == "SECUNDARIA" ? "selected" : "")>Secundaria</option>
                     if (tipo != OMIstats.Models.TipoOlimpiada.OMIS)
                     {
-                <option value="PREPARATORIA">Bachillerato/Preparatoria</option>
+                <option value="PREPARATORIA" @(nivelEscuela == "PREPARATORIA" ? "selected" : "")>Bachillerato/Preparatoria</option>
                     }
                 }
             </select>
@@ -330,14 +336,14 @@ if (md == null && !resubmit)
             <span class="control-title">Año escolar <img src="~/img/info.svg" title="Preparatorias cuenten por año y no por semestre. Empiecen en 1° y no en 4°" style="width:12px"/><span class="errorTextoRojo">*</span></span>
             <select name="selectAnioEscolar" id="selectAnioEscolar" class="shiny-box">
                 <option></option>
-                <option value="1">1°</option>
-                <option value="2">2°</option>
-                <option value="3">3°</option>
+                <option value="1" @(añoEscuela == 1 ? "selected" : "")>1°</option>
+                <option value="2" @(añoEscuela == 2 ? "selected" : "")>2°</option>
+                <option value="3" @(añoEscuela == 3 ? "selected" : "")>3°</option>
                 @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP)
                 {
-                <option value="4">4°</option>
-                <option value="5">5°</option>
-                <option value="6">6°</option>
+                <option value="4" @(añoEscuela == 4 ? "selected" : "")>4°</option>
+                <option value="5" @(añoEscuela == 5 ? "selected" : "")>5°</option>
+                <option value="6" @(añoEscuela == 6 ? "selected" : "")>6°</option>
                 }
             </select>
             <div id="errorselectAnioEscolar" class="errorTextoRojo" style="display:none">Elige el año escolar</div>

@@ -144,6 +144,10 @@ namespace OMIstats.Controllers
             ViewBag.hayResultados = false;
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
+            ViewBag.nombreEscuela = "";
+            ViewBag.claveEscuela = 0;
+            ViewBag.añoEscuela = 0;
+            ViewBag.nivelEscuela = "";
         }
 
         //
@@ -204,6 +208,10 @@ namespace OMIstats.Controllers
                 ViewBag.claveDisponible = md.clave;
                 ViewBag.tipoAsistente = md.tipo;
                 ViewBag.estado = Estado.obtenerEstadoConClave(md.estado);
+                ViewBag.nombreEscuela = md.nombreEscuela;
+                ViewBag.claveEscuela = md.claveEscuela;
+                ViewBag.añoEscuela = md.añoEscuela;
+                ViewBag.nivelEscuela = md.nivelEscuela.ToString();
                 tipoOriginal = md.tipoOlimpiada;
             }
 

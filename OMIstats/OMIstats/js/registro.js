@@ -144,8 +144,12 @@ function personaSeleccionada(a) {
         document.getElementById("estado").value &&
         persona.nombreEscuela) {
         agregaEscuelaACombo(persona.nombreEscuela, persona.claveEscuela);
+        setCampo("selectNivelEscolar", persona.nivelEscuela);
+        setCampo("selectAnioEscolar", persona.anioEscuela);
         nombreEscuela = persona.nombreEscuela;
         claveEscuela = persona.claveEscuela;
+        anioEscuela = persona.anioEscuela;
+        nivelEscuela = persona.nivelEscuela;
     }
 
     var button = document.getElementById("botonGuardar");
@@ -225,8 +229,11 @@ function receiveEscuelas(data)
         combo.add(generaOpcion(escuelas[i].nombre, escuelas[i].clave));
     }
     combo.add(generaOpcion("--- La escuela no está listada ---", "---"));
-    if (nombreEscuela)
-        agregaEscuelaACombo(nobmreEscuela, claveEscuela);
+    if (nombreEscuela) {
+        agregaEscuelaACombo(nombreEscuela, claveEscuela);
+        setCampo("selectNivelEscolar", nivelEscuela);
+        setCampo("selectAnioEscolar", anioEscuela);
+    }
 
     setVisible("panelEscuela", "block");
     setVisible("panelSpinner", false);

@@ -8,12 +8,12 @@ namespace OMIstats.Ajax
 {
     public class BuscarEscuelas
     {
-        public string clave;
+        public int clave;
         public string nombre;
 
         public void llenarDatos(DataRow datos)
         {
-            clave = datos["clave"].ToString().Trim();
+            clave = (int)datos["clave"];
             nombre = datos["nombre"].ToString().Trim();
         }
     }

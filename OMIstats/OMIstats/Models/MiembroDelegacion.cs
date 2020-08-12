@@ -1258,8 +1258,8 @@ namespace OMIstats.Models
                             {
                                 if (!i.secundaria)
                                 {
-                                    //nombreEscuela = "";
-                                    //claveEscuela = 0;
+                                    nombreEscuela = "";
+                                    claveEscuela = 0;
                                 }
                                 return;
                             }
@@ -1270,13 +1270,13 @@ namespace OMIstats.Models
                             if (añoEscuela > 3)
                             {
                                 nivelEscuela = Institucion.NivelInstitucion.UNIVERSIDAD;
-                                //nombreEscuela = "";
-                                //claveEscuela = 0;
+                                nombreEscuela = "";
+                                claveEscuela = 0;
                             }
                             else if (!i.preparatoria)
                             {
-                                //nombreEscuela = "";
-                                //claveEscuela = 0;
+                                nombreEscuela = "";
+                                claveEscuela = 0;
                             }
                             return;
                         }
