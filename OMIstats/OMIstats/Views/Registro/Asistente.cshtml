@@ -288,7 +288,7 @@ if (md == null && !resubmit)
     <div class="panel-body" id="panelEscuela">
     <div class="registro-controls">
         <div class="registro-single-control">
-            <span class="control-title">Elige una escuela</span>
+            <span class="control-title">Elige una escuela<span class="errorTextoRojo">*</span></span>
             <select name="selectEscuela" id="selectEscuela" class="shiny-box" onchange="onEscuelaChanged()">
                 <option></option>
                 @if (escuelas != null)
@@ -301,14 +301,14 @@ if (md == null && !resubmit)
                 <option value="---">--- La escuela no está listada ---</option>
             </select>
             <div id="errorselectEscuela" class="errorTextoRojo" style="display:none">Elige una escuela</div>
-            <span id="labelNombreEscuela" class="control-title" style="display:none">Escribe el nombre de la escuela:</span>
+            <span id="labelNombreEscuela" class="control-title" style="display:none">Escribe el nombre de la escuela<span class="errorTextoRojo">*</span>:</span>
             <input name="nombreEscuela" id="nombreEscuela" class="shiny-box" style="display:none"/>
             <div id="errornombreEscuela" class="errorTextoRojo" style="display:none">Escribe el nombre de la escuela</div>
         </div>
     </div>
     <div class="registro-controls">
         <div class="registro-single-control">
-            <span class="control-title">Nivel escolar</span>
+            <span class="control-title">Nivel escolar<span class="errorTextoRojo">*</span></span>
             <select name="selectNivelEscolar" id="selectNivelEscolar" class="shiny-box" onchange="onNivelEscolar()">
                 @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP)
                 {
@@ -327,7 +327,7 @@ if (md == null && !resubmit)
             <div id="errorselectNivelEscolar" class="errorTextoRojo" style="display:none">Elige el nivel escolar</div>
         </div>
         <div class="registro-single-control">
-            <span class="control-title">Año escolar <img src="~/img/info.svg" title="Preparatorias cuenten por año y no por semestre. Empiecen en 1° y no en 4°" style="width:12px"/></span>
+            <span class="control-title">Año escolar <img src="~/img/info.svg" title="Preparatorias cuenten por año y no por semestre. Empiecen en 1° y no en 4°" style="width:12px"/><span class="errorTextoRojo">*</span></span>
             <select name="selectAnioEscolar" id="selectAnioEscolar" class="shiny-box">
                 <option></option>
                 <option value="1">1°</option>

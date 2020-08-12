@@ -284,10 +284,13 @@ namespace OMIstats.Controllers
                 md = temp[0];
             }
 
+            Estado e = Estado.obtenerEstadoConClave(estado);
+            if (claveSelect != null && asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !claveSelect.StartsWith(e.ISO))
+                claveSelect = "";
             if (persona != "0")
                 p.clave = int.Parse(persona);
             ViewBag.claveDisponible = claveSelect;
-            ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+            ViewBag.estado = e;
             ViewBag.md = md;
             ViewBag.nuevo = String.IsNullOrEmpty(claveOriginal);
             ViewBag.omi = o;
