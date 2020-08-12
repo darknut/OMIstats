@@ -25,7 +25,13 @@ namespace OMIstats.Ajax
         public string medicina;
         public string alergias;
 
-        public BuscarPersonas(Persona persona)
+        // Datos de la escuela
+        public string nombreEscuela;
+        public int claveEscuela;
+        public string nivelEscuela;
+        public int anioEscuela;
+
+        public BuscarPersonas(Persona persona, MiembroDelegacion md)
         {
             persona.breakNombre();
             nombre = persona.nombre;
@@ -44,6 +50,14 @@ namespace OMIstats.Ajax
             clave = persona.clave;
             medicina = persona.medicina;
             alergias = persona.alergias;
+
+            if (md != null)
+            {
+                nombreEscuela = md.nombreEscuela;
+                claveEscuela = md.claveEscuela;
+                nivelEscuela = md.nivelEscuela.ToString();
+                anioEscuela = md.añoEscuela;
+            }
         }
     }
 }

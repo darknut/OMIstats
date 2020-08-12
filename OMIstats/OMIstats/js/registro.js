@@ -109,6 +109,15 @@ function setCampo(id, value) {
     input.value = value;
 }
 
+function agregaEscuelaACombo(nombre, clave) {
+    var contenido = $('#selectEscuela').find('option[value="' + clave + '"]').val();
+    var escuelas = document.getElementById("selectEscuela");
+    if (!contenido) {
+        escuelas.add(generaOpcion(nombre, clave));
+    }
+    escuelas.value = clave;
+}
+
 function personaSeleccionada(a) {
     var persona = resultados.filter(function (p) {
         return p.clave == a.value;
@@ -130,6 +139,14 @@ function personaSeleccionada(a) {
     setCampo("alergias", persona.alergias);
     setCampo("genero", persona.genero);
     setCampo("persona", persona.clave);
+
+    if (document.getElementById("tipoAsistente").value == "COMPETIDOR" &&
+        document.getElementById("estado").value &&
+        persona.nombreEscuela) {
+        agregaEscuelaACombo(persona.nombreEscuela, persona.claveEscuela);
+        nombreEscuela = persona.nombreEscuela;
+        claveEscuela = persona.claveEscuela;
+    }
 
     var button = document.getElementById("botonGuardar");
     button.focus();
@@ -208,6 +225,8 @@ function receiveEscuelas(data)
         combo.add(generaOpcion(escuelas[i].nombre, escuelas[i].clave));
     }
     combo.add(generaOpcion("--- La escuela no está listada ---", "---"));
+    if (nombreEscuela)
+        agregaEscuelaACombo(nobmreEscuela, claveEscuela);
 
     setVisible("panelEscuela", "block");
     setVisible("panelSpinner", false);

@@ -1076,11 +1076,10 @@ namespace OMIstats.Models
 
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
 
             if (String.IsNullOrEmpty(input))
             {
-                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-
                 query.Append(" select p.clave, MAX(o.año) as reciente from MiembroDelegacion as md ");
                 query.Append(" inner join Persona as p on p.clave = md.persona ");
                 query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
@@ -1109,11 +1108,10 @@ namespace OMIstats.Models
                     if (año == o.año)
                         continue;
 
+                    MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(clavePersona);
+                    // Revisamos la última participación del competidor en particular
                     if (tipo != TipoOlimpiada.NULL)
                     {
-                        // Revisamos la última participación del competidor en particular
-                        MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(clavePersona);
-
                         // Esto será true si está registrado como otro tipo de asistente este año
                         if (md.olimpiada == omi)
                             continue;
@@ -1124,15 +1122,15 @@ namespace OMIstats.Models
                                 continue;
 
                         // Descartamos a los que ya se gruaduaron de la escuela en su nivel
-                        Institucion.NivelInstitucion nivel = Institucion.calculaNuevoNivel(md.nivelEscuela, md.añoEscuela, (int)o.año - año);
-                        if (nivel == Institucion.NivelInstitucion.UNIVERSIDAD ||
-                            tipo == TipoOlimpiada.OMIS && nivel == Institucion.NivelInstitucion.PREPARATORIA ||
-                            tipo == TipoOlimpiada.OMIP && nivel != Institucion.NivelInstitucion.PRIMARIA)
+                        md.calculaNuevoNivel((int)o.año - año);
+                        if (md.nivelEscuela == Institucion.NivelInstitucion.UNIVERSIDAD ||
+                            tipo == TipoOlimpiada.OMIS && md.nivelEscuela == Institucion.NivelInstitucion.PREPARATORIA ||
+                            tipo == TipoOlimpiada.OMIP && md.nivelEscuela != Institucion.NivelInstitucion.PRIMARIA)
                             continue;
                     }
 
                     Persona p = Persona.obtenerPersonaConClave(clavePersona, completo:true, incluirDatosPrivados:true);
-                    personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
+                    personas.Add(new OMIstats.Ajax.BuscarPersonas(p, md));
                     if (personas.Count == 10)
                         break;
                 }
@@ -1155,7 +1153,19 @@ namespace OMIstats.Models
                     {
                         Persona p = new Persona();
                         p.llenarDatos(r, completo: false);
-                        personas.Add(new OMIstats.Ajax.BuscarPersonas(p));
+
+                        MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(p.clave);
+                        if (md.tipo == TipoAsistente.COMPETIDOR)
+                        {
+                            Olimpiada om = Olimpiada.obtenerOlimpiadaConClave(md.olimpiada, md.tipoOlimpiada);
+                            md.calculaNuevoNivel((int)o.año - (int)om.año);
+                        }
+                        else
+                        {
+                            md = null;
+                        }
+
+                        personas.Add(new OMIstats.Ajax.BuscarPersonas(p, md));
                     }
             }
 
@@ -1211,5 +1221,73 @@ namespace OMIstats.Models
 
             return "";
         }
+#if OMISTATS
+        /// <summary>
+        /// Devuelve un objeto institucion vacío, que incluye solo el nuevo nivel en que el alumno tiene que estar
+        /// después de delta años
+        /// </summary>
+        /// <param name="delta">El delta entre la ultima participacion del alumno y el año actual</param>
+        public void calculaNuevoNivel(int delta)
+        {
+            añoEscuela += delta;
+            Institucion i = Institucion.obtenerInstitucionConClave(claveEscuela);
+            nombreEscuela = i.nombre;
+            while (true)
+            {
+                switch (nivelEscuela)
+                {
+                    case Institucion.NivelInstitucion.PRIMARIA:
+                        {
+                            if (añoEscuela > 6)
+                            {
+                                nivelEscuela = Institucion.NivelInstitucion.SECUNDARIA;
+                                añoEscuela -= 6;
+                            }
+                            else
+                                return;
+                            break;
+                        }
+                    case Institucion.NivelInstitucion.SECUNDARIA:
+                        {
+                            if (añoEscuela > 3)
+                            {
+                                nivelEscuela = Institucion.NivelInstitucion.PREPARATORIA;
+                                añoEscuela -= 3;
+                            }
+                            else
+                            {
+                                if (!i.secundaria)
+                                {
+                                    //nombreEscuela = "";
+                                    //claveEscuela = 0;
+                                }
+                                return;
+                            }
+                            break;
+                        }
+                    case Institucion.NivelInstitucion.PREPARATORIA:
+                        {
+                            if (añoEscuela > 3)
+                            {
+                                nivelEscuela = Institucion.NivelInstitucion.UNIVERSIDAD;
+                                //nombreEscuela = "";
+                                //claveEscuela = 0;
+                            }
+                            else if (!i.preparatoria)
+                            {
+                                //nombreEscuela = "";
+                                //claveEscuela = 0;
+                            }
+                            return;
+                        }
+                    default:
+                        {
+                            nivelEscuela = Institucion.NivelInstitucion.NULL;
+                            return;
+                        }
+                }
+            }
+        }
+#endif
     }
 }

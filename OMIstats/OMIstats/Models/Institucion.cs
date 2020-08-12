@@ -501,55 +501,5 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
-
-        /// <summary>
-        /// Devuelve un objeto institucion vacío, que incluye solo el nuevo nivel en que el alumno tiene que estar
-        /// después de delta años
-        /// </summary>
-        /// <param name="nivelInstitucion">El ultimo nivel conocido del alumno</param>
-        /// <param name="añoActual">El último año conocido del alumno</param>
-        /// <param name="delta">El delta entre la ultima participacion del alumno y el año actual</param>
-        /// <returns>El nuevo nivel que debería tener el alumno</returns>
-        public static NivelInstitucion calculaNuevoNivel(NivelInstitucion nivelInstitucion, int añoActual, int delta)
-        {
-            añoActual += delta;
-
-            while (true)
-            {
-                switch (nivelInstitucion)
-                {
-                    case NivelInstitucion.PRIMARIA:
-                        {
-                            if (añoActual > 6)
-                            {
-                                nivelInstitucion = NivelInstitucion.SECUNDARIA;
-                                añoActual -= 6;
-                            }
-                            else
-                                return nivelInstitucion;
-                            break;
-                        }
-                    case NivelInstitucion.SECUNDARIA:
-                        {
-                            if (añoActual > 3)
-                            {
-                                nivelInstitucion = NivelInstitucion.PREPARATORIA;
-                                añoActual -= 3;
-                            }
-                            else
-                                return nivelInstitucion;
-                            break;
-                        }
-                    case NivelInstitucion.PREPARATORIA:
-                        {
-                            if (añoActual > 3)
-                                return NivelInstitucion.UNIVERSIDAD;
-                            return nivelInstitucion;
-                        }
-                    default:
-                        return NivelInstitucion.NULL;
-                }
-            }
-        }
     }
 }
