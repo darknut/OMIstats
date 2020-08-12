@@ -736,6 +736,29 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        public void guardarDatosEscuela()
+        {
+            StringBuilder query = new StringBuilder();
+            Acceso db = new Acceso();
+
+            query.Append(" update miembrodelegacion set institucion = ");
+            query.Append(claveEscuela);
+            query.Append(", nivel = ");
+            query.Append((int)nivelEscuela);
+            query.Append(", año = ");
+            query.Append(añoEscuela);
+            query.Append(" where olimpiada = ");
+            query.Append(Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and clave = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and persona = ");
+            query.Append(claveUsuario);
+
+            db.EjecutarQuery(query.ToString());
+        }
 #endif
 
         /// <summary>

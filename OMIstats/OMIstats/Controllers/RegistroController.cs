@@ -252,6 +252,7 @@ namespace OMIstats.Controllers
             int selectEscuela, string nombreEscuela, int selectAnioEscolar, bool selectPublica = true,
             Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL)
         {
+            // Se valida que el usuario tenga permiso para realizar esta acción
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null)
                 return RedirectTo(Pagina.HOME);
@@ -266,6 +267,7 @@ namespace OMIstats.Controllers
                 return View(new Persona());
             }
 
+            // Se valida que haya espacio para registrar otro competidor
             MiembroDelegacion.TipoAsistente asistente = EnumParser.ToTipoAsistente(tipoAsistente);
             TipoOlimpiada tipoOlimpiada = EnumParser.ToTipoOlimpiada(tipo);
             if (!esAdmin() &&
@@ -277,6 +279,7 @@ namespace OMIstats.Controllers
                 return View(new Persona());
             }
 
+            // Se valida que el miembro delegacion que se está modificando (en caso de update), exista
             MiembroDelegacion md = null;
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
             Institucion i = null;
@@ -297,6 +300,7 @@ namespace OMIstats.Controllers
                 md = temp[0];
             }
 
+            // Se regresan todos los valores al viewbag en caso de error
             Estado e = Estado.obtenerEstadoConClave(estado);
             if (claveSelect != null && asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !claveSelect.StartsWith(e.ISO))
                 claveSelect = "";
@@ -314,8 +318,8 @@ namespace OMIstats.Controllers
             ViewBag.tipoOriginal = tipoO;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
-            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
-
+            bool hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+            ViewBag.hayResultados = hayResultados;
             if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipoOlimpiada, estado);
@@ -341,6 +345,7 @@ namespace OMIstats.Controllers
                 }
             }
 
+            // Validaciones extra de la foto
             if (file != null)
             {
                 var valida = Archivos.esImagenValida(file, Peticion.TamañoFotoMaximo);
@@ -351,10 +356,13 @@ namespace OMIstats.Controllers
                 }
             }
 
+            // Validaciones del modelo
             if (!ModelState.IsValid)
                 return View(p);
 
-            if (String.IsNullOrEmpty(claveOriginal))
+            // Validaciones terminadas, guardamos persona y miembro delegacion
+            // Primero en caso de que sea un nuevo miembro de la delegación
+            if (md == null)
             {
                 // Nuevo asistente
                 if (persona == "0")
@@ -393,7 +401,7 @@ namespace OMIstats.Controllers
             else
             {
                 // Si ya hay resultados no podemos cambiar la clave, estado, o tipo de OMI
-                if (Resultados.hayResultadosParaOMI(o.numero))
+                if (hayResultados)
                 {
                     tipoOlimpiada = md.tipoOlimpiada;
                     claveSelect = md.clave;
@@ -419,6 +427,53 @@ namespace OMIstats.Controllers
                 md.clave = claveSelect;
                 md.tipo = asistente;
                 md.guardarDatos(claveOriginal, tipoO);
+            }
+
+            // Ahora se guarda la escuela
+            if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
+                // La escuela ya se consultó en la sección de viewbag, si es null, se llenó la sección de escuela nueva
+                if (i == null)
+                {
+                    if (!String.IsNullOrEmpty(nombreEscuela))
+                    {
+                        // La escuela aun puede ya existir pero no la vieron y la volvieron a escribir,
+                        // aqui tratamos de ver si ya existe
+                        i = Institucion.buscarInstitucionConNombre(nombreEscuela);
+                        if (i == null)
+                        {
+                            // Se genera una nueva escuela vacía y se asignan los datos que tenemos
+                            i = new Institucion();
+                            i.nuevaInstitucion();
+                            i.nombre = nombreEscuela;
+                            i.publica = selectPublica;
+                        }
+                    }
+                }
+
+                // Si en este punto tenemos una escuela, actualizamos los datos de la escuela y
+                // actualizamos el miembro delegacion
+                if (i != null)
+                {
+                    switch (selectNivelEscolar)
+                    {
+                        case Institucion.NivelInstitucion.PRIMARIA:
+                            i.primaria = true;
+                            break;
+                        case Institucion.NivelInstitucion.SECUNDARIA:
+                            i.secundaria = true;
+                            break;
+                        case Institucion.NivelInstitucion.PREPARATORIA:
+                            i.preparatoria = true;
+                            break;
+                    }
+                    i.guardar(generarPeticiones: false);
+
+                    md.claveEscuela = i.clave;
+                    md.nivelEscuela = selectNivelEscolar;
+                    md.añoEscuela = selectAnioEscolar;
+                    md.guardarDatosEscuela();
+                }
             }
 
             ViewBag.guardado = true;
