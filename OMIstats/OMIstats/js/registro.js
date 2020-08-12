@@ -17,7 +17,7 @@ function getDataSearch(query)
 }
 
 function setUpSearch(tipo) {
-    if (!updating || !resubmit) {
+    if (!updating && !resubmit) {
         tipoRegistro = tipo;
         setVisible("tablaRegistro", false);
         setVisible("info", false);
