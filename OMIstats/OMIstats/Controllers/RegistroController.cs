@@ -136,11 +136,9 @@ namespace OMIstats.Controllers
 
         private void failSafeViewBag()
         {
-            ViewBag.nuevo = false;
             ViewBag.errorInfo = "";
             ViewBag.tipo = TipoOlimpiada.NULL;
             ViewBag.tipoAsistente = MiembroDelegacion.TipoAsistente.NULL;
-            ViewBag.tipoOriginal = TipoOlimpiada.NULL;
             ViewBag.hayResultados = false;
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
@@ -184,7 +182,6 @@ namespace OMIstats.Controllers
             }
 
             MiembroDelegacion md = null;
-            TipoOlimpiada tipoOriginal = TipoOlimpiada.NULL;
             if (clave == null)
             {
                 if (!p.esSuperUsuario() && tipo != TipoOlimpiada.NULL)
@@ -210,7 +207,6 @@ namespace OMIstats.Controllers
                     ViewBag.errorInfo = "permisos";
                     return View(new Persona());
                 }
-                ViewBag.claveOriginal = md.clave;
                 ViewBag.claveDisponible = md.clave;
                 ViewBag.tipoAsistente = md.tipo;
                 ViewBag.estado = Estado.obtenerEstadoConClave(md.estado);
@@ -218,14 +214,11 @@ namespace OMIstats.Controllers
                 ViewBag.claveEscuela = md.claveEscuela;
                 ViewBag.añoEscuela = md.añoEscuela;
                 ViewBag.nivelEscuela = md.nivelEscuela.ToString();
-                tipoOriginal = md.tipoOlimpiada;
             }
 
             ViewBag.md = md;
-            ViewBag.nuevo = (clave == null);
             ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
-            ViewBag.tipoOriginal = tipoOriginal;
             limpiarErroresViewBag();
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
@@ -321,13 +314,10 @@ namespace OMIstats.Controllers
             ViewBag.claveDisponible = claveSelect;
             ViewBag.estado = e;
             ViewBag.md = md;
-            ViewBag.nuevo = String.IsNullOrEmpty(claveOriginal);
             ViewBag.omi = o;
             ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
             ViewBag.tipoAsistente = tipoAsistente;
-            ViewBag.claveOriginal = claveOriginal;
-            ViewBag.tipoOriginal = tipoO;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
             bool hayResultados = Resultados.hayResultadosParaOMI(o.numero);

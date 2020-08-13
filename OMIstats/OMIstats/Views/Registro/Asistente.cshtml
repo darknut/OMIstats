@@ -1,40 +1,42 @@
 ﻿@model OMIstats.Models.Persona
 
 @{
-    bool nuevo = ViewBag.nuevo;
+    // Sacando variables del ViewBag
     string errorInfo = ViewBag.errorInfo;
-    ViewBag.Title = errorInfo.Length > 0 ? "Error" : nuevo  ? "Registro" : "Modificar";
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
     OMIstats.Models.TipoOlimpiada tipo = ViewBag.tipo;
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
-    bool registroActivo = ViewBag.registroActivo;
-    bool esSede = estado != null && omi.claveEstado == estado.clave;
     OMIstats.Models.MiembroDelegacion md = ViewBag.md;
-    string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
-    string claveCompetidor = ViewBag.claveOriginal;
-    OMIstats.Models.TipoOlimpiada tipoOriginal = ViewBag.tipoOriginal;
     OMIstats.Models.MiembroDelegacion.TipoAsistente tipoAsistente = ViewBag.tipoAsistente;
     bool hayResultados = ViewBag.hayResultados;
-    bool puedeCambiarSelects = nuevo || !hayResultados;
-    bool mostrarClaveCbo = !hayResultados &&
-                            (tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
-                            (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL 
-                            && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL));
     string claveDisponible = ViewBag.claveDisponible;
     bool resubmit = ViewBag.resubmit;
-    bool puedeCambiarConPermisos = puedeCambiarSelects && usuario.esSuperUsuario();
     bool guardado = ViewBag.guardado;
-    bool mostrarEscuela = (md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) ||
-                           (nuevo && !usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
     List<OMIstats.Ajax.BuscarEscuelas> escuelas = ViewBag.escuelas;
     string nombreEscuela = ViewBag.nombreEscuela;
     int claveEscuela = ViewBag.claveEscuela;
     int añoEscuela = ViewBag.añoEscuela;
     string nivelEscuela = ViewBag.nivelEscuela;
-    bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
     bool escuelaPublica = ViewBag.publica;
+
+    // Variables temporales para facilitar el resto del archivo
+    bool nuevo = md == null;
+    ViewBag.Title = errorInfo.Length > 0 ? "Error" : nuevo ? "Registro" : "Modificar";
+    bool esSede = estado != null && omi.claveEstado == estado.clave;
+    string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
+    bool puedeCambiarSelects = nuevo || !hayResultados;
+    bool mostrarClaveCbo = !hayResultados &&
+                            (tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
+                            (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL
+                            && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL));
+    bool puedeCambiarConPermisos = puedeCambiarSelects && usuario.esSuperUsuario();
+    bool mostrarEscuela = (md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) ||
+                       (nuevo && !usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL);
+    bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
+    string claveCompetidor = md == null ? "" : md.clave;
+    OMIstats.Models.TipoOlimpiada tipoOriginal = md == null ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
 }
 
 @section AddToHead
