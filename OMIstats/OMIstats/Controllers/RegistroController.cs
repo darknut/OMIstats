@@ -252,33 +252,33 @@ namespace OMIstats.Controllers
         //
         // POST: /Registro/Asistente
         [HttpPost]
-        public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipo, string tipoAsistente,
-            string tipoOriginal, string estado, string claveSelect, string persona, string claveOriginal,
-            int selectEscuela, string nombreEscuela, int selectAnioEscolar, bool selectPublica = true,
-            Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL)
+        public ActionResult Asistente(HttpPostedFileBase file, Persona p, string omi, string tipoOriginal,
+            string estado, string claveSelect, int persona, string claveOriginal,
+            int selectEscuela = 0, string nombreEscuela = null, int selectAnioEscolar = 0,
+            Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL,
+            TipoOlimpiada tipo = TipoOlimpiada.NULL, bool selectPublica = true,
+            MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL)
         {
             // Se valida que el usuario tenga permiso para realizar esta acción
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null)
+            if (String.IsNullOrEmpty(estado) ||
+                tipo == TipoOlimpiada.NULL ||
+                tipoAsistente == MiembroDelegacion.TipoAsistente.NULL ||
+                o == null)
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
-            if (String.IsNullOrEmpty(estado) ||
-                String.IsNullOrEmpty(tipo) ||
-                String.IsNullOrEmpty(tipoAsistente) ||
-                !tienePermisos(o.registroActivo, estado))
+            if (!tienePermisos(o.registroActivo, estado))
             {
                 ViewBag.errorInfo = "permisos";
                 return View(new Persona());
             }
 
             // Se valida que haya espacio para registrar otro competidor
-            MiembroDelegacion.TipoAsistente asistente = EnumParser.ToTipoAsistente(tipoAsistente);
-            TipoOlimpiada tipoOlimpiada = EnumParser.ToTipoOlimpiada(tipo);
             if (!esAdmin() &&
                  String.IsNullOrEmpty(claveOriginal) &&
-                 asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
-                 !puedeRegistrarOtroMas(o, tipoOlimpiada, estado))
+                 tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
+                 !puedeRegistrarOtroMas(o, tipo, estado))
             {
                 ViewBag.errorInfo = "limite";
                 return View(new Persona());
@@ -312,10 +312,10 @@ namespace OMIstats.Controllers
 
             // Se valida que la clave que se eligió sea valida para el estado
             Estado e = Estado.obtenerEstadoConClave(estado);
-            if (claveSelect != null && asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !claveSelect.StartsWith(e.ISO))
+            if (claveSelect != null && tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !claveSelect.StartsWith(e.ISO))
                 claveSelect = "";
-            if (persona != "0")
-                p.clave = int.Parse(persona);
+            if (persona != 0)
+                p.clave = persona;
 
             // Se regresan todos los valores al viewbag en caso de error
             ViewBag.claveDisponible = claveSelect;
@@ -323,18 +323,18 @@ namespace OMIstats.Controllers
             ViewBag.md = md;
             ViewBag.nuevo = String.IsNullOrEmpty(claveOriginal);
             ViewBag.omi = o;
-            ViewBag.tipo = tipoOlimpiada;
+            ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
-            ViewBag.tipoAsistente = asistente;
+            ViewBag.tipoAsistente = tipoAsistente;
             ViewBag.claveOriginal = claveOriginal;
             ViewBag.tipoOriginal = tipoO;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
             bool hayResultados = Resultados.hayResultadosParaOMI(o.numero);
             ViewBag.hayResultados = hayResultados;
-            if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
-                ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipoOlimpiada, estado);
+                ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipo, estado);
                 ViewBag.claveEscuela = selectEscuela;
                 ViewBag.añoEscuela = selectAnioEscolar;
                 ViewBag.nivelEscuela = selectNivelEscolar.ToString();
@@ -377,7 +377,7 @@ namespace OMIstats.Controllers
             if (md == null)
             {
                 // Nuevo asistente
-                if (persona == "0")
+                if (persona == 0)
                 {
                     // Si no hay clave de persona previa, se agrega una nueva persona
                     p.nuevoUsuario();
@@ -385,7 +385,7 @@ namespace OMIstats.Controllers
                 else
                 {
                     // Si tengo clave, se intenta conseguir
-                    Persona per = Persona.obtenerPersonaConClave(int.Parse(persona));
+                    Persona per = Persona.obtenerPersonaConClave(persona);
                     if (per == null)
                     {
                         ViewBag.errorInfo = "persona";
@@ -395,18 +395,16 @@ namespace OMIstats.Controllers
                     p.clave = per.clave;
                 }
 
-                string fotoURL = guardaFoto(file, p.clave);
-                if (!String.IsNullOrEmpty(fotoURL))
-                    p.foto = fotoURL;
+                p.foto = guardaFoto(file, p.clave);
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
 
                 // Se genera un nuevo miembro delegacion
                 md = new MiembroDelegacion();
                 md.olimpiada = o.numero;
-                md.tipoOlimpiada = tipoOlimpiada;
+                md.tipoOlimpiada = tipo;
                 md.estado = estado;
                 md.clave = claveSelect;
-                md.tipo = asistente;
+                md.tipo = tipoAsistente;
                 md.claveUsuario = p.clave;
                 md.nuevo();
 
@@ -420,15 +418,15 @@ namespace OMIstats.Controllers
                 // Si ya hay resultados no podemos cambiar la clave, estado, o tipo de OMI
                 if (hayResultados)
                 {
-                    tipoOlimpiada = md.tipoOlimpiada;
+                    tipo = md.tipoOlimpiada;
                     claveSelect = md.clave;
                     estado = md.estado;
 
                     // Adicionalmente si es competidor, no se piuede cambiar su tipo de asistencia
                     // ni volver a alguien mas competidor
                     if (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR ||
-                        asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
-                        asistente = md.tipo;
+                        tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                        tipoAsistente = md.tipo;
                 }
 
                 // Modificando asistente
@@ -439,10 +437,10 @@ namespace OMIstats.Controllers
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
 
                 // Luego el miembro delegacion
-                md.tipoOlimpiada = tipoOlimpiada;
+                md.tipoOlimpiada = tipo;
                 md.estado = estado;
                 md.clave = claveSelect;
-                md.tipo = asistente;
+                md.tipo = tipoAsistente;
                 md.guardarDatos(claveOriginal, tipoO);
 
                 // Se registra la telemetria
@@ -452,7 +450,7 @@ namespace OMIstats.Controllers
             }
 
             // Ahora se guarda la escuela
-            if (asistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 // La escuela ya se consultó en la sección de viewbag, si es null, se llenó la sección de escuela nueva
                 if (i == null)

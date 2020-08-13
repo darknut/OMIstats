@@ -42,6 +42,11 @@ function setUpSearch(tipo) {
             callServer("Buscar", getDataSearch(""), handleAjax, handleError);
         }
     }
+    if (!updating && document.getElementById("persona").value != 0) {
+        disableCampo("nombre");
+        disableCampo("apellidoPaterno");
+        disableCampo("apellidoMaterno");
+    }
 }
 
 function generaOpcion(text, value) {
@@ -151,6 +156,10 @@ function personaSeleccionada(a) {
         anioEscuela = persona.anioEscuela;
         nivelEscuela = persona.nivelEscuela;
     }
+
+    disableCampo("nombre");
+    disableCampo("apellidoPaterno");
+    disableCampo("apellidoMaterno");
 
     var button = document.getElementById("botonGuardar");
     button.focus();
@@ -288,6 +297,14 @@ function reEnable(campo) {
     }
 }
 
+function disableCampo(campo) {
+    var obj = document.getElementById(campo);
+    if (!obj.disabled) {
+        obj.disabled = true;
+        obj.classList.add("mockDisabled");
+    }
+}
+
 function validar() {
     if (revisaNoVacio("tipoAsistente"))
         return false;
@@ -322,6 +339,9 @@ function validar() {
     reEnable("tipoAsistente");
     reEnable("estado");
     reEnable("tipo");
+    reEnable("nombre");
+    reEnable("apellidoPaterno");
+    reEnable("apellidoMaterno");
 
     setVisible("loading", true);
     return true;
