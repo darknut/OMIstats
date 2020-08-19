@@ -101,7 +101,13 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Buscar(string omi, TipoOlimpiada tipo, string query, string estado)
         {
-            return Json(MiembroDelegacion.buscarParaRegistro(omi, tipo, estado, query));
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                Json("error");
+
+            Persona p = getUsuario();
+
+            return Json(MiembroDelegacion.buscarParaRegistro(omi, tipo, estado, query, p.esSuperUsuario()));
         }
 
         //
@@ -130,6 +136,10 @@ namespace OMIstats.Controllers
             if (md.estado != estado)
                 return RedirectTo(Pagina.HOME);
             md.borrarMiembroDelegacion();
+
+            // Se registra la telemetria
+            Log.add(Log.TipoLog.REGISTRO, "Usuario " + getUsuario().nombreCompleto + " elimino al asistente con clave " +
+                md.clave + " del estado " + md.estado + " en la categoría " + md.tipoOlimpiada.ToString());
 
             return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
         }

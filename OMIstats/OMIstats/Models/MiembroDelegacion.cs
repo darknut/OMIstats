@@ -1095,7 +1095,7 @@ namespace OMIstats.Models
             return lineas.ToString();
         }
 
-        public static List<OMIstats.Ajax.BuscarPersonas> buscarParaRegistro(string omi, TipoOlimpiada tipo, string estado, string input)
+        public static List<OMIstats.Ajax.BuscarPersonas> buscarParaRegistro(string omi, TipoOlimpiada tipo, string estado, string input, bool esSuperUsuario)
         {
             List<OMIstats.Ajax.BuscarPersonas> personas = new List<OMIstats.Ajax.BuscarPersonas>();
 
@@ -1164,11 +1164,12 @@ namespace OMIstats.Models
             {
                 query.Append(" select top 11 * from Persona where search like ");
                 query.Append(Cadenas.comillas("%" + input + "%"));
-                query.Append(" and clave not in ( select persona from MiembroDelegacion where olimpiada = ");
-                query.Append(Cadenas.comillas(omi));
-                query.Append(" and estado = ");
-                query.Append(Cadenas.comillas(estado));
-                query.Append(")");
+                if (!esSuperUsuario)
+                {
+                    query.Append(" and clave not in ( select persona from MiembroDelegacion where olimpiada = ");
+                    query.Append(Cadenas.comillas(omi));
+                    query.Append(")");
+                }
 
                 db.EjecutarQuery(query.ToString());
                 DataTable table = db.getTable();
@@ -1180,8 +1181,10 @@ namespace OMIstats.Models
                         p.llenarDatos(r, completo: false);
 
                         MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(p.clave);
-                        if (md.olimpiada == omi)
-                            continue;
+
+                        if (md.estado == estado || esSuperUsuario)
+                            p.llenarDatos(r, completo: true, incluirDatosPrivados: true);
+
                         if (md.tipo == TipoAsistente.COMPETIDOR)
                         {
                             Olimpiada om = Olimpiada.obtenerOlimpiadaConClave(md.olimpiada, md.tipoOlimpiada);
