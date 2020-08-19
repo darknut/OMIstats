@@ -847,9 +847,11 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             MiembroDelegacion md = new MiembroDelegacion();
 
-            query.Append(" select * from MiembroDelegacion where persona = ");
+            query.Append(" select md.* from MiembroDelegacion as md  ");
+            query.Append(" inner join olimpiada as o on o.numero = md.olimpiada  ");
+            query.Append(" where md.persona =  ");
             query.Append(persona);
-            query.Append(" order by olimpiada desc ");
+            query.Append(" order by o.año desc ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -1178,6 +1180,8 @@ namespace OMIstats.Models
                         p.llenarDatos(r, completo: false);
 
                         MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(p.clave);
+                        if (md.olimpiada == omi)
+                            continue;
                         if (md.tipo == TipoAsistente.COMPETIDOR)
                         {
                             Olimpiada om = Olimpiada.obtenerOlimpiadaConClave(md.olimpiada, md.tipoOlimpiada);
