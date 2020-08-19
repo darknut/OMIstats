@@ -109,7 +109,14 @@
         {
     <tr><td>
         <a onclick="iniciaRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
-    </td></tr>
+    </td>
+        @if (usuario.esSuperUsuario())
+        {
+            <td>
+            @Html.ActionLink("Bajar csv", "GetCSV", "Registro", new { omi = omi.numero }, new { })
+            </td>
+        }
+    </tr>
         }
     }
     if (usuario.esSuperUsuario())

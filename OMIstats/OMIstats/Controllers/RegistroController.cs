@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Text;
 using OMIstats.Models;
 using OMIstats.Utilities;
 
@@ -515,6 +516,32 @@ namespace OMIstats.Controllers
             int maxUsuarios = o.getMaxParticipantesDeEstado(estado);
             List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosDelegacion(o.numero, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR);
             return (mds.Count < maxUsuarios);
+        }
+
+        //
+        // GET: /Registro/GetCSV/
+
+        public ActionResult GetCSV(string omi)
+        {
+            Persona p = getUsuario();
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (!p.esSuperUsuario() || o == null)
+                return RedirectTo(Pagina.HOME);
+
+            StringBuilder texto = new StringBuilder();
+            texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true, incluirCabeceras: true));
+            o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIP);
+            if (o != null)
+            {
+                texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true));
+            }
+            o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIS);
+            if (o != null)
+            {
+                texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true));
+            }
+
+            return File(Archivos.creaArchivoTexto(texto.ToString()), "text/csv", "asistentes.csv");
         }
     }
 }

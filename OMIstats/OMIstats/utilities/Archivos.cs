@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.IO.Compression;
+using System.Text;
 
 namespace OMIstats.Utilities
 {
@@ -245,6 +246,11 @@ namespace OMIstats.Utilities
             }
 
             return bytes;
+        }
+
+        public static byte[] creaArchivoTexto(string texto)
+        {
+            return Encoding.UTF8.GetBytes(texto);
         }
     }
 }

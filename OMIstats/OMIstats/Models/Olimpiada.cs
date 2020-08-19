@@ -631,16 +631,30 @@ namespace OMIstats.Models
         /// para la edición manual para admins
         /// </summary>
         /// <returns>La tabla tabulada con comas</returns>
-        public string obtenerTablaAsistentes(bool incluirDatosPrivados = false)
+        public string obtenerTablaAsistentes(bool esParaRegistro = false, bool incluirCabeceras = false)
         {
             List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada);
 
             StringBuilder tabla = new StringBuilder();
 
+            if (incluirCabeceras)
+            {
+                // Incluimos cabeceras de datos
+                tabla.Append("nivel omi, nombre, estado, tipo asistente, clave, fecha nacimiento, ");
+                tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada,  ");
+                tabla.Append(" celular, telefono, direccion, omegaup, emergencia, parentesco, ");
+                tabla.Append(" telefono emergencia, medicina, alergias\n");
+            }
+
             foreach (MiembroDelegacion asistente in asistentes)
             {
-                tabla.Append(asistente.obtenerLineaAdmin());
-                if (incluirDatosPrivados)
+                if (esParaRegistro)
+                {
+                    tabla.Append(tipoOlimpiada);
+                    tabla.Append(",");
+                }
+                tabla.Append(asistente.obtenerLineaAdmin(incluirUsuario: !esParaRegistro));
+                if (esParaRegistro)
                 {
                     Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
                     tabla.Append(p.obtenerLineaAdmin());
