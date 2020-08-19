@@ -631,7 +631,7 @@ namespace OMIstats.Models
         /// para la edición manual para admins
         /// </summary>
         /// <returns>La tabla tabulada con comas</returns>
-        public string obtenerTablaAsistentes()
+        public string obtenerTablaAsistentes(bool incluirDatosPrivados = false)
         {
             List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada);
 
@@ -640,6 +640,11 @@ namespace OMIstats.Models
             foreach (MiembroDelegacion asistente in asistentes)
             {
                 tabla.Append(asistente.obtenerLineaAdmin());
+                if (incluirDatosPrivados)
+                {
+                    Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
+                    tabla.Append(p.obtenerLineaAdmin());
+                }
                 tabla.Append("\n");
             }
 

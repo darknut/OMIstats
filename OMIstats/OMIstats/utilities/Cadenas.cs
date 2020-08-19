@@ -9,11 +9,11 @@ namespace OMIstats.Utilities
 {
     public class Cadenas
     {
-        public static string comillas(string cadena)
+        public static string comillas(string cadena, string comilla = "\'")
         {
             if (String.IsNullOrEmpty(cadena))
-                return "''";
-            return "\'" + cadena.Replace("\'", "\'\'") + "\'";
+                return comilla + comilla;
+            return comilla + cadena.Replace(comilla, comilla + comilla) + comilla;
         }
 
         /// <summary>

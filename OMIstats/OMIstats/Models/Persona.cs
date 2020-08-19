@@ -819,5 +819,36 @@ namespace OMIstats.Models
 
             }
         }
+
+        /// <summary>
+        /// Regresa los datos en este objeto como un string separado por comas
+        /// con los datos privados del usuario
+        /// </summary>
+        /// <returns>Los datos separados por coma</returns>
+        public string obtenerLineaAdmin()
+        {
+            StringBuilder s = new StringBuilder();
+
+            s.Append(", ");
+            s.Append(celular);
+            s.Append(", ");
+            s.Append(telefono);
+            s.Append(", ");
+            s.Append(Cadenas.comillas(direccion, "\""));
+            s.Append(", ");
+            s.Append(omegaup);
+            s.Append(", ");
+            s.Append(emergencia);
+            s.Append(", ");
+            s.Append(parentesco);
+            s.Append(", ");
+            s.Append(telEmergencia);
+            s.Append(", ");
+            s.Append(medicina);
+            s.Append(", ");
+            s.Append(alergias);
+
+            return s.ToString();
+        }
     }
 }
