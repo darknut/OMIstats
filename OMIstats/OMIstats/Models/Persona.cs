@@ -373,7 +373,7 @@ namespace OMIstats.Models
                 query.Append(",");
 
                 query.Append(" search = ");
-                query.Append(Cadenas.comillas(Cadenas.quitaEspeciales(nombre + apellidoPaterno + apellidoMaterno)));
+                query.Append(Cadenas.comillas(Cadenas.quitaEspeciales(nombre + " " + apellidoPaterno + " " + apellidoMaterno)));
                 query.Append(",");
             }
 

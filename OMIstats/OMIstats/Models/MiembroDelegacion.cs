@@ -1253,8 +1253,12 @@ namespace OMIstats.Models
         public void calculaNuevoNivel(int delta)
         {
             añoEscuela += delta;
-            Institucion i = Institucion.obtenerInstitucionConClave(claveEscuela);
-            nombreEscuela = i.nombre;
+            Institucion i = null;
+            if (claveEscuela > 0)
+            {
+                i = Institucion.obtenerInstitucionConClave(claveEscuela);
+                nombreEscuela = i.nombre;
+            }
             while (true)
             {
                 switch (nivelEscuela)
@@ -1279,7 +1283,7 @@ namespace OMIstats.Models
                             }
                             else
                             {
-                                if (!i.secundaria)
+                                if (i != null && !i.secundaria)
                                 {
                                     nombreEscuela = "";
                                     claveEscuela = 0;
@@ -1296,7 +1300,7 @@ namespace OMIstats.Models
                                 nombreEscuela = "";
                                 claveEscuela = 0;
                             }
-                            else if (!i.preparatoria)
+                            else if (i != null && !i.preparatoria)
                             {
                                 nombreEscuela = "";
                                 claveEscuela = 0;
