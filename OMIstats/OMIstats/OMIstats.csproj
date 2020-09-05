@@ -209,6 +209,7 @@
     <Compile Include="Models\Problema.cs" />
     <Compile Include="Models\Resultados.cs" />
     <Compile Include="Models\SearchResult.cs" />
+    <Compile Include="Models\SedeOnline.cs" />
     <Compile Include="Models\TipoOlimpiada.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="utilities\Acceso.cs" />

@@ -98,6 +98,13 @@ else
                 </div>
 
                 <div>
+                    <div class="label">Registro de sedes activo:</div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.registroSedes)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">Estados participantes:</div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.estados)

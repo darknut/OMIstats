@@ -107,6 +107,8 @@ namespace OMIstats.Models
 
         public bool esOnline { get; set; }
 
+        public bool registroSedes { get; set; }
+
         public float media
         {
             get
@@ -277,6 +279,7 @@ namespace OMIstats.Models
             puntosDetallados = false;
             diplomasOnline = false;
             esOnline = false;
+            registroSedes = false;
 
             liveResults = false;
         }
@@ -385,6 +388,7 @@ namespace OMIstats.Models
             registroActivo = (bool)datos["registroActivo"];
             diplomasOnline = (bool)datos["diplomasOnline"];
             esOnline = (bool)datos["esOnline"];
+            registroSedes = (bool)datos["registroSedes"];
 
             claveEstado = datos["estado"].ToString().Trim();
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -549,6 +553,8 @@ namespace OMIstats.Models
             query.Append(diplomasOnline ? 1 : 0);
             query.Append(", esOnline = ");
             query.Append(esOnline ? 1 : 0);
+            query.Append(", registroSedes = ");
+            query.Append(registroSedes ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Cadenas.comillas(clave));
             query.Append(" and clase = ");
@@ -600,6 +606,7 @@ namespace OMIstats.Models
             omi.registroActivo = this.registroActivo;
             omi.diplomasOnline = this.diplomasOnline;
             omi.esOnline = this.esOnline;
+            omi.registroSedes = this.registroSedes;
 
             omi.guardarDatos(clave);
         }
