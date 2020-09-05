@@ -11,9 +11,9 @@ namespace OMIstats.Models
 {
     public class SedeOnline
     {
-        int clave;
-        string estado;
-        string omi;
+        public int clave;
+        public string estado;
+        public string omi;
 
         [Required(ErrorMessage = "Escribe el nombre")]
         [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el nombre")]
@@ -25,10 +25,12 @@ namespace OMIstats.Models
         [MaxLength(200, ErrorMessage = "El tamaño máximo es 200 caracteres")]
         public string supervisor { get; set; }
 
+        [Required(ErrorMessage = "Escribe el teléfono")]
         [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
         [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
         public string telefono { get; set; }
 
+        [Required(ErrorMessage = "Escribe el correo electrónico")]
         [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Escribe un correo electrónico válido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string correo { get; set; }

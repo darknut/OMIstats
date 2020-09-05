@@ -125,3 +125,12 @@
     }
 }
 </table>
+
+@if (omi.esOnline)
+{
+<h1 class="titulo">Sedes</h1>
+    if (omi.registroSedes && !usuario.esSuperUsuario())
+    {
+        @Html.ActionLink("Agregar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
+    }
+}

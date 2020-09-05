@@ -543,5 +543,61 @@ namespace OMIstats.Controllers
 
             return File(Archivos.creaArchivoTexto(texto.ToString()), "text/csv", "asistentes.csv");
         }
+
+        //
+        // GET: /Registro/Sede
+
+        public ActionResult Sede(string omi, string estado)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            failSafeViewBag();
+            Persona p = getUsuario();
+            if (!p.esSuperUsuario() && !o.registroSedes)
+            {
+                ViewBag.errorInfo = "permisos";
+                return View(new SedeOnline());
+            }
+
+            ViewBag.omi = o;
+            ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+
+            return View(new SedeOnline());
+        }
+
+        //
+        // Post: /Registro/Sede
+
+        [HttpPost]
+        public ActionResult Sede(SedeOnline sede, int clave, string omi, string estado)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            failSafeViewBag();
+            Persona p = getUsuario();
+            if (!p.esSuperUsuario() && !o.registroSedes)
+            {
+                ViewBag.errorInfo = "permisos";
+                return View(new SedeOnline());
+            }
+
+            sede.omi = omi;
+            sede.estado = estado;
+            ViewBag.omi = o;
+            ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+
+            // Validaciones del modelo
+            if (!ModelState.IsValid)
+                return View(sede);
+
+            sede.nuevo();
+            ViewBag.guardado = true;
+
+            return View(sede);
+        }
     }
 }

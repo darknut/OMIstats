@@ -184,3 +184,8 @@
     border-color: #CCCCCC;
     background-color: white;
 }
+
+.tiny-text {
+    font-style: italic;
+    font-size: 10pt;
+}
