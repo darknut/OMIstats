@@ -172,7 +172,7 @@
            {
         <td>
             @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave }, new { })
-            @if (miembrosPorSede[sedes[i].clave].Count != 0)
+            @if (miembrosPorSede[sedes[i].clave].Count == 0)
             {
             <a onclick="eliminarSede(@sedes[i].clave, '@sedes[i].nombre')" class="a-sin-href">Eliminar</a>
             }

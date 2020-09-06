@@ -595,10 +595,10 @@ namespace OMIstats.Controllers
         // Post: /Registro/Sede
 
         [HttpPost]
-        public ActionResult Sede(SedeOnline sede, int clave, string omi, string estado)
+        public ActionResult Sede(SedeOnline sede)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(sede.omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, sede.estado))
                 return RedirectTo(Pagina.HOME);
 
             failSafeViewBag();
@@ -609,21 +609,18 @@ namespace OMIstats.Controllers
                 ViewBag.errorInfo = "permisos";
                 return View(new SedeOnline());
             }
-            if (clave > 0)
+            if (sede.clave > 0)
             {
-                SedeOnline so = SedeOnline.obtenerSedeConClave(clave);
-                if (so == null || so.estado != estado && !p.esSuperUsuario())
+                SedeOnline so = SedeOnline.obtenerSedeConClave(sede.clave);
+                if (so == null || so.estado != sede.estado && !p.esSuperUsuario())
                 {
                     ViewBag.errorInfo = "permisos";
                     return View(new SedeOnline());
                 }
             }
 
-            sede.clave = clave;
-            sede.omi = omi;
-            sede.estado = estado;
             ViewBag.omi = o;
-            ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+            ViewBag.estado = Estado.obtenerEstadoConClave(sede.estado);
 
             // Validaciones del modelo
             if (!ModelState.IsValid)
@@ -632,7 +629,7 @@ namespace OMIstats.Controllers
             sede.guardar();
             ViewBag.guardado = true;
 
-            if (clave == 0)
+            if (sede.clave == 0)
                 Log.add(Log.TipoLog.REGISTRO, "Usuario " + p.nombreCompleto + " agregó sede " + sede.nombre + " en el estado " + sede.estado);
             else
                 Log.add(Log.TipoLog.REGISTRO, "Usuario " + p.nombreCompleto + " actualizó sede " + sede.nombre + " en el estado " + sede.estado);

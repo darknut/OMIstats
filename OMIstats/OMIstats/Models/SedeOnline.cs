@@ -11,9 +11,9 @@ namespace OMIstats.Models
 {
     public class SedeOnline
     {
-        public int clave;
-        public string estado;
-        public string omi;
+        public int clave { get; set; }
+        public string estado { get; set; }
+        public string omi { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre")]
         [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
