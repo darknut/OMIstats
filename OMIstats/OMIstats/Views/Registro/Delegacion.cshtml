@@ -5,6 +5,7 @@
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
     List<OMIstats.Models.SedeOnline> sedes = ViewBag.sedes;
+    Dictionary<int, List<OMIstats.Models.MiembroDelegacion>> miembrosPorSede = ViewBag.miembrosPorSede;
     bool registroActivo = ViewBag.registroActivo;
     int competidoresProcesados = 0;
     string lastEstado = "";
@@ -167,18 +168,25 @@
         <td class="lineas-registro">@sedes[i].telefono</td>
         <td class="lineas-registro">@sedes[i].correo</td>
            }
-           @if (usuario.esSuperUsuario() || omi.registroSedes)
+           @if (usuario.esAdmin() || (!usuario.esSuperUsuario() && omi.registroSedes))
            {
         <td>
-            @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave, clave = sedes[i].clave }, new { })
+            @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave }, new { })
+            @if (miembrosPorSede[sedes[i].clave].Count != 0)
+            {
             <a onclick="eliminarSede(@sedes[i].clave, '@sedes[i].nombre')" class="a-sin-href">Eliminar</a>
+            }
+            else
+            {
+            <a class="desabilitado" title="Para borrar esta sede primero reasigne a los alumnos de esta sede">Eliminar</a>
+            }
         </td>
            }
     </tr>
         }
 </table>
     }
-    if (omi.registroSedes && !usuario.esSuperUsuario())
+    if (!usuario.esSuperUsuario() && omi.registroSedes)
     {
         @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
     }

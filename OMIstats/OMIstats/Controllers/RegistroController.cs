@@ -95,7 +95,15 @@ namespace OMIstats.Controllers
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
             if (o.esOnline)
             {
-                ViewBag.sedes = SedeOnline.obtenerSedes(omi, estado);
+                List<SedeOnline> sedes = SedeOnline.obtenerSedes(omi, p.esSuperUsuario() ? null : estado);
+                Dictionary<int, List<MiembroDelegacion>> miembrosPorSede = new Dictionary<int, List<MiembroDelegacion>>();
+                foreach (SedeOnline sede in sedes)
+                {
+                    List<MiembroDelegacion> miembrosEnSede = MiembroDelegacion.obtenerMiembrosEnSede(sede.clave);
+                    miembrosPorSede.Add(sede.clave, miembrosEnSede);
+                }
+                ViewBag.miembrosPorSede = miembrosPorSede;
+                ViewBag.sedes = sedes;
             }
             return View(registrados);
         }
@@ -556,6 +564,7 @@ namespace OMIstats.Controllers
             failSafeViewBag();
             Persona p = getUsuario();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+
             if (o == null || !tienePermisos(o.registroActivo, estado) ||
                 (!p.esSuperUsuario() && !o.registroSedes))
             {
@@ -567,18 +576,17 @@ namespace OMIstats.Controllers
             if (clave > 0)
             {
                 so = SedeOnline.obtenerSedeConClave(clave);
-                if (so.estado != estado && !p.esSuperUsuario())
+                if (so == null || so.estado != estado && !p.esSuperUsuario())
                 {
                     ViewBag.errorInfo = "permisos";
                     return View(new SedeOnline());
                 }
             }
 
-            if (so == null)
-                so = new SedeOnline();
-
             ViewBag.omi = o;
             ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+            if (so == null)
+                so = new SedeOnline();
 
             return View(so);
         }
@@ -595,6 +603,7 @@ namespace OMIstats.Controllers
 
             failSafeViewBag();
             Persona p = getUsuario();
+
             if (!p.esSuperUsuario() && !o.registroSedes)
             {
                 ViewBag.errorInfo = "permisos";
@@ -603,7 +612,7 @@ namespace OMIstats.Controllers
             if (clave > 0)
             {
                 SedeOnline so = SedeOnline.obtenerSedeConClave(clave);
-                if (so.estado != estado && !p.esSuperUsuario())
+                if (so == null || so.estado != estado && !p.esSuperUsuario())
                 {
                     ViewBag.errorInfo = "permisos";
                     return View(new SedeOnline());
@@ -623,7 +632,40 @@ namespace OMIstats.Controllers
             sede.guardar();
             ViewBag.guardado = true;
 
+            if (clave == 0)
+                Log.add(Log.TipoLog.REGISTRO, "Usuario " + p.nombreCompleto + " agregó sede " + sede.nombre + " en el estado " + sede.estado);
+            else
+                Log.add(Log.TipoLog.REGISTRO, "Usuario " + p.nombreCompleto + " actualizó sede " + sede.nombre + " en el estado " + sede.estado);
+
             return View(sede);
+        }
+
+        //
+        // GET: /Registro/EliminarSede
+
+        public ActionResult EliminarSede(int clave)
+        {
+            SedeOnline so = SedeOnline.obtenerSedeConClave(clave);
+            Persona p = getUsuario();
+            Olimpiada o = null;
+            if (so != null)
+                o = Olimpiada.obtenerOlimpiadaConClave(so.omi, TipoOlimpiada.OMI);
+
+            if (so == null || !tienePermisos(o.registroActivo, so.estado) ||
+                (!p.esSuperUsuario() && !o.registroSedes))
+                return RedirectTo(Pagina.HOME);
+
+            List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosEnSede(clave);
+            if (miembros.Count > 0)
+                return RedirectTo(Pagina.HOME);
+
+            so.borrar();
+
+            // Se registra la telemetria
+            Log.add(Log.TipoLog.REGISTRO, "Usuario " + getUsuario().nombreCompleto + " elimino la sede " +
+                so.nombre + " del estado " + so.estado);
+
+            return RedirectTo(Pagina.REGISTRO, new { omi = so.omi, estado = so.estado });
         }
     }
 }

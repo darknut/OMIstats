@@ -1255,6 +1255,31 @@ namespace OMIstats.Models
 
             return "";
         }
+
+        public static List<MiembroDelegacion> obtenerMiembrosEnSede(int sede)
+        {
+            List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from miembrodelegacion ");
+            query.Append(" where sede = ");
+            query.Append(sede);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r, incluirPersona: false, incluirEscuela: false);
+
+                lista.Add(md);
+            }
+
+            return lista;
+        }
+
 #if OMISTATS
         /// <summary>
         /// Devuelve un objeto institucion vacío, que incluye solo el nuevo nivel en que el alumno tiene que estar

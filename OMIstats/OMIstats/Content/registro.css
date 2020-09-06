@@ -189,3 +189,7 @@
     font-style: italic;
     font-size: 10pt;
 }
+
+.desabilitado {
+    color: gray;
+}

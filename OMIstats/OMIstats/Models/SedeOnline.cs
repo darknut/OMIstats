@@ -50,6 +50,7 @@ namespace OMIstats.Models
         {
             clave = (int)r["clave"];
             nombre = r["nombre"].ToString().Trim();
+            omi = r["olimpiada"].ToString().Trim();
             estado = r["estado"].ToString().Trim();
             supervisor = r["supervisor"].ToString().Trim();
             telefono = r["telefono"].ToString().Trim();
@@ -156,6 +157,17 @@ namespace OMIstats.Models
             }
 
             return so;
+        }
+
+        public void borrar()
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" delete SedeOnline where clave = ");
+            query.Append(clave);
+
+            db.EjecutarQuery(query.ToString());
         }
     }
 }
