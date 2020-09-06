@@ -183,3 +183,7 @@ a {
 .oculto {
     display:none;
 }
+
+.info-svg {
+    width: 12px;
+}

@@ -73,6 +73,10 @@
             }
         <td class="lineas-registro">
             @miembro.nombreAsistente
+            @if(usuario.esSuperUsuario() && miembro.permisosDelegado)
+            {
+            <img src="~/img/info.svg" title="Puede regsitrar" class="info-svg"/>
+            }
         </td>
         @if (usuario.esSuperUsuario())
         {

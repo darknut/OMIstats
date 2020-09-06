@@ -74,6 +74,7 @@ namespace OMIstats.Models
         public string genero;
         public string nombreEscuela;
         public bool escuelaPublica;
+        public bool permisosDelegado;
 #if OMISTATS
         public Institucion.NivelInstitucion nivelEscuela;
 #endif
@@ -917,7 +918,7 @@ namespace OMIstats.Models
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from MiembroDelegacion as md ");
+            query.Append(" select *, p.permisos from MiembroDelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
@@ -993,6 +994,7 @@ namespace OMIstats.Models
                     md.resultados = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave);
 
                 md.fotoUsuario = r["foto"].ToString().Trim();
+                md.permisosDelegado = EnumParser.ToTipoPermisos(r["permisos"].ToString()) == Persona.TipoPermisos.DELEGADO;
 
                 lista.Add(md);
             }
