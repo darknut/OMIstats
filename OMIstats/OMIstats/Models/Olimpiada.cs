@@ -650,7 +650,10 @@ namespace OMIstats.Models
                 tabla.Append("nivel omi, nombre, estado, tipo asistente, clave, fecha nacimiento, ");
                 tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada,  ");
                 tabla.Append(" celular, telefono, direccion, omegaup, emergencia, parentesco, ");
-                tabla.Append(" telefono emergencia, medicina, alergias\n");
+                tabla.Append(" telefono emergencia, medicina, alergias");
+                if (this.esOnline)
+                    tabla.Append(", sede");
+                tabla.Append("\n");
             }
 
             foreach (MiembroDelegacion asistente in asistentes)
@@ -665,6 +668,13 @@ namespace OMIstats.Models
                 {
                     Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
                     tabla.Append(p.obtenerLineaAdmin());
+                    if (this.esOnline)
+                    {
+                        tabla.Append(",");
+                        SedeOnline so = SedeOnline.obtenerSedeConClave(asistente.sede);
+                        if (so != null)
+                            tabla.Append(Cadenas.comillas(so.nombre, "\""));
+                    }
                 }
                 tabla.Append("\n");
             }
