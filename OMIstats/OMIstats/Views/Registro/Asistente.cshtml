@@ -20,6 +20,7 @@
     int añoEscuela = ViewBag.añoEscuela;
     string nivelEscuela = ViewBag.nivelEscuela;
     bool escuelaPublica = ViewBag.publica;
+    List<OMIstats.Models.SedeOnline> sedes = ViewBag.sedes;
 
     // Variables temporales para facilitar el resto del archivo
     bool nuevo = md == null;
@@ -289,7 +290,19 @@ if (md == null && !resubmit)
                     <div class="errorTextoRojo">El limite de tamaño para una imagen es 300KB</div>
                 }
         </div>
-        <div class="registro-single-control"></div>
+        <div class="registro-single-control">
+            @if (omi.esOnline && !usuario.esSuperUsuario())
+            {
+            <span class="control-title">Sede</span>
+            <select id="sede" name="sede" class="shiny-box">
+                <option value="0">--- Elige una sede ---</option>
+                @foreach (OMIstats.Models.SedeOnline sede in sedes)
+                {
+                <option value="@sede.clave" @(md.sede == sede.clave ? "selected" : "")>@sede.nombre</option>
+                }
+            </select>
+            }
+        </div>
     </div>
 </div>
 </div>
@@ -354,7 +367,7 @@ if (md == null && !resubmit)
                 <option value="1" @(añoEscuela == 1 ? "selected" : "")>1°</option>
                 <option value="2" @(añoEscuela == 2 ? "selected" : "")>2°</option>
                 <option value="3" @(añoEscuela == 3 ? "selected" : "")>3°</option>
-                @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP)
+                @if (md.nivelEscuela == OMIstats.Models.Institucion.NivelInstitucion.PRIMARIA)
                 {
                 <option value="4" @(añoEscuela == 4 ? "selected" : "")>4°</option>
                 <option value="5" @(añoEscuela == 5 ? "selected" : "")>5°</option>

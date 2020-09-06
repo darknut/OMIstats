@@ -18,12 +18,12 @@
 @if (guardado)
 {
     <div> Se han guardado los datos con éxito </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro")
+    @Html.ActionLink("Volver", "Select", "Registro")
 }
 else if (errorInfo == "permisos")
 {
     <div class="errorTextoRojo"> No tienes permisos para realizar esta acción o el registro ya terminó</div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro")
+    @Html.ActionLink("Volver", "Select", "Registro")
 } else {
 <form name="sede" id="sede" action="~/Registro/Sede" method="post" enctype="multipart/form-data">
 <div class="panel panel-green datos-padding">

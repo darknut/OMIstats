@@ -246,6 +246,10 @@ namespace OMIstats.Controllers
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+            if (o.esOnline && !p.esSuperUsuario())
+            {
+                ViewBag.sedes = SedeOnline.obtenerSedes(o.numero, estado);
+            }
 
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
             p.breakNombre();
@@ -273,7 +277,7 @@ namespace OMIstats.Controllers
             int selectEscuela = 0, string nombreEscuela = null, int selectAnioEscolar = 0,
             Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL,
             TipoOlimpiada tipo = TipoOlimpiada.NULL, bool selectPublica = true,
-            MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL)
+            MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL, int sede = -1)
         {
             // Se valida que el usuario tenga permiso para realizar esta acción
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
@@ -345,6 +349,10 @@ namespace OMIstats.Controllers
             ViewBag.resubmit = true;
             bool hayResultados = Resultados.hayResultadosParaOMI(o.numero);
             ViewBag.hayResultados = hayResultados;
+            if (o.esOnline && !p.esSuperUsuario())
+            {
+                ViewBag.sedes = SedeOnline.obtenerSedes(o.numero, estado);
+            }
             if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipo, estado);
@@ -419,6 +427,7 @@ namespace OMIstats.Controllers
                 md.clave = claveSelect;
                 md.tipo = tipoAsistente;
                 md.claveUsuario = p.clave;
+                md.sede = sede;
                 md.nuevo();
 
                 // Se registra la telemetria
@@ -454,6 +463,7 @@ namespace OMIstats.Controllers
                 md.estado = estado;
                 md.clave = claveSelect;
                 md.tipo = tipoAsistente;
+                md.sede = sede;
                 md.guardarDatos(claveOriginal, tipoO);
 
                 // Se registra la telemetria

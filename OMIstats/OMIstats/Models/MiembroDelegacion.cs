@@ -727,8 +727,11 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", estado = ");
             query.Append(Cadenas.comillas(estado));
-            query.Append(", sede = ");
-            query.Append(sede);
+            if (sede != -1)
+            {
+                query.Append(", sede = ");
+                query.Append(sede);
+            }
             query.Append(" where olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
