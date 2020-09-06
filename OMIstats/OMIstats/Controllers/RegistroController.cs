@@ -93,6 +93,10 @@ namespace OMIstats.Controllers
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, TipoOlimpiada.NULL);
             ViewBag.omi = o;
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+            if (o.esOnline)
+            {
+                ViewBag.sedes = SedeOnline.obtenerSedes(omi, estado);
+            }
             return View(registrados);
         }
 

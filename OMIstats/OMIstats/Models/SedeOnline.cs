@@ -100,5 +100,33 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        public static List<SedeOnline> obtenerSedes(string omi, string estado)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+            List<SedeOnline> list = new List<SedeOnline>();
+
+            query.Append(" select * from SedeOnline where olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            if (!String.IsNullOrEmpty(estado))
+            {
+                query.Append(" and estado = ");
+                query.Append(Cadenas.comillas(estado));
+            }
+            query.Append(" order by estado desc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                SedeOnline so = new SedeOnline();
+                so.llenarDatos(r);
+                list.Add(so);
+            }
+
+            return list;
+        }
     }
 }

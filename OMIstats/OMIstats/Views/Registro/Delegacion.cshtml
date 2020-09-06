@@ -4,6 +4,7 @@
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
+    List<OMIstats.Models.SedeOnline> sedes = ViewBag.sedes;
     bool registroActivo = ViewBag.registroActivo;
     int competidoresProcesados = 0;
     string lastEstado = "";
@@ -23,7 +24,9 @@
     if (usuario.esSuperUsuario())
     {
         ViewBag.Title = "Registro";
-    } else {
+    }
+    else
+    {
         ViewBag.Title = "Registro de delegación: " + estado.nombre;
     }
 }
@@ -40,7 +43,7 @@
 <h1 class="titulo">@ViewBag.Title</h1>
 
 <table>
-@for(int i = 0; i < tipos.Length; i++)
+@for (int i = 0; i < tipos.Length; i++)
 {
     if (!usuario.esSuperUsuario())
     {
@@ -103,7 +106,7 @@
     {
     <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
     }
-    if(usuario.esAdmin() || registroActivo)
+    if (usuario.esAdmin() || registroActivo)
     {
         if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))
         {
@@ -129,8 +132,48 @@
 @if (omi.esOnline)
 {
 <h1 class="titulo">Sedes</h1>
+    if (sedes.Count == 0)
+    {
+<div class="no-registrados"> No se han registrado sedes </div>
+    }
+    else
+    {
+<table>
+    <tr>
+        @if (usuario.esSuperUsuario())
+        {
+        <td class="titulo-registro">Estado</td>
+        }
+        <td class="titulo-registro">Sede</td>
+        @if (usuario.esSuperUsuario())
+        {
+        <td class="titulo-registro">Supervisor</td>
+        <td class="titulo-registro">Teléfono</td>
+        <td class="titulo-registro">Correo</td>
+        }
+        <td></td>
+    </tr>
+        @for (int i = 0; i < sedes.Count; i++)
+        {
+    <tr>
+           @if (usuario.esSuperUsuario())
+           {
+        <td class="lineas-registro clave-registro">@OMIstats.Models.Estado.obtenerEstadoConClave(sedes[i].estado).nombre</td>
+           }
+        <td class="lineas-registro">@sedes[i].nombre</td>
+           @if (usuario.esSuperUsuario())
+           {
+        <td class="lineas-registro">@sedes[i].supervisor</td>
+        <td class="lineas-registro">@sedes[i].telefono</td>
+        <td class="lineas-registro">@sedes[i].correo</td>
+           }
+        <td></td>
+    </tr>
+        }
+</table>
+    }
     if (omi.registroSedes && !usuario.esSuperUsuario())
     {
-        @Html.ActionLink("Agregar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
+        @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
     }
 }
