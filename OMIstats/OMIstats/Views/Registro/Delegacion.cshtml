@@ -152,10 +152,12 @@
         <td class="titulo-registro">Teléfono</td>
         <td class="titulo-registro">Correo</td>
         }
+        <td class="titulo-registro">Competidores en sede</td>
         <td></td>
     </tr>
         @for (int i = 0; i < sedes.Count; i++)
         {
+            List<OMIstats.Models.MiembroDelegacion> miembrosEnSede = miembrosPorSede[sedes[i].clave];
     <tr>
            @if (usuario.esSuperUsuario())
            {
@@ -168,11 +170,12 @@
         <td class="lineas-registro">@sedes[i].telefono</td>
         <td class="lineas-registro">@sedes[i].correo</td>
            }
+        <td class="lineas-registro">@miembrosEnSede.Count</td>
            @if (usuario.esAdmin() || (!usuario.esSuperUsuario() && omi.registroSedes))
            {
         <td>
             @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave }, new { })
-            @if (miembrosPorSede[sedes[i].clave].Count == 0)
+            @if (miembrosEnSede.Count == 0)
             {
             <a onclick="eliminarSede(@sedes[i].clave, '@sedes[i].nombre')" class="a-sin-href">Eliminar</a>
             }
@@ -183,6 +186,16 @@
         </td>
            }
     </tr>
+            if(!usuario.esSuperUsuario())
+            {
+                foreach(var miembro in miembrosEnSede)
+                {
+    <tr>
+        <td></td>
+        <td class="tiny-text">@miembro.nombreAsistente</td>
+    </tr>
+                }
+            }
         }
 </table>
     }

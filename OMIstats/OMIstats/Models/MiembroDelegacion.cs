@@ -1265,8 +1265,9 @@ namespace OMIstats.Models
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from miembrodelegacion ");
-            query.Append(" where sede = ");
+            query.Append(" select p.nombre, p.apellidoP, p.apellidoM, md.* from miembrodelegacion as md ");
+            query.Append(" inner join persona as p on p.clave = md.persona ");
+            query.Append(" where md.sede = ");
             query.Append(sede);
 
             db.EjecutarQuery(query.ToString());
@@ -1276,6 +1277,7 @@ namespace OMIstats.Models
             {
                 MiembroDelegacion md = new MiembroDelegacion();
                 md.llenarDatos(r, incluirPersona: false, incluirEscuela: false);
+                md.nombreAsistente = r["nombre"].ToString().Trim() + " " + r["apellidoP"].ToString().Trim() + " " + r["apellidoM"].ToString().Trim();
 
                 lista.Add(md);
             }
