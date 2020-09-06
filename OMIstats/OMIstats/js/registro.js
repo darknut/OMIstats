@@ -199,6 +199,13 @@ function eliminarUsuario(tipoOlimpiada, clave, nombre) {
     }
 }
 
+function eliminarSede(clave, nombre) {
+    var result = confirm("¿Eliminar sede " + nombre + "?");
+    if (result) {
+        redirige(ajaxUrl, "EliminarSede?clave=" + clave);
+    }
+}
+
 function iniciaRegistro(tipo, clave) {
     var address = "Asistente?omi=" + omi;
     if (tipo)

@@ -551,24 +551,36 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Sede
 
-        public ActionResult Sede(string omi, string estado)
+        public ActionResult Sede(string omi, string estado, int clave = 0)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
-                return RedirectTo(Pagina.HOME);
-
             failSafeViewBag();
             Persona p = getUsuario();
-            if (!p.esSuperUsuario() && !o.registroSedes)
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado) ||
+                (!p.esSuperUsuario() && !o.registroSedes))
             {
                 ViewBag.errorInfo = "permisos";
                 return View(new SedeOnline());
             }
 
+            SedeOnline so = null;
+            if (clave > 0)
+            {
+                so = SedeOnline.obtenerSedeConClave(clave);
+                if (so.estado != estado && !p.esSuperUsuario())
+                {
+                    ViewBag.errorInfo = "permisos";
+                    return View(new SedeOnline());
+                }
+            }
+
+            if (so == null)
+                so = new SedeOnline();
+
             ViewBag.omi = o;
             ViewBag.estado = Estado.obtenerEstadoConClave(estado);
 
-            return View(new SedeOnline());
+            return View(so);
         }
 
         //
@@ -588,7 +600,17 @@ namespace OMIstats.Controllers
                 ViewBag.errorInfo = "permisos";
                 return View(new SedeOnline());
             }
+            if (clave > 0)
+            {
+                SedeOnline so = SedeOnline.obtenerSedeConClave(clave);
+                if (so.estado != estado && !p.esSuperUsuario())
+                {
+                    ViewBag.errorInfo = "permisos";
+                    return View(new SedeOnline());
+                }
+            }
 
+            sede.clave = clave;
             sede.omi = omi;
             sede.estado = estado;
             ViewBag.omi = o;
@@ -598,7 +620,7 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(sede);
 
-            sede.nuevo();
+            sede.guardar();
             ViewBag.guardado = true;
 
             return View(sede);

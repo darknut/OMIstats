@@ -167,7 +167,13 @@
         <td class="lineas-registro">@sedes[i].telefono</td>
         <td class="lineas-registro">@sedes[i].correo</td>
            }
-        <td></td>
+           @if (usuario.esSuperUsuario() || omi.registroSedes)
+           {
+        <td>
+            @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave, clave = sedes[i].clave }, new { })
+            <a onclick="eliminarSede(@sedes[i].clave, '@sedes[i].nombre')" class="a-sin-href">Eliminar</a>
+        </td>
+           }
     </tr>
         }
 </table>

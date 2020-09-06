@@ -16,7 +16,7 @@ namespace OMIstats.Models
         public string omi;
 
         [Required(ErrorMessage = "Escribe el nombre")]
-        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el nombre")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
         [MaxLength(200, ErrorMessage = "El tamaño máximo es 200 caracteres")]
         public string nombre { get; set; }
 
@@ -56,7 +56,7 @@ namespace OMIstats.Models
             correo = r["correo"].ToString().Trim();
         }
 
-        public void nuevo()
+        private void nuevo()
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -78,7 +78,7 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
         }
 
-        public void update()
+        private void update()
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -99,6 +99,14 @@ namespace OMIstats.Models
             query.Append(clave);
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public void guardar()
+        {
+            if (clave == 0)
+                nuevo();
+            else
+                update();
         }
 
         public static List<SedeOnline> obtenerSedes(string omi, string estado)
@@ -127,6 +135,27 @@ namespace OMIstats.Models
             }
 
             return list;
+        }
+
+        public static SedeOnline obtenerSedeConClave(int clave)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from SedeOnline where clave = ");
+            query.Append(clave);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+            SedeOnline so = null;
+
+            if (table.Rows.Count > 0)
+            {
+                so = new SedeOnline();
+                so.llenarDatos(table.Rows[0]);
+            }
+
+            return so;
         }
     }
 }
