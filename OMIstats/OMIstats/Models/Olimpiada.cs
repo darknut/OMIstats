@@ -916,7 +916,7 @@ namespace OMIstats.Models
 #endif
         public int getMaxParticipantesDeEstado(string estado)
         {
-            return estado == this.claveEstado ? 8 : 4;
+            return estado == this.claveEstado && !this.esOnline ? 8 : 4;
         }
     }
 }

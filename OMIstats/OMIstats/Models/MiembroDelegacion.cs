@@ -74,7 +74,7 @@ namespace OMIstats.Models
         public string genero;
         public string nombreEscuela;
         public bool escuelaPublica;
-        public bool permisosDelegado;
+        public bool puedeRegistrar;
 #if OMISTATS
         public Institucion.NivelInstitucion nivelEscuela;
 #endif
@@ -994,7 +994,7 @@ namespace OMIstats.Models
                     md.resultados = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave);
 
                 md.fotoUsuario = r["foto"].ToString().Trim();
-                md.permisosDelegado = EnumParser.ToTipoPermisos(r["permisos"].ToString()) == Persona.TipoPermisos.DELEGADO;
+                md.puedeRegistrar = EnumParser.ToTipoPermisos(r["permisos"].ToString()) != Persona.TipoPermisos.NORMAL;
 
                 lista.Add(md);
             }

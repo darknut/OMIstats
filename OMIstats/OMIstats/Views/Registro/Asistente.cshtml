@@ -59,7 +59,7 @@
         var OMI_minimo = @(DateTime.Today.Year - 80);
         var OMI_maximo = @(DateTime.Today.Year - 6);
         var currentClave = "@claveCompetidor";
-        var estadoSede = "@OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO";
+        var estadoSede = "@(omi.esOnline ? "" : OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO)";
         var updating = @(md == null ? "false" : "true");
         var estados = {};
         var resubmit = @(resubmit ? "true" : "false");
@@ -291,7 +291,7 @@ if (md == null && !resubmit)
                 }
         </div>
         <div class="registro-single-control">
-            @if (omi.esOnline && mostrarEscuela)
+            @if (omi.esOnline && mostrarEscuela && !usuario.esSuperUsuario())
             {
             <span class="control-title">Sede</span>
             <select id="sede" name="sede" class="shiny-box">
