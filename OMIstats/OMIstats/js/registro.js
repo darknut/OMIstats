@@ -193,17 +193,13 @@ function buscar() {
 }
 
 function eliminarUsuario(tipoOlimpiada, clave, nombre) {
-    var result = confirm("¿Eliminar a " + nombre + "?");
-    if (result) {
-        redirige(ajaxUrl, "Eliminar?omi=" + omi + "&tipo=" + tipoOlimpiada + "&estado=" + estado + "&clave=" + clave);
-    }
+    tryConfirm(ajaxUrl + "Eliminar?omi=" + omi + "&tipo=" + tipoOlimpiada + "&estado=" + estado + "&clave=" + clave,
+               "¿Eliminar a " + nombre + "?");
 }
 
 function eliminarSede(clave, nombre) {
-    var result = confirm("¿Eliminar sede " + nombre + "?");
-    if (result) {
-        redirige(ajaxUrl, "EliminarSede?clave=" + clave);
-    }
+    tryConfirm(ajaxUrl + "EliminarSede?clave=" + clave,
+               "¿Eliminar sede " + nombre + "?");
 }
 
 function iniciaRegistro(tipo, clave) {

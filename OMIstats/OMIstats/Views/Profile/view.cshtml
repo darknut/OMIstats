@@ -134,7 +134,7 @@
                 if (@ViewBag.usuario.clave != Model.clave)
                 {
                     <div>
-                        <a href='@Url.Content("~/Admin/Unlink?usuario=" + Model.usuario)' class="botonPerfil">
+                        <a onclick='tryConfirm("@Url.Content("~/Admin/Unlink?usuario=" + Model.usuario)", "¿Deslinkear usuario?")' class="botonPerfil">
                             Deslinkear usuario
                         </a>
                     </div>

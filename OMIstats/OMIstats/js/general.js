@@ -22,3 +22,10 @@ function muestraLoadGifYSubmit(formId) {
 function redirige(pagina, parametro) {
     window.location.href = pagina + parametro;
 }
+
+function tryConfirm(url, texto) {
+    var result = confirm(texto);
+    if (result) {
+        window.location.href = url;
+    }
+}
