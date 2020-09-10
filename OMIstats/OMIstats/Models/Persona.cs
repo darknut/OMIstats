@@ -748,9 +748,12 @@ namespace OMIstats.Models
         /// <summary>
         /// Trata de poner el nombre mandado como parámetro en nombre y apellidos
         /// </summary>
-        /// <param name="nombre">El nombre a analizar</param>
-        public void breakNombre(string nombre = null)
+        /// <param name="nombre">El nombre a analizar, de no venir se usa el que está en el objeto</param>
+        /// <param name="ignorarApellidos">Si se van a sobreescribir los apellidos en el objeto</param>
+        public void breakNombre(string nombre = null, bool ignorarApellidos = false)
         {
+            if (ignorarApellidos)
+                apellidoMaterno = apellidoPaterno = "";
             if (nombre == null)
             {
                 if (this.apellidoPaterno.Length > 0)

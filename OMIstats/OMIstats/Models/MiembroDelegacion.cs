@@ -470,6 +470,7 @@ namespace OMIstats.Models
                 {
                     p = new Persona();
                     p.nombre = md.nombreAsistente;
+                    p.breakNombre();
 
                     if (md.genero != "M" && md.genero != "F")
                         return (int) TipoError.GENERO;
@@ -496,7 +497,7 @@ namespace OMIstats.Models
             if (md.nombreAsistente.Length > 0)
             {
                 p.nombre = md.nombreAsistente;
-                p.breakNombre();
+                p.breakNombre(ignorarApellidos: true);
             }
 
             try
