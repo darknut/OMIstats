@@ -73,10 +73,6 @@ namespace OMIstats.Controllers
 
             limpiarErroresViewBag();
 
-            // Borramos estos datos para que el delegado no haga cambios accidentales
-            e.nombreDelegado = "";
-            e.mailDelegado = "";
-
             return View(e);
         }
 
