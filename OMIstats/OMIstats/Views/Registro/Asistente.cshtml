@@ -407,6 +407,8 @@ if (md == null && !resubmit)
             <div id="errortelEmergencia" class="errorTextoRojo" style="display:none">Escribe un teléfono</div>
         </div>
     </div>
+    @if(!omi.esOnline)
+    {
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Medicina especial</span>
@@ -421,6 +423,12 @@ if (md == null && !resubmit)
             @Html.ValidationMessageFor(model => model.alergias)
         </div>
     </div>
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.medicina, new { @class = "shiny-box" })
+        @Html.HiddenFor(model => model.alergias, new { @class = "shiny-box" })
+    }
     </div>
 </div>
 <input id="omi" name="omi" type="hidden" value="@omi.numero" />
