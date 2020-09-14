@@ -393,6 +393,12 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(p);
 
+            if ((tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIS) &&
+                tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
+                p.omips = true;
+            }
+
             // Validaciones terminadas, guardamos persona y miembro delegacion
             // Primero en caso de que sea un nuevo miembro de la delegación
             if (md == null)

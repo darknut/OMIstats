@@ -114,6 +114,8 @@ namespace OMIstats.Models
 
         public int ioiID { get; set; }
 
+        public bool omips;
+
         public string nombreCompleto
         {
             get
@@ -154,6 +156,7 @@ namespace OMIstats.Models
             telEmergencia = "";
             medicina = "";
             alergias = "";
+            omips = false;
         }
 
         /// <summary>
@@ -169,6 +172,7 @@ namespace OMIstats.Models
             apellidoPaterno = datos["apellidoP"].ToString().Trim();
             apellidoMaterno = datos["apellidoM"].ToString().Trim();
             usuario = datos["usuario"].ToString().Trim();
+            omips = (bool) datos["omips"];
 
             if (completo)
             {
@@ -420,6 +424,10 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(omegaup));
             query.Append(",");
 
+            query.Append(" omips = ");
+            query.Append(omips ? 1 : 0);
+            query.Append(",");
+
             if (lugarGuardado == LugarGuardado.REGISTRO)
             {
                 query.Append(" celular = ");
@@ -519,9 +527,9 @@ namespace OMIstats.Models
             query.Append(" declare @inserted table(clave int); ");
             query.Append(" insert into persona (nombre, facebook, twitter, sitio, usuario, permisos, codeforces,");
             query.Append(" topcoder, ioiID, celular, telefono, direccion, emergencia, parentesco, telemergencia,");
-            query.Append(" medicina, alergias) output inserted.clave into @inserted values( ");
+            query.Append(" medicina, alergias, omips) output inserted.clave into @inserted values( ");
             query.Append(Cadenas.comillas(nombre));
-            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', ''); select clave from @inserted ");
+            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', '', 0); select clave from @inserted ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return;

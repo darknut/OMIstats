@@ -520,6 +520,12 @@ namespace OMIstats.Models
                 p.correo = md.correo;
             }
 
+            if ((tipoOlimpiada == TipoOlimpiada.OMIP || tipoOlimpiada == TipoOlimpiada.OMIS) &&
+                md.tipo == TipoAsistente.COMPETIDOR)
+            {
+                p.omips = true;
+            }
+
             if (!p.guardarDatos())
                 return (int) TipoError.CAMPOS_USUARIO;
 
