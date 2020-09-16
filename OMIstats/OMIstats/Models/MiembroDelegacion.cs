@@ -73,6 +73,7 @@ namespace OMIstats.Models
         public string correo;
         public string genero;
         public string nombreEscuela;
+        public bool omips;
         public bool escuelaPublica;
         public bool puedeRegistrar;
 #if OMISTATS
@@ -107,6 +108,7 @@ namespace OMIstats.Models
             genero = "";
             nombreEscuela = "";
             escuelaPublica = false;
+            omips = false;
 #if OMISTATS
             nivelEscuela = Institucion.NivelInstitucion.NULL;
             eliminar = false;
@@ -140,6 +142,7 @@ namespace OMIstats.Models
                 usuario = row["usuario"].ToString().Trim();
                 nombreAsistente = row["nombre"].ToString().Trim() + " " + row["apellidoP"].ToString().Trim() + " " + row["apellidoM"].ToString().Trim();
                 fechaNacimiento = row["nacimiento"].ToString().Trim();
+                omips = (bool)row["omips"];
                 genero = row["genero"].ToString().Trim();
                 correo = row["correo"].ToString().Trim();
             }
@@ -313,7 +316,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, ");
-            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, p.omips, i.nombreCorto, md.nivel,");
             query.Append(" md.año, md.sede, i.publica, md.persona, md.institucion from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
@@ -889,7 +892,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
-            query.Append(" p.nacimiento, p.genero, p.correo, i.nombreCorto, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, p.omips, i.nombreCorto, md.nivel,");
             query.Append(" md.año, md.sede, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");

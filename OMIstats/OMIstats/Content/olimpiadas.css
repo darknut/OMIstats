@@ -215,3 +215,12 @@
 .counter-container:hover {
     text-decoration: underline;
 }
+
+.karel-png {
+    width: 10px;
+}
+
+.karel-png-medium {
+    width: 15px;
+    margin-left: 5px;
+}

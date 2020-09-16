@@ -316,8 +316,12 @@ else
     @if (mostrar && datos.persona != null)
     {
 <span>
+@if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI && datos.persona.omips)
+{
+<img src="~/img/karel.png" title="Participó en OMIPS en años anteriores" class="karel-png"/>
+}
 <a class="nombre" href="@Url.Content("~/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">
-        @datos.persona.nombreCompleto
+    @datos.persona.nombreCompleto
 </a>
 </span>
     }
