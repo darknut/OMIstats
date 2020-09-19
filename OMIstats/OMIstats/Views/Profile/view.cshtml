@@ -30,6 +30,10 @@
 @{
     ViewBag.Title = Model.nombreCompleto;
     bool perfilPropio = (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave));
+    OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
+    Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.Resultados>> participaciones = ViewBag.participaciones;
+    OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    bool hayParticipaciones = false;
 }
 
     @{
@@ -82,7 +86,7 @@
                 <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio" title="Sitio web"/></a>
             }
 
-            @if (Model.correo.Length > 0)
+            @if (Model.correo.Length > 0 && (!Model.omips || medalleros.IOI != null || medalleros.OMI != null))
             {
                 <a href="mailto:@Model.correo" target="_blank"><img src="~/img/mail.png" alt="correo" title="Correo"/></a>
             }
@@ -170,13 +174,6 @@
             </div>
         }
     </div>
-
-    @{
-        OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
-        Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.Resultados>> participaciones = ViewBag.participaciones;
-        OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
-        bool hayParticipaciones = false;
-    }
 
     @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
     {
