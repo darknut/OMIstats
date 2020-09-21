@@ -298,7 +298,7 @@ if (md == null && !resubmit)
                 <option value="0">--- Elige una sede ---</option>
                 @foreach (OMIstats.Models.SedeOnline sede in sedes)
                 {
-                <option value="@sede.clave" @(md.sede == sede.clave ? "selected" : "")>@sede.nombre</option>
+                <option value="@sede.clave" @(md != null && md.sede == sede.clave ? "selected" : "")>@sede.nombre</option>
                 }
             </select>
             }
