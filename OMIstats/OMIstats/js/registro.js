@@ -264,14 +264,14 @@ function cambiaClavesCbo() {
     var combo = document.getElementById("claveSelect");
 
     if (tipo === "COMPETIDOR" && estado) {
-        if (hayResultados) {
+        if (!hayResultados) {
             span.style.opacity = "1";
             combo.disabled = false;
             llenaClaves(estados[estado]);
         }
         preparaAjaxEscuela();
     } else {
-        if (hayResultados) {
+        if (!hayResultados) {
             span.style.opacity = "0";
             combo.disabled = true;
         }
