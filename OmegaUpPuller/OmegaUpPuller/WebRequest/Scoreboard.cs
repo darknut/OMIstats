@@ -25,6 +25,7 @@ namespace OmegaUpPuller.WebRequest
             };
 
         private int[] cortes;
+        public bool hidden;
 
         public Scoreboard(string olimpiada, TipoOlimpiada tipoOlimpiada, int dia, int problemas)
         {
@@ -33,12 +34,16 @@ namespace OmegaUpPuller.WebRequest
             this.dia = dia;
             this.problemas = problemas;
             this.concursantes = 0;
+            this.hidden = false;
 
             inicializaResultados();
 
             medalleroEstados = new Dictionary<string, Medallero>();
 
-            Olimpiada.guardaProblemas(olimpiada, tipoOlimpiada, problemas, dia);
+            if (Program.HIDE)
+                this.hidden = true;
+            else
+                this.guardaProblemas();
         }
 
         private void inicializaResultados()
@@ -309,6 +314,14 @@ namespace OmegaUpPuller.WebRequest
 
                 estado.actualizar();
             }
+        }
+
+        /// <summary>
+        /// Actualiza la tabla olimpiada una vez que se ha borrado la instrucción de ocultar
+        /// </summary>
+        public void guardaProblemas()
+        {
+            Olimpiada.guardaProblemas(olimpiada, tipoOlimpiada, problemas, dia);
         }
     }
 }

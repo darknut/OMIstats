@@ -233,5 +233,14 @@ namespace OmegaUpPuller.WebRequest
             Log.add(Log.TipoLog.OMEGAUP, "Scoreboard actualizado con éxito");
             return true;
         }
+
+        /// <summary>
+        /// Actualiza la tabla olimpiada una vez que se ha borrado la instrucción de ocultar
+        /// </summary>
+        public void Unhide()
+        {
+            foreach (var key in scoreboards.Keys)
+                scoreboards[key].guardaProblemas();
+        }
     }
 }

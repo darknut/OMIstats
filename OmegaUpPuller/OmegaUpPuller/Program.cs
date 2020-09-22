@@ -87,6 +87,7 @@ namespace OmegaUpPuller
                 {
                     List<OmegaUp> instrucciones = OmegaUp.obtenerInstrucciones();
                     int polls = 0;
+                    bool wasHidden = HIDE;
                     HIDE = false;
 
                     foreach (var instruccion in instrucciones)
@@ -128,6 +129,9 @@ namespace OmegaUpPuller
                         status.borrar();
                         return;
                     }
+
+                    if (wasHidden && !HIDE)
+                        WebRequest.ScoreboardManager.Instance.Unhide();
 
                     // Guardamos el status para actualizar el timestamp
                     status.guardar();
