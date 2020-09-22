@@ -12,11 +12,16 @@
     ViewBag.Title = "Scoreboard Management";
 
     OMIstats.Models.OmegaUp status = null;
+    OMIstats.Models.OmegaUp hide = null;
     List<OMIstats.Models.OmegaUp> polls = ViewBag.polls;
 
     if (ViewBag.status.Count > 0)
     {
         status = ViewBag.status[0];
+    }
+    if (ViewBag.hide.Count > 0)
+    {
+        hide = ViewBag.hide[0];
     }
     int counter = 0;
 }
@@ -27,23 +32,27 @@
     <div class="status">STATUS: </div>
     @if (status == null)
     {
-        <div class="not-started">
-            NOT STARTED
-        </div>
-        <a href="@Url.Content("~/Admin/StartScoreboard")" class="start-button">START</a>
+    <div class="not-started">
+        NOT STARTED
+    </div>
+    <a href="@Url.Content("~/Admin/StartScoreboard")" class="start-button">START</a>
     } else {
         if (status.status == OMIstats.Models.OmegaUp.Status.OK)
         {
-            <div class="online">
-                ONLINE
-            </div>
-            <a href="@Url.Content("~/Admin/KillScoreboard")" class="kill-button">MATAR</a>
+    <div class="online">
+        ONLINE
+    </div>
+    <a href="@Url.Content("~/Admin/KillScoreboard")" class="kill-button">MATAR</a>
         } else {
-            <div class="not-started">
-                ERROR!
-            </div>
-            <a href="@Url.Content("~/Admin/StartScoreboard")" class="start-button">RE-START</a>
+    <div class="not-started">
+        ERROR!
+    </div>
+    <a href="@Url.Content("~/Admin/StartScoreboard")" class="start-button">RE-START</a>
         }
+    }
+    @if(hide == null)
+    {
+    <a href="@Url.Content("~/Admin/HideScoreboard")" class="start-button">HIDE</a>
     }
 </div>
 

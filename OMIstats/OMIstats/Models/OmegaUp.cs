@@ -25,7 +25,8 @@ namespace OMIstats.Models
             NULL,
             POLL,
             KILL,
-            STATUS
+            STATUS,
+            HIDE
         }
 
         public enum Status

@@ -34,6 +34,7 @@ namespace OMIstats.Controllers
             List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
             ViewBag.polls = OmegaUp.obtenerInstrucciones();
             ViewBag.status = status;
+            ViewBag.hide = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.HIDE);
 
             if (status.Count == 0)
                 OmegaUp.RunnerStarted = false;
@@ -83,6 +84,21 @@ namespace OMIstats.Controllers
 
             OmegaUp o = new OmegaUp();
             o.instruccion = OmegaUp.Instruccion.KILL;
+            o.guardarNuevo();
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
+        // GET: /Admin/HideScoreboard/
+
+        public ActionResult HideScoreboard()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            OmegaUp o = new OmegaUp();
+            o.instruccion = OmegaUp.Instruccion.HIDE;
             o.guardarNuevo();
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
