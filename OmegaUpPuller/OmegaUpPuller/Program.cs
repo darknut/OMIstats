@@ -8,6 +8,9 @@ using OMIstats.Utilities;
 using OMIstats.Models;
 using System.Globalization;
 using System.Threading;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace OmegaUpPuller
 {
@@ -139,6 +142,11 @@ namespace OmegaUpPuller
             }
         }
 
+        private static bool AlwaysGoodCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
+        {
+            return true;
+        }
+
         static void Main(string[] args)
         {
 #if DEBUG
@@ -150,6 +158,10 @@ namespace OmegaUpPuller
 
             Acceso.CADENA_CONEXION = ConfigurationManager.AppSettings["conexion"];
             OmegaUp.startTimestampsForPolls();
+
+            ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(AlwaysGoodCertificate);
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             new Program().Run();
         }
