@@ -146,7 +146,8 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave)[0];
-            if (md.estado != estado)
+            Persona p = getUsuario();
+            if (!p.esSuperUsuario() && md.estado != estado)
                 return RedirectTo(Pagina.HOME);
             md.borrarMiembroDelegacion();
 
