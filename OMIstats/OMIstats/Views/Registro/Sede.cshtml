@@ -54,6 +54,23 @@ else if (errorInfo == "permisos")
             @Html.ValidationMessageFor(model => model.correo)
         </div>
     </div>
+    <div class="registro-controls">
+        <div class="registro-single-control">
+            <span class="control-title">Nombre del segundo supervisor</span>
+            @Html.TextBoxFor(model => model.supervisor2, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.supervisor2)
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Teléfono del segundo supervisor</span>
+            @Html.TextBoxFor(model => model.telefono2, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.telefono2)
+        </div>
+        <div class="registro-single-control">
+            <span class="control-title">Correo del segundo supervisor</span>
+            @Html.TextBoxFor(model => model.correo2, new { @class = "shiny-box" })
+            @Html.ValidationMessageFor(model => model.correo2)
+        </div>
+    </div>
 </div>
 </div>
 <input id="olimpiada" name="omi" type="hidden" value="@omi.numero" />

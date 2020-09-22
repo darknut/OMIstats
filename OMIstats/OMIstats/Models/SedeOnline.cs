@@ -35,6 +35,30 @@ namespace OMIstats.Models
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string correo { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el nombre")]
+        [MaxLength(200, ErrorMessage = "El tamaño máximo es 200 caracteres")]
+        public string supervisor2 { get; set; }
+
+        [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
+        [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
+        public string telefono2 { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Escribe un correo electrónico válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+        public string correo2 { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z ñÑáéíóúÁÉÍÓÚäëïöü\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos en el nombre")]
+        [MaxLength(200, ErrorMessage = "El tamaño máximo es 200 caracteres")]
+        public string supervisor3 { get; set; }
+
+        [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
+        [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
+        public string telefono3 { get; set; }
+
+        [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$", ErrorMessage = "Escribe un correo electrónico válido")]
+        [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
+        public string correo3 { get; set; }
+
         public SedeOnline()
         {
             clave = 0;
@@ -44,6 +68,12 @@ namespace OMIstats.Models
             supervisor = "";
             telefono = "";
             correo = "";
+            supervisor2 = "";
+            telefono2 = "";
+            correo2 = "";
+            supervisor3 = "";
+            telefono3 = "";
+            correo3 = "";
         }
 
         public void llenarDatos(DataRow r)
@@ -55,6 +85,12 @@ namespace OMIstats.Models
             supervisor = r["supervisor"].ToString().Trim();
             telefono = r["telefono"].ToString().Trim();
             correo = r["correo"].ToString().Trim();
+            supervisor2 = r["supervisor2"].ToString().Trim();
+            telefono2 = r["telefono2"].ToString().Trim();
+            correo2 = r["correo2"].ToString().Trim();
+            supervisor3 = r["supervisor3"].ToString().Trim();
+            telefono3 = r["telefono3"].ToString().Trim();
+            correo3 = r["correo3"].ToString().Trim();
         }
 
         private void nuevo()
@@ -74,6 +110,18 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(telefono));
             query.Append(" ,");
             query.Append(Cadenas.comillas(correo));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(supervisor2));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(telefono2));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(correo2));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(supervisor3));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(telefono3));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(correo3));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
@@ -96,6 +144,18 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(telefono));
             query.Append(" , correo = ");
             query.Append(Cadenas.comillas(correo));
+            query.Append(" , supervisor2 = ");
+            query.Append(Cadenas.comillas(supervisor2));
+            query.Append(" , telefono2 = ");
+            query.Append(Cadenas.comillas(telefono2));
+            query.Append(" , correo2 = ");
+            query.Append(Cadenas.comillas(correo2));
+            query.Append(" , supervisor3 = ");
+            query.Append(Cadenas.comillas(supervisor3));
+            query.Append(" , telefono3 = ");
+            query.Append(Cadenas.comillas(telefono3));
+            query.Append(" , correo3 = ");
+            query.Append(Cadenas.comillas(correo3));
             query.Append(" where clave = ");
             query.Append(clave);
 

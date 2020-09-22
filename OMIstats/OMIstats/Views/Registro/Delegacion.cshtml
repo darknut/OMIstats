@@ -170,9 +170,36 @@
         <td class="lineas-registro">@sedes[i].nombre</td>
            @if (usuario.esSuperUsuario())
            {
-        <td class="lineas-registro">@sedes[i].supervisor</td>
-        <td class="lineas-registro">@sedes[i].telefono</td>
-        <td class="lineas-registro">@sedes[i].correo</td>
+        <td class="lineas-registro">@sedes[i].supervisor
+            @if (sedes[i].supervisor2 != "")
+            {
+            <br />@sedes[i].supervisor2
+                if (sedes[i].supervisor3 != "")
+                {
+            <br />@sedes[i].supervisor3
+                }
+            }
+        </td>
+        <td class="lineas-registro">@sedes[i].telefono
+            @if (sedes[i].telefono2 != "")
+            {
+            <br />@sedes[i].telefono2
+                if (sedes[i].telefono3 != "")
+                {
+            <br />@sedes[i].telefono3
+                }
+            }
+        </td>
+        <td class="lineas-registro">@sedes[i].correo
+            @if (sedes[i].correo2 != "")
+            {
+            <br />@sedes[i].correo2
+                if (sedes[i].correo3 != "")
+                {
+            <br />@sedes[i].correo3
+                }
+            }
+        </td>
            }
         <td class="lineas-registro">@miembrosEnSede.Count</td>
            @if (usuario.esAdmin() || (!usuario.esSuperUsuario() && omi.registroSedes))
@@ -190,16 +217,16 @@
         </td>
            }
     </tr>
-            if(!usuario.esSuperUsuario())
-            {
-                foreach(var miembro in miembrosEnSede)
-                {
+           if (!usuario.esSuperUsuario())
+           {
+               foreach (var miembro in miembrosEnSede)
+               {
     <tr>
         <td></td>
         <td class="tiny-text">@miembro.nombreAsistente</td>
     </tr>
-                }
-            }
+               }
+           }
         }
 </table>
     }
