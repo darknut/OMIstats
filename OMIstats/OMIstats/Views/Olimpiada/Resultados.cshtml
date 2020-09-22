@@ -15,7 +15,7 @@
     if (isLive)
     {
         isRunnerLive = ViewBag.RunnerStarted;
-        if (isRunnerLive && (!Model.esOnline || (usuario != null && usuario.esSuperUsuario())))
+        if (isRunnerLive && !Model.esOnline)
         {
             lastUpdate = ViewBag.lastUpdate;
             dia = ViewBag.dia;
@@ -288,10 +288,13 @@ else
 <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
 @if (isLive && isRunnerLive)
 {
+    if (!Model.esOnline)
+    {
 <img class="up" src="@Url.Content("~/img/up.png")" style="display:none"/>
 <img class="down" src="@Url.Content("~/img/down.png")" style="display:none"/>
 <img class="unchecked" src="@Url.Content("~/img/checkbox.png")" onclick="addBorder('@(datos.clave)')"/>
 <img class="checked" src="@Url.Content("~/img/checkbox2.png")" onclick="addBorder('@(datos.clave)')" style="display:none"/>
+    }
 }
 else
 {
