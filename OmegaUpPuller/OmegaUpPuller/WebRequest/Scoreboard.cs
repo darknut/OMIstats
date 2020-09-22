@@ -172,11 +172,11 @@ namespace OmegaUpPuller.WebRequest
                 }
                 else
                 {
-                    // Para OMIP y OMIS, se siguen las reglas de los tercios
+                    // Para OMIP y OMIS, se siguen las reglas de los cincos
                     this.cortes = new int[] {
-                        (int) Math.Ceiling(this.concursantes / 3.0),
-                        (int) Math.Ceiling(this.concursantes / 1.5),
-                        this.concursantes + 1,
+                        5,
+                        10,
+                        15,
                         this.concursantes + 1
                     };
                 }
