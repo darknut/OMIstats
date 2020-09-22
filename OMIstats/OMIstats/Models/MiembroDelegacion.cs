@@ -916,7 +916,7 @@ namespace OMIstats.Models
 
             return lista;
         }
-
+#if OMISTATS
         /// <summary>
         /// Obtiene la lista de miembros de una delegacion
         /// </summary>
@@ -1011,7 +1011,7 @@ namespace OMIstats.Models
 
             return lista;
         }
-#if OMISTATS
+
         public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes)
         {
             StringBuilder lineas = new StringBuilder();
@@ -1220,7 +1220,7 @@ namespace OMIstats.Models
 
             return personas;
         }
-#endif
+
         public static string obtenerPrimerClaveDisponible(string omi, TipoOlimpiada tipo, string estado, TipoAsistente tipoAsistente = TipoAsistente.COMPETIDOR)
         {
             var e = Estado.obtenerEstadoConClave(estado);
@@ -1270,7 +1270,7 @@ namespace OMIstats.Models
 
             return "";
         }
-
+#endif
         public static List<MiembroDelegacion> obtenerMiembrosEnSede(int sede)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();

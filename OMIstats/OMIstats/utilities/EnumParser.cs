@@ -8,11 +8,6 @@ namespace OMIstats.Utilities
 {
     public class EnumParser
     {
-        public static Persona.TipoPermisos ToTipoPermisos(string value)
-        {
-            return (Persona.TipoPermisos)Enum.Parse(typeof(Persona.TipoPermisos), value);
-        }
-
         public static MiembroDelegacion.TipoAsistente ToTipoAsistente(string value)
         {
             return (MiembroDelegacion.TipoAsistente)Enum.Parse(typeof(MiembroDelegacion.TipoAsistente), value);
@@ -48,6 +43,12 @@ namespace OMIstats.Utilities
             return (OmegaUp.Status)Enum.Parse(typeof(OmegaUp.Status), value);
         }
 
+#if OMISTATS
+        public static Persona.TipoPermisos ToTipoPermisos(string value)
+        {
+            return (Persona.TipoPermisos)Enum.Parse(typeof(Persona.TipoPermisos), value);
+        }
+
         public static Peticion.TipoPeticion ToTipoPeticion(string value)
         {
             return (Peticion.TipoPeticion)Enum.Parse(typeof(Peticion.TipoPeticion), value);
@@ -57,5 +58,6 @@ namespace OMIstats.Utilities
         {
             return (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), value);
         }
+#endif
     }
 }

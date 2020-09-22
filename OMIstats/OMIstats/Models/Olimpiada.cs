@@ -913,10 +913,11 @@ namespace OMIstats.Models
 
             return omis[0];
         }
-#endif
+
         public int getMaxParticipantesDeEstado(string estado)
         {
             return estado == this.claveEstado && !this.esOnline ? 8 : 4;
         }
+#endif
     }
 }
