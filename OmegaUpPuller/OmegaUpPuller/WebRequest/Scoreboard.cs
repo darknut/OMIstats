@@ -260,11 +260,15 @@ namespace OmegaUpPuller.WebRequest
                 }
 
                 // Finalmente guardamos la linea en la base de datos
-                r.guardar(detalles: true, timestamp: timestamp, dia: dia);
+                r.guardar(detalles: true, timestamp: timestamp, dia: dia, soloDetalles: Program.HIDE);
             }
 
             // Para OMIPS ya terminamos los cálculos
             if (tipoOlimpiada != TipoOlimpiada.OMI)
+                return;
+
+            // Si estamos escondiendo los puntos, no hace falta continuar
+            if (Program.HIDE)
                 return;
 
             // Ordenamos también el medallero de los estados

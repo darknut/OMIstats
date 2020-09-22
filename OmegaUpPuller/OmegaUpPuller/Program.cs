@@ -13,6 +13,8 @@ namespace OmegaUpPuller
 {
     class Program
     {
+        public static bool HIDE;
+
         private bool hayOtroActivo()
         {
             List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
@@ -20,7 +22,15 @@ namespace OmegaUpPuller
             foreach (OmegaUp i in status)
             {
                 if (i.status == OmegaUp.Status.OK)
+                {
+#if DEBUG
+                    // Para facilitar depuración, en caso de que haya algo corriendo lo matamos
+                    i.borrar();
+                    return false;
+#else
                     return true;
+#endif
+                }
 
                 // Si hay algo vivo que no era status, lo borramos para que no haga ruido
                 i.borrar();
@@ -74,11 +84,18 @@ namespace OmegaUpPuller
                 {
                     List<OmegaUp> instrucciones = OmegaUp.obtenerInstrucciones();
                     int polls = 0;
+                    HIDE = false;
 
                     foreach (var instruccion in instrucciones)
                     {
                         switch (instruccion.instruccion)
                         {
+                            case OmegaUp.Instruccion.HIDE:
+                                {
+                                    Log.add(Log.TipoLog.OMEGAUP, "Instrucción HIDE encontrada, no se actualizará scoreboard general");
+                                    HIDE = true;
+                                    break;
+                                }
                             case OmegaUp.Instruccion.KILL:
                                 {
                                     Log.add(Log.TipoLog.OMEGAUP, "Instrucción KILL encontrada, saliendo...");

@@ -487,13 +487,25 @@ namespace OMIstats.Models
         /// Guarda los datos del objeto en la base de datos
         /// <param name="detalles">Si las tablas de detalles también deben de guardarse</param>
         /// <param name="timestamp">Si detalles es true, el timestamp es requerido</param>
-        /// <param name="timestamp">Si detalles es true, el dia es requerido</param>
+        /// <param name="dia">Si detalles es true, el dia es requerido</param>
+        /// <param name="soloDetalles">Si detalles es true y soloDetalles tambien, se salta guardar en tabla resultados y solo guarda los detalles</param>
         /// </summary>
-        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0)
+        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0, bool soloDetalles = false)
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
             MiembroDelegacion m = null;
+
+            if (detalles)
+            {
+                DetallePuntos detallePuntos = new DetallePuntos(omi, tipoOlimpiada, clave, timestamp, dia, dia == 1 ? dia1 : dia2);
+                detallePuntos.guardar();
+                DetalleLugar detalleLugar = new DetalleLugar(omi, tipoOlimpiada, clave, timestamp, dia, medalla, lugar);
+                detalleLugar.guardar();
+
+                if (soloDetalles)
+                    return TipoError.OK;
+            }
 
             // Revisamos si hay mas de un usuario con esa clave
 
@@ -589,14 +601,6 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(this.clave));
 
             db.EjecutarQuery(query.ToString());
-
-            if (detalles)
-            {
-                DetallePuntos detallePuntos = new DetallePuntos(omi, tipoOlimpiada, clave, timestamp, dia, dia == 1 ? dia1 : dia2);
-                detallePuntos.guardar();
-                DetalleLugar detalleLugar = new DetalleLugar(omi, tipoOlimpiada, clave, timestamp, dia, medalla, lugar);
-                detalleLugar.guardar();
-            }
 
             return TipoError.OK;
         }
