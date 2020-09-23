@@ -367,7 +367,7 @@ if (md == null && !resubmit)
                 <option value="1" @(añoEscuela == 1 ? "selected" : "")>1°</option>
                 <option value="2" @(añoEscuela == 2 ? "selected" : "")>2°</option>
                 <option value="3" @(añoEscuela == 3 ? "selected" : "")>3°</option>
-                @if (md != null && md.nivelEscuela == OMIstats.Models.Institucion.NivelInstitucion.PRIMARIA)
+                @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP || md != null && md.nivelEscuela == OMIstats.Models.Institucion.NivelInstitucion.PRIMARIA)
                 {
                 <option value="4" @(añoEscuela == 4 ? "selected" : "")>4°</option>
                 <option value="5" @(añoEscuela == 5 ? "selected" : "")>5°</option>
