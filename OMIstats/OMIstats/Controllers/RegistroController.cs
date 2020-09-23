@@ -412,8 +412,6 @@ namespace OMIstats.Controllers
                         persona = pe.clave;
                 }
 
-                return View(p);
-
                 // Nuevo asistente
                 if (persona == 0)
                 {
