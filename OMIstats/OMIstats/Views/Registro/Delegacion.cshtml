@@ -77,6 +77,10 @@
             {
             <img src="~/img/info.svg" title="Puede regsitrar" class="info-svg"/>
             }
+            @if(miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && miembro.sede == 0)
+            {
+            <img src="~/img/info.svg" title="Competidor no tiene sede" class="info-svg info-red"/>
+            }
         </td>
         @if (usuario.esSuperUsuario())
         {
