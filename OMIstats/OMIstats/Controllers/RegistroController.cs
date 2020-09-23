@@ -404,6 +404,16 @@ namespace OMIstats.Controllers
             // Primero en caso de que sea un nuevo miembro de la delegación
             if (md == null)
             {
+                // Si la persona es 0, intentamos hacer match basándonos en el nombre, y solamente en el nombre
+                if (persona == 0)
+                {
+                    Persona pe = Persona.obtenerPersonaConNombre(p.nombreCompleto);
+                    if (pe != null)
+                        persona = pe.clave;
+                }
+
+                return View(p);
+
                 // Nuevo asistente
                 if (persona == 0)
                 {
