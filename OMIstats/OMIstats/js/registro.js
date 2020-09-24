@@ -317,7 +317,7 @@ function validar() {
         return false;
     if (revisaNoVacio("celular"))
         return false;
-    if (!esSuperUsuario) {
+    if (emergenciaRequerido) {
         if (revisaNoVacio("emergencia"))
             return false;
         if (revisaNoVacio("telEmergencia"))
