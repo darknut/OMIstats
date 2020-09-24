@@ -1,4 +1,4 @@
-﻿@model OMIstats.Models.Persona
+﻿    @model OMIstats.Models.Persona
 
 @{
     // Sacando variables del ViewBag
@@ -27,15 +27,13 @@
     ViewBag.Title = errorInfo.Length > 0 ? "Error" : nuevo ? "Registro" : "Modificar";
     bool esSede = estado != null && omi.claveEstado == estado.clave;
     string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
-    bool esCompetidor = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (nuevo && !resubmit && tipo != OMIstats.Models.TipoOlimpiada.NULL && !usuario.esSuperUsuario());
-    bool mostrarClaveCbo = !hayResultados &&
-                            (tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
-                            (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL
-                            && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL));
+    bool esCompetidor = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
+                        (nuevo && !resubmit && tipo != OMIstats.Models.TipoOlimpiada.NULL && !usuario.esSuperUsuario());
+    bool mostrarClaveCbo = !hayResultados && esCompetidor;
     bool puedeCambiarSelects = (nuevo || !hayResultados) && usuario.esSuperUsuario();
     bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
-    string claveCompetidor = md == null ? "" : md.clave;
-    OMIstats.Models.TipoOlimpiada tipoOriginal = md == null ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
+    string claveCompetidor = nuevo ? "" : md.clave;
+    OMIstats.Models.TipoOlimpiada tipoOriginal = nuevo ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
     bool emergenciaRequerido = !usuario.esSuperUsuario() && (!omi.esOnline || esCompetidor);
 }
 
@@ -59,7 +57,7 @@
         var OMI_maximo = @(DateTime.Today.Year - 6);
         var currentClave = "@claveCompetidor";
         var estadoSede = "@(omi.esOnline ? "" : OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO)";
-        var updating = @(md == null ? "false" : "true");
+        var updating = @(nuevo ? "false" : "true");
         var estados = {};
         var resubmit = @(resubmit ? "true" : "false");
         var hayResultados = @(hayResultados ? "true" : "false");
@@ -119,7 +117,7 @@ else if (errorInfo == "persona")
 }
 else
 {
-if (md == null && !resubmit)
+if (nuevo && !resubmit)
 {
 <div id="busqueda" class="panel">
     <div class="panel-heading"> Buscar participantes de años anteriores </div>
@@ -161,9 +159,9 @@ if (md == null && !resubmit)
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Participar como<span class="errorTextoRojo">*</span></span>
-            <select id="tipoAsistente" name="tipoAsistente" class="shiny-box" @(puedeCambiarSelects || (tipoAsistente != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR && tipoAsistente != OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL) || tipo == OMIstats.Models.TipoOlimpiada.NULL ? "" : "disabled") onchange="cambiaClavesCbo()">
+            <select id="tipoAsistente" name="tipoAsistente" class="shiny-box" @(puedeCambiarSelects || !esCompetidor ? "" : "disabled") onchange="cambiaClavesCbo()">
                 <option value=""></option>
-                @if (puedeCambiarSelects || tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (nuevo && tipo != OMIstats.Models.TipoOlimpiada.NULL))
+                @if (puedeCambiarSelects || esCompetidor)
                 {
                 <option value="COMPETIDOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL) ? "selected" : "")>Competidor</option>
                 }
