@@ -57,7 +57,7 @@ namespace OMIstats.Models
         [MaxLength(15, ErrorMessage = "El tamaño máximo es de 15 caracteres")]
         public string twitter { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [RegularExpression(@"^[a-zA-Z0-9_.-]+(?::[a-zA-Z0-9_.-]+)?$", ErrorMessage = "Escribe un nombre de usuario válido")]
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string omegaup { get; set; }
 
