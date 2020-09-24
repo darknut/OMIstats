@@ -21,6 +21,7 @@
     string nivelEscuela = ViewBag.nivelEscuela;
     bool escuelaPublica = ViewBag.publica;
     List<OMIstats.Models.SedeOnline> sedes = ViewBag.sedes;
+    string nombreSede = ViewBag.nombreSede;
 
     // Variables temporales para facilitar el resto del archivo
     bool nuevo = md == null;
@@ -288,9 +289,15 @@ if (nuevo && !resubmit)
                 }
         </div>
         <div class="registro-single-control">
-            @if (omi.esOnline && esCompetidor && !usuario.esSuperUsuario())
+            @if (omi.esOnline && esCompetidor)
             {
             <span class="control-title">Sede</span>
+                if (usuario.esSuperUsuario())
+                {
+           <input type="text" class="shiny-box" disabled value="@(nombreSede == null ? "No se ha elegido sede" : nombreSede)"/>
+                }
+                else
+                {
             <select id="sede" name="sede" class="shiny-box">
                 <option value="0">--- Elige una sede ---</option>
                 @foreach (OMIstats.Models.SedeOnline sede in sedes)
@@ -298,6 +305,7 @@ if (nuevo && !resubmit)
                 <option value="@sede.clave" @(md != null && md.sede == sede.clave ? "selected" : "")>@sede.nombre</option>
                 }
             </select>
+                }
             }
         </div>
     </div>
@@ -390,7 +398,7 @@ if (nuevo && !resubmit)
     <div class="registro-controls">
         <div class="registro-single-control">
             <span class="control-title">Nombre del contacto de emergencia
-                @if(emergenciaRequerido)
+                @if (emergenciaRequerido)
                 {
                 <span class="errorTextoRojo">*</span>
                 }
@@ -406,7 +414,7 @@ if (nuevo && !resubmit)
         </div>
         <div class="registro-single-control">
             <span class="control-title">Teléfono de emergencia
-                @if(emergenciaRequerido)
+                @if (emergenciaRequerido)
                 {
                 <span class="errorTextoRojo">*</span>
                 }
@@ -416,7 +424,7 @@ if (nuevo && !resubmit)
             <div id="errortelEmergencia" class="errorTextoRojo" style="display:none">Escribe un teléfono</div>
         </div>
     </div>
-    @if(!omi.esOnline)
+    @if (!omi.esOnline)
     {
     <div class="registro-controls">
         <div class="registro-single-control">
@@ -440,7 +448,8 @@ if (nuevo && !resubmit)
     }
     </div>
 </div>
-}else
+}
+else
 {
     @Html.HiddenFor(model => model.emergencia)
     @Html.HiddenFor(model => model.parentesco)

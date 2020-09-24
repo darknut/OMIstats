@@ -251,6 +251,8 @@ namespace OMIstats.Controllers
             {
                 ViewBag.sedes = SedeOnline.obtenerSedes(o.numero, estado);
             }
+            if (md != null && md.sede > 0)
+                ViewBag.nombreSede = SedeOnline.obtenerSedeConClave(md.sede).nombre;
 
             p = md == null ? new Persona() : Persona.obtenerPersonaConClave(md.claveUsuario, completo: true, incluirDatosPrivados: true);
             p.breakNombre();
