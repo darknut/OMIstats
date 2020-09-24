@@ -382,7 +382,7 @@ if (nuevo && !resubmit)
         Ocurrio un error <a class="a-sin-href" onclick="preparaAjaxEscuela()">Reintentar</a>
     </div>
 </div>
-@if (!omi.esOnline || esCompetidor)
+@if (usuario.esSuperUsuario() || emergenciaRequerido)
 {
 <div class="panel">
     <div class="panel-heading"> Datos de emergencia </div>
