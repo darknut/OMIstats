@@ -27,22 +27,16 @@
     ViewBag.Title = errorInfo.Length > 0 ? "Error" : nuevo ? "Registro" : "Modificar";
     bool esSede = estado != null && omi.claveEstado == estado.clave;
     string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
+    bool esCompetidor = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (nuevo && !resubmit && tipo != OMIstats.Models.TipoOlimpiada.NULL && !usuario.esSuperUsuario());
     bool mostrarClaveCbo = !hayResultados &&
                             (tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
                             (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL
                             && tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.NULL));
     bool puedeCambiarSelects = (nuevo || !hayResultados) && usuario.esSuperUsuario();
-    bool mostrarEscuela = (md != null && md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) ||
-                           !usuario.esSuperUsuario() &&
-                             (tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
-                             !resubmit && tipo != OMIstats.Models.TipoOlimpiada.NULL);
     bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
     string claveCompetidor = md == null ? "" : md.clave;
     OMIstats.Models.TipoOlimpiada tipoOriginal = md == null ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
-    bool emergenciaRequerido = !usuario.esSuperUsuario() && (!omi.esOnline ||
-                                !(md != null && md.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
-                                  tipo == OMIstats.Models.TipoOlimpiada.NULL ||
-                                  resubmit && tipoAsistente != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR));
+    bool emergenciaRequerido = !usuario.esSuperUsuario() && (!omi.esOnline || esCompetidor);
 }
 
 @section AddToHead
@@ -296,7 +290,7 @@ if (md == null && !resubmit)
                 }
         </div>
         <div class="registro-single-control">
-            @if (omi.esOnline && mostrarEscuela && !usuario.esSuperUsuario())
+            @if (omi.esOnline && esCompetidor && !usuario.esSuperUsuario())
             {
             <span class="control-title">Sede</span>
             <select id="sede" name="sede" class="shiny-box">
@@ -311,7 +305,7 @@ if (md == null && !resubmit)
     </div>
 </div>
 </div>
-<div class="panel panel-green datos-padding" id="bloqueEscuela" style="@(mostrarEscuela ? "" : "display:none")">
+<div class="panel panel-green datos-padding" id="bloqueEscuela" style="@(esCompetidor ? "" : "display:none")">
     <div class="panel-heading panel-heading-green">Datos de la escuela</div>
     <div class="panel-body" id="panelEscuela">
     <div class="registro-controls">
