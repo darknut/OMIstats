@@ -163,7 +163,7 @@ if (nuevo && !resubmit)
                 <option value=""></option>
                 @if (puedeCambiarSelects || esCompetidor)
                 {
-                <option value="COMPETIDOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || (!usuario.esSuperUsuario() && tipo != OMIstats.Models.TipoOlimpiada.NULL) ? "selected" : "")>Competidor</option>
+                <option value="COMPETIDOR" @(esCompetidor ? "selected" : "")>Competidor</option>
                 }
                 <option value="LIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.LIDER ? "selected" : "")>Líder</option>
                 <option value="DELEGADO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEGADO ? "selected" : "")>Delegado</option>
@@ -382,6 +382,8 @@ if (nuevo && !resubmit)
         Ocurrio un error <a class="a-sin-href" onclick="preparaAjaxEscuela()">Reintentar</a>
     </div>
 </div>
+@if (!omi.esOnline || esCompetidor)
+{
 <div class="panel">
     <div class="panel-heading"> Datos de emergencia </div>
     <div class="panel-body">
@@ -433,11 +435,19 @@ if (nuevo && !resubmit)
     }
     else
     {
-        @Html.HiddenFor(model => model.medicina, new { @class = "shiny-box" })
-        @Html.HiddenFor(model => model.alergias, new { @class = "shiny-box" })
+        @Html.HiddenFor(model => model.medicina)
+        @Html.HiddenFor(model => model.alergias)
     }
     </div>
 </div>
+}else
+{
+    @Html.HiddenFor(model => model.emergencia)
+    @Html.HiddenFor(model => model.parentesco)
+    @Html.HiddenFor(model => model.telEmergencia)
+    @Html.HiddenFor(model => model.medicina)
+    @Html.HiddenFor(model => model.alergias)
+}
 <input id="omi" name="omi" type="hidden" value="@omi.numero" />
 <input id="persona" name="persona" type="hidden" value="@Model.clave" />
 <input id="claveOriginal" name="claveOriginal" type="hidden" value="@claveCompetidor" />
