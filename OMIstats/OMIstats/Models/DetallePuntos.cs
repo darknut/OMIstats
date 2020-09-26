@@ -41,10 +41,10 @@ namespace OMIstats.Models
 #if OMISTATS
         private static void llenarDatos(DataRow row, OverlayPuntos puntos, int problemas)
         {
-            puntos.timestamp.Add((int)row["timestamp"]);
+            puntos.timestamp.Add(DataRowParser.ToInt(row["timestamp"]));
             for (int i = 0; i < problemas; i++)
-                puntos.problemas[i].Add(float.Parse(row["puntosP" + (i + 1)].ToString()));
-            puntos.puntos.Add(float.Parse(row["puntosD"].ToString()));
+                puntos.problemas[i].Add(DataRowParser.ToFloat(row["puntosP" + (i + 1)]));
+            puntos.puntos.Add(DataRowParser.ToFloat(row["puntosD"]));
         }
 
         /// <summary>
@@ -163,11 +163,11 @@ namespace OMIstats.Models
             DetallePuntos actual = new DetallePuntos();
             foreach (DataRow r in table.Rows)
             {
-                actual.puntosDia = float.Parse(r["puntosD"].ToString());
-                actual.timestamp = (int)r["timestamp"];
-                actual.dia = (int)r["dia"];
-                actual.clave = r["clave"].ToString();
-                actual.tipoOlimpiada = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
+                actual.puntosDia = DataRowParser.ToFloat(r["puntosD"]);
+                actual.timestamp = DataRowParser.ToInt(r["timestamp"]);
+                actual.dia = DataRowParser.ToInt(r["dia"]);
+                actual.clave = DataRowParser.ToString(r["clave"]);
+                actual.tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
 
                 if (actual.tipoOlimpiada != anterior.tipoOlimpiada ||
                     actual.clave != anterior.clave ||

@@ -78,19 +78,19 @@ namespace OMIstats.Models
 
         public void llenarDatos(DataRow r)
         {
-            clave = (int)r["clave"];
-            nombre = r["nombre"].ToString().Trim();
-            omi = r["olimpiada"].ToString().Trim();
-            estado = r["estado"].ToString().Trim();
-            supervisor = r["supervisor"].ToString().Trim();
-            telefono = r["telefono"].ToString().Trim();
-            correo = r["correo"].ToString().Trim();
-            supervisor2 = r["supervisor2"].ToString().Trim();
-            telefono2 = r["telefono2"].ToString().Trim();
-            correo2 = r["correo2"].ToString().Trim();
-            supervisor3 = r["supervisor3"].ToString().Trim();
-            telefono3 = r["telefono3"].ToString().Trim();
-            correo3 = r["correo3"].ToString().Trim();
+            clave = DataRowParser.ToInt(r["clave"]);
+            nombre = DataRowParser.ToString(r["nombre"]);
+            omi = DataRowParser.ToString(r["olimpiada"]);
+            estado = DataRowParser.ToString(r["estado"]);
+            supervisor = DataRowParser.ToString(r["supervisor"]);
+            telefono = DataRowParser.ToString(r["telefono"]);
+            correo = DataRowParser.ToString(r["correo"]);
+            supervisor2 = DataRowParser.ToString(r["supervisor2"]);
+            telefono2 = DataRowParser.ToString(r["telefono2"]);
+            correo2 = DataRowParser.ToString(r["correo2"]);
+            supervisor3 = DataRowParser.ToString(r["supervisor3"]);
+            telefono3 = DataRowParser.ToString(r["telefono3"]);
+            correo3 = DataRowParser.ToString(r["correo3"]);
         }
 
         private void nuevo()

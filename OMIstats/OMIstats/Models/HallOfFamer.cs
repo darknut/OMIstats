@@ -53,7 +53,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 HallOfFamer hof = new HallOfFamer();
-                hof.llenarDatos(int.Parse(r["clave"].ToString()));
+                hof.llenarDatos(DataRowParser.ToInt(r["clave"]));
 
                 if (estado != null)
                 {
@@ -99,15 +99,15 @@ namespace OMIstats.Models
             estados = new HashSet<string>();
             foreach (DataRow r in table.Rows)
             {
-                Resultados.TipoMedalla medalla = EnumParser.ToTipoMedalla(r["medalla"].ToString().ToUpper());
+                Resultados.TipoMedalla medalla = DataRowParser.ToTipoMedalla(DataRowParser.ToString(r["medalla"]));
 
                 if (medalla == Resultados.TipoMedalla.NADA)
                     continue;
 
-                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(r["olimpiada"].ToString(), tipoOlimpiada);
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(DataRowParser.ToString(r["olimpiada"]), tipoOlimpiada);
                 medallas.Add(new KeyValuePair<Olimpiada,Resultados.TipoMedalla>(o, medalla));
 
-                string estado = r["estado"].ToString().Trim();
+                string estado = DataRowParser.ToString(r["estado"]);
                 if (!estados.Contains(estado))
                     estados.Add(estado);
 
@@ -149,9 +149,9 @@ namespace OMIstats.Models
             string lastOMI = null;
             foreach (DataRow r in table.Rows)
             {
-                string olimpiada = r["olimpiada"].ToString();
-                int concursante = (int)r["concursante"];
-                Resultados.TipoMedalla medalla = EnumParser.ToTipoMedalla(r["medalla"].ToString());
+                string olimpiada = DataRowParser.ToString(r["olimpiada"]);
+                int concursante = DataRowParser.ToInt(r["concursante"]);
+                Resultados.TipoMedalla medalla = DataRowParser.ToTipoMedalla(r["medalla"]);
 
                 if (lastOMI == null || lastOMI != olimpiada)
                 {

@@ -41,9 +41,9 @@ namespace OMIstats.Models
         /// <param name="datos">La fila con el origen de los datos</param>
         private void llenarDatos(DataRow datos)
         {
-            Id = (long)datos["Id"];
-            Email = datos["Email"].ToString().Trim();
-            Nombre = datos["NombreCompleto"].ToString().Trim();
+            Id = DataRowParser.ToLong(datos["Id"]);
+            Email = DataRowParser.ToString(datos["Email"]);
+            Nombre = DataRowParser.ToString(datos["NombreCompleto"]);
         }
 
         /// <summary>

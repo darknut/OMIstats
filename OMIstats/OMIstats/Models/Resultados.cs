@@ -110,27 +110,21 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow row, bool cargarObjetos, bool miembroDelegacionIncluido = false)
         {
-            lugar = (int)row["lugar"];
-            usuario = (int)row["concursante"];
-            omi = row["olimpiada"].ToString().Trim();
-            clave = row["clave"].ToString().Trim();
-            estado = row["estado"].ToString().Trim();
+            lugar =  DataRowParser.ToInt(row["lugar"]);
+            usuario = DataRowParser.ToInt(row["concursante"]);
+            omi = DataRowParser.ToString(row["olimpiada"]);
+            clave = DataRowParser.ToString(row["clave"]);
+            estado = DataRowParser.ToString(row["estado"]);
             for (int i = 0; i < 6; i++)
-                if (row["puntosD1P" + (i + 1)] == DBNull.Value)
-                    dia1[i] = null;
-                else
-                    dia1[i] = float.Parse(row["puntosD1P" + (i + 1)].ToString());
-            totalDia1 = float.Parse(row["puntosD1"].ToString());
+                dia1[i] = DataRowParser.ToFloat(row["puntosD1P" + (i + 1)]);
+            totalDia1 = DataRowParser.ToFloat(row["puntosD1"]);
             for (int i = 0; i < 6; i++)
-                if (row["puntosD2P" + (i + 1)] == DBNull.Value)
-                    dia2[i] = null;
-                else
-                    dia2[i] = float.Parse(row["puntosD2P" + (i + 1)].ToString());
-            totalDia2 = float.Parse(row["puntosD2"].ToString());
-            total = float.Parse(row["puntos"].ToString());
-            medalla = EnumParser.ToTipoMedalla(row["medalla"].ToString());
-            publico = (bool)row["publico"];
-            ioi = row["ioi"].ToString().Trim();
+                dia2[i] = DataRowParser.ToFloat(row["puntosD2P" + (i + 1)]);
+            totalDia2 = DataRowParser.ToFloat(row["puntosD2"]);
+            total = DataRowParser.ToFloat(row["puntos"]);
+            medalla = DataRowParser.ToTipoMedalla(row["medalla"]);
+            publico = DataRowParser.ToBool(row["publico"]);
+            ioi = DataRowParser.ToString(row["ioi"]);
 
 #if OMISTATS
             if (cargarObjetos)
@@ -140,8 +134,8 @@ namespace OMIstats.Models
                 {
                     if (miembroDelegacionIncluido)
                     {
-                        nivelInstitucion = (Institucion.NivelInstitucion)row["nivel"];
-                        añoEscolar = (int)row["año"];
+                        nivelInstitucion = DataRowParser.ToNivelInstitucion(row["nivel"]);
+                        añoEscolar = DataRowParser.ToInt(row["año"]);
                     }
                     else
                     {
@@ -211,7 +205,7 @@ namespace OMIstats.Models
                     if (datos[indice].Trim().Length == 0)
                         indice++;
                     else
-                        medalla = EnumParser.ToTipoMedalla(datos[indice++].Trim().ToUpper());
+                        medalla = DataRowParser.ToTipoMedalla(datos[indice++].Trim().ToUpper());
                 }
             }
             catch (Exception)
@@ -993,12 +987,14 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                int claveUsuario = (int)r["persona"];
-                string nombre = r["nombre"].ToString().Trim() + " " + r["apellidoP"].ToString().Trim() + " " + r["apellidoM"].ToString().Trim();
-                string clave = r["clave"].ToString().Trim();
-                string estado = r["estado"].ToString().Trim();
-                TipoOlimpiada clase = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
-                TipoMedalla medalla = EnumParser.ToTipoMedalla(r["medalla"].ToString().ToUpper());
+                int claveUsuario = DataRowParser.ToInt(r["persona"]);
+                string nombre = DataRowParser.ToString(r["nombre"]) + " " +
+                                DataRowParser.ToString(r["apellidoP"]) + " " +
+                                DataRowParser.ToString(r["apellidoM"]);
+                string clave = DataRowParser.ToString(r["clave"]);
+                string estado = DataRowParser.ToString(r["estado"]);
+                TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
+                TipoMedalla medalla = DataRowParser.ToTipoMedalla(r["medalla"]);
 
                 lineas.Append(estado);
                 lineas.Append("\\");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using OMIstats.Utilities;
 
 namespace OMIstats.Ajax
 {
@@ -13,8 +14,8 @@ namespace OMIstats.Ajax
 
         public void llenarDatos(DataRow datos)
         {
-            clave = (int)datos["clave"];
-            nombre = datos["nombre"].ToString().Trim();
+            clave = DataRowParser.ToInt(datos["clave"]);
+            nombre = DataRowParser.ToString(datos["nombre"]);
         }
     }
 }

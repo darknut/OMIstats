@@ -362,40 +362,40 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow datos)
         {
-            numero = datos["numero"].ToString().Trim();
-            tipoOlimpiada = EnumParser.ToTipoOlimpiada(datos["clase"].ToString().ToUpper());
-            ciudad = datos["ciudad"].ToString().Trim();
-            pais = datos["pais"].ToString().Trim();
-            año = float.Parse(datos["año"].ToString().Trim());
-            inicio = Fechas.stringToDate(datos["inicio"].ToString().Trim());
-            fin = Fechas.stringToDate(datos["fin"].ToString().Trim());
-            video = datos["video"].ToString().Trim();
-            poster = datos["poster"].ToString().Trim();
-            estados = (int)datos["estados"];
-            participantes = (int)datos["participantes"];
-            datosPublicos = (bool)datos["datospublicos"];
-            relacion = datos["relacion"].ToString().Trim();
-            reporte = datos["reporte"].ToString().Trim();
-            problemasDia1 = (int)datos["problemasDia1"];
-            problemasDia2 = (int)datos["problemasDia2"];
-            mostrarResultadosPorDia = (bool)datos["mostrarResultadosPorDia"];
-            mostrarResultadosPorProblema = (bool)datos["mostrarResultadosPorProblema"];
-            mostrarResultadosTotales = (bool)datos["mostrarResultadosTotales"];
-            puntosDesconocidos = (bool)datos["puntosDesconocidos"];
-            alsoOmips = (bool)datos["alsoOmips"];
-            noMedallistasConocidos = (bool)datos["noMedallistasConocidos"];
-            puntosDetallados = (bool)datos["puntosDetallados"];
-            registroActivo = (bool)datos["registroActivo"];
-            diplomasOnline = (bool)datos["diplomasOnline"];
-            esOnline = (bool)datos["esOnline"];
-            registroSedes = (bool)datos["registroSedes"];
+            numero = DataRowParser.ToString(datos["numero"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(datos["clase"]);
+            ciudad = DataRowParser.ToString(datos["ciudad"]);
+            pais = DataRowParser.ToString(datos["pais"]);
+            año = DataRowParser.ToStrictFloat(datos["año"]);
+            inicio = DataRowParser.ToDateTime(datos["inicio"]);
+            fin = DataRowParser.ToDateTime(datos["fin"]);
+            video = DataRowParser.ToString(datos["video"]);
+            poster = DataRowParser.ToString(datos["poster"]);
+            estados = DataRowParser.ToInt(datos["estados"]);
+            participantes = DataRowParser.ToInt(datos["participantes"]);
+            datosPublicos = DataRowParser.ToBool(datos["datospublicos"]);
+            relacion = DataRowParser.ToString(datos["relacion"]);
+            reporte = DataRowParser.ToString(datos["reporte"]);
+            problemasDia1 = DataRowParser.ToInt(datos["problemasDia1"]);
+            problemasDia2 = DataRowParser.ToInt(datos["problemasDia2"]);
+            mostrarResultadosPorDia = DataRowParser.ToBool(datos["mostrarResultadosPorDia"]);
+            mostrarResultadosPorProblema = DataRowParser.ToBool(datos["mostrarResultadosPorProblema"]);
+            mostrarResultadosTotales = DataRowParser.ToBool(datos["mostrarResultadosTotales"]);
+            puntosDesconocidos = DataRowParser.ToBool(datos["puntosDesconocidos"]);
+            alsoOmips = DataRowParser.ToBool(datos["alsoOmips"]);
+            noMedallistasConocidos = DataRowParser.ToBool(datos["noMedallistasConocidos"]);
+            puntosDetallados = DataRowParser.ToBool(datos["puntosDetallados"]);
+            registroActivo = DataRowParser.ToBool(datos["registroActivo"]);
+            diplomasOnline = DataRowParser.ToBool(datos["diplomasOnline"]);
+            esOnline = DataRowParser.ToBool(datos["esOnline"]);
+            registroSedes = DataRowParser.ToBool(datos["registroSedes"]);
 
-            claveEstado = datos["estado"].ToString().Trim();
+            claveEstado = DataRowParser.ToString(datos["estado"]);
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
             if (estado != null)
                 nombreEstado = estado.nombre;
 
-            claveEscuela = (int)datos["escuela"];
+            claveEscuela = DataRowParser.ToInt(datos["escuela"]);
             Institucion institucion = Institucion.obtenerInstitucionConClave(claveEscuela);
             if (institucion != null)
             {

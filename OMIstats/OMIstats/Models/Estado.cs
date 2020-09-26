@@ -102,12 +102,12 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow datos)
         {
-            clave = datos["clave"].ToString().Trim();
-            nombre = datos["nombre"].ToString().Trim();
-            sitio = datos["sitio"].ToString().Trim();
-            ISO = datos["iso"].ToString().Trim();
+            clave = DataRowParser.ToString(datos["clave"]);
+            nombre = DataRowParser.ToString(datos["nombre"]);
+            sitio = DataRowParser.ToString(datos["sitio"]);
+            ISO = DataRowParser.ToString(datos["iso"]);
 
-            claveDelegado = (int) (datos["delegado"] == DBNull.Value ? 0 : datos["delegado"]);
+            claveDelegado = DataRowParser.ToInt(datos["delegado"]);
             delegado = Persona.obtenerPersonaConClave(claveDelegado);
 
             if (delegado != null)
@@ -189,7 +189,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                string numero = r[0].ToString();
+                string numero = DataRowParser.ToString(r[0]);
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero, TipoOlimpiada.OMI);
                 list.Add(o);
             }

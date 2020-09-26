@@ -167,38 +167,38 @@ namespace OMIstats.Models
         /// <param name="completo">Si es true, incluye datos privados como telefono y direccion </param>
         public void llenarDatos(DataRow datos, bool completo = true, bool incluirDatosPrivados = false)
         {
-            clave = (int) datos["clave"];
-            nombre = datos["nombre"].ToString().Trim();
-            apellidoPaterno = datos["apellidoP"].ToString().Trim();
-            apellidoMaterno = datos["apellidoM"].ToString().Trim();
-            usuario = datos["usuario"].ToString().Trim();
-            omips = (bool) datos["omips"];
+            clave = DataRowParser.ToInt(datos["clave"]);
+            nombre = DataRowParser.ToString(datos["nombre"]);
+            apellidoPaterno = DataRowParser.ToString(datos["apellidoP"]);
+            apellidoMaterno = DataRowParser.ToString(datos["apellidoM"]);
+            usuario = DataRowParser.ToString(datos["usuario"]);
+            omips = DataRowParser.ToBool(datos["omips"]);
 
             if (completo)
             {
-                nacimiento = Fechas.stringToDate(datos["nacimiento"].ToString().Trim());
-                facebook = datos["facebook"].ToString().Trim();
-                twitter = datos["twitter"].ToString().Trim();
-                sitio = datos["sitio"].ToString().Trim();
-                correo = datos["correo"].ToString().Trim();
-                permisos = EnumParser.ToTipoPermisos(datos["permisos"].ToString());
-                genero = datos["genero"].ToString();
-                foto = datos["foto"].ToString().Trim();
-                ioiID = (int)datos["ioiID"];
-                omegaup = datos["omegaup"].ToString().Trim();
-                topcoder = datos["topcoder"].ToString().Trim();
-                codeforces = datos["codeforces"].ToString().Trim();
+                nacimiento = DataRowParser.ToDateTime(datos["nacimiento"]);
+                facebook = DataRowParser.ToString(datos["facebook"]);
+                twitter = DataRowParser.ToString(datos["twitter"]);
+                sitio = DataRowParser.ToString(datos["sitio"]);
+                correo = DataRowParser.ToString(datos["correo"]);
+                permisos = DataRowParser.ToTipoPermisos(datos["permisos"]);
+                genero = DataRowParser.ToString(datos["genero"]);
+                foto = DataRowParser.ToString(datos["foto"]);
+                ioiID = DataRowParser.ToInt(datos["ioiID"]);
+                omegaup = DataRowParser.ToString(datos["omegaup"]);
+                topcoder = DataRowParser.ToString(datos["topcoder"]);
+                codeforces = DataRowParser.ToString(datos["codeforces"]);
 
                 if (incluirDatosPrivados)
                 {
-                    celular = datos["celular"].ToString().Trim();
-                    telefono = datos["telefono"].ToString().Trim();
-                    direccion = datos["direccion"].ToString().Trim();
-                    emergencia = datos["emergencia"].ToString().Trim();
-                    parentesco = datos["parentesco"].ToString().Trim();
-                    telEmergencia = datos["telemergencia"].ToString().Trim();
-                    medicina = datos["medicina"].ToString().Trim();
-                    alergias = datos["alergias"].ToString().Trim();
+                    celular = DataRowParser.ToString(datos["celular"]);
+                    telefono = DataRowParser.ToString(datos["telefono"]);
+                    direccion = DataRowParser.ToString(datos["direccion"]);
+                    emergencia = DataRowParser.ToString(datos["emergencia"]);
+                    parentesco = DataRowParser.ToString(datos["parentesco"]);
+                    telEmergencia = DataRowParser.ToString(datos["telemergencia"]);
+                    medicina = DataRowParser.ToString(datos["medicina"]);
+                    alergias = DataRowParser.ToString(datos["alergias"]);
                 }
             }
         }
@@ -676,7 +676,7 @@ namespace OMIstats.Models
             estados = new List<string>();
             foreach (DataRow r in table.Rows)
             {
-                string estado = r[0].ToString().Trim();
+                string estado = DataRowParser.ToString(r[0]);
                 estados.Add(estado);
             }
             return estados;
@@ -708,7 +708,7 @@ namespace OMIstats.Models
             tipos = new List<string>();
             foreach (DataRow r in table.Rows)
             {
-                MiembroDelegacion.TipoAsistente tipo = EnumParser.ToTipoAsistente(r[0].ToString().Trim().ToUpper());
+                MiembroDelegacion.TipoAsistente tipo = DataRowParser.ToTipoAsistente(DataRowParser.ToString(r[0]));
                 if (tipo == MiembroDelegacion.TipoAsistente.DELELIDER)
                 {
                     if (!tipos.Contains(MiembroDelegacion.TipoAsistente.LIDER.ToString()))
@@ -747,7 +747,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                estados.Add(Estado.obtenerEstadoConClave(r[0].ToString().Trim()));
+                estados.Add(Estado.obtenerEstadoConClave(DataRowParser.ToString(r[0])));
             }
 
             return estados;

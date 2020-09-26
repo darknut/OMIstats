@@ -34,11 +34,11 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow r)
         {
-            album = r["album"].ToString().Trim();
-            id = r["id"].ToString().Trim();
-            orden = (int)r["orden"];
-            imagen = r["imagen"].ToString().Trim();
-            url = r["url"].ToString().Trim();
+            album = DataRowParser.ToString(r["album"]);
+            id = DataRowParser.ToString(r["id"]);
+            orden = DataRowParser.ToInt(r["orden"]);
+            imagen = DataRowParser.ToString(r["imagen"]);
+            url = DataRowParser.ToString(r["url"]);
         }
 
         /// <summary>
@@ -170,9 +170,9 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow r)
         {
-            id = r["id"].ToString().Trim();
-            lastUpdated = Fechas.stringToDate(r["lastUpdated"].ToString().Trim());
-            orden = (int)r["orden"];
+            id = DataRowParser.ToString(r["id"]);
+            lastUpdated = DataRowParser.ToDateTime(r["lastUpdated"]);
+            orden = DataRowParser.ToInt(r["orden"]);
 
             // Los datos generales no guardan nada mas
             if (id == ALBUM_GRAL)
@@ -180,12 +180,12 @@ namespace OMIstats.Models
                 return;
             }
 
-            olimpiada = r["olimpiada"].ToString().Trim();
-            tipoOlimpiada = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
-            fotos = (int)r["fotos"];
-            nombre = r["nombre"].ToString().Trim();
-            portada = r["portada"].ToString().Trim();
-            newsletter = (bool)r["newsletter"];
+            olimpiada = DataRowParser.ToString(r["olimpiada"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
+            fotos = DataRowParser.ToInt(r["fotos"]);
+            nombre = DataRowParser.ToString(r["nombre"]);
+            portada = DataRowParser.ToString(r["portada"]);
+            newsletter = DataRowParser.ToBool(r["newsletter"]);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace OMIstats.Models
 
             foreach (DataRow row in table.Rows)
             {
-                olimpiadas.Add(row[0].ToString().Trim());
+                olimpiadas.Add(DataRowParser.ToString(row[0]));
             }
 
             return olimpiadas;

@@ -45,10 +45,10 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow r)
         {
-            clave = (int)r["clave"];
-            log = r["log"].ToString().Trim();
-            tipo = EnumParser.ToTipoLog(r["tipo"].ToString().ToUpper());
-            timestamp = DateTime.Parse(r["timestamp"].ToString().Trim());
+            clave = DataRowParser.ToInt(r["clave"]);
+            log = DataRowParser.ToString(r["log"]);
+            tipo = DataRowParser.ToTipoLog(r["tipo"]);
+            timestamp = DataRowParser.ToDateTime(r["timestamp"]);
         }
 
         public static void add(TipoLog tipo, string log)

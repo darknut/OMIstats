@@ -108,20 +108,20 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow r)
         {
-            clave = (int)r["clave"];
-            instruccion = EnumParser.ToInstruccion(r["tipo"].ToString().ToUpper());
-            olimpiada = r["olimpiada"].ToString().Trim();
-            tipoOlimpiada = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
-            dia = (short)r["dia"];
-            ping = (int)r["ping"];
-            concurso = r["concurso"].ToString().Trim();
-            token = r["token"].ToString().Trim();
-            prefijo = r["prefijo"].ToString().Trim();
-            status = EnumParser.ToStatus(r["status"].ToString().ToUpper());
-            secondsToFinish = (int)r["secondsToFinish"];
+            clave = DataRowParser.ToInt(r["clave"]);
+            instruccion = DataRowParser.ToInstruccion(r["tipo"]);
+            olimpiada = DataRowParser.ToString(r["olimpiada"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
+            dia = DataRowParser.ToShort(r["dia"]);
+            ping = DataRowParser.ToInt(r["ping"]);
+            concurso = DataRowParser.ToString(r["concurso"]);
+            token = DataRowParser.ToString(r["token"]);
+            prefijo = DataRowParser.ToString(r["prefijo"]);
+            status = DataRowParser.ToStatus(r["status"]);
+            secondsToFinish = DataRowParser.ToInt(r["secondsToFinish"]);
             try
             {
-                timestamp = new DateTime(long.Parse(r["timestamp"].ToString()));
+                timestamp = new DateTime(DataRowParser.ToLong(r["timestamp"]));
             }
             catch (Exception)
             {

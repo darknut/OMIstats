@@ -74,16 +74,16 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow datos)
         {
-            clave = (int)datos["clave"];
-            nombre = datos["nombre"].ToString().Trim();
-            nombreCorto = datos["nombrecorto"].ToString().Trim();
-            nombreURL = datos["nombreurl"].ToString().Trim();
-            pagina = datos["url"].ToString().Trim();
-            primaria = (bool)datos["primaria"];
-            secundaria = (bool)datos["secundaria"];
-            preparatoria = (bool)datos["preparatoria"];
-            universidad = (bool)datos["universidad"];
-            publica = (bool)datos["publica"];
+            clave = DataRowParser.ToInt(datos["clave"]);
+            nombre = DataRowParser.ToString(datos["nombre"]);
+            nombreCorto = DataRowParser.ToString(datos["nombrecorto"]);
+            nombreURL = DataRowParser.ToString(datos["nombreurl"]);
+            pagina = DataRowParser.ToString(datos["url"]);
+            primaria = DataRowParser.ToBool(datos["primaria"]);
+            secundaria = DataRowParser.ToBool(datos["secundaria"]);
+            preparatoria = DataRowParser.ToBool(datos["preparatoria"]);
+            universidad = DataRowParser.ToBool(datos["universidad"]);
+            publica = DataRowParser.ToBool(datos["publica"]);
 
             if (Archivos.existeArchivo(Archivos.FolderImagenes.ESCUELAS,
                                                 clave + ".png"))
@@ -271,7 +271,7 @@ namespace OMIstats.Models
             estados = new List<string>();
             foreach (DataRow r in table.Rows)
             {
-                string estado = r[0].ToString().Trim();
+                string estado = DataRowParser.ToString(r[0]);
                 estados.Add(estado);
             }
         }
@@ -459,7 +459,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                string numero = r[0].ToString();
+                string numero = DataRowParser.ToString(r[0]);
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(numero, TipoOlimpiada.OMI);
                 list.Add(o);
             }

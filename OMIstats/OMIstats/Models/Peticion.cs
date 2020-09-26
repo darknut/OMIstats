@@ -186,15 +186,15 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow datos, bool cargarUsuario = false)
         {
-            clave = (int) datos["clave"];
-            tipo = EnumParser.ToTipoPeticion(datos["tipo"].ToString().Trim().ToUpper());
-            subtipo = EnumParser.ToTipoPeticion(datos["subtipo"].ToString().Trim().ToUpper());
-            datos1 = datos["datos1"].ToString().Trim();
-            datos2 = datos["datos2"].ToString().Trim();
-            datos3 = datos["datos3"].ToString().Trim();
+            clave = DataRowParser.ToInt(datos["clave"]);
+            tipo = DataRowParser.ToTipoPeticion(datos["tipo"]);
+            subtipo = DataRowParser.ToTipoPeticion(datos["subtipo"]);
+            datos1 = DataRowParser.ToString(datos["datos1"]);
+            datos2 = DataRowParser.ToString(datos["datos2"]);
+            datos3 = DataRowParser.ToString(datos["datos3"]);
 
             if (cargarUsuario)
-                usuario = Persona.obtenerPersonaConClave((int)datos["usuario"]);
+                usuario = Persona.obtenerPersonaConClave(DataRowParser.ToInt(datos["usuario"]));
         }
 
         /// <summary>

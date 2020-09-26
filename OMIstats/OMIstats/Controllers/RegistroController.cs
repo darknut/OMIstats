@@ -313,7 +313,7 @@ namespace OMIstats.Controllers
             Institucion i = null;
             if (!String.IsNullOrEmpty(claveOriginal))
             {
-                tipoO = EnumParser.ToTipoOlimpiada(tipoOriginal);
+                tipoO = DataRowParser.ToTipoOlimpiada(tipoOriginal);
                 var temp = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoO, claveOriginal);
                 if (temp.Count == 0)
                 {

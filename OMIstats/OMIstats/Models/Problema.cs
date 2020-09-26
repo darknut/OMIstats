@@ -73,19 +73,19 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow datos)
         {
-            olimpiada = datos["olimpiada"].ToString().Trim();
-            tipoOlimpiada = EnumParser.ToTipoOlimpiada(datos["clase"].ToString().ToUpper());
-            dia = (int)datos["dia"];
-            numero = (int)datos["numero"];
-            nombre = datos["nombre"].ToString().Trim();
-            url = datos["url"].ToString().Trim();
-            media = float.Parse(datos["media"].ToString().Trim());
-            perfectos = (int)datos["perfectos"];
-            ceros = (int)datos["ceros"];
-            mediana = float.Parse(datos["mediana"].ToString());
-            casos = datos["casos"].ToString().Trim();
-            codigo = datos["codigo"].ToString().Trim();
-            solucion = datos["solucion"].ToString().Trim();
+            olimpiada = DataRowParser.ToString(datos["olimpiada"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(datos["clase"]);
+            dia = DataRowParser.ToInt(datos["dia"]);
+            numero = DataRowParser.ToInt(datos["numero"]);
+            nombre = DataRowParser.ToString(datos["nombre"]);
+            url = DataRowParser.ToString(datos["url"]);
+            media = DataRowParser.ToStrictFloat(datos["media"]);
+            perfectos = DataRowParser.ToInt(datos["perfectos"]);
+            ceros = DataRowParser.ToInt(datos["ceros"]);
+            mediana = DataRowParser.ToStrictFloat(datos["mediana"]);
+            casos =  DataRowParser.ToString(datos["casos"]);
+            codigo =  DataRowParser.ToString(datos["codigo"]);
+            solucion =  DataRowParser.ToString(datos["solucion"]);
         }
 
         /// <summary>
@@ -353,10 +353,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                if (r[0] is DBNull)
-                    resultados.Add(0);
-                else
-                    resultados.Add(float.Parse(r[0].ToString()));
+                resultados.Add(DataRowParser.ToStrictFloat(r[0]));
             }
 
             return resultados;

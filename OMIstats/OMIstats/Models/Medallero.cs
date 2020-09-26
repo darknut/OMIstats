@@ -74,18 +74,18 @@ namespace OMIstats.Models
 
         public void llenarDatos(DataRow datos)
         {
-            tipoOlimpiada = EnumParser.ToTipoOlimpiada(datos["clase"].ToString().ToUpper());
-            tipoMedallero = EnumParser.ToTipoMedallero(datos["tipo"].ToString().ToUpper());
-            clave = datos["clave"].ToString().Trim();
-            oros = (int)datos["oro"];
-            platas = (int)datos["plata"];
-            bronces = (int)datos["bronce"];
-            otros = (int)datos["otros"];
-            puntos = float.Parse(datos["puntos"].ToString());
-            promedio = float.Parse(datos["promedio"].ToString());
-            lugar = (int)datos["lugar"];
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(datos["clase"]);
+            tipoMedallero = DataRowParser.ToTipoMedallero(datos["tipo"]);
+            clave = DataRowParser.ToString(datos["clave"]);
+            oros = DataRowParser.ToInt(datos["oro"]);
+            platas = DataRowParser.ToInt(datos["plata"]);
+            bronces = DataRowParser.ToInt(datos["bronce"]);
+            otros = DataRowParser.ToInt(datos["otros"]);
+            puntos = DataRowParser.ToFloat(datos["puntos"]);
+            promedio = DataRowParser.ToFloat(datos["promedio"]);
+            lugar = DataRowParser.ToInt(datos["lugar"]);
 
-            omi = datos["omi"].ToString().Trim();
+            omi = DataRowParser.ToString(datos["omi"]);
         }
 
         /// <summary>

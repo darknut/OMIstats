@@ -139,34 +139,35 @@ namespace OMIstats.Models
         {
             if (incluirPersona)
             {
-                usuario = row["usuario"].ToString().Trim();
-                nombreAsistente = row["nombre"].ToString().Trim() + " " + row["apellidoP"].ToString().Trim() + " " + row["apellidoM"].ToString().Trim();
-                fechaNacimiento = row["nacimiento"].ToString().Trim();
-                omips = (bool)row["omips"];
-                genero = row["genero"].ToString().Trim();
-                correo = row["correo"].ToString().Trim();
+                usuario = DataRowParser.ToString(row["usuario"]);
+                nombreAsistente = DataRowParser.ToString(row["nombre"]) + " " +
+                                  DataRowParser.ToString(row["apellidoP"]) + " " +
+                                  DataRowParser.ToString(row["apellidoM"]);
+                fechaNacimiento = DataRowParser.ToString(row["nacimiento"]);
+                omips = DataRowParser.ToBool(row["omips"]);
+                genero = DataRowParser.ToString(row["genero"]);
+                correo = DataRowParser.ToString(row["correo"]);
             }
 
             if (incluirEscuela)
             {
-                nombreEscuela = row["nombreCorto"].ToString().Trim();
-                if (row["publica"] != DBNull.Value)
-                    escuelaPublica = (bool)row["publica"];
+                nombreEscuela = DataRowParser.ToString(row["nombreCorto"]);
+                escuelaPublica = DataRowParser.ToBool(row["publica"]);
             }
 
-            claveUsuario = (int)row["persona"];
-            estado = row["estado"].ToString().Trim();
-            olimpiada = row["olimpiada"].ToString().Trim();
-            clave = row["clave"].ToString().Trim();
-            tipo = EnumParser.ToTipoAsistente(row["tipo"].ToString().ToUpper());
-            tipoOlimpiada = EnumParser.ToTipoOlimpiada(row["clase"].ToString().ToUpper());
-            sede = (int)row["sede"];
+            claveUsuario = DataRowParser.ToInt(row["persona"]);
+            estado = DataRowParser.ToString(row["estado"]);
+            olimpiada = DataRowParser.ToString(row["olimpiada"]);
+            clave = DataRowParser.ToString(row["clave"]);
+            tipo = DataRowParser.ToTipoAsistente(row["tipo"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(row["clase"]);
+            sede = DataRowParser.ToInt(row["sede"]);
 #if OMISTATS
             try
             {
-                claveEscuela = (int)row["institucion"];
-                nivelEscuela = (Institucion.NivelInstitucion)row["nivel"];
-                añoEscuela = (int)row["año"];
+                claveEscuela = DataRowParser.ToInt(row["institucion"]);
+                nivelEscuela = DataRowParser.ToNivelInstitucion(row["nivel"]);
+                añoEscuela = DataRowParser.ToInt(row["año"]);
             } catch(Exception) { }
             nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
 #endif
@@ -184,7 +185,7 @@ namespace OMIstats.Models
             try
             {
                 if (datos.Length > (int)Campos.TIPO_ASISTENTE)
-                    tipo = EnumParser.ToTipoAsistente(datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
+                    tipo = DataRowParser.ToTipoAsistente(datos[(int)Campos.TIPO_ASISTENTE].Trim().ToUpper());
                 if (tipo == TipoAsistente.NULL)
                     throw new Exception();
             }
@@ -215,7 +216,7 @@ namespace OMIstats.Models
                     if (datos[(int)Campos.NIVEL_ESCUELA].Trim().Length == 0)
                         nivelEscuela = Institucion.NivelInstitucion.NULL;
                     else
-                        nivelEscuela = EnumParser.ToNivelInstitucion(datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
+                        nivelEscuela = DataRowParser.ToNivelInstitucion(datos[(int)Campos.NIVEL_ESCUELA].Trim().ToUpper());
                 }
             }
             catch (Exception)
@@ -1003,8 +1004,8 @@ namespace OMIstats.Models
                 if (tipo == TipoAsistente.COMPETIDOR)
                     md.resultados = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave);
 
-                md.fotoUsuario = r["foto"].ToString().Trim();
-                md.puedeRegistrar = EnumParser.ToTipoPermisos(r["permisos"].ToString()) != Persona.TipoPermisos.NORMAL;
+                md.fotoUsuario = DataRowParser.ToString(r["foto"]);
+                md.puedeRegistrar = DataRowParser.ToTipoPermisos(r["permisos"]) != Persona.TipoPermisos.NORMAL;
 
                 lista.Add(md);
             }
@@ -1030,13 +1031,15 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                int claveUsuario = (int)r["persona"];
-                string nombre = r["nombre"].ToString().Trim() + " " + r["apellidoP"].ToString().Trim() + " " + r["apellidoM"].ToString().Trim();
-                string clave = r["clave"].ToString().Trim();
-                string estado = r["estado"].ToString().Trim();
-                string genero = r["genero"].ToString().Trim();
-                TipoOlimpiada clase = EnumParser.ToTipoOlimpiada(r["clase"].ToString().ToUpper());
-                TipoAsistente tipo = EnumParser.ToTipoAsistente(r["tipo"].ToString().ToUpper());
+                int claveUsuario = DataRowParser.ToInt(r["persona"]);
+                string nombre = DataRowParser.ToString(r["nombre"]) + " " + 
+                                DataRowParser.ToString(r["apellidoP"]) + " " +
+                                DataRowParser.ToString(r["apellidoM"]);
+                string clave = DataRowParser.ToString(r["clave"]);
+                string estado = DataRowParser.ToString(r["estado"]);
+                string genero = DataRowParser.ToString(r["genero"]);
+                TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
+                TipoAsistente tipo = DataRowParser.ToTipoAsistente(r["tipo"]);
 
                 if (lastUsuario == claveUsuario)
                     continue;
@@ -1145,8 +1148,8 @@ namespace OMIstats.Models
 
                 foreach (DataRow r in table.Rows)
                 {
-                    int año = int.Parse(r[1].ToString().Trim());
-                    int clavePersona = (int)r[0];
+                    int año = int.Parse(DataRowParser.ToString(r[1]));
+                    int clavePersona = DataRowParser.ToInt(r[0]);
 
                     // Filtra a los que ya están registrados este año
                     if (año == o.año)
@@ -1289,7 +1292,9 @@ namespace OMIstats.Models
             {
                 MiembroDelegacion md = new MiembroDelegacion();
                 md.llenarDatos(r, incluirPersona: false, incluirEscuela: false);
-                md.nombreAsistente = r["nombre"].ToString().Trim() + " " + r["apellidoP"].ToString().Trim() + " " + r["apellidoM"].ToString().Trim();
+                md.nombreAsistente = DataRowParser.ToString(r["nombre"]) + " " +
+                                     DataRowParser.ToString(r["apellidoP"]) + " " +
+                                     DataRowParser.ToString(r["apellidoM"]);
 
                 lista.Add(md);
             }

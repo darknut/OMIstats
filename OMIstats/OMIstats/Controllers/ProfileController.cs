@@ -198,7 +198,7 @@ namespace OMIstats.Controllers
             if (esSuperUsuario && tipoUsuario != null && tipoUsuario != "")
             {
                 Persona.TipoPermisos permisos;
-                permisos = EnumParser.ToTipoPermisos(tipoUsuario);
+                permisos = DataRowParser.ToTipoPermisos(tipoUsuario);
                 if (permisos == Persona.TipoPermisos.ADMIN && !esAdmin())
                     return RedirectTo(Pagina.ERROR, 403);
                 p.permisos = permisos;
