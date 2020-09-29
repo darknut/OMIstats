@@ -211,7 +211,10 @@ namespace OMIstats.Controllers
             // Se copian los datos que no se pueden modificar
             p.clave = current.clave;
             if (!esAdmin())
+            {
                 p.ioiID = current.ioiID;
+                p.oculta = current.oculta;
+            }
             p.usuario = current.usuario;
 
             // Se guarda la imagen en disco

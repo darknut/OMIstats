@@ -147,6 +147,13 @@
                         @Html.TextBoxFor(model => model.ioiID, new { @class = "smallInput" })
                     </div>
                 </div>
+
+                <div>
+                    <div class="label">¿Oculta?: </div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.oculta, new { @class = "smallInput" })
+                    </div>
+                </div>
             }
 
             @if (ViewBag.usuario.esSuperUsuario())

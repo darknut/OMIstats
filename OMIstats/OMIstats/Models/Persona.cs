@@ -114,7 +114,9 @@ namespace OMIstats.Models
 
         public int ioiID { get; set; }
 
-        public bool omips;
+        public bool omips { get; set; }
+
+        public bool oculta { get; set; }
 
         public string nombreCompleto
         {
@@ -157,6 +159,7 @@ namespace OMIstats.Models
             medicina = "";
             alergias = "";
             omips = false;
+            oculta = false;
         }
 
         /// <summary>
@@ -173,6 +176,7 @@ namespace OMIstats.Models
             apellidoMaterno = DataRowParser.ToString(datos["apellidoM"]);
             usuario = DataRowParser.ToString(datos["usuario"]);
             omips = DataRowParser.ToBool(datos["omips"]);
+            oculta = DataRowParser.ToBool(datos["oculta"]);
 
             if (completo)
             {
@@ -428,6 +432,10 @@ namespace OMIstats.Models
             query.Append(omips ? 1 : 0);
             query.Append(",");
 
+            query.Append(" oculta = ");
+            query.Append(oculta ? 1 : 0);
+            query.Append(",");
+
             if (lugarGuardado == LugarGuardado.REGISTRO)
             {
                 query.Append(" celular = ");
@@ -527,9 +535,9 @@ namespace OMIstats.Models
             query.Append(" declare @inserted table(clave int); ");
             query.Append(" insert into persona (nombre, facebook, twitter, sitio, usuario, permisos, codeforces,");
             query.Append(" topcoder, ioiID, celular, telefono, direccion, emergencia, parentesco, telemergencia,");
-            query.Append(" medicina, alergias, omips) output inserted.clave into @inserted values( ");
+            query.Append(" medicina, alergias, omips, oculta) output inserted.clave into @inserted values( ");
             query.Append(Cadenas.comillas(nombre));
-            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', '', 0); select clave from @inserted ");
+            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', '', 0, 0); select clave from @inserted ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return;
@@ -633,6 +641,7 @@ namespace OMIstats.Models
 
             query.Append("select * from persona where search like ");
             query.Append(Cadenas.comillas("%" + Cadenas.quitaEspeciales(nombre) + "%"));
+            query.Append(" and oculta = 0 ");
             query.Append(" order by search asc");
 
             db.EjecutarQuery(query.ToString());

@@ -530,6 +530,9 @@ namespace OMIstats.Models
                 p.omips = true;
             }
 
+            if (md.tipo == TipoAsistente.COMPETIDOR)
+                p.oculta = false;
+
             if (!p.guardarDatos())
                 return (int) TipoError.CAMPOS_USUARIO;
 
@@ -874,6 +877,8 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
+            if (table.Rows.Count == 0)
+                return null;
             md.llenarDatos(table.Rows[0], incluirPersona: false, incluirEscuela: false);
 
             return md;
@@ -933,6 +938,7 @@ namespace OMIstats.Models
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
+            query.Append(" and oculta = 0 ");
             if (tipo == TipoAsistente.COMPETIDOR)
             {
                 query.Append(" and md.clase = ");
@@ -1157,7 +1163,7 @@ namespace OMIstats.Models
 
                     MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(clavePersona);
                     // Revisamos la última participación del competidor en particular
-                    if (tipo != TipoOlimpiada.NULL)
+                    if (tipo != TipoOlimpiada.NULL && md != null)
                     {
                         // Esto será true si está registrado como otro tipo de asistente este año
                         if (md.olimpiada == omi)
@@ -1204,17 +1210,20 @@ namespace OMIstats.Models
 
                         MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(p.clave);
 
-                        if (md.estado == estado || esSuperUsuario)
-                            p.llenarDatos(r, completo: true, incluirDatosPrivados: true);
+                        if (md != null)
+                        {
+                            if (md.estado == estado || esSuperUsuario)
+                                p.llenarDatos(r, completo: true, incluirDatosPrivados: true);
 
-                        if (md.tipo == TipoAsistente.COMPETIDOR)
-                        {
-                            Olimpiada om = Olimpiada.obtenerOlimpiadaConClave(md.olimpiada, md.tipoOlimpiada);
-                            md.calculaNuevoNivel((int)o.año - (int)om.año);
-                        }
-                        else
-                        {
-                            md = null;
+                            if (md.tipo == TipoAsistente.COMPETIDOR)
+                            {
+                                Olimpiada om = Olimpiada.obtenerOlimpiadaConClave(md.olimpiada, md.tipoOlimpiada);
+                                md.calculaNuevoNivel((int)o.año - (int)om.año);
+                            }
+                            else
+                            {
+                                md = null;
+                            }
                         }
 
                         personas.Add(new OMIstats.Ajax.BuscarPersonas(p, md));

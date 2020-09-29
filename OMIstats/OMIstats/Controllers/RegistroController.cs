@@ -433,6 +433,8 @@ namespace OMIstats.Controllers
                     p.clave = per.clave;
                 }
 
+                if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                    p.oculta = false;
                 p.foto = guardaFoto(file, p.clave);
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
 
@@ -471,7 +473,10 @@ namespace OMIstats.Controllers
                 // Modificando asistente
                 // Primero los datos de persona
                 Persona per = Persona.obtenerPersonaConClave(md.claveUsuario);
+                if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                    per.oculta = false;
                 p.clave = per.clave;
+                p.oculta = per.oculta;
                 p.foto = guardaFoto(file, p.clave);
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
 
