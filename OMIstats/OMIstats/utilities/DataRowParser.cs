@@ -34,6 +34,11 @@ namespace OMIstats.Utilities
             return float.Parse(value.ToString());
         }
 
+        public static DateTime ToLongDateTime(object value)
+        {
+            return DateTime.Parse(value.ToString().Trim());
+        }
+
         public static DateTime ToDateTime(object value)
         {
             return Fechas.stringToDate(value.ToString().Trim());

@@ -48,7 +48,7 @@ namespace OMIstats.Models
             clave = DataRowParser.ToInt(r["clave"]);
             log = DataRowParser.ToString(r["log"]);
             tipo = DataRowParser.ToTipoLog(r["tipo"]);
-            timestamp = DataRowParser.ToDateTime(r["timestamp"]);
+            timestamp = DataRowParser.ToLongDateTime(r["timestamp"]);
         }
 
         public static void add(TipoLog tipo, string log)
