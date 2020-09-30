@@ -76,6 +76,7 @@ namespace OMIstats.Controllers
                 {
                     // No hay match, la persona no existe
                     ViewBag.NoMatch = true;
+                    Log.add(Log.TipoLog.USUARIO, "Usuario con nombre " + usuario.Nombre + " y correo " + usuario.Email + " no se encontró en el sistema");
                     usuario.borrarGUID();
                     return View(usuario);
                 }
