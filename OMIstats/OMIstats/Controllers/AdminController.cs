@@ -251,14 +251,14 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Admin/BorrarDelegados/
+        // GET: /Admin/ResetPermisos/
 
-        public ActionResult BorrarDelegados()
+        public ActionResult ResetPermisos()
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.HOME);
 
-            Persona.borrarDelegados();
+            Persona.resetPermisos();
 
             return RedirectTo(Pagina.MANAGE_REQUEST);
         }

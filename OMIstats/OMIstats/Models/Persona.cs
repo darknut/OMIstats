@@ -870,12 +870,12 @@ namespace OMIstats.Models
             return s.ToString();
         }
 
-        public static void borrarDelegados()
+        public static void resetPermisos()
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" update persona set permisos = 0 where permisos = 3 ");
+            query.Append(" update persona set permisos = 0 where permisos > 1 ");
 
             db.EjecutarQuery(query.ToString());
         }
