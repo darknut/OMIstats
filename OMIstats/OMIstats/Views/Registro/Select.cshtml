@@ -4,12 +4,16 @@
 }
 
 @{
-    ViewBag.Title = "Elige el estado";
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
+    ViewBag.Title = estados.Count == 0 ? "No se encontraron estados" : "Elige el estado";
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
+@if (estados.Count == 0)
+{
+<div>Por favor contacta a un miembro del COMI para que te asigne un estado</div>
+}
 <ul>
 @foreach (OMIstats.Models.Estado estado in estados)
 {
