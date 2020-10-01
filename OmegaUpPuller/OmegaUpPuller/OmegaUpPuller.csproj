@@ -52,8 +52,8 @@
     <Compile Include="..\..\OMIStats\OMIStats\utilities\Cadenas.cs">
       <Link>OMIStats\Utilities\Cadenas.cs</Link>
     </Compile>
-	<Compile Include="..\..\OMIStats\OMIStats\utilities\EnumParser.cs">
-      <Link>OMIStats\Utilities\EnumParser.cs</Link>
+	<Compile Include="..\..\OMIStats\OMIStats\utilities\DataRowParser.cs">
+      <Link>OMIStats\Utilities\DataRowParser.cs</Link>
     </Compile>
     <Compile Include="..\..\OMIStats\OMIStats\utilities\Fechas.cs">
       <Link>OMIStats\Utilities\Fechas.cs</Link>
