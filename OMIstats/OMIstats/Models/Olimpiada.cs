@@ -109,6 +109,8 @@ namespace OMIstats.Models
 
         public bool registroSedes { get; set; }
 
+        public bool ordenarPorPuntos { get; set; }
+
         public float media
         {
             get
@@ -280,6 +282,7 @@ namespace OMIstats.Models
             diplomasOnline = false;
             esOnline = false;
             registroSedes = false;
+            ordenarPorPuntos = false;
 
             liveResults = false;
         }
@@ -389,6 +392,7 @@ namespace OMIstats.Models
             diplomasOnline = DataRowParser.ToBool(datos["diplomasOnline"]);
             esOnline = DataRowParser.ToBool(datos["esOnline"]);
             registroSedes = DataRowParser.ToBool(datos["registroSedes"]);
+            ordenarPorPuntos = DataRowParser.ToBool(datos["ordenarPorPuntos"]);
 
             claveEstado = DataRowParser.ToString(datos["estado"]);
             Estado estado = Estado.obtenerEstadoConClave(claveEstado);
@@ -555,6 +559,8 @@ namespace OMIstats.Models
             query.Append(esOnline ? 1 : 0);
             query.Append(", registroSedes = ");
             query.Append(registroSedes ? 1 : 0);
+            query.Append(", ordenarPorPuntos = ");
+            query.Append(ordenarPorPuntos ? 1 : 0);
             query.Append(" where numero = ");
             query.Append(Cadenas.comillas(clave));
             query.Append(" and clase = ");
@@ -607,6 +613,7 @@ namespace OMIstats.Models
             omi.diplomasOnline = this.diplomasOnline;
             omi.esOnline = this.esOnline;
             omi.registroSedes = this.registroSedes;
+            omi.ordenarPorPuntos = this.ordenarPorPuntos;
 
             omi.guardarDatos(clave);
         }
@@ -827,7 +834,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = puntosMaximos > PUNTOS_MINIMOS_CONOCIDOS;
 
             // Calculamos el medallero y lo guardamos en la base
-            Medallero.calcularMedallas(tipoOlimpiada, numero);
+            Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
 
             // Guardamos los datos en la base
             guardarDatos();

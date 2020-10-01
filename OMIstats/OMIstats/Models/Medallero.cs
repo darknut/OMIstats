@@ -46,6 +46,7 @@ namespace OMIstats.Models
         private bool hayUNKs;
 #endif
         public int count;
+        private bool ordenarPorPuntos;
 
         public Medallero()
         {
@@ -65,6 +66,7 @@ namespace OMIstats.Models
             hayUNKs = false;
 #endif
             count = 0;
+            ordenarPorPuntos = false;
         }
 
         public Medallero(TipoOlimpiada tipo): this()
@@ -223,7 +225,7 @@ namespace OMIstats.Models
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
         /// </param name="tipoOlimpiada">El tipo de olimpiada para el que se requieren los tipos</param>
-        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada)
+        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada, bool ordenarPorPuntos)
         {
             if (tipoOlimpiada == TipoOlimpiada.NULL)
                 return;
@@ -306,6 +308,7 @@ namespace OMIstats.Models
                         estadoPorOlimpiada.clave = estadoPorOlimpiadaClave;
                         estadoPorOlimpiada.tipoOlimpiada = tipoOlimpiada;
                         estadoPorOlimpiada.omi = resultado.omi;
+                        estadoPorOlimpiada.ordenarPorPuntos = ordenarPorPuntos;
                         estadoPorOlimpiada.tipoMedallero = TipoMedallero.ESTADO_POR_OMI;
                         estadoPorOlimpiada.count = 0;
                         estadoPorOlimpiada.puntos = 0;
@@ -732,21 +735,42 @@ namespace OMIstats.Models
         {
             if (this.omi == obj.omi)
             {
-                if (obj.promedio == this.promedio)
+                if (ordenarPorPuntos)
                 {
-                    if (obj.puntos == this.puntos)
+                    if (obj.promedio == this.promedio)
                     {
-                        if (this.oros == obj.oros)
+                        if (obj.puntos == this.puntos)
                         {
-                            if (this.platas == obj.platas)
-                                return obj.bronces - this.bronces;
-                            return obj.platas - this.platas;
+                            if (this.oros == obj.oros)
+                            {
+                                if (this.platas == obj.platas)
+                                    return obj.bronces - this.bronces;
+                                return obj.platas - this.platas;
+                            }
+                            return obj.oros - this.oros;
                         }
-                        return obj.oros - this.oros;
+                        return (int)Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
                     }
-                    return (int)Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
+                    return (int)Math.Round((double)((obj.promedio * 100) - (this.promedio * 100)), 0);
                 }
-                return (int)Math.Round((double)((obj.promedio * 100) - (this.promedio * 100)), 0);
+                else
+                {
+                    if (this.oros == obj.oros)
+                    {
+                        if (this.platas == obj.platas)
+                        {
+                            if (this.bronces == obj.bronces)
+                            {
+                                if (obj.promedio == this.promedio)
+                                    return (int)Math.Round((double)((obj.puntos * 100) - (this.puntos * 100)), 0);
+                                return (int)Math.Round((double)((obj.promedio * 100) - (this.promedio * 100)), 0);
+                            }
+                            return obj.bronces - this.bronces;
+                        }
+                        return obj.platas - this.platas;
+                    }
+                    return obj.oros - this.oros;
+                }
             }
             return this.omi.CompareTo(obj.omi);
         }
