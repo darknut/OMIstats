@@ -562,8 +562,7 @@ namespace OMIstats.Models
 
             query.Append(" delete persona where clave in ( ");
             query.Append(" select clave from Persona where clave ");
-            query.Append(" not in (select distinct(Persona) from MiembroDelegacion) and clave not in ");
-            query.Append(" (select delegado from Estado where delegado is not null))");
+            query.Append(" not in (select distinct(Persona) from MiembroDelegacion) and permisos = 0)");
 
             db.EjecutarQuery(query.ToString());
         }
