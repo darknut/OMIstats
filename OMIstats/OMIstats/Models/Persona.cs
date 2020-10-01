@@ -869,5 +869,15 @@ namespace OMIstats.Models
 
             return s.ToString();
         }
+
+        public static void borrarDelegados()
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update persona set permisos = 0 where permisos = 3 ");
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 }

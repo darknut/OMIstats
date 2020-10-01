@@ -251,6 +251,19 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/BorrarDelegados/
+
+        public ActionResult BorrarDelegados()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.HOME);
+
+            Persona.borrarDelegados();
+
+            return RedirectTo(Pagina.MANAGE_REQUEST);
+        }
+
+        //
         // GET: /Admin/Unlink/
 
         public ActionResult Unlink(string usuario)
