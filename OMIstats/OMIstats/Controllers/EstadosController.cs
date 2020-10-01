@@ -16,6 +16,7 @@ namespace OMIstats.Controllers
         {
             List<Medallero> estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI).Values.ToList();
             estados.Sort();
+            ViewBag.admin = esAdmin();
             return View(estados);
         }
 
@@ -45,6 +46,7 @@ namespace OMIstats.Controllers
                     ultimoValido = i;
 
             ViewBag.ultimoValido = ultimoValido;
+            ViewBag.admin = esAdmin();
 
             return View(Estado.obtenerEstados());
         }
@@ -61,6 +63,7 @@ namespace OMIstats.Controllers
             ViewBag.estados = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI, out cabeceras);
             ViewBag.cabeceras = cabeceras;
             ViewBag.totales = Medallero.obtenerTablaEstadosGeneral(TipoOlimpiada.OMI);
+            ViewBag.admin = esAdmin();
 
             return View(Estado.obtenerEstados());
         }

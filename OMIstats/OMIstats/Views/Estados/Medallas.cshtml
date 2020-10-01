@@ -21,8 +21,11 @@
 <div class="submenu">
     @Html.ActionLink("General", "Index", "Estados", null, new { @class = "mini-boton" })
     @Html.ActionLink("Lugares", "Lugares", "Estados", null, new { @class = "mini-boton" })
+    @if (ViewBag.admin)
+    {
     <br />
     @Html.ActionLink("Delegados", "Delegados", "Estados", null, new { @class = "mini-boton" })
+    }
 </div>
 
 <h1 class="titulo">@ViewBag.Title</h1>
