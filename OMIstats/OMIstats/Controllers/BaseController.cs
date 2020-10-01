@@ -86,7 +86,7 @@ namespace OMIstats.Controllers
                 if (p.esAdmin())
                     Log.add(Log.TipoLog.ADMIN, "Admin inició sesión: " + p.nombreCompleto);
                 else
-                    Log.add(Log.TipoLog.USUARIO, "Usuario inició sesión: " + p.clave);
+                    Log.add(Log.TipoLog.USUARIO, p.nombreCompleto + " inició sesión, " + p.correo);
             }
             Session["usuario"] = p;
         }

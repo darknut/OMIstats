@@ -225,7 +225,7 @@ namespace OMIstats.Controllers
             if (p.guardarDatos(generarPeticiones:!esSuperUsuario, currentValues: current))
             {
                 if (!esSuperUsuario)
-                    Log.add(Log.TipoLog.USUARIO, "Usuario actualizó sus datos");
+                    Log.add(Log.TipoLog.USUARIO, p.nombreCompleto + " actualizó sus datos");
 
                 // Se modificaron los datos del usuario, tenemos que recargarlos en la variable de sesion
                 recargarDatos();
