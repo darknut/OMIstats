@@ -183,7 +183,7 @@ namespace OMIstats.Models
                 query.Append(" and estado = ");
                 query.Append(Cadenas.comillas(estado));
             }
-            query.Append(" order by estado desc ");
+            query.Append(" order by estado asc ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
