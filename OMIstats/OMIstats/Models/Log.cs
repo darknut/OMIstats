@@ -29,7 +29,7 @@ namespace OMIstats.Models
         {
             this.tipo = tipo;
             this.log = log;
-            this.timestamp = DateTime.UtcNow;
+            this.timestamp = DateTime.Now;
         }
 
         public enum TipoLog
