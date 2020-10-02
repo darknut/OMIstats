@@ -264,6 +264,19 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/SyncDelegados/
+
+        public ActionResult SyncDelegados()
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.HOME);
+
+            Usuario.syncDelegados();
+
+            return RedirectTo(Pagina.MANAGE_REQUEST);
+        }
+
+        //
         // GET: /Admin/Unlink/
 
         public ActionResult Unlink(string usuario)

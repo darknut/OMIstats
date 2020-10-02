@@ -112,5 +112,46 @@ namespace OMIstats.Models
 
             return usuario;
         }
+
+        /// <summary>
+        /// Busca en la base de datos de la OMI quiénes son delegados y les da permisos en este sitio
+        /// </summary>
+        public static void syncDelegados()
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+            Usuario usuario = new Usuario();
+
+            query.Append(" select Email, NombreCompleto from ");
+            query.Append(tableName("usuarios.vwUsuarios"));
+            query.Append(" where idGrupo='DEL'");
+
+            db.EjecutarQuery(query.ToString(), Acceso.BaseDeDatos.OMI);
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                string correo = DataRowParser.ToString(r[0]);
+                string nombre = DataRowParser.ToString(r[1]);
+
+                Persona p = Persona.obtenerPersonaConCorreo(correo);
+                if (p == null)
+                {
+                    p = Persona.obtenerPersonaConNombre(nombre);
+                    if (p == null)
+                    {
+                        // No se encontró persona con nombre o correo, creamos una nueva
+                        p = new Persona();
+                        p.nombre = nombre;
+                        p.correo = correo;
+                        p.breakNombre();
+                        p.nuevoUsuario(Archivos.FotoInicial.DOMI);
+                    }
+                }
+
+                p.permisos = Persona.TipoPermisos.DELEGADO;
+                p.guardarDatos();
+            }
+        }
     }
 }
