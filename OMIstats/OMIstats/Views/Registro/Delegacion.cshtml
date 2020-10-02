@@ -10,6 +10,7 @@
     int competidoresProcesados = 0;
     string lastEstado = "";
     bool hayResultados = ViewBag.hayResultados;
+    bool errorPermisos = ViewBag.permisos;
     string[] subTitulos = {
         "Competidores de categoría OMI",
         "Competidores de categoría Primaria",
@@ -22,7 +23,11 @@
         OMIstats.Models.TipoOlimpiada.OMIS,
         OMIstats.Models.TipoOlimpiada.NULL
     };
-    if (usuario.esSuperUsuario())
+    if (errorPermisos)
+    {
+        ViewBag.Title = "Error";
+    }
+    else if (usuario.esSuperUsuario())
     {
         ViewBag.Title = "Registro";
     }
@@ -36,13 +41,22 @@
 {
     <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="~/js/registro.js"></script>
+    @if (!errorPermisos)
+    {
     <script>
         setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
     </script>
+    }
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
+@if (errorPermisos)
+{
+    <div class="errorTextoRojo"> No tienes permisos para realizar esta acción </div>
+    @Html.ActionLink("Volver", "Select", "Registro", new { }, new { })
+} else
+{
 <table>
 @for (int i = 0; i < tipos.Length; i++)
 {
@@ -138,7 +152,7 @@
 }
 </table>
 
-@if (omi.esOnline)
+if (omi.esOnline)
 {
 <h1 class="titulo">Sedes</h1>
     if (sedes.Count == 0)
@@ -238,4 +252,5 @@
     {
         @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
     }
+}
 }

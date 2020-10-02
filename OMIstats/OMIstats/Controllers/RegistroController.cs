@@ -77,9 +77,13 @@ namespace OMIstats.Controllers
             if (omi == null)
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
+            failSafeViewBag();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (o == null || !tienePermisos(o.registroActivo, estado))
-                return RedirectTo(Pagina.HOME);
+            {
+                ViewBag.permisos = true;
+                return View();
+            }
 
             Persona p = getUsuario();
 
@@ -171,6 +175,7 @@ namespace OMIstats.Controllers
             ViewBag.añoEscuela = 0;
             ViewBag.nivelEscuela = "";
             ViewBag.publica = true;
+            ViewBag.permisos = false;
         }
 
         //
