@@ -321,5 +321,21 @@ namespace OMIstats.Controllers
                 Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave),
                 "application/zip", "Diplomas.zip");
         }
+
+        //
+        // GET: /Profile/Usurpar/
+
+        public ActionResult Usurpar(int clave)
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 403);
+
+            Persona p = Persona.obtenerPersonaConClave(clave);
+            if (p == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            setUsuario(p);
+            return RedirectTo(Pagina.HOME);
+        }
     }
 }

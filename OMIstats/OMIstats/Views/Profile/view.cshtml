@@ -143,6 +143,12 @@
                         </a>
                     </div>
                     <br />
+                    <div>
+                        @Html.ActionLink("Usurpar personalidad", "Usurpar", "Profile",
+                                new { clave = Model.clave },
+                                new { @class = "botonPerfil" })
+                    </div>
+                    <br />
                 }
             }
         }
