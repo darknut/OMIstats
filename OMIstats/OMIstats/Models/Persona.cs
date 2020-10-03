@@ -177,6 +177,7 @@ namespace OMIstats.Models
             usuario = DataRowParser.ToString(datos["usuario"]);
             omips = DataRowParser.ToBool(datos["omips"]);
             oculta = DataRowParser.ToBool(datos["oculta"]);
+            foto = DataRowParser.ToString(datos["foto"]);
 
             if (completo)
             {
@@ -187,7 +188,6 @@ namespace OMIstats.Models
                 correo = DataRowParser.ToString(datos["correo"]);
                 permisos = DataRowParser.ToTipoPermisos(datos["permisos"]);
                 genero = DataRowParser.ToString(datos["genero"]);
-                foto = DataRowParser.ToString(datos["foto"]);
                 ioiID = DataRowParser.ToInt(datos["ioiID"]);
                 omegaup = DataRowParser.ToString(datos["omegaup"]);
                 topcoder = DataRowParser.ToString(datos["topcoder"]);
@@ -878,6 +878,11 @@ namespace OMIstats.Models
             query.Append(" update persona set permisos = 0 where permisos > 1 ");
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public bool esFotoPersonalizada()
+        {
+            return foto.Contains(clave.ToString());
         }
     }
 }

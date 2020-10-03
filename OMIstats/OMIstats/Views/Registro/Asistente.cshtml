@@ -276,7 +276,9 @@ if (nuevo && !resubmit)
             @Html.ValidationMessageFor(model => model.omegaup)
         </div>
         <div class="registro-single-control">
-            <span class="control-title">Foto <span style="font-weight:normal">(300KB max)</span></span>
+            <span class="control-title">Foto <span style="font-weight:normal">(300KB max)</span>
+                <img id="check-foto" src="~/img/check.svg" class="check-svg-small" title="Ya se tiene foto de esta persona" style="display: @(Model.esFotoPersonalizada() ? "inline" : "none") "/>
+            </span>
             <input type="file" name="file" id="file"
                     class="@(ViewBag.errorImagen.Length == 0 ? "" : "input-validation-error")"/>
                 @if (ViewBag.errorImagen == "imagen_invalida")

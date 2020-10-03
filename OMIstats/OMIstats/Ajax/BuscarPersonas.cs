@@ -24,6 +24,7 @@ namespace OMIstats.Ajax
         public string parentesco;
         public string medicina;
         public string alergias;
+        public bool tieneFoto;
 
         // Datos de la escuela
         public string nombreEscuela;
@@ -50,6 +51,7 @@ namespace OMIstats.Ajax
             clave = persona.clave;
             medicina = persona.medicina;
             alergias = persona.alergias;
+            tieneFoto = persona.esFotoPersonalizada();
 
             if (md != null)
             {

@@ -144,6 +144,7 @@ function personaSeleccionada(a) {
     setCampo("alergias", persona.alergias);
     setCampo("genero", persona.genero);
     setCampo("persona", persona.clave);
+    setVisible("check-foto", persona.tieneFoto);
 
     if (document.getElementById("tipoAsistente").value == "COMPETIDOR" &&
         document.getElementById("estado").value &&
