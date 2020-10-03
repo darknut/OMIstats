@@ -93,6 +93,7 @@ namespace OMIstats.Models
         /// Solo presente cuando se llama a traves de 'obtenerMiembrosDelegacion'
         /// </summary>
         public string fotoUsuario;
+        public Dictionary<TipoOlimpiada, int> numeroParticipaciones;
 #if OMISTATS
         private bool eliminar;
 #endif
@@ -926,8 +927,8 @@ namespace OMIstats.Models
         /// <summary>
         /// Obtiene la lista de miembros de una delegacion
         /// </summary>
-        /// <returns></returns>
-        public static List<MiembroDelegacion> obtenerMiembrosDelegacion(string olimpiada, string estado, TipoOlimpiada tipoOlimpiada, TipoAsistente tipo = TipoAsistente.NULL)
+        /// <param name="listarPorAño">Si es proporcionado, se calculan cuántas participaciones ha tenido el competidor</param>
+        public static List<MiembroDelegacion> obtenerMiembrosDelegacion(string olimpiada, string estado, TipoOlimpiada tipoOlimpiada, TipoAsistente tipo = TipoAsistente.NULL, float listarPorAño = -1)
         {
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
@@ -1012,6 +1013,8 @@ namespace OMIstats.Models
 
                 md.fotoUsuario = DataRowParser.ToString(r["foto"]);
                 md.puedeRegistrar = DataRowParser.ToTipoPermisos(r["permisos"]) != Persona.TipoPermisos.NORMAL;
+                if (listarPorAño > 0)
+                    md.calculaParticipaciones(listarPorAño);
 
                 lista.Add(md);
             }
@@ -1380,6 +1383,33 @@ namespace OMIstats.Models
                             return;
                         }
                 }
+            }
+        }
+
+        public void calculaParticipaciones(float año)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select md.clase, count(*) from MiembroDelegacion as md ");
+            query.Append(" inner join Olimpiada as o on o.numero = md.olimpiada and o.clase = md.clase ");
+            query.Append(" where md.persona =  ");
+            query.Append(this.claveUsuario);
+            query.Append(" and o.año <= ");
+            query.Append(año);
+            if (this.olimpiada == "8b")
+                query.Append(" and o.numero <> '9' ");
+            query.Append(" group by md.clase ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            numeroParticipaciones = new Dictionary<TipoOlimpiada, int>();
+            foreach (DataRow r in table.Rows)
+            {
+                TipoOlimpiada tipo = DataRowParser.ToTipoOlimpiada(r[0]);
+                int count = DataRowParser.ToInt(r[1]);
+                numeroParticipaciones.Add(tipo, count);
             }
         }
 #endif

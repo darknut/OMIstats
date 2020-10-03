@@ -434,11 +434,11 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             Dictionary<TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<TipoOlimpiada, List<MiembroDelegacion>>();
-            delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+            delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
             if (tipo == TipoOlimpiada.OMI && o.alsoOmips)
             {
-                delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR));
-                delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR));
+                delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+                delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
             }
 
             ViewBag.liveResults = o.liveResults;

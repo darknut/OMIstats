@@ -83,6 +83,7 @@
     height: 50px;
     float: right;
     margin-right: 30px;
+    margin-top: -15px;
 }
 
 .fondoBronce {
@@ -155,4 +156,10 @@
 .mini-cell {
     min-height: 25px;
     height: 25px;
+}
+
+.participaciones {
+    font-style: italic;
+    margin-top: 3px;
+    font-size: 10pt;
 }

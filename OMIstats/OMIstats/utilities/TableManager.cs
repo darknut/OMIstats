@@ -244,5 +244,47 @@ namespace OMIstats.Utilities
                 return false;
             return currentOMI.diplomasOnline;
         }
+
+        public static string participaciones(MiembroDelegacion md, TipoOlimpiada tipo)
+        {
+            string result = "";
+
+            int count = md.numeroParticipaciones[tipo];
+            switch (count)
+            {
+                case 1:
+                    result += "Primera";
+                    break;
+                case 2:
+                    result += "Segunda";
+                    break;
+                case 3:
+                    result += "Tercera";
+                    break;
+                case 4:
+                    result += "Cuarta";
+                    break;
+                case 5:
+                    result += "Quinta";
+                    break;
+                case 6:
+                    result += "Sexta";
+                    break;
+                case 7:
+                    result += "Séptima";
+                    break;
+            }
+            result += " participación";
+
+            if (tipo != TipoOlimpiada.OMIP &&
+                (md.numeroParticipaciones.ContainsKey(TipoOlimpiada.OMIP) &&
+                    md.numeroParticipaciones[TipoOlimpiada.OMIP] > 0 ||
+                 md.numeroParticipaciones.ContainsKey(TipoOlimpiada.OMIS) &&
+                    md.numeroParticipaciones[TipoOlimpiada.OMIS] > 0 &&
+                    tipo == TipoOlimpiada.OMI))
+                result += " en esta categoría";
+
+            return result;
+        }
     }
 }

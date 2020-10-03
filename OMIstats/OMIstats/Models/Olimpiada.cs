@@ -313,7 +313,8 @@ namespace OMIstats.Models
             query.Append(" select * from olimpiada ");
             query.Append(" where clase = ");
             query.Append(Cadenas.comillas(tipoQuery.ToString().ToLower()));
-            query.Append(" order by año desc");
+            query.Append(" order by año desc,");
+            query.Append(" numero desc");
 
             db.EjecutarQuery(query.ToString());
 
