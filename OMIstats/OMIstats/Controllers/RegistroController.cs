@@ -436,6 +436,8 @@ namespace OMIstats.Controllers
                     }
 
                     p.clave = per.clave;
+                    p.oculta = per.oculta;
+                    p.omips = per.omips;
                 }
 
                 if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
@@ -482,6 +484,7 @@ namespace OMIstats.Controllers
                     per.oculta = false;
                 p.clave = per.clave;
                 p.oculta = per.oculta;
+                p.omips = per.omips;
                 p.foto = guardaFoto(file, p.clave);
                 p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO);
 
