@@ -180,6 +180,10 @@ if (nuevo && !resubmit)
                 <option value="DELELIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER ? "selected" : "")>Delegado y líder</option>
                 <option value="SUBLIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUBLIDER ? "selected" : "")>Sublider</option>
                 }
+                @if (omi.esOnline)
+                {
+                <option value="SUPERVISOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUPERVISOR ? "selected" : "")>Supervisor</option>
+                }
             </select>
             <div id="errortipoAsistente" class="errorTextoRojo" style="display:none">Elige una opción</div>
         </div>

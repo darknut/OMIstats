@@ -23,7 +23,8 @@ namespace OMIstats.Models
             COLO,
             INVITADO,
             ACOMPAÑANTE,
-            SUBLIDER
+            SUBLIDER,
+            SUPERVISOR
         }
 
         public const string DELELIDER = "DELEGADO Y LIDER";

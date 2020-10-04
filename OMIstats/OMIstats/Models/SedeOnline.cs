@@ -168,6 +168,44 @@ namespace OMIstats.Models
                 nuevo();
             else
                 update();
+
+            // Una vez guardada la sede, tratamos de crear usuarios para los supervisores
+            List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL);
+            tryGeneraUsuarioParaSupervisor(supervisor, correo, telefono, miembros);
+            if (!String.IsNullOrEmpty(supervisor2))
+                tryGeneraUsuarioParaSupervisor(supervisor2, correo2, telefono2, miembros);
+            if (!String.IsNullOrEmpty(supervisor3))
+                tryGeneraUsuarioParaSupervisor(supervisor3, correo3, telefono3, miembros);
+        }
+
+        private void tryGeneraUsuarioParaSupervisor(string nombre, string correo, string telefono, List<MiembroDelegacion> miembros)
+        {
+            Persona p = Persona.obtenerPersonaConNombre(nombre);
+            if (p == null)
+                p = Persona.obtenerPersonaConCorreo(correo);
+            // Si no hay persona con ese nombre o correo, creamos una cuenta
+            if (p == null)
+            {
+                p = new Persona();
+                p.nombre = nombre;
+                p.breakNombre();
+                p.correo = correo;
+                p.celular = telefono;
+                p.nuevoUsuario(Archivos.FotoInicial.DOMI);
+                p.guardarDatos(lugarGuardado: Persona.LugarGuardado.REGISTRO);
+            }
+
+            // Si la persona todavía no es parte de la delegación, la agregamos
+            if (!miembros.Any(miembro => miembro.claveUsuario == p.clave))
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.claveUsuario = p.clave;
+                md.estado = estado;
+                md.tipo = MiembroDelegacion.TipoAsistente.SUPERVISOR;
+                md.tipoOlimpiada = TipoOlimpiada.OMI;
+                md.olimpiada = omi;
+                md.nuevo();
+            }
         }
 
         public static List<SedeOnline> obtenerSedes(string omi, string estado)
