@@ -1076,6 +1076,8 @@ namespace OMIstats.Models
 
             // El primer diploma especial es el medallista más joven
             var resultados = Resultados.cargarResultados(omi, TipoOlimpiada.OMI, cargarObjetos: true);
+            if (resultados.Count == 0)
+                return "";
             Resultados joven = resultados[0];
 
             foreach (Resultados resultado in resultados)
