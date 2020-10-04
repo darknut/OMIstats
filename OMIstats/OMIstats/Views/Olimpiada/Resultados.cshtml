@@ -11,6 +11,7 @@
     string scoreboardName = "";
     string scoreboardToken = "";
     OMIstats.Models.Persona usuario = ViewBag.usuario;
+    List<OMIstats.Models.Resultados> resultados = ViewBag.resultados;
 
     if (isLive)
     {
@@ -52,7 +53,7 @@
 <script type="text/javascript" src="~/Scripts/Chart.bundle.min.js" ></script>
 <script type="text/javascript" src="~/js/graficas.js"></script>
 <script>
-    setUpOverlay("@(Url.Content("~"))" + "Olimpiada/OverlayAjax", "@(Url.Content("~"))", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @Model.problemasDia1, @Model.problemasDia2, @ViewBag.resultados.Count);
+    setUpOverlay("@(Url.Content("~"))" + "Olimpiada/OverlayAjax", "@(Url.Content("~"))", "@(Model.numero)", "@(Model.tipoOlimpiada.ToString())", @Model.problemasDia1, @Model.problemasDia2, @resultados.Count);
 </script>
 }
 <script>
@@ -145,7 +146,7 @@ $(function () {
      }
 </div>
 
-@if (ViewBag.resultados.Count == 0)
+@if (resultados.Count == 0)
 {
     <h1 class="subtitulo"> No se tienen resultados para esta olimpiada </h1>
     <div class="clear">
@@ -271,9 +272,9 @@ else
     tableManager.setCurrentOMI(Model);
     bool hayUNKs = false;
 }
-@for (var l = 0; l < ViewBag.resultados.Count; l++)
+@for (var l = 0; l < resultados.Count; l++)
 {
-    OMIstats.Models.Resultados datos = ViewBag.resultados[l];
+    OMIstats.Models.Resultados datos = resultados[l];
     tableManager.setCurrentResultados(datos);
 
     if (tableManager.esClaveDesconocida())
