@@ -555,7 +555,6 @@ namespace OMIstats.Controllers
             if (!esAdmin() || clave == null || textoX == null || textoY == null)
                 return RedirectTo(Pagina.HOME);
             ViewBag.omi = clave;
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, TipoOlimpiada.OMI);
 
             string[] X = textoX.Split(';');
             string[] Y = textoY.Split(';');
@@ -564,8 +563,6 @@ namespace OMIstats.Controllers
             ViewBag.asistentes = MiembroDelegacion.generarDiplomas(clave, X[0], baseUrl, Y);
             ViewBag.medallistas = Models.Resultados.generarDiplomas(clave, X[1], baseUrl);
             ViewBag.especiales = Models.Resultados.generarDiplomasEspeciales(clave, baseUrl);
-            if (o.esOnline)
-                ViewBag.supervisores = SedeOnline.generarDiplomas(clave, X[0], baseUrl);
 
             return View();
         }
