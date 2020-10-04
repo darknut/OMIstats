@@ -47,6 +47,16 @@ namespace OMIstats.Models
             puntos.puntos.Add(DataRowParser.ToFloat(row["puntosD"]));
         }
 
+        private void llenarDatos(DataRow row)
+        {
+            clave = DataRowParser.ToString(row["clave"]);
+            timestamp = DataRowParser.ToInt(row["timestamp"]);
+            puntosProblemas = new List<float?>();
+            for (int i = 0; i < 6; i++)
+                puntosProblemas.Add(DataRowParser.ToFloat(row["puntosP" + (i + 1)]));
+            puntosDia = DataRowParser.ToFloat(row["puntosD"]);
+        }
+
         /// <summary>
         /// Obtiene la lista de resultados de un usuario en particular, de una olimpiada en particular
         /// </summary>
@@ -86,6 +96,55 @@ namespace OMIstats.Models
             }
 
             puntos.problemas = null;
+            return puntos;
+        }
+
+        public static int obtenerTimestampMasReciente(string clave, TipoOlimpiada tipo, int dia)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select top 1 timestamp from detallepuntos ");
+            query.Append(" where clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" order by timestamp desc ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            return DataRowParser.ToInt(table.Rows[0][0]);
+        }
+
+        public static Dictionary<string, DetallePuntos> obtenerPuntosConTimestamp(string clave, TipoOlimpiada tipo, int dia, int timestamp)
+        {
+            Dictionary<string, DetallePuntos> puntos = new Dictionary<string, DetallePuntos>();
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from detallepuntos ");
+            query.Append(" where clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and timestamp = ");
+            query.Append(timestamp);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                DetallePuntos dp = new DetallePuntos();
+                dp.llenarDatos(table.Rows[i]);
+                puntos.Add(dp.clave, dp);
+            }
+
             return puntos;
         }
 #endif

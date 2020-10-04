@@ -10,12 +10,15 @@
     int remainingSeconds = 0;
     string scoreboardName = "";
     string scoreboardToken = "";
+    int problemasDia1Count = Model.problemasDia1;
+    int problemasDia2Count = Model.problemasDia2;
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     List<OMIstats.Models.Resultados> resultados = ViewBag.resultados;
     List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
     List<OMIstats.Models.Olimpiada> omis = ViewBag.omis;
     List<OMIstats.Models.Olimpiada> omip = ViewBag.omip;
     bool admin = ViewBag.admin;
+    bool secretScoreboard = ViewBag.secretScoreboard;
     int? claveUsuario = ViewBag.claveUsuario;
     OMIstats.Models.Problema numerosDia1 = ViewBag.numerosDia1;
     OMIstats.Models.Problema numerosDia2 = ViewBag.numerosDia2;
@@ -40,6 +43,16 @@
             remainingSeconds = ViewBag.remainingSeconds;
             scoreboardName = ViewBag.scoreboardName;
             scoreboardToken = ViewBag.scoreboardToken;
+        }
+    }
+
+    if (secretScoreboard)
+    {
+        dia = ViewBag.dia;
+        problemasDia1Count = ViewBag.problemasPorDia;
+        if (dia == 2)
+        {
+            problemasDia2Count = problemasDia1Count;
         }
     }
 }
@@ -152,6 +165,11 @@ $(function () {
      }
 </div>
 
+@if (secretScoreboard)
+{
+<img src="~/img/cosmo.png" style="width:100px; border-radius: 15px; margin-top: 15px;" />
+}
+
 @if (resultados.Count == 0)
 {
     <h1 class="subtitulo"> No se tienen resultados para esta olimpiada </h1>
@@ -198,12 +216,12 @@ else
         for (var i = 0; i < Model.problemasDia1; i++)
         {
 <td class="enlaceProblema">
-    @if (problemasDia1[i] != null)
-    {
+            @if (problemasDia1[i] != null)
+            {
 <a href="@problemasDia1[i].url" target="_blank">
 <img src="~/img/link.png" title="@problemasDia1[i].nombre" />
 </a>
-    }
+            }
 </td>
         }
     }
@@ -216,12 +234,12 @@ else
         for (var i = 0; i < Model.problemasDia2; i++)
         {
 <td class="enlaceProblema">
-    @if (problemasDia2[i] != null)
-    {
+            @if (problemasDia2[i] != null)
+            {
 <a href="@problemasDia2[i].url" target="_blank">
 <img src="~/img/link.png" title="@problemasDia2[i].nombre" />
 </a>
-    }
+            }
 </td>
         }
     }
@@ -232,9 +250,9 @@ else
 <th class="bottom-border right-border table-header-clickable">Género</th>
 <th class="bottom-border right-border table-header-clickable">Competidor</th>
 <th class="bottom-border right-border table-header-clickable clave-width">Clave</th>
-    @if (Model.mostrarResultadosPorProblema)
+    @if (Model.mostrarResultadosPorProblema || secretScoreboard)
     {
-        for (var i = 0; i < Model.problemasDia1; i++)
+        for (var i = 0; i < problemasDia1Count; i++)
         {
             string title = "";
             if (problemasDia1[i] != null)
@@ -244,13 +262,13 @@ else
 <th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
         }
     }
-    @if (Model.mostrarResultadosPorDia)
+    @if (Model.mostrarResultadosPorDia || secretScoreboard && dia == 2)
     {
 <th class="bottom-border right-border table-header-clickable">D1</th>
     }
-    @if (Model.mostrarResultadosPorProblema)
+    @if (Model.mostrarResultadosPorProblema || secretScoreboard && dia == 2)
     {
-        for (var i = 0; i < Model.problemasDia2; i++)
+        for (var i = 0; i < problemasDia2Count; i++)
         {
             string title = "";
             if (problemasDia2[i] != null)
@@ -260,11 +278,11 @@ else
 <th class="bottom-border right-border table-header-clickable" title="@title">@("P" + (i + 1))</th>
         }
     }
-    @if (Model.mostrarResultadosPorDia)
+    @if (Model.mostrarResultadosPorDia || secretScoreboard && dia == 2)
     {
 <th class="bottom-border right-border table-header-clickable">D2</th>
     }
-    @if (Model.mostrarResultadosTotales)
+    @if (Model.mostrarResultadosTotales || secretScoreboard)
     {
 <th class="bottom-border right-border table-header-clickable">Total</th>
     }
@@ -368,37 +386,37 @@ else
 </a>
     }
 </td>
-@if (Model.mostrarResultadosPorProblema)
+@if (Model.mostrarResultadosPorProblema || secretScoreboard)
 {
-    for (var i = 0; i < Model.problemasDia1; i++)
+    for (var i = 0; i < problemasDia1Count; i++)
     {
 <td class="@("table-td center right-border " + claseCSS)">
 @tableManager.puntosProblema(1, i)
 </td>
     }
 }
-@if (Model.mostrarResultadosPorDia)
+@if (Model.mostrarResultadosPorDia || secretScoreboard && dia == 2)
 {
 <td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
 @datos.totalDia1
 </td>
 }
-@if (Model.mostrarResultadosPorProblema)
+@if (Model.mostrarResultadosPorProblema || secretScoreboard && dia == 2)
 {
-    for (var i = 0; i < Model.problemasDia2; i++)
+    for (var i = 0; i < problemasDia2Count; i++)
     {
 <td class="@("table-td center right-border " + claseCSS)">
 @tableManager.puntosProblema(2, i)
 </td>
     }
 }
-@if (Model.mostrarResultadosPorDia)
+@if (Model.mostrarResultadosPorDia || secretScoreboard && dia == 2)
 {
 <td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
 @datos.totalDia2
 </td>
 }
-@if (Model.mostrarResultadosTotales)
+@if (Model.mostrarResultadosTotales || secretScoreboard)
 {
 <td class="@("table-td center right-border resultado-total open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
 @datos.total

@@ -9,7 +9,7 @@ using OMIstats.Utilities;
 
 namespace OMIstats.Models
 {
-    public class Resultados
+    public class Resultados : IComparable<Resultados>
     {
         public enum TipoMedalla
         {
@@ -106,6 +106,11 @@ namespace OMIstats.Models
             dia2.Add(0);
             dia2.Add(0);
             dia2.Add(0);
+        }
+
+        public int CompareTo(Resultados obj)
+        {
+            return lugar - obj.lugar;
         }
 
         private void llenarDatos(DataRow row, bool cargarObjetos, bool miembroDelegacionIncluido = false)
@@ -298,6 +303,40 @@ namespace OMIstats.Models
         {
             List<CachedResult> cache;
             return cargarResultados(omi, tipoOlimpiada, cargarObjetos, false, 0, 0, out cache);
+        }
+
+        public static List<Resultados> cargarResultadosSecretos(string clave, TipoOlimpiada tipo, int dia)
+        {
+            List<Resultados> lista = cargarResultados(clave, tipo, cargarObjetos: true);
+
+            // Una vez con la lista normal, la modificamos con los datos de los detalles
+            int timestamp = DetallePuntos.obtenerTimestampMasReciente(clave, tipo, dia);
+            Dictionary<string, DetallePuntos> puntos = DetallePuntos.obtenerPuntosConTimestamp(clave, tipo, dia, timestamp);
+            Dictionary<string, DetalleLugar> lugares = DetalleLugar.obtenerLugaresConTimestamp(clave, tipo, dia, timestamp);
+
+            // Ya que tenemos esto, los unimos
+            for (int i = 0; i < lista.Count; i++)
+            {
+                List<float?> problemas = null;
+                if (dia == 1)
+                    problemas = lista[i].dia1;
+                else
+                    problemas = lista[i].dia2;
+                DetallePuntos dp = puntos[lista[i].clave];
+                DetalleLugar dl = lugares[lista[i].clave];
+                for (int j = 0; j < 6; j++)
+                    problemas[j] = dp.puntosProblemas[j];
+                if (dia == 1)
+                    lista[i].totalDia1 = dp.puntosDia;
+                else
+                    lista[i].totalDia2 = dp.puntosDia;
+                lista[i].total = lista[i].totalDia1 + lista[i].totalDia2;
+                lista[i].lugar = dl.lugar;
+                lista[i].medalla = dl.medalla;
+            }
+
+            lista.Sort();
+            return lista;
         }
 
         /// <summary>

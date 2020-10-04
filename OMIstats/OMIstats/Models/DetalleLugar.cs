@@ -41,6 +41,13 @@ namespace OMIstats.Models
             lugares.medalla.Add(DataRowParser.ToInt(row["medalla"]));
         }
 
+        private void llenarDatos(DataRow row)
+        {
+            clave = DataRowParser.ToString(row["clave"]);
+            lugar = DataRowParser.ToInt(row["lugar"]);
+            medalla = DataRowParser.ToTipoMedalla(row["medalla"]);
+        }
+
         public static OverlayLugares cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, int dia, string clave)
         {
             OverlayLugares lugares = new OverlayLugares();
@@ -72,6 +79,35 @@ namespace OMIstats.Models
                 lugares.timestamp.Insert(0, 0);
                 lugares.lugar.Insert(0, 0);
                 lugares.medalla.Insert(0, 7);
+            }
+
+            return lugares;
+        }
+
+        public static Dictionary<string, DetalleLugar> obtenerLugaresConTimestamp(string clave, TipoOlimpiada tipo, int dia, int timestamp)
+        {
+            Dictionary<string, DetalleLugar> lugares = new Dictionary<string, DetalleLugar>();
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from detallelugar ");
+            query.Append(" where clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and timestamp = ");
+            query.Append(timestamp);
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                DetalleLugar dl = new DetalleLugar();
+                dl.llenarDatos(table.Rows[i]);
+                lugares.Add(dl.clave, dl);
             }
 
             return lugares;

@@ -306,6 +306,7 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
 
             ViewBag.liveResults = false;
+            ViewBag.secretScoreboard = false;
             if (o.liveResults)
             {
                 OmegaUp ou = o.calculateCachedResults();
@@ -315,20 +316,31 @@ namespace OMIstats.Controllers
                 }
                 else
                 {
-                    ViewBag.resultados = o.resultados;
-                    if (o.resultados.Count > 0)
+                    Persona p = getUsuario();
+                    if (o.esOnline && p != null && p.esSuperUsuario())
                     {
-                        o.shouldReload(ou.dia);
-
-                        ViewBag.liveResults = true;
-                        ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
+                        ViewBag.secretScoreboard = true;
                         ViewBag.dia = ou.dia;
-                        ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
-                        ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
-                        ViewBag.ticks = ou.timestamp.Ticks;
-                        ViewBag.scoreboardName = ou.concurso;
-                        ViewBag.scoreboardToken = ou.token;
-                        ViewBag.remainingSeconds = ou.getRemainingContestTime();
+                        ViewBag.problemasPorDia = 3; // HARDCODED BUT OH WELL....
+                        ViewBag.resultados = Models.Resultados.cargarResultadosSecretos(clave, tipo, ou.dia);
+                    }
+                    else
+                    {
+                        ViewBag.resultados = o.resultados;
+                        if (o.resultados.Count > 0)
+                        {
+                            o.shouldReload(ou.dia);
+
+                            ViewBag.liveResults = true;
+                            ViewBag.RunnerStarted = OmegaUp.RunnerStarted;
+                            ViewBag.dia = ou.dia;
+                            ViewBag.problemasPorDia = ou.dia == 1 ? o.problemasDia1 : o.problemasDia2;
+                            ViewBag.lastUpdate = (DateTime.UtcNow.Ticks - ou.timestamp.Ticks) / TimeSpan.TicksPerSecond;
+                            ViewBag.ticks = ou.timestamp.Ticks;
+                            ViewBag.scoreboardName = ou.concurso;
+                            ViewBag.scoreboardToken = ou.token;
+                            ViewBag.remainingSeconds = ou.getRemainingContestTime();
+                        }
                     }
                 }
             }
