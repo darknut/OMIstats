@@ -229,5 +229,44 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        private static void generarDiplomas(string omi, string X, string baseURL, string estado, string supervisor, int i, StringBuilder lineas)
+        {
+            lineas.Append(estado);
+            lineas.Append("\\Supervisor");
+            lineas.Append(i);
+            lineas.Append(".pdf,");
+            lineas.Append(supervisor);
+            lineas.Append(",");
+            lineas.Append(X);
+            lineas.Append(",Supervisor");
+            lineas.Append(Estado.obtenerEstadoConClave(estado).obtenerNombreConPrefijo());
+            lineas.Append(",");
+            lineas.Append(baseURL);
+            lineas.Append("/Profile/OMI/");
+            lineas.Append(omi);
+            lineas.Append("/");
+            lineas.Append(estado);
+            lineas.Append(",OMI\n");
+        }
+
+        public static string generarDiplomas(string omi, string X, string baseURL)
+        {
+            StringBuilder lineas = new StringBuilder();
+
+            List<SedeOnline> sedes = obtenerSedes(omi, null);
+
+            int i = 1;
+            foreach (SedeOnline sede in sedes)
+            {
+                generarDiplomas(omi, X, baseURL, sede.estado, sede.supervisor, i++, lineas);
+                if (!String.IsNullOrEmpty(sede.supervisor2))
+                    generarDiplomas(omi, X, baseURL, sede.estado, sede.supervisor2, i++, lineas);
+                if (!String.IsNullOrEmpty(sede.supervisor3))
+                    generarDiplomas(omi, X, baseURL, sede.estado, sede.supervisor3, i++, lineas);
+            }
+
+            return lineas.ToString();
+        }
     }
 }

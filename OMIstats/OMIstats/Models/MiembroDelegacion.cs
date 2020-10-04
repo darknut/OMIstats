@@ -1092,22 +1092,8 @@ namespace OMIstats.Models
                     case TipoAsistente.DELEGADO:
                     case TipoAsistente.DELELIDER:
                     case TipoAsistente.SUBLIDER:
-                        {
-                            if (estado == "MDF")
-                            {
-                                lineas.Append(" de la Ciudad de México");
-                            }
-                            else if (estado == "MEX")
-                            {
-                                lineas.Append(" del Estado de México");
-                            }
-                            else
-                            {
-                                lineas.Append(" del Estado de ");
-                                lineas.Append(Estado.obtenerEstadoConClave(estado).nombre);
-                            }
+                            lineas.Append(Estado.obtenerEstadoConClave(estado).obtenerNombreConPrefijo());
                             break;
-                        }
                 }
 
                 lineas.Append(",");

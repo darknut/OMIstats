@@ -244,5 +244,14 @@ namespace OMIstats.Models
 
             return obtenerEstadoConClave(table.Rows[0][0].ToString().Trim());
         }
+
+        public string obtenerNombreConPrefijo()
+        {
+            if (clave == "MDF")
+                return " de la Ciudad de México";
+            if (clave == "MEX")
+                return " del Estado de México";
+            return " del Estado de " + nombre;
+        }
     }
 }

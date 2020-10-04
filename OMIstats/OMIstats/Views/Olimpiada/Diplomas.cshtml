@@ -71,5 +71,5 @@ Invitado/Invitada;;" id="textoY" name="textoY" class="inputLarge"/>
 @if(ViewBag.asistentes != null)
 {
 <br />
-<textarea name="tabla" id="tabla" class="tablaAsistentes">@(ViewBag.asistentes + ViewBag.medallistas + ViewBag.especiales)</textarea>
+<textarea name="tabla" id="tabla" class="tablaAsistentes">@(ViewBag.asistentes + ViewBag.medallistas + ViewBag.especiales + (ViewBag.supervisores == null ? "" : ViewBag.supervisores))</textarea>
 }
