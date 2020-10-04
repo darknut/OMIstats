@@ -12,6 +12,21 @@
     string scoreboardToken = "";
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     List<OMIstats.Models.Resultados> resultados = ViewBag.resultados;
+    List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
+    List<OMIstats.Models.Olimpiada> omis = ViewBag.omis;
+    List<OMIstats.Models.Olimpiada> omip = ViewBag.omip;
+    bool admin = ViewBag.admin;
+    int? claveUsuario = ViewBag.claveUsuario;
+    OMIstats.Models.Problema numerosDia1 = ViewBag.numerosDia1;
+    OMIstats.Models.Problema numerosDia2 = ViewBag.numerosDia2;
+    OMIstats.Models.Problema numerosTotal = ViewBag.numerosTotal;
+    List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
+    List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
+
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    tableManager.setCurrentOMI(Model);
+
+    ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
 
     if (isLive)
     {
@@ -79,15 +94,6 @@ $(function () {
 }
 }
 
-@{
-    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
-    tableManager.setCurrentOMI(Model);
-
-    ViewBag.Title = tableManager.enlaceOMI(nombreCompleto: true);
-    List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
-    List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
-}
-
 <div class="submenu">
     @Html.ActionLink("General", "Index", "Olimpiada",
             new { clave = Model.numero }, new { @class = "mini-boton" })
@@ -114,9 +120,9 @@ $(function () {
     <br />
     <div class="comboTitle">Olimpiadas:</div>
     <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
-        @for (int i = 0; i < ViewBag.olimpiadas.Count; i++)
+        @for (int i = 0; i < olimpiadas.Count; i++)
         {
-            OMIstats.Models.Olimpiada omi = ViewBag.olimpiadas[i];
+            OMIstats.Models.Olimpiada omi = olimpiadas[i];
             tableManager.setCurrentOMI(omi);
             <option value="@omi.numero" @(omi.numero == Model.numero ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
         }
@@ -126,9 +132,9 @@ $(function () {
         <br />
         <div class="comboTitle">Secundarias:</div>
         <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?tipo=omis&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
-            @for (int i = 0; i < ViewBag.omis.Count; i++)
+            @for (int i = 0; i < omis.Count; i++)
             {
-                OMIstats.Models.Olimpiada omi = ViewBag.omis[i];
+                OMIstats.Models.Olimpiada omi = omis[i];
                 tableManager.setCurrentOMI(omi);
                 <option value="@omi.numero" @(omi.numero == Model.numero ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
@@ -136,9 +142,9 @@ $(function () {
         <br />
         <div class="comboTitle">Primarias:</div>
         <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?tipo=omip&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
-            @for (int i = 0; i < ViewBag.omip.Count; i++)
+            @for (int i = 0; i < omip.Count; i++)
             {
-                OMIstats.Models.Olimpiada omi = ViewBag.omip[i];
+                OMIstats.Models.Olimpiada omi = omip[i];
                 tableManager.setCurrentOMI(omi);
                 <option value="@omi.numero" @(omi.numero == Model.numero ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
@@ -268,7 +274,7 @@ else
 </thead>
 <tbody>
 @{
-    tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
+    tableManager = new OMIstats.Utilities.TableManager(admin, claveUsuario);
     tableManager.setCurrentOMI(Model);
     bool hayUNKs = false;
 }
@@ -437,7 +443,7 @@ else
 <td class="center right-border top-border pie">
     @if (problemasDia1[i] != null)
     {
-        @ViewBag.problemasDia1[i].media
+        @problemasDia1[i].media
     }
 </td>
     }
@@ -445,9 +451,9 @@ else
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia top-border pie">
-    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    @if (!hayUNKs && numerosDia1 != null)
     {
-        @ViewBag.numerosDia1.media
+        @numerosDia1.media
     }
 </td>
 }
@@ -458,7 +464,7 @@ else
 <td class="center right-border top-border pie">
     @if (problemasDia2[i] != null)
     {
-        @ViewBag.problemasDia2[i].media
+        @problemasDia2[i].media
     }
 </td>
     }
@@ -466,18 +472,18 @@ else
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia top-border pie">
-    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    @if (!hayUNKs && numerosDia2 != null)
     {
-        @ViewBag.numerosDia2.media
+        @numerosDia2.media
     }
 </td>
 }
 @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
 {
 <td class="center resultado-total top-border pie">
-    @if (ViewBag.numerosTotal != null)
+    @if (numerosTotal != null)
     {
-        @ViewBag.numerosTotal.media
+        @numerosTotal.media
     }
 </td>
 }
@@ -504,7 +510,7 @@ else
 <td class="center right-border pie">
     @if (problemasDia1[i] != null)
     {
-        @ViewBag.problemasDia1[i].mediana
+        @problemasDia1[i].mediana
     }
 </td>
     }
@@ -512,9 +518,9 @@ else
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia pie">
-    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    @if (!hayUNKs && numerosDia1 != null)
     {
-        @ViewBag.numerosDia1.mediana
+        @numerosDia1.mediana
     }
 </td>
 }
@@ -525,7 +531,7 @@ else
 <td class="center right-border pie">
     @if (problemasDia2[i] != null)
     {
-        @ViewBag.problemasDia2[i].mediana
+        @problemasDia2[i].mediana
     }
 </td>
     }
@@ -533,18 +539,18 @@ else
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia pie">
-    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    @if (!hayUNKs && numerosDia2 != null)
     {
-        @ViewBag.numerosDia2.mediana
+        @numerosDia2.mediana
     }
 </td>
 }
 @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
 {
 <td class="center resultado-total pie">
-    @if (ViewBag.numerosTotal != null)
+    @if (numerosTotal != null)
     {
-        @ViewBag.numerosTotal.mediana
+        @numerosTotal.mediana
     }
 </td>
 }
@@ -571,7 +577,7 @@ else
 <td class="center right-border pie">
     @if (problemasDia1[i] != null)
     {
-        @ViewBag.problemasDia1[i].perfectos
+        @problemasDia1[i].perfectos
     }
 </td>
     }
@@ -579,9 +585,9 @@ else
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia pie">
-    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    @if (!hayUNKs && numerosDia1 != null)
     {
-        @ViewBag.numerosDia1.perfectos
+        @numerosDia1.perfectos
     }
 </td>
 }
@@ -592,7 +598,7 @@ else
 <td class="center right-border pie">
     @if (problemasDia2[i] != null)
     {
-        @ViewBag.problemasDia2[i].perfectos
+        @problemasDia2[i].perfectos
     }
 </td>
     }
@@ -600,18 +606,18 @@ else
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia pie">
-    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    @if (!hayUNKs && numerosDia2 != null)
     {
-        @ViewBag.numerosDia2.perfectos
+        @numerosDia2.perfectos
     }
 </td>
 }
 @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
 {
 <td class="center resultado-total pie">
-    @if (!hayUNKs && ViewBag.numerosTotal != null)
+    @if (!hayUNKs && numerosTotal != null)
     {
-        @ViewBag.numerosTotal.perfectos
+        @numerosTotal.perfectos
     }
 </td>
 }
@@ -638,7 +644,7 @@ Total competidores
 <td class="center right-border pie">
     @if (problemasDia1[i] != null)
     {
-        @ViewBag.problemasDia1[i].ceros
+        @problemasDia1[i].ceros
     }
 </td>
     }
@@ -646,9 +652,9 @@ Total competidores
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia pie">
-    @if (!hayUNKs && ViewBag.numerosDia1 != null)
+    @if (!hayUNKs && numerosDia1 != null)
     {
-        @ViewBag.numerosDia1.ceros
+        @numerosDia1.ceros
     }
 </td>
 }
@@ -659,7 +665,7 @@ Total competidores
 <td class="center right-border pie">
     @if (problemasDia2[i] != null)
     {
-        @ViewBag.problemasDia2[i].ceros
+        @problemasDia2[i].ceros
     }
 </td>
     }
@@ -667,18 +673,18 @@ Total competidores
 @if (Model.mostrarResultadosPorDia && Model.noMedallistasConocidos)
 {
 <td class="center right-border resultado-dia pie">
-    @if (!hayUNKs && ViewBag.numerosDia2 != null)
+    @if (!hayUNKs && numerosDia2 != null)
     {
-        @ViewBag.numerosDia2.ceros
+        @numerosDia2.ceros
     }
 </td>
 }
 @if (Model.mostrarResultadosTotales && Model.noMedallistasConocidos)
 {
 <td class="center resultado-total pie">
-    @if (!hayUNKs && ViewBag.numerosTotal != null)
+    @if (!hayUNKs && numerosTotal != null)
     {
-        @ViewBag.numerosTotal.ceros
+        @numerosTotal.ceros
     }
 </td>
 }
