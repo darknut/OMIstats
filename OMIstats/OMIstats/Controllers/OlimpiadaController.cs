@@ -317,7 +317,7 @@ namespace OMIstats.Controllers
                 else
                 {
                     Persona p = getUsuario();
-                    if (o.esOnline && p != null && p.esSuperUsuario())
+                    if (o.esOnline && OmegaUp.RunnerStarted && p != null && p.esSuperUsuario())
                     {
                         ViewBag.secretScoreboard = true;
                         ViewBag.dia = ou.dia;
