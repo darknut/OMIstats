@@ -648,7 +648,7 @@ namespace OMIstats.Models
         /// <returns>La tabla tabulada con comas</returns>
         public string obtenerTablaAsistentes(bool esParaRegistro = false, bool incluirCabeceras = false)
         {
-            List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada, true);
+            List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada, esParaRegistro: true);
 
             StringBuilder tabla = new StringBuilder();
 
