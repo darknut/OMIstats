@@ -107,7 +107,22 @@ namespace OMIstats.Models
             dia2.Add(0);
             dia2.Add(0);
         }
+#if OMISTATS
+        private Resultados(MiembroDelegacion competidor, int contestantCount) : this()
+        {
+            usuario = competidor.claveUsuario;
+            omi = competidor.olimpiada;
+            clave = competidor.clave;
+            estado = competidor.estado;
+            publico = true;
+            nivelInstitucion = competidor.nivelEscuela;
+            añoEscolar = competidor.añoEscuela;
+            lugar = contestantCount;
 
+            persona = Persona.obtenerPersonaConClave(competidor.claveUsuario);
+            nombreEstado = Estado.obtenerEstadoConClave(estado).nombre;
+        }
+#endif
         public int CompareTo(Resultados obj)
         {
             return lugar - obj.lugar;
@@ -305,9 +320,27 @@ namespace OMIstats.Models
             return cargarResultados(omi, tipoOlimpiada, cargarObjetos, false, 0, 0, out cache);
         }
 #if OMISTATS
+
+        private static List<Resultados> cargarResultadosVacios(string clave, TipoOlimpiada tipo)
+        {
+            List<Resultados> lista = new List<Resultados>();
+            List<MiembroDelegacion> competidores = MiembroDelegacion.obtenerMiembrosDelegacion(clave, null, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR);
+            int count = competidores.Count;
+
+            foreach (MiembroDelegacion competidor in competidores)
+                lista.Add(new Resultados(competidor, count));
+
+            return lista;
+        }
+
         public static List<Resultados> cargarResultadosSecretos(string clave, TipoOlimpiada tipo, int dia)
         {
-            List<Resultados> lista = cargarResultados(clave, tipo, cargarObjetos: true);
+            List<Resultados> lista = null;
+
+            if (dia == 1)
+                lista = cargarResultadosVacios(clave, tipo);
+            else
+                lista = cargarResultados(clave, tipo, cargarObjetos: true);
 
             // Una vez con la lista normal, la modificamos con los datos de los detalles
             int timestamp = DetallePuntos.obtenerTimestampMasReciente(clave, tipo, dia);
@@ -317,6 +350,8 @@ namespace OMIstats.Models
             // Ya que tenemos esto, los unimos
             for (int i = 0; i < lista.Count; i++)
             {
+                if (!puntos.ContainsKey(lista[i].clave))
+                    continue;
                 List<float?> problemas = null;
                 if (dia == 1)
                     problemas = lista[i].dia1;

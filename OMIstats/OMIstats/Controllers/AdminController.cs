@@ -57,6 +57,9 @@ namespace OMIstats.Controllers
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(poll.olimpiada, poll.tipoOlimpiada);
             o.liveResults = true;
 
+            if (o.esOnline)
+                OmegaUp.nuevaInstruccion(OmegaUp.Instruccion.HIDE, true);
+
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
 
@@ -81,11 +84,7 @@ namespace OMIstats.Controllers
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
-
-            OmegaUp o = new OmegaUp();
-            o.instruccion = OmegaUp.Instruccion.KILL;
-            o.guardarNuevo();
-
+            OmegaUp.nuevaInstruccion(OmegaUp.Instruccion.KILL, true);
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
 
@@ -96,11 +95,7 @@ namespace OMIstats.Controllers
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
-
-            OmegaUp o = new OmegaUp();
-            o.instruccion = OmegaUp.Instruccion.HIDE;
-            o.guardarNuevo();
-
+            OmegaUp.nuevaInstruccion(OmegaUp.Instruccion.HIDE, true);
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
 

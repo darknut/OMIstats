@@ -74,7 +74,7 @@
 <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
 <script type="text/javascript" src="~/js/sorters.js"></script>
-@if(Model.puntosDetallados)
+@if (Model.puntosDetallados && !secretScoreboard)
 {
 <script type="text/javascript" src="~/js/formas.js"></script>
 <script type="text/javascript" src="~/js/overlay.js"></script>
@@ -439,7 +439,7 @@ else
     }
 }
 </tbody>
-    @if (!isLive)
+    @if (!isLive && !secretScoreboard)
     {
 <tfoot>
 <tr>
@@ -714,8 +714,8 @@ Total competidores
     }
 </table>
 
-    if (Model.puntosDetallados)
-    {
+if (Model.puntosDetallados && !secretScoreboard)
+{
 <div class="overlay-container" id="overlay-container" style="display:none" onclick="closeOverlay()">
 </div>
 <div class="overlay" id="overlay" style="display:none">
@@ -797,5 +797,5 @@ Total competidores
         <canvas id="chartPuntos" style="display:none"></canvas>
     </div>
 </div>
-    }
+}
 }

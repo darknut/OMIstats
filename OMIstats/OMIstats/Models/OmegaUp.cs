@@ -78,6 +78,16 @@ namespace OMIstats.Models
             secondsToFinish = 0;
         }
 
+        public static void nuevaInstruccion(Instruccion instruccion, bool unica)
+        {
+            if (!unica || OmegaUp.obtenerInstrucciones(instruccion).Count == 0)
+            {
+                OmegaUp o = new OmegaUp();
+                o.instruccion = instruccion;
+                o.guardarNuevo();
+            }
+        }
+
         public static void StartScoreboard()
         {
             // Primero matamos todos los status que estén en un estado de error
