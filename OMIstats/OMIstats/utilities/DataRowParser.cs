@@ -15,6 +15,11 @@ namespace OMIstats.Utilities
             return (int)value;
         }
 
+        public static int ToInt(string value)
+        {
+            return int.Parse(value);
+        }
+
         public static string ToString(object value)
         {
             return value.ToString().Trim();

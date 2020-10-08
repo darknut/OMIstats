@@ -53,7 +53,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 HallOfFamer hof = new HallOfFamer();
-                hof.llenarDatos(DataRowParser.ToInt(r["clave"]));
+                hof.llenarDatos(DataRowParser.ToInt(r["clave"].ToString()));
 
                 if (estado != null)
                 {
