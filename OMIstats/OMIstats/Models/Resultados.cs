@@ -304,7 +304,7 @@ namespace OMIstats.Models
             List<CachedResult> cache;
             return cargarResultados(omi, tipoOlimpiada, cargarObjetos, false, 0, 0, out cache);
         }
-
+#if OMISTATS
         public static List<Resultados> cargarResultadosSecretos(string clave, TipoOlimpiada tipo, int dia)
         {
             List<Resultados> lista = cargarResultados(clave, tipo, cargarObjetos: true);
@@ -338,7 +338,7 @@ namespace OMIstats.Models
             lista.Sort();
             return lista;
         }
-
+#endif
         /// <summary>
         /// Regresa los resultados de la olimpiada mandada como parametro así como
         /// los resultados para mandar por ajax
