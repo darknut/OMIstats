@@ -129,7 +129,7 @@
     {
     <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
     }
-    if (usuario.esAdmin() || registroActivo)
+    if (usuario.esSuperUsuario() || registroActivo)
     {
         if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))
         {
