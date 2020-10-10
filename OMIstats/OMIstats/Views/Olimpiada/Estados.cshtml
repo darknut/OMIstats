@@ -112,7 +112,7 @@ if (secretScoreboard)
                 <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + estado.clave)">
                     @estado.nombre
                 </a>
-                @if (estado.clave == Model.claveEstado)
+                @if (estado.clave == Model.claveEstado && !Model.esOnline)
                 {
                     <sup><a class="nombre" href="#sede">1</a></sup>
                 }
@@ -184,12 +184,15 @@ if (secretScoreboard)
     }
     else
     {
+        if (!Model.esOnline)
+        {
 <div id="sede" class="sede">
     [1]: Al estado sede solo se le cuentan sus mejores cuatro
     competidores para esta tabla, para ver los detalles del
     resto de la delegación, visite la <a href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
     El total de medallas entregadas en esta tabla <b>NO</b> es afectado por esta regla.
 </div>
+        }
     }
 
     if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
