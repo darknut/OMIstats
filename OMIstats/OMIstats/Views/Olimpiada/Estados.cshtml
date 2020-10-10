@@ -26,6 +26,7 @@
     ViewBag.Title = "Tabla de estados de la " + tableManager.enlaceOMI(nombreCompleto: true);
     bool isLive = ViewBag.liveResults;
     OMIstats.Models.Medallero medalleroGeneral = ViewBag.medalleroGeneral;
+    bool secretScoreboard = ViewBag.secretScoreboard;
 }
 
 <div class="submenu">
@@ -71,6 +72,11 @@ if (isLive)
     <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
 }
 
+if (secretScoreboard)
+{
+<img src="~/img/cosmo.png" style="width:100px; border-radius: 15px; margin-top: 15px;" />
+}
+
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
@@ -84,7 +90,7 @@ if (isLive)
             {
                 <th class="@("bottom-border table-header-clickable " + (hayPromedio ? "right-border" : ""))">Puntos</th>
             }
-            @if(hayPromedio)
+            @if (hayPromedio)
             {
                 <th class="bottom-border table-header-clickable">Promedio</th>
             }
@@ -92,7 +98,7 @@ if (isLive)
     </thead>
 
     @{
-    float? totalPuntos = 0;
+            float? totalPuntos = 0;
     }
     @foreach (OMIstats.Models.Medallero m in ViewBag.estados)
     {
@@ -119,17 +125,17 @@ if (isLive)
             <td class="table-td center right-border fondoPlata">@m.platas</td>
             <td class="table-td center right-border fondoBronce">@m.bronces</td>
             <td class="@("table-td center " + (hayPuntos ? "right-border" : ""))">@(m.oros + m.platas + m.bronces)</td>
-            @if(hayPuntos)
+            @if (hayPuntos)
             {
                 <td class="@("table-td center " + (hayPromedio ? "right-border" : ""))">@m.puntos</td>
             }
-            @if(hayPromedio)
+            @if (hayPromedio)
             {
                 <td class="table-td center">@m.promedio</td>
             }
         </tr>
     }
-    @if(!isLive)
+    @if (!isLive)
     {
     <tfoot>
         <tr>
@@ -148,7 +154,7 @@ if (isLive)
             <td class="@("center resultado-dia top-border pie table-td " + (hayPuntos ? "right-border" : ""))">
                 @(medalleroGeneral.oros + medalleroGeneral.platas + medalleroGeneral.bronces)
             </td>
-            @if(hayPuntos)
+            @if (hayPuntos)
             {
                 <td class="@("center resultado-dia top-border pie table-td " + (hayPromedio ? "right-border" : ""))">
                     @totalPuntos
@@ -168,26 +174,26 @@ if (isLive)
     }
 </table>
 
-if (Model.numero.Equals("8b"))
-{
+    if (Model.numero.Equals("8b"))
+    {
 <div id="omii" class="sede">
     [1]: Durante la OMI Intermedia, no hubo reestricción sobre el número de competidores por delegación,
     tampoco hubo reestricción sobre el número de medallas. Para esta tabla, sólo se cuentas las mejores
     4, de forma similar a como se hace en el resto de las olimpiadas.
 </div>
-}
-else
-{
+    }
+    else
+    {
 <div id="sede" class="sede">
     [1]: Al estado sede solo se le cuentan sus mejores cuatro
     competidores para esta tabla, para ver los detalles del
     resto de la delegación, visite la <a href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + Model.claveEstado)">página de la delegación</a>.
     El total de medallas entregadas en esta tabla <b>NO</b> es afectado por esta regla.
 </div>
-}
+    }
 
-if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
-{
+    if (Model.numero.Equals("12") && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
+    {
 <div id="german" class="sede">
     [2]: En la 12a OMI, se le otorgó una quinta medalla
     al estado de Guanajuato por ser el primer chico de escuelas

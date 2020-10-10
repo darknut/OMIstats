@@ -545,6 +545,62 @@ namespace OMIstats.Models
         }
 
 #if OMISTATS
+
+        public static List<Medallero> obtenerTablaEstadosSecreta(string clave, TipoOlimpiada tipoOlimpiada)
+        {
+            OmegaUp poll = OmegaUp.obtenerParaOMI(clave, tipoOlimpiada);
+            List<Resultados> resultados = Resultados.cargarResultadosSecretos(clave, tipoOlimpiada, poll.dia);
+            Dictionary<string, Medallero> diccionario = new Dictionary<string, Medallero>();
+
+            foreach (Resultados resultado in resultados)
+            {
+                Medallero m = null;
+                if (diccionario.ContainsKey(resultado.estado))
+                {
+                    m = diccionario[resultado.estado];
+                }
+                else
+                {
+                    m = new Medallero();
+                    m.clave = resultado.estado;
+                    diccionario.Add(resultado.estado, m);
+                }
+                switch (resultado.medalla)
+                {
+                    case Resultados.TipoMedalla.ORO:
+                    case Resultados.TipoMedalla.ORO_1:
+                    case Resultados.TipoMedalla.ORO_2:
+                    case Resultados.TipoMedalla.ORO_3:
+                        m.oros++;
+                        break;
+                    case Resultados.TipoMedalla.PLATA:
+                        m.platas++;
+                        break;
+                    case Resultados.TipoMedalla.BRONCE:
+                        m.bronces++;
+                        break;
+                }
+                m.puntos += resultado.total;
+                m.lugar++;
+            }
+
+            List<Medallero> medallero = new List<Medallero>();
+            foreach (Medallero m in diccionario.Values)
+            {
+                m.promedio = m.puntos / m.lugar;
+                m.lugar = 0;
+                medallero.Add(m);
+            }
+            medallero.Sort();
+
+            for (int i = 0; i < medallero.Count; i++)
+            {
+                medallero[i].lugar = i + 1;
+            }
+
+            return medallero;
+        }
+
         /// <summary>
         /// Obtiene la tabla de estados generales, similar a las que se ve en wikipedia
         /// </summary>

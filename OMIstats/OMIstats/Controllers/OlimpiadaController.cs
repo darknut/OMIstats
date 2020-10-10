@@ -494,10 +494,21 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             Medallero medalleroGeneral;
+            Persona p = getUsuario();
 
             ViewBag.liveResults = o.liveResults;
-            ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave, out medalleroGeneral);
-            ViewBag.medalleroGeneral = medalleroGeneral;
+            if (o.esOnline && !OmegaUp.RunnerStarted && p != null && p.esSuperUsuario())
+            {
+                ViewBag.secretScoreboard = true;
+                ViewBag.estados = Medallero.obtenerTablaEstadosSecreta(clave, o.tipoOlimpiada);
+                ViewBag.medalleroGeneral = null;
+            }
+            else
+            {
+                ViewBag.secretScoreboard = false;
+                ViewBag.estados = Medallero.obtenerTablaEstados(o.tipoOlimpiada, clave, out medalleroGeneral);
+                ViewBag.medalleroGeneral = medalleroGeneral;
+            }
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             ViewBag.hayPromedio = Medallero.hayPromedio(ViewBag.estados);
             ViewBag.hayPuntos = Medallero.hayPuntos(ViewBag.estados);
