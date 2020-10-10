@@ -168,7 +168,14 @@
                 <td class="table-td right-border center @(clase)">
                     @if (problema.casos.Length > 0)
                     {
+                        if (problema.casos.Contains("github"))
+                        {
+                    <a href="@problema.casos" target="_blank"><img src="~/img/github.png" /></a>
+                        }
+                        else
+                        {
                     <a href="@problema.casos"><img src="~/img/rar.png" /></a>
+                        }
                     }
                 </td>
                 } else
@@ -185,7 +192,14 @@
                 <td class="table-td right-border center @(clase)">
                     @if (problema.codigo.Length > 0)
                     {
+                        if (problema.codigo.Contains("github"))
+                        {
+                    <a href="@problema.codigo" target="_blank"><img src="~/img/github.png" /></a>
+                        }
+                        else
+                        {
                     <a href="@problema.codigo" target="@(problema.codigoEsTextoPlano() ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                        }
                     }
                 </td>
                 } else
@@ -202,7 +216,11 @@
                 <td class="table-td center @(clase)">
                     @if (problema.solucion.Length > 0)
                     {
-                        if (problema.solucion.Contains("youtu"))
+                        if (problema.solucion.Contains("github"))
+                        {
+                    <a href="@problema.solucion" target="_blank"><img src="~/img/markdown.png" style="width:30px"/></a>
+                        }
+                        else if (problema.solucion.Contains("youtu"))
                         {
                     <a href="@problema.solucion" target="_blank"><img src="~/img/youtube.png" style="width:20px"/></a>
                         }
