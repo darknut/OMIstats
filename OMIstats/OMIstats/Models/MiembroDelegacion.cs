@@ -353,19 +353,27 @@ namespace OMIstats.Models
         /// para que los admins puedan ver los datos en una tabla
         /// </summary>
         /// <returns>Los datos separados por coma</returns>
-        public string obtenerLineaAdmin(bool incluirUsuario = true)
+        public string obtenerLineaAdmin(bool esParaRegistro = true)
         {
             StringBuilder s = new StringBuilder();
 
-            if (incluirUsuario)
+            if (!esParaRegistro)
             {
                 s.Append(usuario);
                 s.Append(", ");
             }
             s.Append(nombreAsistente);
             s.Append(", ");
-            s.Append(estado);
-            s.Append(", ");
+            if (esParaRegistro)
+            {
+                s.Append(estado);
+                s.Append(", ");
+            }
+            else
+            {
+                s.Append(Estado.obtenerEstadoConClave(estado).ISO);
+                s.Append(", ");
+            }
             s.Append(tipo.ToString().ToLower());
             s.Append(", ");
             s.Append(clave);

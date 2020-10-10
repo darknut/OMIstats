@@ -671,7 +671,7 @@ namespace OMIstats.Models
                     tabla.Append(tipoOlimpiada);
                     tabla.Append(",");
                 }
-                tabla.Append(asistente.obtenerLineaAdmin(incluirUsuario: !esParaRegistro));
+                tabla.Append(asistente.obtenerLineaAdmin(esParaRegistro: esParaRegistro));
                 if (esParaRegistro)
                 {
                     Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);

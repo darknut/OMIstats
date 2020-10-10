@@ -196,8 +196,7 @@ namespace OmegaUpPuller.WebRequest
                 timestamp = mockTime;
                 mockTime += 60 * 20; // Cada 20 min
 #else
-                timestamp = (long)resultados[TIME];
-                timestamp /= 1000;   // El tiempo en OmegaUp se cuenta en milisegundos
+                timestamp = Convert.ToInt64(resultados[TIME].ToString());
                 timestamp -= Convert.ToInt64(resultados[START_TIME].ToString());
 #endif
 
