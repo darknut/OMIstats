@@ -202,7 +202,14 @@
                 <td class="table-td center @(clase)">
                     @if (problema.solucion.Length > 0)
                     {
-                    <a href="@problema.solucion" target="_blank"><img src="~/img/pdf.png" /></a>
+                        if (problema.solucion.Contains("youtu"))
+                        {
+                    <a href="@problema.solucion" target="_blank"><img src="~/img/youtube.png" style="width:20px"/></a>
+                        }
+                        else
+                        {
+                    <a href="@problema.solucion" target="_blank"><img src="~/img/pdf.png"/></a>
+                        }
                     }
                 </td>
                 } else
