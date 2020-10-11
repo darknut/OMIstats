@@ -32,7 +32,10 @@
 
     <div class="headerPagina">
     <div class="menu">
-
+        @if (HttpContext.Current.IsDebuggingEnabled)
+        {
+        <span class="errorTextoRojo">DEBUG</span>
+        }
         <a class="boton boton-left" href="~/Olimpiadas">Olimpiadas</a>
         <a class="boton" href="~/Estados">Estados</a>
         <a class="boton" href="~/Escuelas">Escuelas</a>
