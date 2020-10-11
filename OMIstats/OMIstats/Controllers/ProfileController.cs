@@ -216,6 +216,7 @@ namespace OMIstats.Controllers
                 p.oculta = current.oculta;
             }
             p.usuario = current.usuario;
+            p.omips = current.omips;
 
             // Se guarda la imagen en disco
             if (file != null)
