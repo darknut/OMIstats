@@ -366,12 +366,12 @@ namespace OMIstats.Models
             s.Append(", ");
             if (esParaRegistro)
             {
-                s.Append(estado);
+                s.Append(Estado.obtenerEstadoConClave(estado).ISO);
                 s.Append(", ");
             }
             else
             {
-                s.Append(Estado.obtenerEstadoConClave(estado).ISO);
+                s.Append(estado);
                 s.Append(", ");
             }
             s.Append(tipo.ToString().ToLower());
