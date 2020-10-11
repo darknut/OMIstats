@@ -818,7 +818,7 @@ namespace OMIstats.Models
                     if (!(unkEnTabla && resultados[i].medalla == Resultados.TipoMedalla.NADA))
                     {
                         competidores++;
-                        if (i == 0 || resultados[i - 1].total != resultados[i].total)
+                        if (i == 0 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
                             lugar = competidores;
                         // Si el competidor tiene 0 puntos (y sabemos cuántos competidores hay),
                         // le asignamos el último lugar posible al competidor, de lo contrario,
