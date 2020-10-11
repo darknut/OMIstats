@@ -32,7 +32,7 @@
 
     <div class="headerPagina">
     <div class="menu">
-        @if (HttpContext.Current.IsDebuggingEnabled)
+        @if (OMIstats.Utilities.TableManager.IsDebug())
         {
         <span class="errorTextoRojo">DEBUG</span>
         }
