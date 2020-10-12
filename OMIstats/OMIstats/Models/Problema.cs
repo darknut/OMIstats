@@ -88,7 +88,7 @@ namespace OMIstats.Models
                 return ICON_PDF;
             if (url.Contains("github"))
                 return ICON_GITHUB;
-            if (url.EndsWith("zip"))
+            if (url.EndsWith("zip") || url.EndsWith("rar"))
                 return ICON_RAR;
             if (url.EndsWith("cpp") || url.EndsWith("txt"))
                 return ICON_CPP;
