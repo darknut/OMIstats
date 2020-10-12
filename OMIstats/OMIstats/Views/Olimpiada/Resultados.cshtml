@@ -300,7 +300,10 @@ else
 {
     OMIstats.Models.Resultados datos = resultados[l];
     tableManager.setCurrentResultados(datos);
-
+    if (datos.total < 0 && !admin)
+    {
+        continue;
+    }
     if (tableManager.esClaveDesconocida())
     {
         hayUNKs = true;
