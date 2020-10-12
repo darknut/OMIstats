@@ -168,14 +168,7 @@
                 <td class="table-td right-border center @(clase)">
                     @if (problema.casos.Length > 0)
                     {
-                        if (problema.casos.Contains("github"))
-                        {
-                    <a href="@problema.casos" target="_blank"><img src="~/img/github.png" /></a>
-                        }
-                        else
-                        {
-                    <a href="@problema.casos"><img src="~/img/rar.png" /></a>
-                        }
+                    <a href="@problema.casos" target="@(!problema.casos.EndsWith("zip") ? "_blank" : null)"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.casos))" class="icon-cases"/></a>
                     }
                 </td>
                 } else
@@ -192,13 +185,13 @@
                 <td class="table-td right-border center @(clase)">
                     @if (problema.codigo.Length > 0)
                     {
-                        if (problema.codigo.Contains("github"))
+                        if (problema.codigoEsTextoPlano())
                         {
-                    <a href="@problema.codigo" target="_blank"><img src="~/img/github.png" /></a>
+                    <a href="@problema.codigo" target="_blank"><img src="~/img/cpp.png" /></a>
                         }
                         else
                         {
-                    <a href="@problema.codigo" target="@(problema.codigoEsTextoPlano() ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                    <a href="@problema.codigo" target="@(problema.casos.EndsWith("zip") ? "" : "_blank")"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.codigo))" class="icon-cases" /></a>
                         }
                     }
                 </td>
@@ -216,22 +209,7 @@
                 <td class="table-td center @(clase)">
                     @if (problema.solucion.Length > 0)
                     {
-                        if (problema.solucion.Contains("github"))
-                        {
-                    <a href="@problema.solucion" target="_blank"><img src="~/img/markdown.png" style="width:30px"/></a>
-                        }
-                        else if (problema.solucion.Contains("youtu"))
-                        {
-                    <a href="@problema.solucion" target="_blank"><img src="~/img/youtube.png" style="width:20px"/></a>
-                        }
-                        else if (problema.solucion.Contains("omegaup"))
-                        {
-                    <a href="@problema.solucion" target="_blank"><img src="~/img/omega.png" style="width:20px"/></a>
-                        }
-                        else
-                        {
-                    <a href="@problema.solucion" target="_blank"><img src="~/img/pdf.png"/></a>
-                        }
+                    <a href="@problema.solucion" target="_blank"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.solucion))" class="icon-cases"/></a>
                     }
                 </td>
                 } else

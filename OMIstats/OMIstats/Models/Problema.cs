@@ -17,6 +17,11 @@ namespace OMIstats.Models
         private static string ICON_PDF = "/img/pdf.png";
         private static string ICON_KAREL = "/img/karelotitlan.png";
         private static string ICON_OTRO = "/img/link.png";
+        private static string ICON_MARKDOWN = "/img/markdown.png";
+        private static string ICON_YOUTUBE = "/img/youtube.png";
+        private static string ICON_RAR = "/img/rar.png";
+        private static string ICON_GITHUB = "/img/github.png";
+        private static string ICON_CPP = "/img/cpp.png";
 
         public string olimpiada { get; set; }
 
@@ -68,6 +73,25 @@ namespace OMIstats.Models
             if (url.Contains("karelotitlan"))
                 return ICON_KAREL;
 
+            return ICON_OTRO;
+        }
+
+        public static string getURLIconCasos(string url)
+        {
+            if (url.Contains("markdown"))
+                return ICON_MARKDOWN;
+            if (url.Contains("youtu"))
+                return ICON_YOUTUBE;
+            if (url.Contains("omegaup"))
+                return ICON_OMEGAUP;
+            if (url.EndsWith("pdf"))
+                return ICON_PDF;
+            if (url.Contains("github"))
+                return ICON_GITHUB;
+            if (url.EndsWith("zip"))
+                return ICON_RAR;
+            if (url.EndsWith("cpp") || url.EndsWith("txt"))
+                return ICON_CPP;
             return ICON_OTRO;
         }
 
