@@ -369,15 +369,15 @@ namespace OMIstats.Models
             else
             {
                 query.Append(" nombre = ");
-                query.Append(Cadenas.comillas(nombre));
+                query.Append(Cadenas.comillas(Cadenas.quitaEspacioDoble(nombre)));
                 query.Append(",");
 
                 query.Append(" apellidoP = ");
-                query.Append(Cadenas.comillas(apellidoPaterno));
+                query.Append(Cadenas.comillas(Cadenas.quitaEspacioDoble(apellidoPaterno)));
                 query.Append(",");
 
                 query.Append(" apellidoM = ");
-                query.Append(Cadenas.comillas(apellidoMaterno));
+                query.Append(Cadenas.comillas(Cadenas.quitaEspacioDoble(apellidoMaterno)));
                 query.Append(",");
 
                 query.Append(" search = ");
