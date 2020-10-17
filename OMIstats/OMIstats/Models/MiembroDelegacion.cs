@@ -1098,17 +1098,8 @@ namespace OMIstats.Models
 
                 lineas.Append(asistente);
 
-                switch (tipo)
-                {
-                    case TipoAsistente.COMPETIDOR:
-                    case TipoAsistente.ASESOR:
-                    case TipoAsistente.LIDER:
-                    case TipoAsistente.DELEGADO:
-                    case TipoAsistente.DELELIDER:
-                    case TipoAsistente.SUBLIDER:
-                            lineas.Append(Estado.obtenerEstadoConClave(estado).obtenerNombreConPrefijo());
-                            break;
-                }
+                if (tipo != TipoAsistente.COMI && tipo != TipoAsistente.COLO)
+                    lineas.Append(Estado.obtenerEstadoConClave(estado).obtenerNombreConPrefijo());
 
                 lineas.Append(",");
                 lineas.Append(baseURL);
