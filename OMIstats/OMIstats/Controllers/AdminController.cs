@@ -184,7 +184,7 @@ namespace OMIstats.Controllers
             if (String.IsNullOrEmpty(omi))
                 o = Olimpiada.obtenerMasReciente();
             else
-                o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
+                o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
 
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 401);
