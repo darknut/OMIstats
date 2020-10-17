@@ -214,5 +214,80 @@ namespace OMIstats.Models
                 anterior.tipoOlimpiada = actual.tipoOlimpiada;
             }
         }
+
+        public static void trim(string omi, TipoOlimpiada tipo, int tiempo, int dia = 1)
+        {
+            if (dia > 2)
+                return;
+            if (tipo == TipoOlimpiada.NULL)
+            {
+                trim(omi, TipoOlimpiada.OMI, tiempo, dia);
+                trim(omi, TipoOlimpiada.OMIS, tiempo, dia);
+                trim(omi, TipoOlimpiada.OMIP, tiempo, dia);
+                return;
+            }
+
+            StringBuilder query = new StringBuilder();
+            Acceso db = new Acceso();
+
+            // Primero obtenemos una lista de todos los timestamps mas grandes
+            query.Append(" select clave, MAX(timestamp) from DetalleLugar where olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" group by clave ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                string clave = DataRowParser.ToString(r[0]);
+                int timestamp = DataRowParser.ToInt(r[1]);
+
+                // Si el último timestamp es diferente del tiempo que tenemos...
+                if (timestamp != tiempo)
+                {
+                    // ...borramos todos las entradas superiores y menores al que tenemos
+                    query.Clear();
+                    query.Append(" delete DetalleLugar where olimpiada = ");
+                    query.Append(Cadenas.comillas(omi));
+                    query.Append(" and clase = ");
+                    query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+                    query.Append(" and dia = ");
+                    query.Append(dia);
+                    query.Append(" and clave = ");
+                    query.Append(Cadenas.comillas(clave));
+                    query.Append(" and timestamp > ");
+                    query.Append(tiempo);
+                    query.Append(" and timestamp <> ");
+                    query.Append(timestamp);
+
+                    db.EjecutarQuery(query.ToString());
+
+                    // ... y actualizamos el que tenemos para que tenga ese timestamp
+                    query.Clear();
+                    query.Append(" update DetalleLugar set timestamp = ");
+                    query.Append(tiempo);
+                    query.Append(" where olimpiada = ");
+                    query.Append(Cadenas.comillas(omi));
+                    query.Append(" and clase = ");
+                    query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+                    query.Append(" and dia = ");
+                    query.Append(dia);
+                    query.Append(" and clave = ");
+                    query.Append(Cadenas.comillas(clave));
+                    query.Append(" and timestamp = ");
+                    query.Append(timestamp);
+
+                    db.EjecutarQuery(query.ToString());
+                }
+            }
+
+            // Finalmente hacemos lo mismo con dia 2
+            trim(omi, tipo, tiempo, dia + 1);
+        }
     }
 }

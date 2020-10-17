@@ -172,6 +172,30 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Admin/Trim/
+
+        public ActionResult Trim(string omi = "", TipoOlimpiada tipo = TipoOlimpiada.NULL, int tiempo = 18000)
+        {
+            if (!esAdmin())
+                return RedirectTo(Pagina.ERROR, 401);
+
+            Olimpiada o;
+
+            if (String.IsNullOrEmpty(omi))
+                o = Olimpiada.obtenerMasReciente();
+            else
+                o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
+
+            if (o == null)
+                return RedirectTo(Pagina.ERROR, 401);
+
+            DetalleLugar.trim(o.numero, tipo, tiempo);
+            DetallePuntos.trim(o.numero, tipo, tiempo);
+
+            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
+        }
+
+        //
         // GET: /Admin/Logs/
 
         public ActionResult Logs(int count = 0, Log.TipoLog tipo = Log.TipoLog.NULL)
