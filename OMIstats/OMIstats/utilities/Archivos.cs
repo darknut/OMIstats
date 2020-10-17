@@ -235,7 +235,7 @@ namespace OMIstats.Utilities
                     {
                         var nombreArchivo = archivo.Split('\\').Last();
                         // No incluimos los diplomas del comi en los zip
-                        if (nombreArchivo.StartsWith("COMI"))
+                        if (nombreArchivo.StartsWith("COMI") || nombreArchivo.StartsWith("COLO"))
                             continue;
                         var file = archive.CreateEntry(nombreArchivo);
 

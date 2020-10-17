@@ -1072,6 +1072,10 @@ namespace OMIstats.Models
 
                 lineas.Append(estado);
                 lineas.Append("\\");
+                if (clase == TipoOlimpiada.OMIP)
+                    lineas.Append("P-");
+                else if (clase == TipoOlimpiada.OMIS)
+                    lineas.Append("S-");
                 lineas.Append(clave);
                 lineas.Append("-medalla.pdf,");
                 lineas.Append(nombre);
