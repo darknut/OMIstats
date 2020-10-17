@@ -209,9 +209,16 @@ namespace OMIstats.Utilities
 
         public static int cuantosExisten(FolderImagenes folder, string subfolder, string nombre)
         {
-            string path = pathAbsoluto(folder);
-            var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre + "*");
-            return archivos.Count();
+            try
+            {
+                string path = pathAbsoluto(folder);
+                var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre + "*");
+                return archivos.Count();
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         public static byte[] comprimeArchivos(FolderImagenes folder, string subfolder, string nombre = null)
