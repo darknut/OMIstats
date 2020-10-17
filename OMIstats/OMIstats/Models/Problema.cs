@@ -88,9 +88,9 @@ namespace OMIstats.Models
                 return ICON_PDF;
             if (url.Contains("github"))
                 return ICON_GITHUB;
-            if (url.EndsWith("zip") || url.EndsWith("rar"))
+            if (esZip(url))
                 return ICON_RAR;
-            if (url.EndsWith("cpp") || url.EndsWith("txt"))
+            if (esTextoPlano(url))
                 return ICON_CPP;
             return ICON_OTRO;
         }
@@ -387,9 +387,14 @@ namespace OMIstats.Models
         /// Regresa si la variable código representa un archivo de texto plano
         /// </summary>
         /// <returns></returns>
-        public bool codigoEsTextoPlano()
+        public static bool esTextoPlano(string url)
         {
-            return this.codigo.EndsWith(".cpp") || this.codigo.EndsWith(".txt");
+            return url.EndsWith(".cpp") || url.EndsWith(".txt");
+        }
+
+        public static bool esZip(string url)
+        {
+            return url.EndsWith("zip") || url.EndsWith("rar");
         }
     }
 }

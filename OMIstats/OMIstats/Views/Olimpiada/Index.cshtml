@@ -218,7 +218,7 @@
                     }
                     if (metadata[d].codigo.Length > 0)
                     {
-                    <a href="@metadata[d].codigo" target="@(metadata[d].codigoEsTextoPlano() ? "_blank" : null)"><img src="~/img/cpp.png" /></a>
+                    <a href="@metadata[d].codigo" target="@(OMIstats.Models.Problema.esTextoPlano(metadata[d].codigo) ? "_blank" : "")"><img src="~/img/cpp.png" /></a>
                     }
                     if (metadata[d].solucion.Length > 0)
                     {
@@ -260,11 +260,11 @@
                                 <a href="@dia[i].url" class="nombre" target="_blank">@dia[i].nombre</a>
                                 @if(dia[i].casos.Length > 0)
                                 {
-                                <a href="@dia[i].casos" target="@(!dia[i].casos.EndsWith("zip") ? "_blank" : null)"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(dia[i].casos))" class="icon-cases" title="Casos"/></a>
+                                <a href="@dia[i].casos" target="@(OMIstats.Models.Problema.esZip(dia[i].casos) ? "" : "_blank")"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(dia[i].casos))" class="icon-cases" title="Casos"/></a>
                                 }
                                 @if(dia[i].codigo.Length > 0)
                                 {
-                                <a href="@dia[i].codigo" target="@(dia[i].codigoEsTextoPlano() ? "_blank" : null)"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(dia[i].codigo))" class="icon-cases" title="Código"/></a>
+                                <a href="@dia[i].codigo" target="@(OMIstats.Models.Problema.esZip(dia[i].codigo) ? "" : "_blank")"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(dia[i].codigo))" class="icon-cases" title="Código"/></a>
                                 }
                                 @if(dia[i].solucion.Length > 0)
                                 {

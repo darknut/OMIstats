@@ -168,7 +168,7 @@
                 <td class="table-td right-border center @(clase)">
                     @if (problema.casos.Length > 0)
                     {
-                    <a href="@problema.casos" target="@(!problema.casos.EndsWith("zip") ? "_blank" : null)"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.casos))" class="icon-cases"/></a>
+                    <a href="@problema.casos" target="@(OMIstats.Models.Problema.esZip(problema.casos) ? "" : "_blank")"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.casos))" class="icon-cases"/></a>
                     }
                 </td>
                 } else
@@ -185,13 +185,13 @@
                 <td class="table-td right-border center @(clase)">
                     @if (problema.codigo.Length > 0)
                     {
-                        if (problema.codigoEsTextoPlano())
+                        if (OMIstats.Models.Problema.esTextoPlano(problema.codigo))
                         {
                     <a href="@problema.codigo" target="_blank"><img src="~/img/cpp.png" /></a>
                         }
                         else
                         {
-                    <a href="@problema.codigo" target="@(problema.casos.EndsWith("zip") ? "" : "_blank")"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.codigo))" class="icon-cases" /></a>
+                    <a href="@problema.codigo" target="@(OMIstats.Models.Problema.esZip(problema.codigo) ? "" : "_blank")"><img src="@Url.Content("~/" + OMIstats.Models.Problema.getURLIconCasos(problema.codigo))" class="icon-cases" /></a>
                         }
                     }
                 </td>
