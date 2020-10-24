@@ -1059,7 +1059,7 @@ namespace OMIstats.Models
             query.Append(" inner join Persona as p on p.clave = r.concursante ");
             query.Append(" where r.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
-            query.Append(" and medalla <> 7 ");
+            query.Append(" and medalla < 7 ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
