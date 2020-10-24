@@ -300,6 +300,7 @@ else
 {
     OMIstats.Models.Resultados datos = resultados[l];
     tableManager.setCurrentResultados(datos);
+    bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
     if (datos.total < 0 && !admin)
     {
         continue;
@@ -333,7 +334,7 @@ else
 }
 </td>
 <td class="@("table-td center right-border " + claseCSS)">
-    @if (Model.mostrarResultadosTotales && datos.lugar > 0)
+    @if (Model.mostrarResultadosTotales && datos.lugar > 0 && !descalificado)
     {
      @(datos.lugar)
     }
@@ -394,14 +395,28 @@ else
     for (var i = 0; i < problemasDia1Count; i++)
     {
 <td class="@("table-td center right-border " + claseCSS)">
+@if(descalificado)
+{
+@("-")
+}
+else
+{
 @tableManager.puntosProblema(1, i)
+}
 </td>
     }
 }
 @if (Model.mostrarResultadosPorDia || secretScoreboard && dia == 2)
 {
-<td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+<td class="@("table-td center right-border resultado-dia " + (descalificado ? "" : " open-overlay ") + claseCSS)" onclick="@(descalificado ? "null" : "showOverlay('" + datos.clave + "')")">
+@if(descalificado)
+{
+@("-")
+}
+else
+{
 @datos.totalDia1
+}
 </td>
 }
 @if (Model.mostrarResultadosPorProblema || secretScoreboard && dia == 2)
@@ -409,20 +424,41 @@ else
     for (var i = 0; i < problemasDia2Count; i++)
     {
 <td class="@("table-td center right-border " + claseCSS)">
+@if(descalificado)
+{
+@("-")
+}
+else
+{
 @tableManager.puntosProblema(2, i)
+}
 </td>
     }
 }
 @if (Model.mostrarResultadosPorDia || secretScoreboard && dia == 2)
 {
-<td class="@("table-td center right-border resultado-dia open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+<td class="@("table-td center right-border resultado-dia " + (descalificado ? "" : " open-overlay ") + claseCSS)" onclick="@(descalificado ? "null" : "showOverlay('" + datos.clave + "')")">
+@if(descalificado)
+{
+@("-")
+}
+else
+{
 @datos.totalDia2
+}
 </td>
 }
 @if (Model.mostrarResultadosTotales || secretScoreboard)
 {
-<td class="@("table-td center right-border resultado-total open-overlay " + claseCSS)" onclick="showOverlay('@(datos.clave)')">
+<td class="@("table-td center right-border resultado-total " + (descalificado ? "" : " open-overlay ") + claseCSS)" onclick="@(descalificado ? "null" : "showOverlay('" + datos.clave + "')")">
+@if(descalificado)
+{
+@("-")
+}
+else
+{
 @datos.total
+}
 </td>
 }
 <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">

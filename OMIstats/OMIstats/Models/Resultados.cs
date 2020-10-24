@@ -21,6 +21,7 @@ namespace OMIstats.Models
             PLATA,
             BRONCE,
             NADA,
+            DESCALIFICADO
         }
 
         public enum TipoError
@@ -262,7 +263,7 @@ namespace OMIstats.Models
             return TipoError.OK;
         }
 
-        private static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos, bool cargarCache, int dia, int problemas, out List<CachedResult> cached)
+        private static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos, bool cargarCache, bool porLugar, int dia, int problemas, out List<CachedResult> cached)
         {
             List<Resultados> lista = new List<Resultados>();
             List<CachedResult> temp = null;
@@ -278,7 +279,10 @@ namespace OMIstats.Models
                 query.Append(" and olimpiada = ");
                 query.Append(Cadenas.comillas(omi));
             }
-            query.Append(" order by puntos desc, clave asc");
+            query.Append(" order by ");
+            if (porLugar)
+                query.Append(" lugar asc, ");
+            query.Append(" puntos desc, clave asc");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -314,10 +318,10 @@ namespace OMIstats.Models
         /// <param name="tipoOlimpiada">El tipo de olimpiada</param>
         /// <param name="cargarObjetos">Si los objetos deben de llenarse</param>
         /// <returns>Una lista con los resultados</returns>
-        public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false)
+        public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, bool cargarObjetos = false, bool porLugar = false)
         {
             List<CachedResult> cache;
-            return cargarResultados(omi, tipoOlimpiada, cargarObjetos, false, 0, 0, out cache);
+            return cargarResultados(omi, tipoOlimpiada, cargarObjetos, /*cargarCache*/ false, porLugar, 0, 0, out cache);
         }
 #if OMISTATS
 
@@ -387,7 +391,7 @@ namespace OMIstats.Models
         /// <returns>La lista con los resultados</returns>
         public static List<Resultados> cargarResultados(string omi, TipoOlimpiada tipoOlimpiada, int dia, int problemas, out List<CachedResult> cached)
         {
-            return cargarResultados(omi, tipoOlimpiada, true, true, dia, problemas, out cached);
+            return cargarResultados(omi, tipoOlimpiada, true, true, true, dia, problemas, out cached);
         }
 
         /// <summary>
@@ -873,12 +877,12 @@ namespace OMIstats.Models
             query.Append(" and (");
             query.Append(columna);
 
-            db.EjecutarQuery(query.ToString() + " = 0 or " + columna + " is null)");
+            db.EjecutarQuery(query.ToString() + " = 0 or " + columna + " is null) and medalla <> " + (int)TipoMedalla.DESCALIFICADO);
             p.ceros = (int)db.getTable().Rows[0][0];
 
             if (totalProblemas > 0)
                 perfecto *= totalProblemas;
-            db.EjecutarQuery(query.ToString() + " = " + perfecto + ")");
+            db.EjecutarQuery(query.ToString() + " = " + perfecto + ") and medalla <> " + (int)TipoMedalla.DESCALIFICADO);
             p.perfectos = (int)db.getTable().Rows[0][0];
 
             query.Clear();
@@ -888,12 +892,11 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and medalla <> ");
+            query.Append((int)TipoMedalla.DESCALIFICADO);
 
             db.EjecutarQuery(query.ToString());
-            string totalStr = db.getTable().Rows[0][0].ToString();
-            if (totalStr == "")
-                totalStr = "0";
-            suma = float.Parse(totalStr);
+            suma = DataRowParser.ToStrictFloat(db.getTable().Rows[0][0]);
 
             query.Clear();
             query.Append(" select ");
@@ -902,6 +905,8 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and medalla <> ");
+            query.Append((int)TipoMedalla.DESCALIFICADO);
             query.Append(" order by ");
             query.Append(columna);
             query.Append(" desc ");
@@ -915,10 +920,10 @@ namespace OMIstats.Models
                 p.media = suma / total;
                 p.media = (float) Math.Round((Decimal)p.media, 2, MidpointRounding.AwayFromZero);
                 mitad = total / 2;
-                p.mediana = table.Rows[mitad][0] is DBNull ? 0 : float.Parse(table.Rows[mitad][0].ToString());
+                p.mediana = DataRowParser.ToStrictFloat(table.Rows[mitad][0]);
 
                 if (total % 2 == 0)
-                    p.mediana = (p.mediana + (table.Rows[mitad + 1][0] is DBNull ? 0 : float.Parse(table.Rows[mitad + 1][0].ToString()))) / 2;
+                    p.mediana = (p.mediana + DataRowParser.ToStrictFloat(table.Rows[mitad - 1][0])) / 2;
             }
 
             p.dia = dia;

@@ -817,16 +817,24 @@ namespace OMIstats.Models
                 else
                     if (!(unkEnTabla && resultados[i].medalla == Resultados.TipoMedalla.NADA))
                     {
-                        competidores++;
-                        if (i == 0 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
-                            lugar = competidores;
-                        // Si el competidor tiene 0 puntos (y sabemos cuántos competidores hay),
-                        // le asignamos el último lugar posible al competidor, de lo contrario,
-                        // le asignamos el siguiente lugar disponible
-                        if (resultados[i].total == 0 && participantes > 0)
-                            resultados[i].lugar = participantes;
+                        // Si el competidor fue descalificado lo mandamos al fondo del lugar
+                        if (resultados[i].medalla == Resultados.TipoMedalla.DESCALIFICADO)
+                        {
+                            resultados[i].lugar = participantes + 1;
+                        }
                         else
-                            resultados[i].lugar = lugar;
+                        {
+                            competidores++;
+                            if (competidores == 1 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
+                                lugar = competidores;
+                            // Si el competidor tiene 0 puntos (y sabemos cuántos competidores hay),
+                            // le asignamos el último lugar posible al competidor, de lo contrario,
+                            // le asignamos el siguiente lugar disponible
+                            if (resultados[i].total == 0 && participantes > 0)
+                                resultados[i].lugar = participantes;
+                            else
+                                resultados[i].lugar = lugar;
+                        }
                     }
                 resultados[i].guardarLugar();
             }

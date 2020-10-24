@@ -143,6 +143,7 @@
 
             string claseCSS = tableManager.obtenerClaseCSS();
             bool mostrar = tableManager.mostrarLinea();
+            bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
 
             if (tableManager.faltaNombre())
             {
@@ -158,7 +159,7 @@
                     }
                 </td>
                 <td class="@("table-td right-border center " + claseCSS)">
-                    @if (mostrar && datos.lugar > 0)
+                    @if (mostrar && datos.lugar > 0 && !descalificado)
                     {
                         @(datos.lugar)
                     }
@@ -194,7 +195,14 @@
                 <td class="@("table-td center right-border resultado-total " + claseCSS)">
                     @if (mostrar)
                     {
-                        @(datos.total)
+                        if (descalificado)
+                        {
+                            @("-")
+                        }
+                        else
+                        {
+                            @(datos.total)
+                        }
                     }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">

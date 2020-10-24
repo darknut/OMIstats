@@ -131,7 +131,7 @@
                     <div class="participaciones">
                         @OMIstats.Utilities.TableManager.participaciones(md, tipo)
                     </div>
-                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
+                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO)
                     {
                         <img class="medallaMiembro" src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.resultados.medalla))"/>
                     }

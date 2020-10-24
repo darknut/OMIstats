@@ -36,7 +36,13 @@ namespace OMIstats.Utilities
         {
             if (value is DBNull)
                 return 0;
-            return float.Parse(value.ToString());
+            try
+            {
+                return float.Parse(value.ToString());
+            } catch(Exception)
+            {
+                return 0;
+            }
         }
 
         public static DateTime ToLongDateTime(object value)

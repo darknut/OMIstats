@@ -318,78 +318,81 @@ namespace OMIstats.Models
                     }
                 }
 
-                switch (resultado.medalla)
+                if (resultado.medalla != Resultados.TipoMedalla.DESCALIFICADO)
                 {
-                    case Resultados.TipoMedalla.ORO_3:
-                    case Resultados.TipoMedalla.ORO_2:
-                    case Resultados.TipoMedalla.ORO_1:
-                    case Resultados.TipoMedalla.ORO:
-                        {
-                            persona.oros++;
-                            estado.oros++;
-                            institucion.oros++;
-                            if (aplicaAOlimpiada)
-                            {
-                                estadoPorOlimpiada.oros++;
-                            }
-                            break;
-                        }
-                    case Resultados.TipoMedalla.PLATA:
-                        {
-                            persona.platas++;
-                            estado.platas++;
-                            institucion.platas++;
-                            if (aplicaAOlimpiada)
-                            {
-                                estadoPorOlimpiada.platas++;
-                            }
-                            break;
-                        }
-                    case Resultados.TipoMedalla.BRONCE:
-                        {
-                            persona.bronces++;
-                            estado.bronces++;
-                            institucion.bronces++;
-                            if (aplicaAOlimpiada)
-                            {
-                                estadoPorOlimpiada.bronces++;
-                            }
-                            break;
-                        }
-                    default:
-                        {
-                            persona.otros++;
-                            estado.otros++;
-                            institucion.otros++;
-                            break;
-                        }
-                }
-
-                if (aplicaAOlimpiada)
-                {
-                    if (resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
-                        estadoPorOlimpiada.hayUNKs = true;
-
-                    // No se han guardado mas de 4 lugares
-                    if (estadoPorOlimpiada.count < 4)
+                    switch (resultado.medalla)
                     {
-                        // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
-                        if (!resultado.clave.EndsWith("I"))
-                        {
-                            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
-
-                            // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
-                            if (o.noMedallistasConocidos)
+                        case Resultados.TipoMedalla.ORO_3:
+                        case Resultados.TipoMedalla.ORO_2:
+                        case Resultados.TipoMedalla.ORO_1:
+                        case Resultados.TipoMedalla.ORO:
                             {
-                                // En las OMIs con puntos desconocidos, se guarda en los puntos del día 2, los puntos de los estados
-                                if (o.puntosDesconocidos)
+                                persona.oros++;
+                                estado.oros++;
+                                institucion.oros++;
+                                if (aplicaAOlimpiada)
                                 {
-                                    estadoPorOlimpiada.puntos += resultado.totalDia2;
+                                    estadoPorOlimpiada.oros++;
                                 }
-                                else
+                                break;
+                            }
+                        case Resultados.TipoMedalla.PLATA:
+                            {
+                                persona.platas++;
+                                estado.platas++;
+                                institucion.platas++;
+                                if (aplicaAOlimpiada)
                                 {
-                                    estadoPorOlimpiada.count++;
-                                    estadoPorOlimpiada.puntos += resultado.total;
+                                    estadoPorOlimpiada.platas++;
+                                }
+                                break;
+                            }
+                        case Resultados.TipoMedalla.BRONCE:
+                            {
+                                persona.bronces++;
+                                estado.bronces++;
+                                institucion.bronces++;
+                                if (aplicaAOlimpiada)
+                                {
+                                    estadoPorOlimpiada.bronces++;
+                                }
+                                break;
+                            }
+                        default:
+                            {
+                                persona.otros++;
+                                estado.otros++;
+                                institucion.otros++;
+                                break;
+                            }
+                    }
+
+                    if (aplicaAOlimpiada)
+                    {
+                        if (resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
+                            estadoPorOlimpiada.hayUNKs = true;
+
+                        // No se han guardado mas de 4 lugares
+                        if (estadoPorOlimpiada.count < 4)
+                        {
+                            // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
+                            if (!resultado.clave.EndsWith("I"))
+                            {
+                                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
+
+                                // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
+                                if (o.noMedallistasConocidos)
+                                {
+                                    // En las OMIs con puntos desconocidos, se guarda en los puntos del día 2, los puntos de los estados
+                                    if (o.puntosDesconocidos)
+                                    {
+                                        estadoPorOlimpiada.puntos += resultado.totalDia2;
+                                    }
+                                    else
+                                    {
+                                        estadoPorOlimpiada.count++;
+                                        estadoPorOlimpiada.puntos += resultado.total;
+                                    }
                                 }
                             }
                         }

@@ -307,14 +307,11 @@ namespace OMIstats.Controllers
 
             ViewBag.liveResults = false;
             ViewBag.secretScoreboard = false;
+            ViewBag.resultados = null;
             if (o.liveResults)
             {
                 OmegaUp ou = o.calculateCachedResults();
-                if (ou == null)
-                {
-                    ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
-                }
-                else
+                if (ou != null)
                 {
                     Persona p = getUsuario();
                     if (o.esOnline && OmegaUp.RunnerStarted && p != null && p.esSuperUsuario())
@@ -344,9 +341,9 @@ namespace OMIstats.Controllers
                     }
                 }
             }
-            else
+            if (ViewBag.resultados == null)
             {
-                ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, cargarObjetos: true);
+                ViewBag.resultados = Models.Resultados.cargarResultados(clave, tipo, porLugar: !o.puntosDesconocidos && o.noMedallistasConocidos && o.datosPublicos, cargarObjetos: true);
             }
 
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
