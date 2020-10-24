@@ -827,13 +827,7 @@ namespace OMIstats.Models
                             competidores++;
                             if (competidores == 1 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
                                 lugar = competidores;
-                            // Si el competidor tiene 0 puntos (y sabemos cuántos competidores hay),
-                            // le asignamos el último lugar posible al competidor, de lo contrario,
-                            // le asignamos el siguiente lugar disponible
-                            if (resultados[i].total == 0 && participantes > 0)
-                                resultados[i].lugar = participantes;
-                            else
-                                resultados[i].lugar = lugar;
+                            resultados[i].lugar = lugar;
                         }
                     }
                 resultados[i].guardarLugar();
