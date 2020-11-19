@@ -17,7 +17,7 @@ var lugarD2P = [];
 var overlayAjax = "";
 var overlayTipo = ""
 var overlayOMI = "";
-var medallaToGradient = ['','yellow', 'yellow', 'yellow', 'yellow', 'silver', 'brown', 'black'];
+var medallaToGradient = ['', 'yellow', 'yellow', 'yellow', 'yellow', 'silver', 'brown', 'black'];
 
 var overlayProblemasDia1 = 0;
 var overlayProblemasDia2 = 0;
@@ -176,8 +176,8 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
         linea.push([]);
     if (maxTiempo % SECONDS_PER_TICK != 0)
         maxTiempo += SECONDS_PER_TICK;
-    while (true)
-    {
+    var nextDay = false;
+    while (true) {
         var avanzo = false;
         while (true) {
             if (tiempo == 0)
@@ -202,8 +202,13 @@ function dibujaGrafica(chart, puntos, tiempos, maxY, colorIndexes, valorMinimo, 
 
         if (cambioDia && tiempo == cambioDia) {
             colors.push("brown");
+            labels.push(prefijo + tickValue);
+            nextDay = true;
+        } else if (nextDay) {
+            colors.push("#EEEEEE");
             labels.push("Día 2");
             prefijo = "Día 2 ";
+            nextDay = false;
         } else if (tiempo % 3600 == 0) {
             colors.push("gray");
             labels.push(prefijo + tickValue);
