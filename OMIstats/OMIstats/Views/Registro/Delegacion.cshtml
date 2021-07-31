@@ -50,7 +50,7 @@
     }
 }
 
-<h1 class="titulo">@ViewBag.Title</h1>
+<h1 class="titulo">@ViewBag.Title <img src="~/img/check.svg" class="oculto" id="main-check"/></h1>
 
 @if (errorPermisos)
 {
@@ -257,6 +257,10 @@ if (omi.esOnline)
 
     if (!usuario.esSuperUsuario())
     {
+        if (registroTerminado)
+        {
+        <script>setVisible("main-check", true);</script>
+        }
         <br />
         <br />
         <br />
