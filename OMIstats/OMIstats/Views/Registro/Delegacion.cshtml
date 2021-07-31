@@ -135,6 +135,10 @@
             <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
             }
             }
+            @if(usuario.esAdmin() && miembro.cerrado)
+            {
+                @(".")
+            }
         </td>
     </tr>
         }

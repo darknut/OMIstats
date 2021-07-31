@@ -407,6 +407,11 @@ namespace OMIstats.Controllers
                 p.omips = true;
             }
 
+            List<MiembroDelegacion> miembrosExistentes = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.OMI);
+            bool registroCerrado = false;
+            if (miembrosExistentes.Count > 0)
+                registroCerrado = miembrosExistentes[0].cerrado;
+
             // Validaciones terminadas, guardamos persona y miembro delegacion
             // Primero en caso de que sea un nuevo miembro de la delegación
             if (md == null)
@@ -454,6 +459,7 @@ namespace OMIstats.Controllers
                 md.tipo = tipoAsistente;
                 md.claveUsuario = p.clave;
                 md.sede = sede;
+                md.cerrado = registroCerrado;
                 md.nuevo();
 
                 // Se registra la telemetria
@@ -494,6 +500,7 @@ namespace OMIstats.Controllers
                 md.clave = claveSelect;
                 md.tipo = tipoAsistente;
                 md.sede = sede;
+                md.cerrado = registroCerrado;
                 md.guardarDatos(claveOriginal, tipoO);
 
                 // Se registra la telemetria
