@@ -69,6 +69,7 @@
     foreach (OMIstats.Models.MiembroDelegacion miembro in Model)
     {
         registroTerminado |= miembro.cerrado;
+        bool classeLinea = false;
         if (usuario.esSuperUsuario() || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
         {
             if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
@@ -79,15 +80,23 @@
     <tr>
             @if (usuario.esSuperUsuario())
             {
-        <td>
-                @if (lastEstado != miembro.estado)
+                if (lastEstado != miembro.estado)
                 {
+                <td class="celda-estado">
                     @OMIstats.Models.Estado.obtenerEstadoConClave(miembro.estado).nombre
-                    lastEstado = miembro.estado;
+                    <img src="~/img/check.svg" class="@(miembro.cerrado ? "" : "oculto")" title="Registro terminado"/>
+                    @{
+                        lastEstado = miembro.estado;
+                        classeLinea = true;
+                     }
+                </td>
                 }
-        </td>
+                else
+                {
+                <td></td>
+                }
             }
-        <td class="lineas-registro">
+        <td class="lineas-registro @(classeLinea ? "celda-estado" : "")">
             @miembro.nombreAsistente
             @if(usuario.esSuperUsuario() && miembro.puedeRegistrar)
             {
@@ -100,14 +109,14 @@
         </td>
         @if (usuario.esSuperUsuario())
         {
-        <td class="lineas-registro clave-registro">
+        <td class="lineas-registro clave-registro @(classeLinea ? "celda-estado" : "")">
             @if (miembro.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMI && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 @(miembro.tipoOlimpiada)
             }
         </td>
         }
-        <td class="lineas-registro clave-registro">
+        <td class="lineas-registro clave-registro @(classeLinea ? "celda-estado" : "")">
             @if (usuario.esAdmin() || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
             @miembro.clave
@@ -117,7 +126,7 @@
             @miembro.tipo
             }
         </td>
-        <td>
+        <td class="@(classeLinea ? "celda-estado" : "")">
             <a onclick="iniciaRegistro('@miembro.tipoOlimpiada', '@miembro.clave')" class="a-sin-href">Modificar</a>
             @if (!hayResultados && (usuario.esSuperUsuario() || registroActivo))
             {
