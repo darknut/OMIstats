@@ -127,10 +127,13 @@
             }
         </td>
         <td class="@(classeLinea ? "celda-estado" : "")">
+            @if(usuario.esSuperUsuario() || !registroTerminado)
+            {
             <a onclick="iniciaRegistro('@miembro.tipoOlimpiada', '@miembro.clave')" class="a-sin-href">Modificar</a>
-            @if (!hayResultados && (usuario.esSuperUsuario() || registroActivo))
+            if (!hayResultados && (usuario.esSuperUsuario() || registroActivo))
             {
             <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
+            }
             }
         </td>
     </tr>
@@ -145,7 +148,10 @@
         if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))
         {
     <tr><td>
+        @if(usuario.esSuperUsuario() || !registroTerminado)
+        {
         <a onclick="iniciaRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
+        }
     </td>
         @if (usuario.esSuperUsuario())
         {
@@ -234,14 +240,17 @@ if (omi.esOnline)
            @if (usuario.esAdmin() || (!usuario.esSuperUsuario() && omi.registroSedes))
            {
         <td>
+            @if(usuario.esSuperUsuario() || !registroTerminado)
+            {
             @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave }, new { })
-            @if (miembrosEnSede.Count == 0)
+            if (miembrosEnSede.Count == 0)
             {
             <a onclick="eliminarSede(@sedes[i].clave, '@sedes[i].nombre')" class="a-sin-href">Eliminar</a>
             }
             else
             {
             <a class="desabilitado" title="Para borrar esta sede primero reasigne a los alumnos de esta sede">Eliminar</a>
+            }
             }
         </td>
            }
@@ -259,7 +268,7 @@ if (omi.esOnline)
         }
 </table>
     }
-    if (!usuario.esSuperUsuario() && omi.registroSedes)
+    if (!usuario.esSuperUsuario() && omi.registroSedes && !registroTerminado)
     {
         @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
     }
