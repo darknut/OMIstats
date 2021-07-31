@@ -40,9 +40,9 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Olimpiada/New/
+        // GET: /Olimpiada/Nueva/
 
-        public ActionResult New()
+        public ActionResult Nueva()
         {
             if (!estaLoggeado())
             {
