@@ -400,3 +400,16 @@ function onNivelEscolar() {
         combo.add(generaOpcion("6°", "6"));
     }
 }
+
+function terminarRegistro(value) {
+    if (typeof (estado) == "undefined")
+        return;
+
+    var text = value ?
+        "¿Desea marcar el registro como 'No terminado'? Esto te habilitará el registro de nuevo" :
+        "¿Desea marcar el registro como 'Terminado'? Esto te cerrará el registro, pero se puede volver a abrir en caso de error.";
+    var address = "Terminar?omi=" + omi + "&estado=" + estado;
+
+    if (confirm(text))
+        redirige(ajaxUrl, address);
+}

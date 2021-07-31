@@ -77,6 +77,11 @@ namespace OMIstats.Models
         public bool omips;
         public bool escuelaPublica;
         public bool puedeRegistrar;
+        /// <summary>
+        /// Esta bandera indica si el registro ya fue completado por el líder
+        /// Todos los usuarios lo tienen, se actualiza a todos a la vez.
+        /// </summary>
+        public bool cerrado;
 #if OMISTATS
         public Institucion.NivelInstitucion nivelEscuela;
 #endif
@@ -121,6 +126,7 @@ namespace OMIstats.Models
             tipo = TipoAsistente.NULL;
             resultados = null;
             sede = 0;
+            cerrado = false;
         }
 
         public string getTipoAsistenteString()
@@ -164,6 +170,7 @@ namespace OMIstats.Models
             tipo = DataRowParser.ToTipoAsistente(row["tipo"]);
             tipoOlimpiada = DataRowParser.ToTipoOlimpiada(row["clase"]);
             sede = DataRowParser.ToInt(row["sede"]);
+            cerrado = DataRowParser.ToBool(row["cerrado"]);
 #if OMISTATS
             try
             {
@@ -325,7 +332,7 @@ namespace OMIstats.Models
             else
                 query.Append(" i.nombreCorto as nombreEscuela, ");
             query.Append(" md.nivel,");
-            query.Append(" md.año, md.sede, i.publica, md.persona, md.institucion from miembrodelegacion as md");
+            query.Append(" md.año, md.sede, md.cerrado, i.publica, md.persona, md.institucion from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
             query.Append(" where md.olimpiada = ");
@@ -697,7 +704,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
 
-            query.Append(" insert into miembrodelegacion (olimpiada, estado, clase, clave, tipo, persona, sede) values(");
+            query.Append(" insert into miembrodelegacion (olimpiada, estado, clase, clave, tipo, persona, sede, cerrado) values(");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(",");
             query.Append(Cadenas.comillas(estado));
@@ -711,6 +718,8 @@ namespace OMIstats.Models
             query.Append(claveUsuario);
             query.Append(",");
             query.Append(sede);
+            query.Append(",");
+            query.Append(cerrado ? 1 : 0);
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
@@ -762,6 +771,8 @@ namespace OMIstats.Models
                 query.Append(", sede = ");
                 query.Append(sede);
             }
+            query.Append(", cerrado = ");
+            query.Append(cerrado ? 1 : 0);
             query.Append(" where olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
@@ -914,7 +925,7 @@ namespace OMIstats.Models
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
             query.Append(" p.nacimiento, p.genero, p.correo, p.omips, i.nombreCorto as nombreEscuela, md.nivel,");
-            query.Append(" md.año, md.sede, i.publica, md.persona from miembrodelegacion as md");
+            query.Append(" md.año, md.sede, md.cerrado, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
@@ -1402,6 +1413,21 @@ namespace OMIstats.Models
                 int count = DataRowParser.ToInt(r[1]);
                 numeroParticipaciones.Add(tipo, count);
             }
+        }
+
+        public static void cerrarOAbrirRegistro(string omi, string estado, bool cerrado)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" update miembrodelegacion set cerrado = ");
+            query.Append(cerrado ? 1 : 0);
+            query.Append(" where olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and estado = ");
+            query.Append(Cadenas.comillas(estado));
+
+            db.EjecutarQuery(query.ToString());
         }
 #endif
     }

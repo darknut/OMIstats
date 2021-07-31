@@ -704,5 +704,20 @@ namespace OMIstats.Controllers
 
             return RedirectTo(Pagina.REGISTRO, new { omi = so.omi, estado = so.estado });
         }
+
+        //
+        // GET: /Registro/Terminar
+
+        public ActionResult Terminar(string omi, string estado)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.OMI)[0];
+            MiembroDelegacion.cerrarOAbrirRegistro(omi, estado, !md.cerrado);
+
+            return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
+        }
     }
 }

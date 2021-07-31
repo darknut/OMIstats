@@ -11,6 +11,7 @@
     string lastEstado = "";
     bool hayResultados = ViewBag.hayResultados;
     bool errorPermisos = ViewBag.permisos;
+    bool registroTerminado = false;
     string[] subTitulos = {
         "Competidores de categoría OMI",
         "Competidores de categoría Primaria",
@@ -67,6 +68,7 @@
     competidoresProcesados = 0;
     foreach (OMIstats.Models.MiembroDelegacion miembro in Model)
     {
+        registroTerminado |= miembro.cerrado;
         if (usuario.esSuperUsuario() || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
         {
             if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
@@ -251,6 +253,17 @@ if (omi.esOnline)
     if (!usuario.esSuperUsuario() && omi.registroSedes)
     {
         @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
+    }
+
+    if (!usuario.esSuperUsuario())
+    {
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <input onclick="terminarRegistro(@registroTerminado)" type="button" value="@(registroTerminado ? "Marcar registro de estado como 'No terminado'" : "Marcar registro de estado como 'Terminado'")" class="@(registroTerminado ? "verde" : "errorTextoRojo")"/>
     }
 }
 }
