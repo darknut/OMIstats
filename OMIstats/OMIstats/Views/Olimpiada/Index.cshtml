@@ -52,6 +52,10 @@
         <a href="@Url.Content("~/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
         }
         @Model.año
+        @if (Model.esOnline)
+        {
+        @("- En línea")
+        }
         @if (github.Length > 0)
         {
         <span>&nbsp;</span><a href="@(github)" target="_blank" title="GitHub"><img src="~/img/github.png" /></a>

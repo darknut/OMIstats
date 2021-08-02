@@ -60,7 +60,10 @@
                     @item.año
                 </td>
                 <td class="table-td right-border break-word">
-                    @if(!item.esOnline)
+                    @if(item.esOnline)
+                    {
+                        @("En línea")   
+                    } else
                     {
                         if(item.claveEstado != "MDF")
                         {
