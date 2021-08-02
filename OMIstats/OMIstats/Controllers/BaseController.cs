@@ -60,7 +60,7 @@ namespace OMIstats.Controllers
             if (usuario != null)
                 usuario.recargarDatos();
             ViewBag.usuario = usuario;
-            ViewBag.registroActivo = Olimpiada.obtenerMasReciente().registroActivo;
+            ViewBag.registroActivo = Olimpiada.obtenerMasReciente(yaEmpezada: false).registroActivo;
             ViewBag.captchaKey = CAPTCHA_KEY;
         }
 
