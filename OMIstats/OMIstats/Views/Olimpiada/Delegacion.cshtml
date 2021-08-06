@@ -122,6 +122,10 @@
                     {
                         <img src="~/img/karel.png" title="Participó en OMIPS en años anteriores" class="karel-png-medium"/>
                     }
+                    @if (md.resultados.ioi == "Y")
+                    {
+                        <img src="~/img/star.png" title="Medallista más joven" class="karel-png-medium"/>
+                    }
                     </div>
                     <div class="claveMiembro">
                         @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
