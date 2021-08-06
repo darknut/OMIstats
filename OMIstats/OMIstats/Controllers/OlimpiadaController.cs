@@ -252,7 +252,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/ResultsTable/
 
         [HttpPost]
-        public ActionResult ResultsTable(string tabla, string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult ResultsTable(string tabla, string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI, bool run = false)
         {
             if (!esAdmin() || tabla == null || clave == null)
                 return RedirectTo(Pagina.HOME);
@@ -266,7 +266,7 @@ namespace OMIstats.Controllers
             ViewBag.omi = clave;
             ViewBag.dia1 = o.problemasDia1;
             ViewBag.dia2 = o.problemasDia2;
-            string errores = o.guardarTablaResultados(tabla);
+            string errores = o.guardarTablaResultados(tabla, run);
 
             if (errores.Length > 0)
             {

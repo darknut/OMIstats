@@ -24,6 +24,7 @@ namespace OMIstats.Utilities
 
         private const string A = "A";
         private const string B = "B";
+        private const string YOUNG = "Y";
 
         private const string ORO = "ORO";
         private const string ORO_1 = "ORO (I)";

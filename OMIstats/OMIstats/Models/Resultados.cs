@@ -240,7 +240,7 @@ namespace OMIstats.Models
                 if (ioi.Length > 0)
                 {
                     ioi = ioi.Substring(0, 1);
-                    if (ioi != "A" && ioi != "B")
+                    if (ioi != "A" && ioi != "B" && ioi != "Y")
                     {
                         ioi = "";
                         // Este campo también puede contener el lugar del competidor cuando está en vivo el scoreboard

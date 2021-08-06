@@ -745,7 +745,7 @@ namespace OMIstats.Models
         /// <param name="tabla">La nueva tabla de resultados, un competidor por renglon
         /// y tabulada con comas</param>
         /// <returns>Los registros que ocasionaron error</returns>
-        public string guardarTablaResultados(string tabla)
+        public string guardarTablaResultados(string tabla, bool saltarsePrecalculo)
         {
             StringBuilder errores = new StringBuilder();
             string[] lineas;
@@ -763,7 +763,8 @@ namespace OMIstats.Models
                     errores.Append("\n");
                 }
             }
-            precalcularValores();
+            if (!saltarsePrecalculo && errores.Length == 0)
+                precalcularValores();
             // No se llama a calcularNumeros porque
             // olimpiadas donde no se tienen los datos se
             // romperían, hay que llamar calcular números aparte desde el UI.
