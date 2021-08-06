@@ -117,7 +117,7 @@
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
                 </div>
                 <div class="datosMiembro">
-                    <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a>
+                    <div class="noOverflow">
                     @if(tipo == OMIstats.Models.TipoOlimpiada.OMI && md.omips)
                     {
                         <img src="~/img/karel.png" title="Participó en OMIPS en años anteriores" class="karel-png-medium"/>
@@ -126,6 +126,7 @@
                     {
                         <img src="~/img/star.png" title="Medallista más joven" class="karel-png-medium"/>
                     }
+                    <a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a>
                     </div>
                     <div class="claveMiembro">
                         @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
