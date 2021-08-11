@@ -74,7 +74,7 @@ namespace OMIstats.Models
                 llenarDatos(r, lugares);
             }
 
-            if (lugares.timestamp[0] != 0)
+            if (lugares.timestamp[0] != 0 && dia == 1)
             {
                 lugares.timestamp.Insert(0, 0);
                 lugares.lugar.Insert(0, 0);

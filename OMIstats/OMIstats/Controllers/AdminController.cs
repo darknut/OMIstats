@@ -55,10 +55,13 @@ namespace OMIstats.Controllers
             poll.guardarNuevo();
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(poll.olimpiada, poll.tipoOlimpiada);
-            o.liveResults = true;
+            if (o != null)
+            {
+                o.liveResults = true;
 
-            if (o.esOnline)
-                OmegaUp.nuevaInstruccion(OmegaUp.Instruccion.HIDE, true);
+                if (o.esOnline)
+                    OmegaUp.nuevaInstruccion(OmegaUp.Instruccion.HIDE, true);
+            }
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }

@@ -152,7 +152,6 @@
 <a href="@Url.Content("~/Admin/ResetOMI")" class="boton botonOMI">Reset</a>
 <a href="@Url.Content("~/Admin/Logs?tipo=OMEGAUP")" class="boton botonOMI">Logs</a>
 <a href="@Url.Content("~/Admin/Clean")" class="boton botonOMI">Limpiar tablas</a>
-<a href="@Url.Content("~/Admin/Trim?tipo=OMI")" class="boton botonOMI">Trim Detalle</a>
 
 <h3 class="subtitulo">Agregar poll:</h3>
 
@@ -190,3 +189,17 @@
         <input type="submit" value="Agregar Poll" />
     </div>
 }
+
+<form name="trim" id="trim" action="~/Admin/Trim" method="post" enctype="multipart/form-data">
+    <div>
+        <div class="label"> OMI / OMIP / OMIS: </div>
+        <div class="input"> <input type="text" id="tipo" name="tipo" /></div>
+    </div>
+    <div>
+        <div class="label"> Segundos: </div>
+        <div class="input"> <input type="text" id="tiempo" name="tiempo" value="18000"/></div>
+    </div>
+    <div class="label">
+        <input type="submit" value="Trim" />
+    </div>
+</form>
