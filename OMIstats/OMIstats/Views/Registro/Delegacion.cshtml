@@ -50,7 +50,7 @@
     }
 }
 
-<h1 class="titulo">@ViewBag.Title <img src="~/img/check.svg" class="@(registroTerminado ? "oculto": "")"/></h1>
+<h1 class="titulo">@ViewBag.Title <img src="~/img/check.svg" class="@(registroTerminado ? "": "oculto")"/></h1>
 
 @if (errorPermisos)
 {
