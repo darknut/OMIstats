@@ -20,10 +20,7 @@
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/js/general.js")
     @RenderSection("AddToHead", required: false)
-    @RenderSection("scripts", required: false)
 </head>
 <body class="mainpage">
     <img src="~/img/circulo.png" class="circulo" alt="logoOMI"/>
@@ -89,6 +86,9 @@
     <div class="content">
         @RenderBody()
     </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/js/general.js")
+    @RenderSection("scripts", required: false)
     </div>
 </body>
 </html>

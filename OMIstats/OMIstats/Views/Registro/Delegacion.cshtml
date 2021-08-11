@@ -11,7 +11,7 @@
     string lastEstado = "";
     bool hayResultados = ViewBag.hayResultados;
     bool errorPermisos = ViewBag.permisos;
-    bool registroTerminado = false;
+    bool registroTerminado = Model.Count > 0 && !usuario.esSuperUsuario() ? Model[0].cerrado : false;
     string[] subTitulos = {
         "Competidores de categoría OMI",
         "Competidores de categoría Primaria",
@@ -50,7 +50,7 @@
     }
 }
 
-<h1 class="titulo">@ViewBag.Title <img src="~/img/check.svg" class="oculto" id="main-check"/></h1>
+<h1 class="titulo">@ViewBag.Title <img src="~/img/check.svg" class="@(registroTerminado ? "oculto": "")"/></h1>
 
 @if (errorPermisos)
 {
@@ -279,10 +279,6 @@ if (omi.esOnline)
 
     if (!usuario.esSuperUsuario())
     {
-        if (registroTerminado)
-        {
-        <script>setVisible("main-check", true);</script>
-        }
         <br />
         <br />
         <br />
