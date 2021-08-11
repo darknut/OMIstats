@@ -40,6 +40,9 @@ function setUpOverlay(url, base, omi, tipo, problemasDia1, problemasDia2, noComp
     puntosTotal = document.getElementById('puntos');
     lugarTotal = document.getElementById('lugar');
 
+    if (tipo != 'OMI')
+        MAX_SECONDS = 60 * 60 * 4;
+
     overlayProblemasDia1 = problemasDia1;
     overlayProblemasDia2 = problemasDia2;
 
