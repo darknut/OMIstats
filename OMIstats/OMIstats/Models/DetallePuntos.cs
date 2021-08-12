@@ -331,5 +331,62 @@ namespace OMIstats.Models
             // Finalmente hacemos lo mismo con dia 2
             trim(omi, tipo, tiempo, dia + 1);
         }
+
+        /// <summary>
+        /// Actualiza la última entrada en la tabla para el concursante mandado como parámetro
+        /// </summary>
+        public static void actualizarUltimo(string omi, TipoOlimpiada tipo, int dia, string clave, List<float?>puntos, float? total)
+        {
+            StringBuilder query = new StringBuilder();
+            Acceso db = new Acceso();
+
+            // Primero obtenemos el timestamp mas grande
+            query.Append(" select MAX(timestamp) from DetallePuntos where olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and clave = ");
+            query.Append(Cadenas.comillas(clave));
+
+            db.EjecutarQuery(query.ToString());
+
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+                return;
+
+            int timestamp = DataRowParser.ToInt(table.Rows[0][0]);
+            query.Clear();
+
+            // Ahora actualizamos los puntos
+            query.Append("update DetallePuntos set puntosP1 = ");
+            query.Append(puntos[0] == null ? "0" : puntos[0].ToString());
+            query.Append(", puntosP2 = ");
+            query.Append(puntos[1] == null ? "0" : puntos[1].ToString());
+            query.Append(", puntosP3 = ");
+            query.Append(puntos[2] == null ? "0" : puntos[2].ToString());
+            query.Append(", puntosP4 = ");
+            query.Append(puntos[3] == null ? "0" : puntos[3].ToString());
+            query.Append(", puntosP5 = ");
+            query.Append(puntos[4] == null ? "0" : puntos[4].ToString());
+            query.Append(", puntosP6 = ");
+            query.Append(puntos[5] == null ? "0" : puntos[5].ToString());
+            query.Append(", puntosD = ");
+            query.Append(total == null ? "0" : total.ToString());
+            query.Append(" where olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and clave = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and timestamp = ");
+            query.Append(timestamp);
+
+            db.EjecutarQuery(query.ToString());
+        }
     }
 }

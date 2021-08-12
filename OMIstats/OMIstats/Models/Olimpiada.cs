@@ -821,7 +821,7 @@ namespace OMIstats.Models
                         // Si el competidor fue descalificado lo mandamos al fondo del lugar
                         if (resultados[i].medalla == Resultados.TipoMedalla.DESCALIFICADO)
                         {
-                            resultados[i].lugar = participantes + 1;
+                            resultados[i].lugar = resultados.Count + 1;
                         }
                         else
                         {
@@ -832,6 +832,22 @@ namespace OMIstats.Models
                         }
                     }
                 resultados[i].guardarLugar();
+
+                if (this.puntosDetallados)
+                {
+                    // Se actualiza la tabla de detalles
+                    DetallePuntos.actualizarUltimo(this.numero, this.tipoOlimpiada, 1, resultados[i].clave, resultados[i].dia1, resultados[i].totalDia1);
+                    if (problemasDia2 > 0)
+                    {
+                        DetallePuntos.actualizarUltimo(this.numero, this.tipoOlimpiada, 2, resultados[i].clave, resultados[i].dia2, resultados[i].totalDia2);
+                        DetalleLugar.actualizarUltimo(this.numero, this.tipoOlimpiada, 2, resultados[i].clave, resultados[i].lugar, resultados[i].medalla);
+                    }
+                    else
+                    {
+                        // Actualizar la tabla de DetalleLugar de dia 1 el día 2 requiere de muchos más cálculos que espero no sea necesario
+                        DetalleLugar.actualizarUltimo(this.numero, this.tipoOlimpiada, 1, resultados[i].clave, resultados[i].lugar, resultados[i].medalla);
+                    }
+                }
             }
 
             // Si el primer lugar tiene menos de 100 puntos, entonces no tenemos los puntos
