@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Invitaciones";
+    string invitaciones = ViewBag.invitaciones;
+}
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css" />
+}
+
+<h1 class="titulo">Invitaciones</h1>
+
+<textarea name="tabla" id="tabla" class="tablaAsistentes">@(invitaciones)</textarea>

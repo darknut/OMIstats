@@ -1128,6 +1128,62 @@ namespace OMIstats.Models
             return lineas.ToString();
         }
 
+        public static string generarInvitaciones(string omi)
+        {
+            StringBuilder lineas = new StringBuilder();
+            StringBuilder query = new StringBuilder();
+            Acceso db = new Acceso();
+
+            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clase, md.estado from miembrodelegacion as md ");
+            query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and md.tipo = ");
+            query.Append((int)TipoAsistente.COMPETIDOR);
+            query.Append(" order by persona ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                int claveUsuario = DataRowParser.ToInt(r["persona"]);
+                string nombre = DataRowParser.ToString(r["nombre"]) + " " +
+                                DataRowParser.ToString(r["apellidoP"]) + " " +
+                                DataRowParser.ToString(r["apellidoM"]);
+                string estado = DataRowParser.ToString(r["estado"]);
+                string genero = DataRowParser.ToString(r["genero"]);
+                TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
+
+                lineas.Append(claveUsuario);
+                lineas.Append(".pdf,");
+                lineas.Append(nombre);
+                lineas.Append(",");
+                if (genero == "M")
+                    lineas.Append("o,");
+                else
+                    lineas.Append("a,");
+
+                lineas.Append(Estado.obtenerEstadoConClave(estado).obtenerNombreConPrefijo(prefijoFemenino: true));
+                lineas.Append(",");
+
+                switch (clase)
+                {
+                    case TipoOlimpiada.OMI:
+                        lineas.Append("abierta");
+                        break;
+                    case TipoOlimpiada.OMIP:
+                        lineas.Append("de primaria");
+                        break;
+                    case TipoOlimpiada.OMIS:
+                        lineas.Append("de secundaria");
+                        break;
+                }
+            }
+
+            return lineas.ToString();
+        }
+
         public static List<OMIstats.Ajax.BuscarPersonas> buscarParaRegistro(string omi, TipoOlimpiada tipo, string estado, string input, bool esSuperUsuario)
         {
             List<OMIstats.Ajax.BuscarPersonas> personas = new List<OMIstats.Ajax.BuscarPersonas>();

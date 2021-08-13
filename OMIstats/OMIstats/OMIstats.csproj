@@ -435,6 +435,7 @@
     <Content Include="Views\Registro\Delegacion.cshtml" />
     <Content Include="Views\Registro\Asistente.cshtml" />
     <Content Include="Views\Registro\Sede.cshtml" />
+    <Content Include="Views\Registro\GeneraInvitaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

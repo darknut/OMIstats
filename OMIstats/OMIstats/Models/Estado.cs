@@ -245,13 +245,13 @@ namespace OMIstats.Models
             return obtenerEstadoConClave(table.Rows[0][0].ToString().Trim());
         }
 
-        public string obtenerNombreConPrefijo()
+        public string obtenerNombreConPrefijo(bool prefijoFemenino = false)
         {
             if (clave == "MDF")
-                return " de la Ciudad de México";
+                return (prefijoFemenino ? " a" : " de") + " la Ciudad de México";
             if (clave == "MEX")
-                return " del Estado de México";
-            return " del Estado de " + nombre;
+                return (prefijoFemenino ? " al" : " del") + " Estado de México";
+            return (prefijoFemenino ? " al" : " del") + " Estado de " + nombre;
         }
     }
 }

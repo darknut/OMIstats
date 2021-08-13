@@ -726,5 +726,19 @@ namespace OMIstats.Controllers
 
             return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
         }
+
+        //
+        // GET: /Registro/GeneraInvitaciones
+
+        public ActionResult GeneraInvitaciones(string omi)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !esAdmin())
+                return RedirectTo(Pagina.HOME);
+
+            ViewBag.invitaciones = MiembroDelegacion.generarInvitaciones(omi);
+
+            return View();
+        }
     }
 }
