@@ -159,14 +159,18 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
         }
 
-        public static void clean(string omi)
+        public static void clean(string omi, TipoOlimpiada tipo, int dia)
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
 
             query.Append(" select * from DetalleLugar where olimpiada = ");
             query.Append(Cadenas.comillas(omi));
-            query.Append(" order by clase, clave, dia, timestamp asc ");
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" order by clave, timestamp asc ");
 
             db.EjecutarQuery(query.ToString());
 
@@ -180,13 +184,9 @@ namespace OMIstats.Models
                 actual.lugar = DataRowParser.ToInt(r["lugar"]);
                 actual.timestamp = DataRowParser.ToInt(r["timestamp"]);
                 actual.medalla = DataRowParser.ToTipoMedalla(r["medalla"]);
-                actual.dia = DataRowParser.ToInt(r["dia"]);
                 actual.clave = DataRowParser.ToString(r["clave"]);
-                actual.tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
 
-                if (actual.tipoOlimpiada != anterior.tipoOlimpiada ||
-                    actual.clave != anterior.clave ||
-                    actual.dia != anterior.dia)
+                if (actual.clave != anterior.clave)
                 {
                     first = true;
                 }
@@ -209,9 +209,7 @@ namespace OMIstats.Models
                 anterior.lugar = actual.lugar;
                 anterior.timestamp = actual.timestamp;
                 anterior.medalla = actual.medalla;
-                anterior.dia = actual.dia;
                 anterior.clave = actual.clave;
-                anterior.tipoOlimpiada = actual.tipoOlimpiada;
             }
         }
 
@@ -219,13 +217,6 @@ namespace OMIstats.Models
         {
             if (dia > 2)
                 return;
-            if (tipo == TipoOlimpiada.NULL)
-            {
-                trim(omi, TipoOlimpiada.OMI, tiempo, dia);
-                trim(omi, TipoOlimpiada.OMIS, tiempo, dia);
-                trim(omi, TipoOlimpiada.OMIP, tiempo, dia);
-                return;
-            }
 
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();

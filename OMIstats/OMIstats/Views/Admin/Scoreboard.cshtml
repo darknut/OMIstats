@@ -151,7 +151,6 @@
 <a href="@Url.Content("~/Admin/BorrarScoreboard")" class="boton botonOMI">Borrar Todo</a>
 <a href="@Url.Content("~/Admin/ResetOMI")" class="boton botonOMI">Reset</a>
 <a href="@Url.Content("~/Admin/Logs?tipo=OMEGAUP")" class="boton botonOMI">Logs</a>
-<a href="@Url.Content("~/Admin/Clean")" class="boton botonOMI">Limpiar tablas</a>
 
 <h3 class="subtitulo">Agregar poll:</h3>
 
@@ -190,7 +189,7 @@
     </div>
 }
 
-<h3 class="subtitulo">Trim:</h3>
+<h3 class="subtitulo">Clean and trim:</h3>
 
 <form name="trim" id="trim" action="~/Admin/Trim" method="post" enctype="multipart/form-data">
     <div>
@@ -201,7 +200,11 @@
         <div class="label"> Segundos: </div>
         <div class="input"> <input type="text" id="tiempo" name="tiempo" value="18000"/></div>
     </div>
+    <div>
+        <div class="label"> Día: </div>
+        <div class="input"> <input type="text" id="dia" name="dia"/></div>
+    </div>
     <div class="label">
-        <input type="submit" value="Trim" />
+        <input type="submit" value="Clean and trim" />
     </div>
 </form>

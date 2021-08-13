@@ -159,25 +159,9 @@ namespace OMIstats.Controllers
         }
 
         //
-        // GET: /Admin/Clean/
-
-        public ActionResult Clean()
-        {
-            if (!esAdmin())
-                return RedirectTo(Pagina.ERROR, 401);
-
-            Olimpiada o = Olimpiada.obtenerMasReciente();
-
-            DetalleLugar.clean(o.numero);
-            DetallePuntos.clean(o.numero);
-
-            return RedirectTo(Pagina.ADMIN_SCOREBOARD);
-        }
-
-        //
         // GET: /Admin/Trim/
 
-        public ActionResult Trim(string omi = "", TipoOlimpiada tipo = TipoOlimpiada.NULL, int tiempo = 18000)
+        public ActionResult Trim(string omi = "", TipoOlimpiada tipo = TipoOlimpiada.NULL, int tiempo = 18000, int dia = 1)
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
@@ -192,8 +176,11 @@ namespace OMIstats.Controllers
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            DetalleLugar.trim(o.numero, tipo, tiempo);
-            DetallePuntos.trim(o.numero, tipo, tiempo);
+            DetalleLugar.clean(o.numero, tipo, dia);
+            DetalleLugar.trim(o.numero, tipo, tiempo, dia);
+
+            DetallePuntos.clean(o.numero, tipo, dia);
+            DetallePuntos.trim(o.numero, tipo, tiempo, dia);
 
             return RedirectTo(Pagina.ADMIN_SCOREBOARD);
         }
