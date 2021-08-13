@@ -1134,12 +1134,12 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clase, md.estado from miembrodelegacion as md ");
+            query.Append(" select md.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clase, md.estado from miembrodelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
             query.Append(" and md.tipo = ");
-            query.Append((int)TipoAsistente.COMPETIDOR);
+            query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
             query.Append(" order by persona ");
 
             db.EjecutarQuery(query.ToString());
@@ -1147,7 +1147,7 @@ namespace OMIstats.Models
 
             foreach (DataRow r in table.Rows)
             {
-                int claveUsuario = DataRowParser.ToInt(r["persona"]);
+                string clave = DataRowParser.ToString(r["persona"]);
                 string nombre = DataRowParser.ToString(r["nombre"]) + " " +
                                 DataRowParser.ToString(r["apellidoP"]) + " " +
                                 DataRowParser.ToString(r["apellidoM"]);
@@ -1155,7 +1155,11 @@ namespace OMIstats.Models
                 string genero = DataRowParser.ToString(r["genero"]);
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
 
-                lineas.Append(claveUsuario);
+                if (clase == TipoOlimpiada.OMIP)
+                    lineas.Append("P-");
+                if (clase == TipoOlimpiada.OMIS)
+                    lineas.Append("S-");
+                lineas.Append(clave);
                 lineas.Append(".pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
@@ -1179,6 +1183,7 @@ namespace OMIstats.Models
                         lineas.Append("de secundaria");
                         break;
                 }
+                lineas.Append("\n");
             }
 
             return lineas.ToString();

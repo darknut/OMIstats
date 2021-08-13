@@ -163,6 +163,14 @@
             @Html.ActionLink("Bajar csv", "GetCSV", "Registro", new { omi = omi.numero }, new { })
             </td>
         }
+        @if(usuario.esAdmin())
+        {
+            <td></td>
+            <td></td>
+            <td>
+            @Html.ActionLink("Generar invitaciones", "GeneraInvitaciones", "Registro", new { omi = omi.numero }, new { })
+            </td>
+        }
     </tr>
         }
     }
