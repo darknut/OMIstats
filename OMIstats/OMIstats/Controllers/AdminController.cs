@@ -161,7 +161,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Admin/Trim/
 
-        public ActionResult Trim(string omi = "", TipoOlimpiada tipo = TipoOlimpiada.NULL, int tiempo = 18000, int dia = 1)
+        public ActionResult Trim(TipoOlimpiada tipo, int tiempo, int dia, string omi = "")
         {
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
