@@ -196,14 +196,13 @@ namespace OMIstats.Models
                         actual.lugar == anterior.lugar)
                     {
                         if (!first)
-                            borrar(omi, anterior.tipoOlimpiada.ToString().ToLower(), anterior.clave, anterior.timestamp, anterior.dia);
+                            borrar(omi, tipo.ToString().ToLower(), anterior.clave, anterior.timestamp, dia);
                         first = false;
                     }
                     else
                     {
                         first = true;
                     }
-
                 }
 
                 anterior.lugar = actual.lugar;

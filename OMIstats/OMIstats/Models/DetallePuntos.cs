@@ -239,14 +239,13 @@ namespace OMIstats.Models
                     if (actual.puntosDia == anterior.puntosDia)
                     {
                         if (!first)
-                            borrar(omi, anterior.tipoOlimpiada.ToString().ToLower(), anterior.clave, anterior.timestamp, anterior.dia);
+                            borrar(omi, tipo.ToString().ToLower(), anterior.clave, anterior.timestamp, dia);
                         first = false;
                     }
                     else
                     {
                         first = true;
                     }
-
                 }
 
                 anterior.puntosDia = actual.puntosDia;
