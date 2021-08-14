@@ -151,11 +151,11 @@ namespace OMIstats.Controllers
 
             if (fileLogo != null)
                 Utilities.Archivos.guardaArchivo(fileLogo, omi.numero + ".png",
-                    Utilities.Archivos.FolderImagenes.OLIMPIADAS);
+                    Utilities.Archivos.Folder.OLIMPIADAS);
 
             if (filePoster != null)
                 Utilities.Archivos.guardaArchivo(filePoster, filePoster.FileName,
-                    Utilities.Archivos.FolderImagenes.POSTERS);
+                    Utilities.Archivos.Folder.POSTERS);
 
             ViewBag.guardado = true;
             Log.add(Log.TipoLog.ADMIN, o.tipoOlimpiada + " " + o.año + " actualizada por admin " + getUsuario().nombreCompleto);

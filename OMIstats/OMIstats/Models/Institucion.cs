@@ -85,7 +85,7 @@ namespace OMIstats.Models
             universidad = DataRowParser.ToBool(datos["universidad"]);
             publica = DataRowParser.ToBool(datos["publica"]);
 
-            if (Archivos.existeArchivo(Archivos.FolderImagenes.ESCUELAS,
+            if (Archivos.existeArchivo(Archivos.Folder.ESCUELAS,
                                                 clave + ".png"))
                 logo = clave + ".png";
             else

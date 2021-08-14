@@ -37,7 +37,7 @@ namespace OMIstats.Utilities
             IMAGEN_MUY_GRANDE
         }
 
-        public enum FolderImagenes
+        public enum Folder
         {
             TEMPORAL,
             ESTADOS,
@@ -88,36 +88,36 @@ namespace OMIstats.Utilities
             return ResultadoImagen.VALIDA;
         }
 
-        private static string pathRelativo(FolderImagenes folder)
+        private static string pathRelativo(Folder folder)
         {
             string s = "";
             switch (folder)
             {
-                case FolderImagenes.TEMPORAL:
+                case Folder.TEMPORAL:
                     s = FOLDER_TEMPORAL;
                     break;
-                case FolderImagenes.USUARIOS:
+                case Folder.USUARIOS:
                     s = FOLDER_USUARIOS;
                     break;
-                case FolderImagenes.ESTADOS:
+                case Folder.ESTADOS:
                     s = FOLDER_ESTADOS;
                     break;
-                case FolderImagenes.OLIMPIADAS:
+                case Folder.OLIMPIADAS:
                     s = FOLDER_OLIMPIADAS;
                     break;
-                case FolderImagenes.POSTERS:
+                case Folder.POSTERS:
                     s = FOLDER_POSTERS;
                     break;
-                case FolderImagenes.ESCUELAS:
+                case Folder.ESCUELAS:
                     s = FOLDER_ESCUELAS;
                     break;
-                case FolderImagenes.NEWSLETTERS:
+                case Folder.NEWSLETTERS:
                     s = FOLDER_NEWSLETTERS;
                     break;
-                case FolderImagenes.DIPLOMAS:
+                case Folder.DIPLOMAS:
                     s = FOLDER_DIPLOMAS;
                     break;
-                case FolderImagenes.INVITACIONES:
+                case Folder.INVITACIONES:
                     s = FOLDER_INVITACIONES;
                     break;
                 default:
@@ -128,7 +128,7 @@ namespace OMIstats.Utilities
             return s;
         }
 
-        private static string pathAbsoluto(FolderImagenes folder)
+        private static string pathAbsoluto(Folder folder)
         {
             string s = pathRelativo(folder);
             s = HttpContext.Current.Server.MapPath(s);
@@ -143,7 +143,7 @@ namespace OMIstats.Utilities
         /// <param name="nombre">El nombre opcional de la imagen</param>
         /// <param name="folder">El folder donde colocar la imagen</param>
         /// <returns>El path relativo de la imagen</returns>
-        public static string guardaArchivo(HttpPostedFileBase archivo, string nombre = "", FolderImagenes folder = FolderImagenes.TEMPORAL, bool appendExtension = false, bool returnRelativeFolder = false)
+        public static string guardaArchivo(HttpPostedFileBase archivo, string nombre = "", Folder folder = Folder.TEMPORAL, bool appendExtension = false, bool returnRelativeFolder = false)
         {
             string extension = Path.GetExtension(archivo.FileName);
             string lugarEnDisco = pathAbsoluto(folder);
@@ -166,7 +166,7 @@ namespace OMIstats.Utilities
         /// <summary>
         /// Borra el archivo del disco
         /// </summary>
-        public static void eliminarArchivo(string nombre, FolderImagenes folder)
+        public static void eliminarArchivo(string nombre, Folder folder)
         {
             string lugarEnDisco = pathAbsoluto(folder);
             if (File.Exists(Path.Combine(lugarEnDisco, nombre)))
@@ -177,7 +177,7 @@ namespace OMIstats.Utilities
         /// Copia un archivo
         /// </summary>
         /// <returns>El path relativo al archivo destino</returns>
-        public static string copiarArchivo(string nombreOrigen, FolderImagenes folderOrigen, string nombreDestino, FolderImagenes folderDestino)
+        public static string copiarArchivo(string nombreOrigen, Folder folderOrigen, string nombreDestino, Folder folderDestino)
         {
             string lugarOrigen = pathAbsoluto(folderOrigen);
             string lugarDestino = pathAbsoluto(folderDestino);
@@ -206,13 +206,13 @@ namespace OMIstats.Utilities
             return "";
         }
 
-        public static bool existeArchivo(FolderImagenes folder, string imagen)
+        public static bool existeArchivo(Folder folder, string imagen)
         {
             string path = pathAbsoluto(folder);
             return File.Exists(Path.Combine(path, imagen));
         }
 
-        public static int cuantosExisten(FolderImagenes folder, string subfolder, string nombre)
+        public static int cuantosExisten(Folder folder, string subfolder, string nombre)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace OMIstats.Utilities
             }
         }
 
-        public static byte[] comprimeArchivos(FolderImagenes folder, string subfolder, string nombre = null)
+        public static byte[] comprimeArchivos(Folder folder, string subfolder, string nombre = null)
         {
             string path = pathAbsoluto(folder);
             var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre == null ? "*" : nombre + "*");

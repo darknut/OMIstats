@@ -94,7 +94,7 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.HOME);
                 Estado e = Estado.obtenerEstadoConClave(estado);
                 ViewBag.estado = e;
-                ViewBag.invitaciones = Archivos.existeArchivo(Archivos.FolderImagenes.INVITACIONES, omi + "\\" + estado + "\\" +  e.ISO + "-1.pdf");
+                ViewBag.invitaciones = Archivos.existeArchivo(Archivos.Folder.INVITACIONES, omi + "\\" + estado + "\\" +  e.ISO + "-1.pdf");
             }
 
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, TipoOlimpiada.NULL);
@@ -568,7 +568,7 @@ namespace OMIstats.Controllers
         {
             if (file != null)
             {
-                return Archivos.guardaArchivo(file, clave.ToString(), Archivos.FolderImagenes.USUARIOS, appendExtension: true, returnRelativeFolder: true);
+                return Archivos.guardaArchivo(file, clave.ToString(), Archivos.Folder.USUARIOS, appendExtension: true, returnRelativeFolder: true);
             }
 
             return "";
@@ -755,7 +755,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
 
             return File(Archivos.comprimeArchivos(
-               Archivos.FolderImagenes.INVITACIONES, omi + "\\" + estado),
+               Archivos.Folder.INVITACIONES, omi + "\\" + estado),
                "application/zip", "Invitaciones.zip");
         }
     }

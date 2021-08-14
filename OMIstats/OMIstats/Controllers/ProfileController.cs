@@ -237,9 +237,9 @@ namespace OMIstats.Controllers
                     {
                         string oldFoto = p.foto;
                         p.foto =
-                            Archivos.copiarArchivo(p.foto, Archivos.FolderImagenes.TEMPORAL,
-                                                p.clave.ToString(), Archivos.FolderImagenes.USUARIOS);
-                        Archivos.eliminarArchivo(oldFoto, Archivos.FolderImagenes.TEMPORAL);
+                            Archivos.copiarArchivo(p.foto, Archivos.Folder.TEMPORAL,
+                                                p.clave.ToString(), Archivos.Folder.USUARIOS);
+                        Archivos.eliminarArchivo(oldFoto, Archivos.Folder.TEMPORAL);
                         p.guardarDatos();
                     }
 
@@ -300,7 +300,7 @@ namespace OMIstats.Controllers
             if (!todos)
             {
                 int numeroDeDiplomas = Archivos.cuantosExisten
-                    (Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, clave);
+                    (Archivos.Folder.DIPLOMAS, omi + "\\" + md.estado, clave);
 
                 if (numeroDeDiplomas == 0)
                     return RedirectTo(Pagina.ERROR, 404);
@@ -319,7 +319,7 @@ namespace OMIstats.Controllers
             }
 
             return File(Archivos.comprimeArchivos(
-                Archivos.FolderImagenes.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave),
+                Archivos.Folder.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave),
                 "application/zip", "Diplomas.zip");
         }
 

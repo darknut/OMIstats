@@ -419,7 +419,7 @@ namespace OMIstats.Models
                                    " al " + Fechas.friendlyString(fin);
             }
 
-            if (Archivos.existeArchivo(Archivos.FolderImagenes.OLIMPIADAS,
+            if (Archivos.existeArchivo(Archivos.Folder.OLIMPIADAS,
                 numero + ".png"))
                 logo = numero + ".png";
             else

@@ -158,7 +158,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 500);
 
             if (file != null)
-                Utilities.Archivos.guardaArchivo(file, e.clave + ".png", Utilities.Archivos.FolderImagenes.ESTADOS);
+                Utilities.Archivos.guardaArchivo(file, e.clave + ".png", Utilities.Archivos.Folder.ESTADOS);
 
             ViewBag.guardado = true;
             return View(estado);

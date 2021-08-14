@@ -240,7 +240,7 @@ namespace OMIstats.Models
                 return false;
 
             if (tipo == TipoPeticion.USUARIO && subtipo == TipoPeticion.FOTO)
-                Archivos.eliminarArchivo(datos1, Archivos.FolderImagenes.TEMPORAL);
+                Archivos.eliminarArchivo(datos1, Archivos.Folder.TEMPORAL);
 
             return true;
         }
@@ -266,8 +266,8 @@ namespace OMIstats.Models
 
                 if (subtipo == TipoPeticion.FOTO)
                     usuario.foto =
-                        Archivos.copiarArchivo(datos1, Archivos.FolderImagenes.TEMPORAL,
-                                    usuario.clave.ToString(), Archivos.FolderImagenes.USUARIOS);
+                        Archivos.copiarArchivo(datos1, Archivos.Folder.TEMPORAL,
+                                    usuario.clave.ToString(), Archivos.Folder.USUARIOS);
 
                 if (!usuario.guardarDatos())
                     return false;

@@ -109,9 +109,9 @@ namespace OMIstats.Controllers
                 {
                     if (file != null)
                     {
-                        Utilities.Archivos.copiarArchivo(escuela.logo, Utilities.Archivos.FolderImagenes.TEMPORAL,
-                                        escuela.clave.ToString(), Utilities.Archivos.FolderImagenes.ESCUELAS);
-                        Utilities.Archivos.eliminarArchivo(escuela.logo, Utilities.Archivos.FolderImagenes.TEMPORAL);
+                        Utilities.Archivos.copiarArchivo(escuela.logo, Utilities.Archivos.Folder.TEMPORAL,
+                                        escuela.clave.ToString(), Utilities.Archivos.Folder.ESCUELAS);
+                        Utilities.Archivos.eliminarArchivo(escuela.logo, Utilities.Archivos.Folder.TEMPORAL);
                     }
 
                     guardarParams(Pagina.SAVED_ESCUELA, OK);
