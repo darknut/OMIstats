@@ -1155,6 +1155,8 @@ namespace OMIstats.Models
                 string genero = DataRowParser.ToString(r["genero"]);
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
 
+                lineas.Append(estado);
+                lineas.Append("\\");
                 if (clase == TipoOlimpiada.OMIP)
                     lineas.Append("P-");
                 if (clase == TipoOlimpiada.OMIS)
