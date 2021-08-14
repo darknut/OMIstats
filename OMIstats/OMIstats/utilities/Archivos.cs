@@ -21,6 +21,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
         public const string FOLDER_NEWSLETTERS = "~/img/news";
         public const string FOLDER_DIPLOMAS = "~/private/diplomas";
+        public const string FOLDER_INVITACIONES = "~/private/invitaciones";
         public const string FOLDER_DEFAULT = "~/img";
 
         public const string OMI_LOGO = "omi.png";
@@ -45,7 +46,8 @@ namespace OMIstats.Utilities
             POSTERS,
             ESCUELAS,
             NEWSLETTERS,
-            DIPLOMAS
+            DIPLOMAS,
+            INVITACIONES
         }
 
         public enum FotoInicial
@@ -114,6 +116,9 @@ namespace OMIstats.Utilities
                     break;
                 case FolderImagenes.DIPLOMAS:
                     s = FOLDER_DIPLOMAS;
+                    break;
+                case FolderImagenes.INVITACIONES:
+                    s = FOLDER_INVITACIONES;
                     break;
                 default:
                     s = FOLDER_DEFAULT;

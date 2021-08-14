@@ -86,12 +86,15 @@ namespace OMIstats.Controllers
             }
 
             Persona p = getUsuario();
+            ViewBag.invitaciones = false;
 
             if (!p.esSuperUsuario())
             {
                 if (estado == null)
                     return RedirectTo(Pagina.HOME);
-                ViewBag.estado = Estado.obtenerEstadoConClave(estado);
+                Estado e = Estado.obtenerEstadoConClave(estado);
+                ViewBag.estado = e;
+                ViewBag.invitaciones = Archivos.existeArchivo(Archivos.FolderImagenes.INVITACIONES, omi + "\\" + estado + "\\" +  e.ISO + "-1.pdf");
             }
 
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, TipoOlimpiada.NULL);
@@ -109,6 +112,7 @@ namespace OMIstats.Controllers
                 ViewBag.miembrosPorSede = miembrosPorSede;
                 ViewBag.sedes = sedes;
             }
+
             return View(registrados);
         }
 
@@ -739,6 +743,20 @@ namespace OMIstats.Controllers
             ViewBag.invitaciones = MiembroDelegacion.generarInvitaciones(omi);
 
             return View();
+        }
+
+        //
+        // GET: /Registro/Invitaciones
+
+        public ActionResult Invitaciones(string omi, string estado)
+        {
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            if (o == null || !tienePermisos(o.registroActivo, estado))
+                return RedirectTo(Pagina.HOME);
+
+            return File(Archivos.comprimeArchivos(
+               Archivos.FolderImagenes.INVITACIONES, omi + "\\" + estado),
+               "application/zip", "Invitaciones.zip");
         }
     }
 }
