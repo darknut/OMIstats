@@ -54,6 +54,8 @@ namespace OMIstats.Utilities
 
         public static string quitaEspacioDoble(string cadena)
         {
+            if (cadena == null)
+                return "";
             while (cadena.IndexOf("  ") >= 0)
                 cadena = cadena.Replace("  ", " ");
             return cadena;
