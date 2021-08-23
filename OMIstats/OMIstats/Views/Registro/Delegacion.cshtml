@@ -6,7 +6,6 @@
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
     List<OMIstats.Models.SedeOnline> sedes = ViewBag.sedes;
     Dictionary<int, List<OMIstats.Models.MiembroDelegacion>> miembrosPorSede = ViewBag.miembrosPorSede;
-    bool registroActivo = ViewBag.registroActivo;
     int competidoresProcesados = 0;
     string lastEstado = "";
     bool hayResultados = ViewBag.hayResultados;
@@ -131,7 +130,7 @@
             @if(usuario.esSuperUsuario() || !registroTerminado)
             {
             <a onclick="iniciaRegistro('@miembro.tipoOlimpiada', '@miembro.clave')" class="a-sin-href">Modificar</a>
-            if (!hayResultados && (usuario.esSuperUsuario() || registroActivo))
+            if (!hayResultados && (usuario.esSuperUsuario() || omi.registroActivo))
             {
             <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
             }
@@ -148,15 +147,10 @@
     {
     <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
     }
-    if (usuario.esSuperUsuario() || registroActivo)
+    if (usuario.esSuperUsuario() || (omi.registroActivo && !registroTerminado && (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))))
     {
-        if (usuario.esSuperUsuario() || tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))
-        {
     <tr><td>
-        @if(usuario.esSuperUsuario() || !registroTerminado)
-        {
         <a onclick="iniciaRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
-        }
     </td>
         @if (usuario.esSuperUsuario())
         {
@@ -173,7 +167,6 @@
             </td>
         }
     </tr>
-        }
     }
     if (usuario.esSuperUsuario())
     {

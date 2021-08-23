@@ -53,7 +53,7 @@ namespace OMIstats.Controllers
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo))
+            if (o == null || !tienePermisos(o.registroActivo || o.registroSedes))
                 return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
@@ -79,10 +79,10 @@ namespace OMIstats.Controllers
 
             failSafeViewBag();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
+            if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.permisos = true;
-                return View();
+                return View(new List<MiembroDelegacion>());
             }
 
             Persona p = getUsuario();
@@ -180,6 +180,7 @@ namespace OMIstats.Controllers
             ViewBag.nivelEscuela = "";
             ViewBag.publica = true;
             ViewBag.permisos = false;
+            ViewBag.invitaciones = false;
         }
 
         //
@@ -192,7 +193,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
-            if (!tienePermisos(o.registroActivo, estado))
+            if (!tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.errorInfo = "permisos";
                 return View(new Persona());
@@ -300,7 +301,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
-            if (!tienePermisos(o.registroActivo, estado))
+            if (!tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.errorInfo = "permisos";
                 return View(new Persona());
@@ -616,7 +617,7 @@ namespace OMIstats.Controllers
             Persona p = getUsuario();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
 
-            if (o == null || !tienePermisos(o.registroActivo, estado) ||
+            if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado) ||
                 (!p.esSuperUsuario() && !o.registroSedes))
             {
                 ViewBag.errorInfo = "permisos";
@@ -649,7 +650,7 @@ namespace OMIstats.Controllers
         public ActionResult Sede(SedeOnline sede)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(sede.omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, sede.estado))
+            if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, sede.estado))
                 return RedirectTo(Pagina.HOME);
 
             failSafeViewBag();
@@ -699,7 +700,7 @@ namespace OMIstats.Controllers
             if (so != null)
                 o = Olimpiada.obtenerOlimpiadaConClave(so.omi, TipoOlimpiada.OMI);
 
-            if (so == null || !tienePermisos(o.registroActivo, so.estado) ||
+            if (so == null || !tienePermisos(o.registroActivo || o.registroSedes, so.estado) ||
                 (!p.esSuperUsuario() && !o.registroSedes))
                 return RedirectTo(Pagina.HOME);
 
@@ -722,7 +723,7 @@ namespace OMIstats.Controllers
         public ActionResult Terminar(string omi, string estado)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
+            if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.OMI)[0];
@@ -751,7 +752,7 @@ namespace OMIstats.Controllers
         public ActionResult Invitaciones(string omi, string estado)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
-            if (o == null || !tienePermisos(o.registroActivo, estado))
+            if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
                 return RedirectTo(Pagina.HOME);
 
             return File(Archivos.comprimeArchivos(
