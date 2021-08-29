@@ -40,6 +40,10 @@
     </thead>
     @foreach (OMIstats.Models.Estado e in Model)
     {
+        if (e.extranjero)
+        {
+            continue;
+        }
     <tr>
         <td class="table-td right-border first-column-placeholder">
             <a class="nombre" href="@Url.Content("~/Estado?clave=" + e.clave)">@e.nombre</a>
@@ -72,6 +76,10 @@
     </thead>
     @foreach (OMIstats.Models.Estado e in Model)
     {
+        if (e.extranjero)
+        {
+            continue;
+        }
     <tr>
         <td class="table-td right-border first-column-placeholder">@e.nombre</td>
         @{Dictionary<string, OMIstats.Models.Medallero> medalleros = estados[e.clave];}

@@ -24,6 +24,10 @@
         @for (int i = 0; i < ViewBag.estados.Count; i++)
         {
             OMIstats.Models.Estado estado = ViewBag.estados[i];
+            if (estado.extranjero)
+            {
+                continue;
+            }
             <option value="@estado.clave" @(estado.clave == filtro ? "selected" : "")>@(estado.nombre)</option>
         }
     </select>

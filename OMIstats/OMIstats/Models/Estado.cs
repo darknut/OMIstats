@@ -37,13 +37,15 @@ namespace OMIstats.Models
         [MaxLength(3, ErrorMessage = "El tamaño máximo es de 3 caracteres")]
         public string ISO { get; set; }
 
+        public bool extranjero;
+
         private static Dictionary<string, Estado> cargarEstados()
         {
             Dictionary<string, Estado> lista = new Dictionary<string, Estado>();
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select * from estado order by nombre ");
+            query.Append(" select * from estado order by ext, nombre");
 
             db.EjecutarQuery(query.ToString());
 
@@ -106,6 +108,7 @@ namespace OMIstats.Models
             nombre = DataRowParser.ToString(datos["nombre"]);
             sitio = DataRowParser.ToString(datos["sitio"]);
             ISO = DataRowParser.ToString(datos["iso"]);
+            extranjero = DataRowParser.ToBool(datos["ext"]);
 
             claveDelegado = DataRowParser.ToInt(datos["delegado"]);
             delegado = Persona.obtenerPersonaConClave(claveDelegado);

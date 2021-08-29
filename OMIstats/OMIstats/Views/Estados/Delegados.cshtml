@@ -37,6 +37,10 @@
     </thead>
     @foreach (var item in Model)
     {
+        if (item.extranjero)
+        {
+            continue;
+        }
         <tr>
             <td class="table-td center right-border">
                 <img src="@Url.Content("~/img/estados/" + item.clave + ".png")" class="logoEstado"/>
