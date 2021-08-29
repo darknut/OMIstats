@@ -60,6 +60,7 @@
         var estadoSede = "@(omi.esOnline ? "" : OMIstats.Models.Estado.obtenerEstadoConClave(omi.claveEstado).ISO)";
         var updating = @(nuevo ? "false" : "true");
         var estados = {};
+        var ext = {};
         var resubmit = @(resubmit ? "true" : "false");
         var hayResultados = @(hayResultados ? "true" : "false");
         var nombreEscuela = "@nombreEscuela";
@@ -72,6 +73,7 @@
             foreach(OMIstats.Models.Estado e in estados)
             {
         @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
+        @(new MvcHtmlString("ext." + e.clave + (e.extranjero ? "=true;" : "=false;")))
             }
         @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "\" + \"Registro/\", \"" + (usuario.esSuperUsuario() ? "" : estado.clave) + "\", \"" + omi.numero + "\");"))
         @(new MvcHtmlString("setUpSearch(\"" + tipo + "\");"))

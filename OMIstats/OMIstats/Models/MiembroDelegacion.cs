@@ -962,6 +962,7 @@ namespace OMIstats.Models
 
             query.Append(" select *, p.permisos from MiembroDelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
+            query.Append(" inner join Estado as e on md.estado = e.clave ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and oculta = 0 ");
@@ -1018,7 +1019,7 @@ namespace OMIstats.Models
 
             if (tipo == TipoAsistente.NULL)
             {
-                query.Append(" order by md.estado, md.clase desc, md.clave ");
+                query.Append(" order by e.ext, md.estado, md.clase desc, md.clave ");
             }
             else
             {

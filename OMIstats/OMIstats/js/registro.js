@@ -314,30 +314,36 @@ function validar() {
         return false;
     if (revisaNoVacio("estado"))
         return false;
-    if (revisaNoVacio("correo"))
-        return false;
-    if (revisaNoVacio("celular"))
-        return false;
-    if (emergenciaRequerido) {
-        if (revisaNoVacio("emergencia"))
-            return false;
-        if (revisaNoVacio("telEmergencia"))
-            return false;
-    }
 
-    var tipo = document.getElementById("tipoAsistente").value;
-    if (tipo == "COMPETIDOR") {
-        if (revisaNoVacio("selectEscuela"))
+    estado = document.getElementById("estado").value;
+    var isExt = ext[estado];
+
+    if (!isExt) {
+        if (revisaNoVacio("correo"))
             return false;
-        var escuela = document.getElementById("selectEscuela").value;
-        if (escuela == -1) {
-            if (revisaNoVacio("nombreEscuela"))
+        if (revisaNoVacio("celular"))
+            return false;
+        if (emergenciaRequerido) {
+            if (revisaNoVacio("emergencia"))
+                return false;
+            if (revisaNoVacio("telEmergencia"))
                 return false;
         }
-        if (revisaNoVacio("selectNivelEscolar"))
-            return false;
-        if (revisaNoVacio("selectAnioEscolar"))
-            return false;
+
+        var tipo = document.getElementById("tipoAsistente").value;
+        if (tipo == "COMPETIDOR") {
+            if (revisaNoVacio("selectEscuela"))
+                return false;
+            var escuela = document.getElementById("selectEscuela").value;
+            if (escuela == -1) {
+                if (revisaNoVacio("nombreEscuela"))
+                    return false;
+            }
+            if (revisaNoVacio("selectNivelEscolar"))
+                return false;
+            if (revisaNoVacio("selectAnioEscolar"))
+                return false;
+        }
     }
 
     reEnable("tipoAsistente");
