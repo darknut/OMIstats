@@ -97,7 +97,7 @@ function showOverlay(clave) {
 
     // Puntos y lugares totales
     puntosTotal.textContent = tds[tds.length - 3].innerText;
-    lugarTotal.textContent = tds[1].innerHTML;
+    lugarTotal.textContent = tds[1].innerText;
 
     // Puntos por día
     if (puntosD1 != null) {

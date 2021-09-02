@@ -813,9 +813,11 @@ namespace OMIstats.Models
             for (int i = 0; i < resultados.Count; i++)
             {
                 resultados[i].lugar = 0;
+                bool extranjero = false;
                 if (resultados[i].clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
                     unkEnTabla = true;
                 else
+                {
                     if (!(unkEnTabla && resultados[i].medalla == Resultados.TipoMedalla.NADA))
                     {
                         // Si el competidor fue descalificado lo mandamos al fondo del lugar
@@ -825,17 +827,31 @@ namespace OMIstats.Models
                         }
                         else
                         {
-                            competidores++;
-                            if (competidores == 1 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
-                                lugar = competidores;
-                            resultados[i].lugar = lugar;
+                            // Si el competidor es extranjero, no se le considera
+                            Estado e = Estado.obtenerEstadoConClave(resultados[i].estado);
+                            extranjero = e.extranjero;
+                            if (extranjero)
+                            {
+                                if (lugar == 0)
+                                    resultados[i].lugar = 1;
+                                else
+                                    resultados[i].lugar = lugar;
+                            }
+                            else
+                            {
+                                competidores++;
+                                if (competidores == 1 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
+                                    lugar = competidores;
+                                resultados[i].lugar = lugar;
+                            }
                         }
                     }
+                }
                 resultados[i].guardarLugar();
 
-                if (this.puntosDetallados)
+                // Se actualiza la tabla de detalles
+                if (this.puntosDetallados && !extranjero)
                 {
-                    // Se actualiza la tabla de detalles
                     DetallePuntos.actualizarUltimo(this.numero, this.tipoOlimpiada, 1, resultados[i].clave, resultados[i].dia1, resultados[i].totalDia1);
                     if (problemasDia2 > 0)
                     {
