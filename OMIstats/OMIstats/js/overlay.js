@@ -114,6 +114,15 @@ function showOverlay(clave) {
         puntosD2P[i].textContent = tds[6 + overlayProblemasDia1 + i].innerHTML;
     }
 
+    // Revisamos si es extranjero
+    var ext = tr.getAttribute("ext");
+
+    if (ext) {
+        setVisible('overlayExt', true);
+        setVisible('chart-title', false);
+        return;
+    }
+
     // Hacemos visible el cosito de cargando
     setVisible('overlayLoading', true);
 
@@ -130,6 +139,8 @@ function closeOverlay() {
     setVisible('overlayLoading', false);
     setVisible('chartPuntos', false);
     setVisible('overlayError', false);
+    setVisible('overlayExt', false);
+    setVisible('chart-title', true);
 
     overlayEstado.setAttribute("src", "");
     overlayMedalla.setAttribute("src", "");

@@ -75,6 +75,7 @@
 <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
 <script type="text/javascript" src="~/js/sorters.js"></script>
+<script type="text/javascript" src="~/js/resultados.js"></script>
 @if (Model.puntosDetallados && !secretScoreboard)
 {
 <script type="text/javascript" src="~/js/formas.js"></script>
@@ -208,6 +209,13 @@ else
             }
         }
     }
+
+    if (!isLive && extranjeros.Count > 0 && resultados.Count > 0)
+    {
+<input type="checkbox" id="ckbExt" onclick="extranjeros()" />
+<label for="ckbExt">Mostrar invitados extranjeros</label>
+    }
+
 <table class="table" id="tablaPuntos">
 <thead>
 <tr>
@@ -300,6 +308,7 @@ else
 @for (var l = 0; l < resultados.Count; l++)
 {
     OMIstats.Models.Resultados datos = resultados[l];
+    OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(resultados[l].estado);
     tableManager.setCurrentResultados(datos);
     bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
     if (datos.total < 0 && !admin)
@@ -314,7 +323,7 @@ else
     {
         string claseCSS = tableManager.obtenerClaseCSS(mostrarPendientes: false);
         bool mostrar = tableManager.mostrarLinea(overrideMostrarResultadosTotales: true);
-<tr id="@((isRunnerLive || Model.puntosDetallados) ? datos.clave : null)" foto="@((isRunnerLive || Model.puntosDetallados) ? datos.persona.foto.Substring(2) : null)">
+<tr id="@((isRunnerLive || Model.puntosDetallados) ? datos.clave : null)" foto="@((isRunnerLive || Model.puntosDetallados) ? datos.persona.foto.Substring(2) : null)" @(estado.extranjero ? "ext=true style=display:none" : "")>
 <td class="ioi-mini-imagen @(isRunnerLive ? "options-scoreboard" : "")">
 @if (isLive && isRunnerLive)
 {
@@ -338,10 +347,10 @@ else
     @if (Model.mostrarResultadosTotales && datos.lugar > 0 && !descalificado)
     {
 @(datos.lugar)
-    if (datos.ioi == "Y")
-    {
+        if (datos.ioi == "Y")
+        {
 <img src="~/img/star.png" title="Medallista más joven" class="karel-png"/>
-    }
+        }
     }
 </td>
 <td class="@("table-td center right-border " + claseCSS)">
@@ -829,13 +838,14 @@ Total competidores
     </div>
     <div class="graph-containers">
         <img id="overlayLoading" src="@(Url.Content("~/img/ajax-loader.gif"))" style="display:none"/>
-        <div class="chart-title"><a onclick="muestraChartTotal()">Total</a>|<a onclick="muestraChartLugar()">Lugar</a>|<a onclick="muestraChartProblemas()">Por problema</a>
+        <div class="chart-title" id="chart-title"><a onclick="muestraChartTotal()">Total</a>|<a onclick="muestraChartLugar()">Lugar</a>|<a onclick="muestraChartProblemas()">Por problema</a>
 @if (Model.problemasDia2 > 0)
 {
 @("|")<a onclick="mustraChartPorDias()">Por día</a>
 }
         </div>
         <div class="textoRojo" id="overlayError" style="display:none"><br /><br /><br />Hubo un error en el server, intenta de nuevo más tarde.</div>
+        <div class="textoRojo" id="overlayExt" style="display:none"><br /><br /><br />Los invitados extranjeros no cuentan con detalles sobre sus envíos.</div>
         <canvas id="chartPuntos" style="display:none"></canvas>
     </div>
 </div>
