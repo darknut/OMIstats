@@ -873,12 +873,14 @@ namespace OMIstats.Models
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select COUNT(*) from MiembroDelegacion where olimpiada = ");
+            query.Append(" select COUNT(*) from MiembroDelegacion as md ");
+            query.Append(" inner join Estado as e on md.estado = e.clave where olimpiada = ");
             query.Append(Cadenas.comillas(omi));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and tipo = ");
             query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(" and e.ext = 0 ");
 
             db.EjecutarQuery(query.ToString());
             return (int)db.getTable().Rows[0][0];
@@ -1492,6 +1494,30 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(estado));
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public static List<Estado> obtenerEstadosExtranjerosEnOlimpiada(string omi)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(e.clave) from MiembroDelegacion as md ");
+            query.Append(" inner join Estado as e on md.estado = e.clave ");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and e.ext = 1 ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            List<Estado> estados = new List<Estado>();
+            foreach (DataRow r in table.Rows)
+            {
+                string estado = DataRowParser.ToString(r[0]);
+                estados.Add(Estado.obtenerEstadoConClave(estado));
+            }
+
+            return estados;
         }
 #endif
     }

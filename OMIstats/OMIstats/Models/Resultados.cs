@@ -870,10 +870,12 @@ namespace OMIstats.Models
                     columna += "P" + numero;
             }
 
-            query.Append(" select count(*) from Resultados where olimpiada = ");
+            query.Append(" select count(*) from Resultados as r ");
+            query.Append(" inner join Estado as e on r.estado = e.clave where olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and e.ext = 0 ");
             query.Append(" and (");
             query.Append(columna);
 
@@ -888,12 +890,14 @@ namespace OMIstats.Models
             query.Clear();
             query.Append(" select sum(");
             query.Append(columna);
-            query.Append(") from Resultados where olimpiada = ");
+            query.Append(") from Resultados as r ");
+            query.Append(" inner join Estado as e on r.estado = e.clave where olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and medalla <> ");
             query.Append((int)TipoMedalla.DESCALIFICADO);
+            query.Append(" and e.ext = 0 ");
 
             db.EjecutarQuery(query.ToString());
             suma = DataRowParser.ToStrictFloat(db.getTable().Rows[0][0]);
@@ -901,12 +905,14 @@ namespace OMIstats.Models
             query.Clear();
             query.Append(" select ");
             query.Append(columna);
-            query.Append(" from Resultados where olimpiada = ");
+            query.Append(" from Resultados as r ");
+            query.Append(" inner join Estado as e on r.estado = e.clave where olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and medalla <> ");
             query.Append((int)TipoMedalla.DESCALIFICADO);
+            query.Append(" and e.ext = 0 ");
             query.Append(" order by ");
             query.Append(columna);
             query.Append(" desc ");
@@ -965,10 +971,12 @@ namespace OMIstats.Models
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
 
-            query.Append(" select count(distinct(Estado)) from Resultados where olimpiada = ");
+            query.Append(" select count(distinct(Estado)) from Resultados as r ");
+            query.Append(" inner join Estado as e on r.estado = e.clave where olimpiada = ");
             query.Append(Cadenas.comillas(omi));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            query.Append(" and e.ext = 0 ");
 
             db.EjecutarQuery(query.ToString());
 

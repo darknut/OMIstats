@@ -366,6 +366,8 @@ namespace OMIstats.Controllers
                 ViewBag.numerosTotal = metadata[0];
             }
 
+            ViewBag.extranjeros = MiembroDelegacion.obtenerEstadosExtranjerosEnOlimpiada(o.numero);
+
             return View(o);
         }
 
