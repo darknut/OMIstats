@@ -5,7 +5,11 @@
     for (var i = 0; i < trs.length; i++) {
         var isExt = trs[i].getAttribute("ext");
         if (isExt) {
-            setVisible(trs[i].getAttribute("id"), value ? 'table-row' : 'none');
+            var row = $("#" + trs[i].getAttribute("id"));
+            if (value)
+                row.fadeIn(250);
+            else
+                row.fadeOut(250);
         }
     }
 }
