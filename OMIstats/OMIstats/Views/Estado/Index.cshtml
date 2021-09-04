@@ -110,7 +110,7 @@
 
 </div>
 
-<h1 class="titulo subtitulo"> Alumnos competidores
+<h1 class="titulo subtitulo"> Alumnos @(Model.extranjero ? " invitados " : "competidores")
     @if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIS)
     {
         @("de secundaria")
@@ -131,10 +131,13 @@
             <th class="bottom-border right-border table-header-clickable">Concursante</th>
             <th class="bottom-border right-border table-header-clickable">Clave</th>
             <th class="bottom-border right-border table-header-clickable">Puntos</th>
-            <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+            <th class="bottom-border @(Model.extranjero ? "" : "right-border") table-header-clickable {sorter:'medalla'}">Medalla</th>
+            @if(!Model.extranjero)
+            {
             <th class="bottom-border right-border table-header-clickable">Escuela</th>
             <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
             <th class="bottom-border table-header-clickable">Año escolar</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -217,9 +220,11 @@
                         }
                     }
                 </td>
-                <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
+                <td class="@("table-td center " + (Model.extranjero ? "" : " right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
                     @tableManager.medallaString()
                 </td>
+                @if (!Model.extranjero)
+                {
                 <td class="@("table-td break-word right-border " + claseCSS)">
                     @if (datos.escuela != null)
                     {
@@ -242,6 +247,7 @@
                         @(datos.añoEscolar + "º")
                     }
                 </td>
+                }
             </tr>
         }
     </tbody>

@@ -34,6 +34,14 @@
     Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.Resultados>> participaciones = ViewBag.participaciones;
     OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     bool hayParticipaciones = false;
+    bool extranjero = false;
+    var participacionesOMI = participaciones[OMIstats.Models.TipoOlimpiada.OMI];
+    var imgFoto = Url.Content(@Model.foto);
+    if (participacionesOMI.Count > 0)
+    {
+        extranjero = OMIstats.Models.Estado.obtenerEstadoConClave(participacionesOMI[0].estado).extranjero;
+        imgFoto = Url.Content("~/img/estados/" + participacionesOMI[0].estado + ".png");
+    }
 }
 
     @{
@@ -58,7 +66,7 @@
     <h1 class="titulo">Datos de usuario</h1>
 
     <div class="foto" >
-        <img src='@Url.Content(@Model.foto)' alt="@Model.nombreCompleto"/>
+        <img src='@imgFoto' alt="@Model.nombreCompleto"/>
     </div>
 
     <div class="datosParticipante">
@@ -192,7 +200,7 @@
         hayParticipaciones = true;
         OMIstats.Models.Medallero medallero = medalleros.medalleroDeTipo(tipo);
 
-        <h1 class="titulo subtitulo"> Participaciones como competidor
+        <h1 class="titulo subtitulo"> @(extranjero ? "Invitaciones como competidor" : "Participaciones como competidor")
             @if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
             {
                 <span>de secundaria</span>
@@ -236,10 +244,13 @@
                     <th class="bottom-border right-border table-header-clickable">Estado</th>
                     <th class="bottom-border right-border table-header-clickable">Clave</th>
                     <th class="bottom-border right-border table-header-clickable">Puntos</th>
-                    <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+                    <th class="bottom-border @(extranjero ? "" : "right-border") table-header-clickable {sorter:'medalla'}">Medalla</th>
+                    @if (!extranjero)
+                    {
                     <th class="bottom-border right-border table-header-clickable">Escuela</th>
                     <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
                     <th class="bottom-border table-header-clickable">Año escolar</th>
+                    }
                     @if(perfilPropio)
                     {
                     <th class="bottom-border left-border">Diplomas</th>
@@ -305,9 +316,11 @@
                             }
                         }
                     </td>
-                    <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
+                    <td class="@("table-td center " + (extranjero ? "" : "right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
                         @tableManager.medallaString()
                     </td>
+                    @if (!extranjero)
+                    {
                     <td class="@("table-td break-word right-border " + claseCSS)">
                         @if (datos.escuela != null)
                         {
@@ -330,6 +343,7 @@
                             @(datos.añoEscolar + "º")
                         }
                     </td>
+                    }
                     @if (perfilPropio)
                     {
                     <td class="left-border padding-diploma">

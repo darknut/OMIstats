@@ -210,7 +210,7 @@ else
         }
     }
 
-    if (!isLive && extranjeros.Count > 0 && resultados.Count > 0)
+    if (!isLive && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI && extranjeros.Count > 0 && resultados.Count > 0)
     {
 <input type="checkbox" id="ckbExt" onclick="extranjeros()" />
 <label for="ckbExt">Mostrar invitados extranjeros</label>
