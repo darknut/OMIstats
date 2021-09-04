@@ -20,7 +20,9 @@ function muestraLoadGifYSubmit(formId) {
 }
 
 function redirige(pagina, parametro) {
-    window.location.href = pagina + parametro;
+    if (parametro != '-') {
+        window.location.href = pagina + parametro;
+    }
 }
 
 function tryConfirm(url, texto) {

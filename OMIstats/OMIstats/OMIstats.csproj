@@ -358,6 +358,7 @@
     <Content Include="js\profile.js" />
     <Content Include="js\registro.js" />
     <Content Include="js\request.js" />
+    <Content Include="js\resultados.js" />
     <Content Include="js\scoreboard.js" />
     <Content Include="js\sorters.js" />
     <Content Include="Scripts\Chart.bundle.min.js" />
