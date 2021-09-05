@@ -318,7 +318,7 @@ namespace OMIstats.Controllers
                     {
                         ViewBag.secretScoreboard = true;
                         ViewBag.dia = ou.dia;
-                        ViewBag.problemasPorDia = 3; // HARDCODED BUT OH WELL....
+                        ViewBag.problemasPorDia = 4; // HARDCODED BUT OH WELL....
                         ViewBag.resultados = Models.Resultados.cargarResultadosSecretos(clave, tipo, ou.dia);
                     }
                     else
