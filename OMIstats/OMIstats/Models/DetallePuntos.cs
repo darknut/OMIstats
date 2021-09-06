@@ -292,7 +292,7 @@ namespace OMIstats.Models
                     query.Append(dia);
                     query.Append(" and clave = ");
                     query.Append(Cadenas.comillas(clave));
-                    query.Append(" and timestamp > ");
+                    query.Append(" and timestamp >= ");
                     query.Append(tiempo);
                     query.Append(" and timestamp <> ");
                     query.Append(timestamp);
