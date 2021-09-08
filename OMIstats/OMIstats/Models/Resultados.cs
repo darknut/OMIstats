@@ -1162,10 +1162,13 @@ namespace OMIstats.Models
 
             Medallero medalleroGral = null;
             List<Medallero> medallero = Medallero.obtenerTablaEstados(TipoOlimpiada.OMI, omi, out medalleroGral);
+            int lugar = 0;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; lugar < 3; i++)
             {
                 Estado estado = Estado.obtenerEstadoConClave(medallero[i].clave);
+                if (estado.extranjero)
+                    continue;
                 lineas.Append(estado.clave);
                 lineas.Append("\\");
                 lineas.Append(estado.nombre);
@@ -1186,15 +1189,15 @@ namespace OMIstats.Models
                 lineas.Append(",");
                 lineas.Append("POR HABER OBTENIDO");
                 lineas.Append(",");
-                switch (i)
+                switch (++lugar)
                 {
-                    case 0:
+                    case 1:
                         lineas.Append("Primer");
                         break;
-                    case 1:
+                    case 2:
                         lineas.Append("Segundo");
                         break;
-                    case 2:
+                    case 3:
                         lineas.Append("Tercer");
                         break;
                 }
