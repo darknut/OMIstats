@@ -40,7 +40,10 @@
     if (participacionesOMI.Count > 0)
     {
         extranjero = OMIstats.Models.Estado.obtenerEstadoConClave(participacionesOMI[0].estado).extranjero;
-        imgFoto = Url.Content("~/img/estados/" + participacionesOMI[0].estado + ".png");
+        if (extranjero)
+        {
+            imgFoto = Url.Content("~/img/estados/" + participacionesOMI[0].estado + ".png");
+        }
     }
 }
 
