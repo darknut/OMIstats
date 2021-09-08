@@ -344,7 +344,7 @@ else
 }
 </td>
 <td class="@("table-td center right-border " + claseCSS)">
-    @if (Model.mostrarResultadosTotales && datos.lugar > 0 && !descalificado)
+    @if (Model.mostrarResultadosTotales && datos.lugar > 0 && !descalificado && !estado.extranjero)
     {
 @(datos.lugar)
         if (datos.ioi == "Y")
