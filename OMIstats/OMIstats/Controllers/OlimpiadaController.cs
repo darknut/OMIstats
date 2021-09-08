@@ -459,6 +459,7 @@ namespace OMIstats.Controllers
             ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.INVITADO);
             ViewBag.medallas = Medallero.obtenerMedallas(tipo, Medallero.TipoMedallero.ESTADO_POR_OMI, estado + "_" + clave);
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
+            ViewBag.olimpiadasParaEstado = Olimpiada.obtenerOlimpiadasParaEstado(estado);
             ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
             ViewBag.extranjeros = MiembroDelegacion.obtenerEstadosExtranjerosEnOlimpiada(o.numero);

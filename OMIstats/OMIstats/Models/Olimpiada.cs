@@ -961,6 +961,29 @@ namespace OMIstats.Models
         {
             return estado == this.claveEstado && !this.esOnline ? 8 : 4;
         }
+
+        public static HashSet<string> obtenerOlimpiadasParaEstado(string estado)
+        {
+            HashSet<string> lista = new HashSet<string>();
+
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(olimpiada) from MiembroDelegacion where estado = ");
+            query.Append(Cadenas.comillas(estado));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+            Dictionary<string, Olimpiada> olimpiadas = getOlimpiadas(TipoOlimpiada.OMI);
+
+            foreach (DataRow r in table.Rows)
+            {
+                string numero = DataRowParser.ToString(r[0]);
+                lista.Add(numero);
+            }
+
+            return lista;
+        }
 #endif
     }
 }
