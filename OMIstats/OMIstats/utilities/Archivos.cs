@@ -30,6 +30,8 @@ namespace OMIstats.Utilities
         public const string FOTO_DOMI = "~/img/domi.gif";
         public const string FOTO_OMI = "~/img/" + OMI_LOGO;
 
+        private static byte[] BOM = {239, 187, 191};
+
         public enum ResultadoImagen
         {
             VALIDA = 0,
@@ -262,7 +264,10 @@ namespace OMIstats.Utilities
 
         public static byte[] creaArchivoTexto(string texto)
         {
-            return Encoding.UTF8.GetBytes(texto);
+            List<byte> list = new List<byte>();
+            list.AddRange(BOM);
+            list.AddRange(Encoding.UTF8.GetBytes(texto));
+            return list.ToArray();
         }
     }
 }
