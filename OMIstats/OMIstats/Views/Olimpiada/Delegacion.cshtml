@@ -9,13 +9,13 @@
 
 @{
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
-    List<OMIstats.Models.Estado> estados = ViewBag.estados;
-    List<OMIstats.Models.Estado> extranjeros = ViewBag.extranjeros;
+    List<OMIstats.Models.Estado> estadosEnOlimpiada = ViewBag.estadosEnOlimpiada;
     List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
     HashSet<string> olimpiadasParaEstado = ViewBag.olimpiadasParaEstado;
     tableManager.setCurrentOMI(Model);
     ViewBag.Title = ViewBag.estado.nombre + " en la " + tableManager.enlaceOMI(nombreCompleto: true);
     bool isLive = ViewBag.liveResults;
+    bool extranjeros = false;
 }
 
 <div class="submenu">
@@ -35,21 +35,26 @@
 
     <div class="comboTitle">Estados:</div>
     <select onChange="redirige('@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=")', this.options[this.selectedIndex].value)" class="comboMargin">
-        @for (int i = 0; i < estados.Count; i++)
+        @for (int i = 0; i < estadosEnOlimpiada.Count; i++)
         {
-            OMIstats.Models.Estado estado = estados[i];
+            OMIstats.Models.Estado estado = estadosEnOlimpiada[i];
             if (estado.extranjero)
             {
+                extranjeros = true;
                 continue;
             }
             <option value="@estado.clave" @(estado.clave == ViewBag.estado.clave ? "selected" : "")>@(estado.nombre)</option>
         }
-        @if (extranjeros.Count > 0)
+        @if (extranjeros)
         {
             <option value="-">- - -</option>
-            for (int i = 0; i < extranjeros.Count; i++)
+            for (int i = 0; i < estadosEnOlimpiada.Count; i++)
             {
-                OMIstats.Models.Estado estado = extranjeros[i];
+                OMIstats.Models.Estado estado = estadosEnOlimpiada[i];
+                if (!estado.extranjero)
+                {
+                    continue;
+                }
             <option value="@estado.clave" @(estado.clave == ViewBag.estado.clave ? "selected" : "")>@(estado.nombre)</option>
             }
         }

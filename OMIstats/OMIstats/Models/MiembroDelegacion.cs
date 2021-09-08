@@ -1519,6 +1519,29 @@ namespace OMIstats.Models
 
             return estados;
         }
+
+        public static List<Estado> obtenerEstadosEnOlimpiada(string omi)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select distinct(e.clave) from MiembroDelegacion as md ");
+            query.Append(" inner join Estado as e on md.estado = e.clave ");
+            query.Append(" where md.olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            List<Estado> estados = new List<Estado>();
+            foreach (DataRow r in table.Rows)
+            {
+                string estado = DataRowParser.ToString(r[0]);
+                estados.Add(Estado.obtenerEstadoConClave(estado));
+            }
+
+            return estados;
+        }
 #endif
     }
 }

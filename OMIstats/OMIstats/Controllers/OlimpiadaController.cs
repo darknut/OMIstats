@@ -461,8 +461,7 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             ViewBag.olimpiadasParaEstado = Olimpiada.obtenerOlimpiadasParaEstado(estado);
             ViewBag.tipo = tipo;
-            ViewBag.estados = Estado.obtenerEstados();
-            ViewBag.extranjeros = MiembroDelegacion.obtenerEstadosExtranjerosEnOlimpiada(o.numero);
+            ViewBag.estadosEnOlimpiada = MiembroDelegacion.obtenerEstadosEnOlimpiada(o.numero);
 
             if (delegaciones[tipo].Count == 0)
                 ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(tipo, clave);
