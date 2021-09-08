@@ -417,65 +417,68 @@ namespace OMIstats.Models
 
             // Finalmente, para los estados por olimpiada, hay que hacer un par de cosas
             List<Medallero> sortedEstados = new List<Medallero>(estadosPorOlimpiada.Values);
-            string lastOMI = sortedEstados[0].omi;
-            bool invalido = false;
-            int firstEstadoInOmi = 0;
-            // Los necesitamos ordenados primero por olimpiada
-            sortedEstados.Sort();
-            // Necesitamos reordenarlos por promedio
-            for (int i = 0; i < sortedEstados.Count; i++)
+            if (sortedEstados.Count > 0)
             {
-                Medallero estado = sortedEstados[i];
-                if (estado.omi != lastOMI)
+                string lastOMI = sortedEstados[0].omi;
+                bool invalido = false;
+                int firstEstadoInOmi = 0;
+                // Los necesitamos ordenados primero por olimpiada
+                sortedEstados.Sort();
+                // Necesitamos reordenarlos por promedio
+                for (int i = 0; i < sortedEstados.Count; i++)
                 {
-                    // Si algún estado en la olimpiada tiene un
-                    // promedio invalido, ningún promedio es valido
-                    if (invalido)
+                    Medallero estado = sortedEstados[i];
+                    if (estado.omi != lastOMI)
                     {
-                        for (int j = firstEstadoInOmi; j < i; j++)
-                            sortedEstados[j].promedio = 0;
+                        // Si algún estado en la olimpiada tiene un
+                        // promedio invalido, ningún promedio es valido
+                        if (invalido)
+                        {
+                            for (int j = firstEstadoInOmi; j < i; j++)
+                                sortedEstados[j].promedio = 0;
+                        }
+                        firstEstadoInOmi = i;
+                        invalido = false;
+                        lastOMI = estado.omi;
                     }
-                    firstEstadoInOmi = i;
-                    invalido = false;
-                    lastOMI = estado.omi;
+
+                    if (!estado.hayUNKs && estado.count > 0)
+                        estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+                    invalido |= estado.promedioEsInvalido();
                 }
+                sortedEstados.Sort();
 
-                if (!estado.hayUNKs && estado.count > 0)
-                    estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
-                invalido |= estado.promedioEsInvalido();
-            }
-            sortedEstados.Sort();
+                lastOMI = "";
+                int lugarActual = 0;
+                Medallero ultimoEstado = null;
 
-            lastOMI = "";
-            int lugarActual = 0;
-            Medallero ultimoEstado = null;
-
-            // Vamos por cada estado para asignarles el lugar
-            foreach (Medallero estado in sortedEstados)
-            {
-                // Estamos recibiendo los estados de todas las olimpiadas
-                if (estado.omi != lastOMI)
+                // Vamos por cada estado para asignarles el lugar
+                foreach (Medallero estado in sortedEstados)
                 {
-                    lastOMI = estado.omi;
-                    lugarActual = 0;
-                    ultimoEstado = null;
+                    // Estamos recibiendo los estados de todas las olimpiadas
+                    if (estado.omi != lastOMI)
+                    {
+                        lastOMI = estado.omi;
+                        lugarActual = 0;
+                        ultimoEstado = null;
+                    }
+
+                    lugarActual++;
+
+                    // Revisamos si hay empates entre estados
+                    if (ultimoEstado == null ||
+                        ultimoEstado.oros != estado.oros ||
+                        ultimoEstado.platas != estado.platas ||
+                        ultimoEstado.bronces != estado.bronces ||
+                        (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
+                        estado.lugar = lugarActual;
+                    else
+                        estado.lugar = ultimoEstado.lugar;
+
+                    ultimoEstado = estado;
+
+                    estado.guardarDatos();
                 }
-
-                lugarActual++;
-
-                // Revisamos si hay empates entre estados
-                if (ultimoEstado == null ||
-                    ultimoEstado.oros != estado.oros ||
-                    ultimoEstado.platas != estado.platas ||
-                    ultimoEstado.bronces != estado.bronces ||
-                    (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
-                    estado.lugar = lugarActual;
-                else
-                    estado.lugar = ultimoEstado.lugar;
-
-                ultimoEstado = estado;
-
-                estado.guardarDatos();
             }
 
             // Al final hacemos los ajustes hardcodeados
