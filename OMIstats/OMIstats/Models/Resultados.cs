@@ -1093,18 +1093,37 @@ namespace OMIstats.Models
                 lineas.Append("-medalla.pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
-                lineas.Append(X);
-                lineas.Append(",");
-                lineas.Append("Medalla de ");
+                Estado e = Estado.obtenerEstadoConClave(estado);
+                if (e.extranjero)
+                    lineas.Append("PUNTAJE PARA ");
+                else
+                    lineas.Append("MEDALLA DE ");
 
                 if (medalla == TipoMedalla.BRONCE)
-                    lineas.Append("Bronce");
+                    lineas.Append("BRONCE");
                 else if (medalla == TipoMedalla.PLATA)
-                    lineas.Append("Plata");
+                    lineas.Append("PLATA");
                 else
-                    lineas.Append("Oro");
+                    lineas.Append("ORO");
 
+                lineas.Append(",en la categoría OMI ");
+                if (clase == TipoOlimpiada.OMI)
+                    lineas.Append("Abierta a,");
+                else if (clase == TipoOlimpiada.OMIP)
+                    lineas.Append("para Primaria a,");
+                else if (clase == TipoOlimpiada.OMIS)
+                    lineas.Append("para Secundaria a,");
+
+                lineas.Append(clase.ToString());
                 lineas.Append(",");
+
+                if (medalla == TipoMedalla.BRONCE)
+                    lineas.Append("bronce,");
+                else if (medalla == TipoMedalla.PLATA)
+                    lineas.Append("plata,");
+                else
+                    lineas.Append("oro,");
+
                 lineas.Append(baseURL);
                 lineas.Append("/Profile/");
                 lineas.Append(clase.ToString());
@@ -1112,8 +1131,7 @@ namespace OMIstats.Models
                 lineas.Append(omi);
                 lineas.Append("/");
                 lineas.Append(clave);
-                lineas.Append(",");
-                lineas.Append(clase.ToString());
+
                 lineas.Append("\n");
             }
 
@@ -1146,7 +1164,10 @@ namespace OMIstats.Models
             lineas.Append(joven.clave);
             lineas.Append("-joven.pdf,");
             lineas.Append(joven.persona.nombreCompleto);
-            lineas.Append(",POR HABER SIDO,El Medallista Más Joven,");
+            lineas.Append(",POR HABER SIDO,El Medallista Más Joven a,");
+            lineas.Append(joven.tipoOlimpiada.ToString());
+            lineas.Append(",reconocimiento,");
+
             lineas.Append(baseURL);
             lineas.Append("/Profile/");
             lineas.Append(joven.tipoOlimpiada.ToString());
@@ -1154,8 +1175,7 @@ namespace OMIstats.Models
             lineas.Append(omi);
             lineas.Append("/");
             lineas.Append(joven.clave);
-            lineas.Append(",");
-            lineas.Append(joven.tipoOlimpiada.ToString());
+
             lineas.Append("\n");
 
             // Los siguientes diplomas, son los diplomas de estados
@@ -1164,7 +1184,7 @@ namespace OMIstats.Models
             List<Medallero> medallero = Medallero.obtenerTablaEstados(TipoOlimpiada.OMI, omi, out medalleroGral);
             int lugar = 0;
 
-            for (int i = 0; lugar < 3; i++)
+            for (int i = 0; lugar < 3 && i < medallero.Count; i++)
             {
                 Estado estado = Estado.obtenerEstadoConClave(medallero[i].clave);
                 if (estado.extranjero)
@@ -1173,21 +1193,7 @@ namespace OMIstats.Models
                 lineas.Append("\\");
                 lineas.Append(estado.nombre);
                 lineas.Append(".pdf,");
-                switch (estado.clave)
-                {
-                    case "MDF":
-                        lineas.Append("La ");
-                        break;
-                    case "MEX":
-                        lineas.Append("El ");
-                        break;
-                    default:
-                        lineas.Append("El Estado de ");
-                        break;
-                }
                 lineas.Append(estado.nombre);
-                lineas.Append(",");
-                lineas.Append("POR HABER OBTENIDO");
                 lineas.Append(",");
                 switch (++lugar)
                 {
@@ -1201,7 +1207,19 @@ namespace OMIstats.Models
                         lineas.Append("Tercer");
                         break;
                 }
-                lineas.Append(" Lugar a Nivel Estados,,OMI");
+                lineas.Append(" Lugar, a Nivel Estados a,OMI,");
+                switch (lugar)
+                {
+                    case 1:
+                        lineas.Append("oro");
+                        break;
+                    case 2:
+                        lineas.Append("plata");
+                        break;
+                    case 3:
+                        lineas.Append("bronce");
+                        break;
+                }
                 lineas.Append("\n");
             }
 

@@ -1098,6 +1098,9 @@ namespace OMIstats.Models
                 lineas.Append(X);
                 lineas.Append(",");
 
+                lineas.Append(Estado.obtenerEstadoConClave(estado).nombre);
+                lineas.Append(" como ");
+
                 string asistente = stringsAsistentes[((int)tipo) - 1];
                 if (asistente.Trim().Length == 0)
                     asistente = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(tipo.ToString().ToLower());
@@ -1112,10 +1115,9 @@ namespace OMIstats.Models
 
                 lineas.Append(asistente);
 
-                if (tipo != TipoAsistente.COMI && tipo != TipoAsistente.COLO)
-                    lineas.Append(Estado.obtenerEstadoConClave(estado).obtenerNombreConPrefijo());
-
-                lineas.Append(",");
+                lineas.Append(" a,");
+                lineas.Append(clase.ToString());
+                lineas.Append(",reconocimiento,");
                 lineas.Append(baseURL);
                 lineas.Append("/Profile/");
                 lineas.Append(clase.ToString());
@@ -1123,8 +1125,7 @@ namespace OMIstats.Models
                 lineas.Append(omi);
                 lineas.Append("/");
                 lineas.Append(clave);
-                lineas.Append(",");
-                lineas.Append(clase.ToString());
+
                 lineas.Append("\n");
             }
 
