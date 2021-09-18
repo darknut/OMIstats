@@ -291,6 +291,7 @@ namespace OMIstats.Models
                     institucion = new Medallero();
                 }
 
+                Estado e = Estado.obtenerEstadoConClave(resultado.estado);
                 if (!estados.TryGetValue(resultado.estado, out estado))
                 {
                     estado = new Medallero();
@@ -314,7 +315,8 @@ namespace OMIstats.Models
                         estadoPorOlimpiada.puntos = 0;
                         estadoPorOlimpiada.promedio = 0;
                         estadoPorOlimpiada.hayUNKs = false;
-                        estadosPorOlimpiada.Add(estadoPorOlimpiadaClave, estadoPorOlimpiada);
+                        if (!e.extranjero)
+                            estadosPorOlimpiada.Add(estadoPorOlimpiadaClave, estadoPorOlimpiada);
                     }
                 }
 
