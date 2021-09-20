@@ -367,36 +367,36 @@ namespace OMIstats.Models
             if (!esParaRegistro)
             {
                 s.Append(usuario);
-                s.Append(", ");
+                s.Append(",");
             }
             s.Append(nombreAsistente);
-            s.Append(", ");
+            s.Append(",");
             if (esParaRegistro)
             {
                 s.Append(Estado.obtenerEstadoConClave(estado).ISO);
-                s.Append(", ");
+                s.Append(",");
             }
             else
             {
                 s.Append(estado);
-                s.Append(", ");
+                s.Append(",");
             }
             s.Append(tipo.ToString().ToLower());
-            s.Append(", ");
+            s.Append(",");
             s.Append(clave);
-            s.Append(", ");
+            s.Append(",");
             s.Append(fechaNacimiento);
-            s.Append(", ");
+            s.Append(",");
             s.Append(genero);
             s.Append(", ");
             s.Append(correo);
-            s.Append(", ");
+            s.Append(",");
             s.Append(nombreEscuela);
-            s.Append(", ");
+            s.Append(",");
             s.Append(nivelEscuela.ToString().ToLower());
-            s.Append(", ");
+            s.Append(",");
             s.Append(añoEscuela);
-            s.Append(", ");
+            s.Append(",");
             s.Append(escuelaPublica ? "publica" : "privada");
 
             return s.ToString();
