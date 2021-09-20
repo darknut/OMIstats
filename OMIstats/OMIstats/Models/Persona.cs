@@ -848,23 +848,23 @@ namespace OMIstats.Models
         {
             StringBuilder s = new StringBuilder();
 
-            s.Append(", ");
+            s.Append(",");
             s.Append(celular);
-            s.Append(", ");
+            s.Append(",");
             s.Append(telefono);
-            s.Append(", ");
+            s.Append(",");
             s.Append(Cadenas.comillas(direccion, "\""));
-            s.Append(", ");
+            s.Append(",");
             s.Append(omegaup);
-            s.Append(", ");
+            s.Append(",");
             s.Append(emergencia);
-            s.Append(", ");
+            s.Append(",");
             s.Append(parentesco);
-            s.Append(", ");
+            s.Append(",");
             s.Append(telEmergencia);
-            s.Append(", ");
+            s.Append(",");
             s.Append(medicina);
-            s.Append(", ");
+            s.Append(",");
             s.Append(alergias);
 
             return s.ToString();
