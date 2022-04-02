@@ -189,7 +189,7 @@ namespace OMIstats.Controllers
 
         public ActionResult Asistente(string omi, TipoOlimpiada tipo = TipoOlimpiada.NULL, string estado = null, string clave = null)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
             if (o == null)
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();

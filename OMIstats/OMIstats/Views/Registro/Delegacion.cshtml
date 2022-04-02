@@ -12,18 +12,31 @@
     bool errorPermisos = ViewBag.permisos;
     bool registroTerminado = Model.Count > 0 && !usuario.esSuperUsuario() ? Model[0].cerrado : false;
     bool invitaciones = ViewBag.invitaciones;
-    string[] subTitulos = {
-        "Competidores de categoría OMI",
-        "Competidores de categoría Primaria",
-        "Competidores de categoría Secundaria",
-        "Líderes, asesores e invitados"
-    };
-    OMIstats.Models.TipoOlimpiada[] tipos = {
-        OMIstats.Models.TipoOlimpiada.OMI,
-        OMIstats.Models.TipoOlimpiada.OMIP,
-        OMIstats.Models.TipoOlimpiada.OMIS,
-        OMIstats.Models.TipoOlimpiada.NULL
-    };
+    string[] subTitulos;
+    OMIstats.Models.TipoOlimpiada[] tipos;
+    if (omi.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO || omi.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO) {
+        tipos = new OMIstats.Models.TipoOlimpiada[] {
+            OMIstats.Models.TipoOlimpiada.OMIPO,
+            OMIstats.Models.TipoOlimpiada.OMISO,
+        };
+        subTitulos = new string[] {
+            "Competidores de categoría Primaria",
+            "Competidores de categoría Secundaria",
+        };
+    } else {
+        tipos = new OMIstats.Models.TipoOlimpiada[] {
+            OMIstats.Models.TipoOlimpiada.OMI,
+            OMIstats.Models.TipoOlimpiada.OMIP,
+            OMIstats.Models.TipoOlimpiada.OMIS,
+            OMIstats.Models.TipoOlimpiada.NULL
+        };
+        subTitulos = new string[] {
+            "Competidores de categoría OMI",
+            "Competidores de categoría Primaria",
+            "Competidores de categoría Secundaria",
+            "Líderes, asesores e invitados"
+        };
+    }
     if (errorPermisos)
     {
         ViewBag.Title = "Error";
