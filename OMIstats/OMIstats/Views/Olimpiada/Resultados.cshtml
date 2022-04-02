@@ -123,6 +123,8 @@ $(function () {
         {
             if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
                 tipo != OMIstats.Models.TipoOlimpiada.NULL &&
+                tipo != OMIstats.Models.TipoOlimpiada.OMIPO &&
+                tipo != OMIstats.Models.TipoOlimpiada.OMISO &&
                 Model.tipoOlimpiada != tipo)
             {
                 @Html.ActionLink(tipo.ToString(), "Resultados", "Olimpiada",
@@ -131,6 +133,19 @@ $(function () {
         }
         <br />
         <br />
+        if (Model.alsoOmipsOnline)
+        {
+            if (Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIP)
+            {
+                 @Html.ActionLink("Online", "Resultados", "Olimpiada",
+                        new { clave = Model.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIPO }, new { @class = "mini-boton" })
+            }
+            if (Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIS)
+            {
+                @Html.ActionLink("Online", "Resultados", "Olimpiada",
+                        new { clave = Model.numero, tipo = OMIstats.Models.TipoOlimpiada.OMISO }, new { @class = "mini-boton" })
+            }
+        }
     }
     <br />
     <div class="comboTitle">Olimpiadas:</div>
