@@ -95,6 +95,8 @@ namespace OMIstats.Models
 
         public bool alsoOmips { get; set; }
 
+        public bool alsoOmipsOnline { get; set; }
+
         public string omisActualNumber { get; set; }
 
         public bool liveResults { get; set; }
@@ -275,6 +277,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = false;
             puntosDesconocidos = false;
             alsoOmips = false;
+            alsoOmipsOnline = false;
             noMedallistasConocidos = false;
             omisActualNumber = "";
             registroActivo = false;
@@ -387,6 +390,7 @@ namespace OMIstats.Models
             mostrarResultadosTotales = DataRowParser.ToBool(datos["mostrarResultadosTotales"]);
             puntosDesconocidos = DataRowParser.ToBool(datos["puntosDesconocidos"]);
             alsoOmips = DataRowParser.ToBool(datos["alsoOmips"]);
+            alsoOmipsOnline = DataRowParser.ToBool(datos["alsoOmipsOnline"]);
             noMedallistasConocidos = DataRowParser.ToBool(datos["noMedallistasConocidos"]);
             puntosDetallados = DataRowParser.ToBool(datos["puntosDetallados"]);
             registroActivo = DataRowParser.ToBool(datos["registroActivo"]);
@@ -548,6 +552,8 @@ namespace OMIstats.Models
             query.Append(puntosDesconocidos ? 1 : 0);
             query.Append(", alsoOmips = ");
             query.Append(alsoOmips ? 1 : 0);
+            query.Append(", alsoOmipsOnline = ");
+            query.Append(alsoOmipsOnline ? 1 : 0);
             query.Append(", noMedallistasConocidos = ");
             query.Append(noMedallistasConocidos ? 1 : 0);
             query.Append(", puntosDetallados = ");
@@ -577,6 +583,13 @@ namespace OMIstats.Models
                 this.actualizaOMIPS(TipoOlimpiada.OMIS, clave);
             }
 
+            // Si esta omi es también OMIPS online, creamos también los objetos
+            if (tipoOlimpiada == TipoOlimpiada.OMI && this.alsoOmipsOnline)
+            {
+                this.actualizaOMIPS(TipoOlimpiada.OMIPO, clave);
+                this.actualizaOMIPS(TipoOlimpiada.OMISO, clave);
+            }
+
             // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
             resetOMIs(this.tipoOlimpiada);
 
@@ -603,6 +616,7 @@ namespace OMIstats.Models
             omi.datosPublicos = this.datosPublicos;
             omi.puntosDesconocidos = this.puntosDesconocidos;
             omi.alsoOmips = this.alsoOmips;
+            omi.alsoOmipsOnline = this.alsoOmipsOnline;
             omi.claveEscuela = this.claveEscuela;
             omi.relacion = this.relacion;
             omi.video = this.video;
@@ -612,7 +626,7 @@ namespace OMIstats.Models
             omi.puntosDetallados = this.puntosDetallados;
             omi.registroActivo = this.registroActivo;
             omi.diplomasOnline = this.diplomasOnline;
-            omi.esOnline = this.esOnline;
+            omi.esOnline = this.esOnline || tipoOlimpiada == TipoOlimpiada.OMISO || tipoOlimpiada == TipoOlimpiada.OMIPO;
             omi.registroSedes = this.registroSedes;
             omi.ordenarPorPuntos = this.ordenarPorPuntos;
 
@@ -636,7 +650,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }

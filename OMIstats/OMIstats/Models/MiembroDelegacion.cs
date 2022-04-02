@@ -1242,15 +1242,15 @@ namespace OMIstats.Models
                             continue;
 
                         // Descartamos a los que ya participaron en categorías mas altas
-                        if (tipo == TipoOlimpiada.OMIS && md.tipoOlimpiada == TipoOlimpiada.OMI ||
-                            tipo == TipoOlimpiada.OMIP && md.tipoOlimpiada != TipoOlimpiada.OMIP)
+                        if ((tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMISO) && md.tipoOlimpiada == TipoOlimpiada.OMI ||
+                            (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIPO) && md.tipoOlimpiada != TipoOlimpiada.OMIP && md.tipoOlimpiada != TipoOlimpiada.OMIPO)
                                 continue;
 
                         // Descartamos a los que ya se gruaduaron de la escuela en su nivel
                         md.calculaNuevoNivel((int)o.año - año);
                         if (md.nivelEscuela == Institucion.NivelInstitucion.UNIVERSIDAD ||
-                            tipo == TipoOlimpiada.OMIS && md.nivelEscuela == Institucion.NivelInstitucion.PREPARATORIA ||
-                            tipo == TipoOlimpiada.OMIP && md.nivelEscuela != Institucion.NivelInstitucion.PRIMARIA)
+                            (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMISO) && md.nivelEscuela == Institucion.NivelInstitucion.PREPARATORIA ||
+                            (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIPO) && md.nivelEscuela != Institucion.NivelInstitucion.PRIMARIA)
                             continue;
                     }
 

@@ -163,6 +163,13 @@ else
                 </div>
 
                 <div>
+                    <div class="label">¿También OMIPS online?:</div>
+                    <div class="input">
+                        @Html.CheckBoxFor(model => model.alsoOmipsOnline)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">¿Ordenar por puntos?:</div>
                     <div class="input">
                         @Html.CheckBoxFor(model => model.ordenarPorPuntos)
@@ -185,7 +192,13 @@ else
                 </div>
 
                 <div>
-                    <div class="label">IOI:</div>
+                    <div class="label">
+                        @if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI) {
+                            @("IOI:")
+                        } else {
+                            @("OMI:")
+                        }
+                    </div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.relacion)
                         @Html.ValidationMessageFor(model => model.relacion)

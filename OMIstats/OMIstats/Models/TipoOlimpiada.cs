@@ -11,6 +11,8 @@ namespace OMIstats.Models
         OMI,
         IOI,
         OMIP,
-        OMIS
+        OMIS,
+        OMIPO,
+        OMISO
     }
 }

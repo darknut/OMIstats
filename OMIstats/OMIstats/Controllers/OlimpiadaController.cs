@@ -16,7 +16,7 @@ namespace OMIstats.Controllers
         public ActionResult Index(string clave, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (clave == Olimpiada.TEMP_CLAVE)
-                return RedirectTo(Pagina.EDIT_OLIMPIADA, clave);
+                return RedirectTo(Pagina.EDIT_OLIMPIADA, clave + ":" + tipo.ToString());
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
 
@@ -42,7 +42,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Nueva/
 
-        public ActionResult Nueva()
+        public ActionResult Nueva(TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (!estaLoggeado())
             {
@@ -53,11 +53,14 @@ namespace OMIstats.Controllers
             if (!esAdmin())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Olimpiada.nuevaOMI(TipoOlimpiada.OMI);
+            if (tipo == TipoOlimpiada.NULL)
+                return RedirectTo(Pagina.ERROR, 404);
 
-            Log.add(Log.TipoLog.ADMIN, "Nueva olimpiada creada por admin " + getUsuario().nombreCompleto);
+            Olimpiada.nuevaOMI(tipo);
 
-            return RedirectTo(Pagina.EDIT_OLIMPIADA, Olimpiada.TEMP_CLAVE);
+            Log.add(Log.TipoLog.ADMIN, "Nueva " + tipo + " creada por admin " + getUsuario().nombreCompleto);
+
+            return RedirectTo(Pagina.EDIT_OLIMPIADA, Olimpiada.TEMP_CLAVE + ":" + tipo.ToString());
         }
 
         //
@@ -67,7 +70,7 @@ namespace OMIstats.Controllers
         {
             if (!estaLoggeado())
             {
-                guardarParams(Pagina.LOGIN, Pagina.EDIT_OLIMPIADA, clave);
+                guardarParams(Pagina.LOGIN, Pagina.EDIT_OLIMPIADA, clave + ":" + tipo.ToString());
                 return RedirectTo(Pagina.LOGIN);
             }
 
@@ -95,7 +98,7 @@ namespace OMIstats.Controllers
             if (!esAdmin() || omi == null)
                 return RedirectTo(Pagina.HOME);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, omi.tipoOlimpiada);
             if (o == null)
                 return RedirectTo(Pagina.ERROR, 404);
 

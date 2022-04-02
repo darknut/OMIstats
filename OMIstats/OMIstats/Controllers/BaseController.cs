@@ -144,9 +144,12 @@ namespace OMIstats.Controllers
                 case Pagina.EDIT_PROFILE:
                     return RedirectToAction("Edit", "Profile");
                 case Pagina.EDIT_OLIMPIADA:
-                    if (opciones != null)
-                        return RedirectToAction("Edit", "Olimpiada", new { clave = opciones.ToString() });
-                    return RedirectTo(Pagina.ERROR, 404);
+                    {
+                        string[] param = opciones.ToString().Split(':');
+                        if (opciones != null)
+                            return RedirectToAction("Edit", "Olimpiada", new { clave = param[0], tipo = param[1] });
+                        return RedirectTo(Pagina.ERROR, 404);
+                    }
                 case Pagina.ATTENDEES_OMI:
                     if (opciones != null)
                         return RedirectToAction("Attendees", "Olimpiada", new { clave = opciones.ToString() });
