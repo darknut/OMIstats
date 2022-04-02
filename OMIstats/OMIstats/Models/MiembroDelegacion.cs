@@ -973,6 +973,21 @@ namespace OMIstats.Models
                 query.Append(" and md.clase = ");
                 query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
+            if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
+            {
+                query.Append(" and (md.clase = ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                query.Append(" or md.clase = ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                query.Append(" ) ");
+            }
+            else
+            {
+                query.Append(" and md.clase <> ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                query.Append(" and md.clase <> ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+            }
             if (estado != null)
             {
                 query.Append(" and md.estado = ");

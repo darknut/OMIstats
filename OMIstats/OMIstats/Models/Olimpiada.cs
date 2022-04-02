@@ -624,9 +624,16 @@ namespace OMIstats.Models
             omi.logo = this.logo;
             omi.poster = this.poster;
             omi.puntosDetallados = this.puntosDetallados;
-            omi.registroActivo = this.registroActivo;
+            if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
+            {
+                omi.esOnline = true;
+            }
+            else
+            {
+                omi.registroActivo = this.registroActivo;
+                omi.esOnline = this.esOnline;
+            }
             omi.diplomasOnline = this.diplomasOnline;
-            omi.esOnline = this.esOnline || tipoOlimpiada == TipoOlimpiada.OMISO || tipoOlimpiada == TipoOlimpiada.OMIPO;
             omi.registroSedes = this.registroSedes;
             omi.ordenarPorPuntos = this.ordenarPorPuntos;
 
@@ -650,7 +657,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }

@@ -6,6 +6,7 @@
 @{
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
     ViewBag.Title = estados.Count == 0 ? "No se encontraron estados" : "Elige el estado";
+    OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
@@ -19,7 +20,7 @@
 {
     <li class="registro-lista">
         @Html.ActionLink(estado.nombre, "Delegacion", "Registro",
-            new { estado = estado.clave }, new { @class = "nombre" })
+            new { estado = estado.clave, tipo = tipoOlimpiada }, new { @class = "nombre" })
     </li>
 }
 </ul>

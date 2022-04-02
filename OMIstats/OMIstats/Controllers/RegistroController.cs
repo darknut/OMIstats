@@ -47,24 +47,25 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Select
 
-        public ActionResult Select(string omi = null)
+        public ActionResult Select(string omi = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (omi == null)
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes))
                 return RedirectTo(Pagina.HOME);
 
             Persona p = getUsuario();
 
             if (p.esSuperUsuario())
-                return RedirectTo(Pagina.REGISTRO);
+                return RedirectTo(Pagina.REGISTRO, new { tipo = tipo });
 
             List<Estado> estados = p.obtenerEstadosDeDelegado();
             if (estados.Count == 1)
-                return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estados[0].clave });
+                return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estados[0].clave, tipo = tipo });
             ViewBag.estados = estados;
+            ViewBag.tipo = o.tipoOlimpiada;
 
             return View();
         }
@@ -72,13 +73,13 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Delegacion
 
-        public ActionResult Delegacion(string omi = null, string estado = null)
+        public ActionResult Delegacion(string omi = null, string estado = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             if (omi == null)
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
             failSafeViewBag();
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.permisos = true;
@@ -97,7 +98,7 @@ namespace OMIstats.Controllers
                 ViewBag.invitaciones = Archivos.existeArchivo(Archivos.Folder.INVITACIONES, omi + "\\" + estado + "\\" +  e.ISO + "-1.pdf");
             }
 
-            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, TipoOlimpiada.NULL);
+            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, o.tipoOlimpiada);
             ViewBag.omi = o;
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
             if (o.esOnline)
