@@ -980,6 +980,10 @@ namespace OMIstats.Models
 
         public int getMaxParticipantesDeEstado(string estado)
         {
+            if (this.tipoOlimpiada == TipoOlimpiada.OMIPO || this.tipoOlimpiada == TipoOlimpiada.OMISO)
+            {
+                return 25;
+            }
             return estado == this.claveEstado && !this.esOnline ? 8 : 4;
         }
 

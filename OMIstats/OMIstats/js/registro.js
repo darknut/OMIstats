@@ -66,7 +66,7 @@ function llenaClaves(subfijo) {
     var combo = document.getElementById("claveSelect");
     borrarOpciones(combo);
 
-    var lim = estadoSede == subfijo ? 8 : 4;
+    var lim = tipo == "OMISO" || tipo == "OMIPO" ? 25 : estadoSede == subfijo ? 8 : 4;
     for (i = 1; i <= lim; i++) {
         var tempClave = subfijo + "-" + i;
         var opt = generaOpcion(tempClave, tempClave);
