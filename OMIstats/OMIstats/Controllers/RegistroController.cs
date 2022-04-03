@@ -123,7 +123,7 @@ namespace OMIstats.Controllers
         [HttpPost]
         public JsonResult Buscar(string omi, TipoOlimpiada tipo, string query, string estado)
         {
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             if (o == null || !tienePermisos(o.registroActivo, estado))
                 Json("error");
 
@@ -294,7 +294,7 @@ namespace OMIstats.Controllers
             MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL, int sede = -1)
         {
             // Se valida que el usuario tenga permiso para realizar esta acción
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
             if (String.IsNullOrEmpty(estado) ||
                 tipo == TipoOlimpiada.NULL ||
                 tipoAsistente == MiembroDelegacion.TipoAsistente.NULL ||

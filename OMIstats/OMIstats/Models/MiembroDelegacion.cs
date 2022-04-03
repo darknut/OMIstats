@@ -974,7 +974,7 @@ namespace OMIstats.Models
             query.Append(" inner join Estado as e on md.estado = e.clave ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
-            query.Append(" and oculta = 0 ");
+            query.Append(" and (oculta = 0 or omips = 1)");
             if (tipo == TipoAsistente.COMPETIDOR)
             {
                 query.Append(" and md.clase = ");

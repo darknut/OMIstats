@@ -291,8 +291,27 @@ namespace OMIstats.Models
             query.Append(" (select distinct(institucion) from MiembroDelegacion as md ");
             query.Append(" where md.estado =  ");
             query.Append(Cadenas.comillas(estado));
-            query.Append(" and md.clase =  ");
-            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            if (tipoOlimpiada == TipoOlimpiada.OMIP || tipoOlimpiada == TipoOlimpiada.OMIPO)
+            {
+                query.Append(" and (md.clase =  ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIP.ToString().ToLower()));
+                query.Append(" or md.clase =  ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                query.Append(" ) ");
+            }
+            else if (tipoOlimpiada == TipoOlimpiada.OMIS || tipoOlimpiada == TipoOlimpiada.OMISO)
+            {
+                query.Append(" and (md.clase =  ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIS.ToString().ToLower()));
+                query.Append(" or md.clase =  ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                query.Append(" ) ");
+            }
+            else
+            {
+                query.Append(" and md.clase =  ");
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            }
             query.Append(" ) order by nombre ");
 
             db.EjecutarQuery(query.ToString());

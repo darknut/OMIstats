@@ -86,37 +86,37 @@
 {
     <div> Se han guardado los datos con éxito </div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
-    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "limite")
 {
     <div class="errorTextoRojo"> Este estado ya llegó al limite de competidores </div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
-    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "permisos")
 {
     <div class="errorTextoRojo"> No tienes permisos para realizar esta acción </div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
-    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "duplicado")
 {
     <div class="errorTextoRojo"> El usuario que se quiere cambiar tiene clave duplicada, contacta a un administrador </div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
-    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "invalido")
 {
     <div class="errorTextoRojo"> La clave seleccionada es inválida </div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
-    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "persona")
 {
     <div class="errorTextoRojo"> La persona seleccionada es inválida </div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
-    new { omi = omi.numero, estado = estado != null ? estado.clave : null }, new { })
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else
 {
@@ -153,8 +153,8 @@ if (nuevo && !resubmit)
             <select id="tipo" name="tipo" class="shiny-box" @(puedeCambiarSelects ? "" : "disabled") onchange="onOMIselected()">
                 @if (tipo == OMIstats.Models.TipoOlimpiada.OMIPO || tipo == OMIstats.Models.TipoOlimpiada.OMISO)
                 {
-                <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMISO ? "selected" : "")>OMI Secundarias</option>
-                <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIPO ? "selected" : "")>OMI Primarias</option>
+                <option value="OMISO" @(tipo == OMIstats.Models.TipoOlimpiada.OMISO ? "selected" : "")>OMI Secundarias</option>
+                <option value="OMIPO" @(tipo == OMIstats.Models.TipoOlimpiada.OMIPO ? "selected" : "")>OMI Primarias</option>
                 }
                 else
                 {
@@ -365,15 +365,15 @@ if (nuevo && !resubmit)
         <div class="registro-single-control">
             <span class="control-title">Nivel escolar<span class="errorTextoRojo">*</span></span>
             <select name="selectNivelEscolar" id="selectNivelEscolar" class="shiny-box" onchange="onNivelEscolar()">
-                @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP)
+                @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP && tipo != OMIstats.Models.TipoOlimpiada.OMIPO)
                 {
                 <option></option>
                 }
                 <option value="PRIMARIA" @(nivelEscuela == "PRIMARIA" ? "selected" : "")>Primaria</option>
-                @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP)
+                @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP && tipo != OMIstats.Models.TipoOlimpiada.OMIPO)
                 {
                 <option value="SECUNDARIA" @(nivelEscuela == "SECUNDARIA" ? "selected" : "")>Secundaria</option>
-                    if (tipo != OMIstats.Models.TipoOlimpiada.OMIS)
+                    if (tipo != OMIstats.Models.TipoOlimpiada.OMIS && tipo != OMIstats.Models.TipoOlimpiada.OMISO)
                     {
                 <option value="PREPARATORIA" @(nivelEscuela == "PREPARATORIA" ? "selected" : "")>Bachillerato/Preparatoria</option>
                     }
@@ -388,7 +388,8 @@ if (nuevo && !resubmit)
                 <option value="1" @(añoEscuela == 1 ? "selected" : "")>1°</option>
                 <option value="2" @(añoEscuela == 2 ? "selected" : "")>2°</option>
                 <option value="3" @(añoEscuela == 3 ? "selected" : "")>3°</option>
-                @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP || md != null && md.nivelEscuela == OMIstats.Models.Institucion.NivelInstitucion.PRIMARIA)
+                @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP || tipo == OMIstats.Models.TipoOlimpiada.OMIPO ||
+                    (md != null && md.nivelEscuela == OMIstats.Models.Institucion.NivelInstitucion.PRIMARIA))
                 {
                 <option value="4" @(añoEscuela == 4 ? "selected" : "")>4°</option>
                 <option value="5" @(añoEscuela == 5 ? "selected" : "")>5°</option>
