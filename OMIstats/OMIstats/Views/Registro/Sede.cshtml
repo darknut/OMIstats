@@ -18,12 +18,12 @@
 @if (guardado)
 {
     <div> Se han guardado los datos con éxito </div>
-    @Html.ActionLink("Volver", "Select", "Registro")
+    @Html.ActionLink("Volver", "Select", "Registro", new { tipo = omi.tipoOlimpiada }, new { })
 }
 else if (errorInfo == "permisos")
 {
     <div class="errorTextoRojo"> No tienes permisos para realizar esta acción o el registro ya terminó</div>
-    @Html.ActionLink("Volver", "Select", "Registro")
+    @Html.ActionLink("Volver", "Select", "Registro", new { tipo = omi.tipoOlimpiada }, new { })
 } else {
 <form name="sede" id="sede" action="~/Registro/Sede" method="post" enctype="multipart/form-data">
 <div class="panel panel-green datos-padding">
@@ -76,6 +76,7 @@ else if (errorInfo == "permisos")
 <input id="olimpiada" name="omi" type="hidden" value="@omi.numero" />
 <input id="estado" name="estado" type="hidden" value="@estado.clave" />
 <input id="clave" name="clave" type="hidden" value="@Model.clave" />
+<input id="tipoOlimpiada" name="tipoOlimpiada" type="hidden" value="@omi.tipoOlimpiada" />
 <div class="boton-guardar">
     <button id="botonGuardar" class="boton-registro">Guardar</button>
 </div>

@@ -631,10 +631,10 @@ namespace OMIstats.Models
             else
             {
                 omi.registroActivo = this.registroActivo;
+                omi.registroSedes = this.registroSedes;
                 omi.esOnline = this.esOnline;
             }
             omi.diplomasOnline = this.diplomasOnline;
-            omi.registroSedes = this.registroSedes;
             omi.ordenarPorPuntos = this.ordenarPorPuntos;
 
             omi.guardarDatos(clave);
@@ -981,9 +981,7 @@ namespace OMIstats.Models
         public int getMaxParticipantesDeEstado(string estado)
         {
             if (this.tipoOlimpiada == TipoOlimpiada.OMIPO || this.tipoOlimpiada == TipoOlimpiada.OMISO)
-            {
                 return 25;
-            }
             return estado == this.claveEstado && !this.esOnline ? 8 : 4;
         }
 

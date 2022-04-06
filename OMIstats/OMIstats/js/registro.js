@@ -411,10 +411,8 @@ function terminarRegistro(value) {
     if (typeof (estado) == "undefined")
         return;
 
-    var text = value ?
-        "¿Desea marcar el registro como 'No terminado'? Esto te habilitará el registro de nuevo" :
-        "¿Desea marcar el registro como 'Terminado'? Esto te cerrará el registro, pero se puede volver a abrir en caso de error.";
-    var address = "Terminar?omi=" + omi + "&estado=" + estado;
+    var text = "¿Deseas terminar el registro? Para volverlo a abrir es necesario contactar al COMI";
+    var address = "Terminar?omi=" + omi + "&estado=" + estado + "&tipo=" + tipoRegistro;
 
     if (confirm(text))
         redirige(ajaxUrl, address);

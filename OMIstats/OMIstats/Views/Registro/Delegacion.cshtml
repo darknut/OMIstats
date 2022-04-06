@@ -68,7 +68,7 @@
 @if (errorPermisos)
 {
     <div class="errorTextoRojo"> No tienes permisos para realizar esta acción </div>
-    @Html.ActionLink("Volver", "Select", "Registro", new { }, new { })
+    @Html.ActionLink("Volver", "Select", "Registro", new { tipo = omi.tipoOlimpiada }, new { })
 } else
 {
 <table>
@@ -261,7 +261,7 @@ if (omi.esOnline)
         <td>
             @if(usuario.esSuperUsuario() || !registroTerminado)
             {
-            @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave }, new { })
+            @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave, tipo = omi.tipoOlimpiada }, new { })
             if (miembrosEnSede.Count == 0)
             {
             <a onclick="eliminarSede(@sedes[i].clave, '@sedes[i].nombre')" class="a-sin-href">Eliminar</a>
@@ -289,7 +289,7 @@ if (omi.esOnline)
     }
     if (!usuario.esSuperUsuario() && omi.registroSedes && !registroTerminado)
     {
-        @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave }, new { })
+        @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave, tipo = omi.tipoOlimpiada }, new { })
     }
 
     if (!usuario.esSuperUsuario())
@@ -306,7 +306,10 @@ if (omi.esOnline)
         <br />
         <br />
         <br />
-        <input onclick="terminarRegistro(@registroTerminado)" type="button" value="@(registroTerminado ? "Marcar registro de estado como 'No terminado'" : "Marcar registro de estado como 'Terminado'")" class="@(registroTerminado ? "verde" : "errorTextoRojo")"/>
+        if(!registroTerminado)
+        {
+        <input onclick="terminarRegistro(@registroTerminado)" type="button" value="Terminar registro" class="errorTextoRojo"/>
+        }
     }
 }
 }

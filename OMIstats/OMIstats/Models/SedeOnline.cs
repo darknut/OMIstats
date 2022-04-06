@@ -14,6 +14,7 @@ namespace OMIstats.Models
         public int clave { get; set; }
         public string estado { get; set; }
         public string omi { get; set; }
+        public TipoOlimpiada tipoOlimpiada { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre")]
         [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
@@ -64,6 +65,7 @@ namespace OMIstats.Models
             clave = 0;
             estado = "";
             omi = "";
+            tipoOlimpiada = TipoOlimpiada.NULL;
             nombre = "";
             supervisor = "";
             telefono = "";
@@ -81,6 +83,7 @@ namespace OMIstats.Models
             clave = DataRowParser.ToInt(r["clave"]);
             nombre = DataRowParser.ToString(r["nombre"]);
             omi = DataRowParser.ToString(r["olimpiada"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
             estado = DataRowParser.ToString(r["estado"]);
             supervisor = DataRowParser.ToString(r["supervisor"]);
             telefono = DataRowParser.ToString(r["telefono"]);
@@ -122,6 +125,8 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(telefono3));
             query.Append(" ,");
             query.Append(Cadenas.comillas(correo3));
+            query.Append(" ,");
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
@@ -136,6 +141,8 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(estado));
             query.Append(" , olimpiada = ");
             query.Append(Cadenas.comillas(omi));
+            query.Append(" , clase = ");
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString()));
             query.Append(" , nombre = ");
             query.Append(Cadenas.comillas(nombre));
             query.Append(" , supervisor = ");
@@ -164,6 +171,8 @@ namespace OMIstats.Models
 
         public void guardar()
         {
+            tipoOlimpiada = obtenerTipo(tipoOlimpiada);
+
             if (clave == 0)
                 nuevo();
             else
@@ -208,14 +217,27 @@ namespace OMIstats.Models
             }
         }
 
-        public static List<SedeOnline> obtenerSedes(string omi, string estado)
+        private static TipoOlimpiada obtenerTipo(TipoOlimpiada tipo)
+        {
+            if (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIS)
+                return TipoOlimpiada.OMI;
+            if (tipo == TipoOlimpiada.OMISO)
+                return TipoOlimpiada.OMIPO;
+            return tipo;
+        }
+
+        public static List<SedeOnline> obtenerSedes(string omi, string estado, TipoOlimpiada tipoOlimpiada)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
             List<SedeOnline> list = new List<SedeOnline>();
 
+            tipoOlimpiada = obtenerTipo(tipoOlimpiada);
+
             query.Append(" select * from SedeOnline where olimpiada = ");
             query.Append(Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString()));
             if (!String.IsNullOrEmpty(estado))
             {
                 query.Append(" and estado = ");
