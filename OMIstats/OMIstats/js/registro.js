@@ -407,12 +407,12 @@ function onNivelEscolar() {
     }
 }
 
-function terminarRegistro(value) {
+function terminarRegistro(value, tipoOlimpiada) {
     if (typeof (estado) == "undefined")
         return;
 
     var text = "¿Deseas terminar el registro? Para volverlo a abrir es necesario contactar al COMI";
-    var address = "Terminar?omi=" + omi + "&estado=" + estado + "&tipo=" + tipoRegistro;
+    var address = "Terminar?omi=" + omi + "&estado=" + estado + "&tipo=" + tipoOlimpiada;
 
     if (confirm(text))
         redirige(ajaxUrl, address);
