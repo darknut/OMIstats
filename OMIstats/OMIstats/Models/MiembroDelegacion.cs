@@ -916,9 +916,8 @@ namespace OMIstats.Models
         /// Regresa las participaciones del usuario mandado como parámetro que no son como competidor
         /// </summary>
         /// <param name="persona">La clave de la persona deseada</param>
-        /// <param name="filtrarOmipos">Si hay que ignorar omipos</param>
         /// <returns>La lista de participaciones</returns>
-        public static List<MiembroDelegacion> obtenerParticipaciones(int persona, bool filtrarOmipos = false)
+        public static List<MiembroDelegacion> obtenerParticipaciones(int persona)
         {  // -TODO- Cuando agregue IOI, hay que revisitar este método
             List<MiembroDelegacion> lista = new List<MiembroDelegacion>();
 
@@ -935,13 +934,6 @@ namespace OMIstats.Models
             query.Append(persona);
             query.Append(" and md.tipo <> ");
             query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
-            if (filtrarOmipos)
-            {
-                query.Append(" and md.clase <> ");
-                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
-                query.Append(" and md.clase <> ");
-                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
-            }
             query.Append(" order by o.año asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -1307,6 +1299,7 @@ namespace OMIstats.Models
                     query.Append(Cadenas.comillas(omi));
                     query.Append(")");
                 }
+                query.Append(" and (oculta = 0 or omips = 1)");
 
                 db.EjecutarQuery(query.ToString());
                 DataTable table = db.getTable();

@@ -456,12 +456,13 @@ namespace OMIstats.Controllers
                 if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
                 {
                     if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
-                        if (MiembroDelegacion.obtenerParticipaciones(p.clave, filtrarOmipos: true).Count == 0)
+                    {
+                        if (persona == 0)
                             p.oculta = true;
-                        else
-                            p.oculta = false;
-                    else
+                    } else
+                    {
                         p.oculta = false;
+                    }
                 }
 
                 p.foto = guardaFoto(file, p.clave);
