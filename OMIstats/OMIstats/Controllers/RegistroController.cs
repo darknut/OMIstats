@@ -53,6 +53,15 @@ namespace OMIstats.Controllers
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
+            if (o == null || !(o.registroActivo || o.registroSedes))
+            {
+                Olimpiada op = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIPO);
+                if (op != null && (op.registroActivo || op.registroSedes))
+                {
+                    tipo = TipoOlimpiada.OMIPO;
+                    o = op;
+                }
+            }
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes))
                 return RedirectTo(Pagina.HOME);
 

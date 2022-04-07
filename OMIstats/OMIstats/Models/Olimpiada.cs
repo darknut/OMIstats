@@ -966,9 +966,12 @@ namespace OMIstats.Models
             return false;
         }
 
-        public static Olimpiada obtenerMasReciente(bool yaEmpezada = true)
+        public static Olimpiada obtenerMasReciente(bool yaEmpezada = true, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
-            List<Olimpiada> omis = obtenerOlimpiadas(TipoOlimpiada.OMI);
+            List<Olimpiada> omis = obtenerOlimpiadas(tipo);
+
+            if (omis.Count == 0)
+                return new Olimpiada();
 
             if (yaEmpezada)
                 for (int i = 0; i < omis.Count; i++)
