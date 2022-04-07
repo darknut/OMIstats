@@ -1236,11 +1236,26 @@ namespace OMIstats.Models
                 query.Append(o.año - 3);
                 query.Append(" and md.tipo ");
                 if (tipo == TipoOlimpiada.NULL)
-                    query.Append(" <> '");
+                    query.Append(" <> ");
                 else
-                    query.Append(" = '");
-                query.Append(TipoAsistente.COMPETIDOR.ToString().ToLower());
-                query.Append("' group by p.clave ");
+                    query.Append(" = ");
+                query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+                if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+                {
+                    query.Append(" and (md.clase = ");
+                    query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                    query.Append(" or md.clase = ");
+                    query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                    query.Append(" ) ");
+                }
+                else
+                {
+                    query.Append(" and md.clase <> ");
+                    query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                    query.Append(" and md.clase <> ");
+                    query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                }
+                query.Append(" group by p.clave ");
                 query.Append(" order by reciente desc ");
 
                 db.EjecutarQuery(query.ToString());
