@@ -424,7 +424,7 @@ namespace OMIstats.Controllers
                 p.omips = true;
             }
 
-            List<MiembroDelegacion> miembrosExistentes = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.OMI);
+            List<MiembroDelegacion> miembrosExistentes = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, tipo);
             bool registroCerrado = false;
             if (miembrosExistentes.Count > 0)
                 registroCerrado = miembrosExistentes[0].cerrado;
@@ -749,10 +749,14 @@ namespace OMIstats.Controllers
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
                 return RedirectTo(Pagina.HOME);
 
-            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, tipo)[0];
-            MiembroDelegacion.cerrarOAbrirRegistro(omi, estado, !md.cerrado);
 
-            return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
+            MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, tipo)[0];
+            if (md.cerrado && !getUsuario().esSuperUsuario())
+                return RedirectTo(Pagina.HOME);
+
+            MiembroDelegacion.cerrarOAbrirRegistro(omi, estado, !md.cerrado, tipo);
+
+            return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado, tipo = tipo });
         }
 
         //

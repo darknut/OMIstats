@@ -1512,7 +1512,7 @@ namespace OMIstats.Models
             }
         }
 
-        public static void cerrarOAbrirRegistro(string omi, string estado, bool cerrado)
+        public static void cerrarOAbrirRegistro(string omi, string estado, bool cerrado, TipoOlimpiada tipo)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -1523,6 +1523,21 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(omi));
             query.Append(" and estado = ");
             query.Append(Cadenas.comillas(estado));
+            if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+            {
+                query.Append(" and (clase = ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                query.Append(" or clase = ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                query.Append(" ) ");
+            }
+            else
+            {
+                query.Append(" and clase <> ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                query.Append(" and clase <> ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+            }
 
             db.EjecutarQuery(query.ToString());
         }
