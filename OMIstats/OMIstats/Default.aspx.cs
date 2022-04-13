@@ -11,7 +11,12 @@ namespace OMIstats
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Response.Redirect("Olimpiada/Resultados");
+            string guid = Page.Request.Params.Get("GUID");
+            Response.Redirect("Olimpiada/Resultados" + (
+                guid != null ?
+                ("?guid=" + guid)
+                : ""
+                ));
         }
     }
 }

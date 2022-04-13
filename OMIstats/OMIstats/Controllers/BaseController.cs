@@ -265,5 +265,21 @@ namespace OMIstats.Controllers
             ViewBag.errorEstado = false;
             ViewBag.errorGuardar = false;
         }
+
+        protected void tryLogIn(string GUID)
+        {
+            Usuario usuario = Usuario.obtenerUsuarioConGUID(GUID);
+
+            if (usuario != null)
+            {
+                Persona persona = Persona.obtenerPersonaDeUsuario(usuario.Id.ToString());
+                if (persona != null)
+                {
+                    // Log in exitoso
+                    setUsuario(persona);
+                    usuario.borrarGUID();
+                }
+            }
+        }
     }
 }

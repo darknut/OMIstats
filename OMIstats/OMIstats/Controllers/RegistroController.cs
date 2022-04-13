@@ -47,8 +47,11 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Select
 
-        public ActionResult Select(string omi = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult Select(string omi = null, TipoOlimpiada tipo = TipoOlimpiada.OMI, string GUID = null)
         {
+            if (GUID != null)
+                tryLogIn(GUID);
+
             if (omi == null)
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 

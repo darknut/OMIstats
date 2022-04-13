@@ -288,8 +288,10 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Resultados/
 
-        public ActionResult Resultados(string clave = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult Resultados(string clave = null, TipoOlimpiada tipo = TipoOlimpiada.OMI, string GUID = null)
         {
+            if (GUID != null)
+                tryLogIn(GUID);
             Olimpiada o = null;
 
             if (clave == null)
