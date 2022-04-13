@@ -18,6 +18,8 @@
     {
         if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
             tipo != OMIstats.Models.TipoOlimpiada.NULL &&
+            tipo != OMIstats.Models.TipoOlimpiada.OMIPO &&
+            tipo != OMIstats.Models.TipoOlimpiada.OMISO &&
             tipoOlimpiada != tipo)
         {
             @Html.ActionLink(tipo.ToString(), "Index", "Problemas",
