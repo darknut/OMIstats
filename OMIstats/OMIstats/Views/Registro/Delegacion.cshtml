@@ -176,7 +176,7 @@
         @if (usuario.esSuperUsuario())
         {
             <td>
-            @Html.ActionLink("Bajar csv", "GetCSV", "Registro", new { omi = omi.numero }, new { })
+            @Html.ActionLink("Bajar csv", "GetCSV", "Registro", new { omi = omi.numero, tipo = omi.tipoOlimpiada }, new { })
             </td>
         }
         @if(usuario.esAdmin())

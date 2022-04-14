@@ -1158,6 +1158,10 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(omi));
             query.Append(" and md.tipo = ");
             query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(" and md.clase <> ");
+            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+            query.Append(" and md.clase <> ");
+            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
             query.Append(" order by persona ");
 
             db.EjecutarQuery(query.ToString());
