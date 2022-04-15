@@ -310,7 +310,9 @@ else
     {
 <th class="bottom-border right-border table-header-clickable">Total</th>
     }
-<th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">Medalla</th>
+<th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">
+@(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO ||
+Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO ? "Resultado" : "Medalla")</th>
 <th class="bottom-border table-header-clickable">Escuela</th>
 </tr>
 </thead>
@@ -393,18 +395,29 @@ else
 {
 <img src="@Url.Content("~/img/estados/" + estado.clave + ".png")" title="Invitado extranjero de @(estado.nombre)" class="karel-png"/>
 }
+@if (datos.persona.oculta)
+{
+@datos.persona.nombreCompleto
+} else
+{
 <a class="nombre" href="@Url.Content("~/Profile/view?usuario=" + datos.persona.usuario + "&tipo=" + Model.tipoOlimpiada)">@datos.persona.nombreCompleto</a>
+}
 </span>
     }
 </td>
 <td class="@("table-td center right-border " + claseCSS)">
-    @if (mostrar)
+@if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO || Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO)
+{
+<span>@datos.clave</span>
+}
+else {
+    if (mostrar)
     {
 <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=" + datos.estado)">
 @if (tableManager.faltaClave())
 {
 <span>
-        @datos.estado
+@datos.estado
 </span>
 }
 else
@@ -420,6 +433,7 @@ else
 }
 </a>
     }
+}
 </td>
 @if (Model.mostrarResultadosPorProblema || secretScoreboard)
 {
@@ -498,11 +512,18 @@ else
 <td class="@("table-td break-word escuela-td " + claseCSS)">
     @if (mostrar && datos.escuela != null)
     {
+        if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO || Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO)
+        {
+@datos.escuela.nombreCorto
+        }
+        else
+        {
 <span>
 <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + Model.tipoOlimpiada)">
 @datos.escuela.nombreCorto
 </a>
 </span>
+        }
     }
 </td>
 </tr>

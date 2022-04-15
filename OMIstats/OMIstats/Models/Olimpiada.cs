@@ -431,7 +431,9 @@ namespace OMIstats.Models
 
             if (numero != TEMP_CLAVE &&
                 (tipoOlimpiada == TipoOlimpiada.OMIP ||
-                tipoOlimpiada == TipoOlimpiada.OMIS))
+                tipoOlimpiada == TipoOlimpiada.OMIS ||
+                tipoOlimpiada == TipoOlimpiada.OMIPO ||
+                tipoOlimpiada == TipoOlimpiada.OMISO))
                 omisActualNumber = (Int32.Parse(numero) - OMIS_SIN_OMIPS).ToString();
 
             datosGenerales = Problema.obtenerProblema(numero, tipoOlimpiada, 0, 0);
@@ -623,16 +625,17 @@ namespace OMIstats.Models
             omi.reporte = this.reporte;
             omi.logo = this.logo;
             omi.poster = this.poster;
-            omi.puntosDetallados = this.puntosDetallados;
             if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
             {
                 omi.esOnline = true;
+                omi.puntosDetallados = false;
             }
             else
             {
                 omi.registroActivo = this.registroActivo;
                 omi.registroSedes = this.registroSedes;
                 omi.esOnline = this.esOnline;
+                omi.puntosDetallados = this.puntosDetallados;
             }
             omi.diplomasOnline = this.diplomasOnline;
             omi.ordenarPorPuntos = this.ordenarPorPuntos;
@@ -891,7 +894,8 @@ namespace OMIstats.Models
             mostrarResultadosTotales = puntosMaximos > PUNTOS_MINIMOS_CONOCIDOS;
 
             // Calculamos el medallero y lo guardamos en la base
-            Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
+            if (tipoOlimpiada != TipoOlimpiada.OMIPO && tipoOlimpiada != TipoOlimpiada.OMISO)
+                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
 
             // Guardamos los datos en la base
             guardarDatos();

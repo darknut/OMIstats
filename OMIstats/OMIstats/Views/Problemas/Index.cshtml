@@ -10,7 +10,20 @@
     List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
     OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
-    ViewBag.Title = "Lista de problemas";
+    string title = "Lista de problemas";
+    if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIP || tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO)
+    {
+        title += " de primaria";
+    }
+    if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIS || tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO)
+    {
+        title += " de secundaria";
+    }
+    if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO || tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO)
+    {
+        title += " (online)";
+    }
+    ViewBag.Title = title;
 }
 
 <div class="submenu">
@@ -18,12 +31,32 @@
     {
         if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
             tipo != OMIstats.Models.TipoOlimpiada.NULL &&
-            tipo != OMIstats.Models.TipoOlimpiada.OMIPO &&
-            tipo != OMIstats.Models.TipoOlimpiada.OMISO &&
             tipoOlimpiada != tipo)
         {
-            @Html.ActionLink(tipo.ToString(), "Index", "Problemas",
-                new { tipo = tipo.ToString() }, new { @class = "mini-boton" })
+            if (tipo == OMIstats.Models.TipoOlimpiada.OMIPO ||
+                (tipo == OMIstats.Models.TipoOlimpiada.OMISO &&
+                 tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO))
+            {
+            <br />
+            <br />
+            }
+
+            if (tipo == OMIstats.Models.TipoOlimpiada.OMIPO)
+            {
+                @Html.ActionLink("OMIP Online", "Index", "Problemas",
+                    new { tipo = tipo.ToString() }, new { @class = "mini-boton" })
+            } else
+            {
+                if (tipo == OMIstats.Models.TipoOlimpiada.OMISO)
+                {
+                    @Html.ActionLink("OMIS Online", "Index", "Problemas",
+                        new { tipo = tipo.ToString() }, new { @class = "mini-boton" })
+                } else
+                {
+                    @Html.ActionLink(tipo.ToString(), "Index", "Problemas",
+                        new { tipo = tipo.ToString() }, new { @class = "mini-boton" })
+                }
+            }
         }
     }
 </div>

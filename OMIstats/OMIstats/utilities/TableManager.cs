@@ -17,6 +17,7 @@ namespace OMIstats.Utilities
         private const string CLASE_PLATA = "fondoPlata";
         private const string CLASE_ORO = "fondoOro";
         private const string CLASE_PENDIENTE = "fondoPendiente";
+        private const string CLASE_CLASIFICADO = "fondoPendiente";
 
         private const string IMG_ORO = "/img/oro.png";
         private const string IMG_PLATA = "/img/plata.png";
@@ -99,17 +100,19 @@ namespace OMIstats.Utilities
                     return CLASE_BRONCE;
                 case Resultados.TipoMedalla.PLATA:
                     return CLASE_PLATA;
-                case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_1:
+                case Resultados.TipoMedalla.ORO:
+                case Resultados.TipoMedalla.ORO_1:
                     return CLASE_ORO;
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_2:
+                case Resultados.TipoMedalla.ORO_2:
                     if (top3)
                         return CLASE_PLATA;
                     return CLASE_ORO;
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                case Resultados.TipoMedalla.ORO_3:
                     if (top3)
                         return CLASE_BRONCE;
                     return CLASE_ORO;
+                case Resultados.TipoMedalla.CLASIFICADO:
+                    return CLASE_CLASIFICADO;
             }
 
             return String.Empty;
@@ -166,11 +169,12 @@ namespace OMIstats.Utilities
                     return mostrarPrimeros ? ORO_1 : ORO;
                 case Resultados.TipoMedalla.ORO_2:
                     return mostrarPrimeros ? ORO_2 : ORO;
-                case OMIstats.Models.Resultados.TipoMedalla.ORO_3:
+                case Resultados.TipoMedalla.ORO_3:
                     return mostrarPrimeros ? ORO_3 : ORO;
-                case OMIstats.Models.Resultados.TipoMedalla.ORO:
-                case OMIstats.Models.Resultados.TipoMedalla.PLATA:
-                case OMIstats.Models.Resultados.TipoMedalla.BRONCE:
+                case Resultados.TipoMedalla.ORO:
+                case Resultados.TipoMedalla.PLATA:
+                case Resultados.TipoMedalla.BRONCE:
+                case Resultados.TipoMedalla.CLASIFICADO:
                     return currentResultados.medalla.ToString();
                 default:
                     return NO_MEDALLA;
@@ -222,7 +226,9 @@ namespace OMIstats.Utilities
             string enlace = "";
             if (currentOMI != null &&
                 (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIP ||
-                 currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS))
+                 currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS ||
+                 currentOMI.tipoOlimpiada == TipoOlimpiada.OMIPO ||
+                 currentOMI.tipoOlimpiada == TipoOlimpiada.OMISO))
             {
                 enlace = currentOMI.omisActualNumber;
             }
@@ -231,7 +237,17 @@ namespace OMIstats.Utilities
                 enlace = olimpiada;
             }
 
-            enlace += "ª " + (currentOMI != null ? currentOMI.tipoOlimpiada.ToString() : "OMI");
+            string nombre = "OMI";
+            if (currentOMI != null)
+            {
+                if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIPO)
+                    nombre = "OMIP Online";
+                else if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMISO)
+                    nombre = "OMIS Online";
+                else
+                    nombre = currentOMI.tipoOlimpiada.ToString();
+            }
+            enlace += "ª " + nombre;
             if (incluirCiudad && currentOMI != null && !currentOMI.esOnline)
             {
                 enlace += ": " + (currentOMI.claveEstado == "MDF" ? "" : currentOMI.ciudad + ", ");
