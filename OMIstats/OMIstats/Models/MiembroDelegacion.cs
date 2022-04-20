@@ -1592,6 +1592,33 @@ namespace OMIstats.Models
 
             return estados;
         }
+
+        /// <summary>
+        /// Registra a todos los clasificados de la OMIP y OMIS online en la
+        /// nacional
+        /// </summary>
+        /// <remarks>Si el competidor ya está registrado en la nacional, no hace nada</remarks>
+        public static void registrarGanadoresOMIPOS(string numero, TipoOlimpiada tipoOlimpiada)
+        {
+            List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
+            TipoOlimpiada grande = tipoOlimpiada == TipoOlimpiada.OMIPO ? TipoOlimpiada.OMIP : TipoOlimpiada.OMIS;
+            List<MiembroDelegacion> competidoresGrande = MiembroDelegacion.obtenerMiembrosDelegacion(numero, null, grande, TipoAsistente.COMPETIDOR);
+            foreach (Resultados r in resultados)
+            {
+                if (r.medalla == Resultados.TipoMedalla.CLASIFICADO)
+                {
+                    MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(numero, tipoOlimpiada, r.clave)[0];
+                    MiembroDelegacion problable = competidoresGrande.FirstOrDefault((MiembroDelegacion miembro) => md.claveUsuario == miembro.claveUsuario);
+                    if (problable == null)
+                    {
+                        md.tipoOlimpiada = grande;
+                        md.clave = "";
+                        md.nuevo();
+                        md.guardarDatosEscuela();
+                    }
+                }
+            }
+        }
 #endif
     }
 }

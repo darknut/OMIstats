@@ -896,6 +896,8 @@ namespace OMIstats.Models
             // Calculamos el medallero y lo guardamos en la base
             if (tipoOlimpiada != TipoOlimpiada.OMIPO && tipoOlimpiada != TipoOlimpiada.OMISO)
                 Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
+            else
+                MiembroDelegacion.registrarGanadoresOMIPOS(numero, tipoOlimpiada);
 
             // Guardamos los datos en la base
             guardarDatos();
