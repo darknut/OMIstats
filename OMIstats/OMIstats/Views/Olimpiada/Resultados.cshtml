@@ -530,7 +530,7 @@ else
     }
 }
 </tbody>
-    @if (!isLive && !secretScoreboard)
+    @if (!isLive && !secretScoreboard && Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIPO && Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMISO)
     {
 <tfoot>
 <tr>
