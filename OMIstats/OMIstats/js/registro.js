@@ -66,9 +66,13 @@ function llenaClaves(subfijo) {
     var combo = document.getElementById("claveSelect");
     borrarOpciones(combo);
 
-    var lim = tipoRegistro == "OMISO" || tipoRegistro == "OMIPO" ? 25 : estadoSede == subfijo ? 8 : 4;
+    var isOMIPOS = tipoRegistro == "OMISO" || tipoRegistro == "OMIPO";
+    var lim = isOMIPOS ? 25 : estadoSede == subfijo ? 8 : 4;
     for (i = 1; i <= lim; i++) {
-        var tempClave = subfijo + "-" + i;
+        var padd = "";
+        if (isOMIPOS && i < 10)
+            padd = "0";
+        var tempClave = subfijo + "-" + padd + i;
         var opt = generaOpcion(tempClave, tempClave);
         if (tempClave == currentClave)
             opt.selected = true;

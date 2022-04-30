@@ -483,6 +483,7 @@ namespace OMIstats.Models
                 md.tipo == TipoAsistente.NULL ||
                 md.clave.Length == 0)
                 return (int) TipoError.FALTAN_CAMPOS;
+            bool seCreoUsuario = false;
 
             // Verificar que exista el usuario
             if (md.usuario.Length == 0)
@@ -508,6 +509,7 @@ namespace OMIstats.Models
                         foto = Archivos.FotoInicial.KAREL;
 
                     p.nuevoUsuario(foto);
+                    seCreoUsuario = true;
                 }
             }
             else
@@ -546,14 +548,25 @@ namespace OMIstats.Models
                 p.correo = md.correo;
             }
 
-            if ((tipoOlimpiada == TipoOlimpiada.OMIP || tipoOlimpiada == TipoOlimpiada.OMIS) &&
+            if ((tipoOlimpiada == TipoOlimpiada.OMIP || tipoOlimpiada == TipoOlimpiada.OMIS ||
+                 tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO) &&
                 md.tipo == TipoAsistente.COMPETIDOR)
             {
                 p.omips = true;
             }
 
-            if (md.tipo == TipoAsistente.COMPETIDOR)
-                p.oculta = false;
+            if (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            {
+                if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
+                {
+                    if (seCreoUsuario)
+                        p.oculta = true;
+                }
+                else
+                {
+                    p.oculta = false;
+                }
+            }
 
             if (!p.guardarDatos())
                 return (int) TipoError.CAMPOS_USUARIO;

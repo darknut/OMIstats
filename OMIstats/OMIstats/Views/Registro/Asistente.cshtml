@@ -217,7 +217,12 @@ if (nuevo && !resubmit)
                 int maxParticipantes = omi.getMaxParticipantesDeEstado(estado.clave);
                 for (int i = 1; i <= maxParticipantes; i++)
                 {
-                    var clave = estado.ISO + "-" + i;
+                    string padd = "";
+                    if (maxParticipantes >= 10 && i < 10)
+                    {
+                        padd = "0";
+                    }
+                    var clave = estado.ISO + "-" + padd + i;
                 <option value="@(clave)" @((claveDisponible == clave) ? "selected" : "")>@(clave)</option>
                 }
             }
