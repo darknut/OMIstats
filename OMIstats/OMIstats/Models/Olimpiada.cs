@@ -38,6 +38,8 @@ namespace OMIstats.Models
         private const string APPLICATION_OMI = "OlimpiadasOMI";
         private const string APPLICATION_OMIS = "OlimpiadasOMIS";
         private const string APPLICATION_OMIP = "OlimpiadasOMIP";
+        private const string APPLICATION_OMIPO = "OlimpiadasOMIPO";
+        private const string APPLICATION_OMISO = "OlimpiadasOMISO";
 
         [Required(ErrorMessage = "Campo requerido")]
         [MaxLength(30, ErrorMessage = "El tamaño máximo es 30 caracteres")]
@@ -300,6 +302,10 @@ namespace OMIstats.Models
                     return APPLICATION_OMIP;
                 case TipoOlimpiada.OMIS:
                     return APPLICATION_OMIS;
+                case TipoOlimpiada.OMIPO:
+                    return APPLICATION_OMIPO;
+                case TipoOlimpiada.OMISO:
+                    return APPLICATION_OMISO;
             }
 
             return "";
