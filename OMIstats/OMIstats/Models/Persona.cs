@@ -28,7 +28,8 @@ namespace OMIstats.Models
         public enum LugarGuardado
         {
             PROFILE,
-            REGISTRO
+            REGISTRO,
+            AUTO
         }
 
         public int clave { get; set; }

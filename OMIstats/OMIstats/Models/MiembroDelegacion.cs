@@ -1622,6 +1622,12 @@ namespace OMIstats.Models
                 {
                     MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(numero, tipoOlimpiada, r.clave)[0];
                     MiembroDelegacion problable = competidoresGrande.FirstOrDefault((MiembroDelegacion miembro) => md.claveUsuario == miembro.claveUsuario);
+                    Persona p = Persona.obtenerPersonaConClave(md.claveUsuario);
+                    if (p.oculta)
+                    {
+                        p.oculta = false;
+                        p.guardarDatos(lugarGuardado: Persona.LugarGuardado.AUTO);
+                    }
                     if (problable == null)
                     {
                         md.tipoOlimpiada = grande;
