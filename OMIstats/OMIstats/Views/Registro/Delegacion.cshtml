@@ -97,14 +97,13 @@
                 {
                 <td class="celda-estado">
                     @OMIstats.Models.Estado.obtenerEstadoConClave(miembro.estado).nombre
-                    <br />
                     @if(miembro.cerrado)
                     {
-                    <img src="~/img/check.svg" title="Registro terminado, click para reabrir" onclick="terminarRegistro('@omi.tipoOlimpiada','@miembro.estado')" style="cursor:pointer"/>
+                    <img src="~/img/check.svg" title="Registro terminado, click para reabrir" onclick="terminarRegistro('@omi.tipoOlimpiada','@miembro.estado')" style="cursor:pointer;height:20px"/>
                     }
                     else
                     {
-                    <img src="~/img/close.png" title="Cerrar registro" onclick="terminarRegistro('@omi.tipoOlimpiada','@miembro.estado')" style="cursor:pointer"/>
+                    <img src="~/img/close.png" title="Cerrar registro" onclick="terminarRegistro('@omi.tipoOlimpiada','@miembro.estado')" style="cursor:pointer;height:20px"/>
                     }
                     @{
                         lastEstado = miembro.estado;
