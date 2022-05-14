@@ -1370,9 +1370,13 @@ namespace OMIstats.Models
             {
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
                 int maxUsers = o.getMaxParticipantesDeEstado(estado);
+                bool isOMIPOS = tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO;
                 for (int i = 1; i <= maxUsers; i++)
                 {
-                    var testClave = prefijo + "-" + i;
+                    var padd = "";
+                    if (isOMIPOS && i < 10)
+                        padd = "0";
+                    var testClave = prefijo + "-" + padd + i;
                     if (!miembros.Contains(testClave))
                         return testClave;
                 }
