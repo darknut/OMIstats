@@ -179,7 +179,7 @@ namespace OMIstats.Controllers
             Log.add(Log.TipoLog.REGISTRO, "Usuario " + getUsuario().nombreCompleto + " elimino al asistente con clave " +
                 md.clave + " del estado " + md.estado + " en la categoría " + md.tipoOlimpiada.ToString());
 
-            return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado });
+            return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estado, tipo = tipo });
         }
 
         private void failSafeViewBag()
