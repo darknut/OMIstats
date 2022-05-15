@@ -211,7 +211,7 @@ namespace OMIstats.Models
                 md.claveUsuario = p.clave;
                 md.estado = estado;
                 md.tipo = MiembroDelegacion.TipoAsistente.SUPERVISOR;
-                md.tipoOlimpiada = TipoOlimpiada.OMI;
+                md.tipoOlimpiada = this.tipoOlimpiada;
                 md.olimpiada = omi;
                 md.nuevo();
             }
