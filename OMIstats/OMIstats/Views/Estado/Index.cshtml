@@ -30,7 +30,10 @@
         OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
         OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
     }
-    @Html.ActionLink("Desempeño", "Desempeño", "Estado", new { clave = Model.clave }, new { @class = "mini-boton" })
+    @if(!Model.extranjero)
+    {
+        @Html.ActionLink("Desempeño", "Desempeño", "Estado", new { clave = Model.clave }, new { @class = "mini-boton" })
+    }
     <br />
     @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
     {
@@ -86,6 +89,8 @@
     <div class="datosEstado tituloEstado">
         <div>
             <h2 class="titulo">@Model.nombre</h2>
+            @if(!Model.extranjero)
+            {
             <div class="medallero">
                 <img src="@Url.Content("~/img/" + tipoOlimpiada.ToString() + ".png")" class="tipoOMI"/>
                 <div class="separador">:</div>
@@ -102,6 +107,7 @@
                     <div>@ViewBag.medallas.bronces</div>
                 </div>
             </div>
+            }
         </div>
     </div>
 </div>
@@ -166,7 +172,7 @@
                     }
                 </td>
                 <td class="@("table-td right-border center " + claseCSS)">
-                    @if (mostrar && datos.lugar > 0 && !descalificado)
+                    @if (!Model.extranjero && mostrar && datos.lugar > 0 && !descalificado)
                     {
                         @(datos.lugar)
                         if (datos.ioi == "Y")

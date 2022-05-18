@@ -13,14 +13,16 @@
     List<OMIstats.Models.Olimpiada> olimpiadas = ViewBag.olimpiadas;
     HashSet<string> olimpiadasParaEstado = ViewBag.olimpiadasParaEstado;
     tableManager.setCurrentOMI(Model);
-    ViewBag.Title = ViewBag.estado.nombre + " en la " + tableManager.enlaceOMI(nombreCompleto: true);
+    OMIstats.Models.Estado estado = ViewBag.estado;
+    OMIstats.Models.Medallero medallas = ViewBag.medallas;
+    ViewBag.Title = estado.nombre + " en la " + tableManager.enlaceOMI(nombreCompleto: true);
     bool isLive = ViewBag.liveResults;
     bool extranjeros = false;
 }
 
 <div class="submenu">
     <div class="comboTitle">Olimpiadas:</div>
-    <select onChange="redirige('@Url.Content("~/Olimpiada/Delegacion?estado=" + ViewBag.estado.clave + "&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
+    <select onChange="redirige('@Url.Content("~/Olimpiada/Delegacion?estado=" + estado.clave + "&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
         @for (int i = 0; i < olimpiadas.Count; i++)
         {
             OMIstats.Models.Olimpiada omi = olimpiadas[i];
@@ -37,25 +39,25 @@
     <select onChange="redirige('@Url.Content("~/Olimpiada/Delegacion?clave=" + Model.numero + "&estado=")', this.options[this.selectedIndex].value)" class="comboMargin">
         @for (int i = 0; i < estadosEnOlimpiada.Count; i++)
         {
-            OMIstats.Models.Estado estado = estadosEnOlimpiada[i];
-            if (estado.extranjero)
+            OMIstats.Models.Estado e = estadosEnOlimpiada[i];
+            if (e.extranjero)
             {
                 extranjeros = true;
                 continue;
             }
-            <option value="@estado.clave" @(estado.clave == ViewBag.estado.clave ? "selected" : "")>@(estado.nombre)</option>
+            <option value="@e.clave" @(e.clave == estado.clave ? "selected" : "")>@(e.nombre)</option>
         }
         @if (extranjeros)
         {
             <option value="-">- - -</option>
             for (int i = 0; i < estadosEnOlimpiada.Count; i++)
             {
-                OMIstats.Models.Estado estado = estadosEnOlimpiada[i];
-                if (!estado.extranjero)
+                OMIstats.Models.Estado e = estadosEnOlimpiada[i];
+                if (!e.extranjero)
                 {
                     continue;
                 }
-            <option value="@estado.clave" @(estado.clave == ViewBag.estado.clave ? "selected" : "")>@(estado.nombre)</option>
+            <option value="@e.clave" @(e.clave == estado.clave ? "selected" : "")>@(e.nombre)</option>
             }
         }
     </select>
@@ -70,32 +72,35 @@
 
 <div>
     <div class="logoEstadoFloat" >
-        <img src="@Url.Content("~/img/estados/" + ViewBag.estado.clave + ".png")"/>
+        <img src="@Url.Content("~/img/estados/" + estado.clave + ".png")"/>
     </div>
 
     <div class="datosEstado tituloEstado">
         <div>
             <h2 class="titulo">
-                @Html.ActionLink((string) ViewBag.estado.nombre, "Index", "Estado",
-                    new { clave = ViewBag.estado.clave, tipo = tipoOlimpiada }, new { @class = "link" })
+                @Html.ActionLink((string) estado.nombre, "Index", "Estado",
+                    new { clave = estado.clave, tipo = tipoOlimpiada }, new { @class = "link" })
                 en la
                 @Html.ActionLink(tableManager.enlaceOMI(nombreCompleto: true), "Resultados", "Olimpiada",
                    new { clave = Model.numero, tipo = tipoOlimpiada }, new { @class = "link" })
             </h2>
+            @if(!estado.extranjero)
+            {
             <div class="medallero">
                 <div class="medalla" title="Medallas de oro">
                     <div><img src="~/img/oro.png"/></div>
-                    <div>@ViewBag.medallas.oros</div>
+                    <div>@medallas.oros</div>
                 </div>
                 <div class="medalla" title="Medallas de plata">
                     <div><img src="~/img/plata.png"/></div>
-                    <div>@ViewBag.medallas.platas</div>
+                    <div>@medallas.platas</div>
                 </div>
                 <div class="medalla" title="Medallas de bronce">
                     <div><img src="~/img/bronce.png"/></div>
-                    <div>@ViewBag.medallas.bronces</div>
+                    <div>@medallas.bronces</div>
                 </div>
             </div>
+            }
         </div>
     </div>
 </div>
