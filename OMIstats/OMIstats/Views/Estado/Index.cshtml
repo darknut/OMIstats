@@ -172,7 +172,7 @@
                     }
                 </td>
                 <td class="@("table-td right-border center " + claseCSS)">
-                    @if (!Model.extranjero && mostrar && datos.lugar > 0 && !descalificado)
+                    @if (mostrar && datos.lugar > 0 && !descalificado)
                     {
                         @(datos.lugar)
                         if (datos.ioi == "Y")
