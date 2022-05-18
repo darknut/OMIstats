@@ -676,7 +676,7 @@ namespace OMIstats.Models
         /// para la edición manual para admins
         /// </summary>
         /// <returns>La tabla tabulada con comas</returns>
-        public string obtenerTablaAsistentes(bool esParaRegistro = false, bool incluirCabeceras = false)
+        public string obtenerTablaAsistentes(bool esParaRegistro = false, bool incluirCabeceras = false, bool esParaOmegaUp = false)
         {
             List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada, esParaRegistro: true);
 
@@ -693,28 +693,61 @@ namespace OMIstats.Models
                     tabla.Append(", sede");
                 tabla.Append("\n");
             }
-
-            foreach (MiembroDelegacion asistente in asistentes)
+            if (esParaOmegaUp)
             {
-                if (esParaRegistro)
+                tabla.Append("username,name,country_id,state_id,gender,school_name\n");
+                foreach (MiembroDelegacion asistente in asistentes)
                 {
-                    tabla.Append(tipoOlimpiada);
-                    tabla.Append(",");
-                }
-                tabla.Append(asistente.obtenerLineaAdmin(esParaRegistro: esParaRegistro));
-                if (esParaRegistro)
-                {
-                    Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
-                    tabla.Append(p.obtenerLineaAdmin());
-                    if (this.esOnline)
+                    if (asistente.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
                     {
+                        Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
+                        Estado e = Estado.obtenerEstadoConClave(asistente.estado);
+                        tabla.Append(asistente.clave);
                         tabla.Append(",");
-                        SedeOnline so = SedeOnline.obtenerSedeConClave(asistente.sede);
-                        if (so != null)
-                            tabla.Append(Cadenas.comillas(so.nombre, "\""));
+                        tabla.Append(p.nombreCompleto);
+                        tabla.Append(",");
+                        if (e.extranjero)
+                        {
+                            tabla.Append(e.sitio); // Guardamos el ISO necesario para el país en este campo dado que no se usa para extranjeros
+                        }
+                        else
+                        {
+                            tabla.Append("MX");
+                            tabla.Append(",");
+                            tabla.Append(e.ISO);
+                        }
+                        tabla.Append(",");
+                        tabla.Append(p.genero == "M" ? "male" : "female");
+                        tabla.Append(",");
+                        tabla.Append(asistente.nombreEscuela);
+                        tabla.Append("\n");
                     }
                 }
-                tabla.Append("\n");
+            }
+            else
+            {
+                foreach (MiembroDelegacion asistente in asistentes)
+                {
+                    if (esParaRegistro)
+                    {
+                        tabla.Append(tipoOlimpiada);
+                        tabla.Append(",");
+                    }
+                    tabla.Append(asistente.obtenerLineaAdmin(esParaRegistro: esParaRegistro));
+                    if (esParaRegistro)
+                    {
+                        Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
+                        tabla.Append(p.obtenerLineaAdmin());
+                        if (this.esOnline)
+                        {
+                            tabla.Append(",");
+                            SedeOnline so = SedeOnline.obtenerSedeConClave(asistente.sede);
+                            if (so != null)
+                                tabla.Append(Cadenas.comillas(so.nombre, "\""));
+                        }
+                    }
+                    tabla.Append("\n");
+                }
             }
 
             return tabla.ToString();

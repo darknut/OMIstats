@@ -613,7 +613,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/GetCSV/
 
-        public ActionResult GetCSV(string omi, TipoOlimpiada tipo)
+        public ActionResult GetCSV(string omi, TipoOlimpiada tipo, bool paraOmegaUp = false)
         {
             Persona p = getUsuario();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
@@ -622,7 +622,15 @@ namespace OMIstats.Controllers
 
             StringBuilder texto = new StringBuilder();
 
-            if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+            if (paraOmegaUp)
+            {
+                o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
+                if (o != null)
+                {
+                    texto.Append(o.obtenerTablaAsistentes(esParaOmegaUp: true));
+                }
+            }
+            else if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
             {
                 o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIPO);
                 if (o != null)
