@@ -84,6 +84,10 @@ namespace OMIstats.Models
         public bool cerrado;
 #if OMISTATS
         public Institucion.NivelInstitucion nivelEscuela;
+        private const string filtrarOMIPOS = " and md.clase <> " +
+                                            Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()) +
+                                            " and md.clase <> " +
+                                            Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower());
 #endif
         public int añoEscuela;
         public string clave;
@@ -947,6 +951,7 @@ namespace OMIstats.Models
             query.Append(persona);
             query.Append(" and md.tipo <> ");
             query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(filtrarOMIPOS);
             query.Append(" order by o.año asc ");
 
             db.EjecutarQuery(query.ToString());
@@ -995,10 +1000,7 @@ namespace OMIstats.Models
             }
             else
             {
-                query.Append(" and md.clase <> ");
-                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
-                query.Append(" and md.clase <> ");
-                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                query.Append(filtrarOMIPOS);
             }
             if (estado != null)
             {
@@ -1171,10 +1173,7 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(omi));
             query.Append(" and md.tipo = ");
             query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
-            query.Append(" and md.clase <> ");
-            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
-            query.Append(" and md.clase <> ");
-            query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+            query.Append(filtrarOMIPOS);
             query.Append(" order by persona ");
 
             db.EjecutarQuery(query.ToString());
@@ -1259,10 +1258,7 @@ namespace OMIstats.Models
                 }
                 else
                 {
-                    query.Append(" and md.clase <> ");
-                    query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
-                    query.Append(" and md.clase <> ");
-                    query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                    query.Append(filtrarOMIPOS);
                 }
                 query.Append(" group by p.clave ");
                 query.Append(" order by reciente desc ");
@@ -1554,10 +1550,7 @@ namespace OMIstats.Models
             }
             else
             {
-                query.Append(" and clase <> ");
-                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
-                query.Append(" and clase <> ");
-                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+                query.Append(filtrarOMIPOS);
             }
 
             db.EjecutarQuery(query.ToString());

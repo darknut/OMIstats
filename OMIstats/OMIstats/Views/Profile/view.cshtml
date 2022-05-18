@@ -29,7 +29,11 @@
 
 @{
     ViewBag.Title = Model.nombreCompleto;
-    bool perfilPropio = (@ViewBag.usuario.clave != 0 && (@ViewBag.usuario.clave == Model.clave));
+    OMIstats.Models.Persona usuario = ViewBag.usuario;
+    bool esAdmin = usuario.esAdmin();
+    bool tienePeticiones = ViewBag.tienePeticiones;
+    bool perfilPropio = (usuario.clave != 0 && (usuario.clave == Model.clave));
+    List<OMIstats.Models.MiembroDelegacion> asistencias = ViewBag.asistencias;
     OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
     Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.Resultados>> participaciones = ViewBag.participaciones;
     OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
@@ -47,393 +51,393 @@
     }
 }
 
-    @{
-    string GUID = ViewBag.GUID;
-    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(ViewBag.admin, ViewBag.claveUsuario);
-    if (GUID.Length > 0)
-    {
-        <p class="errorTextoRojo textoGrande">
-            Este es el perfil que creemos te pertenece. ¿Es este tu perfil de usuario?
-        </p>
-        @Html.ActionLink("Sí", "In", "Log", new { GUID = GUID, force = true }, new { @class="botonPerfil" })
-        <span>&nbsp;</span>
-        @Html.ActionLink("No", "Login", "Request", new { nombre = Model.nombreCompleto, correo = Model.correo,
-                tipo = OMIstats.Models.Peticion.TipoPeticion.BAD_LINK }, new { @class="botonPerfil", target="_blank" })
-        <br />
-        <br />
-        <br />
-    }
-    }
+@{
+string GUID = ViewBag.GUID;
+OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager(esAdmin, usuario.clave);
+if (GUID.Length > 0)
+{
+    <p class="errorTextoRojo textoGrande">
+        Este es el perfil que creemos te pertenece. ¿Es este tu perfil de usuario?
+    </p>
+    @Html.ActionLink("Sí", "In", "Log", new { GUID = GUID, force = true }, new { @class="botonPerfil" })
+    <span>&nbsp;</span>
+    @Html.ActionLink("No", "Login", "Request", new { nombre = Model.nombreCompleto, correo = Model.correo,
+            tipo = OMIstats.Models.Peticion.TipoPeticion.BAD_LINK }, new { @class="botonPerfil", target="_blank" })
+    <br />
+    <br />
+    <br />
+}
+}
 
 
-    <h1 class="titulo">Datos de usuario</h1>
+<h1 class="titulo">Datos de usuario</h1>
 
-    <div class="foto" >
-        <img src='@imgFoto' alt="@Model.nombreCompleto"/>
-    </div>
+<div class="foto" >
+    <img src='@imgFoto' alt="@Model.nombreCompleto"/>
+</div>
 
-    <div class="datosParticipante">
+<div class="datosParticipante">
 
-        <div class="nombrePerfil">@Model.nombreCompleto</div>
+    <div class="nombrePerfil">@Model.nombreCompleto</div>
     
-        <div>
-            <div class="fechaNacimiento">
-                @if (Model.nacimiento.Year > 1900)
-                {
-                    @Model.nacimiento.ToString("dd/MM/yyyy")
-                }
-            </div>
-        </div>
-
-        <div class="contacto">
-
-            @if (Model.ioiID != 0)
+    <div>
+        <div class="fechaNacimiento">
+            @if (Model.nacimiento.Year > 1900)
             {
-                <a href='@tableManager.getIOIStatsLink(Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;" title="IOI"/></a>
-            }
-
-            @if (Model.sitio.Length > 0)
-            {
-                <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio" title="Sitio web"/></a>
-            }
-
-            @if (Model.correo.Length > 0 && (!Model.omips || medalleros.IOI != null || medalleros.OMI != null))
-            {
-                <a href="mailto:@Model.correo" target="_blank"><img src="~/img/mail.png" alt="correo" title="Correo"/></a>
-            }
-
-            @if (Model.facebook.Length > 0)
-            {
-                <a href='@Url.Content("https://www.facebook.com/" + @Model.facebook)' target="_blank"><img src="~/img/facebook.png" alt="facebook" title="Facebook"/></a>
-            }
-
-            @if (Model.twitter.Length > 0)
-            {
-                <a href='@Url.Content("http://www.twitter.com/" + @Model.twitter)' target="_blank"><img src="~/img/twitter.png" alt="twitter" title="Twitter"/></a>
-            }
-
-            @if (Model.omegaup.Length > 0)
-            {
-                <a href='@Url.Content("https://omegaup.com/profile/" + @Model.omegaup)' target="_blank"><img class="omegaIcon" src="~/img/omega.png" alt="omegaup" title="OmegaUp"/></a>
-            }
-
-            @if (Model.codeforces.Length > 0)
-            {
-                <a href='@Url.Content("http://codeforces.com/profile/" + @Model.codeforces)' target="_blank"><img style="margin-bottom:3px" src="~/img/codeforces.png" alt="codeforces" title="Code forces"/></a>
-            }
-
-            @if (Model.topcoder.Length > 0)
-            {
-                <a href='@Url.Content("https://www.topcoder.com/members/" + @Model.topcoder)' target="_blank"><img style="margin-bottom:3px" src="~/img/topcoder.png" alt="topcoder" title="Top coder"/></a>
+                @Model.nacimiento.ToString("dd/MM/yyyy")
             }
         </div>
-
     </div>
 
-    <div class="botones">
+    <div class="contacto">
 
-        @if (@ViewBag.usuario != null)
+        @if (Model.ioiID != 0)
         {
-            if (ViewBag.usuario.esSuperUsuario() || perfilPropio)
-            {
-                <div>
-                    @Html.ActionLink("Actualizar datos", "Edit", "Profile",
-                                ViewBag.usuario.esAdmin() ? new { usuario = Model.usuario } : null,
-                                new { @class = "botonPerfil" })
-                </div>
-                <br />
-            }
-
-            if (@ViewBag.usuario.esAdmin())
-            {
-                if (@ViewBag.usuario.clave != Model.clave)
-                {
-                    <div>
-                        <a onclick='tryConfirm("@Url.Content("~/Admin/Unlink?usuario=" + Model.usuario)", "¿Deslinkear usuario?")' class="botonPerfil">
-                            Deslinkear usuario
-                        </a>
-                    </div>
-                    <br />
-                    <div>
-                        @Html.ActionLink("Usurpar personalidad", "Usurpar", "Profile",
-                                new { clave = Model.clave },
-                                new { @class = "botonPerfil" })
-                    </div>
-                    <br />
-                }
-            }
+            <a href='@tableManager.getIOIStatsLink(Model.ioiID)' target="_blank"><img src="~/img/ioi.png" alt="ioi" style="width:20px;" title="IOI"/></a>
         }
 
+        @if (Model.sitio.Length > 0)
+        {
+            <a href="@Model.sitio" target="_blank"><img src="~/img/homepage.png" alt="sitio" title="Sitio web"/></a>
+        }
+
+        @if (Model.correo.Length > 0 && (!Model.omips || medalleros.IOI != null || medalleros.OMI != null))
+        {
+            <a href="mailto:@Model.correo" target="_blank"><img src="~/img/mail.png" alt="correo" title="Correo"/></a>
+        }
+
+        @if (Model.facebook.Length > 0)
+        {
+            <a href='@Url.Content("https://www.facebook.com/" + @Model.facebook)' target="_blank"><img src="~/img/facebook.png" alt="facebook" title="Facebook"/></a>
+        }
+
+        @if (Model.twitter.Length > 0)
+        {
+            <a href='@Url.Content("http://www.twitter.com/" + @Model.twitter)' target="_blank"><img src="~/img/twitter.png" alt="twitter" title="Twitter"/></a>
+        }
+
+        @if (Model.omegaup.Length > 0)
+        {
+            <a href='@Url.Content("https://omegaup.com/profile/" + @Model.omegaup)' target="_blank"><img class="omegaIcon" src="~/img/omega.png" alt="omegaup" title="OmegaUp"/></a>
+        }
+
+        @if (Model.codeforces.Length > 0)
+        {
+            <a href='@Url.Content("http://codeforces.com/profile/" + @Model.codeforces)' target="_blank"><img style="margin-bottom:3px" src="~/img/codeforces.png" alt="codeforces" title="Code forces"/></a>
+        }
+
+        @if (Model.topcoder.Length > 0)
+        {
+            <a href='@Url.Content("https://www.topcoder.com/members/" + @Model.topcoder)' target="_blank"><img style="margin-bottom:3px" src="~/img/topcoder.png" alt="topcoder" title="Top coder"/></a>
+        }
     </div>
 
-    @if (ViewBag.tienePeticiones)
-    {
-        <div style="clear:both" class="errorTextoRojo">
-            Tienes peticiones que los administradores aún no han respondido, si quieres verlas, da clic <a href="~/Request/view">aquí</a>.
-        </div>
-        <br />
-    }
+</div>
 
-    <div style="clear:both">
-        @if (ViewBag.usuario != null && ViewBag.usuario.clave == Model.clave && !ViewBag.usuario.esAdmin())
+<div class="botones">
+
+    @if (usuario != null)
+    {
+        if (usuario.esSuperUsuario() || perfilPropio)
         {
             <div>
-                @Html.ActionLink("¿No eres tú?", "user", "Request",
-                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.NO_SOY_YO }, null) |
-                @Html.ActionLink("¿Perfil incompleto?", "user", "Request",
-                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.INCOMPLETO }, null) |
-                @Html.ActionLink("¿Perfil duplicado?", "user", "Request",
-                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.DUPLICADO }, null)
+                @Html.ActionLink("Actualizar datos", "Edit", "Profile",
+                            esAdmin ? new { usuario = Model.usuario } : null,
+                            new { @class = "botonPerfil" })
+            </div>
+            <br />
+        }
+
+        if (esAdmin)
+        {
+            if (usuario.clave != Model.clave)
+            {
+                <div>
+                    <a onclick='tryConfirm("@Url.Content("~/Admin/Unlink?usuario=" + Model.usuario)", "¿Deslinkear usuario?")' class="botonPerfil">
+                        Deslinkear usuario
+                    </a>
+                </div>
                 <br />
-                @Html.ActionLink("¿Te sabes tus puntos y nosotros no?", "user", "Request",
-                    new { tipo = OMIstats.Models.Peticion.TipoPeticion.PUNTOS }, null) |
-                @Html.ActionLink("Contáctanos", "General", "Request")
+                <div>
+                    @Html.ActionLink("Usurpar personalidad", "Usurpar", "Profile",
+                            new { clave = Model.clave },
+                            new { @class = "botonPerfil" })
+                </div>
+                <br />
+            }
+        }
+    }
+
+</div>
+
+@if (tienePeticiones)
+{
+    <div style="clear:both" class="errorTextoRojo">
+        Tienes peticiones que los administradores aún no han respondido, si quieres verlas, da clic <a href="~/Request/view">aquí</a>.
+    </div>
+    <br />
+}
+
+<div style="clear:both">
+    @if (usuario != null && usuario.clave == Model.clave && !esAdmin)
+    {
+        <div>
+            @Html.ActionLink("¿No eres tú?", "user", "Request",
+                new { tipo = OMIstats.Models.Peticion.TipoPeticion.NO_SOY_YO }, null) |
+            @Html.ActionLink("¿Perfil incompleto?", "user", "Request",
+                new { tipo = OMIstats.Models.Peticion.TipoPeticion.INCOMPLETO }, null) |
+            @Html.ActionLink("¿Perfil duplicado?", "user", "Request",
+                new { tipo = OMIstats.Models.Peticion.TipoPeticion.DUPLICADO }, null)
+            <br />
+            @Html.ActionLink("¿Te sabes tus puntos y nosotros no?", "user", "Request",
+                new { tipo = OMIstats.Models.Peticion.TipoPeticion.PUNTOS }, null) |
+            @Html.ActionLink("Contáctanos", "General", "Request")
+        </div>
+    }
+</div>
+
+@foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
+{
+    List<OMIstats.Models.Resultados> participacion = null;
+    participaciones.TryGetValue(tipo, out participacion);
+    if (participacion == null || participacion.Count == 0)
+    {
+        continue;
+    }
+    hayParticipaciones = true;
+    OMIstats.Models.Medallero medallero = medalleros.medalleroDeTipo(tipo);
+
+    <h1 class="titulo subtitulo"> @(extranjero ? "Invitaciones como competidor" : "Participaciones como competidor")
+        @if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
+        {
+            <span>de secundaria</span>
+        }
+        @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP)
+        {
+            <span>de primaria</span>
+        }
+    </h1>
+
+    <div class="medallero">
+        <img src="@Url.Content("~/img/" + tipo.ToString() + ".png")" class="tipoOMI"/>
+        <div class="separador">:</div>
+        <div class="medalla" title="Medallas de oro">
+            <div><img src="~/img/oro.png"/></div>
+            <div>@(medallero == null ? "?" : medallero.oros.ToString())</div>
+        </div>
+        <div class="medalla" title="Medallas de plata">
+            <div><img src="~/img/plata.png"/></div>
+            <div>@(medallero == null ? "?" : medallero.platas.ToString())</div>
+        </div>
+        <div class="medalla" title="Medallas de bronce">
+            <div><img src="~/img/bronce.png"/></div>
+            <div>@(medallero == null ? "?" : medallero.bronces.ToString())</div>
+        </div>
+        @if (medallero != null && medallero.otros > 0)
+        {
+            <div class="medalla diploma" title="Participaciones sin medalla">
+                <div><img src="~/img/diploma.png"/></div>
+                <div>@(medallero.otros)</div>
             </div>
         }
     </div>
 
-    @foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
-    {
-        List<OMIstats.Models.Resultados> participacion = null;
-        participaciones.TryGetValue(tipo, out participacion);
-        if (participacion == null || participacion.Count == 0)
+    <table class="table tablePadding" id="tablaCompetidor">
+        <thead>
+            <tr class="table-header">
+                <th></th>
+                <th class="bottom-border right-border table-header-clickable">Lugar</th>
+                <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
+                <th class="bottom-border right-border table-header-clickable">Estado</th>
+                <th class="bottom-border right-border table-header-clickable">Clave</th>
+                <th class="bottom-border right-border table-header-clickable">Puntos</th>
+                <th class="bottom-border @(extranjero ? "" : "right-border") table-header-clickable {sorter:'medalla'}">Medalla</th>
+                @if (!extranjero)
+                {
+                <th class="bottom-border right-border table-header-clickable">Escuela</th>
+                <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
+                <th class="bottom-border table-header-clickable">Año escolar</th>
+                }
+                @if(perfilPropio)
+                {
+                <th class="bottom-border left-border">Diplomas</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+        @for (var l = 0; l < participacion.Count; l++)
         {
-            continue;
+            OMIstats.Models.Resultados datos = participacion[l];
+            tableManager.setCurrentResultados(datos);
+            tableManager.setCurrentOMI();
+            string claseCSS = tableManager.obtenerClaseCSS();
+            bool mostrar = tableManager.mostrarLinea();
+            bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
+            <tr>
+                <td class="ioi-mini-imagen">
+                    @if (tableManager.mostrarLogoIOI())
+                    {
+                        <a href="@tableManager.getIOIStatsLinkForPerson()" target="_blank">
+                            <img src="~/img/ioi.png" />
+                        </a>
+                    }
+                </td>
+                <td class="@("table-td right-border center " + claseCSS)">
+                    @if (mostrar && datos.lugar > 0 && !descalificado)
+                    {
+                        @(datos.lugar)
+                        if (datos.ioi == "Y")
+                        {
+                    <img src="~/img/star.png" title="Medallista más joven" class="karel-png"/>
+                        }
+                    }
+                </td>
+                <td class="@("table-td right-border " + claseCSS)" omi="@(datos.omi)">
+                    <a class="nombre" href="@Url.Content("~/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipo.ToString())">
+                        @tableManager.enlaceOMI()
+                    </a>
+                </td>
+                <td class="@("table-td right-border " + claseCSS)">
+                    <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipo.ToString())">
+                        @datos.nombreEstado
+                    </a>
+                </td>
+                <td class="@("table-td center right-border " + claseCSS)">
+                    @if (!tableManager.faltaClave())
+                    {
+                        <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipo.ToString())">
+                            @datos.clave
+                        </a>
+                    }
+                </td>
+                <td class="@("table-td center right-border resultado-total " + claseCSS)">
+                    @if (mostrar)
+                    {
+                        if (descalificado)
+                        {
+                            @("-")
+                        }
+                        else
+                        {
+                        @(datos.total)
+                        }
+                    }
+                </td>
+                <td class="@("table-td center " + (extranjero ? "" : "right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
+                    @tableManager.medallaString()
+                </td>
+                @if (!extranjero)
+                {
+                <td class="@("table-td break-word right-border " + claseCSS)">
+                    @if (datos.escuela != null)
+                    {
+                        <span>
+                            <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipo.ToString())">
+                                @datos.escuela.nombreCorto
+                            </a>
+                        </span>
+                    }
+                </td>
+                <td class="@("table-td right-border " + claseCSS)">
+                    @if (datos.nivelInstitucion != OMIstats.Models.Institucion.NivelInstitucion.NULL)
+                    {
+                        @(datos.nivelInstitucion.ToString())
+                    }
+                </td>
+                <td class="@("table-td center " + claseCSS)">
+                    @if (datos.añoEscolar != 0)
+                    {
+                        @(datos.añoEscolar + "º")
+                    }
+                </td>
+                }
+                @if (perfilPropio)
+                {
+                <td class="left-border padding-diploma">
+                    @if (tableManager.tieneDiplomas())
+                    {
+                            @Html.ActionLink("Descargar", "Diploma", "Profile",
+                            new { omi = datos.omi, clave = datos.clave, clase = tipo },
+                            new { @class = "botonPerfil" })
+                    }
+                </td>
+                }
+            </tr>
         }
-        hayParticipaciones = true;
-        OMIstats.Models.Medallero medallero = medalleros.medalleroDeTipo(tipo);
+        </tbody>
+    </table>
+}
 
-        <h1 class="titulo subtitulo"> @(extranjero ? "Invitaciones como competidor" : "Participaciones como competidor")
-            @if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
-            {
-                <span>de secundaria</span>
-            }
-            @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP)
-            {
-                <span>de primaria</span>
-            }
-        </h1>
-
-        <div class="medallero">
-            <img src="@Url.Content("~/img/" + tipo.ToString() + ".png")" class="tipoOMI"/>
-            <div class="separador">:</div>
-            <div class="medalla" title="Medallas de oro">
-                <div><img src="~/img/oro.png"/></div>
-                <div>@(medallero == null ? "?" : medallero.oros.ToString())</div>
-            </div>
-            <div class="medalla" title="Medallas de plata">
-                <div><img src="~/img/plata.png"/></div>
-                <div>@(medallero == null ? "?" : medallero.platas.ToString())</div>
-            </div>
-            <div class="medalla" title="Medallas de bronce">
-                <div><img src="~/img/bronce.png"/></div>
-                <div>@(medallero == null ? "?" : medallero.bronces.ToString())</div>
-            </div>
-            @if (medallero != null && medallero.otros > 0)
-            {
-                <div class="medalla diploma" title="Participaciones sin medalla">
-                    <div><img src="~/img/diploma.png"/></div>
-                    <div>@(medallero.otros)</div>
-                </div>
-            }
-        </div>
-
-        <table class="table tablePadding" id="tablaCompetidor">
-            <thead>
-                <tr class="table-header">
-                    <th></th>
-                    <th class="bottom-border right-border table-header-clickable">Lugar</th>
-                    <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
-                    <th class="bottom-border right-border table-header-clickable">Estado</th>
-                    <th class="bottom-border right-border table-header-clickable">Clave</th>
-                    <th class="bottom-border right-border table-header-clickable">Puntos</th>
-                    <th class="bottom-border @(extranjero ? "" : "right-border") table-header-clickable {sorter:'medalla'}">Medalla</th>
-                    @if (!extranjero)
-                    {
-                    <th class="bottom-border right-border table-header-clickable">Escuela</th>
-                    <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
-                    <th class="bottom-border table-header-clickable">Año escolar</th>
-                    }
-                    @if(perfilPropio)
-                    {
-                    <th class="bottom-border left-border">Diplomas</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-            @for (var l = 0; l < participacion.Count; l++)
-            {
-                OMIstats.Models.Resultados datos = participacion[l];
-                tableManager.setCurrentResultados(datos);
-                tableManager.setCurrentOMI();
-                string claseCSS = tableManager.obtenerClaseCSS();
-                bool mostrar = tableManager.mostrarLinea();
-                bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
-                <tr>
-                    <td class="ioi-mini-imagen">
-                        @if (tableManager.mostrarLogoIOI())
-                        {
-                            <a href="@tableManager.getIOIStatsLinkForPerson()" target="_blank">
-                                <img src="~/img/ioi.png" />
-                            </a>
-                        }
-                    </td>
-                    <td class="@("table-td right-border center " + claseCSS)">
-                        @if (mostrar && datos.lugar > 0 && !descalificado)
-                        {
-                            @(datos.lugar)
-                            if (datos.ioi == "Y")
-                            {
-                        <img src="~/img/star.png" title="Medallista más joven" class="karel-png"/>
-                            }
-                        }
-                    </td>
-                    <td class="@("table-td right-border " + claseCSS)" omi="@(datos.omi)">
-                        <a class="nombre" href="@Url.Content("~/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipo.ToString())">
-                            @tableManager.enlaceOMI()
-                        </a>
-                    </td>
-                    <td class="@("table-td right-border " + claseCSS)">
-                        <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipo.ToString())">
-                            @datos.nombreEstado
-                        </a>
-                    </td>
-                    <td class="@("table-td center right-border " + claseCSS)">
-                        @if (!tableManager.faltaClave())
-                        {
-                            <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipo.ToString())">
-                                @datos.clave
-                            </a>
-                        }
-                    </td>
-                    <td class="@("table-td center right-border resultado-total " + claseCSS)">
-                        @if (mostrar)
-                        {
-                            if (descalificado)
-                            {
-                                @("-")
-                            }
-                            else
-                            {
-                            @(datos.total)
-                            }
-                        }
-                    </td>
-                    <td class="@("table-td center " + (extranjero ? "" : "right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
-                        @tableManager.medallaString()
-                    </td>
-                    @if (!extranjero)
-                    {
-                    <td class="@("table-td break-word right-border " + claseCSS)">
-                        @if (datos.escuela != null)
-                        {
-                            <span>
-                                <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipo.ToString())">
-                                    @datos.escuela.nombreCorto
-                                </a>
-                            </span>
-                        }
-                    </td>
-                    <td class="@("table-td right-border " + claseCSS)">
-                        @if (datos.nivelInstitucion != OMIstats.Models.Institucion.NivelInstitucion.NULL)
-                        {
-                            @(datos.nivelInstitucion.ToString())
-                        }
-                    </td>
-                    <td class="@("table-td center " + claseCSS)">
-                        @if (datos.añoEscolar != 0)
-                        {
-                            @(datos.añoEscolar + "º")
-                        }
-                    </td>
-                    }
-                    @if (perfilPropio)
-                    {
-                    <td class="left-border padding-diploma">
-                        @if (tableManager.tieneDiplomas())
-                        {
-                             @Html.ActionLink("Descargar", "Diploma", "Profile",
-                                new { omi = datos.omi, clave = datos.clave, clase = tipo },
-                                new { @class = "botonPerfil" })
-                        }
-                    </td>
-                    }
-                </tr>
-            }
-            </tbody>
-        </table>
+@if (asistencias.Count > 0)
+{
+    if (hayParticipaciones)
+    {
+        <h1 class="titulo subtitulo"> Participaciones con diferente rol </h1>
+    }
+    else
+    {
+        <h1 class="titulo subtitulo"> Participaciones en olimpiadas</h1>
     }
 
-    @if (ViewBag.asistencias.Count > 0)
-    {
-        if (hayParticipaciones)
+    <table class="table tablePadding" id="tablaAsistente">
+        <thead>
+            <tr class="table-header">
+                <th></th>
+                <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
+                <th class="bottom-border right-border table-header-clickable">Estado</th>
+                <th class="bottom-border table-header-clickable">Rol</th>
+                @if (perfilPropio)
+                {
+                <th class="bottom-border left-border">Diplomas</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+        @for (var l = 0; l < asistencias.Count; l++)
         {
-            <h1 class="titulo subtitulo"> Participaciones con diferente rol </h1>
-        }
-        else
-        {
-            <h1 class="titulo subtitulo"> Participaciones en olimpiadas</h1>
-        }
+            OMIstats.Models.MiembroDelegacion datos = asistencias[l];
+            tableManager.setCurrentOMI(OMIstats.Models.Olimpiada.obtenerOlimpiadaConClave(datos.olimpiada, tipoOlimpiada));
+            <tr>
+                <td class="ioi-mini-imagen">
+                </td>
+                <td class="table-td right-border" omi="@(datos.olimpiada)">
+                    <a class="nombre" href="@Url.Content("~/Olimpiada?clave=" + datos.olimpiada + "&tipo=" + tipoOlimpiada.ToString())">
+                        @(tableManager.enlaceOMI())
+                    </a>
+                </td>
+                <td class="table-td right-border">
+                    <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipoOlimpiada.ToString())">
+                        @datos.nombreEstado
+                    </a>
+                </td>
+                <td class="table-td center">
+                    <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.olimpiada + "&estado=" + datos.estado + "&tipo=" + tipoOlimpiada.ToString())">
+                        @datos.getTipoAsistenteString()
+                    </a>
+                </td>
+                @if (perfilPropio)
+                {
+                <td class="left-border padding-diploma">
+                    @if (tableManager.tieneDiplomas())
+                    {
+                            @Html.ActionLink("Descargar", "Diploma", "Profile",
+                            new { omi = datos.olimpiada, clave = datos.clave },
+                            new { @class = "botonPerfil" })
 
-        <table class="table tablePadding" id="tablaAsistente">
-            <thead>
-                <tr class="table-header">
-                    <th></th>
-                    <th class="bottom-border right-border table-header-clickable {sorter:'omi'}">Olimpiada</th>
-                    <th class="bottom-border right-border table-header-clickable">Estado</th>
-                    <th class="bottom-border table-header-clickable">Rol</th>
-                    @if (perfilPropio)
-                    {
-                    <th class="bottom-border left-border">Diplomas</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-            @for (var l = 0; l < ViewBag.asistencias.Count; l++)
-            {
-                OMIstats.Models.MiembroDelegacion datos = ViewBag.asistencias[l];
-                tableManager.setCurrentOMI(OMIstats.Models.Olimpiada.obtenerOlimpiadaConClave(datos.olimpiada, tipoOlimpiada));
-                <tr>
-                    <td class="ioi-mini-imagen">
-                    </td>
-                    <td class="table-td right-border" omi="@(datos.olimpiada)">
-                        <a class="nombre" href="@Url.Content("~/Olimpiada?clave=" + datos.olimpiada + "&tipo=" + tipoOlimpiada.ToString())">
-                            @(tableManager.enlaceOMI())
-                        </a>
-                    </td>
-                    <td class="table-td right-border">
-                        <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipoOlimpiada.ToString())">
-                            @datos.nombreEstado
-                        </a>
-                    </td>
-                    <td class="table-td center">
-                        <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.olimpiada + "&estado=" + datos.estado + "&tipo=" + tipoOlimpiada.ToString())">
-                            @datos.getTipoAsistenteString()
-                        </a>
-                    </td>
-                    @if (perfilPropio)
-                    {
-                    <td class="left-border padding-diploma">
-                        @if (tableManager.tieneDiplomas())
+                        if (datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.LIDER ||
+                            datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUBLIDER ||
+                            datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEGADO ||
+                            datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER)
                         {
-                             @Html.ActionLink("Descargar", "Diploma", "Profile",
-                                new { omi = datos.olimpiada, clave = datos.clave },
+                            @Html.ActionLink("Descargar todos", "Diploma", "Profile",
+                                new { omi = datos.olimpiada, clave = datos.clave, todos = true },
                                 new { @class = "botonPerfil" })
-
-                            if (datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.LIDER ||
-                                datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUBLIDER ||
-                                datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEGADO ||
-                                datos.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER)
-                            {
-                                @Html.ActionLink("Descargar todos", "Diploma", "Profile",
-                                    new { omi = datos.olimpiada, clave = datos.clave, todos = true },
-                                    new { @class = "botonPerfil" })
-                            }
                         }
-                    </td>
                     }
-                </tr>
-            }
-            </tbody>
-        </table>
-    }
+                </td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
