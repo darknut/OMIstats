@@ -84,7 +84,7 @@ namespace OMIstats.Models
         public bool cerrado;
 #if OMISTATS
         public Institucion.NivelInstitucion nivelEscuela;
-        private const string filtrarOMIPOS = " and md.clase <> " +
+        private static string filtrarOMIPOS = " and md.clase <> " +
                                             Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()) +
                                             " and md.clase <> " +
                                             Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower());
