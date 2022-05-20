@@ -710,6 +710,10 @@ namespace OMIstats.Models
                 query.Append(" and clase = ");
                 query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             }
+            query.Append(" and clase <> ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+            query.Append(" and clase <> ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
