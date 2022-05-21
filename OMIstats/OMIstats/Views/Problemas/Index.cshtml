@@ -19,7 +19,8 @@
     {
         title += " de secundaria";
     }
-    if (tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO || tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO)
+    bool esOMIPOS = tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO || tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO; 
+    if (esOMIPOS)
     {
         title += " (online)";
     }
@@ -67,7 +68,10 @@
     <thead>
         <tr class="table-header">
             <th class="bottom-border right-border">Olimpiada</th>
+            @if(!esOMIPOS)
+            {
             <th class="bottom-border right-border">Día</th>
+            }
             <th class="bottom-border right-border">Problema</th>
             <th class="bottom-border right-border">Media</th>
             <th class="bottom-border right-border">Mediana</th>
@@ -133,7 +137,7 @@
                     }
                 </td>
                 }
-                @if (!headerDias[problema.dia])
+                @if (!headerDias[problema.dia] && !esOMIPOS)
                 {
                     headerDias[problema.dia] = true;
                 <td rowspan="@(pDias[problema.dia])" class="table-td right-border center top-border mini-padding">
