@@ -26,6 +26,7 @@
     List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
     List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
     List<OMIstats.Models.Estado> extranjeros = ViewBag.extranjeros;
+    bool esOMIPOS = Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO || Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO;
 
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);
@@ -311,8 +312,7 @@ else
 <th class="bottom-border right-border table-header-clickable">Total</th>
     }
 <th class="bottom-border right-border table-header-clickable {sorter:'medalla'}">
-@(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO ||
-Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO ? "Resultado" : "Medalla")</th>
+@(esOMIPOS ? "Resultado" : "Medalla")</th>
 <th class="bottom-border table-header-clickable">Escuela</th>
 </tr>
 </thead>
@@ -406,7 +406,7 @@ else
     }
 </td>
 <td class="@("table-td center right-border " + claseCSS)">
-@if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO || Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO)
+@if(esOMIPOS)
 {
 <span>@datos.clave</span>
 }
@@ -512,7 +512,7 @@ else
 <td class="@("table-td break-word escuela-td " + claseCSS)">
     @if (mostrar && datos.escuela != null)
     {
-        if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO || Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO)
+        if(esOMIPOS && !admin)
         {
 @datos.escuela.nombreCorto
         }
