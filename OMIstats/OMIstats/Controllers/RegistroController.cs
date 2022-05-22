@@ -324,9 +324,10 @@ namespace OMIstats.Controllers
                 return View(new Persona());
             }
 
+            bool modifyMode = !String.IsNullOrEmpty(claveOriginal);
             // Se valida que haya espacio para registrar otro competidor
             if (!esAdmin() &&
-                 String.IsNullOrEmpty(claveOriginal) &&
+                 !modifyMode &&
                  tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
                  !puedeRegistrarOtroMas(o, tipo, estado))
             {
@@ -338,7 +339,7 @@ namespace OMIstats.Controllers
             MiembroDelegacion md = null;
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
             Institucion i = null;
-            if (!String.IsNullOrEmpty(claveOriginal))
+            if (modifyMode)
             {
                 tipoO = DataRowParser.ToTipoOlimpiada(tipoOriginal);
                 var temp = MiembroDelegacion.obtenerMiembrosConClave(omi, tipoO, claveOriginal);
@@ -423,8 +424,8 @@ namespace OMIstats.Controllers
             if (!ModelState.IsValid)
                 return View(p);
 
-            if ((tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIS ||
-                tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO) &&
+            bool isOMIPOS = TableManager.isOMIPOS(tipo);
+            if ((tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIS || isOMIPOS) &&
                 tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 p.omips = true;
@@ -470,7 +471,7 @@ namespace OMIstats.Controllers
 
                 if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
                 {
-                    if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+                    if (isOMIPOS)
                     {
                         if (persona == 0)
                             p.oculta = true;
@@ -519,7 +520,7 @@ namespace OMIstats.Controllers
                 // Modificando asistente
                 // Primero los datos de persona
                 Persona per = Persona.obtenerPersonaConClave(md.claveUsuario);
-                if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                if (!modifyMode && tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !isOMIPOS)
                     per.oculta = false;
                 p.clave = per.clave;
                 p.oculta = per.oculta;
@@ -630,7 +631,7 @@ namespace OMIstats.Controllers
                     texto.Append(o.obtenerTablaAsistentes(esParaOmegaUp: true));
                 }
             }
-            else if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+            else if (TableManager.isOMIPOS(tipo))
             {
                 o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIPO);
                 if (o != null)

@@ -304,6 +304,11 @@ namespace OMIstats.Utilities
             return result;
         }
 
+        public static bool isOMIPOS(TipoOlimpiada tipo)
+        {
+            return tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO;
+        }
+
         public static bool IsDebug()
         {
 #if DEBUG

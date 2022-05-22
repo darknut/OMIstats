@@ -95,7 +95,7 @@ namespace OMIstats.Controllers
             Session[GUID_STRING] = null;
             Session[GUID_USER] = null;
 
-            if (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+            if (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMIP || TableManager.isOMIPOS(tipo))
                 tipo = TipoOlimpiada.OMI;
 
             Medalleros medalleros = Medallero.obtenerMedalleros(Medallero.TipoMedallero.PERSONA, p.clave.ToString());

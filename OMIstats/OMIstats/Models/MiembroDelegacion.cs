@@ -1248,7 +1248,7 @@ namespace OMIstats.Models
                 else
                     query.Append(" = ");
                 query.Append(Utilities.Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
-                if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+                if (TableManager.isOMIPOS(tipo))
                 {
                     query.Append(" and (md.clase = ");
                     query.Append(Utilities.Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
@@ -1283,16 +1283,17 @@ namespace OMIstats.Models
                         if (md.olimpiada == omi)
                             continue;
 
+                        bool isOMIPOS = TableManager.isOMIPOS(tipo);
                         // Descartamos a los que ya participaron en categorías mas altas
                         if ((tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMISO) && md.tipoOlimpiada == TipoOlimpiada.OMI ||
-                            (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIPO) && md.tipoOlimpiada != TipoOlimpiada.OMIP && md.tipoOlimpiada != TipoOlimpiada.OMIPO)
+                            (isOMIPOS) && md.tipoOlimpiada != TipoOlimpiada.OMIP && md.tipoOlimpiada != TipoOlimpiada.OMIPO)
                                 continue;
 
                         // Descartamos a los que ya se gruaduaron de la escuela en su nivel
                         md.calculaNuevoNivel((int)o.año - año);
                         if (md.nivelEscuela == Institucion.NivelInstitucion.UNIVERSIDAD ||
                             (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMISO) && md.nivelEscuela == Institucion.NivelInstitucion.PREPARATORIA ||
-                            (tipo == TipoOlimpiada.OMIP || tipo == TipoOlimpiada.OMIPO) && md.nivelEscuela != Institucion.NivelInstitucion.PRIMARIA)
+                            (isOMIPOS) && md.nivelEscuela != Institucion.NivelInstitucion.PRIMARIA)
                             continue;
                     }
 
@@ -1366,7 +1367,7 @@ namespace OMIstats.Models
             {
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
                 int maxUsers = o.getMaxParticipantesDeEstado(estado);
-                bool isOMIPOS = tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO;
+                bool isOMIPOS = TableManager.isOMIPOS(tipo);
                 for (int i = 1; i <= maxUsers; i++)
                 {
                     var padd = "";
@@ -1540,7 +1541,7 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(omi));
             query.Append(" and estado = ");
             query.Append(Cadenas.comillas(estado));
-            if (tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO)
+            if (TableManager.isOMIPOS(tipo))
             {
                 query.Append(" and (clase = ");
                 query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));

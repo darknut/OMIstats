@@ -14,7 +14,7 @@
     bool invitaciones = ViewBag.invitaciones;
     string[] subTitulos;
     OMIstats.Models.TipoOlimpiada[] tipos;
-    bool isOMIPOS = omi.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO || omi.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO;
+    bool isOMIPOS = OMIstats.Utilities.TableManager.isOMIPOS(omi.tipoOlimpiada);
     if (isOMIPOS)
     {
         tipos = new OMIstats.Models.TipoOlimpiada[] {
