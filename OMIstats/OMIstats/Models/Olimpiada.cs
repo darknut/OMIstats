@@ -893,7 +893,7 @@ namespace OMIstats.Models
                             // Si el competidor es extranjero, no se le considera
                             Estado e = Estado.obtenerEstadoConClave(resultados[i].estado);
                             extranjero = e.extranjero;
-                            if (extranjero)
+                            if (extranjero || resultados[i].clave.EndsWith("I"))
                             {
                                 if (lugar == 0)
                                     resultados[i].lugar = 1;

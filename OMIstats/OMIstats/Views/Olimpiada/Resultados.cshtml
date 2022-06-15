@@ -361,7 +361,7 @@ else
 }
 </td>
 <td class="@("table-td center right-border " + claseCSS)">
-    @if (Model.mostrarResultadosTotales && datos.lugar > 0 && !descalificado && !estado.extranjero)
+    @if (Model.mostrarResultadosTotales && datos.lugar > 0 && !descalificado && !estado.extranjero && !datos.clave.EndsWith("I"))
     {
 @(datos.lugar)
         if (datos.ioi == "Y")
