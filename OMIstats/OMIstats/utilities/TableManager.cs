@@ -174,6 +174,7 @@ namespace OMIstats.Utilities
                 case Resultados.TipoMedalla.ORO:
                 case Resultados.TipoMedalla.PLATA:
                 case Resultados.TipoMedalla.BRONCE:
+                    return currentResultados.medalla.ToString();
                 case Resultados.TipoMedalla.CLASIFICADO:
                     if (currentResultados.persona.genero == "F")
                         return "CLASIFICADA";
