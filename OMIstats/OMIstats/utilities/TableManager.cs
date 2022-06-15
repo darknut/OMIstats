@@ -71,13 +71,7 @@ namespace OMIstats.Utilities
             int IOI = 1988;
             try
             {
-                int relacion = int.Parse(currentOMI.relacion);
-
-                // Caso especial para Alier que clasificó un año después :/
-                if (relacion == 33 && currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS)
-                    relacion++;
-
-                IOI += relacion;
+                IOI += int.Parse(currentOMI.relacion);
             } catch (Exception)
             {
                 return "";
