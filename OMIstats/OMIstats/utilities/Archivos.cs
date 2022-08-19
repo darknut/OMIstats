@@ -157,7 +157,16 @@ namespace OMIstats.Utilities
 
             if (!Directory.Exists(lugarEnDisco))
                 Directory.CreateDirectory(lugarEnDisco);
-            archivo.SaveAs(Path.Combine(lugarEnDisco, nombre));
+
+            try
+            {
+                archivo.SaveAs(Path.Combine(lugarEnDisco, nombre));
+            }
+            catch (Exception e)
+            {
+                Models.Log.add(Models.Log.TipoLog.EXCEPTIONS, e.ToString());
+                throw e;
+            }
 
             if (returnRelativeFolder)
                 return Path.Combine(pathRelativo(folder), nombre);
@@ -172,7 +181,17 @@ namespace OMIstats.Utilities
         {
             string lugarEnDisco = pathAbsoluto(folder);
             if (File.Exists(Path.Combine(lugarEnDisco, nombre)))
-                File.Delete(Path.Combine(lugarEnDisco, nombre));
+            {
+                try
+                {
+                    File.Delete(Path.Combine(lugarEnDisco, nombre));
+                }
+                catch (Exception e)
+                {
+                    Models.Log.add(Models.Log.TipoLog.EXCEPTIONS, e.ToString());
+                    throw e;
+                }
+            }
         }
 
         /// <summary>
@@ -187,8 +206,16 @@ namespace OMIstats.Utilities
             if (Path.GetExtension(nombreDestino).Length < 2)
                 nombreDestino += Path.GetExtension(nombreOrigen);
 
-            File.Copy(Path.Combine(lugarOrigen, nombreOrigen),
-                Path.Combine(lugarDestino, nombreDestino), overwrite:true);
+            try
+            {
+                File.Copy(Path.Combine(lugarOrigen, nombreOrigen),
+                    Path.Combine(lugarDestino, nombreDestino), overwrite: true);
+            }
+            catch (Exception e)
+            {
+                Models.Log.add(Models.Log.TipoLog.EXCEPTIONS, e.ToString());
+                throw e;
+            }
 
             return Path.Combine(pathRelativo(folderDestino), nombreDestino);
         }
