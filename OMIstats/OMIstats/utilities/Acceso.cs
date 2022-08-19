@@ -48,6 +48,7 @@ namespace OMIstats.Utilities
             }
             catch(Exception e)
             {
+                Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
                 resultado.error = true;
                 resultado.descripcion = e.Message;
             }
@@ -65,6 +66,7 @@ namespace OMIstats.Utilities
             }
             catch (Exception e)
             {
+                Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
                 resultado.error = true;
                 resultado.descripcion = e.Message;
             }
@@ -118,6 +120,7 @@ namespace OMIstats.Utilities
             }
             catch (Exception e)
             {
+                Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
                 resultado.error = true;
                 resultado.descripcion = e.Message;
                 try
