@@ -1551,7 +1551,7 @@ namespace OMIstats.Models
             }
             else
             {
-                query.Append(filtrarOMIPOS);
+                query.Append(filtrarOMIPOS.Replace("md.", ""));
             }
 
             db.EjecutarQuery(query.ToString());
@@ -1630,6 +1630,7 @@ namespace OMIstats.Models
                     {
                         md.tipoOlimpiada = grande;
                         md.clave = "";
+                        md.cerrado = false;
                         md.nuevo();
                         md.guardarDatosEscuela();
                     }
