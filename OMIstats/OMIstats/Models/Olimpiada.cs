@@ -115,6 +115,8 @@ namespace OMIstats.Models
 
         public bool ordenarPorPuntos { get; set; }
 
+        public int invitados { get; set; }
+
         public float media
         {
             get
@@ -280,6 +282,7 @@ namespace OMIstats.Models
             puntosDesconocidos = false;
             alsoOmips = false;
             alsoOmipsOnline = false;
+            invitados = 0;
             noMedallistasConocidos = false;
             omisActualNumber = "";
             registroActivo = false;
@@ -397,6 +400,7 @@ namespace OMIstats.Models
             puntosDesconocidos = DataRowParser.ToBool(datos["puntosDesconocidos"]);
             alsoOmips = DataRowParser.ToBool(datos["alsoOmips"]);
             alsoOmipsOnline = DataRowParser.ToBool(datos["alsoOmipsOnline"]);
+            invitados = DataRowParser.ToInt(datos["invitados"]);
             noMedallistasConocidos = DataRowParser.ToBool(datos["noMedallistasConocidos"]);
             puntosDetallados = DataRowParser.ToBool(datos["puntosDetallados"]);
             registroActivo = DataRowParser.ToBool(datos["registroActivo"]);
@@ -562,6 +566,8 @@ namespace OMIstats.Models
             query.Append(alsoOmips ? 1 : 0);
             query.Append(", alsoOmipsOnline = ");
             query.Append(alsoOmipsOnline ? 1 : 0);
+            query.Append(", invitados = ");
+            query.Append(invitados);
             query.Append(", noMedallistasConocidos = ");
             query.Append(noMedallistasConocidos ? 1 : 0);
             query.Append(", puntosDetallados = ");
@@ -666,7 +672,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }

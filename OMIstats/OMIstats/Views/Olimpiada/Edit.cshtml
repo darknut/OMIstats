@@ -170,6 +170,14 @@ else
                 </div>
 
                 <div>
+                    <div class="label">Invitados:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.invitados)
+                        @Html.ValidationMessageFor(model => model.invitados)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">¿Ordenar por puntos?:</div>
                     <div class="input">
                         @Html.CheckBoxFor(model => model.ordenarPorPuntos)
