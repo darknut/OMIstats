@@ -1005,7 +1005,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Regresa si ya hay resultados grabados en la base de datos para la omi
         /// </summary>
-        public static bool hayResultadosParaOMI(string omi)
+        public static bool hayResultadosParaOMI(string omi, TipoOlimpiada tipoOlimpiada)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -1013,6 +1013,13 @@ namespace OMIstats.Models
             query.Append(" select COUNT(*) from Resultados where ");
             query.Append(" olimpiada = ");
             query.Append(Cadenas.comillas(omi));
+            if (tipoOlimpiada != TipoOlimpiada.OMIPO && tipoOlimpiada != TipoOlimpiada.OMISO)
+            {
+                query.Append(" and clase <> ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+                query.Append(" and clase <> ");
+                query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+            }
 
             db.EjecutarQuery(query.ToString());
             return (int)db.getTable().Rows[0][0] > 0;

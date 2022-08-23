@@ -115,7 +115,7 @@ namespace OMIstats.Controllers
             }
 
             List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, o.tipoOlimpiada);
-            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             if (o.esOnline)
             {
                 List<SedeOnline> sedes = SedeOnline.obtenerSedes(omi, p.esSuperUsuario() ? null : estado, tipo);
@@ -166,7 +166,7 @@ namespace OMIstats.Controllers
         public ActionResult Eliminar(string omi, TipoOlimpiada tipo, string estado, string clave)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
-            if (o == null || !tienePermisos(o.registroActivo, estado) || Resultados.hayResultadosParaOMI(omi))
+            if (o == null || !tienePermisos(o.registroActivo, estado) || Resultados.hayResultadosParaOMI(omi, tipo))
                 return RedirectTo(Pagina.HOME);
 
             MiembroDelegacion md = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, clave)[0];
@@ -273,7 +273,7 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
-            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+            ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             if (o.esOnline && !p.esSuperUsuario())
             {
                 ViewBag.sedes = SedeOnline.obtenerSedes(o.numero, estado, tipo);
@@ -378,7 +378,7 @@ namespace OMIstats.Controllers
             ViewBag.tipoAsistente = tipoAsistente;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
-            bool hayResultados = Resultados.hayResultadosParaOMI(o.numero);
+            bool hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             ViewBag.hayResultados = hayResultados;
             if (o.esOnline && !p.esSuperUsuario())
             {
