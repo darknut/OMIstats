@@ -62,7 +62,7 @@
     @if (!errorPermisos)
     {
     <script>
-        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero");
+        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero", @omi.invitados);
     </script>
     }
 }

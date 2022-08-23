@@ -19,6 +19,7 @@ namespace OMIstats.Models
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
 #endif
         public string numero { get; set; }
+        public const int COMPETIDORES_BASE = 4;
 
         public TipoOlimpiada tipoOlimpiada { get; set; }
 
@@ -1036,7 +1037,7 @@ namespace OMIstats.Models
         {
             if (this.tipoOlimpiada == TipoOlimpiada.OMIPO || this.tipoOlimpiada == TipoOlimpiada.OMISO)
                 return 25;
-            return estado == this.claveEstado && !this.esOnline ? 8 : 4;
+            return estado == this.claveEstado && !this.esOnline ? COMPETIDORES_BASE * 2 : COMPETIDORES_BASE + this.invitados;
         }
 
         public static HashSet<string> obtenerOlimpiadasParaEstado(string estado)

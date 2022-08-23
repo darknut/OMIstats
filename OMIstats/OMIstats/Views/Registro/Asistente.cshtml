@@ -1,4 +1,4 @@
-﻿    @model OMIstats.Models.Persona
+﻿@model OMIstats.Models.Persona
 
 @{
     // Sacando variables del ViewBag
@@ -75,7 +75,7 @@
         @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
         @(new MvcHtmlString("ext." + e.clave + (e.extranjero ? "=true;" : "=false;")))
             }
-        @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "\" + \"Registro/\", \"" + (usuario.esSuperUsuario() ? "" : estado.clave) + "\", \"" + omi.numero + "\");"))
+        @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "\" + \"Registro/\", \"" + (usuario.esSuperUsuario() ? "" : estado.clave) + "\", \"" + omi.numero + "\"," + omi.invitados + ");"))
         @(new MvcHtmlString("setUpSearch(\"" + tipo + "\");"))
         }
     </script>

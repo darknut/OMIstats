@@ -4,11 +4,13 @@ var estado = "";
 var omi = "";
 var searching = false;
 var resultados = [];
+var invitados = 0;
 
-function setUpAjax(url, claveEstado, claveOmi) {
+function setUpAjax(url, claveEstado, claveOmi, inv) {
     ajaxUrl = url;
     estado = claveEstado;
     omi = claveOmi;
+    invitados = inv;
 }
 
 function getDataSearch(query)
@@ -67,7 +69,7 @@ function llenaClaves(subfijo) {
     borrarOpciones(combo);
 
     var isOMIPOS = tipoRegistro == "OMISO" || tipoRegistro == "OMIPO";
-    var lim = isOMIPOS ? 25 : estadoSede == subfijo ? 8 : 4;
+    var lim = isOMIPOS ? 25 : estadoSede == subfijo ? 8 : 4 + invitados;
     for (i = 1; i <= lim; i++) {
         var padd = "";
         if (isOMIPOS && i < 10)
