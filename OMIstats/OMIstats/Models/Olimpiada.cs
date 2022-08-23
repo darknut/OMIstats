@@ -842,6 +842,24 @@ namespace OMIstats.Models
             return errores.ToString();
         }
 
+        public bool esInvitadoOnline(string clave)
+        {
+            if (this.esOnline)
+            {
+                int numero = 0;
+                if (!int.TryParse(clave.Substring(4), out numero))
+                    return true;
+                return numero > COMPETIDORES_BASE;
+            }
+
+            return false;
+        }
+
+        public bool esInvitado(string clave)
+        {
+            return clave.EndsWith("I");
+        }
+
         /// <summary>
         /// Guarda valores en la base de datos que estan directamente relacionados
         /// con los resultados y que no pueden escribirse a mano
@@ -879,6 +897,7 @@ namespace OMIstats.Models
             int lugar = 0;
             float? puntosMaximos = resultados.Count > 0 ? resultados[0].total : 0;
             bool unkEnTabla = false;
+            Resultados lastResults = null;
 
             for (int i = 0; i < resultados.Count; i++)
             {
@@ -897,10 +916,9 @@ namespace OMIstats.Models
                         }
                         else
                         {
-                            // Si el competidor es extranjero, no se le considera
+                            // Si el competidor es extranjero o invitado, no se le considera. A los invitados online sí se les asigna lugar
                             Estado e = Estado.obtenerEstadoConClave(resultados[i].estado);
-                            extranjero = e.extranjero;
-                            if (extranjero || resultados[i].clave.EndsWith("I"))
+                            if (e.extranjero || esInvitado(resultados[i].clave))
                             {
                                 if (lugar == 0)
                                     resultados[i].lugar = 1;
@@ -910,8 +928,11 @@ namespace OMIstats.Models
                             else
                             {
                                 competidores++;
-                                if (competidores == 1 || Math.Abs((decimal)(resultados[i - 1].total - resultados[i].total)) >= 1)
+                                if (competidores == 1 || Math.Abs((decimal)(lastResults.total - resultados[i].total)) >= 1)
+                                {
                                     lugar = competidores;
+                                    lastResults = resultados[i];
+                                }
                                 resultados[i].lugar = lugar;
                             }
                         }
@@ -940,10 +961,10 @@ namespace OMIstats.Models
             mostrarResultadosTotales = puntosMaximos > PUNTOS_MINIMOS_CONOCIDOS;
 
             // Calculamos el medallero y lo guardamos en la base
-            if (tipoOlimpiada != TipoOlimpiada.OMIPO && tipoOlimpiada != TipoOlimpiada.OMISO)
-                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
-            else
+            if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
                 MiembroDelegacion.registrarGanadoresOMIPOS(numero, tipoOlimpiada);
+            else
+                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
 
             // Guardamos los datos en la base
             guardarDatos();

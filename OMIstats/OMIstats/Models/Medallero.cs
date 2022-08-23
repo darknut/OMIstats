@@ -375,13 +375,12 @@ namespace OMIstats.Models
                             estadoPorOlimpiada.hayUNKs = true;
 
                         // No se han guardado mas de 4 lugares
-                        if (estadoPorOlimpiada.count < 4)
+                        if (estadoPorOlimpiada.count < Olimpiada.COMPETIDORES_BASE)
                         {
                             // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
-                            if (!resultado.clave.EndsWith("I"))
+                            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(olimpiada, tipoOlimpiada);
+                            if (!o.esInvitado(resultado.clave) && !o.esInvitadoOnline(resultado.clave))
                             {
-                                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
-
                                 // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
                                 if (o.noMedallistasConocidos)
                                 {
