@@ -1631,6 +1631,7 @@ namespace OMIstats.Models
                         md.tipoOlimpiada = grande;
                         md.clave = "";
                         md.cerrado = false;
+                        md.sede = 0;
                         md.nuevo();
                         md.guardarDatosEscuela();
                     }
