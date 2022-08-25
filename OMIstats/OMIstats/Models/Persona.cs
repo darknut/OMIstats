@@ -528,7 +528,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Crea un nuevo usuario con los datos en el objeto
         /// </summary>
-        public void nuevoUsuario(Archivos.FotoInicial fotoInicial = Archivos.FotoInicial.KAREL)
+        public bool nuevoUsuario(Archivos.FotoInicial fotoInicial = Archivos.FotoInicial.KAREL)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -541,16 +541,16 @@ namespace OMIstats.Models
             query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', '', 0, 0); select clave from @inserted ");
 
             if (db.EjecutarQuery(query.ToString()).error)
-                return;
+                return false;
 
             DataTable table = db.getTable();
             if (table.Rows.Count != 1)
-                return;
+                return false;
             clave = (int)table.Rows[0][0];
             usuario = "_" + clave.ToString();
             foto = Archivos.obtenerFotoInicial(fotoInicial);
 
-            guardarDatos();
+            return guardarDatos();
         }
 
         /// <summary>

@@ -706,7 +706,7 @@ namespace OMIstats.Models
             return p.clave;
         }
 
-        public void nuevo()
+        public bool nuevo()
         {
             // Primero se revisa si hay clave
             if (String.IsNullOrEmpty(clave))
@@ -749,10 +749,10 @@ namespace OMIstats.Models
             query.Append(cerrado ? 1 : 0);
             query.Append(")");
 
-            db.EjecutarQuery(query.ToString());
+            return !db.EjecutarQuery(query.ToString()).error;
         }
 
-        public void guardarDatos(string claveOriginal, TipoOlimpiada tipoOriginal, bool ignoreCollisions = false)
+        public bool guardarDatos(string claveOriginal, TipoOlimpiada tipoOriginal, bool ignoreCollisions = false)
         {
             if (String.IsNullOrEmpty(clave))
             {
@@ -811,10 +811,10 @@ namespace OMIstats.Models
             query.Append(" and persona = ");
             query.Append(claveUsuario);
 
-            db.EjecutarQuery(query.ToString());
+            return !db.EjecutarQuery(query.ToString()).error;
         }
 
-        public void guardarDatosEscuela()
+        public bool guardarDatosEscuela()
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
@@ -834,7 +834,7 @@ namespace OMIstats.Models
             query.Append(" and persona = ");
             query.Append(claveUsuario);
 
-            db.EjecutarQuery(query.ToString());
+            return !db.EjecutarQuery(query.ToString()).error;
         }
 #endif
 

@@ -3,6 +3,7 @@
 @{
     // Sacando variables del ViewBag
     string errorInfo = ViewBag.errorInfo;
+    string errorCode = ViewBag.errorCode;
     OMIstats.Models.Persona usuario = ViewBag.usuario;
     OMIstats.Models.Estado estado = ViewBag.estado;
     OMIstats.Models.Olimpiada omi = ViewBag.omi;
@@ -115,6 +116,13 @@ else if (errorInfo == "invalido")
 else if (errorInfo == "persona")
 {
     <div class="errorTextoRojo"> La persona seleccionada es inválida </div>
+    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
+}
+else if (errorInfo == "db")
+{
+    <div class="errorTextoRojo"> Hubo un error en la base de datos, por favor contacta al COMI </div>
+    <div>Código de error: @errorCode</div>
     @Html.ActionLink("Volver", "Delegacion", "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
