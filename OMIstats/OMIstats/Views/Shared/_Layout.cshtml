@@ -67,9 +67,13 @@
                     {
                         <span>Bienvenida</span>
                     }
-                    else
+                    else if (usuario.genero[0] == 'M')
                     {
                         <span>Bienvenido</span>
+                    }
+                    else
+                    {
+                        <span>Bienvenide</span>
                     }
                     @Html.ActionLink(usuario.nombre, "view", "Profile",
                                       new { usuario = usuario.usuario },

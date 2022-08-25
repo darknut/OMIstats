@@ -320,6 +320,8 @@ function validar() {
         return false;
     if (revisaNoVacio("estado"))
         return false;
+    if (revisaNoVacio("tshirt"))
+        return false;
 
     estado = document.getElementById("estado").value;
     var isExt = ext[estado];

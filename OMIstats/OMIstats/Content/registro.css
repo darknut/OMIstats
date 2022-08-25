@@ -201,3 +201,7 @@
 .celda-estado {
     border-top: solid 1px black;
 }
+
+.small-combo {
+    width: 130px;
+}

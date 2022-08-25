@@ -241,15 +241,15 @@ if (nuevo && !resubmit)
             @Html.ValidationMessageFor(model => model.apellidoPaterno)
         </div>
         <div class="registro-single-control">
-            <span class="control-title">Apellido Materno<span class="errorTextoRojo">*</span></span>
+            <span class="control-title">Apellido Materno</span>
             @Html.TextBoxFor(model => model.apellidoMaterno, new { @class = "shiny-box" })
             @Html.ValidationMessageFor(model => model.apellidoMaterno)
         </div>
     </div>
     <div class="registro-controls">
         <div class="registro-single-control">
-            <span class="control-title">Sexo<span class="errorTextoRojo">*</span></span>
-            <select id="genero" name="genero" class="shiny-box">
+            <span class="control-title">Sexo</span>
+            <select id="genero" name="genero" class="shiny-box small-combo">
                 <option value=""></option>
                 <option value="M" @(Model.genero == "M" ? "selected" : "")>Masculino</option>
                 <option value="F" @(Model.genero == "F" ? "selected" : "")>Femenino</option>
@@ -260,7 +260,17 @@ if (nuevo && !resubmit)
             @Html.TextBoxFor(model => model.nacimiento, "{0:dd/MM/yyyy}", new { @class="shiny-box" })
             @Html.ValidationMessageFor(model => model.nacimiento, "No escribiste una fecha válida")
         </div>
-        <div class="registro-single-control"></div>
+        <div class="registro-single-control">
+            <span class="control-title">Tamaño de playera<span class="errorTextoRojo">*</span></span>
+            <select id="tshirt" name="tshirt" class="shiny-box small-combo">
+                <option value=""></option>
+                <option value="S" @(!nuevo && md.tshirt == "S" ? "selected" : "")>Chica</option>
+                <option value="M" @(!nuevo && md.tshirt == "M" ? "selected" : "")>Mediana</option>
+                <option value="L" @(!nuevo && md.tshirt == "L" ? "selected" : "")>Grande</option>
+                <option value="XL" @(!nuevo && md.tshirt == "XL" ? "selected" : "")>Extra grande</option>
+            </select>
+            <div id="errortshirt" class="errorTextoRojo" style="display:none">Elige una opción</div>
+        </div>
     </div>
     <div class="registro-controls">
         <div class="registro-single-control">

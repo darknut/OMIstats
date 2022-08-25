@@ -145,7 +145,7 @@ namespace OMIstats.Models
             correo = "";
             usuario = "";
             permisos = TipoPermisos.NORMAL;
-            genero = "M";
+            genero = "";
             foto = "";
             ioiID = 0;
             omegaup = "";

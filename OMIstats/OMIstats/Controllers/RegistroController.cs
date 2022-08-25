@@ -307,7 +307,8 @@ namespace OMIstats.Controllers
             int selectEscuela = 0, string nombreEscuela = null, int selectAnioEscolar = 0,
             Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL,
             TipoOlimpiada tipo = TipoOlimpiada.NULL, bool selectPublica = true,
-            MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL, int sede = -1)
+            MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL, int sede = -1,
+            string tshirt = "")
         {
             // Se valida que el usuario tenga permiso para realizar esta acción
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
@@ -494,6 +495,7 @@ namespace OMIstats.Controllers
                 md.claveUsuario = p.clave;
                 md.sede = sede;
                 md.cerrado = registroCerrado;
+                md.tshirt = tshirt;
                 md.nuevo();
 
                 // Se registra la telemetria
@@ -535,6 +537,7 @@ namespace OMIstats.Controllers
                 md.tipo = tipoAsistente;
                 md.sede = sede;
                 md.cerrado = registroCerrado;
+                md.tshirt = tshirt;
                 md.guardarDatos(claveOriginal, tipoO);
 
                 // Se registra la telemetria

@@ -77,6 +77,7 @@ namespace OMIstats.Models
         public bool omips;
         public bool escuelaPublica;
         public bool puedeRegistrar;
+        public string tshirt;
         /// <summary>
         /// Esta bandera indica si el registro ya fue completado por el líder
         /// Todos los usuarios lo tienen, se actualiza a todos a la vez.
@@ -130,6 +131,7 @@ namespace OMIstats.Models
             tipo = TipoAsistente.NULL;
             resultados = null;
             sede = 0;
+            tshirt = "";
             cerrado = false;
         }
 
@@ -174,6 +176,7 @@ namespace OMIstats.Models
             tipo = DataRowParser.ToTipoAsistente(row["tipo"]);
             tipoOlimpiada = DataRowParser.ToTipoOlimpiada(row["clase"]);
             sede = DataRowParser.ToInt(row["sede"]);
+            tshirt = DataRowParser.ToString(row["tshirt"]);
             cerrado = DataRowParser.ToBool(row["cerrado"]);
 #if OMISTATS
             try
@@ -335,7 +338,7 @@ namespace OMIstats.Models
                 query.Append(" i.nombre as nombreEscuela, ");
             else
                 query.Append(" i.nombreCorto as nombreEscuela, ");
-            query.Append(" md.nivel,");
+            query.Append(" md.nivel, md.tshirt,");
             query.Append(" md.año, md.sede, md.cerrado, i.publica, md.persona, md.institucion from miembrodelegacion as md");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" left outer join Institucion as i on i.clave = md.institucion");
@@ -721,7 +724,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
 
-            query.Append(" insert into miembrodelegacion (olimpiada, estado, clase, clave, tipo, persona, sede, cerrado) values(");
+            query.Append(" insert into miembrodelegacion (olimpiada, estado, clase, clave, tipo, persona, sede, tshirt, cerrado) values(");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(",");
             query.Append(Cadenas.comillas(estado));
@@ -735,6 +738,8 @@ namespace OMIstats.Models
             query.Append(claveUsuario);
             query.Append(",");
             query.Append(sede);
+            query.Append(",");
+            query.Append(Cadenas.comillas(tshirt));
             query.Append(",");
             query.Append(cerrado ? 1 : 0);
             query.Append(")");
@@ -788,6 +793,8 @@ namespace OMIstats.Models
                 query.Append(", sede = ");
                 query.Append(sede);
             }
+            query.Append(", tshirt = ");
+            query.Append(Cadenas.comillas(tshirt));
             query.Append(", cerrado = ");
             query.Append(cerrado ? 1 : 0);
             query.Append(" where olimpiada = ");
@@ -942,7 +949,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" select p.usuario, p.nombre, p.apellidoP, p.apellidoM, md.olimpiada, md.estado, md.tipo, md.clave, md.clase, md.institucion, ");
-            query.Append(" p.nacimiento, p.genero, p.correo, p.omips, i.nombreCorto as nombreEscuela, md.nivel,");
+            query.Append(" p.nacimiento, p.genero, p.correo, p.omips, i.nombreCorto as nombreEscuela, md.nivel, md.tshirt,");
             query.Append(" md.año, md.sede, md.cerrado, i.publica, md.persona from miembrodelegacion as md");
             query.Append(" inner join Olimpiada as o on md.olimpiada = o.numero and md.clase = o.clase ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
