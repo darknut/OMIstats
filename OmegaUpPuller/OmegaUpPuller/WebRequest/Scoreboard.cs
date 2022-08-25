@@ -166,29 +166,12 @@ namespace OmegaUpPuller.WebRequest
             if (x == null)
                 x1 = -1;
             else
-            {
                 x1 = (float)x.total;
-                xinv = x.invitado;
-            }
 
             if (y == null)
                 y1 = -1;
             else
-            {
                 y1 = (float)y.total;
-                yinv = y.invitado;
-            }
-
-            // Si un competidor invitado tiene los mismos puntos que uno no invitado
-            // queremos poner primero al no invitado para que no haya problema en el
-            // cálculo de medalla
-            if (x1 == y1 && xinv != yinv)
-            {
-                if (xinv)
-                    x1 = -1;
-                else
-                    y1 = -1;
-            }
 
             return y1.CompareTo(x1);
         }
@@ -269,12 +252,9 @@ namespace OmegaUpPuller.WebRequest
                 }
                 else
                 {
-                    // Si el competidor actual es invitado, no se cambian los premios
-                    if (!r.invitado)
-                    {
-                        while (this.cortes[premioActual] < counterMedalla && empatados == 0)
-                            premioActual++;
-                    }
+                    // Se calcula la nueva medalla
+                    while (this.cortes[premioActual] < counterMedalla && empatados == 0)
+                        premioActual++;
 
                     r.medalla = medallas[premioActual];
                 }
