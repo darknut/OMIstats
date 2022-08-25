@@ -185,7 +185,6 @@ namespace OMIstats.Controllers
         private void failSafeViewBag()
         {
             ViewBag.errorInfo = "";
-            ViewBag.errorCode = "";
             ViewBag.tipo = TipoOlimpiada.NULL;
             ViewBag.tipoAsistente = MiembroDelegacion.TipoAsistente.NULL;
             ViewBag.hayResultados = false;
@@ -456,9 +455,8 @@ namespace OMIstats.Controllers
                     // Si no hay clave de persona previa, se agrega una nueva persona
                     if (!p.nuevoUsuario())
                     {
-                        ViewBag.errorInfo = "db";
-                        ViewBag.errorCode = "NEW_USER";
-                        Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                        ViewBag.errorInfo = "db_NEW_USER";
+                        Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                         return View(new Persona());
                     }
                 }
@@ -492,9 +490,8 @@ namespace OMIstats.Controllers
                 p.foto = guardaFoto(file, p.clave);
                 if (!p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO))
                 {
-                    ViewBag.errorInfo = "db";
-                    ViewBag.errorCode = "UPDATE_NEW_USER";
-                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                    ViewBag.errorInfo = "db_UPDATE_NEW_USER";
+                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                     return View(new Persona());
                 }
 
@@ -512,9 +509,8 @@ namespace OMIstats.Controllers
 
                 if (!md.nuevo())
                 {
-                    ViewBag.errorInfo = "db";
-                    ViewBag.errorCode = "NEW_MD";
-                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                    ViewBag.errorInfo = "db_NEW_MD";
+                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                     return View(new Persona());
                 }
 
@@ -550,9 +546,8 @@ namespace OMIstats.Controllers
                 p.foto = guardaFoto(file, p.clave);
                 if (!p.guardarDatos(generarPeticiones: false, lugarGuardado: Persona.LugarGuardado.REGISTRO))
                 {
-                    ViewBag.errorInfo = "db";
-                    ViewBag.errorCode = "UPDATE_USER";
-                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                    ViewBag.errorInfo = "db_UPDATE_USER";
+                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                     return View(new Persona());
                 }
 
@@ -566,9 +561,8 @@ namespace OMIstats.Controllers
                 md.tshirt = tshirt;
                 if (!md.guardarDatos(claveOriginal, tipoO))
                 {
-                    ViewBag.errorInfo = "db";
-                    ViewBag.errorCode = "UPDATE_MD";
-                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                    ViewBag.errorInfo = "db_UPDATE_MD";
+                    Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                     return View(new Persona());
                 }
 
@@ -595,9 +589,8 @@ namespace OMIstats.Controllers
                             i = new Institucion();
                             if (!i.nuevaInstitucion())
                             {
-                                ViewBag.errorInfo = "db";
-                                ViewBag.errorCode = "NEW_SCHOOL";
-                                Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                                ViewBag.errorInfo = "db_NEW_SCHOOL";
+                                Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                                 return View(new Persona());
                             }
                             i.nombre = nombreEscuela;
@@ -624,9 +617,8 @@ namespace OMIstats.Controllers
                     }
                     if (!i.guardar(generarPeticiones: false))
                     {
-                        ViewBag.errorInfo = "db";
-                        ViewBag.errorCode = "UPDATE_SCHOOL";
-                        Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                        ViewBag.errorInfo = "db_UPDATE_SCHOOL";
+                        Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                         return View(new Persona());
                     }
 
@@ -635,9 +627,8 @@ namespace OMIstats.Controllers
                     md.añoEscuela = selectAnioEscolar;
                     if (!md.guardarDatosEscuela())
                     {
-                        ViewBag.errorInfo = "db";
-                        ViewBag.errorCode = "UPDATE_MD_SCHOOL";
-                        Log.add(Log.TipoLog.DATABASE, ViewBag.errorCode);
+                        ViewBag.errorInfo = "db_UPDATE_MD_SCHOOL";
+                        Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                         return View(new Persona());
                     }
                 }
