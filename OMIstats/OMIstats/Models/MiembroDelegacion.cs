@@ -941,6 +941,7 @@ namespace OMIstats.Models
             return md;
         }
 
+#if OMISTATS
         /// <summary>
         /// Regresa las participaciones del usuario mandado como parámetro que no son como competidor
         /// </summary>
@@ -979,7 +980,6 @@ namespace OMIstats.Models
 
             return lista;
         }
-#if OMISTATS
         /// <summary>
         /// Obtiene la lista de miembros de una delegacion
         /// </summary>
