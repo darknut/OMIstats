@@ -90,7 +90,7 @@ namespace OmegaUpPuller.WebRequest
             m.omi = this.olimpiada;
 
             medalleroEstados.Add(estado, m);
-            m.guardarDatos();
+            m.guardarDatos(expectErrors: true);
 
             return m;
         }
@@ -212,9 +212,9 @@ namespace OmegaUpPuller.WebRequest
                 {
                     // Para las OMI se siguen las reglas de los doceavos
                     this.cortes = new int[] {
-                        (int) Math.Ceiling(this.concursantes / 12.0),
-                        (int) Math.Ceiling(this.concursantes / 4.0),
-                        (int) Math.Ceiling(this.concursantes / 2.0),
+                        (int) Math.Ceiling((this.concursantes - this.invitados) / 12.0),
+                        (int) Math.Ceiling((this.concursantes - this.invitados) / 4.0),
+                        (int) Math.Ceiling((this.concursantes - this.invitados) / 2.0),
                         this.concursantes + 1
                     };
                 }
@@ -234,7 +234,8 @@ namespace OmegaUpPuller.WebRequest
             int lastPoints = -1;
             int empatados = 0;
             int premioActual = 0;
-            int counter = 1;
+            int counterMedalla = 1;
+            int counterLugar = 1;
             this.reseteaMedalleroEstados();
 
             // Asignamos lugares y medallas
@@ -252,7 +253,7 @@ namespace OmegaUpPuller.WebRequest
                 }
                 else
                 {
-                    lugar = counter;
+                    lugar = counterLugar;
                     empatados = 0;
                 }
 
@@ -271,7 +272,7 @@ namespace OmegaUpPuller.WebRequest
                     // Si el competidor actual es invitado, no se cambian los premios
                     if (!r.invitado)
                     {
-                        while (this.cortes[premioActual] < counter && empatados == 0)
+                        while (this.cortes[premioActual] < counterMedalla && empatados == 0)
                             premioActual++;
                     }
 
@@ -279,48 +280,53 @@ namespace OmegaUpPuller.WebRequest
                 }
 
 
-                // Para las OMI también calculamos los estados...
+                // Para las OMI también calculamos los estados
                 if (tipoOlimpiada == TipoOlimpiada.OMI)
                 {
-                    // ...pero solo si no es invitado
+                    Medallero m;
+                    if (!medalleroEstados.TryGetValue(r.estado, out m))
+                        m = this.agregaEstado(r.estado);
+
+                    // Si es invitado no cuentan los puntos
                     if (!r.invitado)
                     {
-                        Medallero m;
-                        if (!medalleroEstados.TryGetValue(r.estado, out m))
-                            m = this.agregaEstado(r.estado);
-
                         m.count++;
-
                         if (m.count <= Olimpiada.COMPETIDORES_BASE)
                             m.puntos += r.total;
+                    }
 
-                        switch (r.medalla)
+                    // Pero sí las medallas
+                    switch (r.medalla)
+                    {
+                        case Resultados.TipoMedalla.ORO:
                         {
-                            case Resultados.TipoMedalla.ORO:
-                                {
-                                    m.oros++;
-                                    break;
-                                }
-                            case Resultados.TipoMedalla.PLATA:
-                                {
-                                    m.platas++;
-                                    break;
-                                }
-                            case Resultados.TipoMedalla.BRONCE:
-                                {
-                                    m.bronces++;
-                                    break;
-                                }
+                            m.oros++;
+                            break;
+                        }
+                        case Resultados.TipoMedalla.PLATA:
+                        {
+                            m.platas++;
+                            break;
+                        }
+                        case Resultados.TipoMedalla.BRONCE:
+                        {
+                            m.bronces++;
+                            break;
                         }
                     }
                 }
 
                 // Para el calculo de medallas, no contamos invitados, así que no incrementamos el counter actual
                 if (!r.invitado)
-                    counter++;
+                    counterMedalla++;
+                counterLugar++;
 
                 // Finalmente guardamos la linea en la base de datos
-                r.guardar(detalles: true, timestamp: timestamp, dia: dia, soloDetalles: Program.HIDE);
+                r.guardar(detalles: true, timestamp: timestamp, dia: dia, soloDetalles: Program.HIDE
+#if DEBUG
+                    ,expectErrors: true
+#endif
+               );
             }
 
             // Para OMIPS ya terminamos los cálculos

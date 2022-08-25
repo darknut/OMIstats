@@ -565,7 +565,7 @@ namespace OMIstats.Models
         /// <param name="dia">Si detalles es true, el dia es requerido</param>
         /// <param name="soloDetalles">Si detalles es true y soloDetalles tambien, se salta guardar en tabla resultados y solo guarda los detalles</param>
         /// </summary>
-        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0, bool soloDetalles = false)
+        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0, bool soloDetalles = false, bool expectErrors = false)
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
@@ -574,9 +574,9 @@ namespace OMIstats.Models
             if (detalles)
             {
                 DetallePuntos detallePuntos = new DetallePuntos(omi, tipoOlimpiada, clave, timestamp, dia, dia == 1 ? dia1 : dia2);
-                detallePuntos.guardar();
+                detallePuntos.guardar(expectErrors: expectErrors);
                 DetalleLugar detalleLugar = new DetalleLugar(omi, tipoOlimpiada, clave, timestamp, dia, medalla, lugar);
-                detalleLugar.guardar();
+                detalleLugar.guardar(expectErrors: expectErrors);
 
                 if (soloDetalles)
                     return TipoError.OK;

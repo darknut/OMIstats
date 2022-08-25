@@ -150,7 +150,7 @@ namespace OMIstats.Models
         /// Guarda los datos en el objeto en la base de datos
         /// </summary>
         /// <returns>Regresa si se guardo o no</returns>
-        public bool guardarDatos()
+        public bool guardarDatos(bool expectErrors = false)
         {
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
@@ -182,7 +182,7 @@ namespace OMIstats.Models
             query.Append(lugar);
             query.Append(")");
 
-            return !db.EjecutarQuery(query.ToString()).error;
+            return !db.EjecutarQuery(query.ToString(), expectErrors: expectErrors).error;
         }
 
         /// <summary>

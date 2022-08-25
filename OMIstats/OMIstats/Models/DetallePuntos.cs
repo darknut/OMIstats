@@ -151,7 +151,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
-        public void guardar()
+        public void guardar(bool expectErrors = false)
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
@@ -182,7 +182,7 @@ namespace OMIstats.Models
             query.Append(this.puntosDia == null ? "0" : this.puntosDia.ToString());
             query.Append(")");
 
-            db.EjecutarQuery(query.ToString());
+            db.EjecutarQuery(query.ToString(), expectErrors: expectErrors);
         }
 
         private static void borrar(string omi, string clase, string clave, int timestamp, int dia)
