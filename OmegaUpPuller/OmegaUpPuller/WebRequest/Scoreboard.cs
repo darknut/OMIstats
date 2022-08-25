@@ -25,7 +25,7 @@ namespace OmegaUpPuller.WebRequest
             };
 
         private int[] cortes;
-        public bool hidden;
+        private int invitados = 0;
 
         public Scoreboard(string olimpiada, TipoOlimpiada tipoOlimpiada, int dia, int problemas)
         {
@@ -34,16 +34,21 @@ namespace OmegaUpPuller.WebRequest
             this.dia = dia;
             this.problemas = problemas;
             this.concursantes = 0;
-            this.hidden = false;
 
             inicializaResultados();
 
             medalleroEstados = new Dictionary<string, Medallero>();
 
-            if (Program.HIDE)
-                this.hidden = true;
-            else
+            if (!Program.HIDE)
                 this.guardaProblemas();
+        }
+
+        private void llenaInvitado(Resultados r)
+        {
+            r.invitado = MiembroDelegacion.esInvitado(r.clave) ||
+                         MiembroDelegacion.esInvitadoOnline(r.clave, Program.HIDE);
+            if (r.invitado)
+                invitados++;
         }
 
         private void inicializaResultados()
@@ -52,9 +57,10 @@ namespace OmegaUpPuller.WebRequest
             List<Resultados> r = Resultados.cargarResultados(olimpiada, tipoOlimpiada, cargarObjetos: false);
             foreach (var resultado in r)
             {
+                llenaInvitado(resultado);
                 resultados.Add(resultado.clave, resultado);
             }
-            this.concursantes = resultados.Count;
+            this.concursantes = resultados.Count - invitados;
         }
 
         private void reseteaMedalleroEstados()
@@ -89,9 +95,16 @@ namespace OmegaUpPuller.WebRequest
             return m;
         }
 
+        /// <summary>
+        /// Actualiza los puntos de un competidor en el diccionario de puntos
+        /// </summary>
+        /// <param name="clave">La clave del competidor</param>
+        /// <param name="resultados">Los resultados a guardar</param>
         public void actualiza(string clave, decimal?[] resultados)
         {
             Resultados res;
+
+            // A veces se agregan competidores en vivo, si ese es el caso, hay que agregarlo.
             if (!this.resultados.TryGetValue(clave, out res))
             {
                 List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosConClave(this.olimpiada, this.tipoOlimpiada, clave);
@@ -108,7 +121,11 @@ namespace OmegaUpPuller.WebRequest
                 res.clave = clave;
                 res.publico = true;
                 res.estado = miembros[0].estado;
-                concursantes++;
+
+                llenaInvitado(res);
+
+                if (!res.invitado)
+                    concursantes++;
                 this.resultados.Add(clave, res);
             }
 
@@ -138,6 +155,9 @@ namespace OmegaUpPuller.WebRequest
             res.total = res.totalDia1 + res.totalDia2;
         }
 
+        /// <summary>
+        /// Compara los resultados de dos competidores y regresa quien está mas alto
+        /// </summary>
         public static int compara(Resultados x, Resultados y)
         {
             float x1 = 0, y1 = 0;
@@ -150,11 +170,27 @@ namespace OmegaUpPuller.WebRequest
             if (y == null)
                 y1 = -1;
             else
-                y1 = (float) y.total;
+                y1 = (float)y.total;
+
+            // Si un competidor invitado tiene los mismos puntos que uno no invitado
+            // queremos poner primero al no invitado para que no haya problema en el
+            // cálculo de medalla
+            if (x1 == y1 && x.invitado != y.invitado)
+            {
+                if (x.invitado)
+                    x1 = -1;
+                else
+                    y1 = -1;
+            }
 
             return y1.CompareTo(x1);
         }
 
+        /// <summary>
+        /// Ordena los resultados y asigna medallas y lugares
+        /// </summary>
+        /// <param name="timestamp">El timestamp con el que se van a guardar los lugares</param>
+        /// <param name="dia">El día del examen</param>
         public void ordena(int timestamp, int dia)
         {
             // Ordenamos los resutlados
@@ -191,12 +227,13 @@ namespace OmegaUpPuller.WebRequest
             int lastPoints = -1;
             int empatados = 0;
             int premioActual = 0;
+            int counter = 1;
             this.reseteaMedalleroEstados();
 
             // Asignamos lugares y medallas
-            for (int counter = 1; counter <= list.Count; counter++)
+            for (int i = 0; i < list.Count; i++)
             {
-                Resultados r = list[counter - 1];
+                Resultados r = list[i];
                 if (r == null)
                     break;
 
@@ -224,45 +261,56 @@ namespace OmegaUpPuller.WebRequest
                 }
                 else
                 {
-                    // Se verifica si hay que cambiar de premio
-                    while (this.cortes[premioActual] < counter && empatados == 0)
-                        premioActual++;
+                    // Si el competidor actual es invitado, no se cambian los premios
+                    if (!r.invitado)
+                    {
+                        while (this.cortes[premioActual] < counter && empatados == 0)
+                            premioActual++;
+                    }
 
                     r.medalla = medallas[premioActual];
                 }
 
 
-                // Para las OMI también calculamos los estados
+                // Para las OMI también calculamos los estados...
                 if (tipoOlimpiada == TipoOlimpiada.OMI)
                 {
-                    Medallero m;
-                    if (!medalleroEstados.TryGetValue(r.estado, out m))
-                        m = this.agregaEstado(r.estado);
-
-                    m.count++;
-
-                    if (m.count <= 4)
-                        m.puntos += r.total;
-
-                    switch (r.medalla)
+                    // ...pero solo si no es invitado
+                    if (!r.invitado)
                     {
-                        case Resultados.TipoMedalla.ORO:
-                            {
-                                m.oros++;
-                                break;
-                            }
-                        case Resultados.TipoMedalla.PLATA:
-                            {
-                                m.platas++;
-                                break;
-                            }
-                        case Resultados.TipoMedalla.BRONCE:
-                            {
-                                m.bronces++;
-                                break;
-                            }
+                        Medallero m;
+                        if (!medalleroEstados.TryGetValue(r.estado, out m))
+                            m = this.agregaEstado(r.estado);
+
+                        m.count++;
+
+                        if (m.count <= Olimpiada.COMPETIDORES_BASE)
+                            m.puntos += r.total;
+
+                        switch (r.medalla)
+                        {
+                            case Resultados.TipoMedalla.ORO:
+                                {
+                                    m.oros++;
+                                    break;
+                                }
+                            case Resultados.TipoMedalla.PLATA:
+                                {
+                                    m.platas++;
+                                    break;
+                                }
+                            case Resultados.TipoMedalla.BRONCE:
+                                {
+                                    m.bronces++;
+                                    break;
+                                }
+                        }
                     }
                 }
+
+                // Para el calculo de medallas, no contamos invitados, así que no incrementamos el counter actual
+                if (!r.invitado)
+                    counter++;
 
                 // Finalmente guardamos la linea en la base de datos
                 r.guardar(detalles: true, timestamp: timestamp, dia: dia, soloDetalles: Program.HIDE);

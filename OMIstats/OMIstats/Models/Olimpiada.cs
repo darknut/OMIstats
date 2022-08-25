@@ -30,6 +30,7 @@ namespace OMIstats.Models
 
         public bool noMedallistasConocidos { get; set; }
         public bool puntosDesconocidos { get; set; }
+        public bool esOnline { get; set; }
 
 #if OMISTATS
         public const string TEMP_CLAVE = "TMP";
@@ -109,8 +110,6 @@ namespace OMIstats.Models
         public bool registroActivo { get; set; }
 
         public bool diplomasOnline { get; set; }
-
-        public bool esOnline { get; set; }
 
         public bool registroSedes { get; set; }
 
@@ -842,24 +841,6 @@ namespace OMIstats.Models
             return errores.ToString();
         }
 
-        public bool esInvitadoOnline(string clave)
-        {
-            if (this.esOnline)
-            {
-                int numero = 0;
-                if (!int.TryParse(clave.Substring(4), out numero))
-                    return true;
-                return numero > COMPETIDORES_BASE;
-            }
-
-            return false;
-        }
-
-        public bool esInvitado(string clave)
-        {
-            return clave.EndsWith("I");
-        }
-
         /// <summary>
         /// Guarda valores en la base de datos que estan directamente relacionados
         /// con los resultados y que no pueden escribirse a mano
@@ -918,7 +899,7 @@ namespace OMIstats.Models
                         {
                             // Si el competidor es extranjero o invitado, no se le considera. A los invitados online sí se les asigna lugar
                             Estado e = Estado.obtenerEstadoConClave(resultados[i].estado);
-                            if (e.extranjero || esInvitado(resultados[i].clave))
+                            if (e.extranjero || MiembroDelegacion.esInvitado(resultados[i].clave))
                             {
                                 if (lugar == 0)
                                     resultados[i].lugar = 1;

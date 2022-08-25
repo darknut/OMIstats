@@ -377,9 +377,9 @@ namespace OMIstats.Models
                         // No se han guardado mas de 4 lugares
                         if (estadoPorOlimpiada.count < Olimpiada.COMPETIDORES_BASE)
                         {
-                            // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
                             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(olimpiada, tipoOlimpiada);
-                            if (!o.esInvitado(resultado.clave) && !o.esInvitadoOnline(resultado.clave))
+                            // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
+                            if (!MiembroDelegacion.esInvitado(resultado.clave) && !MiembroDelegacion.esInvitadoOnline(resultado.clave, o.esOnline))
                             {
                                 // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
                                 if (o.noMedallistasConocidos)

@@ -64,6 +64,8 @@ namespace OMIstats.Models
         public Persona persona;
         public Institucion escuela;
         public Institucion.NivelInstitucion nivelInstitucion;
+#else
+        public bool invitado;
 #endif
         public int añoEscolar;
         public string nombreEstado;

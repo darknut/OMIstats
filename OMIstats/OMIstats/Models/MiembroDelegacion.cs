@@ -1443,6 +1443,24 @@ namespace OMIstats.Models
             return lista;
         }
 
+        public static bool esInvitadoOnline(string clave, bool esOnline)
+        {
+            if (esOnline)
+            {
+                int numero = 0;
+                if (!int.TryParse(clave.Substring(4), out numero))
+                    return true;
+                return numero > Olimpiada.COMPETIDORES_BASE;
+            }
+
+            return false;
+        }
+
+        public static bool esInvitado(string clave)
+        {
+            return clave.EndsWith("I");
+        }
+
 #if OMISTATS
         /// <summary>
         /// Devuelve un objeto institucion vacío, que incluye solo el nuevo nivel en que el alumno tiene que estar
