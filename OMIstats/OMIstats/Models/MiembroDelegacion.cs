@@ -405,6 +405,11 @@ namespace OMIstats.Models
             s.Append(añoEscuela);
             s.Append(",");
             s.Append(escuelaPublica ? "publica" : "privada");
+            if (esParaRegistro)
+            {
+                s.Append(",");
+                s.Append(tshirt);
+            }
 
             return s.ToString();
         }

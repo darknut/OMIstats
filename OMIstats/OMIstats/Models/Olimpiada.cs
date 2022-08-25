@@ -693,7 +693,7 @@ namespace OMIstats.Models
             {
                 // Incluimos cabeceras de datos
                 tabla.Append("nivel omi, nombre, estado, tipo asistente, clave, fecha nacimiento, ");
-                tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada,  ");
+                tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada, camiseta, ");
                 tabla.Append(" celular, telefono, direccion, omegaup, emergencia, parentesco, ");
                 tabla.Append(" telefono emergencia, medicina, alergias");
                 if (this.esOnline)
