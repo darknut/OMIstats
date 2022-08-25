@@ -161,23 +161,30 @@ namespace OmegaUpPuller.WebRequest
         public static int compara(Resultados x, Resultados y)
         {
             float x1 = 0, y1 = 0;
+            bool xinv = false, yinv = false;
 
             if (x == null)
                 x1 = -1;
             else
+            {
                 x1 = (float)x.total;
+                xinv = x.invitado;
+            }
 
             if (y == null)
                 y1 = -1;
             else
+            {
                 y1 = (float)y.total;
+                yinv = y.invitado;
+            }
 
             // Si un competidor invitado tiene los mismos puntos que uno no invitado
             // queremos poner primero al no invitado para que no haya problema en el
             // cálculo de medalla
-            if (x1 == y1 && x.invitado != y.invitado)
+            if (x1 == y1 && xinv != yinv)
             {
-                if (x.invitado)
+                if (xinv)
                     x1 = -1;
                 else
                     y1 = -1;
