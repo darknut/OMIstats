@@ -30,7 +30,6 @@ namespace OMIstats.Models
 
         public bool noMedallistasConocidos { get; set; }
         public bool puntosDesconocidos { get; set; }
-        public bool esOnline { get; set; }
 
 #if OMISTATS
         public const string TEMP_CLAVE = "TMP";
@@ -116,6 +115,8 @@ namespace OMIstats.Models
         public bool ordenarPorPuntos { get; set; }
 
         public int invitados { get; set; }
+
+        public bool esOnline { get; set; }
 
         public float media
         {
@@ -1063,6 +1064,21 @@ namespace OMIstats.Models
             }
 
             return lista;
+        }
+#else
+        public static bool esOnline(string olimpiada, TipoOlimpiada tipoOlimpiada)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select esOnline from olimpiada where numero = ");
+            query.Append(Cadenas.comillas(olimpiada));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+
+            db.EjecutarQuery(query.ToString());
+
+            return Utilities.DataRowParser.ToBool(db.getTable().Rows[0][0]);
         }
 #endif
     }

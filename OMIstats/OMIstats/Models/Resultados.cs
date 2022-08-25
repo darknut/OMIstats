@@ -615,7 +615,7 @@ namespace OMIstats.Models
             query.Append((int)TipoMedalla.NADA);
             query.Append(", 0, '', 0)");
 
-            db.EjecutarQuery(query.ToString());
+            db.EjecutarQuery(query.ToString(), expectErrors: expectErrors);
             query.Clear();
 
             // Ahora actualizamos con los datos que tenemos en el objeto

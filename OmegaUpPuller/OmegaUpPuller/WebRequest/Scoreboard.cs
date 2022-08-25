@@ -16,6 +16,7 @@ namespace OmegaUpPuller.WebRequest
         private int problemas;
         private int concursantes;
         private Dictionary<string, Medallero> medalleroEstados = null;
+        private bool esOnline;
 
         private static Resultados.TipoMedalla[] medallas = new Resultados.TipoMedalla[] {
                 Resultados.TipoMedalla.ORO,
@@ -34,6 +35,7 @@ namespace OmegaUpPuller.WebRequest
             this.dia = dia;
             this.problemas = problemas;
             this.concursantes = 0;
+            this.esOnline = Olimpiada.esOnline(olimpiada, tipoOlimpiada);
 
             inicializaResultados();
 
@@ -46,7 +48,7 @@ namespace OmegaUpPuller.WebRequest
         private void llenaInvitado(Resultados r)
         {
             r.invitado = MiembroDelegacion.esInvitado(r.clave) ||
-                         MiembroDelegacion.esInvitadoOnline(r.clave, Program.HIDE);
+                         MiembroDelegacion.esInvitadoOnline(r.clave, this.esOnline);
             if (r.invitado)
                 invitados++;
         }
@@ -73,6 +75,9 @@ namespace OmegaUpPuller.WebRequest
                 m.oros = 0;
                 m.platas = 0;
                 m.bronces = 0;
+                m.orosExtra = 0;
+                m.platasExtra = 0;
+                m.broncesExtra = 0;
                 m.otros = 0;
                 m.puntos = 0;
                 m.promedio = 0;
@@ -90,7 +95,21 @@ namespace OmegaUpPuller.WebRequest
             m.omi = this.olimpiada;
 
             medalleroEstados.Add(estado, m);
-            m.guardarDatos(expectErrors: true);
+
+            m.guardarDatos(
+#if DEBUG
+                expectErrors: true
+#endif
+            );
+
+            if (invitados > 0)
+            {
+                m.guardarDatosExtra(
+#if DEBUG
+                    expectErrors: true
+#endif
+                );
+            }
 
             return m;
         }
@@ -161,7 +180,6 @@ namespace OmegaUpPuller.WebRequest
         public static int compara(Resultados x, Resultados y)
         {
             float x1 = 0, y1 = 0;
-            bool xinv = false, yinv = false;
 
             if (x == null)
                 x1 = -1;
@@ -280,17 +298,26 @@ namespace OmegaUpPuller.WebRequest
                     {
                         case Resultados.TipoMedalla.ORO:
                         {
-                            m.oros++;
+                            if (r.invitado)
+                                m.orosExtra++;
+                            else
+                                m.oros++;
                             break;
                         }
                         case Resultados.TipoMedalla.PLATA:
                         {
-                            m.platas++;
+                            if (r.invitado)
+                                m.platasExtra++;
+                            else
+                                m.platas++;
                             break;
                         }
                         case Resultados.TipoMedalla.BRONCE:
                         {
-                            m.bronces++;
+                            if (r.invitado)
+                                m.broncesExtra++;
+                            else
+                                m.bronces++;
                             break;
                         }
                     }
@@ -325,8 +352,11 @@ namespace OmegaUpPuller.WebRequest
             {
                 // Arreglamos el estado sede
                 int competidores = estado.count;
-                if (competidores > 4)
-                    competidores = 4;
+                if (competidores > Olimpiada.COMPETIDORES_BASE)
+                {
+                    competidores = Olimpiada.COMPETIDORES_BASE;
+                    estado.ajustarMedallas();
+                }
                 estado.promedio = (float?)Math.Round((double)(estado.puntos / competidores), 2);
             }
 
@@ -353,7 +383,7 @@ namespace OmegaUpPuller.WebRequest
 
                 ultimoEstado = estado;
 
-                estado.actualizar();
+                estado.guardaMedallasEstado(this.invitados > 0);
             }
         }
 

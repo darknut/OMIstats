@@ -19,6 +19,8 @@ namespace OMIstats.Models
             ESTADO_POR_OMI
         }
 
+        private const string INVITADOS_EXTRA_KEY = "_I";
+
         public TipoOlimpiada tipoOlimpiada { get; set; }
 
         public TipoMedallero tipoMedallero { get; set; }
@@ -30,6 +32,12 @@ namespace OMIstats.Models
         public int platas { get; set; }
 
         public int bronces { get; set; }
+
+        public int orosExtra { get; set; }
+
+        public int platasExtra { get; set; }
+
+        public int broncesExtra { get; set; }
 
         public int otros { get; set; }
 
@@ -146,24 +154,30 @@ namespace OMIstats.Models
             return m;
         }
 
+        public bool guardarDatosExtra(bool expectErrors = false)
+        {
+            return guardarDatos(expectErrors, this.clave + INVITADOS_EXTRA_KEY);
+        }
+
         /// <summary>
         /// Guarda los datos en el objeto en la base de datos
         /// </summary>
         /// <returns>Regresa si se guardo o no</returns>
-        public bool guardarDatos(bool expectErrors = false)
+        public bool guardarDatos(bool expectErrors = false, string overwriteClave = null)
         {
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
+            string c = overwriteClave == null ? this.clave : overwriteClave;
 
             query.Append(" insert into medallero values( ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(", ");
             query.Append((int)tipoMedallero);
             query.Append(", ");
-            query.Append(Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(c));
             query.Append(", ");
             query.Append(oros);
             query.Append(", ");
@@ -186,15 +200,41 @@ namespace OMIstats.Models
         }
 
         /// <summary>
+        /// Guarda el medallero de los estados
+        /// haciendo los ajustes necesarios a las medallas extra
+        /// </summary>
+        public bool guardaMedallasEstado(bool hayInvitados)
+        {
+            if (hayInvitados)
+            {
+                bool temp = actualizar();
+                if (!temp)
+                    return temp;
+                this.oros = this.orosExtra;
+                this.platas = this.platasExtra;
+                this.bronces = this.broncesExtra;
+                return actualizar(this.clave + INVITADOS_EXTRA_KEY);
+            }
+            else
+            {
+                this.oros += this.orosExtra;
+                this.platas += this.platasExtra;
+                this.bronces += this.broncesExtra;
+                return actualizar();
+            }
+        }
+
+        /// <summary>
         /// Actualiza el medallero en la base de datos
         /// </summary>
-        public bool actualizar()
+        public bool actualizar(string overwriteClave = null)
         {
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
+            string c = overwriteClave == null ? this.clave : overwriteClave;
 
             query.Append(" update medallero set oro = ");
             query.Append(oros);
@@ -215,7 +255,7 @@ namespace OMIstats.Models
             query.Append(" and tipo = ");
             query.Append((int)tipoMedallero);
             query.Append(" and clave = ");
-            query.Append(Cadenas.comillas(clave));
+            query.Append(Cadenas.comillas(c));
 
             return !db.EjecutarQuery(query.ToString()).error;
         }
@@ -493,14 +533,27 @@ namespace OMIstats.Models
         /// </summary>
         public void ajustarMedallas()
         {
-            if (this.oros + this.platas + this.bronces > 4)
+            int temp = 0;
+            if (this.oros + this.platas + this.bronces > Olimpiada.COMPETIDORES_BASE)
             {
-                if (this.oros > 4)
-                    this.oros = 4;
-                if (this.oros + this.platas > 4)
-                    this.platas = 4 - this.oros;
-                if (this.oros + this.platas + this.bronces > 4)
-                    this.bronces = 4 - this.oros - this.platas;
+                if (this.oros > Olimpiada.COMPETIDORES_BASE)
+                {
+                    temp = this.oros;
+                    this.oros = Olimpiada.COMPETIDORES_BASE;
+                    this.orosExtra = temp - this.oros;
+                }
+                if (this.oros + this.platas > Olimpiada.COMPETIDORES_BASE)
+                {
+                    temp = this.platas;
+                    this.platas = Olimpiada.COMPETIDORES_BASE - this.oros;
+                    this.platasExtra = temp - this.platas;
+                }
+                if (this.oros + this.platas + this.bronces > Olimpiada.COMPETIDORES_BASE)
+                {
+                    temp = this.bronces;
+                    this.bronces = Olimpiada.COMPETIDORES_BASE - this.oros - this.platas;
+                    this.broncesExtra = temp - this.bronces;
+                }
             }
         }
 
