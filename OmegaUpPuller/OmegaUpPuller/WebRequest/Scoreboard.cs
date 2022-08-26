@@ -96,20 +96,11 @@ namespace OmegaUpPuller.WebRequest
 
             medalleroEstados.Add(estado, m);
 
-            m.guardarDatos(
+            m.guardarDatosEstados(invitados > 0
 #if DEBUG
-                expectErrors: true
+                ,expectErrors: true
 #endif
             );
-
-            if (invitados > 0)
-            {
-                m.guardarDatosExtra(
-#if DEBUG
-                    expectErrors: true
-#endif
-                );
-            }
 
             return m;
         }

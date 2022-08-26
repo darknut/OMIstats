@@ -154,9 +154,25 @@ namespace OMIstats.Models
             return m;
         }
 
-        public bool guardarDatosExtra(bool expectErrors = false)
+        public bool guardarDatosEstados(bool hayInvitados, bool expectErrors = false)
         {
-            return guardarDatos(expectErrors, this.clave + INVITADOS_EXTRA_KEY);
+            if (hayInvitados)
+            {
+                bool temp = this.guardarDatos();
+                if (!temp)
+                    return temp;
+                this.oros = this.orosExtra;
+                this.platas = this.platasExtra;
+                this.bronces = this.broncesExtra;
+                return this.guardarDatos(expectErrors, this.clave + INVITADOS_EXTRA_KEY);
+            }
+            else
+            {
+                this.oros += this.orosExtra;
+                this.platas += this.platasExtra;
+                this.bronces += this.broncesExtra;
+                return this.guardarDatos();
+            }
         }
 
         /// <summary>
@@ -302,6 +318,7 @@ namespace OMIstats.Models
                 Medallero estado;
                 Medallero estadoPorOlimpiada = null;
                 bool aplicaAOlimpiada = olimpiada == resultado.omi;
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(resultado.omi, resultado.tipoOlimpiada);
 
                 string estadoPorOlimpiadaClave = resultado.estado + "_" + resultado.omi;
 
@@ -360,6 +377,9 @@ namespace OMIstats.Models
                     }
                 }
 
+                bool esInvitado = MiembroDelegacion.esInvitado(resultado.clave) ||
+                                  MiembroDelegacion.esInvitadoOnline(resultado.clave, o.esOnline);
+
                 if (resultado.medalla != Resultados.TipoMedalla.DESCALIFICADO)
                 {
                     switch (resultado.medalla)
@@ -370,40 +390,53 @@ namespace OMIstats.Models
                         case Resultados.TipoMedalla.ORO:
                             {
                                 persona.oros++;
-                                estado.oros++;
+                                if (!esInvitado)
+                                    estado.oros++;
                                 institucion.oros++;
                                 if (aplicaAOlimpiada)
                                 {
-                                    estadoPorOlimpiada.oros++;
+                                    if (esInvitado)
+                                        estadoPorOlimpiada.orosExtra++;
+                                    else
+                                        estadoPorOlimpiada.oros++;
                                 }
                                 break;
                             }
                         case Resultados.TipoMedalla.PLATA:
                             {
                                 persona.platas++;
-                                estado.platas++;
+                                if (!esInvitado)
+                                    estado.platas++;
                                 institucion.platas++;
                                 if (aplicaAOlimpiada)
                                 {
-                                    estadoPorOlimpiada.platas++;
+                                    if (esInvitado)
+                                        estadoPorOlimpiada.platasExtra++;
+                                    else
+                                        estadoPorOlimpiada.platas++;
                                 }
                                 break;
                             }
                         case Resultados.TipoMedalla.BRONCE:
                             {
                                 persona.bronces++;
-                                estado.bronces++;
+                                if (!esInvitado)
+                                    estado.bronces++;
                                 institucion.bronces++;
                                 if (aplicaAOlimpiada)
                                 {
-                                    estadoPorOlimpiada.bronces++;
+                                    if (esInvitado)
+                                        estadoPorOlimpiada.broncesExtra++;
+                                    else
+                                        estadoPorOlimpiada.bronces++;
                                 }
                                 break;
                             }
                         default:
                             {
                                 persona.otros++;
-                                estado.otros++;
+                                if (!esInvitado)
+                                    estado.otros++;
                                 institucion.otros++;
                                 break;
                             }
@@ -417,9 +450,8 @@ namespace OMIstats.Models
                         // No se han guardado mas de 4 lugares
                         if (estadoPorOlimpiada.count < Olimpiada.COMPETIDORES_BASE)
                         {
-                            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(olimpiada, tipoOlimpiada);
-                            // En algunas olimpiadas, hubo invitados que se pusieron en el medallero, estos no se cuentan en el total
-                            if (!MiembroDelegacion.esInvitado(resultado.clave) && !MiembroDelegacion.esInvitadoOnline(resultado.clave, o.esOnline))
+                            // Invitados no se cuentan en el total
+                            if (!esInvitado)
                             {
                                 // Si solo tenemos los datos de los medallistas, no podemos hacer nada con los puntos
                                 if (o.noMedallistasConocidos)
@@ -469,6 +501,7 @@ namespace OMIstats.Models
                 for (int i = 0; i < sortedEstados.Count; i++)
                 {
                     Medallero estado = sortedEstados[i];
+                    estado.ajustarMedallas();
                     if (estado.omi != lastOMI)
                     {
                         // Si algún estado en la olimpiada tiene un
@@ -518,7 +551,8 @@ namespace OMIstats.Models
 
                     ultimoEstado = estado;
 
-                    estado.guardarDatos();
+                    Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(estado.omi, estado.tipoOlimpiada);
+                    estado.guardarDatosEstados(o.invitados > 0);
                 }
             }
 
