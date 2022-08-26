@@ -657,7 +657,7 @@ namespace OMIstats.Models
 
 #if OMISTATS
 
-        public static List<Medallero> obtenerTablaEstadosSecreta(string clave, TipoOlimpiada tipoOlimpiada)
+        public static List<Medallero> obtenerTablaEstadosSecreta(bool hayInvitados, string clave, TipoOlimpiada tipoOlimpiada)
         {
             OmegaUp poll = OmegaUp.obtenerParaOMI(clave, tipoOlimpiada);
             List<Resultados> resultados = Resultados.cargarResultadosSecretos(clave, tipoOlimpiada, poll.dia);
@@ -666,6 +666,7 @@ namespace OMIstats.Models
             foreach (Resultados resultado in resultados)
             {
                 Medallero m = null;
+                bool esInvitado = MiembroDelegacion.esInvitadoOnline(resultado.clave, hayInvitados);
                 if (diccionario.ContainsKey(resultado.estado))
                 {
                     m = diccionario[resultado.estado];
@@ -682,13 +683,22 @@ namespace OMIstats.Models
                     case Resultados.TipoMedalla.ORO_1:
                     case Resultados.TipoMedalla.ORO_2:
                     case Resultados.TipoMedalla.ORO_3:
-                        m.oros++;
+                        if (esInvitado)
+                            m.oros++;
+                        else
+                            m.orosExtra++;
                         break;
                     case Resultados.TipoMedalla.PLATA:
-                        m.platas++;
+                        if (esInvitado)
+                            m.platas++;
+                        else
+                            m.platasExtra++;
                         break;
                     case Resultados.TipoMedalla.BRONCE:
-                        m.bronces++;
+                        if (esInvitado)
+                            m.bronces++;
+                        else
+                            m.broncesExtra++;
                         break;
                 }
                 m.puntos += resultado.total;

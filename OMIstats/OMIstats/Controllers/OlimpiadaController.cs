@@ -505,7 +505,7 @@ namespace OMIstats.Controllers
             if (o.esOnline && OmegaUp.RunnerStarted && p != null && p.esSuperUsuario())
             {
                 ViewBag.secretScoreboard = true;
-                ViewBag.estados = Medallero.obtenerTablaEstadosSecreta(clave, o.tipoOlimpiada);
+                ViewBag.estados = Medallero.obtenerTablaEstadosSecreta(o.invitados > 0, clave, o.tipoOlimpiada);
                 ViewBag.medalleroGeneral = null;
             }
             else
