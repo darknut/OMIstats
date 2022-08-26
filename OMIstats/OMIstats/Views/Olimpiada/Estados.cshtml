@@ -103,8 +103,8 @@ if (secretScoreboard)
     @foreach (OMIstats.Models.Medallero m in ViewBag.estados)
     {
         totalPuntos += m.puntos;
-
         OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(m.clave);
+        int totalExtra = m.orosExtra + m.platasExtra + m.broncesExtra;
         
         <tr>
             <td class="table-td center right-border ">@m.lugar</td>
@@ -121,10 +121,30 @@ if (secretScoreboard)
                     <sup><a class="nombre" href="#german">2</a></sup>
                 }
             </td>
-            <td class="table-td center right-border fondoOro">@m.oros</td>
-            <td class="table-td center right-border fondoPlata">@m.platas</td>
-            <td class="table-td center right-border fondoBronce">@m.bronces</td>
-            <td class="@("table-td center " + (hayPuntos ? "right-border" : ""))">@(m.oros + m.platas + m.bronces)</td>
+            <td class="table-td center right-border fondoOro">@m.oros
+                @if (m.orosExtra > 0)
+                {
+                    @("+ " + m.orosExtra)
+                }
+            </td>
+            <td class="table-td center right-border fondoPlata">@m.platas
+                @if (m.platasExtra > 0)
+                {
+                    @("+ " + m.platasExtra)
+                }
+            </td>
+            <td class="table-td center right-border fondoBronce">@m.bronces
+                @if (m.broncesExtra > 0)
+                {
+                    @("+ " + m.broncesExtra)
+                }
+            </td>
+            <td class="@("table-td center " + (hayPuntos ? "right-border" : ""))">@(m.oros + m.platas + m.bronces)
+                @if (totalExtra > 0)
+                {
+                    @("+ " + totalExtra)
+                }
+            </td>
             @if (hayPuntos)
             {
                 <td class="@("table-td center " + (hayPromedio ? "right-border" : ""))">@m.puntos</td>
@@ -137,6 +157,7 @@ if (secretScoreboard)
     }
     @if (!isLive)
     {
+        int totalMedallasExtra = medalleroGeneral.orosExtra + medalleroGeneral.platasExtra + medalleroGeneral.broncesExtra;
     <tfoot>
         <tr>
             <td class="right-border top-border derecha pie pieTitulo table-footer" colspan="2">
@@ -144,30 +165,39 @@ if (secretScoreboard)
             </td>
             <td class="center right-border resultado-dia top-border pie fondoOro">
                 @medalleroGeneral.oros
+                @if (medalleroGeneral.orosExtra > 0)
+                {
+                     @("+ " + medalleroGeneral.orosExtra)
+                }
             </td>
             <td class="center right-border resultado-dia top-border pie fondoPlata">
                 @medalleroGeneral.platas
+                @if (medalleroGeneral.platasExtra > 0)
+                {
+                     @("+ " + medalleroGeneral.platasExtra)
+                }
             </td>
             <td class="center right-border resultado-dia top-border pie fondoBronce">
                 @medalleroGeneral.bronces
+                @if (medalleroGeneral.broncesExtra > 0)
+                {
+                     @("+ " + medalleroGeneral.broncesExtra)
+                }
             </td>
             <td class="@("center resultado-dia top-border pie table-td " + (hayPuntos ? "right-border" : ""))">
                 @(medalleroGeneral.oros + medalleroGeneral.platas + medalleroGeneral.bronces)
+                @if (totalMedallasExtra > 0)
+                {
+                    @("+ " + totalMedallasExtra)
+                }
             </td>
             @if (hayPuntos)
             {
-                <td class="@("center resultado-dia top-border pie table-td " + (hayPromedio ? "right-border" : ""))">
-                    @totalPuntos
-                </td>
+                <td class="top-border"></td>
             }
             @if (hayPromedio)
             {
-                <td class="center resultado-dia top-border pie table-td">
-                    @if (Model.participantes > 0)
-                    {
-                        @(Math.Round((decimal)totalPuntos / Model.participantes, 2))
-                    }
-                </td>
+                <td class="top-border"></td>
             }
         </tr>
     </tfoot>

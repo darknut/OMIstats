@@ -612,27 +612,44 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" order by lugar asc ");
+            query.Append(" order by lugar asc, clave asc ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
 
             medalleroGeneral = new Medallero();
+            Medallero lastMedallero = null;
             foreach (DataRow r in table.Rows)
             {
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
-                // Después de esto solo nos importa la clave del estado, así que nos deshacemos del resto
-                m.clave = m.clave.Substring(0, 3);
 
-                medalleroGeneral.oros += m.oros;
-                medalleroGeneral.platas += m.platas;
-                medalleroGeneral.bronces += m.bronces;
+                if (m.clave.EndsWith(INVITADOS_EXTRA_KEY))
+                {
+                    lastMedallero.orosExtra += m.oros;
+                    lastMedallero.platasExtra += m.platas;
+                    lastMedallero.broncesExtra += m.bronces;
 
-                // Solo quiero 4 medallas por estado en este caso
-                m.ajustarMedallas();
+                    medalleroGeneral.orosExtra += m.oros;
+                    medalleroGeneral.platasExtra += m.platas;
+                    medalleroGeneral.broncesExtra += m.bronces;
+                }
+                else
+                {
+                    // Después de esto solo nos importa la clave del estado, así que nos deshacemos del resto
+                    m.clave = m.clave.Substring(0, 3);
 
-                lista.Add(m);
+                    medalleroGeneral.oros += m.oros;
+                    medalleroGeneral.platas += m.platas;
+                    medalleroGeneral.bronces += m.bronces;
+
+                    // Solo quiero 4 medallas por estado en este caso
+                    m.ajustarMedallas();
+
+                    lista.Add(m);
+
+                    lastMedallero = m;
+                }
             }
 
             return lista;
