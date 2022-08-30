@@ -587,14 +587,14 @@ namespace OMIstats.Controllers
                         {
                             // Se genera una nueva escuela vacía y se asignan los datos que tenemos
                             i = new Institucion();
+                            i.nombre = nombreEscuela;
+                            i.publica = selectPublica;
                             if (!i.nuevaInstitucion())
                             {
                                 ViewBag.errorInfo = "db_NEW_SCHOOL";
                                 Log.add(Log.TipoLog.DATABASE, ViewBag.errorInfo);
                                 return View(new Persona());
                             }
-                            i.nombre = nombreEscuela;
-                            i.publica = selectPublica;
                         }
                     }
                 }

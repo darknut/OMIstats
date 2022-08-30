@@ -516,7 +516,7 @@ namespace OMIstats.Models
             query.Append(" delete institucion where clave in ( ");
             query.Append(" select clave from Institucion where clave ");
             query.Append(" not in (select escuela from Olimpiada) and clave not in ");
-            query.Append(" (select institucion from MiembroDelegacion))");
+            query.Append(" (select institucion from MiembroDelegacion where institucion is not null))");
 
             db.EjecutarQuery(query.ToString());
         }
