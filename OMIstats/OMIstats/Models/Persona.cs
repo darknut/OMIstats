@@ -630,7 +630,7 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="nombre">El nombre a buscar</param>
         /// <returns>La lista de resultados</returns>
-        public static List<SearchResult> buscar(string nombre)
+        public static List<SearchResult> buscar(string nombre, bool ignorarOcultos = true)
         {
             List<SearchResult> resultados = new List<SearchResult>();
             if (String.IsNullOrEmpty(nombre))
@@ -641,7 +641,8 @@ namespace OMIstats.Models
 
             query.Append("select * from persona where search like ");
             query.Append(Cadenas.comillas("%" + Cadenas.quitaEspeciales(nombre) + "%"));
-            query.Append(" and oculta = 0 ");
+            if (ignorarOcultos)
+                query.Append(" and oculta = 0 ");
             query.Append(" order by search asc");
 
             db.EjecutarQuery(query.ToString());

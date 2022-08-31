@@ -76,20 +76,24 @@
                     new { usuario = sr.persona.usuario }, new { @class = "nombre" })
             </td>
             }
-            @if (keys.Count <= i)
+            @if(sr.persona.oculta)
             {
-                <td class="table-td right-border center thin-top-border" colspan="4">-</td>
+            <td class="table-td right-border center thin-top-border" colspan="4"><strong>HIDDEN</strong></td>
+            }
+            else if (keys.Count <= i)
+            {
+            <td class="table-td right-border center thin-top-border" colspan="4">-</td>
             }
             else
             {
                 OMIstats.Models.Medallero m = sr.medalleros[keys[i]];
                 string clase = i == 0 ? "thin-top-border" : "";
-                <td class="table-td center @clase"><img src="@Url.Content("~/img/" + keys[i].ToString() + ".png")" style="width:30px"/></td>
-                <td class="table-td center fondoOro @clase">@m.oros</td>
-                <td class="table-td center fondoPlata @clase">@m.platas</td>
-                <td class="table-td right-border center fondoBronce @clase">@m.bronces</td>
+            <td class="table-td center @clase"><img src="@Url.Content("~/img/" + keys[i].ToString() + ".png")" style="width:30px"/></td>
+            <td class="table-td center fondoOro @clase">@m.oros</td>
+            <td class="table-td center fondoPlata @clase">@m.platas</td>
+            <td class="table-td right-border center fondoBronce @clase">@m.bronces</td>
             }
-            @if(!nombrePuesto)
+            @if (!nombrePuesto)
             {
                 nombrePuesto = true;
             <td class="table-td right-border thin-top-border" rowspan="@rowspan">
