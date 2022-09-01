@@ -223,15 +223,15 @@ if (GUID.Length > 0)
         <div class="separador">:</div>
         <div class="medalla" title="Medallas de oro">
             <div><img src="~/img/oro.png"/></div>
-            <div>@(medallero == null ? "?" : medallero.oros.ToString())</div>
+            <div>@(medallero == null ? "0" : medallero.oros.ToString())</div>
         </div>
         <div class="medalla" title="Medallas de plata">
             <div><img src="~/img/plata.png"/></div>
-            <div>@(medallero == null ? "?" : medallero.platas.ToString())</div>
+            <div>@(medallero == null ? "0" : medallero.platas.ToString())</div>
         </div>
         <div class="medalla" title="Medallas de bronce">
             <div><img src="~/img/bronce.png"/></div>
-            <div>@(medallero == null ? "?" : medallero.bronces.ToString())</div>
+            <div>@(medallero == null ? "0" : medallero.bronces.ToString())</div>
         </div>
         @if (medallero != null && medallero.otros > 0)
         {
