@@ -380,7 +380,7 @@ if (GUID.Length > 0)
                 @if (perfilPropio)
                 {
                 <td class="left-border padding-diploma">
-                    @if (tableManager.tieneDiplomas())
+                    @if (tableManager.tieneDiplomas() && !esOMIPOS)
                     {
                             @Html.ActionLink("Descargar", "Diploma", "Profile",
                             new { omi = datos.omi, clave = datos.clave, clase = tipo },
