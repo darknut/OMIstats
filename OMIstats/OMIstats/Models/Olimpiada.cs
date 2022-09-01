@@ -1065,6 +1065,21 @@ namespace OMIstats.Models
 
             return lista;
         }
+
+        public static TipoOlimpiada getOlimpiadaGrande(TipoOlimpiada tipo)
+        {
+            return tipo == TipoOlimpiada.OMIPO ? TipoOlimpiada.OMIP : TipoOlimpiada.OMIS;
+        }
+
+        public static TipoOlimpiada getOlimpiadaPequeña(TipoOlimpiada tipo)
+        {
+            return tipo == TipoOlimpiada.OMIP ? TipoOlimpiada.OMIPO : TipoOlimpiada.OMISO;
+        }
+
+        public static bool esOMIPOS(TipoOlimpiada tipo)
+        {
+            return tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO;
+        }
 #else
         public static bool esOnline(string olimpiada, TipoOlimpiada tipoOlimpiada)
         {

@@ -753,9 +753,18 @@ namespace OMIstats.Models
 
             query.Append(" select r.* from resultados  as r ");
             query.Append(" inner join Olimpiada as o on o.numero = r.olimpiada and o.clase = r.clase ");
-            query.Append(" where r.clase = ");
+            query.Append(" where (r.clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(" and r.concursante = ");
+            if (tipoOlimpiada == TipoOlimpiada.OMIS || tipoOlimpiada == TipoOlimpiada.OMIP)
+            {
+                TipoOlimpiada pequeña = Olimpiada.getOlimpiadaPequeña(tipoOlimpiada);
+                query.Append(" or (r.clase = ");
+                query.Append(Cadenas.comillas(pequeña.ToString().ToLower()));
+                query.Append(" and r.medalla = ");
+                query.Append((int)TipoMedalla.NADA);
+                query.Append(")");
+            }
+            query.Append(") and r.concursante = ");
             query.Append(persona);
             query.Append(" order by o.año asc");
 
@@ -765,7 +774,7 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.tipoOlimpiada = tipoOlimpiada;
+                res.tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 res.llenarDatos(r, cargarObjetos: true);
 
                 lista.Add(res);

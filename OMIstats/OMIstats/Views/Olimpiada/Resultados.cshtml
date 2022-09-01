@@ -26,7 +26,7 @@
     List<OMIstats.Models.Problema> problemasDia1 = ViewBag.problemasDia1;
     List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
     List<OMIstats.Models.Estado> extranjeros = ViewBag.extranjeros;
-    bool esOMIPOS = Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO || Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO;
+    bool esOMIPOS = OMIstats.Models.Olimpiada.esOMIPOS(Model.tipoOlimpiada);
 
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);

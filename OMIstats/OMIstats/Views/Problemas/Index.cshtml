@@ -19,7 +19,7 @@
     {
         title += " de secundaria";
     }
-    bool esOMIPOS = tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO || tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO; 
+    bool esOMIPOS = OMIstats.Models.Olimpiada.esOMIPOS(tipoOlimpiada);
     if (esOMIPOS)
     {
         title += " (online)";

@@ -273,6 +273,8 @@ if (GUID.Length > 0)
             string claseCSS = tableManager.obtenerClaseCSS();
             bool mostrar = tableManager.mostrarLinea();
             bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
+            bool esOMIPOS = OMIstats.Models.Olimpiada.esOMIPOS(participacion[l].tipoOlimpiada);
+            bool esInvitado = OMIstats.Models.MiembroDelegacion.esInvitado(datos.clave);
             <tr>
                 <td class="ioi-mini-imagen">
                     @if (tableManager.mostrarLogoIOI())
@@ -283,7 +285,7 @@ if (GUID.Length > 0)
                     }
                 </td>
                 <td class="@("table-td right-border center " + claseCSS)">
-                    @if (mostrar && datos.lugar > 0 && !descalificado && !datos.clave.EndsWith("I"))
+                    @if (mostrar && datos.lugar > 0 && !descalificado && !esInvitado && !esOMIPOS)
                     {
                         @(datos.lugar)
                         if (datos.ioi == "Y")
@@ -293,21 +295,33 @@ if (GUID.Length > 0)
                     }
                 </td>
                 <td class="@("table-td right-border " + claseCSS)" omi="@(datos.omi)">
-                    <a class="nombre" href="@Url.Content("~/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + tipo.ToString())">
+                    <a class="nombre" href="@Url.Content("~/Olimpiada/Resultados?clave=" + datos.omi + "&tipo=" + datos.tipoOlimpiada.ToString())">
                         @tableManager.enlaceOMI()
                     </a>
                 </td>
                 <td class="@("table-td right-border " + claseCSS)">
+                    @if(esOMIPOS)
+                    {
+                    @datos.nombreEstado
+                    } else
+                    {
                     <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipo.ToString())">
                         @datos.nombreEstado
                     </a>
+                    }
                 </td>
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (!tableManager.faltaClave())
                     {
-                        <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipo.ToString())">
-                            @datos.clave
-                        </a>
+                        if (esOMIPOS)
+                        {
+                    @datos.clave
+                        } else
+                        {
+                    <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipo.ToString())">
+                        @datos.clave
+                    </a>
+                        }
                     }
                 </td>
                 <td class="@("table-td center right-border resultado-total " + claseCSS)">
@@ -324,18 +338,30 @@ if (GUID.Length > 0)
                     }
                 </td>
                 <td class="@("table-td center " + (extranjero ? "" : "right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
+                    @if (esOMIPOS)
+                    {
+                    @("N/A")
+                    } else
+                    {
                     @tableManager.medallaString()
+                    }
                 </td>
                 @if (!extranjero)
                 {
                 <td class="@("table-td break-word right-border " + claseCSS)">
                     @if (datos.escuela != null)
                     {
-                        <span>
-                            <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipo.ToString())">
-                                @datos.escuela.nombreCorto
-                            </a>
-                        </span>
+                    <span>
+                        @if (esOMIPOS)
+                        {
+                        @datos.escuela.nombreCorto
+                        } else
+                        {
+                        <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipo.ToString())">
+                            @datos.escuela.nombreCorto
+                        </a>
+                        }
+                    </span>
                     }
                 </td>
                 <td class="@("table-td right-border " + claseCSS)">

@@ -1642,7 +1642,7 @@ namespace OMIstats.Models
         public static void registrarGanadoresOMIPOS(string numero, TipoOlimpiada tipoOlimpiada)
         {
             List<Resultados> resultados = Resultados.cargarResultados(numero, tipoOlimpiada);
-            TipoOlimpiada grande = tipoOlimpiada == TipoOlimpiada.OMIPO ? TipoOlimpiada.OMIP : TipoOlimpiada.OMIS;
+            TipoOlimpiada grande = Olimpiada.getOlimpiadaGrande(tipoOlimpiada);
             List<MiembroDelegacion> competidoresGrande = MiembroDelegacion.obtenerMiembrosDelegacion(numero, null, grande, TipoAsistente.COMPETIDOR);
             foreach (Resultados r in resultados)
             {
