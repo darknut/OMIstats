@@ -57,7 +57,7 @@ namespace OMIstats.Controllers
             if (p.dia < 0 || p.dia > 2)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            if (p.numero < 0 || p.numero > 4)
+            if (p.numero < 0 || p.numero > 6)
                 return RedirectTo(Pagina.ERROR, 401);
 
             if (!ModelState.IsValid)
