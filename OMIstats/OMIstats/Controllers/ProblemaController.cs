@@ -30,7 +30,7 @@ namespace OMIstats.Controllers
             if (dia < 0 || dia > 2)
                 return RedirectTo(Pagina.ERROR, 401);
 
-            if (numero < 0 || numero > 4)
+            if (numero < 0 || numero > 6)
                 return RedirectTo(Pagina.ERROR, 401);
 
             Problema p = Problema.obtenerProblema(omi, tipo, dia, numero);
