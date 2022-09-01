@@ -664,7 +664,7 @@ namespace OMIstats.Models
                 query.Append((int)md.nivelEscuela);
                 query.Append(", ");
                 query.Append(md.añoEscuela);
-                query.Append(",0,0)");
+                query.Append(",0,0,'')");
 
                 db.EjecutarQuery(query.ToString());
             }
