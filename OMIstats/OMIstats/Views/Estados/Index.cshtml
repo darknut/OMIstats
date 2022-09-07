@@ -51,8 +51,10 @@
     @{int lugar = 0;}
     @foreach (OMIstats.Models.Medallero m in Model)
     {
-        lugar++;
         OMIstats.Models.Estado estado = OMIstats.Models.Estado.obtenerEstadoConClave(m.clave);
+        if (!estado.extranjero)
+        {
+            lugar++;
         <tr>
             <td class="table-td right-border mini-cell center">@lugar</td>
             <td class="table-td right-border mini-cell">
@@ -62,5 +64,6 @@
             <td class="table-td center right-border fondoPlata mini-cell">@m.platas</td>
             <td class="table-td center fondoBronce mini-cell">@m.bronces</td>
         </tr>
+        }
     }
 </table>
