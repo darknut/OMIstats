@@ -43,8 +43,8 @@
             <td class="table-td right-border mini-cell">
                 @Html.ActionLink(e.nombre, "Index", "Estado", new { clave = e.clave }, new { @class = "nombre" })
             </td>
-            <td class="table-td center right-border mini-cell">2</td>
-            <td class="table-td center mini-cell">2</td>
+            <td class="table-td center right-border mini-cell" id="p-@e.clave"></td>
+            <td class="table-td center mini-cell" id="s-@e.clave"></td>
         </tr>
         }
     }
