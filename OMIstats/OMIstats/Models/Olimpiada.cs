@@ -1021,7 +1021,7 @@ namespace OMIstats.Models
             return false;
         }
 
-        public static Olimpiada obtenerMasReciente(bool yaEmpezada = true, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public static Olimpiada obtenerMasReciente(bool yaEmpezada = true, bool yaTerminada = false, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             List<Olimpiada> omis = obtenerOlimpiadas(tipo);
 
@@ -1031,7 +1031,8 @@ namespace OMIstats.Models
             if (yaEmpezada)
                 for (int i = 0; i < omis.Count; i++)
                     if (omis[i].inicio <= DateTime.Now)
-                        return omis[i];
+                        if (!yaTerminada || omis[i].fin <= DateTime.Now)
+                            return omis[i];
 
             return omis[0];
         }

@@ -137,6 +137,7 @@ namespace OMIstats.Models
             lugar =  DataRowParser.ToInt(row["lugar"]);
             usuario = DataRowParser.ToInt(row["concursante"]);
             omi = DataRowParser.ToString(row["olimpiada"]);
+            tipoOlimpiada = DataRowParser.ToTipoOlimpiada(row["clase"]);
             clave = DataRowParser.ToString(row["clave"]);
             estado = DataRowParser.ToString(row["estado"]);
             for (int i = 0; i < 6; i++)
@@ -296,7 +297,6 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.tipoOlimpiada = tipoOlimpiada;
                 res.llenarDatos(r, cargarObjetos);
 
                 lista.Add(res);
@@ -421,7 +421,6 @@ namespace OMIstats.Models
             DataTable table = db.getTable();
 
             Resultados res = new Resultados();
-            res.tipoOlimpiada = tipoOlimpiada;
             if (table.Rows.Count > 0)
                 res.llenarDatos(table.Rows[0], cargarObjetos: false);
 
@@ -774,7 +773,6 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.tipoOlimpiada = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 res.llenarDatos(r, cargarObjetos: true);
 
                 lista.Add(res);
@@ -811,7 +809,6 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.tipoOlimpiada = tipoOlimpiada;
                 res.llenarDatos(r, cargarObjetos: true, miembroDelegacionIncluido: true);
 
                 lista.Add(res);
@@ -848,7 +845,6 @@ namespace OMIstats.Models
             foreach (DataRow r in table.Rows)
             {
                 Resultados res = new Resultados();
-                res.tipoOlimpiada = tipoOlimpiada;
                 res.llenarDatos(r, cargarObjetos: true);
 
                 lista.Add(res);
@@ -1242,6 +1238,54 @@ namespace OMIstats.Models
             }
 
             return lineas.ToString();
+        }
+
+        public static List<Resultados> obtenerLugaresParaOMIPS(Olimpiada omi)
+        {
+            List<Olimpiada> omis = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            List<Resultados> lista = new List<Resultados>();
+            Olimpiada omi2 = null, omi3 = null;
+            foreach (var o in omis)
+            {
+                if (o.año == omi.año - 1)
+                    omi2 = o;
+                if (o.año == omi.año - 2)
+                    omi3 = o;
+                if (omi2 != null && omi3 != null)
+                    break;
+            }
+
+            StringBuilder query = new StringBuilder();
+            Acceso db = new Acceso();
+
+            query.Append(" select * from Resultados where ( ");
+            query.Append(" olimpiada = ");
+            query.Append(Cadenas.comillas(omi.numero));
+            query.Append(" or olimpiada = ");
+            query.Append(Cadenas.comillas(omi2.numero));
+            query.Append(" or olimpiada = ");
+            query.Append(Cadenas.comillas(omi3.numero));
+            query.Append(" ) and (clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMIP.ToString().ToLower()));
+            query.Append(" or clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()));
+            query.Append(" or clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMIS.ToString().ToLower()));
+            query.Append(" or clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMISO.ToString().ToLower()));
+            query.Append(" ) order by estado, clase, olimpiada, concursante ");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                Resultados res = new Resultados();
+                res.llenarDatos(r, cargarObjetos: false);
+
+                lista.Add(res);
+            }
+            return lista;
         }
 #endif
     }

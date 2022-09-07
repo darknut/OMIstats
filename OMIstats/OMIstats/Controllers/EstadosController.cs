@@ -73,7 +73,9 @@ namespace OMIstats.Controllers
 
         public ActionResult OMIPS()
         {
-            return View();
+            Olimpiada o = Olimpiada.obtenerMasReciente(yaTerminada: true);
+
+            return View(Resultados.obtenerLugaresParaOMIPS(o));
         }
     }
 }
