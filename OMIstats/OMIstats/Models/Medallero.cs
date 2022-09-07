@@ -844,6 +844,8 @@ namespace OMIstats.Models
                 // Obtengo los datos de la tabla a un objeto medallero
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
+                if (MiembroDelegacion.esInvitado(m.clave))
+                    continue;
 
                 // Agrego el medallero con la olimpiada
                 estados.Add(m.omi, m);
