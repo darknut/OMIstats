@@ -752,6 +752,8 @@ namespace OMIstats.Models
                 // Obtengo los datos de la tabla a un objeto medallero
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
+                if (MiembroDelegacion.esInvitado(m.clave))
+                    continue;
                 string estado = m.clave.Substring(0, 3);
 
                 // Obtengo el medallero del estado
