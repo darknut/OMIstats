@@ -33,6 +33,7 @@
     bool esAdmin = usuario.esAdmin();
     bool tienePeticiones = ViewBag.tienePeticiones;
     bool perfilPropio = (usuario.clave != 0 && (usuario.clave == Model.clave));
+    bool esDelegado = perfilPropio && usuario.permisos == OMIstats.Models.Persona.TipoPermisos.DELEGADO;
     List<OMIstats.Models.MiembroDelegacion> asistencias = ViewBag.asistencias;
     OMIstats.Models.Medalleros medalleros = ViewBag.medalleros;
     Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.Resultados>> participaciones = ViewBag.participaciones;
@@ -71,6 +72,13 @@ if (GUID.Length > 0)
 
 
 <h1 class="titulo">Datos de usuario</h1>
+
+@if(esDelegado)
+{
+<div class="submenu">
+    @Html.ActionLink("Lugares OMIPS", "OMIPS", "Estados", null, new { @class = "mini-boton" })
+</div>
+}
 
 <div class="foto" >
     <img src='@imgFoto' alt="@Model.nombreCompleto"/>

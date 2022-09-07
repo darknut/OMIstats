@@ -437,6 +437,7 @@
     <Content Include="Views\Registro\Asistente.cshtml" />
     <Content Include="Views\Registro\Sede.cshtml" />
     <Content Include="Views\Registro\GeneraInvitaciones.cshtml" />
+    <Content Include="Views\Estados\OMIPS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

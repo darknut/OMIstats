@@ -1,0 +1,51 @@
+﻿@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/tablas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/olimpiadas.css" type="text/css"/>
+    <link rel="stylesheet" href="~/Content/estados.css" type="text/css"/>
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
+    <script type="text/javascript" src="~/js/sorters.js"></script>
+    <script>
+        $(function () {
+            cargaSorter("tablaPuntos");
+        });
+    </script>
+}
+
+@{
+    ViewBag.Title = "Lugares disponibles para la OMIPS";
+}
+
+<h1 class="titulo">@ViewBag.Title</h1>
+
+<table class="table" id="tablaPuntos">
+    <thead>
+        <tr class="table-header">
+            <th class="bottom-border right-border table-header-clickable">Estado</th>
+            <th class="bottom-border right-border table-header-clickable">Primaria</th>
+            <th class="bottom-border table-header-clickable">Secundaria</th>
+        </tr>
+    </thead>
+
+    @{List<OMIstats.Models.Estado> estados = OMIstats.Models.Estado.obtenerEstados();}
+    @foreach (OMIstats.Models.Estado e in estados)
+    {
+        if (!e.extranjero)
+        {
+        <tr>
+            <td class="table-td right-border mini-cell">
+                @Html.ActionLink(e.nombre, "Index", "Estado", new { clave = e.clave }, new { @class = "nombre" })
+            </td>
+            <td class="table-td center right-border mini-cell">2</td>
+            <td class="table-td center mini-cell">2</td>
+        </tr>
+        }
+    }
+</table>
