@@ -354,6 +354,7 @@
     <Content Include="js\general.js" />
     <Content Include="js\fechas.js" />
     <Content Include="js\graficas.js" />
+    <Content Include="js\omips.js" />
     <Content Include="js\overlay.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\registro.js" />

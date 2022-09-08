@@ -11,13 +11,10 @@
 
 @section scripts
 {
-    <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
-    <script type="text/javascript" src="~/js/sorters.js"></script>
+    <script type="text/javascript" src="~/js/omips.js"></script>
     <script>
         var res = [];
         $(function () {
-            cargaSorter("tablaPuntos");
             @{
             string lastEstado = "";
             string estadoArray = "";
@@ -47,6 +44,12 @@
                     lastOMI = r.omi;
                     omiArray = claseArray + "[" + r.omi + "]";
 @(Html.Raw(omiArray + "={};"))
+@(Html.Raw(omiArray + ".lugarPromedio=0;"))
+@(Html.Raw(omiArray + ".puntosPromedio=0;"))
+@(Html.Raw(omiArray + ".totalCompetidores=0;"))
+@(Html.Raw(omiArray + ".oros=0;"))
+@(Html.Raw(omiArray + ".platas=0;"))
+@(Html.Raw(omiArray + ".inversiones=0;"))
                 }
                 if ((r.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO ||
                      r.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO) &&
@@ -70,9 +73,11 @@
                 }
 @(Html.Raw(mdArray + "=[];"))
 @(Html.Raw(mdArray + ".medalla='" + medalla + "';"))
+@(Html.Raw(mdArray + ".puntos=" + r.total + ";"))
 @(Html.Raw(mdArray + ".lugar=" + r.lugar + ";"))
             }
             }
+            calculaLugares();
         });
     </script>
 }
@@ -86,9 +91,9 @@
 <table class="table" id="tablaPuntos">
     <thead>
         <tr class="table-header">
-            <th class="bottom-border right-border table-header-clickable">Estado</th>
-            <th class="bottom-border right-border table-header-clickable">Primaria</th>
-            <th class="bottom-border table-header-clickable">Secundaria</th>
+            <th class="bottom-border right-border">Estado</th>
+            <th class="bottom-border right-border">Primaria</th>
+            <th class="bottom-border">Secundaria</th>
         </tr>
     </thead>
 
@@ -101,8 +106,8 @@
             <td class="table-td right-border mini-cell">
                 @Html.ActionLink(e.nombre, "Index", "Estado", new { clave = e.clave }, new { @class = "nombre" })
             </td>
-            <td class="table-td center right-border mini-cell" id="p-@e.clave"></td>
-            <td class="table-td center mini-cell" id="s-@e.clave"></td>
+            <td class="table-td center right-border mini-cell" id="p-@e.clave">2</td>
+            <td class="table-td center mini-cell" id="s-@e.clave">2</td>
         </tr>
         }
     }
