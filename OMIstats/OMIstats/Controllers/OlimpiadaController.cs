@@ -594,5 +594,27 @@ namespace OMIstats.Controllers
 
             return View();
         }
+
+        //
+        // POST: /Olimpiada/TempUpdate/
+
+        [HttpPost]
+        public bool TempUpdate(TipoOlimpiada tipo, string clave, int dia, int problema, int score)
+        {
+            DetallePuntos.TempUpdate("27", tipo, dia, clave, problema, score);
+            return true;
+        }
+
+        //
+        // POST: /Olimpiada/TempMedallas/
+
+        [HttpPost]
+        public bool TempMedallas(int dia)
+        {
+            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMI, dia);
+            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIS, dia);
+            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIP, dia);
+            return true;
+        }
     }
 }

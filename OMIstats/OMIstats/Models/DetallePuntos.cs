@@ -378,5 +378,85 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
+
+        public static void TempUpdate(string omi, TipoOlimpiada tipo, int dia, string clave, int problema, int score)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+            DetallePuntos dp = new DetallePuntos();
+
+            query.Append(" select * from detallepuntos ");
+            query.Append(" where clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and clave = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and dia = ");
+            query.Append(dia);
+            query.Append(" and timestamp = 0");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+            {
+                dp.omi = omi;
+                dp.tipoOlimpiada = tipo;
+                dp.dia = dia;
+                dp.clave = clave;
+                dp.puntosProblemas = new List<float?>();
+                for (int i = 0; i < 6; i++)
+                    dp.puntosProblemas.Add(null);
+
+                query.Append("insert into DetallePuntos(olimpiada, clase, clave, dia, timestamp) values(");
+                query.Append(Cadenas.comillas(omi));
+                query.Append(",");
+                query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+                query.Append(",");
+                query.Append(Cadenas.comillas(clave));
+                query.Append(",");
+                query.Append(dia);
+                query.Append(",0)");
+
+                db.EjecutarQuery(query.ToString());
+            }
+            else
+            {
+                dp.llenarDatos(table.Rows[0]);
+            }
+            dp.puntosProblemas[problema - 1] = score;
+
+            dp.puntosDia = (dp.puntosProblemas[0] == null ? 0 : dp.puntosProblemas[0]) +
+                           (dp.puntosProblemas[1] == null ? 0 : dp.puntosProblemas[1]) +
+                           (dp.puntosProblemas[2] == null ? 0 : dp.puntosProblemas[2]) +
+                           (dp.puntosProblemas[3] == null ? 0 : dp.puntosProblemas[3]);
+
+            query.Clear();
+            query.Append("update DetallePuntos set puntosP1 = ");
+            query.Append(dp.puntosProblemas[0] == null ? "null" : dp.puntosProblemas[0].ToString());
+            query.Append(", puntosP2 =");
+            query.Append(dp.puntosProblemas[1] == null ? "null" : dp.puntosProblemas[1].ToString());
+            query.Append(", puntosP3 =");
+            query.Append(dp.puntosProblemas[2] == null ? "null" : dp.puntosProblemas[2].ToString());
+            query.Append(", puntosP4 = ");
+            query.Append(dp.puntosProblemas[3] == null ? "null" : dp.puntosProblemas[3].ToString());
+            query.Append(", puntosD = ");
+            query.Append(dp.puntosDia);
+            query.Append(" where olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and clave = ");
+            query.Append(Cadenas.comillas(clave));
+            query.Append(" and timestamp = 0 and dia = ");
+            query.Append(dia);
+
+            db.EjecutarQuery(query.ToString());
+        }
+
+        public static void TempMedallas(string omi, TipoOlimpiada tipo, int dia)
+        {
+        }
     }
 }
