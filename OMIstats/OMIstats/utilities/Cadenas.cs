@@ -77,5 +77,14 @@ namespace OMIstats.Utilities
             Regex regex = new Regex(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$");
             return regex.IsMatch(correo);
         }
+
+        public static string toDBString(object str)
+        {
+            if (str is string)
+                return comillas(str.ToString());
+            if (str is DBNull)
+                return "null";
+            return str.ToString();
+        }
     }
 }

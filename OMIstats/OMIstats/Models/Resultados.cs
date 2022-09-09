@@ -563,7 +563,7 @@ namespace OMIstats.Models
         /// <param name="dia">Si detalles es true, el dia es requerido</param>
         /// <param name="soloDetalles">Si detalles es true y soloDetalles tambien, se salta guardar en tabla resultados y solo guarda los detalles</param>
         /// </summary>
-        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0, bool soloDetalles = false, bool expectErrors = false)
+        public TipoError guardar(bool detalles = false, int timestamp = 0, int dia = 0, bool soloDetalles = false)
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
@@ -572,9 +572,9 @@ namespace OMIstats.Models
             if (detalles)
             {
                 DetallePuntos detallePuntos = new DetallePuntos(omi, tipoOlimpiada, clave, timestamp, dia, dia == 1 ? dia1 : dia2);
-                detallePuntos.guardar(expectErrors: expectErrors);
+                detallePuntos.guardar();
                 DetalleLugar detalleLugar = new DetalleLugar(omi, tipoOlimpiada, clave, timestamp, dia, medalla, lugar);
-                detalleLugar.guardar(expectErrors: expectErrors);
+                detalleLugar.guardar();
 
                 if (soloDetalles)
                     return TipoError.OK;
@@ -613,7 +613,7 @@ namespace OMIstats.Models
             query.Append((int)TipoMedalla.NADA);
             query.Append(", 0, '', 0)");
 
-            db.EjecutarQuery(query.ToString(), expectErrors: expectErrors);
+            db.EjecutarQuery(query.ToString());
             query.Clear();
 
             // Ahora actualizamos con los datos que tenemos en el objeto

@@ -116,28 +116,19 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
-        public void guardar(bool expectErrors = false)
+        public bool guardar()
         {
-            StringBuilder query = new StringBuilder();
-            Acceso db = new Acceso();
-
-            query.Append("insert into DetalleLugar values(");
-            query.Append(Cadenas.comillas(omi));
-            query.Append(",");
-            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(",");
-            query.Append(Cadenas.comillas(clave));
-            query.Append(",");
-            query.Append(timestamp);
-            query.Append(",");
-            query.Append(dia);
-            query.Append(",");
-            query.Append((int)medalla);
-            query.Append(",");
-            query.Append(lugar);
-            query.Append(")");
-
-            db.EjecutarQuery(query.ToString(), expectErrors: expectErrors);
+            return new Acceso().NuevoOActualiza("DetalleLugar",
+                new Dictionary<string, object>() {
+                    { "olimpiada" , omi },
+                    { "clase", tipoOlimpiada.ToString().ToLower() },
+                    { "clave", clave },
+                    { "timestamp", timestamp },
+                    { "dia", dia }
+                }, new Dictionary<string, object>() {
+                    { "medalla" , (int) medalla },
+                    { "lugar" , lugar }
+                }).error;
         }
 
         private static void borrar(string omi, string clase, string clave, int timestamp, int dia)

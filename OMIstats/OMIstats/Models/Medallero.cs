@@ -184,35 +184,23 @@ namespace OMIstats.Models
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
-            Acceso db = new Acceso();
-            StringBuilder query = new StringBuilder();
             string c = overwriteClave == null ? this.clave : overwriteClave;
 
-            query.Append(" insert into medallero values( ");
-            query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
-            query.Append(", ");
-            query.Append((int)tipoMedallero);
-            query.Append(", ");
-            query.Append(Cadenas.comillas(c));
-            query.Append(", ");
-            query.Append(oros);
-            query.Append(", ");
-            query.Append(platas);
-            query.Append(", ");
-            query.Append(bronces);
-            query.Append(", ");
-            query.Append(otros);
-            query.Append(", ");
-            query.Append(Cadenas.comillas(omi));
-            query.Append(", ");
-            query.Append(puntos);
-            query.Append(", ");
-            query.Append(promedio);
-            query.Append(", ");
-            query.Append(lugar);
-            query.Append(")");
-
-            return !db.EjecutarQuery(query.ToString(), expectErrors: expectErrors).error;
+            return new Acceso().NuevoONoHagasNada("medallero",
+                new Dictionary<string,object> {
+                    { "clase", tipoOlimpiada.ToString().ToLower() },
+                    { "tipo", (int)tipoMedallero },
+                    { "clave", c },
+                    { "omi", omi }
+                }, new Dictionary<string, object> {
+                    { "oro", oros },
+                    { "plata", platas },
+                    { "bronce", bronces },
+                    { "otros", otros },
+                    { "puntos", puntos },
+                    { "promedio", promedio },
+                    { "lugar", lugar },
+                }).error;
         }
 
         /// <summary>

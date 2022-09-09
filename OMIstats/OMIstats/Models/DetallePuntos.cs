@@ -152,7 +152,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Guarda los datos del objeto en la base de datos
         /// </summary>
-        public void guardar(bool expectErrors = false)
+        public void guardar()
         {
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
@@ -183,7 +183,7 @@ namespace OMIstats.Models
             query.Append(this.puntosDia == null ? "0" : this.puntosDia.ToString());
             query.Append(")");
 
-            db.EjecutarQuery(query.ToString(), expectErrors: expectErrors);
+            db.EjecutarQuery(query.ToString());
         }
 
         private static void borrar(string omi, string clase, string clave, int timestamp, int dia)
@@ -504,6 +504,17 @@ namespace OMIstats.Models
                 res.clave = md.clave;
                 res.estado = md.estado;
                 res.invitado = MiembroDelegacion.esInvitadoOnline(res.clave, true);
+
+                res.dia1[0] = null;
+                res.dia1[1] = null;
+                res.dia1[2] = null;
+                res.dia1[3] = null;
+
+                res.dia2[0] = null;
+                res.dia2[1] = null;
+                res.dia2[2] = null;
+                res.dia2[3] = null;
+
                 if (res.invitado)
                     invitados++;
                 concursantes++;
@@ -546,7 +557,7 @@ namespace OMIstats.Models
                 res.total = res.totalDia1 + res.totalDia2;
             }
 
-            // Ordenamos los resutlados
+            // Ordenamos los resultados
             List<Resultados> list = resultados.Values.ToList();
             list.Sort(compara);
 
@@ -615,7 +626,7 @@ namespace OMIstats.Models
                 {
                     r.medalla = Resultados.TipoMedalla.NADA;
                     // Si no hay puntos, tienes el último lugar
-                    r.lugar = concursantes;
+                    r.lugar = concursantes - invitados;
                 }
                 else
                 {
@@ -688,35 +699,23 @@ namespace OMIstats.Models
 
                 // Finalmente guardamos la linea en la base de datos
                 DetalleLugar detalleLugar = new DetalleLugar(omi, tipo, r.clave, 0, dia, r.medalla, r.lugar);
-                detalleLugar.guardar(expectErrors: true);
+                detalleLugar.guardar();
 
-                query.Clear();
-                query.Append(" update DetalleLugar set medalla = ");
-                query.Append((int)r.medalla);
-                query.Append(" lugar = ");
-                query.Append(r.lugar);
-                query.Append(" where olimpiada = ");
-                query.Append(Cadenas.comillas(omi));
-                query.Append(" and clase = ");
-                query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
-                query.Append(" and clave = ");
-                query.Append(Cadenas.comillas(r.clave));
-                query.Append(" and timestamp = 0 and dia = ");
-                query.Append(dia);
-
-                db.EjecutarQuery(query.ToString());
                 if (guardarFinal)
                 {
                     r.guardar();
                 }
             }
 
-            // Para OMIPS ya terminamos los cálculos
-            if (tipo != TipoOlimpiada.OMI)
-                return;
-
             // Si estamos escondiendo los puntos, no hace falta continuar
             if (!guardarFinal)
+                return;
+
+            // Actualizamos el número de problemas
+            Olimpiada.guardaProblemas(omi, tipo, tipo == TipoOlimpiada.OMI ? 4 : 3, dia);
+
+            // Para OMIPS ya terminamos los cálculos
+            if (tipo != TipoOlimpiada.OMI)
                 return;
 
             // Ordenamos también el medallero de los estados

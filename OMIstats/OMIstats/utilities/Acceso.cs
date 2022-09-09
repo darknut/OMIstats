@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 using System.Web;
+using System.Text;
 
 namespace OMIstats.Utilities
 {
@@ -76,8 +77,7 @@ namespace OMIstats.Utilities
         /// Ejecuta un query.
         /// Si el query es un select, llamar a getTable devolvera la tabla consultada
         /// </summary>
-        /// <param name="query"></param>
-        public Estatus EjecutarQuery(string query, BaseDeDatos db = BaseDeDatos.OMIStats, bool expectErrors = false)
+        public Estatus EjecutarQuery(string query, BaseDeDatos db = BaseDeDatos.OMIStats)
         {
             Estatus resultado = Conectar(db);
             if (resultado.error)
@@ -118,8 +118,7 @@ namespace OMIstats.Utilities
             }
             catch (Exception e)
             {
-                if (!expectErrors)
-                    Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
+                Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
                 resultado.error = true;
                 resultado.descripcion = e.Message;
                 try
@@ -136,5 +135,107 @@ namespace OMIstats.Utilities
             return resultado;
         }
 
+        /// <summary>
+        /// Hace un insert solo si ese valor no existe ya en la base
+        /// </summary>
+        public Estatus NuevoONoHagasNada(string tabla, Dictionary<string, object> llaves, Dictionary<string, object> valores, BaseDeDatos db = BaseDeDatos.OMIStats)
+        {
+            return NuevoOActualiza(tabla, llaves, valores, db, actualizar: false);
+        }
+
+        /// <summary>
+        /// Actualiza o inserta los datos en la base de datos que hagan match con las llaves proporcionadas
+        /// </summary>
+        public Estatus NuevoOActualiza(string tabla, Dictionary<string, object> llaves, Dictionary<string, object> valores, BaseDeDatos db = BaseDeDatos.OMIStats, bool actualizar = true)
+        {
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from ");
+            query.Append(tabla);
+            query.Append(" where ");
+            foreach (string key in llaves.Keys)
+            {
+                query.Append(key);
+                query.Append(" = ");
+                query.Append(Cadenas.toDBString(llaves[key]));
+                query.Append(" and ");
+            }
+            query.Append(" 1 = 1 ");
+
+            Estatus resultado = EjecutarQuery(query.ToString());
+            if (resultado.error)
+                return resultado;
+
+            query.Clear();
+            if (getTable().Rows.Count == 0)
+            {
+                // Hay que hacer insert
+                query.Append(" insert into ");
+                query.Append(tabla);
+                query.Append("(");
+                foreach (string key in llaves.Keys)
+                {
+                    query.Append(key);
+                    query.Append(", ");
+                }
+                int i = 0;
+                foreach (string key in valores.Keys)
+                {
+                    i++;
+                    query.Append(key);
+                    if (i < valores.Count)
+                        query.Append(", ");
+                }
+                query.Append(") values(");
+                foreach (string key in llaves.Keys)
+                {
+                    query.Append(Cadenas.toDBString(llaves[key]));
+                    query.Append(", ");
+                }
+                i = 0;
+                foreach (string key in valores.Keys)
+                {
+                    i++;
+                    query.Append(Cadenas.toDBString(valores[key]));
+                    if (i < valores.Count)
+                        query.Append(", ");
+                }
+                query.Append(" )");
+
+                return EjecutarQuery(query.ToString());
+            }
+            else
+            {
+                if (!actualizar)
+                    return resultado;
+
+                // Hay que hacer update
+                query.Append(" update ");
+                query.Append(tabla);
+                query.Append(" set ");
+
+                int i = 0;
+                foreach (string key in valores.Keys)
+                {
+                    query.Append(key);
+                    query.Append(" = ");
+                    i++;
+                    query.Append(Cadenas.toDBString(valores[key]));
+                    if (i < valores.Count)
+                        query.Append(", ");
+                }
+                query.Append(" where ");
+                foreach (string key in llaves.Keys)
+                {
+                    query.Append(key);
+                    query.Append(" = ");
+                    query.Append(Cadenas.toDBString(llaves[key]));
+                    query.Append(" and ");
+                }
+                query.Append(" 1 = 1 ");
+
+                return EjecutarQuery(query.ToString());
+            }
+        }
     }
 }
