@@ -537,6 +537,8 @@ namespace OMIstats.Models
                 DetallePuntos dp = new DetallePuntos();
                 dp.llenarDatos(r);
 
+                if (!resultados.ContainsKey(dp.clave))
+                    continue;
                 Resultados res = resultados[dp.clave];
 
                 List<float?> d = null;

@@ -80,10 +80,10 @@ namespace OMIstats.Utilities
 
         public static string toDBString(object str)
         {
+            if (str == null || str is DBNull)
+                return "null";
             if (str is string)
                 return comillas(str.ToString());
-            if (str is DBNull)
-                return "null";
             return str.ToString();
         }
     }
