@@ -684,21 +684,21 @@ namespace OMIstats.Models
                     case Resultados.TipoMedalla.ORO_2:
                     case Resultados.TipoMedalla.ORO_3:
                         if (esInvitado)
-                            m.oros++;
-                        else
                             m.orosExtra++;
+                        else
+                            m.oros++;
                         break;
                     case Resultados.TipoMedalla.PLATA:
                         if (esInvitado)
-                            m.platas++;
-                        else
                             m.platasExtra++;
+                        else
+                            m.platas++;
                         break;
                     case Resultados.TipoMedalla.BRONCE:
                         if (esInvitado)
-                            m.bronces++;
-                        else
                             m.broncesExtra++;
+                        else
+                            m.bronces++;
                         break;
                 }
                 m.puntos += resultado.total;

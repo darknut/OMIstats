@@ -722,7 +722,7 @@ namespace OMIstats.Models
 
             return ((int)db.getTable().Rows[0][0]) == 0;
         }
-
+#if OMISTATS
         /// <summary>
         /// Regresa las participaciones en olimpiadas del usuario mandado como parametro
         /// </summary>
@@ -779,7 +779,7 @@ namespace OMIstats.Models
 
             return lista;
         }
-
+#endif
         /// <summary>
         /// Regresa los alumnos de la institucion mandada como parametro
         /// </summary>

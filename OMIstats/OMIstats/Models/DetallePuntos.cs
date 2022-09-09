@@ -379,7 +379,7 @@ namespace OMIstats.Models
 
             db.EjecutarQuery(query.ToString());
         }
-
+#if OMISTATS
         public static void TempUpdate(string omi, TipoOlimpiada tipo, int dia, string clave, int problema, int score)
         {
             Acceso db = new Acceso();
@@ -687,7 +687,28 @@ namespace OMIstats.Models
                 counterLugar++;
 
                 // Finalmente guardamos la linea en la base de datos
-                r.guardar(detalles: true, timestamp: 0, dia: dia, soloDetalles: !guardarFinal, expectErrors: true);
+                DetalleLugar detalleLugar = new DetalleLugar(omi, tipo, r.clave, 0, dia, r.medalla, r.lugar);
+                detalleLugar.guardar(expectErrors: true);
+
+                query.Clear();
+                query.Append(" update DetalleLugar set medalla = ");
+                query.Append((int)r.medalla);
+                query.Append(" lugar = ");
+                query.Append(r.lugar);
+                query.Append(" where olimpiada = ");
+                query.Append(Cadenas.comillas(omi));
+                query.Append(" and clase = ");
+                query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+                query.Append(" and clave = ");
+                query.Append(Cadenas.comillas(r.clave));
+                query.Append(" and timestamp = 0 and dia = ");
+                query.Append(dia);
+
+                db.EjecutarQuery(query.ToString());
+                if (guardarFinal)
+                {
+                    r.guardar();
+                }
             }
 
             // Para OMIPS ya terminamos los cálculos
@@ -740,5 +761,6 @@ namespace OMIstats.Models
                 estado.guardaMedallasEstado(invitados > 0);
             }
         }
+#endif
     }
 }

@@ -610,6 +610,7 @@ namespace OMIstats.Controllers
 
         public ActionResult TempMedallas(int dia, bool guardarFinal = false)
         {
+            OmegaUp.RunnerStarted = true;
             DetallePuntos.TempMedallas("27", TipoOlimpiada.OMI, guardarFinal, dia);
             DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIS, guardarFinal, dia);
             DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIP, guardarFinal, dia);
