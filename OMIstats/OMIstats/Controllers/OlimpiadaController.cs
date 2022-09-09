@@ -502,7 +502,7 @@ namespace OMIstats.Controllers
             Persona p = getUsuario();
 
             ViewBag.liveResults = o.liveResults;
-            if (o.esOnline && OmegaUp.RunnerStarted && p != null && p.esSuperUsuario())
+            if (o.liveResults && o.esOnline && OmegaUp.RunnerStarted && p != null && p.esSuperUsuario())
             {
                 ViewBag.secretScoreboard = true;
                 ViewBag.estados = Medallero.obtenerTablaEstadosSecreta(o.invitados > 0, clave, o.tipoOlimpiada);
