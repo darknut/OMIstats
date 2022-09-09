@@ -149,7 +149,7 @@ namespace OMIstats.Models
             return tipo.ToString();
         }
 
-        private void llenarDatos(DataRow row, bool incluirPersona = true, bool incluirEscuela = true)
+        public void llenarDatos(DataRow row, bool incluirPersona = true, bool incluirEscuela = true)
         {
             if (incluirPersona)
             {

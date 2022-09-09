@@ -49,6 +49,7 @@ namespace OMIstats.Models
 
         private void llenarDatos(DataRow row)
         {
+            dia = DataRowParser.ToInt(row["dia"]);
             clave = DataRowParser.ToString(row["clave"]);
             timestamp = DataRowParser.ToInt(row["timestamp"]);
             puntosProblemas = new List<float?>();
@@ -455,8 +456,289 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
         }
 
-        public static void TempMedallas(string omi, TipoOlimpiada tipo, int dia)
+        private static int compara(Resultados x, Resultados y)
         {
+            float x1 = 0, y1 = 0;
+
+            if (x == null)
+                x1 = -1;
+            else
+                x1 = (float)x.total;
+
+            if (y == null)
+                y1 = -1;
+            else
+                y1 = (float)y.total;
+
+            return y1.CompareTo(x1);
+        }
+
+        public static void TempMedallas(string omi, TipoOlimpiada tipo, bool guardarFinal, int dia)
+        {
+            Dictionary<string, Resultados> resultados = new Dictionary<string, Resultados>();
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from miembrodelegacion ");
+            query.Append(" where clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+            query.Append(" and tipo = 'competidor'");
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            int invitados = 0;
+            int concursantes = 0;
+
+            foreach (DataRow r in table.Rows)
+            {
+                MiembroDelegacion md = new MiembroDelegacion();
+                md.llenarDatos(r, incluirEscuela: false, incluirPersona: false);
+
+                Resultados res = new Resultados();
+                res.omi = omi;
+                res.tipoOlimpiada = tipo;
+                res.usuario  = md.claveUsuario;
+                res.clave = md.clave;
+                res.estado = md.estado;
+                res.invitado = MiembroDelegacion.esInvitadoOnline(res.clave, true);
+                if (res.invitado)
+                    invitados++;
+                concursantes++;
+
+                resultados.Add(res.clave, res);
+            }
+
+            query.Clear();
+            query.Append(" select * from detallepuntos ");
+            query.Append(" where clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+
+            db.EjecutarQuery(query.ToString());
+            table = db.getTable();
+
+            foreach (DataRow r in table.Rows)
+            {
+                DetallePuntos dp = new DetallePuntos();
+                dp.llenarDatos(r);
+
+                Resultados res = resultados[dp.clave];
+
+                List<float?> d = null;
+                if (dp.dia == 1)
+                {
+                    d = res.dia1;
+                    res.totalDia1 = dp.puntosDia;
+                }
+                else
+                {
+                    d = res.dia2;
+                    res.totalDia2 = dp.puntosDia;
+                }
+
+                for (int i = 0; i < 4; i++)
+                    d[i] = dp.puntosProblemas[i];
+
+                res.total = res.totalDia1 + res.totalDia2;
+            }
+
+            // Ordenamos los resutlados
+            List<Resultados> list = resultados.Values.ToList();
+            list.Sort(compara);
+
+            int[] cortes;
+            Dictionary<string, Medallero> medalleroEstados = new Dictionary<string,Medallero>();
+
+            if (tipo == TipoOlimpiada.OMI)
+            {
+                // Para las OMI se siguen las reglas de los doceavos
+                cortes = new int[] {
+                    (int) Math.Ceiling((concursantes - invitados) / 12.0),
+                    (int) Math.Ceiling((concursantes - invitados) / 4.0),
+                    (int) Math.Ceiling((concursantes - invitados) / 2.0),
+                    concursantes + 1
+                };
+            }
+            else
+            {
+                // Para OMIP y OMIS, se siguen las reglas de los cincos
+                cortes = new int[] {
+                    5,
+                    10,
+                    15,
+                    concursantes + 1
+                };
+            }
+
+            int lugar = 0;
+            int lastPoints = -1;
+            int empatados = 0;
+            int premioActual = 0;
+            int counterMedalla = 1;
+            int counterLugar = 1;
+
+            Resultados.TipoMedalla[] medallas = new Resultados.TipoMedalla[] {
+                Resultados.TipoMedalla.ORO,
+                Resultados.TipoMedalla.PLATA,
+                Resultados.TipoMedalla.BRONCE,
+                Resultados.TipoMedalla.NADA
+            };
+
+            // Asignamos lugares y medallas
+            for (int i = 0; i < list.Count; i++)
+            {
+                Resultados r = list[i];
+                if (r == null)
+                    break;
+
+                // Se acordó que para el calculo de medallas, los puntos se iban a redondear
+                int currentPoints = (int)Math.Round((decimal)r.total, 0);
+                if (currentPoints == lastPoints)
+                {
+                    empatados++;
+                }
+                else
+                {
+                    lugar = counterLugar;
+                    empatados = 0;
+                }
+
+                r.lugar = lugar;
+                lastPoints = currentPoints;
+
+                // Si no hay puntos, no hay medallas
+                if (currentPoints == 0)
+                {
+                    r.medalla = Resultados.TipoMedalla.NADA;
+                    // Si no hay puntos, tienes el último lugar
+                    r.lugar = concursantes;
+                }
+                else
+                {
+                    // Se calcula la nueva medalla
+                    while (cortes[premioActual] < counterMedalla && empatados == 0)
+                        premioActual++;
+
+                    r.medalla = medallas[premioActual];
+                }
+
+                // Para las OMI también calculamos los estados
+                if (tipo == TipoOlimpiada.OMI)
+                {
+                    Medallero m;
+                    if (!medalleroEstados.TryGetValue(r.estado, out m))
+                    {
+                        m = new Medallero();
+                        m.tipoOlimpiada = tipo;
+                        m.tipoMedallero = Medallero.TipoMedallero.ESTADO_POR_OMI;
+                        m.clave = r.estado + "_" + omi;
+                        m.omi = omi;
+
+                        medalleroEstados.Add(r.estado, m);
+
+                        m.guardarDatosEstados(true);
+                    }
+
+                    // Si es invitado no cuentan los puntos
+                    if (!r.invitado)
+                    {
+                        m.count++;
+                        if (m.count <= Olimpiada.COMPETIDORES_BASE)
+                            m.puntos += r.total;
+                    }
+
+                    // Pero sí las medallas
+                    switch (r.medalla)
+                    {
+                        case Resultados.TipoMedalla.ORO:
+                            {
+                                if (r.invitado)
+                                    m.orosExtra++;
+                                else
+                                    m.oros++;
+                                break;
+                            }
+                        case Resultados.TipoMedalla.PLATA:
+                            {
+                                if (r.invitado)
+                                    m.platasExtra++;
+                                else
+                                    m.platas++;
+                                break;
+                            }
+                        case Resultados.TipoMedalla.BRONCE:
+                            {
+                                if (r.invitado)
+                                    m.broncesExtra++;
+                                else
+                                    m.bronces++;
+                                break;
+                            }
+                    }
+                }
+
+                // Para el calculo de medallas, no contamos invitados, así que no incrementamos el counter actual
+                if (!r.invitado)
+                    counterMedalla++;
+                counterLugar++;
+
+                // Finalmente guardamos la linea en la base de datos
+                r.guardar(detalles: true, timestamp: 0, dia: dia, soloDetalles: !guardarFinal, expectErrors: true);
+            }
+
+            // Para OMIPS ya terminamos los cálculos
+            if (tipo != TipoOlimpiada.OMI)
+                return;
+
+            // Si estamos escondiendo los puntos, no hace falta continuar
+            if (!guardarFinal)
+                return;
+
+            // Ordenamos también el medallero de los estados
+            List<Medallero> sortedEstados = new List<Medallero>(medalleroEstados.Values);
+
+            // Primero calculamos los promedios
+            foreach (Medallero estado in sortedEstados)
+            {
+                // Arreglamos el estado sede
+                int competidores = estado.count;
+                if (competidores > Olimpiada.COMPETIDORES_BASE)
+                {
+                    competidores = Olimpiada.COMPETIDORES_BASE;
+                    estado.ajustarMedallas();
+                }
+                estado.promedio = (float?)Math.Round((double)(estado.puntos / competidores), 2);
+            }
+
+            // Luego ordenamos
+            Medallero ultimoEstado = null;
+            sortedEstados.Sort();
+            lugar = 0;
+
+            // Finalmente, asignamos lugares
+            for (int i = 0; i < sortedEstados.Count; i++)
+            {
+                Medallero estado = sortedEstados[i];
+                lugar++;
+
+                // Revisamos si hay empates entre estados
+                if (ultimoEstado == null ||
+                    ultimoEstado.oros != estado.oros ||
+                    ultimoEstado.platas != estado.platas ||
+                    ultimoEstado.bronces != estado.bronces ||
+                    (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
+                    estado.lugar = lugar;
+                else
+                    estado.lugar = ultimoEstado.lugar;
+
+                ultimoEstado = estado;
+
+                estado.guardaMedallasEstado(invitados > 0);
+            }
         }
     }
 }

@@ -608,13 +608,12 @@ namespace OMIstats.Controllers
         //
         // POST: /Olimpiada/TempMedallas/
 
-        [HttpPost]
-        public bool TempMedallas(int dia)
+        public ActionResult TempMedallas(int dia, bool guardarFinal = false)
         {
-            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMI, dia);
-            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIS, dia);
-            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIP, dia);
-            return true;
+            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMI, guardarFinal, dia);
+            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIS, guardarFinal, dia);
+            DetallePuntos.TempMedallas("27", TipoOlimpiada.OMIP, guardarFinal, dia);
+            return RedirectTo(Pagina.OLIMPIADA, "27");
         }
     }
 }
