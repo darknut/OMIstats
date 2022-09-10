@@ -44,12 +44,6 @@
                     lastOMI = r.omi;
                     omiArray = claseArray + "[" + r.omi + "]";
 @(Html.Raw(omiArray + "={};"))
-@(Html.Raw(omiArray + ".lugarPromedio=0;"))
-@(Html.Raw(omiArray + ".puntosPromedio=0;"))
-@(Html.Raw(omiArray + ".totalCompetidores=0;"))
-@(Html.Raw(omiArray + ".oros=0;"))
-@(Html.Raw(omiArray + ".platas=0;"))
-@(Html.Raw(omiArray + ".inversiones=0;"))
                 }
                 if ((r.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIPO ||
                      r.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMISO) &&
@@ -73,7 +67,6 @@
                 }
 @(Html.Raw(mdArray + "=[];"))
 @(Html.Raw(mdArray + ".medalla='" + medalla + "';"))
-@(Html.Raw(mdArray + ".puntos=" + r.total + ";"))
 @(Html.Raw(mdArray + ".lugar=" + r.lugar + ";"))
             }
             }
@@ -88,7 +81,7 @@
 
 <h1 class="titulo">@ViewBag.Title</h1>
 
-<table class="table" id="tablaPuntos">
+<table class="table">
     <thead>
         <tr class="table-header">
             <th class="bottom-border right-border">Estado</th>
@@ -106,8 +99,8 @@
             <td class="table-td right-border mini-cell">
                 @Html.ActionLink(e.nombre, "Index", "Estado", new { clave = e.clave }, new { @class = "nombre" })
             </td>
-            <td class="table-td center right-border mini-cell" id="p-@e.clave">2</td>
-            <td class="table-td center mini-cell" id="s-@e.clave">2</td>
+            <td class="table-td center right-border mini-cell" id="OMIP-@e.clave">2</td>
+            <td class="table-td center mini-cell" id="OMIS-@e.clave">2</td>
         </tr>
         }
     }
