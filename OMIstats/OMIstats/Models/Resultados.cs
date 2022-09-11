@@ -356,24 +356,28 @@ namespace OMIstats.Models
             // Ya que tenemos esto, los unimos
             for (int i = 0; i < lista.Count; i++)
             {
-                if (!puntos.ContainsKey(lista[i].clave))
-                    continue;
-                List<float?> problemas = null;
-                if (dia == 1)
-                    problemas = lista[i].dia1;
-                else
-                    problemas = lista[i].dia2;
-                DetallePuntos dp = puntos[lista[i].clave];
-                DetalleLugar dl = lugares[lista[i].clave];
-                for (int j = 0; j < 6; j++)
-                    problemas[j] = dp.puntosProblemas[j];
-                if (dia == 1)
-                    lista[i].totalDia1 = dp.puntosDia;
-                else
-                    lista[i].totalDia2 = dp.puntosDia;
-                lista[i].total = lista[i].totalDia1 + lista[i].totalDia2;
-                lista[i].lugar = dl.lugar;
-                lista[i].medalla = dl.medalla;
+                if (puntos.ContainsKey(lista[i].clave))
+                {
+                    List<float?> problemas = null;
+                    if (dia == 1)
+                        problemas = lista[i].dia1;
+                    else
+                        problemas = lista[i].dia2;
+                    DetallePuntos dp = puntos[lista[i].clave];
+                    for (int j = 0; j < 6; j++)
+                        problemas[j] = dp.puntosProblemas[j];
+                    if (dia == 1)
+                        lista[i].totalDia1 = dp.puntosDia;
+                    else
+                        lista[i].totalDia2 = dp.puntosDia;
+                }
+                if (lugares.ContainsKey(lista[i].clave))
+                {
+                    DetalleLugar dl = lugares[lista[i].clave];
+                    lista[i].total = lista[i].totalDia1 + lista[i].totalDia2;
+                    lista[i].lugar = dl.lugar;
+                    lista[i].medalla = dl.medalla;
+                }
             }
 
             lista.Sort();
