@@ -628,7 +628,7 @@ namespace OMIstats.Models
                 {
                     r.medalla = Resultados.TipoMedalla.NADA;
                     // Si no hay puntos, tienes el último lugar
-                    r.lugar = concursantes - invitados;
+                    r.lugar = concursantes;
                 }
                 else
                 {
