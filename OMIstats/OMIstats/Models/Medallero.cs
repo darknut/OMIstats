@@ -159,7 +159,7 @@ namespace OMIstats.Models
             if (hayInvitados)
             {
                 bool temp = this.guardarDatos();
-                if (!temp)
+                if (temp)
                     return temp;
                 this.oros = this.orosExtra;
                 this.platas = this.platasExtra;
