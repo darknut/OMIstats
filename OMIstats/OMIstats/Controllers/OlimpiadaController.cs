@@ -599,7 +599,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/TempUpdate/
 
         [HttpPost]
-        public bool TempUpdate(TipoOlimpiada tipo, string clave, int dia, int problema, int score)
+        public bool TempUpdate(TipoOlimpiada tipo, string clave, int dia, int problema, float score)
         {
             DetallePuntos.TempUpdate("27", tipo, dia, clave, problema, score);
             return true;

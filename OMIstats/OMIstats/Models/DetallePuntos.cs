@@ -380,7 +380,7 @@ namespace OMIstats.Models
             db.EjecutarQuery(query.ToString());
         }
 #if OMISTATS
-        public static void TempUpdate(string omi, TipoOlimpiada tipo, int dia, string clave, int problema, int score)
+        public static void TempUpdate(string omi, TipoOlimpiada tipo, int dia, string clave, int problema, float score)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
