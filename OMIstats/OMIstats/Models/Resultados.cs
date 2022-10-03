@@ -1101,6 +1101,9 @@ namespace OMIstats.Models
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 TipoMedalla medalla = DataRowParser.ToTipoMedalla(r["medalla"]);
 
+                if (Olimpiada.esOMIPOS(clase))
+                    continue;
+
                 lineas.Append(estado);
                 lineas.Append("\\");
                 if (clase == TipoOlimpiada.OMIP)
