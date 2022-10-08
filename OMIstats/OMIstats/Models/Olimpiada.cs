@@ -19,7 +19,6 @@ namespace OMIstats.Models
         [MaxLength(3, ErrorMessage = "El tamaño máximo es 3 caracteres")]
 #endif
         public string numero { get; set; }
-        public const int COMPETIDORES_BASE = 4;
 
         public TipoOlimpiada tipoOlimpiada { get; set; }
 
@@ -117,6 +116,8 @@ namespace OMIstats.Models
         public int invitados { get; set; }
 
         public bool esOnline { get; set; }
+
+        public int competidoresBase { get; set; }
 
         public float media
         {
@@ -290,6 +291,7 @@ namespace OMIstats.Models
             puntosDetallados = false;
             diplomasOnline = false;
             esOnline = false;
+            competidoresBase = 0;
             registroSedes = false;
             ordenarPorPuntos = false;
 
@@ -407,6 +409,7 @@ namespace OMIstats.Models
             registroActivo = DataRowParser.ToBool(datos["registroActivo"]);
             diplomasOnline = DataRowParser.ToBool(datos["diplomasOnline"]);
             esOnline = DataRowParser.ToBool(datos["esOnline"]);
+            competidoresBase = DataRowParser.ToInt(datos["competidoresBase"]);
             registroSedes = DataRowParser.ToBool(datos["registroSedes"]);
             ordenarPorPuntos = DataRowParser.ToBool(datos["ordenarPorPuntos"]);
 
@@ -579,6 +582,8 @@ namespace OMIstats.Models
             query.Append(diplomasOnline ? 1 : 0);
             query.Append(", esOnline = ");
             query.Append(esOnline ? 1 : 0);
+            query.Append(", competidoresBase = ");
+            query.Append(competidoresBase);
             query.Append(", registroSedes = ");
             query.Append(registroSedes ? 1 : 0);
             query.Append(", ordenarPorPuntos = ");
@@ -673,7 +678,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4) ");
 
             db.EjecutarQuery(query.ToString());
         }
@@ -946,7 +951,7 @@ namespace OMIstats.Models
             if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
                 MiembroDelegacion.registrarGanadoresOMIPOS(numero, tipoOlimpiada);
             else
-                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos);
+                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos, this.competidoresBase);
 
             // Guardamos los datos en la base
             guardarDatos();
@@ -1041,7 +1046,7 @@ namespace OMIstats.Models
         {
             if (this.tipoOlimpiada == TipoOlimpiada.OMIPO || this.tipoOlimpiada == TipoOlimpiada.OMISO)
                 return 25;
-            return estado == this.claveEstado && !this.esOnline ? COMPETIDORES_BASE * 2 : COMPETIDORES_BASE + this.invitados;
+            return estado == this.claveEstado && !this.esOnline ? this.competidoresBase * 2 : this.competidoresBase + this.invitados;
         }
 
         public static HashSet<string> obtenerOlimpiadasParaEstado(string estado)

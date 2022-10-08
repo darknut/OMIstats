@@ -269,7 +269,7 @@ namespace OMIstats.Models
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
         /// </param name="tipoOlimpiada">El tipo de olimpiada para el que se requieren los tipos</param>
-        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada, bool ordenarPorPuntos)
+        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada, bool ordenarPorPuntos, int competidoresBase)
         {
             if (tipoOlimpiada == TipoOlimpiada.NULL)
                 return;
@@ -366,7 +366,7 @@ namespace OMIstats.Models
                 }
 
                 bool esInvitado = MiembroDelegacion.esInvitado(resultado.clave) ||
-                                  MiembroDelegacion.esInvitadoOnline(resultado.clave, o.esOnline);
+                                  MiembroDelegacion.esInvitadoOnline(resultado.clave, o.esOnline, o.competidoresBase);
 
                 if (resultado.medalla != Resultados.TipoMedalla.DESCALIFICADO)
                 {
@@ -436,7 +436,7 @@ namespace OMIstats.Models
                             estadoPorOlimpiada.hayUNKs = true;
 
                         // No se han guardado mas de 4 lugares
-                        if (estadoPorOlimpiada.count < Olimpiada.COMPETIDORES_BASE)
+                        if (estadoPorOlimpiada.count < competidoresBase)
                         {
                             // Invitados no se cuentan en el total
                             if (!esInvitado)
@@ -489,7 +489,7 @@ namespace OMIstats.Models
                 for (int i = 0; i < sortedEstados.Count; i++)
                 {
                     Medallero estado = sortedEstados[i];
-                    estado.ajustarMedallas();
+                    estado.ajustarMedallas(competidoresBase);
                     if (estado.omi != lastOMI)
                     {
                         // Si algún estado en la olimpiada tiene un
@@ -553,27 +553,27 @@ namespace OMIstats.Models
         /// Ajusta las medallas del medallero actual para que no haya más de
         /// 4 medallas en total
         /// </summary>
-        public void ajustarMedallas()
+        public void ajustarMedallas(int competidoresBase)
         {
             int temp = 0;
-            if (this.oros + this.platas + this.bronces > Olimpiada.COMPETIDORES_BASE)
+            if (this.oros + this.platas + this.bronces > competidoresBase)
             {
-                if (this.oros > Olimpiada.COMPETIDORES_BASE)
+                if (this.oros > competidoresBase)
                 {
                     temp = this.oros;
-                    this.oros = Olimpiada.COMPETIDORES_BASE;
+                    this.oros = competidoresBase;
                     this.orosExtra = temp - this.oros;
                 }
-                if (this.oros + this.platas > Olimpiada.COMPETIDORES_BASE)
+                if (this.oros + this.platas > competidoresBase)
                 {
                     temp = this.platas;
-                    this.platas = Olimpiada.COMPETIDORES_BASE - this.oros;
+                    this.platas = competidoresBase - this.oros;
                     this.platasExtra = temp - this.platas;
                 }
-                if (this.oros + this.platas + this.bronces > Olimpiada.COMPETIDORES_BASE)
+                if (this.oros + this.platas + this.bronces > competidoresBase)
                 {
                     temp = this.bronces;
-                    this.bronces = Olimpiada.COMPETIDORES_BASE - this.oros - this.platas;
+                    this.bronces = competidoresBase - this.oros - this.platas;
                     this.broncesExtra = temp - this.bronces;
                 }
             }
@@ -607,6 +607,7 @@ namespace OMIstats.Models
 
             medalleroGeneral = new Medallero();
             Medallero lastMedallero = null;
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(olimpiada, tipoOlimpiada);
             foreach (DataRow r in table.Rows)
             {
                 Medallero m = new Medallero();
@@ -632,7 +633,7 @@ namespace OMIstats.Models
                     medalleroGeneral.bronces += m.bronces;
 
                     // Solo quiero 4 medallas por estado en este caso
-                    m.ajustarMedallas();
+                    m.ajustarMedallas(o.competidoresBase);
 
                     lista.Add(m);
 
@@ -654,7 +655,7 @@ namespace OMIstats.Models
             foreach (Resultados resultado in resultados)
             {
                 Medallero m = null;
-                bool esInvitado = MiembroDelegacion.esInvitadoOnline(resultado.clave, hayInvitados);
+                bool esInvitado = MiembroDelegacion.esInvitadoOnline(resultado.clave, hayInvitados, 4);
                 if (diccionario.ContainsKey(resultado.estado))
                 {
                     m = diccionario[resultado.estado];

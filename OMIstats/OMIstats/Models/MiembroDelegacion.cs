@@ -1445,14 +1445,14 @@ namespace OMIstats.Models
             return lista;
         }
 
-        public static bool esInvitadoOnline(string clave, bool esOnline)
+        public static bool esInvitadoOnline(string clave, bool esOnline, int competidoresBase)
         {
             if (esOnline)
             {
                 int numero = 0;
                 if (!int.TryParse(clave.Substring(4), out numero))
                     return true;
-                return numero > Olimpiada.COMPETIDORES_BASE;
+                return numero > competidoresBase;
             }
 
             return false;

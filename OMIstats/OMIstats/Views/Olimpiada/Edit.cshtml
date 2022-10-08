@@ -170,6 +170,14 @@ else
                 </div>
 
                 <div>
+                    <div class="label">Competidores base:</div>
+                    <div class="input">
+                        @Html.TextBoxFor(model => model.competidoresBase)
+                        @Html.ValidationMessageFor(model => model.competidoresBase)
+                    </div>
+                </div>
+
+                <div>
                     <div class="label">Invitados:</div>
                     <div class="input">
                         @Html.TextBoxFor(model => model.invitados)
