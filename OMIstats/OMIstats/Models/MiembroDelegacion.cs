@@ -1101,7 +1101,7 @@ namespace OMIstats.Models
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
-            query.Append(" order by persona ");
+            query.Append(" order by persona, tipo ");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -1119,7 +1119,7 @@ namespace OMIstats.Models
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 TipoAsistente tipo = DataRowParser.ToTipoAsistente(r["tipo"]);
 
-                if (lastUsuario == claveUsuario)
+                if (lastUsuario == claveUsuario && tipo != TipoAsistente.COMPETIDOR)
                     continue;
                 lastUsuario = claveUsuario;
 
