@@ -281,9 +281,11 @@ namespace OMIstats.Models
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" and (tipo <> ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
-            query.Append(" or clave like '%_");
+            query.Append(" or (tipo = ");
+            query.Append((int)TipoMedallero.ESTADO_POR_OMI);
+            query.Append(" and omi = ");
             query.Append(olimpiada);
-            query.Append("%')");
+            query.Append("))");
 
             // Primero borramos todo lo que está en la base de datos
             // a excepción de otros tipos de olimpiada u otros estado-olimpiada
