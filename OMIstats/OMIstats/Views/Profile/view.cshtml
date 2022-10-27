@@ -293,7 +293,7 @@ if (GUID.Length > 0)
                     }
                 </td>
                 <td class="@("table-td right-border center " + claseCSS)">
-                    @if (mostrar && datos.lugar > 0 && !descalificado && !esInvitado && !esOMIPOS)
+                    @if (mostrar && datos.lugar > 0 && !descalificado && !esInvitado)
                     {
                         @(datos.lugar)
                         if (datos.ioi == "Y")
@@ -388,10 +388,10 @@ if (GUID.Length > 0)
                 @if (perfilPropio)
                 {
                 <td class="left-border padding-diploma">
-                    @if (tableManager.tieneDiplomas() && !esOMIPOS)
+                    @if (tableManager.tieneDiplomas() && (!esOMIPOS || tableManager.tieneDiplomasOMIPOS()))
                     {
                             @Html.ActionLink("Descargar", "Diploma", "Profile",
-                            new { omi = datos.omi, clave = datos.clave, clase = tipo },
+                            new { omi = datos.omi, clave = datos.clave, clase = participacion[l].tipoOlimpiada },
                             new { @class = "botonPerfil" })
                     }
                 </td>

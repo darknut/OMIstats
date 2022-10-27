@@ -1125,8 +1125,6 @@ namespace OMIstats.Models
 
                 lineas.Append(estado);
                 lineas.Append("\\");
-                if (Olimpiada.esOMIPOS(clase))
-                    lineas.Append("OMIPS Online\\");
                 if (tipo == TipoAsistente.COMPETIDOR)
                 {
                     if (clase == TipoOlimpiada.OMIP || clase == TipoOlimpiada.OMIPO)
@@ -1135,6 +1133,8 @@ namespace OMIstats.Models
                         lineas.Append("S-");
                 }
                 lineas.Append(clave);
+                if (tipo == TipoAsistente.COMPETIDOR && Olimpiada.esOMIPOS(clase))
+                    lineas.Append("-online");
                 lineas.Append(".pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");

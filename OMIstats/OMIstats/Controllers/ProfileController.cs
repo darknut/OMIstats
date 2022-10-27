@@ -295,6 +295,10 @@ namespace OMIstats.Controllers
                     clave = "P-" + clave;
                 if (clase == TipoOlimpiada.OMIS)
                     clave = "S-" + clave;
+                if (clase == TipoOlimpiada.OMIPO)
+                    clave = "P-" + clave + "-online";
+                if (clase == TipoOlimpiada.OMISO)
+                    clave = "S-" + clave + "-online";
             }
 
             if (!todos)

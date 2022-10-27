@@ -265,6 +265,11 @@ namespace OMIstats.Utilities
             return currentOMI.diplomasOnline;
         }
 
+        public bool tieneDiplomasOMIPOS()
+        {
+            return tieneDiplomas() && currentOMI.año >= 2022;
+        }
+
         public static string participaciones(MiembroDelegacion md, TipoOlimpiada tipo)
         {
             string result = "";
