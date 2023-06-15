@@ -366,8 +366,11 @@ namespace OMIstats.Models
         {
             HttpWebRequest request = (HttpWebRequest)System.Net.WebRequest.Create(api);
             request.Method = "GET";
-            request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36";
+            request.UserAgent = "Other";
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            request.UseDefaultCredentials = true;
+            request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+            request.Referer = "https://www.olimpiadadeinformatica.org.mx/Resultados";
 
             try
             {
@@ -387,7 +390,17 @@ namespace OMIstats.Models
             }
             catch (Exception e)
             {
-                Models.Log.add(Log.TipoLog.FACEBOOK, e.ToString());
+                if (e is WebException)
+                {
+                    var ex = (WebException)e;
+                    var response = ex.Response;
+                    var dataStream = response.GetResponseStream();
+                    var reader = new StreamReader(dataStream);
+                    var details = reader.ReadToEnd();
+                    Models.Log.add(Log.TipoLog.FACEBOOK, details);
+                }
+                else
+                    Models.Log.add(Log.TipoLog.FACEBOOK, e.ToString());
                 return null;
             }
         }
@@ -489,31 +502,34 @@ namespace OMIstats.Models
             }
             finally
             {
-                if (portada.Length == 0)
-                    portada = fallbackPortada;
-
-                // Actualizamos las actualizaciones en general
-                Album al = Album.obtenerAlbum(ALBUM_GRAL);
-
-                if (al.lastUpdated < DateTime.Today)
+                if (portada != null)
                 {
-                    al.lastUpdated = DateTime.Today;
-                    al.orden = currentCalls;
+                    if (portada.Length == 0)
+                        portada = fallbackPortada;
+
+                    // Actualizamos las actualizaciones en general
+                    Album al = Album.obtenerAlbum(ALBUM_GRAL);
+
+                    if (al.lastUpdated < DateTime.Today)
+                    {
+                        al.lastUpdated = DateTime.Today;
+                        al.orden = currentCalls;
+                    }
+                    else
+                    {
+                        al.orden += currentCalls;
+                    }
+
+                    // Le quitamos 1 del extra que le pusimos al principio
+                    al.orden--;
+
+                    // Actualizamos los calls en el sistema
+                    al.guardarDatos();
+
+                    // También actualizamos la fecha del album que estamos actualizando
+                    lastUpdated = DateTime.Today;
+                    currentCalls = 0;
                 }
-                else
-                {
-                    al.orden += currentCalls;
-                }
-
-                // Le quitamos 1 del extra que le pusimos al principio
-                al.orden--;
-
-                // Actualizamos los calls en el sistema
-                al.guardarDatos();
-
-                // También actualizamos la fecha del album que estamos actualizando
-                lastUpdated = DateTime.Today;
-                currentCalls = 0;
             }
         }
     }
