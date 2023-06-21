@@ -762,8 +762,8 @@ namespace OMIstats.Models
                 TipoOlimpiada pequeña = Olimpiada.getOlimpiadaPequeña(tipoOlimpiada);
                 query.Append(" or (r.clase = ");
                 query.Append(Cadenas.comillas(pequeña.ToString().ToLower()));
-                query.Append(" and r.medalla = ");
-                query.Append((int)TipoMedalla.NADA);
+                query.Append(" and r.medalla <> ");
+                query.Append((int)TipoMedalla.CLASIFICADO);
                 query.Append(")");
             }
             query.Append(") and r.concursante = ");
