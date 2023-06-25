@@ -284,7 +284,7 @@ namespace OMIstats.Models
             query.Append(" or (tipo = ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
             query.Append(" and omi = ");
-            query.Append(olimpiada);
+            query.Append(Cadenas.comillas(olimpiada.Trim()));
             query.Append("))");
 
             // Primero borramos todo lo que está en la base de datos
@@ -599,7 +599,7 @@ namespace OMIstats.Models
             query.Append(" select * from Medallero where tipo = ");
             query.Append((int)TipoMedallero.ESTADO_POR_OMI);
             query.Append(" and omi = ");
-            query.Append(Cadenas.comillas(olimpiada));
+            query.Append(Cadenas.comillas(olimpiada.Trim()));
             query.Append(" and clase = ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(" order by lugar asc, clave asc ");
