@@ -951,7 +951,7 @@ namespace OMIstats.Models
             if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
                 MiembroDelegacion.registrarGanadoresOMIPOS(numero, tipoOlimpiada);
             else
-                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos, this.competidoresBase);
+                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos, this.competidoresBase, unkEnTabla);
 
             // Guardamos los datos en la base
             guardarDatos();
