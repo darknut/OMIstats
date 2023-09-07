@@ -5,6 +5,7 @@ var omi = "";
 var searching = false;
 var resultados = [];
 var invitados = 0;
+var soloDiploma = false;
 
 function setUpAjax(url, claveEstado, claveOmi, inv) {
     ajaxUrl = url;
@@ -331,7 +332,7 @@ function validar() {
             return false;
         if (revisaNoVacio("celular"))
             return false;
-        if (emergenciaRequerido) {
+        if (emergenciaRequerido && !soloDiploma) {
             if (revisaNoVacio("emergencia"))
                 return false;
             if (revisaNoVacio("telEmergencia"))
@@ -424,4 +425,9 @@ function terminarRegistro(tipoOlimpiada, e) {
 
     if (estado == "" || confirm(text))
         redirige(ajaxUrl, address);
+}
+
+function onTipoRegistro() {
+    soloDiploma = document.getElementById("soloDiplomaSi").checked;
+    setVisible("bloqueEmergencia", !soloDiploma);
 }

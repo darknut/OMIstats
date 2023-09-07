@@ -36,6 +36,7 @@
     string claveCompetidor = nuevo ? "" : md.clave;
     OMIstats.Models.TipoOlimpiada tipoOriginal = nuevo ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
     bool emergenciaRequerido = !usuario.esSuperUsuario() && (!omi.esOnline || esCompetidor);
+    bool tipoRegistroVisible = !omi.esOnline && !esCompetidor;
 }
 
 @section AddToHead
@@ -171,7 +172,16 @@ if (nuevo && !resubmit)
                 }
             </select>
         </div>
-        <div class="registro-single-control"></div>
+        <div class="registro-single-control">
+            @if(tipoRegistroVisible)
+            {
+            <span class="control-title">Tipo de registro:</span>
+            <div>
+                <input type="radio" name="soloDiploma" id="soloDiplomaSi" value="true" onchange="onTipoRegistro()" @(md != null && md.soloDiploma ? "checked" : "")> Solo para diploma
+                <input type="radio" name="soloDiploma" id="soloDiplomaNo" value="false" onchange="onTipoRegistro()" @(md == null || !md.soloDiploma ? "checked" : "")> Presencial
+            </div>
+            }
+        </div>
         <div class="registro-single-control"></div>
     </div>
     <div class="registro-controls">
@@ -431,7 +441,7 @@ if (nuevo && !resubmit)
 </div>
 @if (usuario.esSuperUsuario() || emergenciaRequerido)
 {
-<div class="panel">
+<div class="panel" id="bloqueEmergencia">
     <div class="panel-heading"> Datos de emergencia </div>
     <div class="panel-body">
     <div class="registro-controls">

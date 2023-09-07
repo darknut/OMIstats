@@ -123,6 +123,10 @@ else
             }
         <td class="lineas-registro @(classeLinea ? "celda-estado" : "")">
             @miembro.nombreAsistente
+            @if (miembro.soloDiploma)
+            {
+            <img src="~/img/info.svg" title="Solo diploma" class="info-svg info-test"/>
+            }
             @if (usuario.esSuperUsuario() && miembro.puedeRegistrar)
             {
             <img src="~/img/info.svg" title="Puede regsitrar" class="info-svg"/>

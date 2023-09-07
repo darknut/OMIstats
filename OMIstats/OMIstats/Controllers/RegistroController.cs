@@ -114,7 +114,7 @@ namespace OMIstats.Controllers
                     Archivos.existeArchivo(Archivos.Folder.INVITACIONES, omi + "\\" + estado + "\\P-" +  e.ISO + "-1.pdf");
             }
 
-            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, o.tipoOlimpiada);
+            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, o.tipoOlimpiada, esParaRegistro: true);
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             if (o.esOnline)
             {
@@ -308,7 +308,7 @@ namespace OMIstats.Controllers
             Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL,
             TipoOlimpiada tipo = TipoOlimpiada.NULL, bool selectPublica = true,
             MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL, int sede = -1,
-            string tshirt = "")
+            string tshirt = "", bool soloDiploma = false)
         {
             // Se valida que el usuario tenga permiso para realizar esta acción
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
@@ -432,7 +432,7 @@ namespace OMIstats.Controllers
                 p.omips = true;
             }
 
-            List<MiembroDelegacion> miembrosExistentes = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, tipo);
+            List<MiembroDelegacion> miembrosExistentes = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, tipo, esParaRegistro: true);
             bool registroCerrado = false;
             if (miembrosExistentes.Count > 0)
                 registroCerrado = miembrosExistentes[0].cerrado;
@@ -506,6 +506,7 @@ namespace OMIstats.Controllers
                 md.sede = sede;
                 md.cerrado = registroCerrado;
                 md.tshirt = tshirt;
+                md.soloDiploma = soloDiploma;
 
                 if (!md.nuevo())
                 {
@@ -559,6 +560,7 @@ namespace OMIstats.Controllers
                 md.sede = sede;
                 md.cerrado = registroCerrado;
                 md.tshirt = tshirt;
+                md.soloDiploma = soloDiploma;
                 if (!md.guardarDatos(claveOriginal, tipoO))
                 {
                     ViewBag.errorInfo = "db_UPDATE_MD";
