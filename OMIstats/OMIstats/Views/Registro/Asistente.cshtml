@@ -259,7 +259,7 @@ if (nuevo && !resubmit)
         </div>
         <div class="registro-single-control">
             <span class="control-title">Apellido Materno</span>
-            @Html.TextBoxFor(model => model.apellidoMaterno, new { @class = "shiny-box" })
+            @Html.TextBoxFor(model => model.apellidoMaterno, new { @class = "shiny-box", @placeholder = "Si no tiene, puede dejar en blanco" })
             @Html.ValidationMessageFor(model => model.apellidoMaterno)
         </div>
     </div>
@@ -317,7 +317,7 @@ if (nuevo && !resubmit)
     </div>
     <div class="registro-controls">
         <div class="registro-single-control">
-            <span class="control-title">Usuario de OmageUp</span>
+            <span class="control-title">Usuario de OmegaUp</span>
             @Html.TextBoxFor(model => model.omegaup, new { @class = "shiny-box" })
             @Html.ValidationMessageFor(model => model.omegaup)
         </div>
@@ -357,6 +357,22 @@ if (nuevo && !resubmit)
             }
         </div>
     </div>
+    @if(!omi.esOnline && !esCompetidor)
+    {
+    <div class="registro-controls" id="notas">
+        <div class="registro-single-control">
+            <span class="control-title">Casos especiales</span>
+            <textarea
+                id="nota"
+                name="nota"
+                class="shiny-box"
+                maxlength="200"
+                placeholder="En caso de que solo vayan a asistir parte de la competencia, no se vayan a quedar en el hotel pero quieran participar en las actividades o alimentos, etc.
+Para alergias use la sección de emergencia."
+            >@(md != null && md.nota != null ? md.nota.nota : "")</textarea>
+        </div>
+    </div>
+    }
 </div>
 </div>
 <div class="panel panel-green datos-padding" id="bloqueEscuela" style="@(esCompetidor ? "" : "display:none")">
@@ -399,7 +415,7 @@ if (nuevo && !resubmit)
             <select name="selectNivelEscolar" id="selectNivelEscolar" class="shiny-box" onchange="onNivelEscolar()">
                 @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP && tipo != OMIstats.Models.TipoOlimpiada.OMIPO)
                 {
-                <option></option>
+                <option value=""></option>
                 }
                 <option value="PRIMARIA" @(nivelEscuela == "PRIMARIA" ? "selected" : "")>Primaria</option>
                 @if (tipo != OMIstats.Models.TipoOlimpiada.OMIP && tipo != OMIstats.Models.TipoOlimpiada.OMIPO)
@@ -414,9 +430,9 @@ if (nuevo && !resubmit)
             <div id="errorselectNivelEscolar" class="errorTextoRojo" style="display:none">Elige el nivel escolar</div>
         </div>
         <div class="registro-single-control">
-            <span class="control-title">Año escolar <img src="~/img/info.svg" title="Preparatorias cuenten por año y no por semestre. Empiecen en 1° y no en 4°" class="info-svg"/><span class="errorTextoRojo">*</span></span>
-            <select name="selectAnioEscolar" id="selectAnioEscolar" class="shiny-box">
-                <option></option>
+            <span class="control-title">Año escolar<span class="errorTextoRojo">*</span></span>
+            <select name="selectAnioEscolar" id="selectAnioEscolar" class="shiny-box" onchange="onAnioEscolar()">
+                <option value=""></option>
                 <option value="1" @(añoEscuela == 1 ? "selected" : "")>1°</option>
                 <option value="2" @(añoEscuela == 2 ? "selected" : "")>2°</option>
                 <option value="3" @(añoEscuela == 3 ? "selected" : "")>3°</option>

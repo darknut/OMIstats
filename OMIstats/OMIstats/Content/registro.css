@@ -209,3 +209,11 @@
 .small-combo {
     width: 130px;
 }
+
+option[value=""]{
+    display:none;
+}
+
+option {
+    color: #000;
+}

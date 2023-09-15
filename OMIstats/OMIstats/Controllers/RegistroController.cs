@@ -258,6 +258,7 @@ namespace OMIstats.Controllers
                     ViewBag.errorInfo = "permisos";
                     return View(new Persona());
                 }
+                md.cargarNota();
                 ViewBag.claveDisponible = md.clave;
                 ViewBag.tipoAsistente = md.tipo;
                 ViewBag.estado = Estado.obtenerEstadoConClave(md.estado);
@@ -308,7 +309,7 @@ namespace OMIstats.Controllers
             Institucion.NivelInstitucion selectNivelEscolar = Institucion.NivelInstitucion.NULL,
             TipoOlimpiada tipo = TipoOlimpiada.NULL, bool selectPublica = true,
             MiembroDelegacion.TipoAsistente tipoAsistente = MiembroDelegacion.TipoAsistente.NULL, int sede = -1,
-            string tshirt = "", bool soloDiploma = false)
+            string tshirt = "", bool soloDiploma = false, string nota = "")
         {
             // Se valida que el usuario tenga permiso para realizar esta acción
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
@@ -507,6 +508,8 @@ namespace OMIstats.Controllers
                 md.cerrado = registroCerrado;
                 md.tshirt = tshirt;
                 md.soloDiploma = soloDiploma;
+                md.asignarNota(nota);
+                md.nota.guardar();
 
                 if (!md.nuevo())
                 {
@@ -561,6 +564,8 @@ namespace OMIstats.Controllers
                 md.cerrado = registroCerrado;
                 md.tshirt = tshirt;
                 md.soloDiploma = soloDiploma;
+                md.asignarNota(nota);
+                md.nota.guardar();
                 if (!md.guardarDatos(claveOriginal, tipoO))
                 {
                     ViewBag.errorInfo = "db_UPDATE_MD";

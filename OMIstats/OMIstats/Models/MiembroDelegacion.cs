@@ -79,6 +79,7 @@ namespace OMIstats.Models
         public bool puedeRegistrar;
         public string tshirt;
         public bool soloDiploma;
+        public NotaRegistro nota;
         /// <summary>
         /// Esta bandera indica si el registro ya fue completado por el líder
         /// Todos los usuarios lo tienen, se actualiza a todos a la vez.
@@ -135,6 +136,7 @@ namespace OMIstats.Models
             tshirt = "";
             soloDiploma = false;
             cerrado = false;
+            nota = null;
         }
 
         public string getTipoAsistenteString()
@@ -360,11 +362,25 @@ namespace OMIstats.Models
             {
                 MiembroDelegacion md = new MiembroDelegacion();
                 md.llenarDatos(r);
+                if (esParaRegistro)
+                    md.cargarNota();
 
                 lista.Add(md);
             }
 
             return lista;
+        }
+
+        public void cargarNota()
+        {
+            nota = NotaRegistro.obtenerNotaPara(olimpiada, tipoOlimpiada, estado, claveUsuario);
+        }
+
+        public void asignarNota(string s)
+        {
+            if (nota == null)
+                cargarNota();
+            nota.nota = s;
         }
 
         /// <summary>
@@ -416,6 +432,8 @@ namespace OMIstats.Models
                 s.Append(tshirt);
                 s.Append(", ");
                 s.Append(soloDiploma ? "si" : "no");
+                s.Append(", ");
+                s.Append(nota.nota ?? "");
             }
 
             return s.ToString();

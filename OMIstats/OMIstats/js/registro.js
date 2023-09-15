@@ -52,10 +52,14 @@ function setUpSearch(tipo) {
     }
 }
 
-function generaOpcion(text, value) {
+function generaOpcion(text, value, isMessage) {
     var opt = document.createElement("option");
     opt.text = text;
     opt.value = value;
+    if (isMessage) {
+        opt.disabled = true;
+        opt.selected = true;
+    }
     return opt;
 }
 
@@ -405,7 +409,14 @@ function onNivelEscolar() {
     var combo = document.getElementById("selectAnioEscolar");
     borrarOpciones(combo);
 
-    combo.add(generaOpcion("", ""));
+    if (nivel == "PREPARATORIA") {
+        combo.add(generaOpcion("Año, no el semestre", "", true));
+        combo.style.color = "gray";
+    }
+    else {
+        combo.add(generaOpcion("", ""));
+        combo.style.color = "black";
+    }
     combo.add(generaOpcion("1°", "1"));
     combo.add(generaOpcion("2°", "2"));
     combo.add(generaOpcion("3°", "3"));
@@ -429,5 +440,11 @@ function terminarRegistro(tipoOlimpiada, e) {
 
 function onTipoRegistro() {
     soloDiploma = document.getElementById("soloDiplomaSi").checked;
-    setVisible("bloqueEmergencia", !soloDiploma);
+    setVisible("bloqueEmergencia", soloDiploma ? false : "block");
+    setVisible("notas", soloDiploma ? false : "flex");
+}
+
+function onAnioEscolar() {
+    var combo = document.getElementById("selectAnioEscolar");
+    combo.style.color = "black";
 }
