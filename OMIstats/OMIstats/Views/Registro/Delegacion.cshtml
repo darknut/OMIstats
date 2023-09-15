@@ -324,7 +324,7 @@ if (omi.esOnline)
         @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave, tipo = omi.tipoOlimpiada }, new { })
     }
 }
-if (!usuario.esSuperUsuario())
+@if (!usuario.esSuperUsuario())
 {
     if (invitaciones)
     {
@@ -340,7 +340,7 @@ if (!usuario.esSuperUsuario())
     <br />
     if (!registroTerminado)
     {
-    <input onclick="terminarRegistro('@omi.tipoOlimpiada    ')" type="button" value="Terminar registro" class="errorTextoRojo"/>
+    <input onclick="terminarRegistro('@omi.tipoOlimpiada')" type="button" value="Terminar registro" class="errorTextoRojo"/>
     }
 }
 }
