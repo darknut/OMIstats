@@ -77,7 +77,7 @@ namespace OMIstats.Utilities
         /// Ejecuta un query.
         /// Si el query es un select, llamar a getTable devolvera la tabla consultada
         /// </summary>
-        public Estatus EjecutarQuery(string query, BaseDeDatos db = BaseDeDatos.OMIStats)
+        public Estatus EjecutarQuery(string query, BaseDeDatos db = BaseDeDatos.OMIStats, bool esperaError = false)
         {
             Estatus resultado = Conectar(db);
             if (resultado.error)
@@ -118,7 +118,8 @@ namespace OMIstats.Utilities
             }
             catch (Exception e)
             {
-                Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
+                if (!esperaError)
+                    Models.Log.add(Models.Log.TipoLog.DATABASE, e.ToString());
                 resultado.error = true;
                 resultado.descripcion = e.Message;
                 try

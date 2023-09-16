@@ -179,7 +179,7 @@ namespace OMIstats.Models
                 update();
 
             // Una vez guardada la sede, tratamos de crear usuarios para los supervisores
-            List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL);
+            List<MiembroDelegacion> miembros = MiembroDelegacion.obtenerMiembrosDelegacion(omi, estado, TipoOlimpiada.NULL, esParaRegistro: true);
             tryGeneraUsuarioParaSupervisor(supervisor, correo, telefono, miembros);
             if (!String.IsNullOrEmpty(supervisor2))
                 tryGeneraUsuarioParaSupervisor(supervisor2, correo2, telefono2, miembros);

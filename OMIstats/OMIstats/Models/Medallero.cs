@@ -50,9 +50,6 @@ namespace OMIstats.Models
         public int lugar { get; set; }
 
         // Variables auxiliares para conteo
-#if OMISTATS
-        private bool hayUNKs;
-#endif
         public int count;
         private bool ordenarPorPuntos;
 
@@ -70,9 +67,6 @@ namespace OMIstats.Models
             lugar = 0;
 
             omi = "";
-#if OMISTATS
-            hayUNKs = false;
-#endif
             count = 0;
             ordenarPorPuntos = false;
         }
@@ -269,7 +263,7 @@ namespace OMIstats.Models
         /// Usa las variables en el objeto para calcular las medallas basadas en lo que hay en la base de datos
         /// </summary>
         /// </param name="tipoOlimpiada">El tipo de olimpiada para el que se requieren los tipos</param>
-        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada, bool ordenarPorPuntos, int competidoresBase)
+        public static void calcularMedallas(TipoOlimpiada tipoOlimpiada, string olimpiada, bool ordenarPorPuntos, int competidoresBase, bool unksEnTabla)
         {
             if (tipoOlimpiada == TipoOlimpiada.NULL)
                 return;
@@ -361,7 +355,6 @@ namespace OMIstats.Models
                         estadoPorOlimpiada.count = 0;
                         estadoPorOlimpiada.puntos = 0;
                         estadoPorOlimpiada.promedio = 0;
-                        estadoPorOlimpiada.hayUNKs = false;
                         if (!e.extranjero)
                             estadosPorOlimpiada.Add(estadoPorOlimpiadaClave, estadoPorOlimpiada);
                     }
@@ -434,9 +427,6 @@ namespace OMIstats.Models
 
                     if (aplicaAOlimpiada)
                     {
-                        if (resultado.clave.StartsWith(Resultados.CLAVE_DESCONOCIDA))
-                            estadoPorOlimpiada.hayUNKs = true;
-
                         // No se han guardado mas de 4 lugares
                         if (estadoPorOlimpiada.count < competidoresBase)
                         {
@@ -482,51 +472,23 @@ namespace OMIstats.Models
             List<Medallero> sortedEstados = new List<Medallero>(estadosPorOlimpiada.Values);
             if (sortedEstados.Count > 0)
             {
-                string lastOMI = sortedEstados[0].omi;
-                bool invalido = false;
-                int firstEstadoInOmi = 0;
-                // Los necesitamos ordenados primero por olimpiada
-                sortedEstados.Sort();
                 // Necesitamos reordenarlos por promedio
                 for (int i = 0; i < sortedEstados.Count; i++)
                 {
                     Medallero estado = sortedEstados[i];
                     estado.ajustarMedallas(competidoresBase);
-                    if (estado.omi != lastOMI)
-                    {
-                        // Si algún estado en la olimpiada tiene un
-                        // promedio invalido, ningún promedio es valido
-                        if (invalido)
-                        {
-                            for (int j = firstEstadoInOmi; j < i; j++)
-                                sortedEstados[j].promedio = 0;
-                        }
-                        firstEstadoInOmi = i;
-                        invalido = false;
-                        lastOMI = estado.omi;
-                    }
 
-                    if (!estado.hayUNKs && estado.count > 0)
+                    if (!unksEnTabla && estado.count > 0)
                         estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
-                    invalido |= estado.promedioEsInvalido();
                 }
                 sortedEstados.Sort();
 
-                lastOMI = "";
                 int lugarActual = 0;
                 Medallero ultimoEstado = null;
 
                 // Vamos por cada estado para asignarles el lugar
                 foreach (Medallero estado in sortedEstados)
                 {
-                    // Estamos recibiendo los estados de todas las olimpiadas
-                    if (estado.omi != lastOMI)
-                    {
-                        lastOMI = estado.omi;
-                        lugarActual = 0;
-                        ultimoEstado = null;
-                    }
-
                     lugarActual++;
 
                     // Revisamos si hay empates entre estados

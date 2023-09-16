@@ -698,7 +698,7 @@ namespace OMIstats.Models
             {
                 // Incluimos cabeceras de datos
                 tabla.Append("nivel omi, nombre, estado, tipo asistente, clave, fecha nacimiento, ");
-                tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada, camiseta, ");
+                tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada, camiseta, solo diploma, notas, ");
                 tabla.Append(" celular, telefono, direccion, omegaup, emergencia, parentesco, ");
                 tabla.Append(" telefono emergencia, medicina, alergias");
                 if (this.esOnline)
@@ -951,7 +951,7 @@ namespace OMIstats.Models
             if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)
                 MiembroDelegacion.registrarGanadoresOMIPOS(numero, tipoOlimpiada);
             else
-                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos, this.competidoresBase);
+                Medallero.calcularMedallas(tipoOlimpiada, numero, ordenarPorPuntos, this.competidoresBase, unkEnTabla);
 
             // Guardamos los datos en la base
             guardarDatos();
