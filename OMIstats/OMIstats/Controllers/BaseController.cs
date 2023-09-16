@@ -45,7 +45,8 @@ namespace OMIstats.Controllers
             DELEGACION,
             FOTOS,
             ALBUM,
-            REGISTRO
+            REGISTRO,
+            REGISTRO_ONSITE
         }
 
         public BaseController()
@@ -215,6 +216,8 @@ namespace OMIstats.Controllers
                     return RedirectTo(Pagina.ERROR, 404);
                 case Pagina.REGISTRO:
                     return RedirectToAction("Delegacion", "Registro", opciones);
+                case Pagina.REGISTRO_ONSITE:
+                    return RedirectToAction("Select", "Registro");
                 case Pagina.HOME:
                 case Pagina.OLIMPIADAS:
                 default:

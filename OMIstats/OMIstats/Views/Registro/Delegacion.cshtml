@@ -15,6 +15,8 @@
     string[] subTitulos;
     OMIstats.Models.TipoOlimpiada[] tipos;
     bool isOMIPOS = OMIstats.Utilities.TableManager.isOMIPOS(omi.tipoOlimpiada);
+    bool? onsite = ViewBag.onsite;
+    bool modoComi = usuario.esSuperUsuario() && onsite != true;
     if (isOMIPOS)
     {
         tipos = new OMIstats.Models.TipoOlimpiada[] {
@@ -45,7 +47,7 @@
     {
         ViewBag.Title = "Error";
     }
-    else if (usuario.esSuperUsuario())
+    else if (modoComi)
     {
         ViewBag.Title = "Registro";
     }
@@ -58,11 +60,21 @@
 @section AddToHead
 {
     <link href="~/Content/registro.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="~/js/registro.js"></script>
+}
+
+@section Scripts
+{
+    <script src="~/js/registro.js"></script>
+    <script>
+        @if(onsite == true)
+        {
+        @("registroOnsite();")
+        }
+    </script>
     @if (!errorPermisos)
     {
     <script>
-        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(usuario.esSuperUsuario() ? "" : estado.clave)", "@omi.numero", @omi.invitados);
+        setUpAjax("@(Url.Content("~"))" + "Registro/", "@(modoComi ? "" : estado.clave)", "@omi.numero", @omi.invitados);
     </script>
     }
 }
@@ -79,7 +91,7 @@ else
 <table>
 @for (int i = 0; i < tipos.Length; i++)
 {
-    if (!usuario.esSuperUsuario())
+    if (!modoComi)
     {
     <tr><td class="titulo-registro" colspan="2">@subTitulos[i]</td></tr>
     }
@@ -88,15 +100,15 @@ else
     {
         registroTerminado |= miembro.cerrado;
         bool classeLinea = false;
-        if (usuario.esSuperUsuario() || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
+        if (modoComi || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
         {
-            if (!usuario.esSuperUsuario() && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
+            if (!modoComi && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
             {
                 continue;
             }
             competidoresProcesados++;
     <tr>
-            @if (usuario.esSuperUsuario())
+            @if (modoComi)
             {
                 if (lastEstado != miembro.estado)
                 {
@@ -127,7 +139,7 @@ else
             {
             <img src="~/img/info.svg" title="Solo diploma" class="info-svg info-test"/>
             }
-            @if (usuario.esSuperUsuario() && miembro.puedeRegistrar)
+            @if (modoComi && miembro.puedeRegistrar)
             {
             <img src="~/img/info.svg" title="Puede regsitrar" class="info-svg"/>
             }
@@ -136,7 +148,7 @@ else
             <img src="~/img/info.svg" title="Competidor no tiene sede" class="info-svg info-red"/>
             }
         </td>
-        @if (usuario.esSuperUsuario())
+        @if (modoComi)
         {
         <td class="lineas-registro clave-registro @(classeLinea ? "celda-estado" : "")">
             @if (miembro.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMI && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
@@ -146,7 +158,7 @@ else
         </td>
         }
         <td class="lineas-registro clave-registro @(classeLinea ? "celda-estado" : "")">
-            @if (usuario.esAdmin() || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            @if ((usuario.esAdmin() && onsite != true) || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
             @miembro.clave
             }
@@ -156,10 +168,10 @@ else
             }
         </td>
         <td class="@(classeLinea ? "celda-estado" : "")">
-            @if (usuario.esSuperUsuario() || !registroTerminado)
+            @if ((modoComi || !registroTerminado) && onsite != true)
             {
             <a onclick="iniciaRegistro('@miembro.tipoOlimpiada', '@miembro.clave')" class="a-sin-href">Modificar</a>
-                if (!hayResultados && (usuario.esSuperUsuario() || omi.registroActivo))
+                if (!hayResultados && (modoComi || omi.registroActivo))
                 {
             <a onclick="eliminarUsuario('@miembro.tipoOlimpiada', '@miembro.clave', '@miembro.nombreAsistente')" class="a-sin-href">Eliminar</a>
                 }
@@ -176,12 +188,12 @@ else
     {
     <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
     }
-    if (usuario.esSuperUsuario() || (omi.registroActivo && !registroTerminado && (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))))
+    if (modoComi || (omi.registroActivo && !registroTerminado && (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))))
     {
     <tr><td>
         <a onclick="iniciaRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
     </td>
-        @if (usuario.esSuperUsuario())
+        @if (modoComi)
         {
             <td>
             @Html.ActionLink("CSV con todo", "GetCSV", "Registro", new { omi = omi.numero, tipo = omi.tipoOlimpiada }, new { })
@@ -203,7 +215,7 @@ else
             }
             </td>
         }
-        @if (usuario.esAdmin())
+        @if (usuario.esAdmin() && onsite != true)
         {
             <td></td>
             <td></td>
@@ -213,7 +225,7 @@ else
         }
     </tr>
     }
-    if (usuario.esSuperUsuario())
+    if (modoComi)
     {
         break;
     }
@@ -231,12 +243,12 @@ if (omi.esOnline)
     {
 <table>
     <tr>
-        @if (usuario.esSuperUsuario())
+        @if (modoComi)
         {
         <td class="titulo-registro">Estado</td>
         }
         <td class="titulo-registro">Sede</td>
-        @if (usuario.esSuperUsuario())
+        @if (modoComi)
         {
         <td class="titulo-registro">Supervisor</td>
         <td class="titulo-registro">Teléfono</td>
@@ -249,12 +261,12 @@ if (omi.esOnline)
         {
             List<OMIstats.Models.MiembroDelegacion> miembrosEnSede = miembrosPorSede[sedes[i].clave];
     <tr>
-           @if (usuario.esSuperUsuario())
+           @if (modoComi)
            {
         <td class="lineas-registro clave-registro">@OMIstats.Models.Estado.obtenerEstadoConClave(sedes[i].estado).nombre</td>
            }
         <td class="lineas-registro">@sedes[i].nombre</td>
-           @if (usuario.esSuperUsuario())
+           @if (modoComi)
            {
         <td class="lineas-registro">@sedes[i].supervisor
             @if (sedes[i].supervisor2 != "")
@@ -288,10 +300,10 @@ if (omi.esOnline)
         </td>
            }
         <td class="lineas-registro">@miembrosEnSede.Count</td>
-           @if (usuario.esAdmin() || (!usuario.esSuperUsuario() && omi.registroSedes))
+           @if (usuario.esAdmin() || (!modoComi && omi.registroSedes))
            {
         <td>
-            @if (usuario.esSuperUsuario() || !registroTerminado)
+            @if (modoComi || !registroTerminado)
             {
             @Html.ActionLink("Modificar", "Sede", "Registro", new { omi = sedes[i].omi, estado = sedes[i].estado, clave = sedes[i].clave, tipo = omi.tipoOlimpiada }, new { })
                 if (miembrosEnSede.Count == 0)
@@ -306,7 +318,7 @@ if (omi.esOnline)
         </td>
            }
     </tr>
-           if (!usuario.esSuperUsuario())
+           if (!modoComi)
            {
                foreach (var miembro in miembrosEnSede)
                {
@@ -319,9 +331,19 @@ if (omi.esOnline)
         }
 </table>
     }
-    if (!usuario.esSuperUsuario() && omi.registroSedes && !registroTerminado)
+    if (!modoComi && omi.registroSedes && !registroTerminado)
     {
         @Html.ActionLink("Registrar sede", "Sede", "Registro", new { omi = omi.numero, estado = estado.clave, tipo = omi.tipoOlimpiada }, new { })
+    }
+}
+if (!omi.esOnline && modoComi)
+{
+    DateTime now = DateTime.Now;
+    if (now >= omi.inicio && now < omi.inicio.AddDays(1))
+    {
+    <br />
+    <br />
+    @Html.ActionLink("Registro On-site", "Onsite", "Registro", new { }, new { @class = "mini-boton" })
     }
 }
 if (!usuario.esSuperUsuario())

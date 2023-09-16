@@ -24,14 +24,14 @@
     @RenderSection("AddToHead", required: false)
 </head>
 <body class="mainpage">
-    <img src="~/img/circulo.png" class="circulo" alt="logoOMI"/>
-    <a href="http://www.olimpiadadeinformatica.org.mx/" target="_blank" class="logo">
+    <img src="~/img/circulo.png" class="circulo" alt="logoOMI" id="circulo" />
+    <a href="http://www.olimpiadadeinformatica.org.mx/" target="_blank" class="logo" id="logo">
         <img src="~/img/omi.svg" alt="logoOMI"/>
     </a>
 
     <div class="maincontent">
 
-    <div class="headerPagina">
+    <div class="headerPagina" id="header">
     <div class="menu">
         @if (OMIstats.Utilities.TableManager.IsDebug())
         {

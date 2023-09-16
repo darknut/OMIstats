@@ -37,6 +37,7 @@
     OMIstats.Models.TipoOlimpiada tipoOriginal = nuevo ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
     bool emergenciaRequerido = !usuario.esSuperUsuario() && (!omi.esOnline || esCompetidor);
     bool tipoRegistroVisible = !omi.esOnline && !esCompetidor;
+    bool? onsite = ViewBag.onsite;
 }
 
 @section AddToHead
@@ -69,6 +70,10 @@
         var anioEscuela = @añoEscuela;
         var nivelEscuela = "@nivelEscuela";
         var emergenciaRequerido = @(emergenciaRequerido ? "true" : "false");
+        @if(onsite == true)
+        {
+        @("registroOnsite();")
+        }
         @if (errorInfo.Length == 0)
         {
             foreach(OMIstats.Models.Estado e in estados)

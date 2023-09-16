@@ -7,6 +7,18 @@
     List<OMIstats.Models.Estado> estados = ViewBag.estados;
     ViewBag.Title = estados.Count == 0 ? "No se encontraron estados" : "Elige el estado";
     OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    bool? onsite = ViewBag.onsite;
+}
+
+@section Scripts
+{
+    <script src="~/js/registro.js"></script>
+    <script>
+        @if(onsite == true)
+        {
+        @("registroOnsite();")
+        }
+    </script>
 }
 
 <h1 class="titulo">@ViewBag.Title</h1>
@@ -18,9 +30,12 @@
 <ul>
 @foreach (OMIstats.Models.Estado estado in estados)
 {
+    if (!estado.extranjero)
+    {
     <li class="registro-lista">
         @Html.ActionLink(estado.nombre, "Delegacion", "Registro",
             new { estado = estado.clave, tipo = tipoOlimpiada }, new { @class = "nombre" })
     </li>
+    }
 }
 </ul>

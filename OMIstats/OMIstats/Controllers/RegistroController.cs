@@ -11,6 +11,15 @@ namespace OMIstats.Controllers
 {
     public class RegistroController : BaseController
     {
+        private bool setOnSite(bool? value = null)
+        {
+            if (value != null)
+                Session["onsite"] = value;
+            bool? onsite = (bool?)Session["onsite"];
+            ViewBag.onsite = onsite;
+            return onsite ?? false;
+        }
+
         private bool tienePermisos(bool registroActivo, string estado = null)
         {
             if (!estaLoggeado())
@@ -55,6 +64,7 @@ namespace OMIstats.Controllers
             if (omi == null)
                 omi = Olimpiada.obtenerMasReciente(yaEmpezada: false).numero;
 
+            bool onsite = setOnSite();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             if (o == null || !(o.registroActivo || o.registroSedes))
             {
@@ -70,10 +80,14 @@ namespace OMIstats.Controllers
 
             Persona p = getUsuario();
 
-            if (p.esSuperUsuario())
+            if (!onsite && p.esSuperUsuario())
                 return RedirectTo(Pagina.REGISTRO, new { tipo = tipo });
 
-            List<Estado> estados = p.obtenerEstadosDeDelegado();
+            List<Estado> estados;
+            if (onsite)
+                estados = Estado.obtenerEstados();
+            else
+                estados = p.obtenerEstadosDeDelegado();
             if (estados.Count == 1)
                 return RedirectTo(Pagina.REGISTRO, new { omi = omi, estado = estados[0].clave, tipo = tipo });
             ViewBag.estados = estados;
@@ -93,6 +107,7 @@ namespace OMIstats.Controllers
             failSafeViewBag();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             ViewBag.omi = o == null ? new Olimpiada() : o;
+            bool onsite = setOnSite();
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.permisos = true;
@@ -102,7 +117,7 @@ namespace OMIstats.Controllers
             Persona p = getUsuario();
             ViewBag.invitaciones = false;
 
-            if (!p.esSuperUsuario())
+            if (!p.esSuperUsuario() || onsite)
             {
                 if (estado == null)
                     return RedirectTo(Pagina.HOME);
@@ -114,7 +129,7 @@ namespace OMIstats.Controllers
                     Archivos.existeArchivo(Archivos.Folder.INVITACIONES, omi + "\\" + estado + "\\P-" +  e.ISO + "-1.pdf");
             }
 
-            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() ? null : estado, o.tipoOlimpiada, esParaRegistro: true);
+            List<MiembroDelegacion> registrados = MiembroDelegacion.obtenerMiembrosDelegacion(omi, p.esSuperUsuario() && !onsite ? null : estado, o.tipoOlimpiada, esParaRegistro: true);
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             if (o.esOnline)
             {
@@ -206,17 +221,17 @@ namespace OMIstats.Controllers
         public ActionResult Asistente(string omi, TipoOlimpiada tipo = TipoOlimpiada.NULL, string estado = null, string clave = null)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
+            Persona p = getUsuario();
             if (o == null)
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
+            setOnSite();
             if (!tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.errorInfo = "permisos";
                 return View(new Persona());
             }
-
-            Persona p = getUsuario();
 
             if (!p.esSuperUsuario())
             {
@@ -320,6 +335,7 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
+            setOnSite();
             if (!tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.errorInfo = "permisos";
@@ -868,6 +884,18 @@ namespace OMIstats.Controllers
             return File(Archivos.comprimeArchivos(
                Archivos.Folder.INVITACIONES, omi + "\\" + estado),
                "application/zip", "Invitaciones.zip");
+        }
+
+        //
+        // GET: /Registro/Onsite
+
+        public ActionResult Onsite()
+        {
+            Persona p = getUsuario();
+            if (!p.esSuperUsuario())
+                return RedirectTo(Pagina.HOME);
+            setOnSite(true);
+            return RedirectTo(Pagina.REGISTRO_ONSITE);
         }
     }
 }
