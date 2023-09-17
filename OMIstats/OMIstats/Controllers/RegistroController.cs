@@ -226,14 +226,14 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
-            setOnSite();
+            bool onsite = setOnSite();
             if (!tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
                 ViewBag.errorInfo = "permisos";
                 return View(new Persona());
             }
 
-            if (!p.esSuperUsuario())
+            if (!p.esSuperUsuario() || onsite)
             {
                 if (estado == null ||
                     (String.IsNullOrEmpty(clave) &&

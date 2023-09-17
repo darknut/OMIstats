@@ -343,7 +343,7 @@ if (!omi.esOnline && modoComi)
     {
     <br />
     <br />
-    @Html.ActionLink("Registro On-site", "Onsite", "Registro", new { }, new { @class = "mini-boton" })
+    @Html.ActionLink("Registro On-site", "Onsite", "Registro", new { @class = "mini-boton" })
     }
 }
 if (!usuario.esSuperUsuario())
@@ -364,5 +364,11 @@ if (!usuario.esSuperUsuario())
     {
     <input onclick="terminarRegistro('@omi.tipoOlimpiada')" type="button" value="Terminar registro" class="errorTextoRojo"/>
     }
+}
+if (onsite == true)
+{
+    <br />
+    <br />
+    @Html.ActionLink("Elegir estado", "Select", "Registro", new { @class = "mini-boton" });
 }
 }

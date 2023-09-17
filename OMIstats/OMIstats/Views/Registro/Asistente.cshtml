@@ -27,17 +27,19 @@
     bool nuevo = md == null;
     ViewBag.Title = errorInfo.Length > 0 ? "Error" : nuevo ? "Registro" : "Modificar";
     bool esSede = estado != null && omi.claveEstado == estado.clave;
+    bool? onsite = ViewBag.onsite;
+    bool modoComi = usuario.esSuperUsuario() && onsite != true;
     string claveEstado = estado != null ? estado.clave : md != null ? md.estado : "";
     bool esCompetidor = tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR ||
-                        (nuevo && !resubmit && tipo != OMIstats.Models.TipoOlimpiada.NULL && !usuario.esSuperUsuario());
-    bool mostrarClaveCbo = !hayResultados && esCompetidor;
-    bool puedeCambiarSelects = (nuevo || !hayResultados) && usuario.esSuperUsuario();
+                        (nuevo && !resubmit && tipo != OMIstats.Models.TipoOlimpiada.NULL && !modoComi);
+    bool mostrarClaveCbo = !hayResultados && esCompetidor && onsite != true;
+    bool puedeCambiarSelects = (nuevo || !hayResultados) && modoComi;
     bool escuelaDesconocida = claveEscuela == -1 && nombreEscuela.Length > 0;
     string claveCompetidor = nuevo ? "" : md.clave;
     OMIstats.Models.TipoOlimpiada tipoOriginal = nuevo ? OMIstats.Models.TipoOlimpiada.NULL : md.tipoOlimpiada;
-    bool emergenciaRequerido = !usuario.esSuperUsuario() && (!omi.esOnline || esCompetidor);
+    bool emergenciaRequerido = !modoComi && (!omi.esOnline || esCompetidor);
     bool tipoRegistroVisible = !omi.esOnline && !esCompetidor;
-    bool? onsite = ViewBag.onsite;
+    string paginaRegreso = onsite == true ? "Select" : "Delegacion";
 }
 
 @section AddToHead
@@ -81,7 +83,7 @@
         @(new MvcHtmlString("estados." + e.clave + "='" + e.ISO + "';"))
         @(new MvcHtmlString("ext." + e.clave + (e.extranjero ? "=true;" : "=false;")))
             }
-        @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "\" + \"Registro/\", \"" + (usuario.esSuperUsuario() ? "" : estado.clave) + "\", \"" + omi.numero + "\"," + omi.invitados + ");"))
+        @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "\" + \"Registro/\", \"" + (modoComi ? "" : estado.clave) + "\", \"" + omi.numero + "\"," + omi.invitados + ");"))
         @(new MvcHtmlString("setUpSearch(\"" + tipo + "\");"))
         }
     </script>
@@ -91,44 +93,44 @@
 @if (guardado)
 {
     <div> Se han guardado los datos con éxito </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "limite")
 {
     <div class="errorTextoRojo"> Este estado ya llegó al limite de competidores </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "permisos")
 {
     <div class="errorTextoRojo"> No tienes permisos para realizar esta acción </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "duplicado")
 {
     <div class="errorTextoRojo"> El usuario que se quiere cambiar tiene clave duplicada, contacta a un administrador </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "invalido")
 {
     <div class="errorTextoRojo"> La clave seleccionada es inválida </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo == "persona")
 {
     <div class="errorTextoRojo"> La persona seleccionada es inválida </div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else if (errorInfo.StartsWith("db_"))
 {
     <div class="errorTextoRojo"> Hubo un error en la base de datos, por favor contacta al COMI </div>
     <div>Código de error: @errorInfo</div>
-    @Html.ActionLink("Volver", "Delegacion", "Registro",
+    @Html.ActionLink("Volver", paginaRegreso, "Registro",
     new { omi = omi.numero, estado = estado != null ? estado.clave : null, tipo = tipo }, new { })
 }
 else
@@ -202,12 +204,12 @@ if (nuevo && !resubmit)
                 <option value="DELEGADO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEGADO ? "selected" : "")>Delegado</option>
                 <option value="ASESOR" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.ASESOR ? "selected" : "")>Asesor</option>
                 <option value="INVITADO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.INVITADO ? "selected" : "")>Invitado</option>
-                @if (usuario.esSuperUsuario())
+                @if (modoComi)
                 {
                 <option value="COMI" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI ? "selected" : "")>COMI</option>
                 <option value="COLO" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO ? "selected" : "")>Comité local</option>
                 }
-                @if (usuario.esAdmin())
+                @if (usuario.esAdmin() && onsite != true)
                 {
                 <option value="DELELIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELELIDER ? "selected" : "")>Delegado y líder</option>
                 <option value="SUBLIDER" @(tipoAsistente == OMIstats.Models.MiembroDelegacion.TipoAsistente.SUBLIDER ? "selected" : "")>Sublider</option>
@@ -460,7 +462,7 @@ Para alergias use la sección de emergencia."
         Ocurrio un error <a class="a-sin-href" onclick="preparaAjaxEscuela()">Reintentar</a>
     </div>
 </div>
-@if (usuario.esSuperUsuario() || emergenciaRequerido)
+@if (modoComi || emergenciaRequerido)
 {
 <div class="panel" id="bloqueEmergencia">
     <div class="panel-heading"> Datos de emergencia </div>
