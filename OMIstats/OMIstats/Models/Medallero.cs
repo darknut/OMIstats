@@ -178,7 +178,7 @@ namespace OMIstats.Models
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
 
-            string c = overwriteClave == null ? this.clave : overwriteClave;
+            string c = overwriteClave ?? this.clave;
 
             return new Acceso().NuevoONoHagasNada("medallero",
                 new Dictionary<string,object> {
@@ -232,7 +232,7 @@ namespace OMIstats.Models
 
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
-            string c = overwriteClave == null ? this.clave : overwriteClave;
+            string c = overwriteClave ?? this.clave;
 
             query.Append(" update medallero set oro = ");
             query.Append(oros);

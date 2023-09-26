@@ -17,6 +17,7 @@
     bool isOMIPOS = OMIstats.Utilities.TableManager.isOMIPOS(omi.tipoOlimpiada);
     bool? onsite = ViewBag.onsite;
     bool modoComi = usuario.esSuperUsuario() && onsite != true;
+    bool llegamosASoloDiploma = false;
     if (isOMIPOS)
     {
         tipos = new OMIstats.Models.TipoOlimpiada[] {
@@ -34,13 +35,15 @@
             OMIstats.Models.TipoOlimpiada.OMI,
             OMIstats.Models.TipoOlimpiada.OMIP,
             OMIstats.Models.TipoOlimpiada.OMIS,
+            OMIstats.Models.TipoOlimpiada.NULL,
             OMIstats.Models.TipoOlimpiada.NULL
         };
         subTitulos = new string[] {
             "Competidores de categoría OMI",
             "Competidores de categoría Primaria",
             "Competidores de categoría Secundaria",
-            "Líderes, asesores e invitados"
+            "Líderes, asesores e invitados",
+            "No asistentes con diploma"
         };
     }
     if (errorPermisos)
@@ -68,7 +71,7 @@
     <script>
         @if(onsite == true)
         {
-        @("registroOnsite();")
+        @("removeBanners();")
         }
     </script>
     @if (!errorPermisos)
@@ -100,7 +103,7 @@ else
     {
         registroTerminado |= miembro.cerrado;
         bool classeLinea = false;
-        if (modoComi || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR))
+        if (modoComi || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || ((tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) && miembro.soloDiploma == llegamosASoloDiploma))
         {
             if (!modoComi && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
             {
@@ -135,7 +138,7 @@ else
             }
         <td class="lineas-registro @(classeLinea ? "celda-estado" : "")">
             @miembro.nombreAsistente
-            @if (miembro.soloDiploma)
+            @if (modoComi && miembro.soloDiploma)
             {
             <img src="~/img/info.svg" title="Solo diploma" class="info-svg info-test"/>
             }
@@ -183,6 +186,10 @@ else
         </td>
     </tr>
         }
+    }
+    if (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL)
+    {
+        llegamosASoloDiploma = true;
     }
     if (competidoresProcesados == 0)
     {

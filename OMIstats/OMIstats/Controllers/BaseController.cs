@@ -46,7 +46,10 @@ namespace OMIstats.Controllers
             FOTOS,
             ALBUM,
             REGISTRO,
-            REGISTRO_ONSITE
+            REGISTRO_ONSITE,
+            RETO_MANAGE,
+            RETO,
+            RETO_LISTA
         }
 
         public BaseController()
@@ -218,6 +221,12 @@ namespace OMIstats.Controllers
                     return RedirectToAction("Delegacion", "Registro", opciones);
                 case Pagina.REGISTRO_ONSITE:
                     return RedirectToAction("Select", "Registro");
+                case Pagina.RETO_MANAGE:
+                    return RedirectToAction("Manage", "Reto", new { omi = opciones != null ? opciones.ToString() : null });
+                case Pagina.RETO:
+                    return RedirectToAction("Index", "Reto");
+                case Pagina.RETO_LISTA:
+                    return RedirectToAction("Lista", "Reto");
                 case Pagina.HOME:
                 case Pagina.OLIMPIADAS:
                 default:

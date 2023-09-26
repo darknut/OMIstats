@@ -415,15 +415,15 @@ namespace OMIstats.Models
             query.Append(", nombrehash = HASHBYTES(\'SHA1\', ");
             query.Append(Cadenas.comillas(hash));
             query.Append("), primaria = ");
-            query.Append(primaria ? "1" : "0");
+            query.Append(Cadenas.boolToInt(primaria));
             query.Append(", secundaria = ");
-            query.Append(secundaria ? "1" : "0");
+            query.Append(Cadenas.boolToInt(secundaria));
             query.Append(", preparatoria = ");
-            query.Append(preparatoria ? "1" : "0");
+            query.Append(Cadenas.boolToInt(preparatoria));
             query.Append(", universidad = ");
-            query.Append(universidad ? "1" : "0");
+            query.Append(Cadenas.boolToInt(universidad));
             query.Append(", publica = ");
-            query.Append(publica ? "1" : "0");
+            query.Append(Cadenas.boolToInt(publica));
             query.Append(" where clave = ");
             query.Append(clave);
 
@@ -519,6 +519,11 @@ namespace OMIstats.Models
             query.Append(" (select institucion from MiembroDelegacion where institucion is not null))");
 
             db.EjecutarQuery(query.ToString());
+        }
+
+        public override string ToString()
+        {
+            return clave.ToString();
         }
     }
 }

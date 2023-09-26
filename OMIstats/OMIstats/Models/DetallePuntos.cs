@@ -168,19 +168,19 @@ namespace OMIstats.Models
             query.Append(",");
             query.Append(dia);
             query.Append(",");
-            query.Append(this.puntosProblemas[0] == null ? "0" : this.puntosProblemas[0].ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosProblemas[0]));
             query.Append(",");
-            query.Append(this.puntosProblemas[1] == null ? "0" : this.puntosProblemas[1].ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosProblemas[1]));
             query.Append(",");
-            query.Append(this.puntosProblemas[2] == null ? "0" : this.puntosProblemas[2].ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosProblemas[2]));
             query.Append(",");
-            query.Append(this.puntosProblemas[3] == null ? "0" : this.puntosProblemas[3].ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosProblemas[3]));
             query.Append(",");
-            query.Append(this.puntosProblemas[4] == null ? "0" : this.puntosProblemas[4].ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosProblemas[4]));
             query.Append(",");
-            query.Append(this.puntosProblemas[5] == null ? "0" : this.puntosProblemas[5].ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosProblemas[5]));
             query.Append(",");
-            query.Append(this.puntosDia == null ? "0" : this.puntosDia.ToString());
+            query.Append(Cadenas.toStringOrDefault(this.puntosDia));
             query.Append(")");
 
             db.EjecutarQuery(query.ToString());
@@ -353,19 +353,19 @@ namespace OMIstats.Models
 
             // Ahora actualizamos los puntos
             query.Append("update DetallePuntos set puntosP1 = ");
-            query.Append(puntos[0] == null ? "0" : puntos[0].ToString());
+            query.Append(Cadenas.toStringOrDefault(puntos[0]));
             query.Append(", puntosP2 = ");
-            query.Append(puntos[1] == null ? "0" : puntos[1].ToString());
+            query.Append(Cadenas.toStringOrDefault(puntos[1]));
             query.Append(", puntosP3 = ");
-            query.Append(puntos[2] == null ? "0" : puntos[2].ToString());
+            query.Append(Cadenas.toStringOrDefault(puntos[2]));
             query.Append(", puntosP4 = ");
-            query.Append(puntos[3] == null ? "0" : puntos[3].ToString());
+            query.Append(Cadenas.toStringOrDefault(puntos[3]));
             query.Append(", puntosP5 = ");
-            query.Append(puntos[4] == null ? "0" : puntos[4].ToString());
+            query.Append(Cadenas.toStringOrDefault(puntos[4]));
             query.Append(", puntosP6 = ");
-            query.Append(puntos[5] == null ? "0" : puntos[5].ToString());
+            query.Append(Cadenas.toStringOrDefault(puntos[5]));
             query.Append(", puntosD = ");
-            query.Append(total == null ? "0" : total.ToString());
+            query.Append(Cadenas.toStringOrDefault(total));
             query.Append(" where olimpiada = ");
             query.Append(Cadenas.comillas(omi));
             query.Append(" and clase = ");

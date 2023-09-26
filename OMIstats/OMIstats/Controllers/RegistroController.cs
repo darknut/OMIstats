@@ -106,7 +106,7 @@ namespace OMIstats.Controllers
 
             failSafeViewBag();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
-            ViewBag.omi = o == null ? new Olimpiada() : o;
+            ViewBag.omi = o ?? new Olimpiada();
             bool onsite = setOnSite();
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
@@ -737,7 +737,7 @@ namespace OMIstats.Controllers
             failSafeViewBag();
             Persona p = getUsuario();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
-            ViewBag.omi = o == null ? new Olimpiada() : o;
+            ViewBag.omi = o ?? new Olimpiada();
 
             if (o == null || !tienePermisos(o.registroActivo || o.registroSedes, estado) ||
                 (!p.esSuperUsuario() && !o.registroSedes))

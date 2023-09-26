@@ -353,7 +353,7 @@ namespace OMIstats.Models
                 query.Append(", portada = ");
                 query.Append(Cadenas.comillas(portada));
                 query.Append(", newsletter = ");
-                query.Append(newsletter ? "1" : "0");
+                query.Append(Cadenas.boolToInt(newsletter));
             }
             query.Append(" where id = ");
             query.Append(Cadenas.comillas(id));

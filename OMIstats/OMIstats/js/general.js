@@ -31,3 +31,11 @@ function tryConfirm(url, texto) {
         window.location.href = url;
     }
 }
+
+function removeBanners() {
+    setVisible("logo", false);
+    setVisible("circulo", false);
+    setVisible("header", false);
+    document.getElementsByClassName("mainpage")[0].style.minWidth = "60px";
+    document.getElementsByClassName("content")[0].style.minWidth = "60px";
+}

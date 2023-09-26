@@ -684,12 +684,12 @@ namespace OMIstats.Models
                 query.Append(", ");
                 query.Append(p.clave);
                 query.Append(", ");
-                query.Append(i == null ? "0" : i.clave.ToString());
+                query.Append(Cadenas.toStringOrDefault(i));
                 query.Append(", ");
                 query.Append((int)md.nivelEscuela);
                 query.Append(", ");
                 query.Append(md.añoEscuela);
-                query.Append(",0,0,'')");
+                query.Append(",0,0,'',0)");
 
                 db.EjecutarQuery(query.ToString());
             }
@@ -711,7 +711,7 @@ namespace OMIstats.Models
                 query.Append(", tipo = ");
                 query.Append(Cadenas.comillas(md.tipo.ToString().ToLower()));
                 query.Append(", institucion = ");
-                query.Append(i == null ? "0" : i.clave.ToString());
+                query.Append(Cadenas.toStringOrDefault(i));
                 query.Append(", nivel = ");
                 query.Append((int)md.nivelEscuela);
                 query.Append(", año = ");
@@ -771,9 +771,9 @@ namespace OMIstats.Models
             query.Append(",");
             query.Append(Cadenas.comillas(tshirt));
             query.Append(",");
-            query.Append(cerrado ? 1 : 0);
+            query.Append(Cadenas.boolToInt(cerrado));
             query.Append(",");
-            query.Append(soloDiploma ? 1 : 0);
+            query.Append(Cadenas.boolToInt(soloDiploma));
             query.Append(")");
 
             return !db.EjecutarQuery(query.ToString()).error;
@@ -828,9 +828,9 @@ namespace OMIstats.Models
             query.Append(", tshirt = ");
             query.Append(Cadenas.comillas(tshirt));
             query.Append(", cerrado = ");
-            query.Append(cerrado ? 1 : 0);
+            query.Append(Cadenas.boolToInt(cerrado));
             query.Append(", soloDiploma = ");
-            query.Append(soloDiploma ? 1 : 0);
+            query.Append(Cadenas.boolToInt(soloDiploma));
             query.Append(" where olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and clase = ");
@@ -1094,7 +1094,7 @@ namespace OMIstats.Models
 
             if (tipo == TipoAsistente.NULL)
             {
-                query.Append(" order by e.ext, md.estado, md.clase desc, md.clave ");
+                query.Append(" order by e.ext, md.estado, md.soloDiploma asc, md.clase desc, md.clave ");
             }
             else
             {
@@ -1600,7 +1600,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
 
             query.Append(" update miembrodelegacion set cerrado = ");
-            query.Append(cerrado ? 1 : 0);
+            query.Append(Cadenas.boolToInt(cerrado));
             query.Append(" where olimpiada = ");
             query.Append(Cadenas.comillas(omi));
             query.Append(" and estado = ");
@@ -1701,6 +1701,31 @@ namespace OMIstats.Models
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Regresa el miembro delegación de la persona mandada como parámetro para la omi deseada
+        /// </summary>
+        public static MiembroDelegacion obtenerMiembroDePersona(int persona, string omi)
+        {
+            Acceso db = new Acceso();
+            StringBuilder query = new StringBuilder();
+
+            query.Append(" select * from miembrodelegacion where persona = ");
+            query.Append(persona);
+            query.Append(" and olimpiada = ");
+            query.Append(Cadenas.comillas(omi));
+
+            db.EjecutarQuery(query.ToString());
+            DataTable table = db.getTable();
+
+            if (table.Rows.Count == 0)
+                return null;
+
+            MiembroDelegacion md = new MiembroDelegacion();
+            md.llenarDatos(table.Rows[0], false, false);
+
+            return md;
         }
 #endif
     }

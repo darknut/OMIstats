@@ -74,7 +74,7 @@
         var emergenciaRequerido = @(emergenciaRequerido ? "true" : "false");
         @if(onsite == true)
         {
-        @("registroOnsite();")
+        @("removeBanners();")
         }
         @if (errorInfo.Length == 0)
         {
@@ -349,7 +349,7 @@ if (nuevo && !resubmit)
             <span class="control-title">Sede</span>
                 if (usuario.esSuperUsuario())
                 {
-           <input type="text" class="shiny-box" disabled value="@(nombreSede == null ? "No se ha elegido sede" : nombreSede)"/>
+           <input type="text" class="shiny-box" disabled value="@(nombreSede ?? "No se ha elegido sede")"/>
                 }
                 else
                 {

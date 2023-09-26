@@ -122,6 +122,11 @@ namespace OMIstats.Utilities
         {
             return (Institucion.NivelInstitucion)Enum.Parse(typeof(Institucion.NivelInstitucion), value.ToString().ToUpper());
         }
+
+        public static RetoStatus ToRetoStatus(object value)
+        {
+            return (RetoStatus)Enum.Parse(typeof(RetoStatus), value.ToString().ToUpper());
+        }
 #endif
     }
 }

@@ -86,5 +86,17 @@ namespace OMIstats.Utilities
                 return comillas(str.ToString());
             return str.ToString();
         }
+
+        public static int boolToInt(bool value)
+        {
+            return value ? 1 : 0;
+        }
+
+        public static string toStringOrDefault(object obj)
+        {
+            if (obj == null)
+                return "0";
+            return obj.ToString();
+        }
     }
 }

@@ -430,11 +430,11 @@ namespace OMIstats.Models
             query.Append(",");
 
             query.Append(" omips = ");
-            query.Append(omips ? 1 : 0);
+            query.Append(Cadenas.boolToInt(omips));
             query.Append(",");
 
             query.Append(" oculta = ");
-            query.Append(oculta ? 1 : 0);
+            query.Append(Cadenas.boolToInt(oculta));
             query.Append(",");
 
             if (lugarGuardado == LugarGuardado.REGISTRO)

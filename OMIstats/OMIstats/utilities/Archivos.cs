@@ -22,6 +22,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_NEWSLETTERS = "~/img/news";
         public const string FOLDER_DIPLOMAS = "~/private/diplomas";
         public const string FOLDER_INVITACIONES = "~/private/invitaciones";
+        public const string FOLDER_RETO = "~/private/reto";
         public const string FOLDER_DEFAULT = "~/img";
 
         public const string OMI_LOGO = "omi.png";
@@ -49,7 +50,8 @@ namespace OMIstats.Utilities
             ESCUELAS,
             NEWSLETTERS,
             DIPLOMAS,
-            INVITACIONES
+            INVITACIONES,
+            RETO
         }
 
         public enum FotoInicial
@@ -92,42 +94,31 @@ namespace OMIstats.Utilities
 
         private static string pathRelativo(Folder folder)
         {
-            string s = "";
             switch (folder)
             {
                 case Folder.TEMPORAL:
-                    s = FOLDER_TEMPORAL;
-                    break;
+                    return FOLDER_TEMPORAL;
                 case Folder.USUARIOS:
-                    s = FOLDER_USUARIOS;
-                    break;
+                    return FOLDER_USUARIOS;
                 case Folder.ESTADOS:
-                    s = FOLDER_ESTADOS;
-                    break;
+                    return FOLDER_ESTADOS;
                 case Folder.OLIMPIADAS:
-                    s = FOLDER_OLIMPIADAS;
-                    break;
+                    return FOLDER_OLIMPIADAS;
                 case Folder.POSTERS:
-                    s = FOLDER_POSTERS;
-                    break;
+                    return FOLDER_POSTERS;
                 case Folder.ESCUELAS:
-                    s = FOLDER_ESCUELAS;
-                    break;
+                    return FOLDER_ESCUELAS;
                 case Folder.NEWSLETTERS:
-                    s = FOLDER_NEWSLETTERS;
-                    break;
+                    return FOLDER_NEWSLETTERS;
                 case Folder.DIPLOMAS:
-                    s = FOLDER_DIPLOMAS;
-                    break;
+                    return FOLDER_DIPLOMAS;
                 case Folder.INVITACIONES:
-                    s = FOLDER_INVITACIONES;
-                    break;
+                    return FOLDER_INVITACIONES;
+                case Folder.RETO:
+                    return FOLDER_RETO;
                 default:
-                    s = FOLDER_DEFAULT;
-                    break;
+                    return FOLDER_DEFAULT;
             }
-
-            return s;
         }
 
         private static string pathAbsoluto(Folder folder)

@@ -42,7 +42,8 @@ namespace OMIstats.Models
             FACEBOOK,
             REGISTRO,
             EXCEPTIONS,
-            DATABASE
+            DATABASE,
+            RETO
         }
 
         private void llenarDatos(DataRow r)

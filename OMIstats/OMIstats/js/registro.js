@@ -448,9 +448,3 @@ function onAnioEscolar() {
     var combo = document.getElementById("selectAnioEscolar");
     combo.style.color = "black";
 }
-
-function registroOnsite() {
-    setVisible("logo", false);
-    setVisible("circulo", false);
-    setVisible("header", false);
-}
