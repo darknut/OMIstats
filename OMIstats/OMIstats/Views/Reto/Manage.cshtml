@@ -1,0 +1,146 @@
+﻿@model List<OMIstats.Models.Reto>
+
+@section AddToHead
+{
+    <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = "Manage";
+    OMIstats.Models.Olimpiada omi = ViewBag.omi;
+    int counter = 0;
+    bool activo = false;
+    bool cerrado = false;
+    OMIstats.Models.Reto sigReto = ViewBag.sigReto;
+    int porEvaluar = ViewBag.porEvaluar;
+    List<OMIstats.Models.RetoPersona> results = porEvaluar > 0 ? null : ViewBag.Results;
+}
+
+<h1 class="titulo">@ViewBag.Title</h1>
+
+@if (Model.Count == 0)
+{
+<div class="errorTextoRojo">No hay registros</div>
+}
+else
+{
+    activo = Model[0].activo;
+    cerrado = Model[0].cerrado;
+if (activo)
+{
+if (porEvaluar > 0)
+{
+<div class="errorTextoRojo">Quedan @porEvaluar por evaluar</div>
+<br />
+<div><b>Pregunta:</b></div>
+<br />
+if (sigReto.pregunta.Contains("|"))
+{
+    string[] temp = sigReto.pregunta.Split('|');
+    int opciones = temp.Length - 2;
+    int opcion = ((sigReto.retoPersona.persona + 2) / 3) % opciones;
+<div>@temp[0] @temp[opcion + 1] @temp[temp.Length - 1]</div>
+} else {
+<div>@sigReto.pregunta</div>
+}
+<br />
+<div><b>Respuesta esperada:</b></div>
+<br />
+<div>@sigReto.respuesta</div>
+<br />
+<a href="@Url.Content(OMIstats.Utilities.Archivos.FOLDER_RETO + '/' + sigReto.retoPersona.foto)" target="_blank">Ver foto</a>
+<br /><br />
+<a href="@Url.Content("~/Reto/Aceptar?reto=" + sigReto.retoPersona.clave)" class="boton botonOMI">Aceptar</a>
+<a href="@Url.Content("~/Reto/Rechazar?reto=" + sigReto.retoPersona.clave)" class="boton botonOMI">Rechazar</a>
+<br /><br />
+}
+else
+{
+int lugar = 1;
+<table border="1">
+    <thead>
+        <tr>
+            <th>
+                Lugar
+            </th>
+            <th>
+                Persona
+            </th>
+            <th>
+                Score
+            </th>
+            <th>
+                Timestamp
+            </th>
+        </tr>
+    </thead>
+@foreach(OMIstats.Models.RetoPersona rp in results)
+{
+    string clase;
+    if (lugar % 2 == 0)
+    {
+        clase = "par";
+    }
+    else
+    {
+        clase = "impar";
+    }
+    <tr class="@clase">
+        <td>@lugar</td>
+        <td>@OMIstats.Models.Persona.obtenerPersonaConClave(rp.persona).nombreCompleto</td>
+        <td>@rp.reto</td>
+        <td>@rp.timestamp</td>
+    </tr>
+    lugar++;
+}
+</table>
+}} else {
+<table border="1">
+    <thead>
+        <tr>
+            <th>
+                Orden
+            </th>
+            <th>
+                Pregunta
+            </th>
+            <th colspan="2">
+                Acciones
+            </th>
+        </tr>
+    </thead>
+   @foreach (var item in Model)
+   {
+       string clase;
+       if (counter % 2 == 0)
+       {
+           clase = "par";
+       }
+       else
+       {
+           clase = "impar";
+       }
+       counter++;
+       <tr class="@clase">
+           <td>@item.orden</td>
+           <td>@item.pregunta</td>
+           <td><a href="@Url.Content("~/Reto/Edit?omi=" + item.olimpiada + "&reto=" + item.clave)">Modificar</a></td>
+           <td><a href="@Url.Content("~/Reto/Borrar?omi=" + item.olimpiada + "&reto=" + item.clave)" class="errorTextoRojo">Borrar</a></td>
+       </tr>
+   }
+</table>
+}}
+<br />
+@if(!activo)
+{
+<a href="@Url.Content("~/Reto/Edit?omi=" + omi.numero)" class="boton botonOMI">Nuevo</a>
+}
+@if (!cerrado)
+{
+<a href="@Url.Content("~/Reto/SwitchActivo?omi=" + omi.numero)" class="boton botonOMI">@(activo ? "Desactivar" : "Activar")</a>
+}
+@if (activo)
+{
+<a href="@Url.Content("~/Reto/SwitchCerrado?omi=" + omi.numero)" class="boton botonOMI">@(cerrado ? "Volver a abrir" : "Terminar")</a>
+}

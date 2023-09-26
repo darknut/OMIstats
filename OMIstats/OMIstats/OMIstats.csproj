@@ -194,6 +194,7 @@
     <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Ajax\CachedResult.cs" />
     <Compile Include="Controllers\EscuelasController.cs" />
+    <Compile Include="Controllers\RetoController.cs" />
     <Compile Include="Models\DetalleLugar.cs" />
     <Compile Include="Models\DetallePuntos.cs" />
     <Compile Include="Models\Estado.cs" />
@@ -209,6 +210,8 @@
     <Compile Include="Models\Peticion.cs" />
     <Compile Include="Models\Problema.cs" />
     <Compile Include="Models\Resultados.cs" />
+    <Compile Include="Models\Reto.cs" />
+    <Compile Include="Models\RetoPersona.cs" />
     <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\SedeOnline.cs" />
     <Compile Include="Models\TipoOlimpiada.cs" />
@@ -251,6 +254,7 @@
     <Content Include="Content\profile.css" />
     <Content Include="Content\registro.css" />
     <Content Include="Content\request.css" />
+    <Content Include="Content\reto.css" />
     <Content Include="Content\tablas.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -361,6 +365,7 @@
     <Content Include="js\registro.js" />
     <Content Include="js\request.js" />
     <Content Include="js\resultados.js" />
+    <Content Include="js\reto.js" />
     <Content Include="js\scoreboard.js" />
     <Content Include="js\sorters.js" />
     <Content Include="Scripts\Chart.bundle.min.js" />
@@ -440,6 +445,10 @@
     <Content Include="Views\Registro\Sede.cshtml" />
     <Content Include="Views\Registro\GeneraInvitaciones.cshtml" />
     <Content Include="Views\Estados\OMIPS.cshtml" />
+    <Content Include="Views\Reto\Manage.cshtml" />
+    <Content Include="Views\Reto\Edit.cshtml" />
+    <Content Include="Views\Reto\Index.cshtml" />
+    <Content Include="Views\Reto\Lista.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

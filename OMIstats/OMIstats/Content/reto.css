@@ -1,0 +1,35 @@
+﻿.retoContainer {
+    padding-left: 10px;
+}
+
+.pregunta {
+    padding-bottom: 30px;
+}
+
+.preguntaImagen {
+    width: 100%;
+    max-width: 800px;
+}
+
+.preguntaWhite {
+    color:white;
+}
+
+.preguntaBlank {
+    background-color: lightgray;
+}
+
+.score {
+    width:250px;
+    text-align:center;
+    padding-bottom:20px;
+}
+
+.score-number {
+    font-weight:bold;
+    font-size:50px;
+}
+
+.score-penalty {
+    font-size:10px;
+}

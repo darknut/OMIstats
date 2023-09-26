@@ -1,0 +1,46 @@
+﻿@model OMIstats.Models.Reto
+
+@{
+    ViewBag.Title = Model.clave == 0 ? "Nuevo reto" : "Actualizar reto";
+}
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
+    <link rel="stylesheet" href="~/Content/profile.css" type="text/css" />
+}
+
+<h2 class="titulo">@ViewBag.Title</h2>
+
+<form name="editReto" id="editReto" action="~/Reto/Edit" method="post" enctype="multipart/form-data">
+    <div class="datosFloat">
+        <div>
+            <div class="label">Reto:</div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.pregunta, new { @class = "inputLarge" })
+                @Html.ValidationMessageFor(model => model.pregunta)
+            </div>
+        </div>
+        <div>
+            <div class="label">Respuesta:</div>
+            <div class="input">
+                @Html.TextAreaFor(model => model.respuesta, new { @class = "inputLarge" })
+                @Html.ValidationMessageFor(model => model.respuesta)
+            </div>
+        </div>
+        <div>
+            <div class="label">Orden:</div>
+            <div class="input">
+                @Html.TextBoxFor(model => model.orden,  new { @class = "smallInput" })
+                @Html.ValidationMessageFor(model => model.orden)
+            </div>
+        </div>
+        <br />
+        @Html.HiddenFor(model => model.olimpiada)
+        @Html.HiddenFor(model => model.clave)
+        <div class="label">
+            <input type="button" onclick="muestraLoadGifYSubmit('editReto')" value="Enviar"/>
+            <img class="textoRojo" id='loading' src="~/img/ajax-loader.gif" />
+        </div>
+    </div>
+</form>

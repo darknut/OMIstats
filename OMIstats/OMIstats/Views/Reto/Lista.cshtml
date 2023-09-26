@@ -1,0 +1,125 @@
+﻿@model List<OMIstats.Models.Reto>
+
+@{
+    ViewBag.Title = "Reto";
+    bool cerrado = ViewBag.cerrado;
+    int counter = 1;
+    OMIstats.Models.Olimpiada omi = ViewBag.omi;
+    OMIstats.Models.Persona persona = ViewBag.persona;
+    int score = 0;
+    long penalty = 0;
+}
+
+@section AddToHead
+{
+    <link rel="stylesheet" href="~/Content/reto.css" type="text/css" />
+}
+
+@section Scripts
+{
+    <script src="~/js/formas.js"></script>
+    <script src="~/js/reto.js"></script>
+    <script>
+        removeBanners();
+        @(new MvcHtmlString("setUpAjax(\"" + Url.Content("~") + "Reto/Pregunta/\",\"" + Url.Content(OMIstats.Utilities.Archivos.FOLDER_RETO) + "/\");"))
+    </script>
+}
+
+<div class="retoContainer">
+<h2 class="titulo">Lista de retos</h2>
+@if (cerrado)
+{
+    <div class="score">
+        <div><b>Tu score</b></div>
+        <div id="score" class="score-number"></div>
+        <div id="penalty" class="score-penalty"></div>
+    </div>
+}
+@foreach (OMIstats.Models.Reto reto in Model)
+{
+    <div class="pregunta">
+        <b>@(counter).</b>
+        @if (reto.pregunta.EndsWith("jpg") || reto.pregunta.EndsWith("png"))
+        {
+            <br /><span>&nbsp;&nbsp;&nbsp;</span>
+            <img src="@reto.pregunta" class="preguntaImagen"/>
+        }
+        else
+        {
+            if (reto.pregunta.StartsWith("WHITE"))
+            {
+                string temp = reto.pregunta.Split(new[] { "WHITE" }, StringSplitOptions.RemoveEmptyEntries)[0];
+            <span class="preguntaWhite">@temp</span>
+            }
+            else
+            {
+                if (reto.pregunta.Contains("BLANK"))
+                {
+                    string[] temp = reto.pregunta.Split(new[] { "BLANK" }, StringSplitOptions.RemoveEmptyEntries);
+            <span>@temp[0]</span><span class="preguntaBlank">____</span><span>@temp[1]</span>
+                }
+                else
+                {
+                    if (reto.pregunta.Contains("|"))
+                    {
+                        string[] temp = reto.pregunta.Split('|');
+                        int opciones = temp.Length - 2;
+                        int opcion = ((persona.clave + 2) / 3) % opciones; // Las claves de usuario empiezan en 1000 y avanzan de tres en tres, así que hacerle mates para que sean números secuenciales
+            <span>@temp[0] @temp[opcion + 1] @temp[temp.Length - 1]</span>
+                    }
+                    else
+                    {
+            @reto.pregunta
+                    }
+                }
+            }
+        }
+    </div>
+        if (cerrado)
+        {
+        <div class="pregunta">
+            &nbsp;&nbsp;&nbsp;<b>Repuesta:</b> @reto.respuesta
+            <br />&nbsp;&nbsp;&nbsp;<b>Tu restultado:
+            @if (reto.retoPersona == null)
+            {
+                <span class="errorTextoRojo">No enviaste nada</span>
+            }
+            else
+            {
+                if (reto.retoPersona.status == OMIstats.Models.RetoStatus.ACCEPTED)
+                {
+                <span class="verde">¡Correcto!</span>
+                    score++;
+                    penalty += reto.retoPersona.timestamp;
+                }
+                else
+                {
+                    if (reto.retoPersona.status == OMIstats.Models.RetoStatus.REJECTED)
+                    {
+                <span class="errorTextoRojo">Incorrecto</span>
+                    }
+                    else
+                    {
+                <span>Evaluando...</span>
+                    }
+                }
+            }
+            </b>
+        </div>
+        <script>
+            document.getElementById("score").innerHTML = @score;
+            document.getElementById("penalty").innerHTML = @penalty;
+        </script>
+        }
+        else
+        {
+    <div class="pregunta">
+    &nbsp;&nbsp;&nbsp;
+    <a href="@(reto.retoPersona == null ? "" : Url.Content("~/private/reto/" + reto.retoPersona.foto))" target="_blank" id="check@(reto.clave)" style="@(reto.retoPersona == null ? "display:none" : "")"><img src="~/img/check.svg" title="Imagen recibida"/></a>
+    Subir @(reto.retoPersona != null ? "otra" : "") respuesta: <input type="file" id="input@(reto.clave)" name="input@(reto.clave)" onchange="onPhotoUpload('@(reto.clave)')"/><img style="display:none" id="loading@(reto.clave)" src="~/img/ajax-loader.gif" />
+    <br />&nbsp;&nbsp;&nbsp;<div class="errorTextoRojo" style="display:none" id="error@(reto.clave)"></div><div class="verde" style="display:none" id="ok@(reto.clave)">Imagen recibida</div>
+    </div>
+    }
+    counter++;
+}
+</div>
