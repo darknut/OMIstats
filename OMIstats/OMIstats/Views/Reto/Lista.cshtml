@@ -37,7 +37,7 @@
 }
 @foreach (OMIstats.Models.Reto reto in Model)
 {
-    <div class="pregunta">
+    <div class="pregunta wrap">
         <b>@(counter).</b>
         @if (reto.pregunta.EndsWith("jpg") || reto.pregunta.EndsWith("png"))
         {
