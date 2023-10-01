@@ -148,7 +148,7 @@ namespace OMIstats.Models
             return m;
         }
 
-        public bool guardarDatosEstados(bool hayInvitados, bool expectErrors = false)
+        public bool guardarDatosEstados(bool hayInvitados)
         {
             if (hayInvitados)
             {
@@ -158,7 +158,7 @@ namespace OMIstats.Models
                 this.oros = this.orosExtra;
                 this.platas = this.platasExtra;
                 this.bronces = this.broncesExtra;
-                return this.guardarDatos(expectErrors, this.clave + INVITADOS_EXTRA_KEY);
+                return this.guardarDatos(this.clave + INVITADOS_EXTRA_KEY);
             }
             else
             {
@@ -173,7 +173,7 @@ namespace OMIstats.Models
         /// Guarda los datos en el objeto en la base de datos
         /// </summary>
         /// <returns>Regresa si se guardo o no</returns>
-        public bool guardarDatos(bool expectErrors = false, string overwriteClave = null)
+        public bool guardarDatos(string overwriteClave = null)
         {
             if (tipoMedallero == TipoMedallero.NULL || tipoOlimpiada == TipoOlimpiada.NULL || clave == "")
                 return false;
@@ -543,6 +543,8 @@ namespace OMIstats.Models
             }
         }
 
+#if OMISTATS
+
         /// <summary>
         /// Obtiene la tabla de estados de la olimpiada mandada como parametro
         /// </summary>
@@ -607,8 +609,6 @@ namespace OMIstats.Models
 
             return lista;
         }
-
-#if OMISTATS
 
         public static List<Medallero> obtenerTablaEstadosSecreta(bool hayInvitados, string clave, TipoOlimpiada tipoOlimpiada)
         {

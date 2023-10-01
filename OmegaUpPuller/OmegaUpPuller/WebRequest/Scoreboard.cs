@@ -48,7 +48,7 @@ namespace OmegaUpPuller.WebRequest
         private void llenaInvitado(Resultados r)
         {
             r.invitado = MiembroDelegacion.esInvitado(r.clave) ||
-                         MiembroDelegacion.esInvitadoOnline(r.clave, this.esOnline);
+                         MiembroDelegacion.esInvitadoOnline(r.clave, this.esOnline, 4);
             if (r.invitado)
                 invitados++;
         }
@@ -96,11 +96,7 @@ namespace OmegaUpPuller.WebRequest
 
             medalleroEstados.Add(estado, m);
 
-            m.guardarDatosEstados(invitados > 0
-#if DEBUG
-                ,expectErrors: true
-#endif
-            );
+            m.guardarDatosEstados(invitados > 0);
 
             return m;
         }
@@ -280,7 +276,7 @@ namespace OmegaUpPuller.WebRequest
                     if (!r.invitado)
                     {
                         m.count++;
-                        if (m.count <= Olimpiada.COMPETIDORES_BASE)
+                        if (m.count <= 4)
                             m.puntos += r.total;
                     }
 
@@ -343,10 +339,10 @@ namespace OmegaUpPuller.WebRequest
             {
                 // Arreglamos el estado sede
                 int competidores = estado.count;
-                if (competidores > Olimpiada.COMPETIDORES_BASE)
+                if (competidores > 4)
                 {
-                    competidores = Olimpiada.COMPETIDORES_BASE;
-                    estado.ajustarMedallas();
+                    competidores = 4;
+                    estado.ajustarMedallas(4);
                 }
                 estado.promedio = (float?)Math.Round((double)(estado.puntos / competidores), 2);
             }

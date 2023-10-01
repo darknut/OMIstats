@@ -79,13 +79,13 @@ namespace OMIstats.Models
         public bool puedeRegistrar;
         public string tshirt;
         public bool soloDiploma;
-        public NotaRegistro nota;
         /// <summary>
         /// Esta bandera indica si el registro ya fue completado por el líder
         /// Todos los usuarios lo tienen, se actualiza a todos a la vez.
         /// </summary>
         public bool cerrado;
 #if OMISTATS
+        public NotaRegistro nota;
         public Institucion.NivelInstitucion nivelEscuela;
         private static string filtrarOMIPOS = " and md.clase <> " +
                                             Cadenas.comillas(TipoOlimpiada.OMIPO.ToString().ToLower()) +
@@ -126,6 +126,7 @@ namespace OMIstats.Models
 #if OMISTATS
             nivelEscuela = Institucion.NivelInstitucion.NULL;
             eliminar = false;
+            nota = null;
 #endif
             añoEscuela = 0;
             clave = "";
@@ -136,7 +137,6 @@ namespace OMIstats.Models
             tshirt = "";
             soloDiploma = false;
             cerrado = false;
-            nota = null;
         }
 
         public string getTipoAsistenteString()
