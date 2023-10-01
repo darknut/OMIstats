@@ -1,7 +1,7 @@
 ﻿var ajaxUrl = '';
 var imageUrl = '';
 var maxSize = 5000000;
-var extensionesValidas = ["jpg", "png", "jfif", "jpeg", "heic"];
+var extensionesValidas = ["jpg", "png", "jfif", "jpeg"];
 
 function setUpAjax(u, v) {
     ajaxUrl = u;

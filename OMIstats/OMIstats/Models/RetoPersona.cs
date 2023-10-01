@@ -92,7 +92,7 @@ namespace OMIstats.Models
             query.Append(" ,");
             query.Append(persona);
             query.Append(" ,0,");
-            query.Append(new TimeSpan(DateTime.Now.Ticks - inicioOMI).TotalSeconds);
+            query.Append(Convert.ToInt64(new TimeSpan(DateTime.Now.Ticks - inicioOMI).TotalSeconds));
             query.Append(" ,");
             query.Append(Cadenas.comillas(name));
             query.Append(")");
