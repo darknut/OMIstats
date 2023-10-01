@@ -4,6 +4,7 @@
 {
     <link href="~/Content/request.css" type="text/css" rel="stylesheet" />
     <link href="~/Content/formas.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/reto.css" type="text/css" rel="stylesheet" />
 }
 
 @{
@@ -42,7 +43,7 @@ if (sigReto.pregunta.Contains("|"))
     int opcion = ((sigReto.retoPersona.persona + 2) / 3) % opciones;
 <div>@temp[0] @temp[opcion + 1] @temp[temp.Length - 1]</div>
 } else {
-<div>@sigReto.pregunta</div>
+<div class="wrap">@sigReto.pregunta</div>
 }
 <br />
 <div><b>Respuesta esperada:</b></div>
@@ -122,7 +123,7 @@ int lugar = 1;
            clase = "impar";
        }
        counter++;
-       <tr class="@clase">
+       <tr class="@clase wrap">
            <td>@item.orden</td>
            <td>@item.pregunta</td>
            <td><a href="@Url.Content("~/Reto/Edit?omi=" + item.olimpiada + "&reto=" + item.clave)">Modificar</a></td>

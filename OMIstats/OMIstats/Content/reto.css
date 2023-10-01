@@ -33,3 +33,7 @@
 .score-penalty {
     font-size:10px;
 }
+
+.wrap {
+    word-break: break-all;
+}
