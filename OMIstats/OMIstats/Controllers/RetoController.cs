@@ -15,6 +15,8 @@ namespace OMIstats.Controllers
         public ActionResult Index()
         {
             ViewBag.esAdmin = esAdmin();
+            Olimpiada o = Olimpiada.obtenerMasReciente();
+            ViewBag.activo = Reto.isRetoActivo(o.numero);
             if (!estaLoggeado())
             {
                 guardarParams(Pagina.LOGIN, Pagina.RETO);
@@ -24,10 +26,7 @@ namespace OMIstats.Controllers
             ViewBag.logeado = true;
 
             Persona p = getUsuario();
-            Olimpiada o = Olimpiada.obtenerMasReciente();
             MiembroDelegacion md = MiembroDelegacion.obtenerMiembroDePersona(p.clave, o.numero);
-
-            ViewBag.activo = Reto.isRetoActivo(o.numero);
 
             return View(md);
         }

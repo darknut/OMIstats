@@ -16,12 +16,6 @@
 
 <h2 class="titulo">Reto OMI</h2>
 
-@if(logeado)
-{
-    if(Model.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || esAdmin)
-    {
-        if (activo == true)
-        {
 <div>
 ¡Bienvenido!, el reto de la OMI 2023 es una búsqueda de tesoros digital (<a href="https://en.wikipedia.org/wiki/Scavenger_hunt" target="_blank">scavenger hunt</a>).
 En la siguiente página encontraras una serie de retos que tendrás que resolver, y para cada uno de ellos, tendrás que subir una foto para comprobar que encontraste
@@ -55,25 +49,27 @@ puedes dar click en la palomita verde. Si no hay palomita, no has enviado nada.<
 <li>Comunicación y cooperación entre competidores está permitida, pero cada quien tiene que subir su propia fotografía independientemente.</li>
 <li>Cualquier competidor descubierto haciendo trampa, copiando, o saboteando a otros competidores será descalificado.</li>
 </ul>
+
+@if (activo == true)
+{
+    if(logeado)
+    {
+        if(Model.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || esAdmin)
+        {
 <a href="@Url.Content("~/Reto/Lista")" class="boton botonOMI">Empezar</a>
         }
-        else
-        {
-<div>El reto todavía no empieza, por favor regresa después del segundo examen.</div>
-        }
-    }
-    else
+    } else
     {
-<div>Este reto está disponible solo para competidores.😔</div>
-    }
-}
-else
-{
-<div>Para poder acceder al Reto OMI es necesario que inicies sesión.</div>
-<br />
-<div>Para ello, da clic <a href="@Url.Content("~/Log")">aquí</a> e inicia sesión con la cuenta de correo con la que te registró tu delegado.</div>
+<a href="@Url.Content("~/Log")" class="boton botonOMI">Iniciar Sesión</a>
+<br /><br />
+<div>Es necesario que inicies sesión con la cuenta de correo con la que te registró tu delegado.</div>
 <br />
 <div>Si no sabes con qué cuenta te registraron, puedes buscarte por nombre <a href="@Url.Content("~/Buscar")" target="_blank">aquí</a> y ver en tu perfil cuál es el correo correcto.</div>
 <br />
 <div>Si no tienes cuenta en la página de la OMI, puedes crear una cuenta ahí mismo, solo asegúrate de crear tu cuenta con esa misma cuenta de correo.</div>
+    }
+} else
+{
+<br  /><br  /><br  />
+<div>Regresa después del segundo examen para empezar el reto.</div>
 }
