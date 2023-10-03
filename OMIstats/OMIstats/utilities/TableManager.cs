@@ -317,6 +317,15 @@ namespace OMIstats.Utilities
             return tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO;
         }
 
+        public static string getPreEstado(string estado)
+        {
+            if (estado == "MEX")
+                return "al";
+            if (estado == "MDF")
+                return "a la";
+            return "al estado de";
+        }
+
         public static bool IsDebug()
         {
 #if DEBUG

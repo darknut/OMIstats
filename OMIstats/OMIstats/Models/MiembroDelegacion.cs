@@ -1150,6 +1150,7 @@ namespace OMIstats.Models
                 string genero = DataRowParser.ToString(r["genero"]);
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 TipoAsistente tipo = DataRowParser.ToTipoAsistente(r["tipo"]);
+                Estado e = Estado.obtenerEstadoConClave(estado);
 
                 if (lastUsuario == claveUsuario && tipo != TipoAsistente.COMPETIDOR)
                     continue;
@@ -1171,9 +1172,6 @@ namespace OMIstats.Models
                 lineas.Append(nombre);
                 lineas.Append(",");
                 lineas.Append(X);
-                lineas.Append(",");
-
-                lineas.Append(Estado.obtenerEstadoConClave(estado).nombre);
                 lineas.Append(" como ");
 
                 string asistente = stringsAsistentes[((int)tipo) - 1];
@@ -1189,8 +1187,11 @@ namespace OMIstats.Models
                 }
 
                 lineas.Append(asistente);
-
                 lineas.Append(" a,");
+                lineas.Append(TableManager.getPreEstado(e.clave));
+                lineas.Append(",");
+                lineas.Append(e.nombre.ToUpperInvariant());
+                lineas.Append(",");
                 lineas.Append(clase.ToString());
                 lineas.Append(",reconocimiento,");
                 lineas.Append(baseURL);

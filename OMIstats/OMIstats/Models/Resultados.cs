@@ -1114,11 +1114,12 @@ namespace OMIstats.Models
                 lineas.Append("-medalla.pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
+                lineas.Append(X);
                 Estado e = Estado.obtenerEstadoConClave(estado);
                 if (e.extranjero)
-                    lineas.Append("PUNTAJE PARA ");
+                    lineas.Append(" PUNTAJE PARA ");
                 else
-                    lineas.Append("MEDALLA DE ");
+                    lineas.Append(" MEDALLA DE ");
 
                 if (medalla == TipoMedalla.BRONCE)
                     lineas.Append("BRONCE");
@@ -1127,13 +1128,11 @@ namespace OMIstats.Models
                 else
                     lineas.Append("ORO");
 
-                lineas.Append(",en la categoría OMI ");
-                if (clase == TipoOlimpiada.OMI)
-                    lineas.Append("Abierta a,");
-                else if (clase == TipoOlimpiada.OMIP)
-                    lineas.Append("para Primaria a,");
-                else if (clase == TipoOlimpiada.OMIS)
-                    lineas.Append("para Secundaria a,");
+                lineas.Append(",");
+                lineas.Append(TableManager.getPreEstado(e.clave));
+                lineas.Append(",");
+                lineas.Append(e.nombre.ToUpperInvariant());
+                lineas.Append(",");
 
                 lineas.Append(clase.ToString());
                 lineas.Append(",");
@@ -1178,13 +1177,18 @@ namespace OMIstats.Models
                     joven = resultado;
                 }
             }
+            Estado e = Estado.obtenerEstadoConClave(joven.estado);
 
             lineas.Append(joven.estado);
             lineas.Append("\\");
             lineas.Append(joven.clave);
             lineas.Append("-joven.pdf,");
             lineas.Append(joven.persona.nombreCompleto);
-            lineas.Append(",POR HABER SIDO,El Medallista Más Joven a,");
+            lineas.Append(",por haber sido EL MEDALLISTA MÁS JOVEN,");
+            lineas.Append(TableManager.getPreEstado(e.clave));
+            lineas.Append(",");
+            lineas.Append(e.nombre.ToUpperInvariant());
+            lineas.Append(",");
             lineas.Append(joven.tipoOlimpiada.ToString());
             lineas.Append(",reconocimiento,");
 
@@ -1213,21 +1217,23 @@ namespace OMIstats.Models
                 lineas.Append("\\");
                 lineas.Append(estado.nombre);
                 lineas.Append(".pdf,");
-                lineas.Append(estado.nombre);
-                lineas.Append(",");
+                lineas.Append(TableManager.getPreEstado(estado.clave));
+                lineas.Append(" ");
+                lineas.Append(estado.nombre.ToUpperInvariant());
+                lineas.Append(",Por ser ");
                 switch (++lugar)
                 {
                     case 1:
-                        lineas.Append("Primer");
+                        lineas.Append("PRIMER");
                         break;
                     case 2:
-                        lineas.Append("Segundo");
+                        lineas.Append("SEGUNDO");
                         break;
                     case 3:
-                        lineas.Append("Tercer");
+                        lineas.Append("TERCER");
                         break;
                 }
-                lineas.Append(" Lugar, a Nivel Estados a,OMI,");
+                lineas.Append(" LUGAR a Nivel Estados a,,,OMI,");
                 switch (lugar)
                 {
                     case 1:
