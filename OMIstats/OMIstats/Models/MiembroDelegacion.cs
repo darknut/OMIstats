@@ -1188,7 +1188,8 @@ namespace OMIstats.Models
 
                 lineas.Append(asistente);
                 lineas.Append(",");
-                lineas.Append(TableManager.getPreEstado(e.clave));
+                if (tipo != TipoAsistente.COMI && tipo != TipoAsistente.COLO)
+                    lineas.Append(TableManager.getPreEstado(e.clave));
                 lineas.Append(",");
                 lineas.Append(e.nombre.ToUpperInvariant());
                 lineas.Append(",");
