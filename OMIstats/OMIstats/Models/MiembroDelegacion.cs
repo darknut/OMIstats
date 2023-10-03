@@ -1354,7 +1354,7 @@ namespace OMIstats.Models
             else
             {
                 query.Append(" select top 11 * from Persona where search like ");
-                query.Append(Cadenas.comillas("%" + input + "%"));
+                query.Append(Cadenas.comillas("%" + Cadenas.quitaEspeciales(input) + "%"));
                 if (!esSuperUsuario)
                 {
                     query.Append(" and clave not in ( select persona from MiembroDelegacion where olimpiada = ");
