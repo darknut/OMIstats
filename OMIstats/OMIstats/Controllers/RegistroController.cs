@@ -357,6 +357,7 @@ namespace OMIstats.Controllers
             MiembroDelegacion md = null;
             TipoOlimpiada tipoO = TipoOlimpiada.NULL;
             Institucion i = null;
+            Persona pp = getUsuario();
             if (modifyMode)
             {
                 tipoO = DataRowParser.ToTipoOlimpiada(tipoOriginal);
@@ -372,7 +373,7 @@ namespace OMIstats.Controllers
                     return View(new Persona());
                 }
                 md = temp[0];
-                if (!p.esSuperUsuario() && md.estado != estado)
+                if (!pp.esSuperUsuario() && md.estado != estado)
                 {
                     ViewBag.errorInfo = "permisos";
                     return View(new Persona());
@@ -398,7 +399,7 @@ namespace OMIstats.Controllers
             ViewBag.resubmit = true;
             bool hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             ViewBag.hayResultados = hayResultados;
-            if (o.esOnline && !p.esSuperUsuario())
+            if (o.esOnline && !pp.esSuperUsuario())
             {
                 ViewBag.sedes = SedeOnline.obtenerSedes(o.numero, estado, tipo);
             }
