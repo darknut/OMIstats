@@ -317,13 +317,13 @@ namespace OMIstats.Utilities
             return tipo == TipoOlimpiada.OMIPO || tipo == TipoOlimpiada.OMISO;
         }
 
-        public static string getPreEstado(string estado)
+        public static string getPreEstado(string estado, bool includeA = true)
         {
             if (estado == "MEX")
-                return "al";
+                return includeA ? "al" : "el";
             if (estado == "MDF")
-                return "a la";
-            return "al estado de";
+                return includeA ? "a la" : "la";
+            return (includeA ? "el" : "al") + " estado de";
         }
 
         public static bool IsDebug()
