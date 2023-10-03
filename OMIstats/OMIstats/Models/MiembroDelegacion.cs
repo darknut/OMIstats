@@ -1187,7 +1187,7 @@ namespace OMIstats.Models
                 }
 
                 lineas.Append(asistente);
-                lineas.Append(" a,");
+                lineas.Append(",");
                 lineas.Append(TableManager.getPreEstado(e.clave));
                 lineas.Append(",");
                 lineas.Append(e.nombre.ToUpperInvariant());
