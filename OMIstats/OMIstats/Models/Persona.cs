@@ -872,6 +872,12 @@ namespace OMIstats.Models
             s.Append(medicina);
             s.Append(",");
             s.Append(alergias);
+            s.Append(",");
+            s.Append(nombre);
+            s.Append(",");
+            s.Append(apellidoPaterno);
+            s.Append(",");
+            s.Append(apellidoMaterno);
 
             return s.ToString();
         }

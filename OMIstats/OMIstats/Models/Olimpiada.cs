@@ -697,10 +697,10 @@ namespace OMIstats.Models
             if (incluirCabeceras)
             {
                 // Incluimos cabeceras de datos
-                tabla.Append("nivel omi, nombre, estado, tipo asistente, clave, fecha nacimiento, ");
+                tabla.Append("nivel omi, nombreCompleto, estado, tipo asistente, clave, fecha nacimiento, ");
                 tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada, camiseta, solo diploma, notas, ");
                 tabla.Append(" celular, telefono, direccion, omegaup, emergencia, parentesco, ");
-                tabla.Append(" telefono emergencia, medicina, alergias");
+                tabla.Append(" telefono emergencia, medicina, alergias, nombrePropio, apellidoPaterno, apellidoMaterno ");
                 if (this.esOnline)
                     tabla.Append(", sede");
                 tabla.Append("\n");
