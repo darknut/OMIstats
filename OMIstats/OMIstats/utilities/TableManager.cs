@@ -323,7 +323,7 @@ namespace OMIstats.Utilities
                 return includeA ? "al" : "el";
             if (estado == "MDF")
                 return includeA ? "a la" : "la";
-            return (includeA ? "el" : "al") + " estado de";
+            return (includeA ? "al" : "el") + " estado de";
         }
 
         public static bool IsDebug()

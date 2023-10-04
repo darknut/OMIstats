@@ -1129,7 +1129,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clave, md.clase, md.tipo, md.estado from miembrodelegacion as md ");
+            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, p.genero, md.clave, md.clase, md.tipo, md.estado, md.soloDiploma from miembrodelegacion as md ");
             query.Append(" inner join Persona as p on p.clave = md.persona ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
@@ -1150,10 +1150,11 @@ namespace OMIstats.Models
                 string genero = DataRowParser.ToString(r["genero"]);
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 TipoAsistente tipo = DataRowParser.ToTipoAsistente(r["tipo"]);
+                bool soloDiploma = DataRowParser.ToBool(r["soloDiploma"]);
                 Estado e = Estado.obtenerEstadoConClave(estado);
                 bool esOMIPOS = (tipo == TipoAsistente.COMPETIDOR || tipo == TipoAsistente.SUPERVISOR) && Olimpiada.esOMIPOS(clase);
 
-                if (naked && esOMIPOS)
+                if (naked && (esOMIPOS || (soloDiploma && tipo == TipoAsistente.ASESOR)))
                     continue;
 
                 if (lastUsuario == claveUsuario && tipo != TipoAsistente.COMPETIDOR)
