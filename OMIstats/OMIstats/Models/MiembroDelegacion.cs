@@ -1123,7 +1123,7 @@ namespace OMIstats.Models
             return lista;
         }
 
-        public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes)
+        public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes, bool naked = false)
         {
             StringBuilder lineas = new StringBuilder();
             StringBuilder query = new StringBuilder();
@@ -1151,12 +1151,19 @@ namespace OMIstats.Models
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 TipoAsistente tipo = DataRowParser.ToTipoAsistente(r["tipo"]);
                 Estado e = Estado.obtenerEstadoConClave(estado);
+                bool esOMIPOS = (tipo == TipoAsistente.COMPETIDOR || tipo == TipoAsistente.SUPERVISOR) && Olimpiada.esOMIPOS(clase);
+
+                if (naked && esOMIPOS)
+                    continue;
 
                 if (lastUsuario == claveUsuario && tipo != TipoAsistente.COMPETIDOR)
                     continue;
                 lastUsuario = claveUsuario;
 
-                lineas.Append(estado);
+                if (naked)
+                    lineas.Append(tipo.ToString());
+                else
+                    lineas.Append(estado);
                 lineas.Append("\\");
                 if (tipo == TipoAsistente.COMPETIDOR)
                 {
@@ -1166,7 +1173,7 @@ namespace OMIstats.Models
                         lineas.Append("S-");
                 }
                 lineas.Append(clave);
-                if (tipo == TipoAsistente.COMPETIDOR && Olimpiada.esOMIPOS(clase))
+                if (esOMIPOS)
                     lineas.Append("-online");
                 lineas.Append(".pdf,");
                 lineas.Append(nombre);
@@ -1194,7 +1201,10 @@ namespace OMIstats.Models
                 lineas.Append(e.nombre.ToUpperInvariant());
                 lineas.Append(",");
                 lineas.Append(clase.ToString());
-                lineas.Append(",reconocimiento,");
+                if (esOMIPOS)
+                    lineas.Append(",online,");
+                else
+                    lineas.Append(",reconocimiento,");
                 lineas.Append(baseURL);
                 lineas.Append("/Profile/");
                 lineas.Append(clase.ToString());
