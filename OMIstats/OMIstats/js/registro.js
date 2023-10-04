@@ -366,6 +366,9 @@ function validar() {
     reEnable("apellidoPaterno");
     reEnable("apellidoMaterno");
 
+    if (llenarDefaultFechaNac)
+        revisa();
+
     setVisible("loading", true);
     return true;
 }
