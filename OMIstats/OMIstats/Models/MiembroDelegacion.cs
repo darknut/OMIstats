@@ -1382,6 +1382,7 @@ namespace OMIstats.Models
                     {
                         Persona p = new Persona();
                         p.llenarDatos(r, completo: false);
+                        string tshirt = null;
 
                         MiembroDelegacion md = MiembroDelegacion.obtenerParticipacionMasReciente(p.clave);
 
@@ -1397,11 +1398,14 @@ namespace OMIstats.Models
                             }
                             else
                             {
+                                tshirt = md.tshirt;
                                 md = null;
                             }
                         }
 
-                        personas.Add(new OMIstats.Ajax.BuscarPersonas(p, md));
+                        var persona = new OMIstats.Ajax.BuscarPersonas(p, md);
+                        persona.tshirt = tshirt;
+                        personas.Add(persona);
                     }
             }
 

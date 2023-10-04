@@ -155,6 +155,7 @@ function personaSeleccionada(a) {
     setCampo("alergias", persona.alergias);
     setCampo("genero", persona.genero);
     setCampo("persona", persona.clave);
+    setCampo("tshirt", persona.tshirt);
     setVisible("check-foto", persona.tieneFoto);
 
     if (document.getElementById("tipoAsistente").value == "COMPETIDOR" &&
@@ -173,8 +174,11 @@ function personaSeleccionada(a) {
     disableCampo("apellidoPaterno");
     disableCampo("apellidoMaterno");
 
-    var button = document.getElementById("botonGuardar");
-    button.focus();
+    var elem = document.getElementById("tipoAsistente");
+    if (elem.value != "")
+        elem = document.getElementById("tshirt");
+
+    elem.focus();
 }
 
 function handleError() {

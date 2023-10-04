@@ -25,6 +25,7 @@ namespace OMIstats.Ajax
         public string medicina;
         public string alergias;
         public bool tieneFoto;
+        public string tshirt;
 
         // Datos de la escuela
         public string nombreEscuela;
