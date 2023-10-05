@@ -17,11 +17,20 @@
     List<OMIstats.Models.Problema> dia2 = ViewBag.dia2;
     List<OMIstats.Models.Problema> metadata = ViewBag.metadata;
     string github = "";
+    bool tieneFavicon = ViewBag.tieneFavicon;
 
     if (metadata.Count > 0)
     {
         github = metadata[0].codigo;
     }
+}
+
+@section Scripts
+{
+@if(tieneFavicon)
+{
+<script>addFavicon('@Url.Content("~")', '@Model.numero');</script>
+}
 }
 
 <div class="submenu">

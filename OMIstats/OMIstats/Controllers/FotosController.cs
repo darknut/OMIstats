@@ -36,6 +36,7 @@ namespace OMIstats.Controllers
             ViewBag.admin = esAdmin();
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             ViewBag.olimpiadasConFotos = Models.Album.obtenerOlimpiadasConAlbumes(tipo);
+            addFavicon(o.numero);
 
             return View(albumes);
         }
@@ -54,6 +55,7 @@ namespace OMIstats.Controllers
             ViewBag.albumes = Models.Album.obtenerAlbumsDeOlimpiada(album.olimpiada, album.tipoOlimpiada);
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(album.tipoOlimpiada);
             ViewBag.olimpiadasConFotos = Models.Album.obtenerOlimpiadasConAlbumes(album.tipoOlimpiada);
+            addFavicon(album.olimpiada);
 
             return View(album);
         }

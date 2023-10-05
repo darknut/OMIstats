@@ -39,3 +39,8 @@ function removeBanners() {
     document.getElementsByClassName("mainpage")[0].style.minWidth = "60px";
     document.getElementsByClassName("content")[0].style.minWidth = "60px";
 }
+
+function addFavicon(base, numero) {
+    var icon = document.querySelector("link[rel~='icon']");
+    icon.href = base + "favicon-" + numero + ".ico";
+}

@@ -13,6 +13,15 @@
     tableManager.setCurrentOMI(olimpiada);
     ViewBag.Title = "Fotos de la " + tableManager.enlaceOMI();
     OMIstats.Models.Album newsletter = null;
+    bool tieneFavicon = ViewBag.tieneFavicon;
+}
+
+@section Scripts
+{
+@if(tieneFavicon)
+{
+<script>addFavicon('@Url.Content("~")', '@olimpiada.numero');</script>
+}
 }
 
 <div class="submenu">

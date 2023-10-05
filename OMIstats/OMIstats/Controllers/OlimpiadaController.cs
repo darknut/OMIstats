@@ -35,6 +35,7 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 
             ViewBag.fotos = Album.obtenerAlbumsDeOlimpiada(clave, tipo).Count > 0;
+            addFavicon(o.numero);
 
             return View(o);
         }
@@ -372,6 +373,7 @@ namespace OMIstats.Controllers
             }
 
             ViewBag.extranjeros = MiembroDelegacion.obtenerEstadosExtranjerosEnOlimpiada(o.numero);
+            addFavicon(o.numero);
 
             return View(o);
         }
@@ -467,6 +469,7 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadasParaEstado = Olimpiada.obtenerOlimpiadasParaEstado(estado);
             ViewBag.tipo = tipo;
             ViewBag.estadosEnOlimpiada = MiembroDelegacion.obtenerEstadosEnOlimpiada(o.numero);
+            addFavicon(o.numero);
 
             if (delegaciones[tipo].Count == 0)
                 ViewBag.vinoAOlimpiada = ViewBag.estado.estadoVinoAOlimpiada(tipo, clave);
@@ -517,6 +520,7 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
             ViewBag.hayPromedio = Medallero.hayPromedio(ViewBag.estados);
             ViewBag.hayPuntos = Medallero.hayPuntos(ViewBag.estados);
+            addFavicon(o.numero);
 
             return View(o);
         }

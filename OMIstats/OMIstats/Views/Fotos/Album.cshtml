@@ -11,6 +11,15 @@
     HashSet<string> olimpiadasConFotos = ViewBag.olimpiadasConFotos;
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     ViewBag.Title = Model.nombre;
+    bool tieneFavicon = ViewBag.tieneFavicon;
+}
+
+@section Scripts
+{
+@if(tieneFavicon)
+{
+<script>addFavicon('@Url.Content("~")', '@Model.olimpiada');</script>
+}
 }
 
 <div class="submenu">

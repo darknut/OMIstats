@@ -18,6 +18,15 @@
     ViewBag.Title = estado.nombre + " en la " + tableManager.enlaceOMI(nombreCompleto: true);
     bool isLive = ViewBag.liveResults;
     bool extranjeros = false;
+    bool tieneFavicon = ViewBag.tieneFavicon;
+}
+
+@section Scripts
+{
+@if(tieneFavicon)
+{
+<script>addFavicon('@Url.Content("~")', '@Model.numero');</script>
+}
 }
 
 <div class="submenu">

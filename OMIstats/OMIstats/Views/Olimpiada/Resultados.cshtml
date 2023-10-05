@@ -27,6 +27,7 @@
     List<OMIstats.Models.Problema> problemasDia2 = ViewBag.problemasDia2;
     List<OMIstats.Models.Estado> extranjeros = ViewBag.extranjeros;
     bool esOMIPOS = OMIstats.Models.Olimpiada.esOMIPOS(Model.tipoOlimpiada);
+    bool tieneFavicon = ViewBag.tieneFavicon;
 
     OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
     tableManager.setCurrentOMI(Model);
@@ -73,6 +74,10 @@
 
 @section scripts
 {
+@if(tieneFavicon)
+{
+<script>addFavicon('@Url.Content("~")', '@Model.numero');</script>
+}
 <script type="text/javascript" src="~/Scripts/jquery.tablesorter.js"></script>
 <script type="text/javascript" src="~/Scripts/jquery.metadata.js"></script>
 <script type="text/javascript" src="~/js/sorters.js"></script>

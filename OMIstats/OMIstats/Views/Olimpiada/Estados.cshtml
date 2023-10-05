@@ -1,5 +1,15 @@
 ﻿@model OMIstats.Models.Olimpiada
 
+@{
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    tableManager.setCurrentOMI(Model);
+    ViewBag.Title = "Tabla de estados de la " + tableManager.enlaceOMI(nombreCompleto: true);
+    bool isLive = ViewBag.liveResults;
+    OMIstats.Models.Medallero medalleroGeneral = ViewBag.medalleroGeneral;
+    bool secretScoreboard = ViewBag.secretScoreboard;
+    bool tieneFavicon = ViewBag.tieneFavicon;
+}
+
 @section AddToHead
 {
     <link rel="stylesheet" href="~/Content/formas.css" type="text/css" />
@@ -18,15 +28,10 @@
             cargaSorter("tablaPuntos");
         });
     </script>
-}
-
-@{
-    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
-    tableManager.setCurrentOMI(Model);
-    ViewBag.Title = "Tabla de estados de la " + tableManager.enlaceOMI(nombreCompleto: true);
-    bool isLive = ViewBag.liveResults;
-    OMIstats.Models.Medallero medalleroGeneral = ViewBag.medalleroGeneral;
-    bool secretScoreboard = ViewBag.secretScoreboard;
+    @if(tieneFavicon)
+    {
+    <script>addFavicon('@Url.Content("~")', '@Model.numero');</script>
+    }
 }
 
 <div class="submenu">

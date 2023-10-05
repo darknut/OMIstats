@@ -293,5 +293,10 @@ namespace OMIstats.Controllers
                 }
             }
         }
+
+        protected void addFavicon(string numero)
+        {
+            ViewBag.tieneFavicon = System.IO.File.Exists(Server.MapPath("~/favicon-" + numero + ".ico"));
+        }
     }
 }
