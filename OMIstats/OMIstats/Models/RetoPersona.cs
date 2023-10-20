@@ -212,7 +212,7 @@ namespace OMIstats.Models
             StringBuilder query = new StringBuilder();
             List<RetoPersona> lista = new List<RetoPersona>();
 
-            query.Append(" select top 5 persona, COUNT(reto) as reto, SUM(timestamp) as timestamp from RetoPersona ");
+            query.Append(" select persona, COUNT(reto) as reto, SUM(timestamp) as timestamp from RetoPersona ");
             query.Append(" where status = ");
             query.Append((int)RetoStatus.ACCEPTED);
             query.Append(" and olimpiada = ");

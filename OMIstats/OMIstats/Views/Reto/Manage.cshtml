@@ -52,6 +52,8 @@ if (sigReto.pregunta.Contains("|"))
 <br />
 <a href="@Url.Content(OMIstats.Utilities.Archivos.FOLDER_RETO + '/' + sigReto.retoPersona.foto)" target="_blank">Ver foto</a>
 <br /><br />
+@(OMIstats.Models.Persona.obtenerPersonaConClave(sigReto.retoPersona.persona).nombreCompleto)
+<br /><br />
 <a href="@Url.Content("~/Reto/Aceptar?reto=" + sigReto.retoPersona.clave)" class="boton botonOMI">Aceptar</a>
 <a href="@Url.Content("~/Reto/Rechazar?reto=" + sigReto.retoPersona.clave)" class="boton botonOMI">Rechazar</a>
 <br /><br />

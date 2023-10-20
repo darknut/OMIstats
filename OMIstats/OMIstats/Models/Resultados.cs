@@ -1075,7 +1075,7 @@ namespace OMIstats.Models
             return mejores;
         }
 #if OMISTATS
-        public static string generarDiplomas(string omi, string X, string baseURL)
+        public static string generarDiplomas(string omi, string X, string baseURL, bool isNaked = false)
         {
             StringBuilder lineas = new StringBuilder();
             StringBuilder query = new StringBuilder();
@@ -1104,7 +1104,14 @@ namespace OMIstats.Models
                 if (Olimpiada.esOMIPOS(clase))
                     continue;
 
-                lineas.Append(estado);
+                if (isNaked)
+                {
+                    lineas.Append(medalla.ToString());
+                }
+                else
+                {
+                    lineas.Append(estado);
+                }
                 lineas.Append("\\");
                 if (clase == TipoOlimpiada.OMIP)
                     lineas.Append("P-");

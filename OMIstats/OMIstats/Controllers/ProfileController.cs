@@ -45,6 +45,7 @@ namespace OMIstats.Controllers
         {
             Persona p = null;
             limpiarErroresViewBag();
+            bool isOwn = false;
 
             // QR's de competidor vienen en la forma usuario=null;clave=CMX-3;tipo=OMI;omi='30'
             if (usuario == null && clave != null)
@@ -63,6 +64,7 @@ namespace OMIstats.Controllers
                 if (estaLoggeado())
                 {
                     p = getUsuario();
+                    isOwn = true;
                     ViewBag.tienePeticiones = p.tienePeticiones();
                 }
                 else
@@ -78,7 +80,8 @@ namespace OMIstats.Controllers
                 if (p != null)
                 {
                     Persona u = getUsuario();
-                    if (p.usuario == u.usuario)
+                    isOwn = p.usuario == u.usuario;
+                    if (isOwn)
                         ViewBag.tienePeticiones = p.tienePeticiones();
                 }
                 else
@@ -101,7 +104,7 @@ namespace OMIstats.Controllers
             Medalleros medalleros = Medallero.obtenerMedalleros(Medallero.TipoMedallero.PERSONA, p.clave.ToString());
 
             ViewBag.participaciones = Resultados.obtenerParticipacionesComoCompetidorPara(p.clave, tipo);
-            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave);
+            ViewBag.asistencias = MiembroDelegacion.obtenerParticipaciones(p.clave, isOwn);
             ViewBag.medalleros = medalleros;
             ViewBag.tipo = tipo;
             return View(p);
