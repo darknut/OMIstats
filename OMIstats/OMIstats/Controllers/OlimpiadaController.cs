@@ -358,10 +358,9 @@ namespace OMIstats.Controllers
             ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
 
             if (o.alsoOmips)
-            {
                 ViewBag.omis = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMIS);
+            if (o.alsoOmip)
                 ViewBag.omip = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMIP);
-            }
 
             List<Problema> metadata = Problema.obetnerMetaDatadeOMI(clave, tipo);
 
@@ -453,10 +452,12 @@ namespace OMIstats.Controllers
 
             Dictionary<TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<TipoOlimpiada, List<MiembroDelegacion>>();
             delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
-            if (tipo == TipoOlimpiada.OMI && o.alsoOmips)
+            if (tipo == TipoOlimpiada.OMI)
             {
-                delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
-                delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+                if (o.alsoOmips)
+                    delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+                if (o.alsoOmip)
+                    delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
             }
 
             ViewBag.liveResults = o.liveResults;

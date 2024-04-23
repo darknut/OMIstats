@@ -246,7 +246,14 @@ namespace OMIstats.Utilities
                 if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIPO)
                     nombre = "OMIP Online";
                 else if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMISO)
-                    nombre = "OMIS Online";
+                {
+                    if (currentOMI.año < 2024)
+                        nombre = "OMIS Online";
+                    else
+                        nombre = "OMIPS Online";
+                }
+                else if (currentOMI.tipoOlimpiada == TipoOlimpiada.OMIS && currentOMI.año >= 2024)
+                    nombre = "OMIPS";
                 else
                     nombre = currentOMI.tipoOlimpiada.ToString();
             }

@@ -18,34 +18,36 @@
     bool? onsite = ViewBag.onsite;
     bool modoComi = usuario.esSuperUsuario() && onsite != true;
     bool llegamosASoloDiploma = false;
+    List<OMIstats.Models.TipoOlimpiada> listaTipos = new List<OMIstats.Models.TipoOlimpiada>();
+    List<string> listaSubtitulos = new List<string>();
     if (isOMIPOS)
     {
-        tipos = new OMIstats.Models.TipoOlimpiada[] {
-            OMIstats.Models.TipoOlimpiada.OMIPO,
-            OMIstats.Models.TipoOlimpiada.OMISO,
-        };
-        subTitulos = new string[] {
-            "Competidores de categoría Primaria",
-            "Competidores de categoría Secundaria",
-        };
+        if (omi.alsoOmipOnline)
+        {
+            listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMIPO);
+            listaSubtitulos.Add("Competidores de categoría Primaria");
+        }
+        listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMISO);
+        listaSubtitulos.Add("Competidores de categoría " + (omi.alsoOmipOnline ? "Secundaria" : "OMIPS"));
     }
     else
     {
-        tipos = new OMIstats.Models.TipoOlimpiada[] {
-            OMIstats.Models.TipoOlimpiada.OMI,
-            OMIstats.Models.TipoOlimpiada.OMIP,
-            OMIstats.Models.TipoOlimpiada.OMIS,
-            OMIstats.Models.TipoOlimpiada.NULL,
-            OMIstats.Models.TipoOlimpiada.NULL
-        };
-        subTitulos = new string[] {
-            "Competidores de categoría OMI",
-            "Competidores de categoría Primaria",
-            "Competidores de categoría Secundaria",
-            "Líderes, asesores e invitados",
-            "No asistentes con diploma"
-        };
+        listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMI);
+        listaSubtitulos.Add("Competidores de categoría OMI");
+        if (omi.alsoOmip)
+        {
+            listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMIP);
+            listaSubtitulos.Add("Competidores de categoría Primaria");
+        }
+        listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMIS);
+        listaSubtitulos.Add("Competidores de categoría " + (omi.alsoOmip ? "Secundaria" : "OMIPS"));
+        listaTipos.Add(OMIstats.Models.TipoOlimpiada.NULL);
+        listaSubtitulos.Add("Líderes, asesores e invitados");
+        listaTipos.Add(OMIstats.Models.TipoOlimpiada.NULL);
+        listaSubtitulos.Add("No asistentes con diploma");
     }
+    tipos = listaTipos.ToArray();
+    subTitulos = listaSubtitulos.ToArray();
     if (errorPermisos)
     {
         ViewBag.Title = "Error";

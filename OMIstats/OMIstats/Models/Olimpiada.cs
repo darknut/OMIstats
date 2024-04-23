@@ -99,6 +99,10 @@ namespace OMIstats.Models
 
         public bool alsoOmipsOnline { get; set; }
 
+        public bool alsoOmip { get; set; }
+
+        public bool alsoOmipOnline { get; set; }
+
         public string omisActualNumber { get; set; }
 
         public bool liveResults { get; set; }
@@ -284,6 +288,8 @@ namespace OMIstats.Models
             puntosDesconocidos = false;
             alsoOmips = false;
             alsoOmipsOnline = false;
+            alsoOmip = false;
+            alsoOmipOnline = false;
             invitados = 0;
             noMedallistasConocidos = false;
             omisActualNumber = "";
@@ -403,6 +409,8 @@ namespace OMIstats.Models
             puntosDesconocidos = DataRowParser.ToBool(datos["puntosDesconocidos"]);
             alsoOmips = DataRowParser.ToBool(datos["alsoOmips"]);
             alsoOmipsOnline = DataRowParser.ToBool(datos["alsoOmipsOnline"]);
+            alsoOmip = DataRowParser.ToBool(datos["alsoOmip"]);
+            alsoOmipOnline = DataRowParser.ToBool(datos["alsoOmipOnline"]);
             invitados = DataRowParser.ToInt(datos["invitados"]);
             noMedallistasConocidos = DataRowParser.ToBool(datos["noMedallistasConocidos"]);
             puntosDetallados = DataRowParser.ToBool(datos["puntosDetallados"]);
@@ -570,6 +578,10 @@ namespace OMIstats.Models
             query.Append(Cadenas.boolToInt(alsoOmips));
             query.Append(", alsoOmipsOnline = ");
             query.Append(Cadenas.boolToInt(alsoOmipsOnline));
+            query.Append(", alsoOmip = ");
+            query.Append(Cadenas.boolToInt(alsoOmip));
+            query.Append(", alsoOmipOnline = ");
+            query.Append(Cadenas.boolToInt(alsoOmipOnline));
             query.Append(", invitados = ");
             query.Append(invitados);
             query.Append(", noMedallistasConocidos = ");
@@ -596,18 +608,18 @@ namespace OMIstats.Models
             if (db.EjecutarQuery(query.ToString()).error)
                 return false;
 
-            // Si esta omi es tambien OMIPS, creamos tambien los objetos
             if (tipoOlimpiada == TipoOlimpiada.OMI && this.alsoOmips)
             {
-                this.actualizaOMIPS(TipoOlimpiada.OMIP, clave);
-                this.actualizaOMIPS(TipoOlimpiada.OMIS, clave);
-            }
-
-            // Si esta omi es también OMIPS online, creamos también los objetos
-            if (tipoOlimpiada == TipoOlimpiada.OMI && this.alsoOmipsOnline)
-            {
-                this.actualizaOMIPS(TipoOlimpiada.OMIPO, clave);
-                this.actualizaOMIPS(TipoOlimpiada.OMISO, clave);
+                // Si esta omi es tambien OMIPS, creamos tambien los objetos
+                if (this.alsoOmips)
+                    this.actualizaOMIPS(TipoOlimpiada.OMIS, clave);
+                if (this.alsoOmip)
+                    this.actualizaOMIPS(TipoOlimpiada.OMIP, clave);
+                // Si esta omi es también OMIPS online, creamos también los objetos
+                if (this.alsoOmipsOnline)
+                    this.actualizaOMIPS(TipoOlimpiada.OMISO, clave);
+                if (this.alsoOmipOnline)
+                    this.actualizaOMIPS(TipoOlimpiada.OMIPO, clave);
             }
 
             // Borramos la referencia en la aplicacion para que el siguiente query recargue las olimpiadas
@@ -637,6 +649,8 @@ namespace OMIstats.Models
             omi.puntosDesconocidos = this.puntosDesconocidos;
             omi.alsoOmips = this.alsoOmips;
             omi.alsoOmipsOnline = this.alsoOmipsOnline;
+            omi.alsoOmip = this.alsoOmip;
+            omi.alsoOmipOnline = this.alsoOmipOnline;
             omi.claveEscuela = this.claveEscuela;
             omi.relacion = this.relacion;
             omi.video = this.video;
@@ -678,7 +692,7 @@ namespace OMIstats.Models
             query.Append(", ");
             query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
             query.Append(",'', 'MEX', 'México' , '0'");
-            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4) ");
+            query.Append(",'', '', '', '', '', 0, 0, 0, 0, '', 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0) ");
 
             db.EjecutarQuery(query.ToString());
         }

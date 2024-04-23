@@ -145,7 +145,7 @@
     </a>
 }
 
-@if (Model.alsoOmips && (dia1[0] != null || dia2[0] != null))
+@if ((Model.alsoOmips || Model.alsoOmip) && (dia1[0] != null || dia2[0] != null))
 {
     <h1 class="subtitulo">
         @if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMI)
@@ -165,14 +165,17 @@
         {
             <span id="secundarias">Problemas Categoría Secundaria</span>
         }
-        |
-        @if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIP)
+        @if (Model.alsoOmip)
         {
-            <a href="@Url.Content("~/Olimpiada?tipo=omip&clave=" + Model.numero + "#primarias")">Primaria</a>
-        }
-        else
-        {
-            <span id="primarias">Problemas Categoría Primaria</span>
+            @("|")
+            if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIP)
+            {
+                <a href="@Url.Content("~/Olimpiada?tipo=omip&clave=" + Model.numero + "#primarias")">Primaria</a>
+            }
+            else
+            {
+                <span id="primarias">Problemas Categoría Primaria</span>
+            }
         }
     </h1>
 }

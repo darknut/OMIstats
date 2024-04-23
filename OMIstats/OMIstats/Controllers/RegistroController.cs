@@ -68,10 +68,10 @@ namespace OMIstats.Controllers
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
             if (o == null || !(o.registroActivo || o.registroSedes))
             {
-                Olimpiada op = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIPO);
+                Olimpiada op = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMISO);
                 if (op != null && (op.registroActivo || op.registroSedes))
                 {
-                    tipo = TipoOlimpiada.OMIPO;
+                    tipo = TipoOlimpiada.OMISO;
                     o = op;
                 }
             }

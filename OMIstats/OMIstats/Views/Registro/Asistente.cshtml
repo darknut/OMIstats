@@ -169,14 +169,20 @@ if (nuevo && !resubmit)
             <select id="tipo" name="tipo" class="shiny-box" @(puedeCambiarSelects ? "" : "disabled") onchange="onOMIselected()">
                 @if (tipo == OMIstats.Models.TipoOlimpiada.OMIPO || tipo == OMIstats.Models.TipoOlimpiada.OMISO)
                 {
-                <option value="OMISO" @(tipo == OMIstats.Models.TipoOlimpiada.OMISO ? "selected" : "")>OMI Secundarias</option>
+                <option value="OMISO" @(tipo == OMIstats.Models.TipoOlimpiada.OMISO ? "selected" : "")>@(omi.alsoOmipOnline ? "OMI Secundarias" : "OMIPS")</option>
+                    if(omi.alsoOmipOnline)
+                    {
                 <option value="OMIPO" @(tipo == OMIstats.Models.TipoOlimpiada.OMIPO ? "selected" : "")>OMI Primarias</option>
+                    }
                 }
                 else
                 {
                 <option value="OMI" @(tipo == OMIstats.Models.TipoOlimpiada.OMI ? "selected" : "")>OMI</option>
-                <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>OMI Secundarias</option>
+                <option value="OMIS" @(tipo == OMIstats.Models.TipoOlimpiada.OMIS ? "selected" : "")>@(omi.alsoOmip ? "OMI Secundarias" : "OMIPS")</option>
+                    if (omi.alsoOmip)
+                    {
                 <option value="OMIP" @(tipo == OMIstats.Models.TipoOlimpiada.OMIP ? "selected" : "")>OMI Primarias</option>
+                    }
                 }
             </select>
         </div>

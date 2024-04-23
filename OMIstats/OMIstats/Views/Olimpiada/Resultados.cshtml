@@ -123,7 +123,7 @@ $(function () {
 
     <br />
     <br />
-    @if (Model.alsoOmips)
+    @if (Model.alsoOmips || Model.alsoOmip)
     {
         foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
         {
@@ -131,7 +131,8 @@ $(function () {
                 tipo != OMIstats.Models.TipoOlimpiada.NULL &&
                 tipo != OMIstats.Models.TipoOlimpiada.OMIPO &&
                 tipo != OMIstats.Models.TipoOlimpiada.OMISO &&
-                Model.tipoOlimpiada != tipo)
+                Model.tipoOlimpiada != tipo &&
+                (tipo != OMIstats.Models.TipoOlimpiada.OMIP || Model.alsoOmip))
             {
                 @Html.ActionLink(tipo.ToString(), "Resultados", "Olimpiada",
                     new { clave = Model.numero, tipo = tipo.ToString() }, new { @class = "mini-boton" })
@@ -139,18 +140,15 @@ $(function () {
         }
         <br />
         <br />
-        if (Model.alsoOmipsOnline)
+        if (Model.alsoOmipsOnline && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIS)
         {
-            if (Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIP)
-            {
-                 @Html.ActionLink("Online", "Resultados", "Olimpiada",
-                        new { clave = Model.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIPO }, new { @class = "mini-boton" })
-            }
-            if (Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIS)
-            {
-                @Html.ActionLink("Online", "Resultados", "Olimpiada",
-                        new { clave = Model.numero, tipo = OMIstats.Models.TipoOlimpiada.OMISO }, new { @class = "mini-boton" })
-            }
+            @Html.ActionLink("Online", "Resultados", "Olimpiada",
+                    new { clave = Model.numero, tipo = OMIstats.Models.TipoOlimpiada.OMISO }, new { @class = "mini-boton" })
+        }
+        if (Model.alsoOmipOnline && Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIP)
+        {
+            @Html.ActionLink("Online", "Resultados", "Olimpiada",
+                new { clave = Model.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIPO }, new { @class = "mini-boton" })
         }
     }
     <br />
@@ -166,7 +164,7 @@ $(function () {
      @if (Model.alsoOmips)
      {
         <br />
-        <div class="comboTitle">Secundarias:</div>
+        <div class="comboTitle">@(Model.alsoOmip ? "Secundarias:" : "OMIPS:")</div>
         <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?tipo=omis&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
             @for (int i = 0; i < omis.Count; i++)
             {
@@ -175,6 +173,9 @@ $(function () {
                 <option value="@omi.numero" @(omi.numero == Model.numero ? "selected" : "")>@(tableManager.enlaceOMI() + " " + omi.año)</option>
             }
         </select>
+     }
+     @if(Model.alsoOmip)
+     {
         <br />
         <div class="comboTitle">Primarias:</div>
         <select onChange="redirige('@Url.Content("~/Olimpiada/Resultados?tipo=omip&clave=")', this.options[this.selectedIndex].value)" class="comboMargin">
