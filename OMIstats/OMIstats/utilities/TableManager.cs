@@ -112,6 +112,7 @@ namespace OMIstats.Utilities
                         return CLASE_BRONCE;
                     return CLASE_ORO;
                 case Resultados.TipoMedalla.CLASIFICADO:
+                case Resultados.TipoMedalla.EMPATE:
                     return CLASE_CLASIFICADO;
             }
 
@@ -174,6 +175,7 @@ namespace OMIstats.Utilities
                 case Resultados.TipoMedalla.ORO:
                 case Resultados.TipoMedalla.PLATA:
                 case Resultados.TipoMedalla.BRONCE:
+                case Resultados.TipoMedalla.EMPATE:
                     return currentResultados.medalla.ToString();
                 case Resultados.TipoMedalla.CLASIFICADO:
                     if (currentResultados.persona.genero == "F")

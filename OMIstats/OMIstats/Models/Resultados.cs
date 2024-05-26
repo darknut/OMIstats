@@ -22,7 +22,8 @@ namespace OMIstats.Models
             BRONCE,
             NADA,
             DESCALIFICADO,
-            CLASIFICADO
+            CLASIFICADO,
+            EMPATE
         }
 
         public enum TipoError
