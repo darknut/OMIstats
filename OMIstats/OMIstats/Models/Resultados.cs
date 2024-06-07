@@ -23,7 +23,8 @@ namespace OMIstats.Models
             NADA,
             DESCALIFICADO,
             CLASIFICADO,
-            EMPATE
+            EMPATE,
+            MENCION,
         }
 
         public enum TipoError

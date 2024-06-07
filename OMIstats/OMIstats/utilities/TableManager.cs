@@ -18,6 +18,8 @@ namespace OMIstats.Utilities
         private const string CLASE_ORO = "fondoOro";
         private const string CLASE_PENDIENTE = "fondoPendiente";
         private const string CLASE_CLASIFICADO = "fondoPendiente";
+        private const string CLASE_EMPATE = "fondoEmpate";
+        private const string CLASE_MENCION = "fondoMencion";
 
         private const string IMG_ORO = "/img/oro.png";
         private const string IMG_PLATA = "/img/plata.png";
@@ -112,8 +114,11 @@ namespace OMIstats.Utilities
                         return CLASE_BRONCE;
                     return CLASE_ORO;
                 case Resultados.TipoMedalla.CLASIFICADO:
-                case Resultados.TipoMedalla.EMPATE:
                     return CLASE_CLASIFICADO;
+                case Resultados.TipoMedalla.EMPATE:
+                    return CLASE_EMPATE;
+                case Resultados.TipoMedalla.MENCION:
+                    return CLASE_MENCION;
             }
 
             return String.Empty;
@@ -181,6 +186,8 @@ namespace OMIstats.Utilities
                     if (currentResultados.persona.genero == "F")
                         return "CLASIFICADA";
                     return "CLASIFICADO";
+                case Resultados.TipoMedalla.MENCION:
+                    return "MENCIÓN HONORÍFICA";
                 default:
                     return NO_MEDALLA;
             }

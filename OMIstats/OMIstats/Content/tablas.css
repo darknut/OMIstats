@@ -75,6 +75,14 @@
     background-image:url(../img/celdapendiente.png);
 }
 
+.fondoMencion {
+    background-image:url(../img/celdamencion.png);
+}
+
+.fondoEmpate {
+    background-image:url(../img/celdaempate.png);
+}
+
 .border {
     border: solid 4px #336699;
 }

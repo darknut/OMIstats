@@ -67,15 +67,5 @@ namespace OMIstats.Controllers
 
             return View(Estado.obtenerEstados());
         }
-
-        //
-        // GET: /Estados/OMIPS
-
-        public ActionResult OMIPS()
-        {
-            Olimpiada o = Olimpiada.obtenerMasReciente(yaTerminada: true);
-
-            return View(Resultados.obtenerLugaresParaOMIPS(o));
-        }
     }
 }
