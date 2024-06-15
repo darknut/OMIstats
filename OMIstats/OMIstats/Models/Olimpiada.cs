@@ -702,7 +702,7 @@ namespace OMIstats.Models
         /// para la edición manual para admins
         /// </summary>
         /// <returns>La tabla tabulada con comas</returns>
-        public string obtenerTablaAsistentes(bool esParaRegistro = false, bool incluirCabeceras = false, bool esParaOmegaUp = false)
+        public string obtenerTablaAsistentes(bool esParaRegistro = false, bool incluirCabeceras = false, bool esParaOmegaUp = false, bool esParaPES = false)
         {
             List<MiembroDelegacion> asistentes = MiembroDelegacion.cargarAsistentesOMI(numero, tipoOlimpiada, esParaRegistro: true);
 
@@ -711,12 +711,14 @@ namespace OMIstats.Models
             if (incluirCabeceras)
             {
                 // Incluimos cabeceras de datos
-                tabla.Append("nivel omi, nombreCompleto, estado, tipo asistente, clave, fecha nacimiento, ");
+                tabla.Append("categoria, nombreCompleto, estado, tipo asistente, clave, fecha nacimiento, ");
                 tabla.Append(" genero, correo, escuela, nivel escuela, año escolar, publica o privada, camiseta, solo diploma, notas, ");
                 tabla.Append(" celular, telefono, direccion, omegaup, emergencia, parentesco, ");
                 tabla.Append(" telefono emergencia, medicina, alergias, nombrePropio, apellidoPaterno, apellidoMaterno ");
                 if (this.esOnline)
                     tabla.Append(", sede");
+                if (esParaPES)
+                    tabla.Append(", codeforces, lugar, puntos, medalla");
                 tabla.Append("\n");
             }
             if (esParaOmegaUp)
@@ -745,7 +747,7 @@ namespace OMIstats.Models
                         tabla.Append(",");
                         tabla.Append(p.genero == "M" ? "male" : "female");
                         tabla.Append(",");
-                        tabla.Append(asistente.nombreEscuela);
+                        //tabla.Append(asistente.nombreEscuela); // Hay un bug en OmegaUp que se muere si le pongo escuela
                         tabla.Append("\n");
                     }
                 }
@@ -754,6 +756,16 @@ namespace OMIstats.Models
             {
                 foreach (MiembroDelegacion asistente in asistentes)
                 {
+                    Resultados r = null;
+                    if (esParaPES)
+                    {
+                        r = Resultados.cargarResultados(numero, tipoOlimpiada, asistente.clave);
+                        if (!(r.medalla == Resultados.TipoMedalla.ORO || r.medalla == Resultados.TipoMedalla.ORO_1 ||
+                            r.medalla == Resultados.TipoMedalla.ORO_2 || r.medalla == Resultados.TipoMedalla.ORO_3 ||
+                            (this.tipoOlimpiada == TipoOlimpiada.OMI && (r.medalla == Resultados.TipoMedalla.PLATA ||
+                            r.medalla == Resultados.TipoMedalla.BRONCE))))
+                            continue;
+                    }
                     if (esParaRegistro)
                     {
                         tabla.Append(tipoOlimpiada);
@@ -770,6 +782,23 @@ namespace OMIstats.Models
                             SedeOnline so = SedeOnline.obtenerSedeConClave(asistente.sede);
                             if (so != null)
                                 tabla.Append(Cadenas.comillas(so.nombre, "\""));
+                        }
+                        if (esParaPES)
+                        {
+                            tabla.Append(",");
+                            tabla.Append(p.codeforces);
+                            tabla.Append(",");
+                            tabla.Append(r.lugar);
+                            tabla.Append(",");
+                            tabla.Append(r.total);
+                            tabla.Append(",");
+                            if (r.medalla == Resultados.TipoMedalla.ORO_1 ||
+                                r.medalla == Resultados.TipoMedalla.ORO_2 ||
+                                r.medalla == Resultados.TipoMedalla.ORO_3)
+                                tabla.Append("ORO");
+                            else
+                                tabla.Append(r.medalla.ToString());
+
                         }
                     }
                     tabla.Append("\n");

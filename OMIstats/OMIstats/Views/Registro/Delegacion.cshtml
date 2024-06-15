@@ -217,6 +217,12 @@ else
             <br />
             @Html.ActionLink("CSV para OmegaUp: OMIPS", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIS, paraOmegaUp = true }, new { })
             }
+            @if(hayResultados)
+            {
+                <br />
+                @Html.ActionLink("CSV para PES", "GetCSV", "Registro", new { omi = omi.numero,  tipo = OMIstats.Models.TipoOlimpiada.OMI, esParaPES = true }, new { })
+                <br />
+            }
             </td>
         }
         @if (usuario.esAdmin() && onsite != true)

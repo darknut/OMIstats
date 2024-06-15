@@ -682,11 +682,15 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/GetCSV/
 
-        public ActionResult GetCSV(string omi, TipoOlimpiada tipo, bool paraOmegaUp = false)
+        public ActionResult GetCSV(string omi, TipoOlimpiada tipo, bool paraOmegaUp = false, bool esParaPES = false)
         {
             Persona p = getUsuario();
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
             if (!p.esSuperUsuario() || o == null)
+                return RedirectTo(Pagina.HOME);
+
+            bool hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
+            if (esParaPES && !hayResultados)
                 return RedirectTo(Pagina.HOME);
 
             StringBuilder texto = new StringBuilder();
@@ -714,16 +718,16 @@ namespace OMIstats.Controllers
             }
             else
             {
-                texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true, incluirCabeceras: true));
+                texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true, incluirCabeceras: true, esParaPES: esParaPES));
                 o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIP);
                 if (o != null)
                 {
-                    texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true));
+                    texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true, esParaPES: esParaPES));
                 }
                 o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMIS);
                 if (o != null)
                 {
-                    texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true));
+                    texto.Append(o.obtenerTablaAsistentes(esParaRegistro: true, esParaPES: esParaPES));
                 }
             }
 
