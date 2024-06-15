@@ -127,15 +127,24 @@ $(function () {
     {
         foreach (OMIstats.Models.TipoOlimpiada tipo in Enum.GetValues(typeof(OMIstats.Models.TipoOlimpiada)))
         {
-            if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
-                tipo != OMIstats.Models.TipoOlimpiada.NULL &&
-                tipo != OMIstats.Models.TipoOlimpiada.OMIPO &&
-                tipo != OMIstats.Models.TipoOlimpiada.OMISO &&
-                Model.tipoOlimpiada != tipo &&
-                (tipo != OMIstats.Models.TipoOlimpiada.OMIP || Model.alsoOmip))
+            if (Model.tipoOlimpiada != tipo &&
+                    (tipo != OMIstats.Models.TipoOlimpiada.OMIP || Model.alsoOmip))
             {
-                @Html.ActionLink(tipo.ToString(), "Resultados", "Olimpiada",
-                    new { clave = Model.numero, tipo = tipo.ToString() }, new { @class = "mini-boton" })
+                if (tipo == OMIstats.Models.TipoOlimpiada.OMIS &&
+                    Model.año >= 2024)
+                {
+                    @Html.ActionLink("OMIPS", "Resultados", "Olimpiada",
+                        new { clave = Model.numero, tipo = tipo.ToString() }, new { @class = "mini-boton" })
+                } else {
+                    if (tipo != OMIstats.Models.TipoOlimpiada.IOI &&
+                        tipo != OMIstats.Models.TipoOlimpiada.NULL &&
+                        tipo != OMIstats.Models.TipoOlimpiada.OMIPO &&
+                        tipo != OMIstats.Models.TipoOlimpiada.OMISO)
+                    {
+                        @Html.ActionLink(tipo.ToString(), "Resultados", "Olimpiada",
+                            new { clave = Model.numero, tipo = tipo.ToString() }, new { @class = "mini-boton" })
+                    }
+                }
             }
         }
         <br />
