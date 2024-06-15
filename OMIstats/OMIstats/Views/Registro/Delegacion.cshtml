@@ -208,19 +208,14 @@ else
             @Html.ActionLink("CSV con todo", "GetCSV", "Registro", new { omi = omi.numero, tipo = omi.tipoOlimpiada }, new { })
             @if (isOMIPOS)
             {
-            <br />
-            @Html.ActionLink("CSV para OmegaUp: OMIP", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIPO, paraOmegaUp = true }, new { })
-            <br />
-            @Html.ActionLink("CSV para OmegaUp: OMIS", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMISO, paraOmegaUp = true }, new { })
+            @Html.ActionLink("CSV para OmegaUp: OMIPS", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMISO, paraOmegaUp = true }, new { })
             }
             else
             {
             <br />
             @Html.ActionLink("CSV para OmegaUp: OMI", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMI, paraOmegaUp = true }, new { })
             <br />
-            @Html.ActionLink("CSV para OmegaUp: OMIP", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIP, paraOmegaUp = true }, new { })
-            <br />
-            @Html.ActionLink("CSV para OmegaUp: OMIS", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIS, paraOmegaUp = true }, new { })
+            @Html.ActionLink("CSV para OmegaUp: OMIPS", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIS, paraOmegaUp = true }, new { })
             }
             </td>
         }
