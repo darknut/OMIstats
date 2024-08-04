@@ -138,6 +138,11 @@ if (GUID.Length > 0)
         {
             <a href='@Url.Content("https://www.topcoder.com/members/" + @Model.topcoder)' target="_blank"><img style="margin-bottom:3px" src="~/img/topcoder.png" alt="topcoder" title="Top coder"/></a>
         }
+
+        @if (Model.linkedin.Length > 0)
+        {
+            <a href='@Url.Content("https://www.linkedin.com/in/" + @Model.linkedin)' target="_blank"><img style="height:18px;" src="~/img/linkedin.png" alt="LinkedIn" title="LinkedIn"/></a>
+        }
     </div>
 
 </div>

@@ -78,6 +78,10 @@ namespace OMIstats.Models
         [MaxLength(50, ErrorMessage = "El tamaño máximo es de 50 caracteres")]
         public string topcoder { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z0-9\.]+$", ErrorMessage = "Escribe un nombre de usuario válido")]
+        [MaxLength(100, ErrorMessage = "El tamaño máximo es de 100 caracteres")]
+        public string linkedin { get; set; }
+
         [RegularExpression(@"^[0-9\.]+$", ErrorMessage = "Escribe un teléfono válido, no incluyas guiones, espacios o paréntesis")]
         [MaxLength(12, ErrorMessage = "El tamaño máximo es de 12 caracteres, no incluyas guiones, espacios o paréntesis")]
         public string celular { get; set; }
@@ -151,6 +155,7 @@ namespace OMIstats.Models
             omegaup = "";
             codeforces = "";
             topcoder = "";
+            linkedin = "";
             celular = "";
             telefono = "";
             direccion = "";
@@ -192,6 +197,7 @@ namespace OMIstats.Models
                 ioiID = DataRowParser.ToInt(datos["ioiID"]);
                 omegaup = DataRowParser.ToString(datos["omegaup"]);
                 topcoder = DataRowParser.ToString(datos["topcoder"]);
+                linkedin = DataRowParser.ToString(datos["linkedin"]);
                 codeforces = DataRowParser.ToString(datos["codeforces"]);
 
                 if (incluirDatosPrivados)
@@ -416,6 +422,10 @@ namespace OMIstats.Models
                 query.Append(Cadenas.comillas(topcoder));
                 query.Append(",");
 
+                query.Append(" linkedin = ");
+                query.Append(Cadenas.comillas(linkedin));
+                query.Append(",");
+
                 query.Append(" ioiID = ");
                 query.Append(ioiID);
                 query.Append(",");
@@ -536,9 +546,9 @@ namespace OMIstats.Models
             query.Append(" declare @inserted table(clave int); ");
             query.Append(" insert into persona (nombre, facebook, twitter, sitio, usuario, permisos, codeforces,");
             query.Append(" topcoder, ioiID, celular, telefono, direccion, emergencia, parentesco, telemergencia,");
-            query.Append(" medicina, alergias, omips, oculta) output inserted.clave into @inserted values( ");
+            query.Append(" medicina, alergias, omips, oculta, linkedin) output inserted.clave into @inserted values( ");
             query.Append(Cadenas.comillas(nombre));
-            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', '', 0, 0); select clave from @inserted ");
+            query.Append(" ,'', '', '', '', 0, '', '', 0, '', '', '', '', '', '', '', '', 0, 0,''); select clave from @inserted ");
 
             if (db.EjecutarQuery(query.ToString()).error)
                 return false;

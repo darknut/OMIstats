@@ -140,6 +140,14 @@
                 </div>
             </div>
 
+            <div>
+                <div class="label">LinkedIn:</div>
+                <div class="input">
+                    https://www.linkedin.com/in/@Html.TextBoxFor(model => model.linkedin, new { @class = "inputLinkedIn" })
+                    @Html.ValidationMessageFor(model => model.linkedin)
+                </div>
+            </div>
+
             @if (ViewBag.usuario.esAdmin())
             {
                 <div>
