@@ -1,0 +1,147 @@
+﻿@model OMIstats.Models.Olimpiada
+
+@section AddToHead
+{
+    <link href="~/Content/olimpiadas.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/profile.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/estados.css" type="text/css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script>
+        @("removeBanners();")
+    </script>
+}
+
+@{
+    OMIstats.Utilities.TableManager tableManager = new OMIstats.Utilities.TableManager();
+    List<OMIstats.Models.Estado> estadosEnOlimpiada = ViewBag.estadosEnOlimpiada;
+    tableManager.setCurrentOMI(Model);
+    OMIstats.Models.Estado estado = ViewBag.estado;
+    ViewBag.Title = estado.nombre;
+    int index = 0;
+}
+
+
+<div class="submenu" style="margin-right:100px;">
+    @{for (index = 0; index < estadosEnOlimpiada.Count; index++)
+      {
+          if (estadosEnOlimpiada[index].clave == estado.clave){
+            break;
+          }
+      }
+      index++;
+
+      if (index < estadosEnOlimpiada.Count)
+      {
+        @Html.ActionLink("Siguiente", "Presentacion", "Olimpiada",
+            new { clave=Model.numero, estado=estadosEnOlimpiada[index].clave }, new { @class = "mini-boton", @style = "font-size:20px !important" })
+      }
+    }
+</div>
+
+@{
+    Dictionary<OMIstats.Models.TipoOlimpiada, List<OMIstats.Models.MiembroDelegacion>> delegaciones = ViewBag.delegaciones;
+    OMIstats.Models.TipoOlimpiada tipoOlimpiada = ViewBag.tipo;
+    tableManager.setCurrentOMI(Model);
+}
+
+<div>
+    <div class="logoEstadoFloat" >
+        <img src="@Url.Content("~/img/estados/" + estado.clave + ".png")"/>
+    </div>
+
+    <div class="datosEstado tituloEstado">
+        <div>
+            <h2 class="titulo">
+                @Html.ActionLink((string) estado.nombre, "Index", "Estado",
+                    new { clave = estado.clave, tipo = tipoOlimpiada }, new { @class = "link" })
+            </h2>
+        </div>
+    </div>
+</div>
+
+<div class="clear"></div>
+
+<br />
+<br />
+
+<div style="display:flex;flex-direction:row;">
+
+@foreach(OMIstats.Models.TipoOlimpiada tipo in delegaciones.Keys)
+{
+    List<OMIstats.Models.MiembroDelegacion> delegacion = delegaciones[tipo];
+    if (tipo != OMIstats.Models.TipoOlimpiada.OMIS && tipo != OMIstats.Models.TipoOlimpiada.OMI)
+    {
+        continue;
+    }
+    if (delegacion.Count == 0)
+    {
+        continue;
+    }
+    bool omips = false;
+    string titulo = "Competidores";
+    if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
+    {
+        titulo = "OMIPS";
+        omips = true;
+    }
+    <div>
+        <div class="subtitulo">@(titulo)</div>
+
+        <div style="width:@(omips ? "600px":"1200px")">
+
+        @foreach (OMIstats.Models.MiembroDelegacion md in delegacion)
+        {
+            <div class="miembroDelegacion">
+                <div class="foto fotoFixedHeight">
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                </div>
+                <div class="datosMiembro">
+                    <div class="noOverflow">
+                    @if(tipo == OMIstats.Models.TipoOlimpiada.OMI && md.omips)
+                    {
+                        <img src="~/img/karel.png" title="Participó en OMIPS en años anteriores" class="karel-png-medium"/>
+                    }
+                    <a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a>
+                    </div>
+                    <div class="claveMiembro">
+                        @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
+                            @md.clave
+                        }
+                    </div>
+                    <div class="participaciones">
+                        @OMIstats.Utilities.TableManager.participaciones(md, tipo)
+                    </div>
+                </div>
+            </div>
+        }
+        </div>
+
+        @if (ViewBag.lideres.Count > 0 && !omips)
+        {
+            <div class="subtitulo">Líderes</div>
+
+            <div class="tablaDelegacion">
+
+                @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.lideres)
+                {
+                    <div class="miembroDelegacion">
+                        <div class="foto fotoFixedHeight">
+                            <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                        </div>
+                        <div class="datosMiembro">
+                            <div class="noOverflow"><a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipoOlimpiada)" title="@md.nombreAsistente">@md.nombreAsistente</a></div>
+                            <div class="claveMiembro">
+                                @md.getTipoAsistenteString()
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+</div>
+

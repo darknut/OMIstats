@@ -479,6 +479,44 @@ namespace OMIstats.Controllers
         }
 
         //
+        // GET: /Olimpiada/Presentacion/
+
+        public ActionResult Presentacion(string clave, string estado, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        {
+            if (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMIP)
+                tipo = TipoOlimpiada.OMI;
+
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
+
+            if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            Estado e = Estado.obtenerEstadoConClave(estado);
+
+            if (e == null)
+                return RedirectTo(Pagina.ERROR, 404);
+
+            Dictionary<TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<TipoOlimpiada, List<MiembroDelegacion>>();
+            delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+            if (tipo == TipoOlimpiada.OMI)
+            {
+                if (o.alsoOmips)
+                    delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+                if (o.alsoOmip)
+                    delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+            }
+
+            ViewBag.estado = e;
+            ViewBag.delegaciones = delegaciones;
+            ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.LIDER);
+            ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.INVITADO);
+            ViewBag.tipo = tipo;
+            ViewBag.estadosEnOlimpiada = MiembroDelegacion.obtenerEstadosEnOlimpiada(o.numero);
+
+            return View(o);
+        }
+
+        //
         // GET: /Olimpiada/Estados/
 
         public ActionResult Estados(string clave = null, TipoOlimpiada tipo = TipoOlimpiada.OMI)

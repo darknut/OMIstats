@@ -449,6 +449,7 @@
     <Content Include="Views\Reto\Edit.cshtml" />
     <Content Include="Views\Reto\Index.cshtml" />
     <Content Include="Views\Reto\Lista.cshtml" />
+    <Content Include="Views\Olimpiada\Presentacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
