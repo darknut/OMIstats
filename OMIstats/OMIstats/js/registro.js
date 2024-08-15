@@ -69,13 +69,18 @@ function borrarOpciones(combo) {
     }
 }
 
-function llenaClaves(subfijo) {
+function llenaClaves(subfijo, startIndex) {
     var combo = document.getElementById("claveSelect");
     borrarOpciones(combo);
 
+    if (!startIndex)
+        startIndex = 1;
+
     var isOMIPOS = tipoRegistro == "OMISO" || tipoRegistro == "OMIPO";
     var lim = isOMIPOS ? 25 : estadoSede == subfijo ? 8 : 4 + invitados;
-    for (i = 1; i <= lim; i++) {
+    if (lim < startIndex)
+        lim += startIndex - 1;
+    for (i = startIndex; i <= lim; i++) {
         var padd = "";
         if (isOMIPOS && i < 10)
             padd = "0";
@@ -218,7 +223,7 @@ function eliminarSede(clave, nombre) {
                "¿Eliminar sede " + nombre + "?");
 }
 
-function iniciaRegistro(tipo, clave) {
+function iniciaRegistro(tipo, clave, subtipo, soloDiploma) {
     var address = "Asistente?omi=" + omi;
     if (tipo)
         address += "&tipo=" + tipo;
@@ -226,6 +231,10 @@ function iniciaRegistro(tipo, clave) {
         address += "&estado=" + estado;
     if (clave)
         address += "&clave=" + clave;
+    if (subtipo && subtipo == "DELEB")
+        address += "&subtipo=DELEB";
+    if (soloDiploma)
+        address += "&soloDiploma=true";
     redirige(ajaxUrl, address);
 }
 
@@ -284,6 +293,13 @@ function cambiaClavesCbo() {
             span.style.opacity = "1";
             combo.disabled = false;
             llenaClaves(estados[estado]);
+        }
+        preparaAjaxEscuela();
+    } else if (tipo === "DELEB" && estado) {
+        if (!hayResultados) {
+            span.style.opacity = "1";
+            combo.disabled = false;
+            llenaClaves(estados[estado], 5);
         }
         preparaAjaxEscuela();
     } else {

@@ -127,6 +127,10 @@
 
                 @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.lideres)
                 {
+                    if (md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB)
+                    {
+                        continue;
+                    }
                     <div class="miembroDelegacion">
                         <div class="foto fotoFixedHeight">
                             <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>

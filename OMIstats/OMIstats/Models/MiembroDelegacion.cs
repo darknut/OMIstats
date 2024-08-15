@@ -24,11 +24,9 @@ namespace OMIstats.Models
             INVITADO,
             ACOMPAÑANTE,
             SUBLIDER,
-            SUPERVISOR
+            SUPERVISOR,
+            DELEB,
         }
-
-        public const string DELELIDER = "DELEGADO Y LIDER";
-        public const string COLO = "COMITÉ LOCAL";
 
         public enum TipoError
         {
@@ -141,15 +139,35 @@ namespace OMIstats.Models
 
         public string getTipoAsistenteString()
         {
-            return getTipoAsistenteString(tipo);
+            return getTipoAsistenteString(tipo, genero);
         }
 
-        public static string getTipoAsistenteString(TipoAsistente tipo)
+        public static string getTipoAsistenteString(TipoAsistente tipo, string genero = "")
         {
+            if (genero == "F")
+            {
+                switch (tipo)
+                {
+                    case TipoAsistente.DELELIDER:
+                        return "DELEGADA Y LÍDER";
+                    case TipoAsistente.ASESOR:
+                        return "ASESORA";
+                    case TipoAsistente.COMPETIDOR:
+                        return "COMPETIDORA";
+                    case TipoAsistente.DELEGADO:
+                        return "DELEGADA";
+                    case TipoAsistente.INVITADO:
+                        return "INVITADA";
+                    case TipoAsistente.SUPERVISOR:
+                        return "SUPERVISORA";
+                }
+            }
             if (tipo == TipoAsistente.DELELIDER)
-                return DELELIDER;
+                return "DELEGADO Y LÍDER";
             if (tipo == TipoAsistente.COLO)
-                return COLO;
+                return "COMITÉ LOCAL";
+            if (tipo == TipoAsistente.DELEB)
+                return "DELEGACIÓN B";
             return tipo.ToString();
         }
 
@@ -1028,6 +1046,13 @@ namespace OMIstats.Models
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(olimpiada));
             query.Append(" and (oculta = 0 or omips = 1)");
+            if (tipo == TipoAsistente.DELEB)
+            {
+                query.Append(" and md.clase = ");
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+                query.Append(" and md.tipo = ");
+                query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
+            }
             if (tipo == TipoAsistente.COMPETIDOR)
             {
                 query.Append(" and md.clase = ");
@@ -1427,12 +1452,13 @@ namespace OMIstats.Models
             var miembros = MiembroDelegacion.obtenerMiembrosConClave(omi, tipo, prefijo, aproximarClave: true, tipoAsistente: tipoAsistente)
                 .Select((miembro) => miembro.clave);
 
-            if (tipoAsistente == TipoAsistente.COMPETIDOR)
+            if (tipoAsistente == TipoAsistente.COMPETIDOR || tipoAsistente == TipoAsistente.DELEB)
             {
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo);
                 int maxUsers = o.getMaxParticipantesDeEstado(estado);
                 bool isOMIPOS = TableManager.isOMIPOS(tipo);
-                for (int i = 1; i <= maxUsers; i++)
+                int delta = tipoAsistente == TipoAsistente.DELEB ? 4 : 0;
+                for (int i = 1 + delta; i <= maxUsers + delta; i++)
                 {
                     var padd = "";
                     if (isOMIPOS && i < 10)

@@ -218,7 +218,7 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/Asistente
 
-        public ActionResult Asistente(string omi, TipoOlimpiada tipo = TipoOlimpiada.NULL, string estado = null, string clave = null)
+        public ActionResult Asistente(string omi, TipoOlimpiada tipo = TipoOlimpiada.NULL, string estado = null, string clave = null, bool soloDiploma = false, MiembroDelegacion.TipoAsistente subtipo = MiembroDelegacion.TipoAsistente.COMPETIDOR)
         {
             Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, tipo == TipoOlimpiada.NULL ? TipoOlimpiada.OMI : tipo);
             Persona p = getUsuario();
@@ -226,6 +226,8 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.HOME);
             failSafeViewBag();
             ViewBag.omi = o;
+            ViewBag.soloDiploma = soloDiploma;
+            ViewBag.subtipo = subtipo;
             bool onsite = setOnSite();
             if (!tienePermisos(o.registroActivo || o.registroSedes, estado))
             {
@@ -238,7 +240,7 @@ namespace OMIstats.Controllers
                 if (estado == null ||
                     (String.IsNullOrEmpty(clave) &&
                      tipo != TipoOlimpiada.NULL &&
-                     !puedeRegistrarOtroMas(o, tipo, estado)))
+                     !puedeRegistrarOtroMas(o, tipo, estado, subtipo)))
                 {
                     ViewBag.errorInfo = "limite";
                     return View(new Persona());
@@ -251,7 +253,7 @@ namespace OMIstats.Controllers
             if (clave == null)
             {
                 if (!p.esSuperUsuario() && tipo != TipoOlimpiada.NULL)
-                    ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado);
+                    ViewBag.claveDisponible = MiembroDelegacion.obtenerPrimerClaveDisponible(omi, tipo, estado, subtipo);
                 ViewBag.tipoAsistente = MiembroDelegacion.TipoAsistente.NULL;
             }
             else
@@ -289,6 +291,8 @@ namespace OMIstats.Controllers
             limpiarErroresViewBag();
             ViewBag.resubmit = false;
             ViewBag.guardado = false;
+            ViewBag.soloDiploma = soloDiploma;
+            ViewBag.subtipo = subtipo;
             ViewBag.hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
             if (o.esOnline && !p.esSuperUsuario())
             {
@@ -301,7 +305,7 @@ namespace OMIstats.Controllers
             p.breakNombre();
 
             List<Ajax.BuscarEscuelas> escuelas = null;
-            if (md != null && md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            if (md != null && (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR || md.tipo == MiembroDelegacion.TipoAsistente.DELEB))
             {
                 escuelas = Institucion.obtenerEscuelasDeEstado(md.tipoOlimpiada, md.estado);
             }
@@ -346,8 +350,8 @@ namespace OMIstats.Controllers
             // Se valida que haya espacio para registrar otro competidor
             if (!esAdmin() &&
                  !modifyMode &&
-                 tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR &&
-                 !puedeRegistrarOtroMas(o, tipo, estado))
+                 (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR || tipoAsistente == MiembroDelegacion.TipoAsistente.DELEB) &&
+                 !puedeRegistrarOtroMas(o, tipo, estado, tipoAsistente))
             {
                 ViewBag.errorInfo = "limite";
                 return View(new Persona());
@@ -382,7 +386,7 @@ namespace OMIstats.Controllers
 
             // Se valida que la clave que se eligió sea valida para el estado
             Estado e = Estado.obtenerEstadoConClave(estado);
-            if (claveSelect != null && tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR && !claveSelect.StartsWith(e.ISO))
+            if (claveSelect != null && (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR || tipoAsistente == MiembroDelegacion.TipoAsistente.DELEB) && !claveSelect.StartsWith(e.ISO))
                 claveSelect = "";
             if (persona != 0)
                 p.clave = persona;
@@ -395,6 +399,8 @@ namespace OMIstats.Controllers
             ViewBag.tipo = tipo;
             ViewBag.estados = Estado.obtenerEstados();
             ViewBag.tipoAsistente = tipoAsistente;
+            ViewBag.subtipo = MiembroDelegacion.TipoAsistente.NULL;
+            ViewBag.soloDiploma = soloDiploma;
             limpiarErroresViewBag();
             ViewBag.resubmit = true;
             bool hayResultados = Resultados.hayResultadosParaOMI(o.numero, o.tipoOlimpiada);
@@ -403,7 +409,7 @@ namespace OMIstats.Controllers
             {
                 ViewBag.sedes = SedeOnline.obtenerSedes(o.numero, estado, tipo);
             }
-            if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR || tipoAsistente == MiembroDelegacion.TipoAsistente.DELEB)
             {
                 ViewBag.escuelas = Institucion.obtenerEscuelasDeEstado(tipo, estado);
                 ViewBag.claveEscuela = selectEscuela;
@@ -597,7 +603,7 @@ namespace OMIstats.Controllers
             }
 
             // Ahora se guarda la escuela
-            if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR || tipoAsistente == MiembroDelegacion.TipoAsistente.DELEB)
             {
                 // La escuela ya se consultó en la sección de viewbag, si es null, se llenó la sección de escuela nueva
                 if (i == null)
@@ -672,10 +678,10 @@ namespace OMIstats.Controllers
             return "";
         }
 
-        private bool puedeRegistrarOtroMas(Olimpiada o, TipoOlimpiada tipo, string estado)
+        private bool puedeRegistrarOtroMas(Olimpiada o, TipoOlimpiada tipo, string estado, MiembroDelegacion.TipoAsistente tipoAsistente)
         {
             int maxUsuarios = o.getMaxParticipantesDeEstado(estado);
-            List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosDelegacion(o.numero, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR);
+            List<MiembroDelegacion> mds = MiembroDelegacion.obtenerMiembrosDelegacion(o.numero, estado, tipo, tipoAsistente);
             return (mds.Count < maxUsuarios);
         }
 

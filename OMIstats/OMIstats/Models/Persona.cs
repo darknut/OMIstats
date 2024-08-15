@@ -184,6 +184,7 @@ namespace OMIstats.Models
             omips = DataRowParser.ToBool(datos["omips"]);
             oculta = DataRowParser.ToBool(datos["oculta"]);
             foto = DataRowParser.ToString(datos["foto"]);
+            genero = DataRowParser.ToString(datos["genero"]);
 
             if (completo)
             {
@@ -193,7 +194,6 @@ namespace OMIstats.Models
                 sitio = DataRowParser.ToString(datos["sitio"]);
                 correo = DataRowParser.ToString(datos["correo"]);
                 permisos = DataRowParser.ToTipoPermisos(datos["permisos"]);
-                genero = DataRowParser.ToString(datos["genero"]);
                 ioiID = DataRowParser.ToInt(datos["ioiID"]);
                 omegaup = DataRowParser.ToString(datos["omegaup"]);
                 topcoder = DataRowParser.ToString(datos["topcoder"]);
@@ -742,7 +742,7 @@ namespace OMIstats.Models
                 }
                 else
                 {
-                    string t = MiembroDelegacion.getTipoAsistenteString(tipo);
+                    string t = MiembroDelegacion.getTipoAsistenteString(tipo, genero);
                     if (!tipos.Contains(t))
                         tipos.Add(t);
                 }

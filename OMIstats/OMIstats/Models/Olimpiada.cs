@@ -726,7 +726,7 @@ namespace OMIstats.Models
                 tabla.Append("username,name,country_id,state_id,gender,school_name\n");
                 foreach (MiembroDelegacion asistente in asistentes)
                 {
-                    if (asistente.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                    if (asistente.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR || asistente.tipo == MiembroDelegacion.TipoAsistente.DELEB)
                     {
                         Persona p = Persona.obtenerPersonaConClave(asistente.claveUsuario, completo: true, incluirDatosPrivados: true);
                         Estado e = Estado.obtenerEstadoConClave(asistente.estado);

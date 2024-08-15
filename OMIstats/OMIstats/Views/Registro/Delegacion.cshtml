@@ -14,40 +14,59 @@
     bool invitaciones = ViewBag.invitaciones;
     string[] subTitulos;
     OMIstats.Models.TipoOlimpiada[] tipos;
+    OMIstats.Models.MiembroDelegacion.TipoAsistente[] subTipos;
     bool isOMIPOS = OMIstats.Utilities.TableManager.isOMIPOS(omi.tipoOlimpiada);
     bool? onsite = ViewBag.onsite;
     bool modoComi = usuario.esSuperUsuario() && onsite != true;
     bool llegamosASoloDiploma = false;
     List<OMIstats.Models.TipoOlimpiada> listaTipos = new List<OMIstats.Models.TipoOlimpiada>();
     List<string> listaSubtitulos = new List<string>();
+    List<OMIstats.Models.MiembroDelegacion.TipoAsistente> listaSubTipos = new List<OMIstats.Models.MiembroDelegacion.TipoAsistente>();
     if (isOMIPOS)
     {
         if (omi.alsoOmipOnline)
         {
             listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMIPO);
             listaSubtitulos.Add("Competidores de categoría Primaria");
+            listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
         }
         listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMISO);
         listaSubtitulos.Add("Competidores de categoría " + (omi.alsoOmipOnline ? "Secundaria" : "OMIPS"));
+        listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
     }
     else
     {
         listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMI);
         listaSubtitulos.Add("Competidores de categoría OMI");
+        listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
         if (omi.alsoOmip)
         {
             listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMIP);
             listaSubtitulos.Add("Competidores de categoría Primaria");
+            listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
         }
         listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMIS);
         listaSubtitulos.Add("Competidores de categoría " + (omi.alsoOmip ? "Secundaria" : "OMIPS"));
+        listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR);
+        if (omi.esOnline)
+        {
+            listaTipos.Add(OMIstats.Models.TipoOlimpiada.OMI);
+            listaSubtitulos.Add("Delegación B");
+            listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB);
+        }
         listaTipos.Add(OMIstats.Models.TipoOlimpiada.NULL);
         listaSubtitulos.Add("Líderes, asesores e invitados");
-        listaTipos.Add(OMIstats.Models.TipoOlimpiada.NULL);
-        listaSubtitulos.Add("No asistentes con diploma");
+        listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.INVITADO);
+        if (!omi.esOnline)
+        {
+            listaTipos.Add(OMIstats.Models.TipoOlimpiada.NULL);
+            listaSubtitulos.Add("No asistentes con diploma");
+            listaSubTipos.Add(OMIstats.Models.MiembroDelegacion.TipoAsistente.INVITADO);
+        }
     }
     tipos = listaTipos.ToArray();
     subTitulos = listaSubtitulos.ToArray();
+    subTipos = listaSubTipos.ToArray();
     if (errorPermisos)
     {
         ViewBag.Title = "Error";
@@ -60,7 +79,7 @@
     {
         ViewBag.Title = "Registro de delegación: " + estado.nombre;
     }
-}
+    }
 
 @section AddToHead
 {
@@ -71,7 +90,7 @@
 {
     <script src="~/js/registro.js"></script>
     <script>
-        @if(onsite == true)
+        @if (onsite == true)
         {
         @("removeBanners();")
         }
@@ -105,7 +124,13 @@ else
     {
         registroTerminado |= miembro.cerrado;
         bool classeLinea = false;
-        if (modoComi || (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) || ((tipos[i] == OMIstats.Models.TipoOlimpiada.NULL && miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR) && miembro.soloDiploma == llegamosASoloDiploma))
+        if (modoComi ||
+           (miembro.tipoOlimpiada == tipos[i] && miembro.tipo == subTipos[i]) ||
+           ((tipos[i] == OMIstats.Models.TipoOlimpiada.NULL) && 
+                    miembro.soloDiploma == llegamosASoloDiploma &&
+                    miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR &&
+                    miembro.tipo != OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB)
+           )
         {
             if (!modoComi && (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMI || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COLO))
             {
@@ -160,16 +185,20 @@ else
             {
                 @(miembro.tipoOlimpiada)
             }
+            @if (miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB)
+            {
+                @("DEL. B")
+            }
         </td>
         }
         <td class="lineas-registro clave-registro @(classeLinea ? "celda-estado" : "")">
-            @if ((usuario.esAdmin() && onsite != true) || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR)
+            @if ((usuario.esAdmin() && onsite != true) || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.COMPETIDOR || miembro.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB)
             {
-            @miembro.clave
+                @miembro.clave
             }
             else
             {
-            @miembro.tipo
+                @miembro.tipo
             }
         </td>
         <td class="@(classeLinea ? "celda-estado" : "")">
@@ -189,10 +218,6 @@ else
     </tr>
         }
     }
-    if (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL)
-    {
-        llegamosASoloDiploma = true;
-    }
     if (competidoresProcesados == 0)
     {
     <tr><td class="lineas-registro no-registrados" colspan="2">No se ha registrado a nadie</td></tr>
@@ -200,7 +225,7 @@ else
     if (modoComi || (omi.registroActivo && !registroTerminado && (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL || competidoresProcesados < omi.getMaxParticipantesDeEstado(estado.clave))))
     {
     <tr><td>
-        <a onclick="iniciaRegistro('@tipos[i]')" class="a-sin-href">Registrar</a>
+        <a onclick="iniciaRegistro('@tipos[i]', null, '@subTipos[i]', @(llegamosASoloDiploma ? "true" : "false"))" class="a-sin-href">Registrar</a>
     </td>
         @if (modoComi)
         {
@@ -217,10 +242,10 @@ else
             <br />
             @Html.ActionLink("CSV para OmegaUp: OMIPS", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMIS, paraOmegaUp = true }, new { })
             }
-            @if(hayResultados)
+            @if (hayResultados)
             {
                 <br />
-                @Html.ActionLink("CSV para PES", "GetCSV", "Registro", new { omi = omi.numero,  tipo = OMIstats.Models.TipoOlimpiada.OMI, esParaPES = true }, new { })
+                @Html.ActionLink("CSV para PES", "GetCSV", "Registro", new { omi = omi.numero, tipo = OMIstats.Models.TipoOlimpiada.OMI, esParaPES = true }, new { })
                 <br />
             }
             </td>
@@ -234,6 +259,10 @@ else
             </td>
         }
     </tr>
+    }
+    if (tipos[i] == OMIstats.Models.TipoOlimpiada.NULL)
+    {
+        llegamosASoloDiploma = true;
     }
     if (modoComi)
     {
