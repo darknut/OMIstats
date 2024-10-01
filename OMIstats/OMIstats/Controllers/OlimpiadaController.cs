@@ -481,12 +481,9 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiada/Presentacion/
 
-        public ActionResult Presentacion(string clave, string estado, TipoOlimpiada tipo = TipoOlimpiada.OMI)
+        public ActionResult Presentacion(string clave, string estado)
         {
-            if (tipo == TipoOlimpiada.OMIS || tipo == TipoOlimpiada.OMIP)
-                tipo = TipoOlimpiada.OMI;
-
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, tipo);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(clave, TipoOlimpiada.OMI);
 
             if (o == null || o.numero == Olimpiada.TEMP_CLAVE)
                 return RedirectTo(Pagina.ERROR, 404);
@@ -497,20 +494,13 @@ namespace OMIstats.Controllers
                 return RedirectTo(Pagina.ERROR, 404);
 
             Dictionary<TipoOlimpiada, List<MiembroDelegacion>> delegaciones = new Dictionary<TipoOlimpiada, List<MiembroDelegacion>>();
-            delegaciones.Add(tipo, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
-            if (tipo == TipoOlimpiada.OMI)
-            {
-                if (o.alsoOmips)
-                    delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
-                if (o.alsoOmip)
-                    delegaciones.Add(TipoOlimpiada.OMIP, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIP, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
-            }
+            delegaciones.Add(TipoOlimpiada.OMI, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
+            delegaciones.Add(TipoOlimpiada.OMIS, MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMIS, MiembroDelegacion.TipoAsistente.COMPETIDOR, listarPorAño: o.año));
 
             ViewBag.estado = e;
             ViewBag.delegaciones = delegaciones;
-            ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.LIDER);
-            ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, tipo, MiembroDelegacion.TipoAsistente.INVITADO);
-            ViewBag.tipo = tipo;
+            ViewBag.lideres = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.LIDER);
+            ViewBag.otros = MiembroDelegacion.obtenerMiembrosDelegacion(clave, estado, TipoOlimpiada.OMI, MiembroDelegacion.TipoAsistente.INVITADO);
             ViewBag.estadosEnOlimpiada = MiembroDelegacion.obtenerEstadosEnOlimpiada(o.numero);
 
             return View(o);

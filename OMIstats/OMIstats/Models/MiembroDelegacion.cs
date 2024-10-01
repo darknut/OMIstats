@@ -1698,6 +1698,13 @@ namespace OMIstats.Models
             query.Append(" inner join Estado as e on md.estado = e.clave ");
             query.Append(" where md.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
+            query.Append(" and (clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMI.ToString().ToLower()));
+            query.Append(" or clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMIS.ToString().ToLower()));
+            query.Append(" or clase = ");
+            query.Append(Cadenas.comillas(TipoOlimpiada.OMIP.ToString().ToLower()));
+            query.Append(" )");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
