@@ -316,6 +316,8 @@
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="img\ajax-loader.gif" />
     <Content Include="img\bronce.png" />
+    <Content Include="img\bronceIOI.png" />
+    <Content Include="img\bronceK.png" />
     <Content Include="img\celdafondo.png" />
     <Content Include="img\celdafondobronce.png" />
     <Content Include="img\celdafondooro.png" />
@@ -345,9 +347,11 @@
     <Content Include="img\omip.png" />
     <Content Include="img\omis.png" />
     <Content Include="img\oro.png" />
+    <Content Include="img\oroK.png" />
     <Content Include="img\pdf.png" />
     <Content Include="img\pdf_large.png" />
     <Content Include="img\plata.png" />
+    <Content Include="img\plataK.png" />
     <Content Include="img\rar.png" />
     <Content Include="img\topcoder.png" />
     <Content Include="img\twitter.png" />

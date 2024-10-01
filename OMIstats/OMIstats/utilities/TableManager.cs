@@ -94,6 +94,31 @@ namespace OMIstats.Utilities
             return obtenerClaseCSS(currentResultados.medalla);
         }
 
+        public static string obtenerClaseCSS(Medalleros medalleros, TipoOlimpiada tipo)
+        {
+            if (tipo == TipoOlimpiada.OMI)
+            {
+                if (medalleros.OMI.oros > 0)
+                    return CLASE_ORO;
+                if (medalleros.OMI.platas > 0)
+                    return CLASE_PLATA;
+                if (medalleros.OMI.bronces > 0)
+                    return CLASE_BRONCE;
+                return String.Empty;
+            }
+            if (tipo == TipoOlimpiada.OMIS)
+            {
+                if (medalleros.OMIS.oros + medalleros.OMIP.oros > 0)
+                    return CLASE_ORO;
+                if (medalleros.OMIS.platas + medalleros.OMIP.platas > 0)
+                    return CLASE_PLATA;
+                if (medalleros.OMIS.bronces + medalleros.OMIP.bronces > 0)
+                    return CLASE_BRONCE;
+                return String.Empty;
+            }
+            return String.Empty;
+        }
+
         public static string obtenerClaseCSS(Resultados.TipoMedalla medalla, bool top3 = false)
         {
             switch (medalla)

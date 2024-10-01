@@ -136,14 +136,14 @@ namespace OMIstats.Models
         /// <param name="tipoMedallero">Si es estado, persona, institucion o asesor</param>
         /// <param name="clave">La clave del estado/persona/institucion/asesor</param>
         /// <returns>Un objeto medalleros con los medalleros deseados</returns>
-        public static Medalleros obtenerMedalleros(TipoMedallero tipoMedallero, string clave)
+        public static Medalleros obtenerMedalleros(TipoMedallero tipoMedallero, string clave, bool nullSiInexistente = true)
         {
             Medalleros m = new Medalleros();
 
-            m.OMI = obtenerMedallas(TipoOlimpiada.OMI, tipoMedallero, clave, true);
-            m.IOI = obtenerMedallas(TipoOlimpiada.IOI, tipoMedallero, clave, true);
-            m.OMIS = obtenerMedallas(TipoOlimpiada.OMIS, tipoMedallero, clave, true);
-            m.OMIP = obtenerMedallas(TipoOlimpiada.OMIP, tipoMedallero, clave, true);
+            m.OMI = obtenerMedallas(TipoOlimpiada.OMI, tipoMedallero, clave, nullSiInexistente);
+            m.IOI = obtenerMedallas(TipoOlimpiada.IOI, tipoMedallero, clave, nullSiInexistente);
+            m.OMIS = obtenerMedallas(TipoOlimpiada.OMIS, tipoMedallero, clave, nullSiInexistente);
+            m.OMIP = obtenerMedallas(TipoOlimpiada.OMIP, tipoMedallero, clave, nullSiInexistente);
 
             return m;
         }
