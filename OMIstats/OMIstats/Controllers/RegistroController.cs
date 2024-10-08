@@ -48,8 +48,11 @@ namespace OMIstats.Controllers
         //
         // GET: /Registro/
 
-        public ActionResult Index()
+        public ActionResult Index(string GUID = null)
         {
+            if (GUID != null)
+                tryLogIn(GUID);
+
             return Select();
         }
 
