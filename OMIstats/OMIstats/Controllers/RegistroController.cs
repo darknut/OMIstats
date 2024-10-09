@@ -502,7 +502,7 @@ namespace OMIstats.Controllers
                     p.omips = per.omips;
                 }
 
-                if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR)
+                if (tipoAsistente == MiembroDelegacion.TipoAsistente.COMPETIDOR || tipoAsistente == MiembroDelegacion.TipoAsistente.DELEB)
                 {
                     if (isOMIPOS)
                     {

@@ -1620,6 +1620,8 @@ namespace OMIstats.Models
             query.Append(" inner join Olimpiada as o on o.numero = md.olimpiada and o.clase = md.clase ");
             query.Append(" where md.persona =  ");
             query.Append(this.claveUsuario);
+            query.Append(" and md.tipo = ");
+            query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
             query.Append(" and o.año <= ");
             query.Append(año);
             if (this.olimpiada == "8b")
