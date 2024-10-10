@@ -15,13 +15,15 @@
 
 <form name="diplomas" id="diplomas" action="~/Olimpiada/Diplomas" method="post" enctype="multipart/form-data">
     <div>
+        <div class="minimensaje">(textos especiales: %MEDALLA%, %medalla%, %estado%, %ESTADO%, %prefijo_estado%,%prefijo_estado_con_estado%, %clase%, %texto_Y%,%TEXTO_Y%)</div>
+
         <div>
             <div class="label">Texto X:
                 <br />
                 <div class="minimensaje">(participación; medalla)</div>
             </div>
             <div class="input">
-                <input type="text" value="por su participación;por obtener" id="textoX" name="textoX" class="inputLarge"/>
+                <input type="text" value="por su valiosa participación representando %prefijo_estado%;%MEDALLA%" id="textoX" name="textoX" class="inputLarge"/>
             </div>
         </div>
 
@@ -63,6 +65,20 @@ Concursante Invitado/Concursante Invitada" id="textoY" name="textoY" class="inpu
                 <li>DELEGACIÓN B</li>
             </ul>
         </div>
+
+        <div>
+            <div class="label">Texto Z:
+                <br />
+                <div class="minimensaje">(texto debajo de participacion;texto debajo de participacion (medalla))</div>
+            </div>
+            <div class="input">
+                <input type="text" value="%ESTADO% como %TEXTO_Y% a;en la categoría %clase% a" id="textoZ" name="textoZ" class="inputLarge"/>
+            </div>
+        </div>
+
+        <br />
+        <input type="checkbox" id="naked" name="naked" value="true"/> Checar para organizar los diplomas por tipo y no por estado
+        <br />
 
         <input type="hidden" value="@omi" id="clave" name="clave" />
 

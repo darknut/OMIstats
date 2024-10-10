@@ -1149,7 +1149,7 @@ namespace OMIstats.Models
             return lista;
         }
 
-        public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes, bool naked = false)
+        public static string generarDiplomas(string omi, string X, string baseURL, string[] stringsAsistentes, string Z, bool naked = false)
         {
             StringBuilder lineas = new StringBuilder();
             StringBuilder query = new StringBuilder();
@@ -1194,8 +1194,6 @@ namespace OMIstats.Models
                 lineas.Append("\\");
                 if (tipo == TipoAsistente.COMPETIDOR)
                 {
-                    if (clase == TipoOlimpiada.OMIP || clase == TipoOlimpiada.OMIPO)
-                        lineas.Append("P-");
                     if (clase == TipoOlimpiada.OMIS || clase == TipoOlimpiada.OMISO)
                         lineas.Append("S-");
                 }
@@ -1205,8 +1203,6 @@ namespace OMIstats.Models
                 lineas.Append(".pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
-                lineas.Append(X);
-                lineas.Append(" como ");
 
                 string asistente = stringsAsistentes[((int)tipo) - 1];
                 if (asistente.Trim().Length == 0)
@@ -1219,13 +1215,11 @@ namespace OMIstats.Models
                     else
                         asistente = generos[1];
                 }
+                lineas.Append(Cadenas.reemplazaValoresDiploma(X, null, e.nombre, e.clave, clase.ToString(), asistente));
 
-                lineas.Append(asistente);
                 lineas.Append(",");
-                if (tipo != TipoAsistente.COMI && tipo != TipoAsistente.COLO)
-                    lineas.Append(TableManager.getPreEstado(e.clave));
-                lineas.Append(",");
-                lineas.Append(e.nombre.ToUpperInvariant());
+                lineas.Append(Cadenas.reemplazaValoresDiploma(Z, null, e.nombre, e.clave, clase.ToString(), asistente));
+
                 lineas.Append(",");
                 lineas.Append(clase.ToString());
                 if (esOMIPOS)

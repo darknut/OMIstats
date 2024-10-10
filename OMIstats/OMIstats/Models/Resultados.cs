@@ -1077,14 +1077,15 @@ namespace OMIstats.Models
             return mejores;
         }
 #if OMISTATS
-        public static string generarDiplomas(string omi, string X, string baseURL, bool isNaked = false)
+        public static string generarDiplomas(string omi, string X, string baseURL, string Z, bool isNaked = false)
         {
             StringBuilder lineas = new StringBuilder();
             StringBuilder query = new StringBuilder();
             Acceso db = new Acceso();
 
-            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, r.clave,r.clase, r.medalla, r.estado from Resultados as r ");
+            query.Append(" select p.clave as persona, p.nombre, p.apellidoP, p.apellidoM, r.clave,r.clase, r.medalla, r.estado, md.tipo from Resultados as r ");
             query.Append(" inner join Persona as p on p.clave = r.concursante ");
+            query.Append(" inner join MiembroDelegacion as md on md.clave = r.clave and md.olimpiada = r.olimpiada and r.clase = md.clase ");
             query.Append(" where r.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
             query.Append(" and medalla < 7 ");
@@ -1102,6 +1103,7 @@ namespace OMIstats.Models
                 string estado = DataRowParser.ToString(r["estado"]);
                 TipoOlimpiada clase = DataRowParser.ToTipoOlimpiada(r["clase"]);
                 TipoMedalla medalla = DataRowParser.ToTipoMedalla(r["medalla"]);
+                MiembroDelegacion.TipoAsistente asistente = DataRowParser.ToTipoAsistente(r["tipo"]);
 
                 if (Olimpiada.esOMIPOS(clase))
                     continue;
@@ -1115,44 +1117,32 @@ namespace OMIstats.Models
                     lineas.Append(estado);
                 }
                 lineas.Append("\\");
-                if (clase == TipoOlimpiada.OMIP)
-                    lineas.Append("P-");
-                else if (clase == TipoOlimpiada.OMIS)
+                if (clase == TipoOlimpiada.OMIS)
                     lineas.Append("S-");
                 lineas.Append(clave);
                 lineas.Append("-medalla.pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
-                lineas.Append(X);
+
                 Estado e = Estado.obtenerEstadoConClave(estado);
-                if (e.extranjero)
-                    lineas.Append(" PUNTAJE PARA ");
+                string medallaStr;
+                if (medalla == TipoMedalla.ORO_1 || medalla == TipoMedalla.ORO_2 || medalla == TipoMedalla.ORO_3)
+                    medallaStr = TipoMedalla.ORO.ToString();
                 else
-                    lineas.Append(" MEDALLA DE ");
+                    medallaStr = medalla.ToString();
+                string prefijoM = "";
+                if (e.extranjero || asistente == MiembroDelegacion.TipoAsistente.DELEB)
+                    prefijoM = "Puntaje para ";
 
-                if (medalla == TipoMedalla.BRONCE)
-                    lineas.Append("BRONCE");
-                else if (medalla == TipoMedalla.PLATA)
-                    lineas.Append("PLATA");
-                else
-                    lineas.Append("ORO");
-
+                lineas.Append(Cadenas.reemplazaValoresDiploma(X, medallaStr, e.nombre, e.clave, clase.ToString(), null, prefijoM));
                 lineas.Append(",");
-                lineas.Append(TableManager.getPreEstado(e.clave));
-                lineas.Append(",");
-                lineas.Append(e.nombre.ToUpperInvariant());
+                lineas.Append(Cadenas.reemplazaValoresDiploma(Z, medallaStr, e.nombre, e.clave, clase.ToString(), null, prefijoM));
                 lineas.Append(",");
 
                 lineas.Append(clase.ToString());
                 lineas.Append(",");
-
-                if (medalla == TipoMedalla.BRONCE)
-                    lineas.Append("bronce,");
-                else if (medalla == TipoMedalla.PLATA)
-                    lineas.Append("plata,");
-                else
-                    lineas.Append("oro,");
-
+                lineas.Append(medallaStr.ToLower());
+                lineas.Append(",");
                 lineas.Append(baseURL);
                 lineas.Append("/Profile/");
                 lineas.Append(clase.ToString());
@@ -1193,11 +1183,7 @@ namespace OMIstats.Models
             lineas.Append(joven.clave);
             lineas.Append("-joven.pdf,");
             lineas.Append(joven.persona.nombreCompleto);
-            lineas.Append(",por haber sido EL MEDALLISTA MÁS JOVEN,");
-            lineas.Append(TableManager.getPreEstado(e.clave));
-            lineas.Append(",");
-            lineas.Append(e.nombre.ToUpperInvariant());
-            lineas.Append(",");
+            lineas.Append(",por haber sido,EL MEDALLISTA MÁS JOVEN a,");
             lineas.Append(joven.tipoOlimpiada.ToString());
             lineas.Append(",reconocimiento,");
 
@@ -1226,8 +1212,6 @@ namespace OMIstats.Models
                 lineas.Append("\\");
                 lineas.Append(estado.nombre);
                 lineas.Append(".pdf,");
-                lineas.Append(TableManager.getPreEstado(estado.clave));
-                lineas.Append(" ");
                 lineas.Append(estado.nombre.ToUpperInvariant());
                 lineas.Append(",Por ser ");
                 switch (++lugar)
@@ -1242,7 +1226,9 @@ namespace OMIstats.Models
                         lineas.Append("TERCER");
                         break;
                 }
-                lineas.Append(" LUGAR a Nivel Estados a,,,OMI,");
+                lineas.Append(" LUGAR, a Nivel Estados ");
+                lineas.Append(TableManager.getPreEstado(estado.clave));
+                lineas.Append(",OMI,");
                 switch (lugar)
                 {
                     case 1:

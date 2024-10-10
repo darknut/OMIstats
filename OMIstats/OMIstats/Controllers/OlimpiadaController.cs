@@ -611,7 +611,7 @@ namespace OMIstats.Controllers
         // POST: /Olimpiada/Diplomas/
 
         [HttpPost]
-        public ActionResult Diplomas(string clave, string textoX, string textoY)
+        public ActionResult Diplomas(string clave, string textoX, string textoY, string textoZ, bool? naked)
         {
             if (!esAdmin() || clave == null || textoX == null || textoY == null)
                 return RedirectTo(Pagina.HOME);
@@ -619,10 +619,11 @@ namespace OMIstats.Controllers
 
             string[] X = textoX.Split(';');
             string[] Y = textoY.Split(';');
+            string[] Z = textoZ.Split(';');
             string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/');
 
-            ViewBag.asistentes = MiembroDelegacion.generarDiplomas(clave, X[0], baseUrl, Y);
-            ViewBag.medallistas = Models.Resultados.generarDiplomas(clave, X[1], baseUrl);
+            ViewBag.asistentes = MiembroDelegacion.generarDiplomas(clave, X[0], baseUrl, Y, Z[0], naked == true);
+            ViewBag.medallistas = Models.Resultados.generarDiplomas(clave, X[1], baseUrl, Z[1], naked == true);
             ViewBag.especiales = Models.Resultados.generarDiplomasEspeciales(clave, baseUrl);
 
             return View();

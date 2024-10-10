@@ -98,5 +98,73 @@ namespace OMIstats.Utilities
                 return "0";
             return obj.ToString();
         }
+
+        public static string reemplazaValoresDiploma(
+            string texto,
+            string medalla,
+            string estado,
+            string claveEstado,
+            string clase,
+            string Y,
+            string prefijoMedalla = null)
+        {
+            if (medalla != null)
+            {
+                if (prefijoMedalla != null)
+                    prefijoMedalla = prefijoMedalla.Trim() + " ";
+                else
+                    prefijoMedalla = "";
+
+                if (texto.IndexOf("%MEDALLA%") >= 0)
+                    texto = texto.Replace("%MEDALLA%", prefijoMedalla.ToUpper() + "MEDALLA DE " + medalla);
+                if (texto.IndexOf("%medalla%") >= 0)
+                    texto = texto.Replace("%medalla%", prefijoMedalla + "Medalla de " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(medalla));
+            }
+            if (estado != null)
+            {
+                if (texto.IndexOf("%ESTADO%") >= 0)
+                    texto = texto.Replace("%ESTADO%", estado.ToUpper());
+                if (texto.IndexOf("%estado%") >= 0)
+                    texto = texto.Replace("%estado%", estado);
+                if (texto.IndexOf("%prefijo_estado%") >= 0)
+                {
+                    if (claveEstado == "MDF")
+                        texto = texto.Replace("%prefijo_estado%", "a la");
+                    else if (claveEstado == "MEX")
+                        texto = texto.Replace("%prefijo_estado%", "al");
+                    else
+                        texto = texto.Replace("%prefijo_estado%", "a");
+                }
+                if (texto.IndexOf("%prefijo_estado_con_estado%") >= 0)
+                {
+                    if (claveEstado == "MDF")
+                        texto = texto.Replace("%prefijo_estado_con_estado%", "a la");
+                    else if (claveEstado == "MEX")
+                        texto = texto.Replace("%prefijo_estado_con_estado%", "al");
+                    else
+                        texto = texto.Replace("%prefijo_estado_con_estado%", "a el Estado de");
+                }
+            }
+            if (clase != null)
+            {
+                if (texto.IndexOf("%clase%") >= 0)
+                {
+                    if (clase == "OMI")
+                        texto = texto.Replace("%clase%", "OMI abierta");
+                    if (clase == "OMIS")
+                        texto = texto.Replace("%clase%", "OMI para Primaria y Secundaria");
+                    if (clase == "OMISO")
+                        texto = texto.Replace("%clase%", "OMI para Primaria y Secundaria Online");
+                }
+            }
+            if (Y != null)
+            {
+                if (texto.IndexOf("%TEXTO_Y%") >= 0)
+                    texto = texto.Replace("%TEXTO_Y%", Y.ToUpper());
+                if (texto.IndexOf("%texto_Y%") >= 0)
+                    texto = texto.Replace("%texto_Y%", Y);
+            }
+            return texto;
+        }
     }
 }
