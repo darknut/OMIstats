@@ -1180,6 +1180,13 @@ namespace OMIstats.Models
                 Estado e = Estado.obtenerEstadoConClave(estado);
                 bool esOMIPOS = (tipo == TipoAsistente.COMPETIDOR || tipo == TipoAsistente.SUPERVISOR) && Olimpiada.esOMIPOS(clase);
 
+                if (esOMIPOS)
+                {
+                    var res = Resultados.cargarResultados(omi, clase, clave);
+                    if (res.total == 0)
+                        continue;
+                }
+
                 if (naked && (esOMIPOS || (soloDiploma && tipo == TipoAsistente.ASESOR)))
                     continue;
 
