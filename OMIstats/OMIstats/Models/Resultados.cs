@@ -1149,7 +1149,7 @@ namespace OMIstats.Models
 
                 lineas.Append(clase.ToString());
                 lineas.Append(",");
-                lineas.Append(medallaStr.ToLower());
+                lineas.Append(medalla == TipoMedalla.MENCION ? medalla.ToString().ToLower() : medallaStr.ToLower());
                 lineas.Append(",");
                 lineas.Append(baseURL);
                 lineas.Append("/Profile/");
