@@ -115,10 +115,13 @@ namespace OMIstats.Utilities
                 else
                     prefijoMedalla = "";
 
+                if (!medalla.StartsWith("MENC"))
+                    prefijoMedalla += "Medalla de ";
+
                 if (texto.IndexOf("%MEDALLA%") >= 0)
-                    texto = texto.Replace("%MEDALLA%", prefijoMedalla.ToUpper() + "MEDALLA DE " + medalla);
+                    texto = texto.Replace("%MEDALLA%", prefijoMedalla.ToUpper() + medalla);
                 if (texto.IndexOf("%medalla%") >= 0)
-                    texto = texto.Replace("%medalla%", prefijoMedalla + "Medalla de " + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(medalla));
+                    texto = texto.Replace("%medalla%", prefijoMedalla + System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(medalla));
             }
             if (estado != null)
             {

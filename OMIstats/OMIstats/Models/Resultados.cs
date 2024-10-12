@@ -1088,7 +1088,9 @@ namespace OMIstats.Models
             query.Append(" inner join MiembroDelegacion as md on md.clave = r.clave and md.olimpiada = r.olimpiada and r.clase = md.clase ");
             query.Append(" where r.olimpiada = ");
             query.Append(Cadenas.comillas(omi));
-            query.Append(" and medalla < 7 ");
+            query.Append(" and (medalla < 7 or medalla = ");
+            query.Append((int)TipoMedalla.MENCION);
+            query.Append(")");
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
@@ -1106,7 +1108,8 @@ namespace OMIstats.Models
                 MiembroDelegacion.TipoAsistente asistente = DataRowParser.ToTipoAsistente(r["tipo"]);
 
                 if (Olimpiada.esOMIPOS(clase))
-                    continue;
+                    if (medalla != TipoMedalla.MENCION)
+                        continue;
 
                 if (isNaked)
                 {
@@ -1120,7 +1123,10 @@ namespace OMIstats.Models
                 if (clase == TipoOlimpiada.OMIS)
                     lineas.Append("S-");
                 lineas.Append(clave);
-                lineas.Append("-medalla.pdf,");
+                if (medalla == TipoMedalla.MENCION)
+                    lineas.Append("-mencion.pdf,");
+                else
+                    lineas.Append("-medalla.pdf,");
                 lineas.Append(nombre);
                 lineas.Append(",");
 
@@ -1128,6 +1134,8 @@ namespace OMIstats.Models
                 string medallaStr;
                 if (medalla == TipoMedalla.ORO_1 || medalla == TipoMedalla.ORO_2 || medalla == TipoMedalla.ORO_3)
                     medallaStr = TipoMedalla.ORO.ToString();
+                else if (medalla == TipoMedalla.MENCION)
+                    medallaStr = "MENCIÓN HONORÍFICA";
                 else
                     medallaStr = medalla.ToString();
                 string prefijoM = "";
