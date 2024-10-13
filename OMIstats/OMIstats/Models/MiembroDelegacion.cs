@@ -1535,8 +1535,14 @@ namespace OMIstats.Models
             return false;
         }
 
-        public static bool esInvitado(string clave)
+        public static bool esInvitado(string clave, bool tieneDeleb, int competidoresBase)
         {
+            if (tieneDeleb)
+            {
+                int numero = 0;
+                if (int.TryParse(clave.Substring(4), out numero))
+                    return numero > competidoresBase;
+            }
             return clave.EndsWith("I");
         }
 

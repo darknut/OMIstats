@@ -954,7 +954,7 @@ namespace OMIstats.Models
                         {
                             // Si el competidor es extranjero o invitado, no se le considera. A los invitados online sí se les asigna lugar
                             Estado e = Estado.obtenerEstadoConClave(resultados[i].estado);
-                            if (e.extranjero || MiembroDelegacion.esInvitado(resultados[i].clave))
+                            if (e.extranjero || MiembroDelegacion.esInvitado(resultados[i].clave, this.tieneDelebs, this.competidoresBase))
                             {
                                 if (lugar == 0)
                                     resultados[i].lugar = 1;

@@ -287,7 +287,7 @@ if (GUID.Length > 0)
             bool mostrar = tableManager.mostrarLinea();
             bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
             bool esOMIPOS = OMIstats.Models.Olimpiada.esOMIPOS(participacion[l].tipoOlimpiada);
-            bool esInvitado = OMIstats.Models.MiembroDelegacion.esInvitado(datos.clave);
+            bool esInvitado = OMIstats.Models.MiembroDelegacion.esInvitado(datos.clave, tableManager.getCurrentOMI().tieneDelebs, tableManager.getCurrentOMI().competidoresBase);
             <tr>
                 <td class="ioi-mini-imagen">
                     @if (tableManager.mostrarLogoIOI())

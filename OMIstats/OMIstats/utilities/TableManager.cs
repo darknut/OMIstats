@@ -53,6 +53,11 @@ namespace OMIstats.Utilities
             currentResultados = null;
         }
 
+        public Olimpiada getCurrentOMI()
+        {
+            return this.currentOMI;
+        }
+
         public void setCurrentOMI(Olimpiada omi)
         {
             this.currentOMI = omi;

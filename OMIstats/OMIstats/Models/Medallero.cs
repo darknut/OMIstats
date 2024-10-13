@@ -360,7 +360,7 @@ namespace OMIstats.Models
                     }
                 }
 
-                bool esInvitado = MiembroDelegacion.esInvitado(resultado.clave) ||
+                bool esInvitado = MiembroDelegacion.esInvitado(resultado.clave, o.tieneDelebs, o.competidoresBase) ||
                                   MiembroDelegacion.esInvitadoOnline(resultado.clave, o.esOnline, o.competidoresBase);
 
                 if (resultado.medalla != Resultados.TipoMedalla.DESCALIFICADO)
@@ -705,7 +705,8 @@ namespace OMIstats.Models
                 // Obtengo los datos de la tabla a un objeto medallero
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
-                if (MiembroDelegacion.esInvitado(m.clave))
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(m.omi, tipoOlimpiada);
+                if (MiembroDelegacion.esInvitado(m.clave, o.tieneDelebs, o.competidoresBase))
                     continue;
                 string estado = m.clave.Substring(0, 3);
 
@@ -797,7 +798,8 @@ namespace OMIstats.Models
                 // Obtengo los datos de la tabla a un objeto medallero
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
-                if (MiembroDelegacion.esInvitado(m.clave))
+                Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(m.omi, m.tipoOlimpiada);
+                if (MiembroDelegacion.esInvitado(m.clave, o.tieneDelebs, o.competidoresBase))
                     continue;
 
                 // Agrego el medallero con la olimpiada
