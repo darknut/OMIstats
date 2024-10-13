@@ -121,6 +121,8 @@ namespace OMIstats.Models
 
         public bool esOnline { get; set; }
 
+        public bool tieneDelebs { get; set; }
+
         public int competidoresBase { get; set; }
 
         public float media
@@ -297,6 +299,7 @@ namespace OMIstats.Models
             puntosDetallados = false;
             diplomasOnline = false;
             esOnline = false;
+            tieneDelebs = false;
             competidoresBase = 0;
             registroSedes = false;
             ordenarPorPuntos = false;
@@ -417,6 +420,7 @@ namespace OMIstats.Models
             registroActivo = DataRowParser.ToBool(datos["registroActivo"]);
             diplomasOnline = DataRowParser.ToBool(datos["diplomasOnline"]);
             esOnline = DataRowParser.ToBool(datos["esOnline"]);
+            tieneDelebs = DataRowParser.ToBool(datos["tieneDelebs"]);
             competidoresBase = DataRowParser.ToInt(datos["competidoresBase"]);
             registroSedes = DataRowParser.ToBool(datos["registroSedes"]);
             ordenarPorPuntos = DataRowParser.ToBool(datos["ordenarPorPuntos"]);
@@ -594,6 +598,8 @@ namespace OMIstats.Models
             query.Append(Cadenas.boolToInt(diplomasOnline));
             query.Append(", esOnline = ");
             query.Append(Cadenas.boolToInt(esOnline));
+            query.Append(", tieneDelebs = ");
+            query.Append(Cadenas.boolToInt(tieneDelebs));
             query.Append(", competidoresBase = ");
             query.Append(competidoresBase);
             query.Append(", registroSedes = ");
