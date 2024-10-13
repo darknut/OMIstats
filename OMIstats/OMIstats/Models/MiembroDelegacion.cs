@@ -1114,6 +1114,14 @@ namespace OMIstats.Models
                         query.Append(Cadenas.comillas(TipoAsistente.SUBLIDER.ToString().ToLower()));
                         query.Append(" and md.tipo <> ");
                         query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+                        query.Append(" and md.tipo <> ");
+                        query.Append(Cadenas.comillas(TipoAsistente.DELEB.ToString().ToLower()));
+                        break;
+                    }
+                case TipoAsistente.DELEB:
+                    {
+                        query.Append(" and md.tipo = ");
+                        query.Append(Cadenas.comillas(TipoAsistente.DELEB.ToString().ToLower()));
                         break;
                     }
             }
@@ -1135,7 +1143,7 @@ namespace OMIstats.Models
                 MiembroDelegacion md = new MiembroDelegacion();
                 md.llenarDatos(r, incluirEscuela: false);
 
-                if (tipo == TipoAsistente.COMPETIDOR)
+                if (tipo == TipoAsistente.COMPETIDOR || tipo == TipoAsistente.DELEB)
                     md.resultados = Resultados.cargarResultados(olimpiada, tipoOlimpiada, md.clave);
 
                 md.fotoUsuario = DataRowParser.ToString(r["foto"]);

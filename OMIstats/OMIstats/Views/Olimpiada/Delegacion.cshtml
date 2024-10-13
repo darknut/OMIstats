@@ -23,7 +23,7 @@
 
 @section Scripts
 {
-@if(tieneFavicon)
+@if (tieneFavicon)
 {
 <script>addFavicon('@Url.Content("~")', '@Model.numero');</script>
 }
@@ -87,13 +87,13 @@
     <div class="datosEstado tituloEstado">
         <div>
             <h2 class="titulo">
-                @Html.ActionLink((string) estado.nombre, "Index", "Estado",
+                @Html.ActionLink((string)estado.nombre, "Index", "Estado",
                     new { clave = estado.clave, tipo = tipoOlimpiada }, new { @class = "link" })
                 en la
                 @Html.ActionLink(tableManager.enlaceOMI(nombreCompleto: true), "Resultados", "Olimpiada",
                    new { clave = Model.numero, tipo = tipoOlimpiada }, new { @class = "link" })
             </h2>
-            @if(!estado.extranjero)
+            @if (!estado.extranjero)
             {
             <div class="medallero">
                 <div class="medalla" title="Medallas de oro">
@@ -124,7 +124,7 @@
     <div class="live-results">Los resultados en esta página son preeliminares y están sujetos a cambios.</div>
 }
 
-@foreach(OMIstats.Models.TipoOlimpiada tipo in delegaciones.Keys)
+@foreach (OMIstats.Models.TipoOlimpiada tipo in delegaciones.Keys)
 {
     List<OMIstats.Models.MiembroDelegacion> delegacion = delegaciones[tipo];
     if (delegacion.Count == 0)
@@ -133,7 +133,7 @@
     }
     hayDelegacion = true;
     string titulo = "Competidores";
-    switch(tipo)
+    switch (tipo)
     {
         case OMIstats.Models.TipoOlimpiada.OMIS:
             {
@@ -158,7 +158,7 @@
                 </div>
                 <div class="datosMiembro">
                     <div class="noOverflow">
-                    @if(tipo == OMIstats.Models.TipoOlimpiada.OMI && md.omips)
+                    @if (tipo == OMIstats.Models.TipoOlimpiada.OMI && md.omips)
                     {
                         <img src="~/img/karel.png" title="Participó en OMIPS en años anteriores" class="karel-png-medium"/>
                     }
@@ -169,7 +169,8 @@
                     <a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a>
                     </div>
                     <div class="claveMiembro">
-                        @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave)) {
+                        @if (!OMIstats.Utilities.TableManager.faltaClave(md.clave))
+                        {
                             @md.clave
                         }
                     </div>
@@ -184,10 +185,38 @@
             </div>
         }
 
+        @if (tipo == OMIstats.Models.TipoOlimpiada.OMI && Model.tieneDelebs)
+        {
+            foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delebs)
+            {
+                if (md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
+                {
+            <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.resultados.medalla)">
+                <div class="foto fotoFixedHeight">
+                    <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
+                </div>
+                <div class="datosMiembro">
+                    <div class="noOverflow">
+                    @if (tipo == OMIstats.Models.TipoOlimpiada.OMI && md.omips)
+                    {
+                        <img src="~/img/karel.png" title="Participó en OMIPS en años anteriores" class="karel-png-medium"/>
+                    }
+                    <a class="nombre nombreMiembro" href="@Url.Content("~/Profile/view?usuario=" + md.usuario + "&tipo=" + tipo)" title="@md.nombreAsistente">@md.nombreAsistente</a>
+                    </div>
+                    <div class="claveMiembro">
+                        @md.clave
+                    </div>
+                </div>
+            </div>
+                }
+            }
+        }
+
     </div>
 }
 
-@if (!hayDelegacion) {
+@if (!hayDelegacion)
+{
     if (ViewBag.vinoAOlimpiada)
     {
         <div class="subtitulo">No se tienen datos de la delegación</div>
@@ -224,10 +253,12 @@
 
 @if (ViewBag.otros.Count > 0)
 {
-    if(ViewBag.lideres.Count == 0 && !hayDelegacion)
+    if (ViewBag.lideres.Count == 0 && !hayDelegacion)
     {
         <div class="subtitulo">Delegación</div>
-    } else {
+    }
+    else
+    {
         <div class="subtitulo">Resto de la delegación</div>
     }
 
@@ -235,10 +266,6 @@
 
         @foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.otros)
         {
-            if (md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB)
-            {
-                continue;
-            }
             <div class="miembroDelegacion">
                 <div class="foto fotoFixedHeight">
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
