@@ -177,7 +177,7 @@
                     <div class="participaciones">
                         @OMIstats.Utilities.TableManager.participaciones(md, tipo)
                     </div>
-                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO)
+                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.MENCION)
                     {
                         <img class="medallaMiembro" src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.resultados.medalla))"/>
                     }
@@ -189,8 +189,6 @@
         {
             foreach (OMIstats.Models.MiembroDelegacion md in ViewBag.delebs)
             {
-                if (md.tipo == OMIstats.Models.MiembroDelegacion.TipoAsistente.DELEB && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL)
-                {
             <div class="miembroDelegacion @OMIstats.Utilities.TableManager.obtenerClaseCSS(md.resultados.medalla)">
                 <div class="foto fotoFixedHeight">
                     <img src='@Url.Content(md.fotoUsuario)' alt="@md.nombreAsistente"/>
@@ -208,7 +206,6 @@
                     </div>
                 </div>
             </div>
-                }
             }
         }
 

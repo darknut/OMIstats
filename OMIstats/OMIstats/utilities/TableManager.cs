@@ -24,6 +24,7 @@ namespace OMIstats.Utilities
         private const string IMG_ORO = "/img/oro.png";
         private const string IMG_PLATA = "/img/plata.png";
         private const string IMG_BRONCE = "/img/bronce.png";
+        private const string IMG_MENCION = "/img/diploma.png";
 
         private const string A = "A";
         private const string B = "B";
@@ -248,6 +249,8 @@ namespace OMIstats.Utilities
                     return IMG_PLATA;
                 case Resultados.TipoMedalla.BRONCE:
                     return IMG_BRONCE;
+                case Resultados.TipoMedalla.MENCION:
+                    return IMG_MENCION;
             }
             return "";
         }
