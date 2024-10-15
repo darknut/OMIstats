@@ -1139,7 +1139,7 @@ namespace OMIstats.Models
                 else
                     medallaStr = medalla.ToString();
                 string prefijoM = "";
-                if (e.extranjero || asistente == MiembroDelegacion.TipoAsistente.DELEB)
+                if ((e.extranjero || asistente == MiembroDelegacion.TipoAsistente.DELEB) && medalla != TipoMedalla.MENCION)
                     prefijoM = "Puntaje para ";
 
                 lineas.Append(Cadenas.reemplazaValoresDiploma(X, medallaStr, e.nombre, e.clave, clase.ToString(), null, prefijoM));
