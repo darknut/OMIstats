@@ -1179,6 +1179,7 @@ namespace OMIstats.Models
             foreach (Resultados resultado in resultados)
             {
                 if (resultado.medalla != TipoMedalla.NADA &&
+                    resultado.medalla != TipoMedalla.MENCION &&
                     resultado.persona.nacimiento > joven.persona.nacimiento)
                 {
                     joven = resultado;
