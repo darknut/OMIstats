@@ -351,7 +351,7 @@ if (GUID.Length > 0)
                     }
                 </td>
                 <td class="@("table-td center " + (extranjero ? "" : "right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
-                    @if (esOMIPOS)
+                    @if (esOMIPOS && datos.medalla != OMIstats.Models.Resultados.TipoMedalla.MENCION)
                     {
                     @("N/A")
                     } else

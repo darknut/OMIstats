@@ -1120,7 +1120,7 @@ namespace OMIstats.Models
                     lineas.Append(estado);
                 }
                 lineas.Append("\\");
-                if (clase == TipoOlimpiada.OMIS)
+                if (clase == TipoOlimpiada.OMIS || clase == TipoOlimpiada.OMISO)
                     lineas.Append("S-");
                 lineas.Append(clave);
                 if (medalla == TipoMedalla.MENCION)

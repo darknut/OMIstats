@@ -1187,12 +1187,18 @@ namespace OMIstats.Models
                 bool soloDiploma = DataRowParser.ToBool(r["soloDiploma"]);
                 Estado e = Estado.obtenerEstadoConClave(estado);
                 bool esOMIPOS = (tipo == TipoAsistente.COMPETIDOR || tipo == TipoAsistente.SUPERVISOR) && Olimpiada.esOMIPOS(clase);
+                string clavePdf = clave;
 
-                if (esOMIPOS)
+                if (esOMIPOS && tipo == TipoAsistente.COMPETIDOR)
                 {
                     var res = Resultados.cargarResultados(omi, clase, clave);
                     if (res.total == 0)
                         continue;
+                    if (res.medalla == Resultados.TipoMedalla.CLASIFICADO)
+                    {
+                        MiembroDelegacion mdnacional = MiembroDelegacion.obtenerMiembroDePersona(claveUsuario, omi, TipoOlimpiada.OMIS);
+                        clavePdf = mdnacional.clave;
+                    }
                 }
 
                 if (naked && (esOMIPOS || (soloDiploma && tipo == TipoAsistente.ASESOR)))
@@ -1212,7 +1218,7 @@ namespace OMIstats.Models
                     if (clase == TipoOlimpiada.OMIS || clase == TipoOlimpiada.OMISO)
                         lineas.Append("S-");
                 }
-                lineas.Append(clave);
+                lineas.Append(clavePdf);
                 if (esOMIPOS)
                     lineas.Append("-online");
                 lineas.Append(".pdf,");
@@ -1774,7 +1780,7 @@ namespace OMIstats.Models
         /// <summary>
         /// Regresa el miembro delegación de la persona mandada como parámetro para la omi deseada
         /// </summary>
-        public static MiembroDelegacion obtenerMiembroDePersona(int persona, string omi)
+        public static MiembroDelegacion obtenerMiembroDePersona(int persona, string omi, TipoOlimpiada tipoOlimpiada = TipoOlimpiada.NULL)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -1783,6 +1789,12 @@ namespace OMIstats.Models
             query.Append(persona);
             query.Append(" and olimpiada = ");
             query.Append(Cadenas.comillas(omi));
+            if (tipoOlimpiada != TipoOlimpiada.NULL)
+            {
+                query.Append(" and clase = ");
+                query.Append(Cadenas.comillas(tipoOlimpiada.ToString().ToLower()));
+            }
+
 
             db.EjecutarQuery(query.ToString());
             DataTable table = db.getTable();
