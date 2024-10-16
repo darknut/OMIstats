@@ -177,9 +177,13 @@
                     <div class="participaciones">
                         @OMIstats.Utilities.TableManager.participaciones(md, tipo)
                     </div>
-                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.MENCION)
+                    @if (md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NADA && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.NULL && md.resultados.medalla != OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO)
                     {
-                        <img class="medallaMiembro" src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.resultados.medalla))"/>
+                        <img
+                          class="medallaMiembro"
+                          src="@Url.Content("~/" + OMIstats.Utilities.TableManager.obtenerImagenMedalla(md.resultados.medalla))"
+                          title="@(md.resultados.medalla == OMIstats.Models.Resultados.TipoMedalla.MENCION ? "Mención honorífica" : "")"
+                          style="@(md.resultados.medalla == OMIstats.Models.Resultados.TipoMedalla.MENCION ? "height: 40px;" : "")"/>
                     }
                 </div>
             </div>

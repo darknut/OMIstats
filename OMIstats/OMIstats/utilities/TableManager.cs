@@ -24,7 +24,7 @@ namespace OMIstats.Utilities
         private const string IMG_ORO = "/img/oro.png";
         private const string IMG_PLATA = "/img/plata.png";
         private const string IMG_BRONCE = "/img/bronce.png";
-        private const string IMG_MENCION = "/img/diploma.png";
+        private const string IMG_MENCION = "/img/mencion.png";
 
         private const string A = "A";
         private const string B = "B";

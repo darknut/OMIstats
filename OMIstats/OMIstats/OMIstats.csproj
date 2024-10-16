@@ -355,6 +355,7 @@
     <Content Include="img\rar.png" />
     <Content Include="img\topcoder.png" />
     <Content Include="img\twitter.png" />
+    <Content Include="img\mencion.png" />
     <Content Include="img\up.png" />
     <Content Include="js\admin.js" />
     <Content Include="js\buscar.js" />
