@@ -326,7 +326,7 @@ namespace OMIstats.Controllers
             }
 
             return File(Archivos.comprimeArchivos(
-                Archivos.Folder.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave, ".pdf"),
+                Archivos.Folder.DIPLOMAS, omi + "\\" + md.estado, todos ? null : clave, todos ? null : ".pdf"),
                 "application/zip", "Diplomas.zip");
         }
 
