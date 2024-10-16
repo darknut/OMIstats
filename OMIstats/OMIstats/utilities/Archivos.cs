@@ -232,12 +232,22 @@ namespace OMIstats.Utilities
             return File.Exists(Path.Combine(path, imagen));
         }
 
+        private static string[] obtenerArchivos(string baseUrl, string nombre, string extension)
+        {
+            List<string> archivos = new List<string>();
+            archivos.AddRange(Directory.GetFiles(baseUrl, nombre + extension));
+            if (!String.IsNullOrEmpty(extension))
+                archivos.AddRange(Directory.GetFiles(baseUrl, nombre + "-*" + extension));
+
+            return archivos.ToArray();
+        }
+
         public static int cuantosExisten(Folder folder, string subfolder, string nombre)
         {
             try
             {
                 string path = pathAbsoluto(folder);
-                var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre + "*");
+                var archivos = obtenerArchivos(Path.Combine(path, subfolder), nombre, ".pdf");
                 return archivos.Count();
             }
             catch (Exception)
@@ -246,10 +256,10 @@ namespace OMIstats.Utilities
             }
         }
 
-        public static byte[] comprimeArchivos(Folder folder, string subfolder, string nombre = null)
+        public static byte[] comprimeArchivos(Folder folder, string subfolder, string nombre = null, string extension = "")
         {
             string path = pathAbsoluto(folder);
-            var archivos = Directory.GetFiles(Path.Combine(path, subfolder), nombre == null ? "*" : nombre + "*");
+            var archivos = obtenerArchivos(Path.Combine(path, subfolder), nombre == null ? "*" : nombre, extension);
             byte[] bytes = null;
 
             using (var memoryStream = new MemoryStream())
