@@ -1231,10 +1231,10 @@ namespace OMIstats.Models
                 string[] generos = asistente.Split('/');
                 if (generos.Length > 1)
                 {
-                    if (genero == "M")
-                        asistente = generos[0];
-                    else
+                    if (genero == "F")
                         asistente = generos[1];
+                    else
+                        asistente = generos[0];
                 }
                 lineas.Append(Cadenas.reemplazaValoresDiploma(X, null, e.nombre, e.clave, clase.ToString(), asistente));
 
