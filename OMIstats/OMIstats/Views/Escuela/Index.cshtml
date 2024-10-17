@@ -286,7 +286,7 @@
                         }
                     </td>
                     <td class="@("table-td center right-border " + claseCSS)" medalla="@((int)datos.medalla)">
-                        @tableManager.medallaString()
+                        @(new MvcHtmlString(tableManager.medallaString()))
                     </td>
                     <td class="@("table-td right-border " + claseCSS)">
                         @if (datos.nivelInstitucion != OMIstats.Models.Institucion.NivelInstitucion.NULL)

@@ -218,7 +218,7 @@ namespace OMIstats.Utilities
                         return "CLASIFICADA";
                     return "CLASIFICADO";
                 case Resultados.TipoMedalla.MENCION:
-                    return "MENCIÓN HONORÍFICA";
+                    return "MENCIÓN<br />HONORÍFICA";
                 default:
                     return NO_MEDALLA;
             }

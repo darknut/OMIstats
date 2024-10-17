@@ -227,7 +227,7 @@
                     }
                 </td>
                 <td class="@("table-td center " + (Model.extranjero ? "" : " right-border ") + claseCSS)" medalla="@((int)datos.medalla)">
-                    @tableManager.medallaString()
+                    @(new MvcHtmlString(tableManager.medallaString()))
                 </td>
                 @if (!Model.extranjero)
                 {
