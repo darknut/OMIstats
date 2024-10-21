@@ -819,7 +819,20 @@ namespace OMIstats.Models
                 lista.Add(res);
             }
 
-            return lista;
+            return ordenaMenciones(lista);
+        }
+
+        private static List<Resultados> ordenaMenciones(List<Resultados> lista)
+        {
+            var menciones = lista.FindAll((Resultados r) => r.medalla == TipoMedalla.MENCION);
+            if (menciones.Count() == 0 || menciones.Count() == lista.Count())
+                return lista;
+            var sinMedalla = lista.FindAll((Resultados r) => ((int)r.medalla) >= ((int)TipoMedalla.NADA) && r.medalla != TipoMedalla.MENCION);
+            if (sinMedalla.Count() == 0)
+                return lista;
+            var medallas = lista.FindAll((Resultados r) => ((int)r.medalla) < ((int)TipoMedalla.NADA));
+
+            return medallas.Concat(menciones).Concat(sinMedalla).ToList();
         }
 
         /// <summary>
@@ -855,7 +868,7 @@ namespace OMIstats.Models
                 lista.Add(res);
             }
 
-            return lista;
+            return ordenaMenciones(lista);
         }
 
         /// <summary>
