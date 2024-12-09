@@ -1011,6 +1011,8 @@ namespace OMIstats.Models
             query.Append(persona);
             query.Append(" and md.tipo <> ");
             query.Append(Cadenas.comillas(TipoAsistente.COMPETIDOR.ToString().ToLower()));
+            query.Append(" and md.tipo <> ");
+            query.Append(Cadenas.comillas(TipoAsistente.DELEB.ToString().ToLower()));
             if (!isOwn)
                 query.Append(" and md.soloDiploma = 0 ");
             query.Append(filtrarOMIPOS);

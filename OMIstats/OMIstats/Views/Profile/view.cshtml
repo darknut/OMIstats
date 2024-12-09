@@ -219,6 +219,7 @@ if (GUID.Length > 0)
     }
     hayParticipaciones = true;
     OMIstats.Models.Medallero medallero = medalleros.medalleroDeTipo(tipo);
+    bool tieneDelebs = false;
 
     <h1 class="titulo subtitulo"> @(extranjero ? "Invitaciones como competidor" : "Participaciones como competidor")
         @if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
@@ -288,6 +289,11 @@ if (GUID.Length > 0)
             bool descalificado = datos.medalla == OMIstats.Models.Resultados.TipoMedalla.DESCALIFICADO;
             bool esOMIPOS = OMIstats.Models.Olimpiada.esOMIPOS(participacion[l].tipoOlimpiada);
             bool esInvitado = OMIstats.Models.MiembroDelegacion.esInvitado(datos.clave, tableManager.getCurrentOMI().tieneDelebs, tableManager.getCurrentOMI().competidoresBase);
+            bool esDeleb = esInvitado && tableManager.getCurrentOMI().tieneDelebs;
+            if (esDeleb)
+            {
+                tieneDelebs = true;
+            }
             <tr>
                 <td class="ioi-mini-imagen">
                     @if (tableManager.mostrarLogoIOI())
@@ -298,6 +304,10 @@ if (GUID.Length > 0)
                     }
                 </td>
                 <td class="@("table-td right-border center " + claseCSS)">
+                    @if (esDeleb)
+                    {
+                        @(datos.lugar)<a class="nombre" href="#deleb" title="Delegación B">*</a>
+                    }
                     @if (mostrar && datos.lugar > 0 && !descalificado && !esInvitado)
                     {
                         @(datos.lugar)
@@ -405,6 +415,11 @@ if (GUID.Length > 0)
         }
         </tbody>
     </table>
+
+    if (tieneDelebs)
+    {
+        <div id="deleb" class="sede">[*]: Participación como competidor invitado de delegación B</div>
+    }
 }
 
 @if (asistencias.Count > 0)
