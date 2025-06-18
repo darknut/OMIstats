@@ -449,11 +449,22 @@ namespace OMIstats.Models
                                    " al " + Fechas.friendlyString(fin);
             }
 
-            if (Archivos.existeArchivo(Archivos.Folder.OLIMPIADAS,
-                numero + ".png"))
-                logo = numero + ".png";
+            if (tipoOlimpiada == TipoOlimpiada.OMIA)
+            {
+                if (Archivos.existeArchivo(Archivos.Folder.OMIA,
+                   numero + ".png"))
+                    logo = numero + ".png";
+                else
+                    logo = Archivos.OMIA_LOGO;
+            }
             else
-                logo = Archivos.OMI_LOGO;
+            {
+                if (Archivos.existeArchivo(Archivos.Folder.OLIMPIADAS,
+                    numero + ".png"))
+                    logo = numero + ".png";
+                else
+                    logo = Archivos.OMI_LOGO;
+            }
 
             if (numero != TEMP_CLAVE &&
                 (tipoOlimpiada == TipoOlimpiada.OMIP ||
@@ -994,7 +1005,7 @@ namespace OMIstats.Models
             }
 
             // Si el primer lugar tiene menos de 100 puntos, entonces no tenemos los puntos
-            mostrarResultadosTotales = puntosMaximos > PUNTOS_MINIMOS_CONOCIDOS;
+            mostrarResultadosTotales = puntosMaximos > PUNTOS_MINIMOS_CONOCIDOS || tipoOlimpiada == TipoOlimpiada.OMIA;
 
             // Calculamos el medallero y lo guardamos en la base
             if (tipoOlimpiada == TipoOlimpiada.OMIPO || tipoOlimpiada == TipoOlimpiada.OMISO)

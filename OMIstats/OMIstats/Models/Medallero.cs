@@ -144,6 +144,7 @@ namespace OMIstats.Models
             m.IOI = obtenerMedallas(TipoOlimpiada.IOI, tipoMedallero, clave, nullSiInexistente);
             m.OMIS = obtenerMedallas(TipoOlimpiada.OMIS, tipoMedallero, clave, nullSiInexistente);
             m.OMIP = obtenerMedallas(TipoOlimpiada.OMIP, tipoMedallero, clave, nullSiInexistente);
+            m.OMIA = obtenerMedallas(TipoOlimpiada.OMIA, tipoMedallero, clave, nullSiInexistente);
 
             return m;
         }
@@ -459,57 +460,60 @@ namespace OMIstats.Models
                 if (persona.clave != "0")
                     persona.guardarDatos();
 
-            // Después las instituciones
-            foreach (Medallero institucion in instituciones.Values)
-                if (institucion.clave != "0")
-                    institucion.guardarDatos();
-
-            // Los estados (general)
-            foreach (Medallero estado in estados.Values)
-                estado.guardarDatos();
-
-            // Finalmente, para los estados por olimpiada, hay que hacer un par de cosas
-            List<Medallero> sortedEstados = new List<Medallero>(estadosPorOlimpiada.Values);
-            if (sortedEstados.Count > 0)
+            if (tipoOlimpiada != TipoOlimpiada.OMIA)
             {
-                // Necesitamos reordenarlos por promedio
-                for (int i = 0; i < sortedEstados.Count; i++)
+                // Después las instituciones
+                foreach (Medallero institucion in instituciones.Values)
+                    if (institucion.clave != "0")
+                        institucion.guardarDatos();
+
+                // Los estados (general)
+                foreach (Medallero estado in estados.Values)
+                    estado.guardarDatos();
+
+                // Finalmente, para los estados por olimpiada, hay que hacer un par de cosas
+                List<Medallero> sortedEstados = new List<Medallero>(estadosPorOlimpiada.Values);
+                if (sortedEstados.Count > 0)
                 {
-                    Medallero estado = sortedEstados[i];
-                    estado.ajustarMedallas(competidoresBase);
+                    // Necesitamos reordenarlos por promedio
+                    for (int i = 0; i < sortedEstados.Count; i++)
+                    {
+                        Medallero estado = sortedEstados[i];
+                        estado.ajustarMedallas(competidoresBase);
 
-                    if (!unksEnTabla && estado.count > 0)
-                        estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+                        if (!unksEnTabla && estado.count > 0)
+                            estado.promedio = (float?)Math.Round((double)(estado.puntos / estado.count), 2);
+                    }
+                    sortedEstados.Sort();
+
+                    int lugarActual = 0;
+                    Medallero ultimoEstado = null;
+
+                    // Vamos por cada estado para asignarles el lugar
+                    foreach (Medallero estado in sortedEstados)
+                    {
+                        lugarActual++;
+
+                        // Revisamos si hay empates entre estados
+                        if (ultimoEstado == null ||
+                            ultimoEstado.oros != estado.oros ||
+                            ultimoEstado.platas != estado.platas ||
+                            ultimoEstado.bronces != estado.bronces ||
+                            (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
+                            estado.lugar = lugarActual;
+                        else
+                            estado.lugar = ultimoEstado.lugar;
+
+                        ultimoEstado = estado;
+
+                        Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(estado.omi, estado.tipoOlimpiada);
+                        estado.guardarDatosEstados(o.invitados > 0);
+                    }
                 }
-                sortedEstados.Sort();
 
-                int lugarActual = 0;
-                Medallero ultimoEstado = null;
-
-                // Vamos por cada estado para asignarles el lugar
-                foreach (Medallero estado in sortedEstados)
-                {
-                    lugarActual++;
-
-                    // Revisamos si hay empates entre estados
-                    if (ultimoEstado == null ||
-                        ultimoEstado.oros != estado.oros ||
-                        ultimoEstado.platas != estado.platas ||
-                        ultimoEstado.bronces != estado.bronces ||
-                        (int)Math.Round((double)ultimoEstado.puntos) != (int)Math.Round((double)estado.puntos))
-                        estado.lugar = lugarActual;
-                    else
-                        estado.lugar = ultimoEstado.lugar;
-
-                    ultimoEstado = estado;
-
-                    Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(estado.omi, estado.tipoOlimpiada);
-                    estado.guardarDatosEstados(o.invitados > 0);
-                }
+                // Al final hacemos los ajustes hardcodeados
+                hardcode(tipoOlimpiada, olimpiada);
             }
-
-            // Al final hacemos los ajustes hardcodeados
-            hardcode(tipoOlimpiada, olimpiada);
         }
 #endif
 
@@ -918,6 +922,7 @@ namespace OMIstats.Models
         public Medallero OMIS;
         public Medallero OMIP;
         public Medallero IOI;
+        public Medallero OMIA;
 
         public Medallero medalleroDeTipo(TipoOlimpiada tipo)
         {
@@ -931,6 +936,8 @@ namespace OMIstats.Models
                     return this.OMIP;
                 case TipoOlimpiada.IOI:
                     return this.IOI;
+                case TipoOlimpiada.OMIA:
+                    return this.OMIA;
             }
             return null;
         }

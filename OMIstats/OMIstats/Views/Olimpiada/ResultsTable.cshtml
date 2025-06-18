@@ -43,6 +43,7 @@ else
             {
                 if (tipo != OMIstats.Models.TipoOlimpiada.IOI && 
                     tipo != OMIstats.Models.TipoOlimpiada.NULL &&
+                    tipo != OMIstats.Models.TipoOlimpiada.OMIA &&
                     Model.tipoOlimpiada != tipo)
                 {
                     <a class="boton" href="@Url.Content("~/Olimpiada/ResultsTable?tipo=" + tipo.ToString() + "&clave=" + Model.numero)">@(tipo.ToString())</a>

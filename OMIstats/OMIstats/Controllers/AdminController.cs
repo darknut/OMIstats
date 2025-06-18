@@ -153,6 +153,7 @@ namespace OMIstats.Controllers
             Olimpiada.resetOMIs(TipoOlimpiada.OMIP);
             Olimpiada.resetOMIs(TipoOlimpiada.OMIPO);
             Olimpiada.resetOMIs(TipoOlimpiada.OMISO);
+            Olimpiada.resetOMIs(TipoOlimpiada.OMIA);
 
             List<OmegaUp> status = OmegaUp.obtenerInstrucciones(OmegaUp.Instruccion.STATUS);
             OmegaUp.RunnerStarted = (status.Count > 0);

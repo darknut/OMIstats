@@ -221,14 +221,22 @@ if (GUID.Length > 0)
     OMIstats.Models.Medallero medallero = medalleros.medalleroDeTipo(tipo);
     bool tieneDelebs = false;
 
-    <h1 class="titulo subtitulo"> @(extranjero ? "Invitaciones como competidor" : "Participaciones como competidor")
-        @if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
+    <h1 class="titulo subtitulo">
+        @if (tipo == OMIstats.Models.TipoOlimpiada.OMIA)
         {
-            <span>de secundaria</span>
+            <span>Participaciones en la Olimpiada de Inteligencia Artificial</span>
         }
-        @if (tipo == OMIstats.Models.TipoOlimpiada.OMIP)
+        else
         {
-            <span>de primaria</span>
+            @(extranjero ? "Invitaciones como competidor" : "Participaciones como competidor")
+            if (tipo == OMIstats.Models.TipoOlimpiada.OMIS)
+            {
+                <span>de secundaria</span>
+            }
+            if (tipo == OMIstats.Models.TipoOlimpiada.OMIP)
+            {
+                <span>de primaria</span>
+            }
         }
     </h1>
 
@@ -272,7 +280,7 @@ if (GUID.Length > 0)
                 <th class="bottom-border right-border table-header-clickable">Nivel escolar</th>
                 <th class="bottom-border table-header-clickable">Año escolar</th>
                 }
-                @if(perfilPropio)
+                @if (perfilPropio)
                 {
                 <th class="bottom-border left-border">Diplomas</th>
                 }
@@ -323,10 +331,11 @@ if (GUID.Length > 0)
                     </a>
                 </td>
                 <td class="@("table-td right-border " + claseCSS)">
-                    @if(esOMIPOS)
+                    @if (esOMIPOS || tipo == OMIstats.Models.TipoOlimpiada.OMIA)
                     {
                     @datos.nombreEstado
-                    } else
+                    }
+                    else
                     {
                     <a class="nombre" href="@Url.Content("~/Estado?clave=" + datos.estado + "&tipo=" + tipo.ToString())">
                         @datos.nombreEstado
@@ -336,10 +345,11 @@ if (GUID.Length > 0)
                 <td class="@("table-td center right-border " + claseCSS)">
                     @if (!tableManager.faltaClave())
                     {
-                        if (esOMIPOS)
+                        if (esOMIPOS || tipo == OMIstats.Models.TipoOlimpiada.OMIA)
                         {
                     @datos.clave
-                        } else
+                        }
+                        else
                         {
                     <a class="nombre" href="@Url.Content("~/Olimpiada/Delegacion?clave=" + datos.omi + "&estado=" + datos.estado + "&tipo=" + tipo.ToString())">
                         @datos.clave
@@ -364,7 +374,8 @@ if (GUID.Length > 0)
                     @if (esOMIPOS && datos.medalla != OMIstats.Models.Resultados.TipoMedalla.MENCION)
                     {
                     @("N/A")
-                    } else
+                    }
+                    else
                     {
                     @(new MvcHtmlString(tableManager.medallaString()))
                     }
@@ -375,10 +386,11 @@ if (GUID.Length > 0)
                     @if (datos.escuela != null)
                     {
                     <span>
-                        @if (esOMIPOS)
+                        @if (esOMIPOS || tipo == OMIstats.Models.TipoOlimpiada.OMIA)
                         {
                         @datos.escuela.nombreCorto
-                        } else
+                        }
+                        else
                         {
                         <a class="nombre" href="@Url.Content("~/Escuela?url=" + datos.escuela.nombreURL + "&tipo=" + tipo.ToString())">
                             @datos.escuela.nombreCorto
@@ -416,10 +428,10 @@ if (GUID.Length > 0)
         </tbody>
     </table>
 
-    if (tieneDelebs)
-    {
+        if (tieneDelebs)
+        {
         <div id="deleb" class="sede">[*]: Participación como competidor invitado de delegación B</div>
-    }
+        }
 }
 
 @if (asistencias.Count > 0)

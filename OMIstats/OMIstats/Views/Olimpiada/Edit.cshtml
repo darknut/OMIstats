@@ -28,7 +28,7 @@ else
    <form name="editOlimpiada" id="editOlimpiada" action="~/Olimpiada/Edit" method="post" enctype="multipart/form-data">
         <div>
             <div class="logoOMI">
-                <img src="@Url.Content("~/img/omi/" + Model.logo)"/>
+                <img src="@Url.Content("~/img/" + Model.tipoOlimpiada.ToString().ToLower() + "/" + Model.logo)"/>
             </div>
 
             <div class="clear"></div>
@@ -272,7 +272,8 @@ else
                             }
                     </div>
                 </div>
-
+                @if(Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIA)
+                {
                 <div>
                     <div class="label">Actualizar póster:</div>
                     <div class="input">
@@ -284,6 +285,7 @@ else
                             }
                     </div>
                 </div>
+                }
 
                 @Html.HiddenFor(model => model.tipoOlimpiada)
                 @Html.HiddenFor(model => model.pais)

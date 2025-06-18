@@ -32,7 +32,12 @@ namespace OMIstats.Controllers
             ViewBag.metadata = Problema.obetnerMetaDatadeOMI(clave, tipo);
 
             // Mientras las OMIS y OMIPS sean en el mismo evento que la OMI, no tienen su propia vista
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            if (tipo == TipoOlimpiada.OMIS ||
+                tipo == TipoOlimpiada.OMISO ||
+                tipo == TipoOlimpiada.OMIP ||
+                tipo == TipoOlimpiada.OMIPO)
+                tipo = TipoOlimpiada.OMI;
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
 
             ViewBag.fotos = Album.obtenerAlbumsDeOlimpiada(clave, tipo).Count > 0;
             addFavicon(o.numero);
@@ -155,6 +160,7 @@ namespace OMIstats.Controllers
 
             if (fileLogo != null)
                 Utilities.Archivos.guardaArchivo(fileLogo, omi.numero + ".png",
+                    omi.tipoOlimpiada == TipoOlimpiada.OMIA ? Utilities.Archivos.Folder.OMIA :
                     Utilities.Archivos.Folder.OLIMPIADAS);
 
             if (filePoster != null)
@@ -355,7 +361,7 @@ namespace OMIstats.Controllers
             ViewBag.problemasDia1 = Problema.obtenerProblemasDeOMI(clave, tipo, 1);
             ViewBag.problemasDia2 = Problema.obtenerProblemasDeOMI(clave, tipo, 2);
             ViewBag.claveUsuario = getUsuario().clave;
-            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI);
+            ViewBag.olimpiadas = Olimpiada.obtenerOlimpiadas(tipo);
 
             if (o.alsoOmips)
                 ViewBag.omis = Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMIS);

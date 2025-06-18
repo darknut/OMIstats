@@ -35,11 +35,12 @@
 
 <div class="submenu">
     @Html.ActionLink("Resultados", "Resultados", "Olimpiada",
-            new { clave = Model.numero }, new { @class = "mini-boton" })
+            new { clave = Model.numero, tipo = Model.tipoOlimpiada }, new { @class = "mini-boton" })
 
+    @if(Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI) {
     @Html.ActionLink("Estados", "Estados", "Olimpiada",
             new { clave = Model.numero }, new { @class = "mini-boton" })
-
+    }
     <br />
 
     @if (ViewBag.admin || fotos)
@@ -52,7 +53,9 @@
 
 <div class="OMItituloFlexBox">
     <div class="logoOMI">
-        <img src="@Url.Content("~/img/omi/" + Model.logo)"/>
+        @if(Model.logo.Length > 0) {
+            <img src="@Url.Content("~/img/" + Model.tipoOlimpiada.ToString().ToLower() + "/" + Model.logo)"/>
+        }
     </div>
     <h2 class="titulo tituloOMI">
         @tableManager.enlaceOMI(nombreCompleto: true, incluirCiudad: true)
@@ -61,7 +64,7 @@
         <a href="@Url.Content("~/Estado?clave=" + Model.claveEstado)">@Model.nombreEstado</a>
         }
         @Model.año
-        @if (Model.esOnline)
+        @if (Model.esOnline && Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIA)
         {
         @("- En línea")
         }
@@ -84,9 +87,11 @@
     <div class="datosOlimpiada">
 
         <div>
+            @if (Model.tipoOlimpiada != OMIstats.Models.TipoOlimpiada.OMIA) {
             <div class="biglabel">
                 @Model.friendlyDate
             </div>
+            }
         </div>
 
         @if (Model.nombreEscuelaCompleto != null && Model.nombreEscuelaCompleto.Length > 0)

@@ -17,6 +17,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_USUARIOS = "~/img/user";
         public const string FOLDER_ESTADOS = "~/img/estados";
         public const string FOLDER_OLIMPIADAS = "~/img/omi";
+        public const string FOLDER_OMIAS = "~/img/omia";
         public const string FOLDER_POSTERS = "~/img/posters";
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
         public const string FOLDER_NEWSLETTERS = "~/img/news";
@@ -26,6 +27,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_DEFAULT = "~/img";
 
         public const string OMI_LOGO = "omi.png";
+        public const string OMIA_LOGO = "omia.jpg";
 
         public const string FOTO_KAREL = "~/img/karel.bmp";
         public const string FOTO_DOMI = "~/img/domi.gif";
@@ -51,7 +53,8 @@ namespace OMIstats.Utilities
             NEWSLETTERS,
             DIPLOMAS,
             INVITACIONES,
-            RETO
+            RETO,
+            OMIA,
         }
 
         public enum FotoInicial
@@ -116,6 +119,8 @@ namespace OMIstats.Utilities
                     return FOLDER_INVITACIONES;
                 case Folder.RETO:
                     return FOLDER_RETO;
+                case Folder.OMIA:
+                    return FOLDER_OMIAS;
                 default:
                     return FOLDER_DEFAULT;
             }

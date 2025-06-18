@@ -739,12 +739,10 @@ namespace OMIstats.Models
         {
             Dictionary<TipoOlimpiada, List<Resultados>> participaciones = new Dictionary<TipoOlimpiada, List<Resultados>>();
 
-            participaciones.Add(tipoOlimpiada, obtenerParticipaciones(persona, tipoOlimpiada));
-            if (tipoOlimpiada == TipoOlimpiada.OMI)
-            {
-                participaciones.Add(TipoOlimpiada.OMIP, obtenerParticipaciones(persona, TipoOlimpiada.OMIP));
-                participaciones.Add(TipoOlimpiada.OMIS, obtenerParticipaciones(persona, TipoOlimpiada.OMIS));
-            }
+            participaciones.Add(TipoOlimpiada.OMI, obtenerParticipaciones(persona, TipoOlimpiada.OMI));
+            participaciones.Add(TipoOlimpiada.OMIP, obtenerParticipaciones(persona, TipoOlimpiada.OMIP));
+            participaciones.Add(TipoOlimpiada.OMIS, obtenerParticipaciones(persona, TipoOlimpiada.OMIS));
+            participaciones.Add(TipoOlimpiada.OMIA, obtenerParticipaciones(persona, TipoOlimpiada.OMIA));
 
             return participaciones;
         }
