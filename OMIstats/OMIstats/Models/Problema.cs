@@ -22,6 +22,7 @@ namespace OMIstats.Models
         private static string ICON_RAR = "/img/rar.png";
         private static string ICON_GITHUB = "/img/github.png";
         private static string ICON_CPP = "/img/cpp.png";
+        private static string ICON_DMOJ = "/img/dmoj.png";
 
         public string olimpiada { get; set; }
 
@@ -88,6 +89,8 @@ namespace OMIstats.Models
                 return ICON_PDF;
             if (url.Contains("github"))
                 return ICON_GITHUB;
+            if (url.Contains("dmoj"))
+                return ICON_DMOJ;
             if (esZip(url))
                 return ICON_RAR;
             if (esTextoPlano(url))
