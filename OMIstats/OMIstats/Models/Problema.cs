@@ -73,6 +73,8 @@ namespace OMIstats.Models
                 return ICON_PDF;
             if (url.Contains("karelotitlan"))
                 return ICON_KAREL;
+            if (url.Contains("dmoj"))
+                return ICON_DMOJ;
 
             return ICON_OTRO;
         }
@@ -89,8 +91,6 @@ namespace OMIstats.Models
                 return ICON_PDF;
             if (url.Contains("github"))
                 return ICON_GITHUB;
-            if (url.Contains("dmoj"))
-                return ICON_DMOJ;
             if (esZip(url))
                 return ICON_RAR;
             if (esTextoPlano(url))
