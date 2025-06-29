@@ -18,6 +18,10 @@
     List<OMIstats.Models.Problema> metadata = ViewBag.metadata;
     string github = "";
     bool tieneFavicon = ViewBag.tieneFavicon;
+    string iconoOMI = Model.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMIA ?
+        OMIstats.Models.TipoOlimpiada.OMIA.ToString().ToLower() :
+        OMIstats.Models.TipoOlimpiada.OMI.ToString().ToLower();
+
 
     if (metadata.Count > 0)
     {
@@ -54,7 +58,7 @@
 <div class="OMItituloFlexBox">
     <div class="logoOMI">
         @if(Model.logo.Length > 0) {
-            <img src="@Url.Content("~/img/" + Model.tipoOlimpiada.ToString().ToLower() + "/" + Model.logo)"/>
+            <img src="@Url.Content("~/img/" + iconoOMI + "/" + Model.logo)"/>
         }
     </div>
     <h2 class="titulo tituloOMI">
