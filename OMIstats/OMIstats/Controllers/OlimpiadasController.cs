@@ -12,10 +12,10 @@ namespace OMIstats.Controllers
         //
         // GET: /Olimpiadas/
 
-        public ActionResult Index()
+        public ActionResult Index(TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             limpiarErroresViewBag();
-            return View(Olimpiada.obtenerOlimpiadas(TipoOlimpiada.OMI));
+            return View(Olimpiada.obtenerOlimpiadas(tipo));
         }
 
     }
