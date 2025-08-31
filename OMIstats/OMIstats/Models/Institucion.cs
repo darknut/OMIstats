@@ -23,18 +23,18 @@ namespace OMIstats.Models
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre de la escuela")]
-        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string nombre { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre corto de la escuela")]
-        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
-        [MaxLength(20, ErrorMessage = "El tamaño máximo es 20 caracteres")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
+        [MaxLength(20, ErrorMessage = "El tamaño máximo es 25 caracteres")]
         public string nombreCorto { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre común de la escuela")]
         [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Solo se permiten letras y números. No espacios.")]
-        [MaxLength(10, ErrorMessage = "El tamaño máximo es 10 caracteres")]
+        [MaxLength(10, ErrorMessage = "El tamaño máximo es 15 caracteres")]
         public string nombreURL { get; set; }
 
         [RegularExpression(@"^(https?:\/\/).*$", ErrorMessage = "Escribe una dirección de internet")]
