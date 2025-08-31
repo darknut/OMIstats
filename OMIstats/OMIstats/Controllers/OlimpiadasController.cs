@@ -14,6 +14,8 @@ namespace OMIstats.Controllers
 
         public ActionResult Index(TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
+            if (tipo != TipoOlimpiada.OMIA)
+                tipo = TipoOlimpiada.OMI;
             limpiarErroresViewBag();
             return View(Olimpiada.obtenerOlimpiadas(tipo));
         }

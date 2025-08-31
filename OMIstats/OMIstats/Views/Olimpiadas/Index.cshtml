@@ -12,6 +12,17 @@
 
 <h1 class="titulo">Olimpiadas</h1>
 
+<div class="submenu">
+    @if (Model[0].tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
+    {
+        @Html.ActionLink("OMIA", "Index", "Olimpiadas",
+            new { tipo =  OMIstats.Models.TipoOlimpiada.OMIA}, new { @class = "mini-boton" })
+    } else {
+        @Html.ActionLink("OMI", "Index", "Olimpiadas",
+            new { tipo =  OMIstats.Models.TipoOlimpiada.OMI}, new { @class = "mini-boton" })
+    }
+</div>
+
 <table class="table">
     <thead>
         <tr class="table-header">
@@ -54,7 +65,13 @@
             tableManager.setCurrentOMI(item);
             <tr>
                 <td class="table-td center right-border anchoColumnaOMI">
-                   <a href ="@Url.Content("~/Olimpiada?clave=" + item.numero)" >@(tableManager.enlaceOMI())</a>
+                    @if(item.tipoOlimpiada == OMIstats.Models.TipoOlimpiada.OMI)
+                    {
+                    <a href ="@Url.Content("~/Olimpiada?clave=" + item.numero)" >@(tableManager.enlaceOMI())</a>
+                    } else
+                    {
+                    <a href ="@Url.Content("~/Olimpiada/Resultados?clave=" + item.numero + "&tipo=" + item.tipoOlimpiada.ToString())" >@(tableManager.enlaceOMI())</a>
+                    }
                 </td>
                 <td class="table-td right-border center anchoColumnaNumero">
                     @item.año
