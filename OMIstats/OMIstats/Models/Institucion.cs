@@ -29,12 +29,12 @@ namespace OMIstats.Models
 
         [Required(ErrorMessage = "Escribe el nombre corto de la escuela")]
         [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
-        [MaxLength(20, ErrorMessage = "El tamaño máximo es 25 caracteres")]
+        [MaxLength(25, ErrorMessage = "El tamaño máximo es 25 caracteres")]
         public string nombreCorto { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre común de la escuela")]
         [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Solo se permiten letras y números. No espacios.")]
-        [MaxLength(10, ErrorMessage = "El tamaño máximo es 15 caracteres")]
+        [MaxLength(15, ErrorMessage = "El tamaño máximo es 15 caracteres")]
         public string nombreURL { get; set; }
 
         [RegularExpression(@"^(https?:\/\/).*$", ErrorMessage = "Escribe una dirección de internet")]
