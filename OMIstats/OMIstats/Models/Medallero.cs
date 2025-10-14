@@ -710,7 +710,7 @@ namespace OMIstats.Models
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(m.omi, tipoOlimpiada);
-                if (MiembroDelegacion.esInvitado(m.clave, o.tieneDelebs, o.competidoresBase))
+                if (MiembroDelegacion.esInvitado(m.clave, false, o.competidoresBase))
                     continue;
                 string estado = m.clave.Substring(0, 3);
 
@@ -803,7 +803,7 @@ namespace OMIstats.Models
                 Medallero m = new Medallero();
                 m.llenarDatos(r);
                 Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(m.omi, m.tipoOlimpiada);
-                if (MiembroDelegacion.esInvitado(m.clave, o.tieneDelebs, o.competidoresBase))
+                if (MiembroDelegacion.esInvitado(m.clave, false, o.competidoresBase))
                     continue;
 
                 // Agrego el medallero con la olimpiada

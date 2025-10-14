@@ -967,7 +967,7 @@ namespace OMIstats.Models
         /// </summary>
         /// <param name="persona">La persona en cuestión</param>
         /// <returns>El objeto deseado</returns>
-        private static MiembroDelegacion obtenerParticipacionMasReciente(int persona)
+        public static MiembroDelegacion obtenerParticipacionMasReciente(int persona, TipoOlimpiada tipo = TipoOlimpiada.OMI)
         {
             Acceso db = new Acceso();
             StringBuilder query = new StringBuilder();
@@ -977,6 +977,8 @@ namespace OMIstats.Models
             query.Append(" inner join olimpiada as o on o.numero = md.olimpiada  ");
             query.Append(" where md.persona =  ");
             query.Append(persona);
+            query.Append(" and md.clase = ");
+            query.Append(Cadenas.comillas(tipo.ToString().ToLower()));
             query.Append(" order by o.año desc ");
 
             db.EjecutarQuery(query.ToString());
@@ -1203,8 +1205,8 @@ namespace OMIstats.Models
                     }
                 }
 
-                if (naked && (esOMIPOS || (soloDiploma && tipo == TipoAsistente.ASESOR)))
-                    continue;
+                //if (naked && (esOMIPOS || (soloDiploma && tipo == TipoAsistente.ASESOR)))
+                   // continue;
 
                 if (lastUsuario == claveUsuario && tipo != TipoAsistente.COMPETIDOR)
                     continue;
@@ -1256,6 +1258,8 @@ namespace OMIstats.Models
                 lineas.Append(omi);
                 lineas.Append("/");
                 lineas.Append(clave);
+                lineas.Append(",");
+                lineas.Append(soloDiploma ? "SOLO DIPLOMA" : "" );
 
                 lineas.Append("\n");
             }

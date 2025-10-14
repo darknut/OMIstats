@@ -315,7 +315,7 @@ namespace OMIstats.Controllers
                 if (numeroDeDiplomas == 1)
                 {
                     string contentFile = "application/pdf";
-                    string url = "~/private/diplomas/" + omi + "/" + md.estado + "/" + clave + ".pdf";
+                    string url = Archivos.FOLDER_DIPLOMAS + "/" + omi + "/" + md.estado + "/" + clave + ".pdf";
                     string file = Server.MapPath(url);
 
                     if (!System.IO.File.Exists(file))

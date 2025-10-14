@@ -629,8 +629,8 @@ namespace OMIstats.Controllers
             string[] Z = textoZ.Split(';');
             string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/');
 
-            ViewBag.asistentes = MiembroDelegacion.generarDiplomas(clave, X[0], baseUrl, Y, Z[0], naked == true);
-            ViewBag.medallistas = Models.Resultados.generarDiplomas(clave, X[1], baseUrl, Z[1], naked == true);
+            ViewBag.asistentes = MiembroDelegacion.generarDiplomas(clave, X[0], baseUrl, Y, Z[0], false);
+            ViewBag.medallistas = Models.Resultados.generarDiplomas(clave, X[1], baseUrl, Z[1], false);
             ViewBag.especiales = Models.Resultados.generarDiplomasEspeciales(clave, baseUrl);
 
             return View();
