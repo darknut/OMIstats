@@ -276,7 +276,7 @@ namespace OMIstats.Controllers
             if (!estaLoggeado())
                 return RedirectTo(Pagina.ERROR, 401);
 
-            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, TipoOlimpiada.OMI);
+            Olimpiada o = Olimpiada.obtenerOlimpiadaConClave(omi, clase == TipoOlimpiada.OMIA ? clase : TipoOlimpiada.OMI);
             if (o == null || !o.diplomasOnline)
                 return RedirectTo(Pagina.ERROR, 404);
 
@@ -292,6 +292,7 @@ namespace OMIstats.Controllers
                         md.tipo != MiembroDelegacion.TipoAsistente.DELELIDER))
                 return RedirectTo(Pagina.ERROR, 401);
 
+            Archivos.Folder folderDiplomas = clase == TipoOlimpiada.OMIA ? Archivos.Folder.DIPLOMAS_OMIA : Archivos.Folder.DIPLOMAS;
             if (md.tipo == MiembroDelegacion.TipoAsistente.COMPETIDOR)
             {
                 if (clase == TipoOlimpiada.OMIP)
@@ -307,7 +308,7 @@ namespace OMIstats.Controllers
             if (!todos)
             {
                 int numeroDeDiplomas = Archivos.cuantosExisten
-                    (Archivos.Folder.DIPLOMAS, omi + "\\" + md.estado, clave);
+                    (folderDiplomas, omi + "\\" + md.estado, clave);
 
                 if (numeroDeDiplomas == 0)
                     return RedirectTo(Pagina.ERROR, 404);
@@ -315,7 +316,7 @@ namespace OMIstats.Controllers
                 if (numeroDeDiplomas == 1)
                 {
                     string contentFile = "application/pdf";
-                    string url = Archivos.FOLDER_DIPLOMAS + "/" + omi + "/" + md.estado + "/" + clave + ".pdf";
+                    string url = Archivos.pathRelativo(folderDiplomas) + "/" + omi + "/" + md.estado + "/" + clave + ".pdf";
                     string file = Server.MapPath(url);
 
                     if (!System.IO.File.Exists(file))

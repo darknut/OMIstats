@@ -22,6 +22,7 @@ namespace OMIstats.Utilities
         public const string FOLDER_ESCUELAS = "~/img/escuelas";
         public const string FOLDER_NEWSLETTERS = "~/img/news";
         public const string FOLDER_DIPLOMAS = "~/private/diplomas";
+        public const string FOLDER_DIPLOMAS_OMIA = "~/private/diplomasOMIA";
         public const string FOLDER_INVITACIONES = "~/private/invitaciones";
         public const string FOLDER_RETO = "~/private/reto";
         public const string FOLDER_DEFAULT = "~/img";
@@ -55,6 +56,7 @@ namespace OMIstats.Utilities
             INVITACIONES,
             RETO,
             OMIA,
+            DIPLOMAS_OMIA,
         }
 
         public enum FotoInicial
@@ -95,7 +97,7 @@ namespace OMIstats.Utilities
             return ResultadoImagen.VALIDA;
         }
 
-        private static string pathRelativo(Folder folder)
+        public static string pathRelativo(Folder folder)
         {
             switch (folder)
             {
@@ -115,6 +117,8 @@ namespace OMIstats.Utilities
                     return FOLDER_NEWSLETTERS;
                 case Folder.DIPLOMAS:
                     return FOLDER_DIPLOMAS;
+                case Folder.DIPLOMAS_OMIA:
+                    return FOLDER_DIPLOMAS_OMIA;
                 case Folder.INVITACIONES:
                     return FOLDER_INVITACIONES;
                 case Folder.RETO:
