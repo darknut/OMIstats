@@ -23,12 +23,12 @@ namespace OMIstats.Models
         public int clave { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre de la escuela")]
-        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöüç#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
         [MaxLength(100, ErrorMessage = "El tamaño máximo es 100 caracteres")]
         public string nombre { get; set; }
 
         [Required(ErrorMessage = "Escribe el nombre corto de la escuela")]
-        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöü#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
+        [RegularExpression(@"^[a-zA-Z0-9 ñÑáéíóúÁÉÍÓÚäëïöüç#\.'""ºª-]*$", ErrorMessage = "Escribiste caracteres inválidos")]
         [MaxLength(25, ErrorMessage = "El tamaño máximo es 25 caracteres")]
         public string nombreCorto { get; set; }
 
